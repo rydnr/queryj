@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.templates.handlers.TemplateHandler;
 
 /*
@@ -59,7 +60,7 @@ import java.io.Serializable;
  * @since 2012/05/13
  */
 public interface FillHandler<P>
-    extends TemplateHandler,
+    extends TemplateHandler<QueryJCommand>,
             Serializable
 {
     /**

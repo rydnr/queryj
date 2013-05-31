@@ -174,7 +174,7 @@ public class JdbcMetadataManagerOld
 
     @Override
     protected void retrieveMetadata(
-        final String[] tableNames,
+        @NotNull final String[] tableNames,
         final DatabaseMetaData metaData,
         final String catalog,
         final String schema,

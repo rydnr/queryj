@@ -39,27 +39,8 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  *Importing project classes.
 */
-import org.acmsl.queryj.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
 import org.acmsl.queryj.templates.FillTemplateChain;
-import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Chain;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-
-/*
- * Importing checkthread.org annotations.
- */
-import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
@@ -67,43 +48,7 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/18
  */
-@ThreadSafe
-public class BasePerForeignKeyFillTemplateChain
-    extends FillTemplateChain<BasePerForeignKeyTemplateContext>
+public interface BasePerForeignKeyFillTemplateChain<BC extends BasePerForeignKeyTemplateContext>
+    extends FillTemplateChain<BC>
 {
-    /**
-     * Creates a {@link BasePerForeignKeyFillTemplateChain} using given context.
-     * @param context the {@link BasePerForeignKeyTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
-     */
-    public BasePerForeignKeyFillTemplateChain(
-        @NotNull final BasePerForeignKeyTemplateContext context,
-        final boolean relevantOnly)
-    {
-        super(context, relevantOnly);
-    }
-
-    /**
-     * Adds additional per-foreign-key handlers.
-     * @param chain the chain to be configured.
-     * @param context the {@link BasePerForeignKeyTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
-     */
-    @Override
-    protected void addHandlers(
-        @NotNull final Chain chain,
-        @NotNull final BasePerForeignKeyTemplateContext context,
-        final boolean relevantOnly)
-    {
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerForeignKeyTemplateContext,ForeignKeyHandler,ForeignKeyDecorator>(
-                new ForeignKeyHandler(context)),
-            relevantOnly);
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerForeignKeyTemplateContext,ForeignKeyAttributeTypeImportsHandler,List<String>>(
-                new ForeignKeyAttributeTypeImportsHandler(context)),
-            relevantOnly);
-    }
 }

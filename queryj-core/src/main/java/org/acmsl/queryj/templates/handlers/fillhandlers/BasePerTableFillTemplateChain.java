@@ -39,30 +39,8 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  *Importing project classes.
 */
-import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.metadata.TableDecorator;
-import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.templates.FillTemplateChain;
-import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Chain;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-
-/*
- * Importing checkthread.org annotations.
- */
-import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
@@ -70,104 +48,7 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/03
  */
-@ThreadSafe
-public class BasePerTableFillTemplateChain
-    extends FillTemplateChain<BasePerTableTemplateContext>
+public interface BasePerTableFillTemplateChain<BC extends BasePerTableTemplateContext>
+    extends FillTemplateChain<BC>
 {
-    /**
-     * Creates a {@link BasePerTableFillTemplateChain} using given context.
-     * @param context the {@link org.acmsl.queryj.templates.BasePerTableTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
-     */
-    public BasePerTableFillTemplateChain(
-        @NotNull final BasePerTableTemplateContext context,
-        final boolean relevantOnly)
-    {
-        super(context, relevantOnly);
-    }
-
-    /**
-     * Adds additional per-table handlers.
-     * @param chain the chain to be configured.
-     * @param context the {@link BasePerTableTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
-     */
-    @Override
-    protected void addHandlers(
-        @NotNull final Chain chain,
-        @NotNull final BasePerTableTemplateContext context,
-        final boolean relevantOnly)
-    {
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,CustomResultsHandler,List<Result>>(
-                new CustomResultsHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,DAOClassNameHandler,DecoratedString>(
-                new DAOClassNameHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,DAOImplementationClassNameHandler,DecoratedString>(
-                new DAOImplementationClassNameHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,DAOFactoryClassNameHandler,DecoratedString>(
-                new DAOFactoryClassNameHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,ForeignKeyListHandler,List<ForeignKey>>(
-                new ForeignKeyListHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,LobHandlingTableCheckHandler,Boolean>(
-                new LobHandlingTableCheckHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,NonPrimaryKeyAttributesHandler,List<Attribute>>(
-                new NonPrimaryKeyAttributesHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,PrimaryKeyHandler,List<Attribute>>(
-                new PrimaryKeyHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,TableHandler,TableDecorator>(
-                new TableHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,TableNameHandler,DecoratedString>(
-                new TableNameHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,ValueObjectNameHandler,DecoratedString>(
-                new ValueObjectNameHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,TableAttributeTypeImportsHandler,List<String>>(
-                new TableAttributeTypeImportsHandler(context)),
-            relevantOnly);
-    }
 }

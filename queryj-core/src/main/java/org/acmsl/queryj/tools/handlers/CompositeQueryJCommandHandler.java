@@ -42,12 +42,6 @@ import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.logging.UniqueLogFactory;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
@@ -59,7 +53,10 @@ import java.util.Iterator;
  */
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.logging.Log;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,8 +72,8 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CompositeQueryJCommandHandler
-    implements  QueryJCommandHandler
+public class CompositeQueryJCommandHandler<C extends QueryJCommand, CH extends QueryJCommandHandler<C>>
+    implements  QueryJCommandHandler<C>
 {
     /**
      * The handler system property prefix.
@@ -97,14 +94,14 @@ public class CompositeQueryJCommandHandler
     /**
      * The handler collection.
      */
-    private Collection<QueryJCommandHandler> m__cHandlers;
+    private Collection<CH> m__cHandlers;
 
     /**
      * Builds a {@link CompositeQueryJCommandHandler} instance.
      */
     public CompositeQueryJCommandHandler()
     {
-        immutableSetHandlerCollection(new ArrayList<QueryJCommandHandler>());
+        immutableSetHandlerCollection(new ArrayList<CH>());
     }
 
     /**
@@ -112,7 +109,7 @@ public class CompositeQueryJCommandHandler
      * @param collection such collection.
      */
     private void immutableSetHandlerCollection(
-        @NotNull final Collection<QueryJCommandHandler> collection)
+        @NotNull final Collection<CH> collection)
     {
         m__cHandlers = collection;
     }
@@ -123,7 +120,7 @@ public class CompositeQueryJCommandHandler
      */
     @SuppressWarnings("unused")
     protected void setHandlerCollection(
-        @NotNull final Collection<QueryJCommandHandler> collection)
+        @NotNull final Collection<CH> collection)
     {
         immutableSetHandlerCollection(collection);
     }
@@ -133,7 +130,7 @@ public class CompositeQueryJCommandHandler
      * @return such handler.
      */
     @NotNull
-    protected Collection<QueryJCommandHandler> getHandlerCollection()
+    protected Collection<CH> getHandlerCollection()
     {
         return m__cHandlers;
     }
@@ -142,7 +139,7 @@ public class CompositeQueryJCommandHandler
      * Adds a new handler to the collection.
      * @param handler the new handler to add.
      */
-    protected void addHandler(final QueryJCommandHandler handler)
+    protected void addHandler(final CH handler)
     {
         addHandler(handler, getHandlerCollection());
     }
@@ -153,8 +150,8 @@ public class CompositeQueryJCommandHandler
      * @param handlerCollection the handler collection.
      */
     protected void addHandler(
-        @Nullable final QueryJCommandHandler handler,
-        @Nullable final Collection<QueryJCommandHandler> handlerCollection)
+        @Nullable final CH handler,
+        @Nullable final Collection<CH> handlerCollection)
     {
         if  (   (handler != null)
              && (handlerCollection != null))
@@ -168,46 +165,8 @@ public class CompositeQueryJCommandHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      */
-    public boolean handle(@NotNull final Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof QueryJCommand)
-        {
-            @NotNull QueryJCommand t_Command = (QueryJCommand) command;
-
-            if (canProceed())
-            {
-                try
-                {
-                    result = handle(t_Command);
-                }
-                catch  (@NotNull final QueryJBuildException buildException)
-                {
-                    Log t_Log =
-                        UniqueLogFactory.getLog(
-                            CompositeQueryJCommandHandler.class);
-
-                    if  (t_Log != null)
-                    {
-                        t_Log.error("Chain step failed.", buildException);
-                    }
-                }
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command.
-     * @return <code>true</code> to avoid further processing of such command
-     * by different handlers.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    public boolean handle(@NotNull final QueryJCommand command)
-        throws  QueryJBuildException
+    public boolean handle(@NotNull final C command)
+        throws QueryJBuildException
     {
         return handle(command, getHandlerCollection());
     }
@@ -221,13 +180,13 @@ public class CompositeQueryJCommandHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(
-        @NotNull final QueryJCommand command,
-        @Nullable final Collection<QueryJCommandHandler> handlerCollection)
+        @NotNull final C command,
+        @Nullable final Collection<CH> handlerCollection)
       throws  QueryJBuildException
     {
         boolean result = false;
 
-        @Nullable Iterator t_itHandlerIterator =
+        @Nullable final Iterator<CH> t_itHandlerIterator =
             (handlerCollection != null)
             ?  handlerCollection.iterator()
             :  null;
@@ -236,13 +195,9 @@ public class CompositeQueryJCommandHandler
         {
             while  (t_itHandlerIterator.hasNext())
             {
-                Object t_Handler = t_itHandlerIterator.next();
+                @NotNull final CH t_Handler = t_itHandlerIterator.next();
 
-                if  (t_Handler instanceof QueryJCommandHandler)
-                {
-                    result =
-                        handle(command, (QueryJCommandHandler) t_Handler);
-                }
+                result = handle(command, t_Handler);
 
                 if  (result)
                 {
@@ -263,7 +218,7 @@ public class CompositeQueryJCommandHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(
-        @NotNull final QueryJCommand command, @NotNull final QueryJCommandHandler handler)
+        @NotNull final C command, @NotNull final CH handler)
       throws  QueryJBuildException
     {
         return handler.handle(command);
@@ -273,11 +228,12 @@ public class CompositeQueryJCommandHandler
      * Checks whether this handle is allowed to proceed or not.
      * @return <code>true</code> in such case.
      */
+    @SuppressWarnings("unused")
     protected boolean canProceed()
     {
         boolean result = true;
 
-        String t_strWildcardProperty = System.getProperty(WILDCARD_SYSTEM_PROPERTY);
+        @Nullable final String t_strWildcardProperty = System.getProperty(WILDCARD_SYSTEM_PROPERTY);
 
         if ("false".equalsIgnoreCase(t_strWildcardProperty))
         {
@@ -286,7 +242,7 @@ public class CompositeQueryJCommandHandler
 
         if (!result)
         {
-            String t_strHandlerProperty =
+            @Nullable final String t_strHandlerProperty =
                 System.getProperty(
                       HANDLER_SYSTEM_PROPERTY_PREFIX
                     + getClass().getName()

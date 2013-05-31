@@ -116,8 +116,8 @@ public class OracleMetaDataRetrievalHandler
     /**
      * {@inheritDoc}
      */
+    @NotNull
     @Override
-    @Nullable
     protected MetadataManager buildMetadataManager(
         @NotNull final Map parameters,
         @NotNull final List<Table> tables,

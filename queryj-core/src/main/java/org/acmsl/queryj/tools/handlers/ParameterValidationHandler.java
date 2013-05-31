@@ -457,6 +457,7 @@ public class ParameterValidationHandler
      * @param usingAnt whether QueryJ is executed within Ant.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
+    @SuppressWarnings("unchecked")
     public void validateParameters(
         @NotNull final Map parameters, final boolean usingAnt)
       throws  QueryJBuildException
@@ -564,11 +565,11 @@ public class ParameterValidationHandler
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final Map parameters,
+        @NotNull final Map<String, String> parameters,
         final boolean usingAnt)
       throws  QueryJBuildException
     {
-        Log t_Log =
+        @Nullable final Log t_Log =
             UniqueLogFactory.getLog(ParameterValidationHandler.class);
                 
         if  (driver == null) 
@@ -635,7 +636,7 @@ public class ParameterValidationHandler
             
             try
             {
-                parameters.put(HEADER, readFile(header));
+                parameters.put(HEADER, readFile(header, Charset.forName(encoding)));
             }
             catch  (@NotNull final FileNotFoundException fileNotFoundException)
             {
@@ -829,11 +830,11 @@ public class ParameterValidationHandler
      * other reason.
      */
     @NotNull
-    protected String readFile(@NotNull final File file)
+    protected String readFile(@NotNull final File file, @NotNull final Charset charset)
         throws  SecurityException,
                 IOException
     {
-        return readFile(file, FileUtils.getInstance());
+        return readFile(file, charset, FileUtils.getInstance());
     }
 
     /**
@@ -848,10 +849,11 @@ public class ParameterValidationHandler
      * other reason.
      */
     @NotNull
-    protected String readFile(@NotNull final File file, @NotNull final FileUtils fileUtils)
+    protected String readFile(
+        @NotNull final File file, @NotNull final Charset charset, @NotNull final FileUtils fileUtils)
         throws  SecurityException,
                 IOException
     {
-        return fileUtils.readFile(file);
+        return fileUtils.readFile(file, charset);
     }
 }

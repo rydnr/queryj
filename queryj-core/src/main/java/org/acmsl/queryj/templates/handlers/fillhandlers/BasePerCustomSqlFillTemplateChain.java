@@ -40,22 +40,11 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
  *Importing project classes.
 */
 import org.acmsl.queryj.templates.BasePerCustomSqlTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Chain;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing checkthread.org annotations.
- */
-import org.checkthread.annotations.ThreadSafe;
+import org.acmsl.queryj.templates.FillTemplateChain;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
@@ -63,34 +52,7 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/07/07
  */
-@ThreadSafe
-public class BasePerCustomSqlFillTemplateChain
-    extends FillTemplateChain<BasePerCustomSqlTemplateContext>
+public interface BasePerCustomSqlFillTemplateChain<BC extends BasePerCustomSqlTemplateContext>
+    extends FillTemplateChain<BC>
 {
-    /**
-     * Creates a {@link BasePerCustomSqlFillTemplateChain} using given context.
-     * @param context the {@link BasePerCustomSqlTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
-     */
-    public BasePerCustomSqlFillTemplateChain(
-        @NotNull final BasePerCustomSqlTemplateContext context,
-        final boolean relevantOnly)
-    {
-        super(context, relevantOnly);
-    }
-
-    /**
-     * Adds additional per-custom-sql handlers.
-     * @param chain the chain to be configured.
-     * @param context the {@link BasePerCustomSqlTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
-     */
-    @SuppressWarnings("unused")
-    @Override
-    protected void addHandlers(
-        @NotNull final Chain chain,
-        @NotNull final BasePerCustomSqlTemplateContext context,
-        final boolean relevantOnly)
-    {
-    }
 }

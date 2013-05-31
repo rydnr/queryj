@@ -44,6 +44,7 @@ import org.acmsl.queryj.metadata.vo.AbstractField;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
@@ -67,6 +68,8 @@ public class AntFieldElement
     extends  AbstractField
     implements  DynamicConfigurator
 {
+
+    private static final long serialVersionUID = 5709131443641728342L;
     /**
      * The field pk nature.
      */
@@ -175,5 +178,12 @@ public class AntFieldElement
         }
 
         return result;
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "AntFieldElement{ pk='" + m__strPk + "' }";
     }
 }

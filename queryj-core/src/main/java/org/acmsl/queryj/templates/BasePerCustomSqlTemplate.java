@@ -33,16 +33,6 @@
 package org.acmsl.queryj.templates;
 
 /*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.templates.handlers.fillhandlers.BasePerCustomSqlFillTemplateChain;
-
-/*
- * Importing StringTemplate classes.
- */
-import org.antlr.stringtemplate.StringTemplate;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -51,55 +41,18 @@ import org.jetbrains.annotations.NotNull;
  * Base logic for all templates to be processed once per custom SQL.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class BasePerCustomSqlTemplate<C extends BasePerCustomSqlTemplateContext>
-    extends  AbstractBasePerCustomSqlTemplate<C>
+public interface BasePerCustomSqlTemplate<C extends BasePerCustomSqlTemplateContext>
+    extends Template<C>
 {
-    /**
-     * Builds a <code>BasePerCustomSqlTemplate</code> using given
-     * information.
-     * @param context the {@link BasePerCustomSqlTemplateContext context}.
-     */
-    public BasePerCustomSqlTemplate(@NotNull final C context)
-    {
-        super(context);
-    }
-
-    /**
-     * Builds a context-specific exception.
-     * @param context the context.
-     * @param template the {@link StringTemplate} instance.
-     * @return the specific {@link InvalidTemplateException} for the template.
-     */
-    @NotNull
-    protected  InvalidTemplateException buildInvalidTemplateException(
-        @NotNull final BasePerCustomSqlTemplateContext context,
-        @NotNull final StringTemplate template,
-        @NotNull final Throwable actualException)
-    {
-        return
-            new InvalidTemplateException(
-                "invalid.per.sql.template",
-                new Object[]
-                {
-                    template.getName(),
-                    getTemplateName(),
-                    context.getSql().getId()
-                },
-                actualException);
-    }
-
     /**
      * Builds the correct chain.
      *
      * @param context the context.
      * @param relevantOnly whether to include only relevant placeholders.
-     * @return the specific {@link FillTemplateChain}.
+     * @return the specific {@link AbstractFillTemplateChain}.
      */
+    @SuppressWarnings("unused")
     @NotNull
-    @Override
-    protected FillTemplateChain buildFillTemplateChain(
-        @NotNull final C context, final boolean relevantOnly)
-    {
-        return new BasePerCustomSqlFillTemplateChain(context, relevantOnly);
-    }
+    public FillTemplateChain<C> buildFillTemplateChain(
+        @NotNull final C context, final boolean relevantOnly);
 }

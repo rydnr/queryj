@@ -32,11 +32,13 @@
  */
 package org.acmsl.queryj.templates.handlers;
 
+import org.acmsl.queryj.QueryJCommand;
+
 /**
  * Marks all template build handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface TemplateBuildHandler
-    extends TemplateHandler
+public interface TemplateBuildHandler<C extends QueryJCommand>
+    extends TemplateHandler<C>
 {
 }

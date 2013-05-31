@@ -166,6 +166,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
+    @SuppressWarnings("unchecked")
     protected void buildTemplate(
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
@@ -189,7 +190,7 @@ public abstract class BasePerTableTemplateBuildHandler
 
         @Nullable T t_Template;
 
-        for  (Table t_Table : tables)
+        for  (@Nullable final Table t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -299,7 +300,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param parameters the parameter map.
      */
     protected abstract void storeTemplates(
-        @NotNull final List<T> templates, @NotNull final Map parameters);
+        @NotNull final List<T> templates, @NotNull final Map<String, List<T>> parameters);
 
     /**
      * Creates a template with required information.
@@ -338,7 +339,7 @@ public abstract class BasePerTableTemplateBuildHandler
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
-        @Nullable List<Row> staticContents,
+        @Nullable final List<Row> staticContents,
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {
@@ -429,7 +430,7 @@ public abstract class BasePerTableTemplateBuildHandler
             }
             catch  (@NotNull final SQLException sqlException)
             {
-                Log t_Log =
+                @Nullable final Log t_Log =
                     UniqueLogFactory.getLog(
                         BasePerTableTemplateBuildHandler.class);
                 

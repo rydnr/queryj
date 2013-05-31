@@ -103,7 +103,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                  */
                 public void warning(@Nullable final String message)
                 {
-                    @Nullable Log t_Log =
+                    @Nullable final Log t_Log =
                         UniqueLogFactory.getLog(AbstractTemplate.class);
 
                     if  (t_Log != null)
@@ -119,7 +119,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                  */
                 public void error(@Nullable final String message, @NotNull final Throwable cause)
                 {
-                    @Nullable Log t_Log =
+                    @Nullable final Log t_Log =
                         UniqueLogFactory.getLog(AbstractTemplate.class);
 
                     if  (t_Log != null)
@@ -603,6 +603,12 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         {
             traceANTLRClassLoadingIssues();
         }
+
+        @Override
+        public String toString()
+        {
+            return "FinalizingThread{ new=" + m__bNew + '}';
+        }
     }
 
     /**
@@ -716,6 +722,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected String normalizeLowercase(
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
@@ -818,15 +825,25 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     new StringTemplateErrorListener()
                     {
                         @Override
-                        public void error(final String s, final Throwable throwable)
+                        public void error(@NotNull final String s, @NotNull final Throwable throwable)
                         {
-                            UniqueLogFactory.getLog(AbstractTemplate.class).error(s, throwable);
+                            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
+
+                            if (t_Log != null)
+                            {
+                                t_Log.error(s, throwable);
+                            }
                         }
 
                         @Override
-                        public void warning(final String s)
+                        public void warning(@NotNull final String s)
                         {
-                            UniqueLogFactory.getLog(AbstractTemplate.class).warn(s);
+                            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
+
+                            if (t_Log != null)
+                            {
+                                t_Log.warn(s);
+                            }
                         }
                     }
                 );
@@ -846,8 +863,13 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 {
                     t_ExceptionToWrap = throwable;
 
-                    UniqueLogFactory.getLog(AbstractTemplate.class).error(
-                        "Error in template " + getTemplateName(), throwable);
+                    @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
+
+                    if (t_Log != null)
+                    {
+                        t_Log.error(
+                            "Error in template " + getTemplateName(), throwable);
+                    }
 
                     @Nullable final StringTemplateTreeView debugTool =
                         new StringTemplateTreeView("Debugging " + getTemplateName(), t_Template);
@@ -858,7 +880,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     {
                         try
                         {
-                            Thread.currentThread().sleep(1000);
+                            Thread.sleep(1000);
                         }
                         catch (InterruptedException e)
                         {
@@ -881,10 +903,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Builds the correct chain.
      * @param context the context.
      * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link FillTemplateChain}.
+     * @return the specific {@link AbstractFillTemplateChain}.
      */
     @NotNull
-    protected abstract FillTemplateChain buildFillTemplateChain(@NotNull final C context, final boolean relevantOnly);
+    public abstract FillTemplateChain<C> buildFillTemplateChain(@NotNull final C context, final boolean relevantOnly);
 
     /**
      * Builds a context-specific exception.
@@ -893,8 +915,19 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return the specific {@link InvalidTemplateException} for the template.
      */
     @NotNull
-    protected abstract InvalidTemplateException buildInvalidTemplateException(
+    public abstract InvalidTemplateException buildInvalidTemplateException(
         @NotNull final C context,
         @NotNull final StringTemplate template,
         @NotNull final Throwable actualException);
+
+    @Override
+    @NotNull
+    public String toString()
+    {
+        return
+            "AbstractTemplate{"
+            + " cachedProcessedHeader='" + m__strCachedProcessedHeader
+            + "', templateContext=" + m__TemplateContext
+            + '}';
+    }
 }

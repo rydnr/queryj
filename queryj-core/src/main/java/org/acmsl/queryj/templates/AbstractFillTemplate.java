@@ -102,5 +102,5 @@ public abstract class AbstractFillTemplate<C extends TemplateContext>
      * @return such chain.
      */
     @NotNull
-    protected abstract FillTemplateChain<C> createChain();
+    protected abstract AbstractFillTemplateChain<C> createChain();
 }

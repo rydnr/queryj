@@ -36,16 +36,23 @@
  */
 package org.acmsl.queryj.templates.handlers;
 
-import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.patterns.Command;
+/*
+ * Imporing project classes.
+ */
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.FillHandler;
-import org.apache.commons.logging.Log;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.Map;
 
 /*
@@ -61,8 +68,11 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class FillAdapterHandler<F extends FillHandler<P>, P>
-    implements QueryJCommandHandler
+    implements QueryJCommandHandler<QueryJCommand>,
+               FillHandler<P>
 {
+
+    private static final long serialVersionUID = 6058212934620381875L;
     /**
      * The fill handler.
      */
@@ -71,7 +81,7 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
 
     /**
      * Creates a {@link FillAdapterHandler instance} to adapt given
-     * {@link org.acmsl.queryj.templates.handlers.fillhandlers.TemplateContextFillHandler fill handler}.
+     * fill handler.
      * @param fillHandler the fill handler to adapt.
      */
     public FillAdapterHandler(@NotNull final F fillHandler)
@@ -103,39 +113,9 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
      * @return such instance.
      */
     @NotNull
-    public FillHandler getFillHandler()
+    public F getFillHandler()
     {
         return this.fillHandler;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command.
-     * @return <code>true</code> to avoid further processing of such command
-     * by different handlers.
-     */
-    public boolean handle(@NotNull final Command command)
-    {
-        boolean result = true;
-
-        if (command instanceof QueryJCommand)
-        {
-            try
-            {
-                result = handle((QueryJCommand) command);
-            }
-            catch (@NotNull final QueryJBuildException templateError)
-            {
-                Log t_Log = UniqueLogFactory.getLog(TemplateContextFillAdapterHandler.class);
-
-                if (t_Log != null)
-                {
-                    t_Log.fatal("Cannot process template using " + getFillHandler(), templateError);
-                }
-            }
-        }
-
-        return result;
     }
 
     /**
@@ -155,7 +135,7 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
     /**
      * Handles given command.
      * @param attributes the attribute map.
-     * @param fillHandler the {@link org.acmsl.queryj.templates.handlers.fillhandlers.TemplateContextFillHandler fill handler}.
+     * @param fillHandler the {@link FillHandler fill handler}.
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
      * @throws QueryJBuildException if the process fails.
@@ -164,10 +144,10 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
     public boolean handle(@NotNull final Map attributes, @NotNull final FillHandler<P> fillHandler)
         throws QueryJBuildException
     {
-        boolean result = false;
+        final boolean result = false;
 
-        @NotNull String t_strPlaceHolder = fillHandler.getPlaceHolder();
-        @Nullable P t_Value = fillHandler.getValue();
+        @NotNull final String t_strPlaceHolder = fillHandler.getPlaceHolder();
+        @Nullable final P t_Value = fillHandler.getValue();
 
         if (t_Value != null)
         {
@@ -175,5 +155,36 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
         }
 
         return result;
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "FillAdapterHandler{ fillHandler=" + fillHandler + '}';
+    }
+
+    /**
+     * Retrieves the placeholder.
+     *
+     * @return such placeholder.
+     */
+    @NotNull
+    @Override
+    public String getPlaceHolder()
+    {
+        return getFillHandler().getPlaceHolder();
+    }
+
+    /**
+     * Retrieves the template value for that placeholder.
+     *
+     * @return the dynamic value.
+     */
+    @Nullable
+    @Override
+    public P getValue() throws QueryJBuildException
+    {
+        return getFillHandler().getValue();
     }
 }

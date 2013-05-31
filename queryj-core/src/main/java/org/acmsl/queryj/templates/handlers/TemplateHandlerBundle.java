@@ -35,6 +35,7 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandler;
 
 /*
@@ -58,9 +59,9 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class TemplateHandlerBundle
-    extends    CompositeQueryJCommandHandler
-    implements TemplateHandler
+public class TemplateHandlerBundle<C extends QueryJCommand, CH extends TemplateHandler<C>, CHB extends CH, CHW extends CH>
+    extends    CompositeQueryJCommandHandler<C, CH>
+    implements TemplateHandler<C>
 {
     /**
      * The system property prefix to disable concrete (or all, with *) template handlers.
@@ -78,8 +79,8 @@ public class TemplateHandlerBundle
      * @param writingHandler the writing handler.
      */
     public TemplateHandlerBundle(
-        @NotNull final TemplateBuildHandler buildHandler,
-        @NotNull final TemplateWritingHandler writingHandler)
+        @NotNull final CHB buildHandler,
+        @NotNull final CHW writingHandler)
     {
         if (isTemplateHandlingEnabled())
         {
@@ -92,11 +93,11 @@ public class TemplateHandlerBundle
      * Builds a bundle with given ones.
      * @param bundles the first bundle.
      */
-    public TemplateHandlerBundle(@Nullable final TemplateHandlerBundle[] bundles)
+    public TemplateHandlerBundle(@Nullable final CH[] bundles)
     {
         if (bundles != null)
         {
-            for (TemplateHandlerBundle t_Bundle : bundles)
+            for (@Nullable final CH t_Bundle : bundles)
             {
                 if  (t_Bundle != null)
                 {
@@ -110,23 +111,10 @@ public class TemplateHandlerBundle
     }
 
     /**
-     * Builds a bundle with given two.
-     * @param firstBundle the first bundle.
-     * @param secondBundle the second bundle, typically
-     * related to test templates associated to the first one's.
-     */
-    public TemplateHandlerBundle(
-        final TemplateHandlerBundle firstBundle,
-        final TemplateHandlerBundle secondBundle)
-    {
-        this(new TemplateHandlerBundle[] { firstBundle, secondBundle });
-    }
-
-    /**
      * Adds a new handler to the collection.
      * @param handler the new handler to add.
      */
-    protected final void immutableAddHandler(@NotNull final TemplateHandler handler)
+    protected final void immutableAddHandler(@NotNull final CH handler)
     {
         super.addHandler(handler);
     }
@@ -183,7 +171,7 @@ public class TemplateHandlerBundle
 
         boolean t_bExplicitlyEnabled = false;
 
-        String[] t_astrEnabled;
+        @NotNull final String[] t_astrEnabled;
 
         if (templatesEnabled != null)
         {
@@ -208,7 +196,7 @@ public class TemplateHandlerBundle
             }
             else if (templatesDisabled != null)
             {
-                String[] t_astrDisabled = templatesDisabled.split(",");
+                @NotNull final String[] t_astrDisabled = templatesDisabled.split(",");
 
                 result = !Arrays.asList(t_astrDisabled).contains(handlerName);
             }

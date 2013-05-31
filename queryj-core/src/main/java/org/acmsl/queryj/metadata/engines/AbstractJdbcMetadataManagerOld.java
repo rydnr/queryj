@@ -92,43 +92,43 @@ public abstract class AbstractJdbcMetadataManagerOld
     /**
      * An empty String array.
      */
-    protected final String[] EMPTY_STRING_ARRAY = new String[0];
+    protected static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     /**
      * An empty int array.
      */
-    protected final int[] EMPTY_INT_ARRAY = new int[0];
+    protected static final int[] EMPTY_INT_ARRAY = new int[0];
 
     /**
      * An empty integer array.
      */
-    protected final Integer[] EMPTY_INTEGER_ARRAY = new Integer[0];
+    protected static final Integer[] EMPTY_INTEGER_ARRAY = new Integer[0];
 
     /**
      * An empty boolean array.
      */
-    protected final boolean[] EMPTY_BOOL_ARRAY = new boolean[0];
+    protected static final boolean[] EMPTY_BOOL_ARRAY = new boolean[0];
 
     /**
      * An empty boolean array.
      */
-    protected final Boolean[] EMPTY_BOOLEAN_ARRAY = new Boolean[0];
+    protected static final Boolean[] EMPTY_BOOLEAN_ARRAY = new Boolean[0];
 
     /**
      * An empty array of String arrays.
      */
-    protected final String[][] EMPTY_ARRAY_OF_STRING_ARRAYS = new String[0][0];
+    protected static final String[][] EMPTY_ARRAY_OF_STRING_ARRAYS = new String[0][0];
 
     /**
      * An empty array of <code>ProcedureMetadata</code> instances.
      */
-    protected final ProcedureMetadata[] EMPTY_PROCEDURE_METADATA_ARRAY =
+    protected static final ProcedureMetadata[] EMPTY_PROCEDURE_METADATA_ARRAY =
         new ProcedureMetadata[0];
     
     /**
      * An empty array of <code>ProcedureParameterMetadata</code> instances.
      */
-    protected final ProcedureParameterMetadata[]
+    protected static final ProcedureParameterMetadata[]
         EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY =
             new ProcedureParameterMetadata[0];
     
@@ -185,7 +185,7 @@ public abstract class AbstractJdbcMetadataManagerOld
     /**
      * The comments of each table.
      */
-    private Map m__mTableComments;
+    private Map<String, String> m__mTableComments;
 
     /**
      * The comments of each column.
@@ -200,12 +200,12 @@ public abstract class AbstractJdbcMetadataManagerOld
     /**
      * The static tables.
      */
-    private Map m__mStaticTables;
+    private Map<String, Table> m__mStaticTables;
 
     /**
      * The decorated tables.
      */
-    private Map m__mDecoratedTables;
+    private Map<String, Table> m__mDecoratedTables;
 
     /**
      * The tables' primary keys information.
@@ -290,11 +290,15 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param metadataExtractionListener the
      * <code>MetadataExtractionListener</code> instance.
      */
+    @SuppressWarnings("unchecked")
     protected AbstractJdbcMetadataManagerOld(
         @Nullable final MetadataExtractionListener metadataExtractionListener)
     {
-        immutableSetMetadataExtractionListener(metadataExtractionListener);
-        Map t_UniqueMap = new HashMap();
+        if (metadataExtractionListener != null)
+        {
+            immutableSetMetadataExtractionListener(metadataExtractionListener);
+        }
+        @NotNull final Map t_UniqueMap = new HashMap();
         immutableSetColumnNames(t_UniqueMap);
         immutableSetColumnTypes(t_UniqueMap);
         immutableSetAllowNulls(t_UniqueMap);
@@ -471,6 +475,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Specifies the case sensitiveness.
      * @param caseSensitive whether the engine is case sensitive.
      */
+    @SuppressWarnings("unused")
     protected void setCaseSensitive(final boolean caseSensitive)
     {
         immutableSetCaseSensitive(caseSensitive);
@@ -518,16 +523,16 @@ public abstract class AbstractJdbcMetadataManagerOld
      * occurs.
      */
     protected void retrieveMetadata(
-        final MetadataExtractionListener metadataExtractionListener,
-        final String[] tableNames,
-        final String[] procedureNames,
+        @Nullable final MetadataExtractionListener metadataExtractionListener,
+        @NotNull final String[] tableNames,
+        @NotNull final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema)
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema)
       throws  SQLException,
               QueryJException
     {
@@ -582,12 +587,22 @@ public abstract class AbstractJdbcMetadataManagerOld
         }
     }
 
+    /**
+     * Retrieves the metadata.
+     * @param tableNames the table names.
+     * @param metaData the meta data.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param metadataExtractionListener the listener.
+     * @throws SQLException if a SQL exception occurs.
+     * @throws QueryJException if some other problem occurs.
+     */
     protected abstract void retrieveMetadata(
-        final String[] tableNames,
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema,
-        final MetadataExtractionListener metadataExtractionListener)
+        @NotNull final String[] tableNames,
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @Nullable final MetadataExtractionListener metadataExtractionListener)
     throws  SQLException,
         QueryJException;
 
@@ -595,7 +610,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Specifies the meta data.
      * @param metaData the database meta data.
      */
-    protected final void immutableSetMetaData(final DatabaseMetaData metaData)
+    protected final void immutableSetMetaData(@NotNull final DatabaseMetaData metaData)
     {
         m__MetaData = metaData;
     }
@@ -613,6 +628,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Retrieves the database meta data.
      * @return such information.
      */
+    @NotNull
     public DatabaseMetaData getMetaData()
     {
         return m__MetaData;
@@ -623,7 +639,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param listener such listener.
      */
     protected final void immutableSetMetadataExtractionListener(
-        final MetadataExtractionListener listener)
+        @NotNull final MetadataExtractionListener listener)
     {
         m__MetadataExtractionListener = listener;
     }
@@ -632,8 +648,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Specifies the metadata extraction listener.
      * @param listener such listener.
      */
+    @SuppressWarnings("unused")
     protected void setMetadataExtractionListener(
-        final MetadataExtractionListener listener)
+        @NotNull final MetadataExtractionListener listener)
     {
         immutableSetMetadataExtractionListener(listener);
     }
@@ -642,6 +659,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Retrieves the metadata extraction listener.
      * @return such listener.
      */
+    @Nullable
     public MetadataExtractionListener getMetadataExtractionListener()
     {
         return m__MetadataExtractionListener;
@@ -715,6 +733,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Specifies the whether the table extraction should be disabled.
      * @param flag such flag.
      */
+    @SuppressWarnings("unused")
     protected void setDisableTableExtraction(final boolean flag)
     {
         immutableSetDisableTableExtraction(flag);
@@ -743,6 +762,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Specifies the lazy table extraction flag.
      * @param flag such flag.
      */
+    @SuppressWarnings("unused")
     protected void setLazyTableExtraction(final boolean flag)
     {
         immutableSetLazyTableExtraction(flag);
@@ -819,7 +839,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Specifies the table names.
      * @param names such names.
      */
-    protected final void immutableSetTableNames(final String[] names)
+    protected final void immutableSetTableNames(@NotNull final String[] names)
     {
         m__astrTableNames = names;
     }
@@ -828,7 +848,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Specifies the table names.
      * @param names such names.
      */
-    protected void setTableNames(final String[] names)
+    protected void setTableNames(@NotNull final String[] names)
     {
         immutableSetTableNames(names);
     }
@@ -837,6 +857,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Retrieves the table names.
      * @return such names.
      */
+    @NotNull
     protected final String[] immutableGetTableNames()
     {
         return m__astrTableNames;
@@ -846,6 +867,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Retrieves the table names.
      * @return such names.
      */
+    @NotNull
     public String[] getTableNames()
     {
         return clone(immutableGetTableNames());
@@ -855,7 +877,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Specifies the table comments.
      * @param comments such comments.
      */
-    protected final void immutableSetTableComments(final Map comments)
+    protected final void immutableSetTableComments(@NotNull final Map<String, String> comments)
     {
         m__mTableComments = comments;
     }
@@ -865,7 +887,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param comments such comments.
      */
     @SuppressWarnings("unused")
-    protected void setTableComments(final Map<String,String> comments)
+    protected void setTableComments(@NotNull final Map<String,String> comments)
     {
         immutableSetTableComments(comments);
     }
@@ -874,7 +896,8 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Retrieves the table comments.
      * @return such comments.
      */
-    protected Map getTableComments()
+    @NotNull
+    protected Map<String, String> getTableComments()
     {
         return m__mTableComments;
     }
@@ -948,6 +971,7 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Specifies the static tables.
      * @param tables such tables.
      */
+    @SuppressWarnings("unused")
     protected void setStaticTables(@NotNull final Map<String,Table> tables)
     {
         immutableSetStaticTables(tables);
@@ -957,7 +981,8 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Retrieves the static tables.
      * @return such tables.
      */
-    protected Map getStaticTables()
+    @NotNull
+    protected Map<String, Table> getStaticTables()
     {
         return m__mStaticTables;
     }
@@ -975,7 +1000,8 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Specifies the decorated tables.
      * @param tables such tables.
      */
-    protected void setDecoratedTables(final Map tables)
+    @SuppressWarnings("unused")
+    protected void setDecoratedTables(@NotNull final Map<String, Table> tables)
     {
         immutableSetDecoratedTables(tables);
     }
@@ -984,7 +1010,8 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Retrieves the decorated tables.
      * @return such tables.
      */
-    protected Map getDecoratedTables()
+    @NotNull
+    protected Map<String, Table> getDecoratedTables()
     {
         return m__mDecoratedTables;
     }
@@ -993,11 +1020,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Adds the comments of given table.
      * @param tableName the table name.
      * @param tableComment the table comment.
-     * @precondition tableName != null
-     * @precondition tableComment != null
      */
     public void addTableComment(
-        final String tableName, final String tableComment)
+        @NotNull final String tableName, @NotNull final String tableComment)
     {
         addTableComment(tableName, tableComment, getTableComments());
     }
@@ -1007,14 +1032,11 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param tableName the table name.
      * @param tableComment the table comment.
      * @param map the map.
-     * @precondition tableName != null
-     * @precondition tableComment != null
-     * @precondition map != null
      */
     protected void addTableComment(
-        final String tableName,
-        final String tableComment,
-        final Map map)
+        @NotNull final String tableName,
+        @NotNull final String tableComment,
+        @NotNull final Map<String, String> map)
     {
         map.put(buildTableCommentKey(tableName), tableComment);
     }
@@ -1023,9 +1045,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Retrieves the table comments.
      * @param tableName the table name.
      * @return the table comment.
-     * @precondition tableName != null
      */
-    public String getTableComment(final String tableName)
+    @Nullable
+    public String getTableComment(@NotNull final String tableName)
     {
         return
             getTableComment(tableName, getTableComments());
@@ -1070,16 +1092,12 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param columnName the column name.
      * @param columnComment the column comment.
      * @param map the map.
-     * @precondition tableName != null
-     * @precondition columnName != null
-     * @precondition columnComment != null
-     * @precondition map != null
      */
     protected void addColumnComment(
-        final String tableName,
-        final String columnName,
-        final String columnComment,
-        final Map map)
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final String columnComment,
+        @NotNull final Map<String, String> map)
     {
         map.put(
             buildColumnCommentKey(tableName, columnName), columnComment);
@@ -1090,11 +1108,10 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param tableName the table name.
      * @param columnName the column name.
      * @return the column comment.
-     * @precondition tableName != null
-     * @precondition columnName != null
      */
+    @Nullable
     public String getColumnComment(
-        final String tableName, final String columnName)
+        @NotNull final String tableName, @NotNull final String columnName)
     {
         return
             getColumnComment(tableName, columnName, getColumnComments());
@@ -1325,18 +1342,15 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param columnTypes the column types.
      * @return the column type.
      * @see java.sql.Types
-     * @precondition tableName != null
-     * @precondition columnName != null
-     * @precondition columnTypes != null
      */
     protected int getColumnType(
-        final String tableName,
-        final String columnName,
-        final Map columnTypes)
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final Map columnTypes)
     {
         int result = -1;
 
-        Object t_Result =
+        @Nullable final Object t_Result =
             columnTypes.get(buildKey(tableName, columnName));
 
         if  (   (t_Result != null)
@@ -1346,7 +1360,7 @@ public abstract class AbstractJdbcMetadataManagerOld
         }
         else
         {
-            String parentTable = getParentTable(tableName);
+            final String parentTable = getParentTable(tableName);
             
             if  (parentTable != null)
             {
@@ -1363,14 +1377,11 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param tableName the table name.
      * @param columnName the column name.
      * @param columnType the column type.
-     * @precondition tableName != null
-     * @precondition columnName != null
-     * @precondition columnType != null
      */
     public void addColumnType(
-        final String tableName,
-        final String columnName,
-        final int columnType)
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final int columnType)
     {
         addColumnType(
             tableName, columnName, columnType, getColumnTypes());
@@ -1382,16 +1393,12 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param columnName the column name.
      * @param columnType the column type.
      * @param columnTypes the column types.
-     * @precondition tableName != null
-     * @precondition columnName != null
-     * @precondition columnType != null
-     * @precondition columnTypes != null
      */
     protected void addColumnType(
-        final String tableName,
-        final String columnName,
+        @NotNull final String tableName,
+        @NotNull final String columnName,
         final int columnType,
-        final Map columnTypes)
+        @NotNull final Map<String, Integer> columnTypes)
     {
         columnTypes.put(
             buildKey(tableName, columnName),
@@ -1476,11 +1483,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param columnNames the column names.
      * @return the allow null.
      * @see java.sql.Types
-     * @precondition tableName != null
-     * @precondition columnNames != null
      */
     public boolean getAllowNull(
-        final String tableName, final String[] columnNames)
+        @NotNull final String tableName, @NotNull final String[] columnNames)
     {
         return
             getAllowNull(
@@ -1494,18 +1499,15 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param allowNulls the allow nulls.
      * @return the allow null.
      * @see java.sql.Types
-     * @precondition tableName != null
-     * @precondition columnNames != null
-     * @precondition allowNulls != null
      */
     protected boolean getAllowNull(
-        final String tableName,
-        final String[] columnNames,
-        final Map allowNulls)
+        @NotNull final String tableName,
+        @NotNull final String[] columnNames,
+        @NotNull final Map allowNulls)
     {
         boolean result = false;
 
-        int t_iLength = (columnNames != null) ? columnNames.length : 0;
+        final int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
@@ -1907,22 +1909,18 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param columnNames the column names.
      * @param refTableName the referred table name.
      * @param refColumnNames the referred column names.
-     * @precondition tableName != null
-     * @precondition columnNames != null
-     * @precondition refRableName != null
-     * @precondition refColumnNames != null
      */
     public void addForeignKey(
-        final String tableName,
-        final String[] columnNames,
-        final String refTableName,
-        final String[] refColumnNames)
+        @NotNull final String tableName,
+        @NotNull final String[] columnNames,
+        @NotNull final String refTableName,
+        @NotNull final String[] refColumnNames)
     {
-        Map t_mForeignKeys = getForeignKeys();
+        final Map t_mForeignKeys = getForeignKeys();
 
         if  (t_mForeignKeys != null) 
         {
-            Object t_ReferingTablesKey = buildReferingTablesKey();
+            final Object t_ReferingTablesKey = buildReferingTablesKey();
 
             Collection t_cReferingTables =
                 (Collection) t_mForeignKeys.get(t_ReferingTablesKey);
@@ -2204,19 +2202,18 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param tableName the table name.
      * @param refTableName the referred table name.
      * @return such field.
-     * @precondition tableName != null
-     * @precondition refTableName != null
      */
+    @NotNull
     public String[][] getForeignKeys(
-        final String tableName, String refTableName)
+        @NotNull final String tableName, @NotNull final String refTableName)
     {
         String[][] result = EMPTY_ARRAY_OF_STRING_ARRAYS;
 
-        Map t_mForeignKeys = getForeignKeys();
+        final Map t_mForeignKeys = getForeignKeys();
 
         if  (t_mForeignKeys != null) 
         {
-            Object t_ForeignKeys = 
+            final Object t_ForeignKeys =
                 t_mForeignKeys.get(buildFkKey(tableName, refTableName));
 
             if  (t_ForeignKeys instanceof String)
@@ -2237,15 +2234,14 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param tableName the table name.
      * @param foreignKey the foreign key.
      * @return the referred table name.
-     * @precondition tableName != null
-     * @precondition foreignKey != null
      */
+    @Nullable
     public String getReferredTable(
-        final String tableName, final String[] foreignKey)
+        @NotNull final String tableName, @NotNull final String[] foreignKey)
     {
         String result = null;
 
-        Map t_mForeignKeys = getForeignKeys();
+        final Map t_mForeignKeys = getForeignKeys();
 
         if  (t_mForeignKeys != null) 
         {
@@ -2432,31 +2428,27 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @return <code>true</code> if such field is managed externally.
      */
     public boolean isManagedExternally(
-        final String tableName, String fieldName)
+        @NotNull final String tableName, @NotNull final String fieldName)
     {
         boolean result = false;
 
-        if  (   (tableName != null)
-             && (fieldName != null))
+        final String[] t_astrExternallyManagedFields =
+            getExternallyManagedFields(tableName);
+
+        if  (t_astrExternallyManagedFields != null)
         {
-            String[] t_astrExternallyManagedFields =
-                getExternallyManagedFields(tableName);
-
-            if  (t_astrExternallyManagedFields != null)
+            for  (int t_iExternallyManagedFieldIndex = 0;
+                        t_iExternallyManagedFieldIndex
+                      < t_astrExternallyManagedFields.length;
+                      t_iExternallyManagedFieldIndex++)
             {
-                for  (int t_iExternallyManagedFieldIndex = 0;
-                            t_iExternallyManagedFieldIndex
-                          < t_astrExternallyManagedFields.length;
-                          t_iExternallyManagedFieldIndex++)
+                if  (fieldName.equalsIgnoreCase(
+                         t_astrExternallyManagedFields[
+                             t_iExternallyManagedFieldIndex]))
                 {
-                    if  (fieldName.equalsIgnoreCase(
-                             t_astrExternallyManagedFields[
-                                 t_iExternallyManagedFieldIndex]))
-                    {
-                        result = true;
+                    result = true;
 
-                        break;
-                    }
+                    break;
                 }
             }
         }
@@ -2728,7 +2720,8 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param key the object key.
      * @return the map key.
      */
-    protected Object buildKey(final Object key)
+    @NotNull
+    protected String buildKey(@Nullable final String key)
     {
         return ((key == null) ? "null" : key);
     }
@@ -2739,8 +2732,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildKey(
-        final Object firstKey, final Object secondKey)
+    @NotNull
+    protected String buildKey(
+        @NotNull final String firstKey, @NotNull final String secondKey)
     {
         return
             "_|_" + buildKey(firstKey)
@@ -2752,7 +2746,8 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param firstKey the first object key.
      * @return the map key.
      */
-    protected Object buildPkKey(final Object firstKey)
+    @NotNull
+    protected String buildPkKey(@NotNull final String firstKey)
     {
         return "[pk]!!" + buildKey(firstKey);
     }
@@ -2763,8 +2758,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildPkKey(
-        final Object firstKey, final Object secondKey)
+    @NotNull
+    protected String buildPkKey(
+        @NotNull final String firstKey, @NotNull final String secondKey)
     {
         return buildPkKey(firstKey) + ".,.," + secondKey;
     }
@@ -2775,8 +2771,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildPkKey(
-        final Object firstKey, final Object secondKey, final Object thirdKey)
+    @NotNull
+    protected String buildPkKey(
+        @NotNull final String firstKey, @NotNull final String secondKey, @NotNull final String thirdKey)
     {
         return buildPkKey(firstKey, secondKey) + ";;" + thirdKey;
     }
@@ -2786,7 +2783,8 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param firstKey the first object key.
      * @return the map key.
      */
-    protected Object buildFkKey(final Object firstKey)
+    @NotNull
+    protected String buildFkKey(@NotNull final String firstKey)
     {
         return "[fk]!!" + buildKey(firstKey);
     }
@@ -2797,18 +2795,14 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildFkKey(
-        final Object firstKey, final Object secondKey)
+    @NotNull
+    protected String buildFkKey(
+        @NotNull final String firstKey, @NotNull final String[] secondKey)
     {
-        Object result = null;
+        final String result;
         
-        String secondPart = "" + secondKey;
-        
-        if  (secondKey instanceof String[])
-        {
-            secondPart = concat((String[]) secondKey, ",");
-        }
-        
+        final String secondPart = concat(secondKey, ",");
+
         result = buildFkKey(firstKey) + "++" + secondPart;
 
         return result;
@@ -2820,8 +2814,28 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildFkKey(
-        final Object firstKey, final Object secondKey, final Object thirdKey)
+    @NotNull
+    protected String buildFkKey(
+        @NotNull final String firstKey, @NotNull final String secondKey)
+    {
+        final String result;
+
+        final String secondPart = secondKey;
+
+        result = buildFkKey(firstKey) + "++" + secondPart;
+
+        return result;
+    }
+
+    /**
+     * Builds a fk key using given object.
+     * @param firstKey the first object key.
+     * @param secondKey the second object key.
+     * @return the map key.
+     */
+    @NotNull
+    protected String buildFkKey(
+        @NotNull final String firstKey, @NotNull final String[] secondKey, @NotNull final String thirdKey)
     {
         return buildFkKey(firstKey, secondKey) + ";:;:" + thirdKey;
     }
@@ -2834,21 +2848,17 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param fourthKey the fourth key.
      * @return the map key.
      */
-    protected Object buildFkKey(
-        final Object firstKey,
-        final Object secondKey,
-        final Object thirdKey,
-        final Object fourthKey)
+    @NotNull
+    protected String buildFkKey(
+        @NotNull final String firstKey,
+        @NotNull final String[] secondKey,
+        @NotNull final String thirdKey,
+        @NotNull final String[] fourthKey)
     {
-        Object result = null;
+        final String result;
         
-        String fourthPart = "" + fourthKey;
-        
-        if  (fourthKey instanceof String[])
-        {
-            fourthPart = concat((String[]) fourthKey, ",");
-        }
-        
+        final String fourthPart = concat((String[]) fourthKey, ",");
+
         result =
               buildFkKey(firstKey, secondKey, thirdKey)
             + ".;.;" + fourthPart;
@@ -2862,8 +2872,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildRefFkKey(
-        final Object firstKey, final Object secondKey)
+    @NotNull
+    protected String buildRefFkKey(
+        @NotNull final String firstKey, @NotNull final String secondKey)
     {
         return "\\ref//" + buildFkKey(firstKey, secondKey);
     }
@@ -2873,8 +2884,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param firstKey the first object key.
      * @return the map key.
      */
-    protected Object buildExternallyManagedFieldKey(
-        final Object firstKey)
+    @NotNull
+    protected String buildExternallyManagedFieldKey(
+        @NotNull final String firstKey)
     {
         return "[externally-managed-field]!!" + buildKey(firstKey);
     }
@@ -2885,8 +2897,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildExternallyManagedFieldKey(
-        final Object firstKey, final Object secondKey)
+    @NotNull
+    protected String buildExternallyManagedFieldKey(
+        @NotNull final String firstKey, @NotNull final String secondKey)
     {
         return
               buildExternallyManagedFieldKey(firstKey)
@@ -2899,8 +2912,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param firstKey the first object key.
      * @return the map key.
      */
-    protected Object buildExternallyManagedFieldRetrievalQueryKey(
-        final Object firstKey)
+    @NotNull
+    protected String buildExternallyManagedFieldRetrievalQueryKey(
+        @NotNull final String firstKey)
     {
         return
               "[externally-managed-field-retrieval-query]!!"
@@ -2914,8 +2928,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param secondKey the second object key.
      * @return the map key.
      */
-    protected Object buildExternallyManagedFieldRetrievalQueryKey(
-        final Object firstKey, final Object secondKey)
+    @NotNull
+    protected String buildExternallyManagedFieldRetrievalQueryKey(
+        @NotNull final String firstKey, @NotNull final String secondKey)
     {
         return
               buildExternallyManagedFieldRetrievalQueryKey(firstKey)
@@ -2927,14 +2942,19 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param value the object.
      * @return the map value.
      */
-    protected Object buildExternallyManagedFieldValue(
-        final Object value)
+    @NotNull
+    protected String buildExternallyManagedFieldValue(
+        @Nullable final String value)
     {
-        Object result = "";
+        @NotNull final String result;
 
         if  (value != null)
         {
             result = value;
+        }
+        else
+        {
+            result = "";
         }
 
         return result;
@@ -2946,14 +2966,19 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param value the object.
      * @return the map value.
      */
-    protected Object buildExternallyManagedFieldRetrievalQueryValue(
-        final Object value)
+    @NotNull
+    protected String buildExternallyManagedFieldRetrievalQueryValue(
+        @Nullable final String value)
     {
-        Object result = "";
+        @NotNull final String result;
 
         if  (value != null)
         {
             result = value;
+        }
+        else
+        {
+            result = "";
         }
 
         return result;
@@ -2965,8 +2990,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param second the second.
      * @return the map key.
      */
-    protected Object buildAllowNullKey(
-        final Object first, final Object second)
+    @NotNull
+    protected String buildAllowNullKey(
+        @NotNull final String first, @NotNull final String second)
     {
         return
               "[allow-nulls]!!"
@@ -2979,8 +3005,9 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param tableName the table name.
      * @return the map key.
      */
-    protected Object buildTableCommentKey(
-        final Object tableName)
+    @NotNull
+    protected String buildTableCommentKey(
+        @NotNull final String tableName)
     {
         return "[table-comment]!!" + buildKey(tableName);
     }
@@ -2990,11 +3017,10 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param tableName the table name.
      * @param columnName the column name.
      * @return the map key.
-     * @precondition tableName != null
-     * @precondition columnName != null
      */
-    protected Object buildColumnCommentKey(
-        final Object tableName, final String columnName)
+    @NotNull
+    protected String buildColumnCommentKey(
+        @NotNull final String tableName, @NotNull final String columnName)
     {
         return
             "[column-comment]!!" + buildKey(tableName) + buildKey(columnName);
@@ -5882,4 +5908,39 @@ public abstract class AbstractJdbcMetadataManagerOld
         return new String[0];
     }
 
+    @Override
+    public String toString()
+    {
+        return "AbstractJdbcMetadataManagerOld{" +
+               "m__aProceduresMetadata=" + Arrays.toString(m__aProceduresMetadata) +
+               ", m__MetaData=" + m__MetaData +
+               ", m__MetadataExtractionListener=" + m__MetadataExtractionListener +
+               ", m__strCatalog='" + m__strCatalog + '\'' +
+               ", m__strSchema='" + m__strSchema + '\'' +
+               ", m__astrTableNames=" + Arrays.toString(m__astrTableNames) +
+               ", m__lTables=" + m__lTables +
+               ", m__lColumns=" + m__lColumns +
+               ", m__mColumnNames=" + m__mColumnNames +
+               ", m__mColumnTypes=" + m__mColumnTypes +
+               ", m__mAllowNulls=" + m__mAllowNulls +
+               ", m__mTableComments=" + m__mTableComments +
+               ", m__mColumnComments=" + m__mColumnComments +
+               ", m__mColumnBools=" + m__mColumnBools +
+               ", m__mStaticTables=" + m__mStaticTables +
+               ", m__mDecoratedTables=" + m__mDecoratedTables +
+               ", m__mPrimaryKeys=" + m__mPrimaryKeys +
+               ", m__mForeignKeys=" + m__mForeignKeys +
+               ", m__mExternallyManagedFields=" + m__mExternallyManagedFields +
+               ", m__astrProcedureNames=" + Arrays.toString(m__astrProcedureNames) +
+               ", m__mProcedureParametersMetadata=" + m__mProcedureParametersMetadata +
+               ", m__bDisableTableExtraction=" + m__bDisableTableExtraction +
+               ", m__bLazyTableExtraction=" + m__bLazyTableExtraction +
+               ", m__bDisableProcedureExtraction=" + m__bDisableProcedureExtraction +
+               ", m__bLazyProcedureExtraction=" + m__bLazyProcedureExtraction +
+               ", m__bCaseSensitive=" + m__bCaseSensitive +
+               ", m__strEngineName='" + m__strEngineName + '\'' +
+               ", m__strEngineVersion='" + m__strEngineVersion + '\'' +
+               ", m__strQuote='" + m__strQuote + '\'' +
+               '}';
+    }
 }

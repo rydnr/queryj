@@ -127,8 +127,8 @@ public class MySQL4xMetaDataRetrievalHandler
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
+    @NotNull
     @Override
-    @Nullable
     protected MetadataManager buildMetadataManager(
         @NotNull final Map parameters,
         @NotNull List<Table> tables,

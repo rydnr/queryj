@@ -35,11 +35,6 @@
 package org.acmsl.queryj.tools.ant;
 
 /*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.tools.ant.AntTableElement;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
@@ -50,6 +45,11 @@ import java.util.Collection;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
@@ -69,13 +69,13 @@ public class AntExternallyManagedFieldsElement
     /**
      * The field collection.
      */
-    private Collection m__cFields;
+    private Collection<AntFieldElement> m__cFields;
 
     /**
      * Specifies the field collection.
      * @param fields the collection
      */
-    private void immutableSetFields(final Collection fields)
+    private void immutableSetFields(@NotNull final Collection<AntFieldElement> fields)
     {
         m__cFields = fields;
     }
@@ -84,7 +84,7 @@ public class AntExternallyManagedFieldsElement
      * Specifies the field collection.
      * @param fields the collection
      */
-    private void setFields(final Collection fields)
+    private void setFields(@NotNull final Collection<AntFieldElement> fields)
     {
         immutableSetFields(fields);
     }
@@ -93,7 +93,8 @@ public class AntExternallyManagedFieldsElement
      * Retrieves the field collection.
      * @return such collection.
      */
-    public Collection getFields()
+    @NotNull
+    public Collection<AntFieldElement> getFields()
     {
         return m__cFields;
     }
@@ -103,7 +104,7 @@ public class AntExternallyManagedFieldsElement
      * @param name the attribute name.
      * @param value the attribute value.
      */
-    public void setDynamicAttribute(final String name, final String value)
+    public void setDynamicAttribute(@NotNull final String name, @NotNull final String value)
     {
         throw new BuildException("Attributes are not supported");
     }
@@ -115,19 +116,19 @@ public class AntExternallyManagedFieldsElement
      * @throws BuildException if the element is not supported.
      */
     @Nullable
-    public Object createDynamicElement(final String name)
+    public Object createDynamicElement(@NotNull final String name)
     {
-        @Nullable AntFieldElement result = null;
+        @Nullable final AntFieldElement result;
 
         if  ("field".equals(name)) 
         {
             result = new AntFieldElement();
 
-            Collection t_cFields = getFields();
+            Collection<AntFieldElement> t_cFields = getFields();
 
             if  (t_cFields == null)
             {
-                t_cFields = new ArrayList();
+                t_cFields = new ArrayList<AntFieldElement>();
                 setFields(t_cFields);
             }
 
@@ -139,5 +140,12 @@ public class AntExternallyManagedFieldsElement
         }
 
         return result;
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "AntExternallyManagedFieldsElement{ fields=" + m__cFields + " }";
     }
 }

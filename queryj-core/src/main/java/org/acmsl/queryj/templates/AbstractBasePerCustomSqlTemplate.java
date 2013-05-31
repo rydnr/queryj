@@ -44,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractBasePerCustomSqlTemplate<C extends BasePerCustomSqlTemplateContext>
     extends  AbstractTemplate<C>
+    implements BasePerCustomSqlTemplate<C>
 {
     /**
      * Builds a <code>AbstractBasePerCustomSqlTemplate</code> using

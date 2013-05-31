@@ -81,6 +81,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class JdbcMetadataManager
     extends AbstractJdbcMetadataManager
 {
+
+    private static final long serialVersionUID = -3287133509095459164L;
+
     /**
      * Creates a {@link JdbcMetadataManager} with given name.
      * @param name the name.
@@ -155,14 +158,14 @@ public class JdbcMetadataManager
     protected List<TableIncompleteValueObject> extractTableNamesAndComments(
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
-        @Nullable  String schema,
+        @Nullable final String schema,
         @NotNull final List<String> tableNames,
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         final boolean caseSensitiveness)
         throws  SQLException,
                 QueryJException
     {
-        List<TableIncompleteValueObject> result = new ArrayList<TableIncompleteValueObject>();
+        @NotNull final List<TableIncompleteValueObject> result = new ArrayList<TableIncompleteValueObject>();
 
         ResultSet t_rsTables = null;
 
@@ -245,10 +248,10 @@ public class JdbcMetadataManager
         throws SQLException,
                QueryJException
     {
-        Map<String,List<AttributeIncompleteValueObject>> t_mAux =
+        final Map<String,List<AttributeIncompleteValueObject>> t_mAux =
             new HashMap<String,List<AttributeIncompleteValueObject>>(tables.size());
 
-        ResultSet t_rsColumns;
+        final ResultSet t_rsColumns;
         String t_strTableName;
         String t_strColumnName;
         int t_iColumnType;
@@ -354,9 +357,9 @@ public class JdbcMetadataManager
         throws  SQLException,
                 QueryJException
     {
-        Map<String,List<Attribute>> t_mAux = new HashMap<String,List<Attribute>>(tables.size());
+        @NotNull final Map<String,List<Attribute>> t_mAux = new HashMap<String,List<Attribute>>(tables.size());
 
-        ResultSet t_rsPrimaryKeys;
+        final ResultSet t_rsPrimaryKeys;
         String t_strTableName;
         String t_strColumnName;
         int t_iOrdinalPosition;
@@ -377,7 +380,7 @@ public class JdbcMetadataManager
             {
                 t_strTableName = t_rsPrimaryKeys.getString("TABLE_NAME");
 
-                Table t_Table = findTable(t_strTableName, tables, caseSensitiveness);
+                @Nullable final Table t_Table = findTable(t_strTableName, tables, caseSensitiveness);
 
                 if (   (t_Table != null)
                     && (passesFilter(t_Table, tables, caseSensitiveness)))
@@ -424,7 +427,7 @@ public class JdbcMetadataManager
         List<Attribute> t_lChildTablePrimaryKey;
         List<Attribute> t_lCompletePrimaryKey;
 
-        for (TableIncompleteValueObject t_Table : tables)
+        for (@NotNull final TableIncompleteValueObject t_Table : tables)
         {
             t_lChildTablePrimaryKey = t_mAux.get(t_Table.getName());
 
@@ -469,9 +472,9 @@ public class JdbcMetadataManager
         throws  SQLException,
                 QueryJException
     {
-        Map<String,List<ForeignKey>> t_mAux = new HashMap<String,List<ForeignKey>>(tables.size());
+        @NotNull final Map<String,List<ForeignKey>> t_mAux = new HashMap<String,List<ForeignKey>>(tables.size());
 
-        ResultSet t_rsForeignKeys;
+        final ResultSet t_rsForeignKeys;
         String t_strSourceTableName;
         Table t_SourceTable;
         String t_strTargetTableName;
@@ -559,7 +562,7 @@ public class JdbcMetadataManager
         List<ForeignKey> t_lChildForeignKeys;
         List<ForeignKey> t_lCompleteForeignKey;
 
-        for (TableIncompleteValueObject t_Table : tables)
+        for (@NotNull final TableIncompleteValueObject t_Table : tables)
         {
             t_lChildForeignKeys = t_mAux.get(t_Table.getName());
 

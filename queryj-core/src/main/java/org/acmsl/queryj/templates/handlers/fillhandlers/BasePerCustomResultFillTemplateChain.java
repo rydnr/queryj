@@ -39,30 +39,8 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  *Importing project classes.
 */
-import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.templates.FillTemplateChain;
-import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Chain;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing checkthread.org annotations.
- */
-import org.checkthread.annotations.ThreadSafe;
-
-/*
- * Importing JDK classes.
- */
-import java.util.List;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
@@ -70,49 +48,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/17
  */
-@ThreadSafe
-public class BasePerCustomResultFillTemplateChain
-    extends FillTemplateChain<BasePerCustomResultTemplateContext>
+public interface BasePerCustomResultFillTemplateChain<BC extends BasePerCustomResultTemplateContext>
+    extends FillTemplateChain<BC>
 {
-    /**
-     * Creates a {@link org.acmsl.queryj.templates.handlers.fillhandlers.BasePerCustomResultFillTemplateChain} using given context.
-     * @param context the {@link BasePerCustomResultTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
-     */
-    public BasePerCustomResultFillTemplateChain(
-        @NotNull final BasePerCustomResultTemplateContext context,
-        final boolean relevantOnly)
-    {
-        super(context, relevantOnly);
-    }
-
-    /**
-     * Adds additional per-custom-result handlers.
-     * @param chain the chain to be configured.
-     * @param context the {@link BasePerCustomResultTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
-     */
-    @Override
-    protected void addHandlers(
-        @NotNull final Chain chain,
-        @NotNull final BasePerCustomResultTemplateContext context,
-        final boolean relevantOnly)
-    {
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext,CustomResultHandler,ResultDecorator>(
-                new CustomResultHandler(context)),
-            relevantOnly);
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext,CustomResultTypeImportsHandler,List<String>>(
-                new CustomResultTypeImportsHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext,ResultIdHandler,DecoratedString>(
-                new ResultIdHandler(context)),
-            relevantOnly);
-    }
 }

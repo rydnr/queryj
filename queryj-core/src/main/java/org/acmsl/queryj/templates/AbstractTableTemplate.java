@@ -24,7 +24,7 @@
 
  *****************************************************************************
  *
- * Filename: TableTemplate.java
+ * Filename: AbstractTableTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -64,8 +64,9 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class TableTemplate
-    extends  BasePerTableTemplate<BasePerTableTemplateContext>
+@SuppressWarnings("unused")
+public abstract class AbstractTableTemplate
+    extends  AbstractBasePerTableTemplate<BasePerTableTemplateContext>
 {
     private static final long serialVersionUID = -1114015521191407454L;
     /**
@@ -82,7 +83,7 @@ public class TableTemplate
      * Builds a <code>TableTemplate</code> using given information.
      * @param context the {@link BasePerTableTemplateContext} instance.
      */
-    public TableTemplate(@NotNull final BasePerTableTemplateContext context)
+    public AbstractTableTemplate(@NotNull final BasePerTableTemplateContext context)
     {
         super(context);
 
@@ -134,6 +135,7 @@ public class TableTemplate
      * Adds a new field.
      * @param field the new field.
      */
+    @SuppressWarnings("unused")
     public void addField(@NotNull final String field)
     {
         @NotNull final List<String> t_lFields = getFields();
@@ -175,9 +177,10 @@ public class TableTemplate
      * @param field the field.
      * @param type the field type.
      */
+    @SuppressWarnings("unused")
     public void addFieldType(@NotNull final String field, @NotNull final String type)
     {
-        @NotNull Map<String,String> t_mFieldTypes = getFieldTypes();
+        @NotNull final Map<String,String> t_mFieldTypes = getFieldTypes();
 
         t_mFieldTypes.put(field, type);
     }
@@ -188,11 +191,12 @@ public class TableTemplate
      * @return the field type.
      */
     @NotNull
-    public String getFieldType(final String field)
+    @SuppressWarnings("unused")
+    public String getFieldType(@NotNull final String field)
     {
         @Nullable String result;
 
-        @NotNull Map<String,String> t_mFieldTypes = getFieldTypes();
+        @NotNull final Map<String,String> t_mFieldTypes = getFieldTypes();
 
         result = t_mFieldTypes.get(field);
 
@@ -212,5 +216,12 @@ public class TableTemplate
     public String getTemplateName()
     {
         return "Table";
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "TableTemplate{ fields=" + m__lFields + ", fieldTypes=" + m__mFieldTypes + " }";
     }
 }

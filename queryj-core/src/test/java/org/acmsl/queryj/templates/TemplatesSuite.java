@@ -85,7 +85,7 @@ public class TemplatesSuite
   
     public static TestSuite suite()
     {
-        TestSuite suite;
+        final TestSuite suite;
 
         suite = new TestSuite("org.acmsl.queryj.tools.templates");
 
@@ -93,11 +93,6 @@ public class TemplatesSuite
         suite.addTestSuite(org.acmsl.queryj.templates.TableRepositoryTemplateUtilsTest.class);
         suite.addTestSuite(org.acmsl.queryj.templates.TableTemplateUtilsTest.class);
         //suite.addTestSuite(org.acmsl.queryj.templates.TableTemplateTest.class);
-
-        suite.addTest(org.acmsl.queryj.templates.dao.DaoSuite.suite());
-        suite.addTest(org.acmsl.queryj.templates.handlers.HandlersSuite.suite());
-        suite.addTest(org.acmsl.queryj.templates.valueobject.ValueobjectSuite.suite());
-
 
         // JUnitDoclet begin method suite
         // JUnitDoclet end method suite

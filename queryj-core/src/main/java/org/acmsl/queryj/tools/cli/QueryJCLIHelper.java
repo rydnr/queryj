@@ -185,7 +185,7 @@ public class QueryJCLIHelper
     @NotNull
     public Option[] createVerbosityOptions()
     {
-        @NotNull Collection t_cResult = new ArrayList();
+        @NotNull Collection<Option> t_cResult = new ArrayList<Option>();
 
         Option t_Option =
             OptionBuilder
@@ -295,7 +295,7 @@ public class QueryJCLIHelper
         options.addOption(configurationOption);
         options.addOption(customSqlOption);
 
-        int t_iCount =
+        final int t_iCount =
             (verbosityOptions != null) ? verbosityOptions.length : 0;
 
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
@@ -353,7 +353,7 @@ public class QueryJCLIHelper
         final Option helpLongOption,
         final PrintStream printStream)
     {
-        @NotNull Options t_Options = new Options();
+        @NotNull final Options t_Options = new Options();
 
         addOptions(
             t_Options,
@@ -391,7 +391,7 @@ public class QueryJCLIHelper
 
             try
             {
-                @NotNull File t_File = new File(configurationFile);
+                @NotNull final File t_File = new File(configurationFile);
 
                 if  (   (t_File.exists())
                      && (t_File.canRead()))
@@ -483,7 +483,7 @@ public class QueryJCLIHelper
 
             if  (log)
             {
-                Log t_Log =
+                @Nullable final Log t_Log =
                     UniqueLogFactory.getLog(QueryJCLIHelper.class);
 
                 if  (t_Log != null)

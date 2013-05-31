@@ -54,11 +54,14 @@ import org.checkthread.annotations.ThreadSafe;
 public class QueryJBuildException
     extends QueryJException
 {
+
+    private static final long serialVersionUID = 5487018574560920387L;
+
     /**
      * Builds a QueryJ build exception with a certain message.
      * @param message the message.
      */
-    public QueryJBuildException(final String message)
+    public QueryJBuildException(@NotNull final String message)
     {
         super(message);
     }
@@ -68,7 +71,7 @@ public class QueryJBuildException
      * @param message the message.
      * @param cause the exception to wrap.
      */
-    public QueryJBuildException(final String message, final Throwable cause)
+    public QueryJBuildException(@NotNull final String message, @NotNull final Throwable cause)
     {
         super(message, cause);
     }
@@ -93,7 +96,7 @@ public class QueryJBuildException
     @NotNull
     public String toString(@NotNull final String message, @Nullable final Throwable cause)
     {
-        @NotNull StringBuilder t_sbResult = new StringBuilder();
+        @NotNull final StringBuilder t_sbResult = new StringBuilder();
 
         t_sbResult.append(message);
 

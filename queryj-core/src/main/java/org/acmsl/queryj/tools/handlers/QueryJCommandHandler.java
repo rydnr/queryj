@@ -45,14 +45,15 @@ import org.acmsl.queryj.tools.QueryJBuildException;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.CommandHandler;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Inside a Chain Of Responsibility, these are the chain links.
  * This means they perform specific actions when receiving the command.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface QueryJCommandHandler
-    extends  CommandHandler
+public interface QueryJCommandHandler<C extends QueryJCommand>
+    extends  CommandHandler<C, QueryJBuildException>
 {
     /**
      * Handles given command.
@@ -61,6 +62,6 @@ public interface QueryJCommandHandler
      * by different handlers.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    public boolean handle(final QueryJCommand command)
+    public boolean handle(@NotNull final C command)
         throws  QueryJBuildException;
 }

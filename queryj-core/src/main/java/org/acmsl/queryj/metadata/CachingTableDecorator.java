@@ -75,6 +75,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class CachingTableDecorator
     extends AbstractTableDecorator
 {
+
+    private static final long serialVersionUID = 7125795956047030470L;
     /**
      * The cached uppercased name.
      */

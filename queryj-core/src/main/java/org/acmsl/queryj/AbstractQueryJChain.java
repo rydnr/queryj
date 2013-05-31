@@ -56,12 +56,12 @@ import org.jetbrains.annotations.Nullable;
  * Manages a sequential chain of actions within QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractQueryJChain
+public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<C>, C extends QueryJCommand>
 {
     /**
      * The chain.
      */
-    private Chain m__Chain;
+    private Chain<CH> m__Chain;
 
     /**
      * Constructs an {@link AbstractQueryJChain} instance.
@@ -69,14 +69,15 @@ public abstract class AbstractQueryJChain
     public AbstractQueryJChain()
     {
         super(); // redundant
-        immutableSetChain(new ArrayListChainAdapter());
+        immutableSetChain(new ArrayListChainAdapter<CH>());
     }
 
     /**
      * Specifies the chain.
      * @param chain the new chain.
      */
-    protected final void immutableSetChain(@NotNull final Chain chain)
+    @SuppressWarnings("unchecked")
+    protected final void immutableSetChain(@NotNull final Chain<CH> chain)
     {
         m__Chain = chain;
     }
@@ -86,7 +87,7 @@ public abstract class AbstractQueryJChain
      * @param chain the new chain.
      */
     @SuppressWarnings("unused")
-    protected void setChain(@NotNull final Chain chain)
+    protected void setChain(@NotNull final Chain<CH> chain)
     {
         immutableSetChain(chain);
     }
@@ -96,7 +97,7 @@ public abstract class AbstractQueryJChain
      * @return such chain.
      */
     @NotNull
-    public Chain getChain()
+    public Chain<CH> getChain()
     {
         return m__Chain;
     }
@@ -117,14 +118,15 @@ public abstract class AbstractQueryJChain
      * @param chain the chain to be configured.
      * @return the updated chain.
      */
-    protected abstract Chain buildChain(@NotNull final Chain chain);
+    protected abstract Chain<CH> buildChain(@NotNull final Chain<CH> chain);
 
     /**
      * Builds the command.
      * @return the initialized command.
      */
     @NotNull
-    protected QueryJCommand buildCommand()
+    @SuppressWarnings("unchecked")
+    protected C buildCommand()
     {
         return buildCommand(new QueryJCommand());
     }
@@ -135,7 +137,7 @@ public abstract class AbstractQueryJChain
      * @return the initialized command.
      */
     @NotNull
-    protected abstract QueryJCommand buildCommand(@NotNull final QueryJCommand command);
+    protected abstract C buildCommand(@NotNull final QueryJCommand command);
 
     /**
      * Retrieves the link of the chain just after the one given command
@@ -145,10 +147,10 @@ public abstract class AbstractQueryJChain
      * @return the next handler in the chain.
      */
     @Nullable
-    public QueryJCommandHandler getNextChainLink(
-        @Nullable final Chain chain, @Nullable final QueryJCommandHandler commandHandler)
+    public CH getNextChainLink(
+        @Nullable final Chain<CH> chain, @Nullable final CH commandHandler)
     {
-        @Nullable QueryJCommandHandler result = null;
+        @Nullable CH result = null;
 
         if  (   (chain != null)
              && (!chain.isEmpty()))
@@ -156,17 +158,16 @@ public abstract class AbstractQueryJChain
             if  (   (commandHandler == null)
                  || (!chain.contains(commandHandler)))
             {
-                result = (QueryJCommandHandler) chain.get(0);
+                result = chain.get(0);
             }
             else
             {
-                int t_iCurrentIndex = chain.indexOf(commandHandler);
+                final int t_iCurrentIndex = chain.indexOf(commandHandler);
 
                 if  (   (t_iCurrentIndex >= 0)
                      && (t_iCurrentIndex < chain.size() - 1))
                 {
-                    result =
-                        (QueryJCommandHandler) chain.get(t_iCurrentIndex + 1);
+                    result = chain.get(t_iCurrentIndex + 1);
                 }
             }
         }
@@ -182,18 +183,18 @@ public abstract class AbstractQueryJChain
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean process(
-        @NotNull final Chain chain, @NotNull final QueryJCommand command)
+        @NotNull final Chain<CH> chain, @NotNull final C command)
       throws QueryJBuildException
     {
         boolean result = false;
 
         @Nullable final QueryJLog t_Log = command.getLog();
 
-        boolean t_bLoggingEnabled = (t_Log != null);
+        final boolean t_bLoggingEnabled = (t_Log != null);
 
         try 
         {
-            @Nullable QueryJCommandHandler t_CurrentCommandHandler = null;
+            @Nullable CH t_CurrentCommandHandler = null;
 
             do
             {
@@ -245,4 +246,11 @@ public abstract class AbstractQueryJChain
     protected abstract void cleanUpOnError(
         @NotNull final QueryJBuildException buildException,
         @NotNull final QueryJCommand command);
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "AbstractQueryJChain{" + "chain=" + getChain() + '}';
+    }
 }

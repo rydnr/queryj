@@ -157,7 +157,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        boolean result;
+        final boolean result;
 
         @NotNull final DatabaseMetaData t_Metadata = retrieveDatabaseMetaData(parameters);
 
@@ -222,7 +222,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         }
         catch (@NotNull final SQLException cannotCheckCaseSensitivity)
         {
-            Log t_Log =
+            @Nullable final Log t_Log =
                 UniqueLogFactory.getLog(
                     DatabaseMetaDataRetrievalHandler.class);
 
@@ -249,10 +249,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
       throws QueryJBuildException
     {
-        boolean t_bDisableTableExtraction =
+        final boolean t_bDisableTableExtraction =
             !retrieveExtractTables(parameters);
 
-        boolean t_bDisableProcedureExtraction =
+        final boolean t_bDisableProcedureExtraction =
             !retrieveExtractProcedures(parameters);
 
         return
@@ -271,12 +271,12 @@ public abstract class DatabaseMetaDataRetrievalHandler
     {
         List<Table> result = null;
 
-        @Nullable AntTablesElement t_TablesElement =
+        @Nullable final AntTablesElement t_TablesElement =
             retrieveTablesElement(parameters);
 
-        @Nullable Iterator t_itTableElements;
+        @Nullable final Iterator t_itTableElements;
 
-        @Nullable Collection t_cTableElements;
+        @Nullable final Collection t_cTableElements;
 
         if  (t_TablesElement != null)
         {
@@ -291,7 +291,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                 while  (t_itTableElements.hasNext())
                 {
-                    @NotNull AntTableElement t_Table =
+                    @NotNull final AntTableElement t_Table =
                         (AntTableElement) t_itTableElements.next();
 
                     result.add(convertToTable(t_Table));
@@ -325,7 +325,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             @NotNull final List<Attribute> t_lAttributes = new ArrayList<Attribute>(t_lFields.size());
 
-            for (@Nullable AntFieldElement t_Field : t_lFields)
+            for (@Nullable final AntFieldElement t_Field : t_lFields)
             {
                 if (t_Field != null)
                 {
@@ -353,9 +353,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         if (explicitTables != null)
         {
-            @Nullable Iterator t_itTableElements;
+            @Nullable final Iterator t_itTableElements;
 
-            @Nullable Collection t_cTableElements = explicitTables.getTables();
+            @Nullable final Collection t_cTableElements = explicitTables.getTables();
 
             @Nullable Collection t_cFieldElements;
 
@@ -363,7 +363,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
             while  (t_itTableElements.hasNext())
             {
-                @NotNull AntTableElement t_Table =
+                @NotNull final AntTableElement t_Table =
                     (AntTableElement) t_itTableElements.next();
 
                 t_cFieldElements = t_Table.getFields();
@@ -426,18 +426,22 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @Nullable final AntTablesElement explicitTables,
-        @NotNull final Map fieldMap)
+        @NotNull final Map<String, Collection<AntTableElement>> tableMap,
+        @NotNull final Map<String, Collection<String>> tableNameMap,
+        @NotNull final Map<String, Collection<AntFieldElement>> fieldMap,
+        @NotNull final Map<String, String> fieldNameMap,
+        @NotNull final Map<String, List<Attribute>> attributeMap)
     {
-        @Nullable Collection t_cTableElements = null;
+        @Nullable Collection<AntTableElement> t_cTableElements = null;
 
         if (explicitTables != null)
         {
             t_cTableElements = explicitTables.getTables();
         }
 
-        @Nullable Iterator t_itTableElements = null;
+        @Nullable Iterator<AntTableElement> t_itTableElements = null;
 
-        @Nullable Collection t_cFieldElements;
+        @Nullable Collection<AntFieldElement> t_cFieldElements;
 
         Collection<String> t_cTables;
 
@@ -450,15 +454,15 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             while  (t_itTableElements.hasNext())
             {
-                @NotNull AntTableElement t_Table =
-                    (AntTableElement) t_itTableElements.next();
+                @NotNull final AntTableElement t_Table =
+                    t_itTableElements.next();
 
-                t_cTables = (Collection<String>) fieldMap.get(buildTableKey());
+                t_cTables = tableNameMap.get(buildTableKey());
 
                 if  (t_cTables == null)
                 {
-                    t_cTables = new ArrayList();
-                    fieldMap.put(buildTableKey(), t_cTables);
+                    t_cTables = new ArrayList<String>();
+                    tableNameMap.put(buildTableKey(), t_cTables);
                 }
 
                 t_cTables.add(t_Table.getName());
@@ -468,29 +472,24 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 if  (   (t_cFieldElements  != null)
                      && (t_cFieldElements.size() > 0))
                 {
-                    Iterator t_itFieldElements = t_cFieldElements.iterator();
+                    @NotNull final Iterator t_itFieldElements = t_cFieldElements.iterator();
 
-                    int t_iFieldIndex = 0;
+                    final int t_iFieldIndex = 0;
 
                     while  (t_itFieldElements.hasNext())
                     {
-                        @NotNull AntFieldElement t_Field =
+                        @NotNull final AntFieldElement t_Field =
                             (AntFieldElement) t_itFieldElements.next();
 
                         @SuppressWarnings("unchecked")
                         @Nullable List<Attribute> t_lFields =
-                            (List<Attribute>)
-                                fieldMap.get(
-                                    buildTableFieldsKey(
-                                        t_Table.getName()));
+                            attributeMap.get(buildTableFieldsKey(t_Table.getName()));
 
                         if  (t_lFields == null)
                         {
                             t_lFields = new ArrayList<Attribute>(4);
 
-                            fieldMap.put(
-                                buildTableFieldsKey(
-                                    t_Table.getName()), t_lFields);
+                            attributeMap.put(buildTableFieldsKey(t_Table.getName()), t_lFields);
                         }
 
                         t_lFields.add(t_Field);
@@ -498,24 +497,18 @@ public abstract class DatabaseMetaDataRetrievalHandler
                         if  (t_Field.isPk())
                         {
                             @Nullable List<Attribute> t_lPks =
-                                (List<Attribute>)
-                                    fieldMap.get(
-                                        buildPkKey(t_Table.getName()));
+                                attributeMap.get(buildPkKey(t_Table.getName()));
 
                             if  (t_lPks == null)
                             {
                                 t_lPks = new ArrayList<Attribute>(1);
-                                fieldMap.put(
-                                    buildPkKey(
-                                        t_Table.getName()), t_lPks);
+                                attributeMap.put(buildPkKey(t_Table.getName()), t_lPks);
                             }
 
                             t_lPks.add(t_Field);
 
-                            fieldMap.put(
-                                buildPkKey(
-                                    t_Table.getName(),
-                                    t_Field.getName()),
+                            fieldNameMap.put(
+                                buildPkKey(t_Table.getName(), t_Field.getName()),
                                 t_Field.getName());
                         }
 
@@ -540,11 +533,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     }
                 }
 
-                @Nullable List<Attribute> t_lFields =
-                    (List<Attribute>)
-                        fieldMap.get(
-                            buildTableFieldsKey(
-                                t_Table.getName()));
+                @Nullable final List<Attribute> t_lFields =
+                    attributeMap.get(buildTableFieldsKey(t_Table.getName()));
 
                 if (t_lFields != null)
                 {
@@ -568,17 +558,17 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @NotNull final Map parameters, @Nullable final MetadataManager metadataManager)
         throws  QueryJBuildException
     {
-        boolean result = false;
+        final boolean result = false;
 
         @NotNull final DatabaseMetaData t_Metadata = retrieveDatabaseMetaData(parameters);
 
         storeMetadata(t_Metadata, parameters);
 
-        @Nullable MetadataTypeManager t_MetadataTypeManager;
+        @Nullable final MetadataTypeManager t_MetadataTypeManager;
 
         if  (metadataManager != null)
         {
-            @NotNull Map t_mKeys = new HashMap();
+            @NotNull final Map t_mKeys = new HashMap();
 
             storeMetadataManager(metadataManager, parameters);
 
@@ -590,46 +580,50 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 metadataManager,
                 t_MetadataTypeManager,
                 retrieveTablesElement(parameters),
+                t_mKeys,
+                t_mKeys,
+                t_mKeys,
+                t_mKeys,
                 t_mKeys);
 
-            @Nullable List<Table> t_lTables = (List<Table>) t_mKeys.get(buildTableKey());
+            @Nullable final List<Table> t_lTables = (List<Table>) t_mKeys.get(buildTableKey());
 
             if  (t_lTables != null)
             {
-                Iterator<Table> t_itTables = t_lTables.iterator();
+                final Iterator<Table> t_itTables = t_lTables.iterator();
 
                 while  (t_itTables.hasNext())
                 {
-                    @Nullable Table t_Table = t_itTables.next();
+                    @Nullable final Table t_Table = t_itTables.next();
 
                     if  (t_Table != null)
                     {
-                        @NotNull List<Attribute> t_lFields =
+                        @NotNull final List<Attribute> t_lFields =
                             (List<Attribute>)
                                 t_mKeys.get(
                                     buildTableFieldsKey(
                                         t_Table.getName()));
 
-                        Iterator<Attribute> t_itFields = t_lFields.iterator();
+                        final Iterator<Attribute> t_itFields = t_lFields.iterator();
 
                         while  (t_itFields.hasNext())
                         {
-                            @Nullable Attribute t_Field = t_itFields.next();
+                            @Nullable final Attribute t_Field = t_itFields.next();
 
-                            @NotNull List<AntFieldFkElement> t_lFieldFks =
+                            @NotNull final List<AntFieldFkElement> t_lFieldFks =
                                 (List<AntFieldFkElement>)
                                     t_mKeys.get(
                                         buildFkKey(
                                             t_Table.getName(),
                                             t_Field.getName()));
 
-                            Iterator<AntFieldFkElement> t_itFieldFks = t_lFieldFks.iterator();
+                            final Iterator<AntFieldFkElement> t_itFieldFks = t_lFieldFks.iterator();
 
                             @NotNull final List<Attribute> t_lFk = new ArrayList<Attribute>(1);
 
                             while  (t_itFieldFks.hasNext())
                             {
-                                @Nullable AntFieldFkElement t_FieldFk = t_itFieldFks.next();
+                                @Nullable final AntFieldFkElement t_FieldFk = t_itFieldFks.next();
 
                                 if  (t_FieldFk != null)
                                 {
@@ -674,7 +668,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final boolean enableProcedureExtraction)
       throws  QueryJBuildException
     {
-        boolean result = false;
+        final boolean result = false;
 
         storeMetadata(metaData, parameters);
 
@@ -684,13 +678,13 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             t_TablesElement = retrieveTablesElement(parameters);
 
-            @NotNull List<Table> t_lTables =
+            @NotNull final List<Table> t_lTables =
                 extractTables(parameters, t_TablesElement);
 
             storeTables(t_lTables, parameters);
         }
 
-        @Nullable MetadataManager t_MetadataManager =
+        @Nullable final MetadataManager t_MetadataManager =
             buildMetadataManager(
                 metaData,
                 !enableTableExtraction,
@@ -741,15 +735,15 @@ public abstract class DatabaseMetaDataRetrievalHandler
     @NotNull
     protected List<Table> extractTables(@Nullable final List<AntTableElement> tables)
     {
-        @Nullable List<Table> result;
+        @Nullable final List<Table> result;
 
-        int t_iLength = (tables != null) ? tables.size() : 0;
+        final int t_iLength = (tables != null) ? tables.size() : 0;
 
         result = new ArrayList<Table>(t_iLength);
 
         if (tables != null)
         {
-            for (@Nullable AntTableElement t_Table : tables)
+            for (@Nullable final AntTableElement t_Table : tables)
             {
                 if  (t_Table != null)
                 {
@@ -789,11 +783,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         if (tables != null)
         {
-            for (@Nullable AntTableElement t_Table : tables)
+            for (@Nullable final AntTableElement t_Table : tables)
             {
                 if  (t_Table != null)
                 {
-                    Collection t_cFields = t_Table.getFields();
+                    @Nullable final Collection t_cFields = t_Table.getFields();
 
                     if  (   (t_cFields != null)
                          && (t_cFields.size()> 0))
@@ -819,29 +813,29 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @NotNull final Collection tables,
         @NotNull final Map extractedMap,
         @NotNull final MetadataManager metadataManager,
-        @NotNull Object tableKey)
+        @NotNull final Object tableKey)
     {
-        Iterator t_itTables = tables.iterator();
+        final Iterator t_itTables = tables.iterator();
 
         while  (t_itTables.hasNext())
         {
-            @NotNull String t_strTableName = (String) t_itTables.next();
+            @NotNull final String t_strTableName = (String) t_itTables.next();
 
-            @NotNull Collection t_cFields =
+            @NotNull final Collection t_cFields =
                 (Collection)
                     extractedMap.get(buildTableFieldsKey(t_strTableName));
 
-            Iterator t_itFields = t_cFields.iterator();
+            final Iterator t_itFields = t_cFields.iterator();
 
             while  (t_itFields.hasNext())
             {
-                @NotNull String t_strFieldName =
+                @NotNull final String t_strFieldName =
                     (String) t_itFields.next();
 
-                @NotNull Collection t_cFieldFks =
+                @NotNull final Collection t_cFieldFks =
                     (Collection) extractedMap.get(buildFkKey(t_strTableName, t_strFieldName));
 
-                @Nullable Iterator t_itFieldFks = null;
+                @Nullable final Iterator t_itFieldFks = null;
 
 //                        if  (t_cFieldFks != null)
 //                        {
@@ -919,7 +913,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameters.
      */
     @SuppressWarnings("unchecked")
-    public void storeDatabaseProductName(@NotNull String productName, @NotNull final Map parameters)
+    public void storeDatabaseProductName(@NotNull final String productName, @NotNull final Map parameters)
     {
         parameters.put(DATABASE_PRODUCT_NAME, productName);
     }
@@ -941,7 +935,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameters.
      */
     @SuppressWarnings("unchecked")
-    public void storeDatabaseProductVersion(@NotNull String productVersion, @NotNull final Map parameters)
+    public void storeDatabaseProductVersion(@NotNull final String productVersion, @NotNull final Map parameters)
     {
         parameters.put(DATABASE_PRODUCT_VERSION, productVersion);
     }
@@ -976,7 +970,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     {
         int result = -1;
 
-        Integer t_iMajorVersion = (Integer) parameters.get(DATABASE_MAJOR_VERSION);
+        @Nullable final Integer t_iMajorVersion = (Integer) parameters.get(DATABASE_MAJOR_VERSION);
 
         if (t_iMajorVersion != null)
         {
@@ -1005,7 +999,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     {
         int result = -1;
 
-        Integer t_iMinorVersion = (Integer) parameters.get(DATABASE_MINOR_VERSION);
+        @Nullable final Integer t_iMinorVersion = (Integer) parameters.get(DATABASE_MINOR_VERSION);
 
         if (t_iMinorVersion != null)
         {
@@ -1025,7 +1019,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     {
         boolean result = false;
 
-        Object t_Flag = parameters.get(name);
+        @Nullable final Object t_Flag = parameters.get(name);
 
         if  (   (t_Flag != null)
              && (t_Flag instanceof Boolean))
@@ -1054,8 +1048,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * performed.
      */
     @Nullable
+    @SuppressWarnings("unchecked")
     protected MetadataManager buildMetadataManager(
-        @NotNull DatabaseMetaData metaData,
+        @NotNull final DatabaseMetaData metaData,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
@@ -1102,29 +1097,26 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         }
 
-        if  (result != null)
+        try
         {
-            try
-            {
-                result.eagerlyFetchMetadata();
+            result.eagerlyFetchMetadata();
 
-                if (t_lTables.size() == 0)
-                {
-                    storeTables(result.getTableDAO().findAllTables(), parameters);
-                }
-            }
-            catch  (@NotNull final SQLException sqlException)
+            if (t_lTables.size() == 0)
             {
-                throw
-                    new QueryJBuildException(
-                        "Cannot retrieve metadata.", sqlException);
+                storeTables(result.getTableDAO().findAllTables(), parameters);
             }
-            catch  (@NotNull final QueryJException queryjException)
-            {
-                throw
-                    new QueryJBuildException(
-                        "Cannot retrieve metadata.", queryjException);
-            }
+        }
+        catch  (@NotNull final SQLException sqlException)
+        {
+            throw
+                new QueryJBuildException(
+                    "Cannot retrieve metadata.", sqlException);
+        }
+        catch  (@NotNull final QueryJException queryjException)
+        {
+            throw
+                new QueryJBuildException(
+                    "Cannot retrieve metadata.", queryjException);
         }
 
         return result;
@@ -1153,7 +1145,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     {
         boolean result = false;
 
-        Boolean t_bCaseSensitive = (Boolean) parameters.get(CASE_SENSITIVE);
+        @Nullable final Boolean t_bCaseSensitive = (Boolean) parameters.get(CASE_SENSITIVE);
 
         if (t_bCaseSensitive != null)
         {
@@ -1196,7 +1188,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
-    @Nullable
+    @NotNull
     protected MetadataManager buildMetadataManager(
         @NotNull final Map parameters,
         @NotNull final List<Table> tables,
@@ -1214,7 +1206,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @NotNull final String quote)
       throws  QueryJBuildException
     {
-        MetadataManager result;
+        @NotNull final MetadataManager result;
 
         try 
         {
@@ -1240,7 +1232,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         }
         catch  (@NotNull final Exception exception)
         {
-            Log t_Log =
+            @Nullable final Log t_Log =
                 UniqueLogFactory.getLog(
                     DatabaseMetaDataRetrievalHandler.class);
 
@@ -1290,7 +1282,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     {
         boolean result = false;
 
-        Object t_Flag = parameters.get(METADATA_EXTRACTION_ALREADY_DONE);
+        @Nullable final Object t_Flag = parameters.get(METADATA_EXTRACTION_ALREADY_DONE);
 
         if  (   (t_Flag  != null)
              && (t_Flag instanceof Boolean))
@@ -1366,8 +1358,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the schema.
      */
     @Nullable
-    @SuppressWarnings("unchecked")
-    protected String retrieveSchema(@NotNull final Map parameters)
+    protected String retrieveSchema(@NotNull final Map<String, ?> parameters)
     {
         return (String) parameters.get(ParameterValidationHandler.JDBC_SCHEMA);
     }
@@ -1377,7 +1368,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the map key.
      */
     @NotNull
-    protected Object buildTableKey()
+    protected String buildTableKey()
     {
         return "'@'@'table";
     }
@@ -1387,7 +1378,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the map key.
      */
     @NotNull
-    protected Object buildTableFieldsKey(@NotNull final Object key)
+    protected String buildTableFieldsKey(@NotNull final Object key)
     {
         return ".98.table'@'@'fields`p" + key;
     }
@@ -1398,7 +1389,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the map key.
      */
     @NotNull
-    protected Object buildPkKey(@NotNull final Object firstKey)
+    protected String buildPkKey(@NotNull final Object firstKey)
     {
         return ".|\\|.pk" + firstKey;
     }
@@ -1410,8 +1401,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the map key.
      */
     @NotNull
-    protected Object buildPkKey(
-        @NotNull final Object firstKey, @NotNull final Object secondKey)
+    protected String buildPkKey(
+        @NotNull final String firstKey, @NotNull final String secondKey)
     {
         return buildPkKey(firstKey) + "-.,.,-" + secondKey;
     }
@@ -1422,7 +1413,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the map key.
      */
     @NotNull
-    protected Object buildFkKey(@NotNull final Object firstKey)
+    protected String buildFkKey(@NotNull final String firstKey)
     {
         return "==fk''" + firstKey;
     }
@@ -1434,8 +1425,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the map key.
      */
     @NotNull
-    protected Object buildFkKey(
-        @NotNull final Object firstKey, @NotNull final Object secondKey)
+    protected String buildFkKey(
+        @NotNull final String firstKey, @NotNull final String secondKey)
     {
         return buildFkKey(firstKey) + ".,.," + secondKey;
     }
@@ -1460,7 +1451,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         }
         catch  (@NotNull final SQLException sqlException)
         {
-            Log t_Log =
+            @Nullable final Log t_Log =
                 UniqueLogFactory.getLog(
                     DatabaseMetaDataRetrievalHandler.class);
 
@@ -1501,7 +1492,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         }
         catch  (@NotNull final SQLException sqlException)
         {
-            Log t_Log =
+            @Nullable final Log t_Log =
                 UniqueLogFactory.getLog(
                     DatabaseMetaDataRetrievalHandler.class);
 
@@ -1535,7 +1526,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         }
         catch  (@NotNull final SQLException sqlException)
         {
-            Log t_Log =
+            @Nullable final Log t_Log =
                 UniqueLogFactory.getLog(
                     DatabaseMetaDataRetrievalHandler.class);
 
@@ -1575,7 +1566,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         }
         catch  (@NotNull final SQLException sqlException)
         {
-            Log t_Log =
+            @Nullable final Log t_Log =
                 UniqueLogFactory.getLog(
                     DatabaseMetaDataRetrievalHandler.class);
 
@@ -1605,7 +1596,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         }
         catch  (@NotNull final SQLException sqlException)
         {
-            Log t_Log =
+            @Nullable final Log t_Log =
                 UniqueLogFactory.getLog(
                     DatabaseMetaDataRetrievalHandler.class);
 
@@ -1627,10 +1618,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return <code>true</code> in case it matches.
      * @throws QueryJBuildException if the check fails.
      */
-    protected boolean checkVendor(@NotNull final DatabaseMetaData metaData, @NotNull Map parameters)
+    protected boolean checkVendor(@NotNull final DatabaseMetaData metaData, @NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        boolean result;
+        final boolean result;
 
         @Nullable QueryJBuildException t_ExceptionToThrow = null;
 

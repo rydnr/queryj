@@ -55,6 +55,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class ForeignKeyValueObject
     extends AbstractForeignKey
 {
+
+    private static final long serialVersionUID = 3292464819930780148L;
+
     /**
      * Creates a <code>ForeignKeyValueObject</code> with given information.
      * @param sourceTableName the source table name.

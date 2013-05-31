@@ -57,6 +57,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class CachingAttributeDecorator
     extends  AbstractAttributeDecorator
 {
+
+    private static final long serialVersionUID = 7937414826592045025L;
     /**
      * The cached name uppercased.
      */

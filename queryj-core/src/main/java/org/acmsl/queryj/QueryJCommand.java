@@ -76,7 +76,7 @@ public class QueryJCommand
     /**
      * The reference to the log instance.
      */
-    private QueryJLog m__Log;
+    private transient QueryJLog m__Log;
 
     /**
      * Constructs an empty map command.
@@ -84,7 +84,7 @@ public class QueryJCommand
     @SuppressWarnings("unchecked")
     public QueryJCommand()
     {
-        immutableSetAttributeMap(new HashMap());
+        immutableSetAttributeMap(new HashMap<String, Object>());
     }
 
     /**
@@ -114,16 +114,6 @@ public class QueryJCommand
     public void setAttributeMap(@NotNull final Map<String,?> map)
     {
         immutableSetAttributeMap(map);
-    }
-
-    /**
-     * Retrieves the attribute map.
-     * @return the map.
-     */
-    @NotNull
-    protected final Map<String,?> immutableGetAttributeMap()
-    {
-        return m__mAttributes;
     }
 
     /**
@@ -182,9 +172,9 @@ public class QueryJCommand
      * @return the value or <code>null</code> if it wasn't found.
      */
     @Nullable
-    protected Object getAttribute(final String name, @Nullable final Map<String,?> map)
+    protected <T> T getAttribute(final String name, @Nullable final Map<String, T> map)
     {
-        @Nullable Object result = null;
+        @Nullable T result = null;
 
         if  (map != null) 
         {
@@ -249,5 +239,11 @@ public class QueryJCommand
     public QueryJLog getLog()
     {
         return m__Log;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "QueryJCommand{" + "log=" + m__Log + ", attributes=" + m__mAttributes + '}';
     }
 }

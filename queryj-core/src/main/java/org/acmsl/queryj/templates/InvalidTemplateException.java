@@ -52,16 +52,18 @@ import org.checkthread.annotations.ThreadSafe;
 public class InvalidTemplateException
     extends  NonCheckedException
 {
+
+    private static final long serialVersionUID = -3527297991508297513L;
+
     /**
      * Creates a InvalidTemplateException with given message.
      * @param messageKey the key to build the exception message.
      * @param params the parameters to build the exception message.
-     * @precondition messageKey != null
-     * @precondition params != null
      */
+    @SuppressWarnings("unused")
     public InvalidTemplateException(
-        final String messageKey,
-        final Object[] params)
+        @NotNull final String messageKey,
+        @NotNull final Object[] params)
     {
         super(messageKey, params);
     }
@@ -71,14 +73,11 @@ public class InvalidTemplateException
      * @param messageKey the key to build the exception message.
      * @param params the parameters to build the exception message.
      * @param cause the error cause.
-     * @precondition messageKey != null
-     * @precondition params != null
-     * @precondition cause != null
      */
     public InvalidTemplateException(
-        final String messageKey,
-        final Object[] params,
-        final Throwable cause)
+        @NotNull final String messageKey,
+        @NotNull final Object[] params,
+        @NotNull final Throwable cause)
     {
         super(messageKey, params, cause);
     }

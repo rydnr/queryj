@@ -35,16 +35,12 @@ package org.acmsl.queryj.tools;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
-import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOTemplateHandlerBundle;
-import org.acmsl.queryj.templates.dao.handlers.RepositoryDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.templates.dao.handlers.RepositoryDAOTemplateHandlerBundle;
-import org.acmsl.queryj.templates.other.OtherBundle;
 import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataCacheWritingHandler;
@@ -53,11 +49,9 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
 import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
-import org.acmsl.queryj.templates.dao.DAOBundle;
-import org.acmsl.queryj.templates.handlers.TableTemplateHandlerBundle;
-import org.acmsl.queryj.templates.valueobject.VOBundle;
 
 /*
  * Importing some ACM-SL classes.
@@ -97,8 +91,8 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class QueryJChain
-    extends org.acmsl.queryj.AbstractQueryJChain
+public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
+    extends AbstractQueryJChain<CH, QueryJCommand>
     implements QueryJSettings
 {
     /**
@@ -905,14 +899,16 @@ public class QueryJChain
      * @param properties the properties.
      * @return the output folder.
      */
+    @Nullable
     protected File getOutputdir(@Nullable final Properties properties)
     {
-        File result = getOutputdir();
+        @Nullable File result = getOutputdir();
 
         if  (   (result == null)
              && (properties != null))
         {
-            String t_strOutputdir = properties.getProperty(OUTPUT_FOLDER);
+            @Nullable final String t_strOutputdir =
+                properties.getProperty(OUTPUT_FOLDER);
 
             if  (t_strOutputdir != null)
             {
@@ -928,7 +924,7 @@ public class QueryJChain
      * Specifies the header.
      * @param header the new header.
      */
-    protected final void immutableSetHeaderfile(final File header)
+    protected final void immutableSetHeaderfile(@NotNull final File header)
     {
         m__Header = header;
     }
@@ -963,7 +959,7 @@ public class QueryJChain
         if  (   (result == null)
              && (properties != null))
         {
-            String t_strHeader = properties.getProperty(HEADER_FILE);
+            @Nullable final String t_strHeader = properties.getProperty(HEADER_FILE);
 
             if  (t_strHeader != null)
             {
@@ -1384,6 +1380,7 @@ public class QueryJChain
      * Retrieves the "generate-mock-dao-implementation" flag.
      * @return such flag.
      */
+    @SuppressWarnings("unused")
     protected boolean getGenerateMockDAOImplementationFlag()
     {
         return m__bGenerateMockDAOImplementation;
@@ -1464,6 +1461,7 @@ public class QueryJChain
      * Retrieves the "generate-xml-dao-implementation" flag.
      * @return such flag.
      */
+    @SuppressWarnings("unused")
     protected boolean getGenerateXMLDAOImplementationFlag()
     {
         return m__bGenerateXMLDAOImplementation;
@@ -1895,14 +1893,15 @@ public class QueryJChain
      * @param properties the properties.
      * @return such information.
      */
+    @Nullable
     protected File getSqlXmlFile(@Nullable final Properties properties)
     {
-        File result = getSqlXmlFile();
+        @Nullable File result = getSqlXmlFile();
 
         if  (   (result == null)
              && (properties != null))
         {
-            String t_strSqlXml = properties.getProperty(SQL_XML_FILE);
+            @Nullable final String t_strSqlXml = properties.getProperty(SQL_XML_FILE);
 
             if  (t_strSqlXml != null)
             {
@@ -1919,7 +1918,7 @@ public class QueryJChain
      * @param grammarFolder the new grammar folder.
      */
     protected final void immutableSetGrammarFolder(
-            final File grammarFolder)
+        @NotNull final File grammarFolder)
     {
         m__GrammarFolder = grammarFolder;
     }
@@ -1937,6 +1936,7 @@ public class QueryJChain
      * Retrieves the grammar name.
      * @return such information.
      */
+    @Nullable
     public File getGrammarFolder()
     {
         return m__GrammarFolder;
@@ -2061,7 +2061,7 @@ public class QueryJChain
     @Nullable
     protected String getGrammarSuffix(@Nullable final Properties properties)
     {
-        String result = getGrammarSuffix();
+        @Nullable String result = getGrammarSuffix();
 
         if  (   (result == null)
              && (properties != null))
@@ -2114,7 +2114,7 @@ public class QueryJChain
     @Nullable
     protected String getEncoding(@Nullable final Properties properties)
     {
-        String result = getEncoding();
+        @Nullable String result = getEncoding();
 
         if  (   (result == null)
              && (properties != null))
@@ -2134,7 +2134,7 @@ public class QueryJChain
      * Specifies whether to disable caching.
      * @param allow such setting.
      */
-    protected final void immutableSetDisableCaching(final String allow)
+    protected final void immutableSetDisableCaching(@NotNull final String allow)
     {
         m__strDisableCaching = allow;
     }
@@ -2143,7 +2143,7 @@ public class QueryJChain
      * Specifies whether to disable caching.
      * @param disable such setting.
      */
-    public void setDisableCaching(final String disable)
+    public void setDisableCaching(@NotNull final String disable)
     {
         immutableSetDisableCaching(disable);
 
@@ -2166,6 +2166,7 @@ public class QueryJChain
      * Retrieves whether to disable caching.
      * @return such setting.
      */
+    @Nullable
     public String getDisableCaching()
     {
         return m__strDisableCaching;
@@ -2261,7 +2262,7 @@ public class QueryJChain
         if  (   (result == 0)
              && (properties != null))
         {
-            @Nullable String t_strValue = properties.getProperty(THREAD_COUNT);
+            @Nullable final String t_strValue = properties.getProperty(THREAD_COUNT);
 
             if (t_strValue != null)
             {
@@ -2271,7 +2272,7 @@ public class QueryJChain
                 }
                 catch (@NotNull final NumberFormatException invalidValue)
                 {
-                    @Nullable Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
+                    @Nullable final Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 
                     if (t_Log != null)
                     {
@@ -2328,7 +2329,7 @@ public class QueryJChain
         if  (   (!result)
              && (properties != null))
         {
-            String t_strValue = properties.getProperty(DISABLE_CACHING);
+            @Nullable final String t_strValue = properties.getProperty(DISABLE_CACHING);
 
             if (t_strValue != null)
             {
@@ -2363,6 +2364,7 @@ public class QueryJChain
      * Retrieves whether to use generation timestamps.
      * @return such setting.
      */
+    @Nullable
     protected final String getDisableGenerationTimestamps()
     {
         return m__strDisableGenerationTimestamps;
@@ -2578,68 +2580,49 @@ public class QueryJChain
      * @param chain the chain to be configured.
      * @return the updated chain.
      */
+    @SuppressWarnings("unchecked")
     @NotNull
-    protected Chain buildChain(@NotNull final Chain chain)
+    protected Chain<CH> buildChain(@NotNull final Chain<CH> chain)
     {
-        return
-            buildChain(
-                chain,
-                getGenerateMockDAOImplementationFlag(),
-                getGenerateXMLDAOImplementationFlag());
-    }
+        chain.add((CH) new ParameterValidationHandler());
 
-    /**
-     * Builds the chain.
-     * @param chain the chain to be configured.
-     * @param generateMock whether to include Mock implementations.
-     * @param generateXML whether to include XML implementations.
-     * @return the updated chain.
-     */
-    @NotNull
-    protected Chain buildChain(
-        @NotNull final Chain chain,
-        final boolean generateMock,
-        final boolean generateXML)
-    {
-        chain.add(new ParameterValidationHandler());
+        chain.add((CH) new Log4JInitializerHandler());
 
-        chain.add(new Log4JInitializerHandler());
-
-        chain.add(new JdbcConnectionOpeningHandler());
-        chain.add(new CustomSqlProviderRetrievalHandler());
+        chain.add((CH) new JdbcConnectionOpeningHandler());
+        chain.add((CH) new CustomSqlProviderRetrievalHandler());
 
         // chain.add(new DatabaseMetaDataCacheReadingHandler());
 
-        chain.add(new MySQL4xMetaDataRetrievalHandler());
-        chain.add(new OracleMetaDataRetrievalHandler());
-        chain.add(new JdbcMetaDataRetrievalHandler());
-        chain.add(new CustomSqlValidationHandler());
+        chain.add((CH) new MySQL4xMetaDataRetrievalHandler());
+        chain.add((CH) new OracleMetaDataRetrievalHandler());
+        chain.add((CH) new JdbcMetaDataRetrievalHandler());
+        chain.add((CH) new CustomSqlValidationHandler());
 
-        chain.add(new DatabaseMetaDataCacheWritingHandler());
+        chain.add((CH) new DatabaseMetaDataCacheWritingHandler());
 
-        chain.add(new DatabaseMetaDataLoggingHandler());
+        chain.add((CH) new DatabaseMetaDataLoggingHandler());
 
-        chain.add(new ExternallyManagedFieldsRetrievalHandler());
+        chain.add((CH) new ExternallyManagedFieldsRetrievalHandler());
 
-        chain.add(new OtherBundle());
+//        chain.add(new OtherBundle());
 
-        chain.add(new TableTemplateHandlerBundle());
+//        chain.add(new TableTemplateHandlerBundle());
 
-        chain.add(new BaseRepositoryDAOTemplateHandlerBundle());
-        chain.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
+//        chain.add(new BaseRepositoryDAOTemplateHandlerBundle());
+//        chain.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
 
-        chain.add(new RepositoryDAOTemplateHandlerBundle());
-        chain.add(new RepositoryDAOFactoryTemplateHandlerBundle());
+//        chain.add(new RepositoryDAOTemplateHandlerBundle());
+//        chain.add(new RepositoryDAOFactoryTemplateHandlerBundle());
 
-        //chain.add(new TableRepositoryTemplateHandlerBundle());
-        //chain.add(new FunctionsBundle());
-        //chain.add(new KeywordRepositoryTemplateHandlerBundle());
+//        //chain.add(new TableRepositoryTemplateHandlerBundle());
+//        //chain.add(new FunctionsBundle());
+//        //chain.add(new KeywordRepositoryTemplateHandlerBundle());
 
-        chain.add(new DAOBundle(generateMock, generateXML));
+//        chain.add(new DAOBundle(generateMock, generateXML));
 
-        chain.add(new VOBundle(generateMock, generateXML));
+//        chain.add(new VOBundle(generateMock, generateXML));
 
-        chain.add(new JdbcConnectionClosingHandler());
+        chain.add((CH) new JdbcConnectionClosingHandler());
 
         return chain;
     }
@@ -2652,7 +2635,7 @@ public class QueryJChain
     protected void cleanUpOnError(
         @NotNull final QueryJBuildException buildException, @NotNull final QueryJCommand command)
     {
-        @Nullable Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 
         if  (t_Log != null)
         {
@@ -3008,7 +2991,7 @@ public class QueryJChain
                 && (grammarName != null)
                 && (grammarSuffix != null))
             {
-                @NotNull File t_GrammarFile =
+                @NotNull final File t_GrammarFile =
                     new File(
                           grammarFolder + File.separator + grammarName
                         + "_" + Locale.US.getLanguage().toLowerCase(Locale.US)
@@ -3069,7 +3052,7 @@ public class QueryJChain
 
         if  (value != null)
         {
-            @NotNull String t_strTrimmedValue = value.trim().toLowerCase();
+            @NotNull final String t_strTrimmedValue = value.trim().toLowerCase();
 
             result =
                 (   (t_strTrimmedValue.equals("yes"))
@@ -3104,7 +3087,7 @@ public class QueryJChain
             {
                 result = null;
 
-                @Nullable Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 
                 if  (t_Log != null)
                 {
@@ -3124,7 +3107,7 @@ public class QueryJChain
                     }
                     catch  (@NotNull final IOException ioException)
                     {
-                        @Nullable Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
+                        @Nullable final Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 
                         if  (t_Log != null)
                         {
@@ -3139,5 +3122,88 @@ public class QueryJChain
         }
 
         return result;
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        @NotNull final StringBuilder result =
+            new StringBuilder("QueryJChain{AllowEmptyRepositoryDAO=");
+
+        result.append(getAllowEmptyRepositoryDAO());
+        result.append(", Settings =");
+        result.append(getSettings());
+        result.append(", SettingsFile=");
+        result.append(getSettingsFile().getAbsolutePath());
+        result.append(", Driver='");
+        result.append(getDriver());
+        result.append("', Url='");
+        result.append(getUrl());
+        result.append("', Username='");
+        result.append(getUsername());
+        result.append("', Password='");
+        result.append(getPassword());
+        result.append("', Catalog='");
+        result.append(getCatalog());
+        result.append("', Schema='");
+        result.append(getSchema());
+        result.append("', Repository='");
+        result.append(getRepository());
+        result.append("', Package='");
+        result.append(getPackage());
+        result.append("', Outputdir=");
+        result.append(getOutputdir().getAbsolutePath());
+        result.append(", Header=");
+        result.append(getHeaderfile());
+        result.append(", Outputdirsubfolders='");
+        result.append(getOutputdirsubfolders());
+        result.append(", ExtractTables='");
+        result.append(getExtractTables());
+        result.append("', ExtractProcedures=");
+        result.append(getExtractProcedures());
+        result.append("', ExtractFunctions=");
+        result.append(getExtractFunctions());
+        result.append(", JNDIDataSources='");
+        result.append(getJndiDataSource());
+        result.append("', GenerateMockDAOImplementation='");
+        result.append(getGenerateMockDAOImplementation());
+        result.append(", GenerateXMLDAOImplementation='");
+        result.append(getGenerateXMLDAOImplementation());
+        result.append(", GenerateTests='");
+        result.append(getGenerateTests());
+        result.append(", CustomSqlModel='");
+        result.append(getCustomSqlModel());
+        result.append("', SqlXmlFile=");
+        result.append(getSqlXmlFile());
+        result.append(", GrammarFolder=");
+        result.append(getGrammarFolder());
+        result.append(", GrammarName='");
+        result.append(getGrammarName());
+        result.append("', GrammarSuffix='");
+        result.append(getGrammarSuffix());
+        result.append("', AllowEmptyRepositoryDAO='");
+        result.append(getAllowEmptyRepositoryDAO());
+        result.append(", ImplementMarkerInterfaces='");
+        result.append(getImplementMarkerInterfaces());
+        result.append(", DisableCustomSqlValidation='");
+        result.append(getDisableCustomSqlValidation());
+        result.append("', Encoding='");
+        result.append(getEncoding());
+        result.append("', Caching=");
+        result.append(isCaching());
+        result.append(", DisableCaching='");
+        result.append(getDisableCaching());
+        result.append(", ThreadCount=");
+        result.append(getThreadCount());
+        result.append("', DisableGenerationTimestampsFlag=");
+        result.append(getDisableGenerationTimestamps());
+        result.append(", DisableNotNullAnnotations='");
+        result.append(getDisableNotNullAnnotations());
+        result.append(", DisableCheckthreadAnnotations='");
+        result.append(getDisableCheckthreadAnnotations());
+        result.append('}');
+
+        return result.toString();
     }
 }

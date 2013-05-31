@@ -63,6 +63,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class TemplateContextFillAdapterHandler<C extends TemplateContext, F extends TemplateContextFillHandler<C,P>, P>
     extends FillAdapterHandler
 {
+
+    private static final long serialVersionUID = 7171024612422933270L;
+
     /**
      * Creates a {@link TemplateContextFillAdapterHandler instance} to adapt given
      * {@link TemplateContextFillHandler fill handler}.

@@ -54,7 +54,6 @@ import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.templates.TableTemplate;
 
 /*
  * Importing some JetBrains annotations.
@@ -65,7 +64,6 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -142,7 +140,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
             retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
             retrieveJNDILocation(parameters),
-            retrieveTableTemplates(parameters),
             CachingDecoratorFactory.getInstance());
 
         return false;
@@ -161,7 +158,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to support JMX or not.
      * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param tableTemplates the table templates.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
@@ -178,15 +174,14 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @NotNull final List<TableTemplate> tableTemplates,
         @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
     {
         if (isGenerationEnabled(customSqlProvider, parameters))
         {
-            @NotNull List<String> t_lTableNames = metadataManager.getTableDAO().findAllTableNames();
+            @NotNull final List<String> t_lTableNames = metadataManager.getTableDAO().findAllTableNames();
 
-            @Nullable T t_Template =
+            @Nullable final T t_Template =
                 createTemplate(
                     metadataManager,
                     customSqlProvider,
@@ -255,7 +250,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
-        @NotNull String jndiLocation,
+        @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
@@ -320,27 +315,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         @NotNull final T template, @NotNull final Map parameters);
 
     /**
-     * Retrieves the table templates.
-     * @param parameters the parameter map.
-     * @return such templates.
-     */
-    @NotNull
-    @SuppressWarnings("unchecked")
-    protected List<TableTemplate> retrieveTableTemplates(@NotNull final Map parameters)
-    {
-        List<TableTemplate> result =
-            (List<TableTemplate>)
-                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-
-        if (result == null)
-        {
-            result = new ArrayList<TableTemplate>(0);
-        }
-
-        return result;
-    }
-
-    /**
      * Checks whether there's any custom SQL for the whole repository.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param allowEmptyRepositoryDAO whether to generate the repository DAO
@@ -369,7 +343,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
 
         if  (!result)
         {
-            for (@Nullable Sql t_Sql : sqlDAO.findAll())
+            for (@Nullable final Sql t_Sql : sqlDAO.findAll())
             {
                 if (   (t_Sql != null)
                     && (t_Sql.getRepositoryScope() != null))
@@ -391,9 +365,9 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     @SuppressWarnings("unchecked")
     protected boolean getAllowEmptyRepositoryDAOSetting(@NotNull final Map parameters)
     {
-        boolean result;
+        final boolean result;
 
-        @Nullable Boolean t_Result =
+        @Nullable final Boolean t_Result =
             (Boolean)
                 parameters.get(
                     ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO);

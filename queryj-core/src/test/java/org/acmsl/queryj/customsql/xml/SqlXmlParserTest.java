@@ -300,41 +300,42 @@ extends TestCase
   * @throws Exception if an unexpected situation occurs.
   * @see org.acmsl.queryj.customsql.xml.SqlXmlParser#parse()
   */
+  @SuppressWarnings("unused")
   public void testParse()
   throws Exception
   {
     // JUnitDoclet begin method parse
-      @NotNull SqlXmlParser t_Parser =
+      @NotNull final SqlXmlParser t_Parser =
           new SqlXmlParserImpl(new ByteArrayInputStream(TEST_INPUT.getBytes())) {};
       assertNotNull(t_Parser);
       t_Parser.parse();
-      List<Sql> t_lQueries = t_Parser.getQueries();
+      final List<Sql> t_lQueries = t_Parser.getQueries();
       assertNotNull(t_lQueries);
       System.out.println(t_lQueries);
       assertEquals(4, t_lQueries.size());
 
-      List<Result> t_lResults = t_Parser.getResults();
+      final List<Result> t_lResults = t_Parser.getResults();
       assertEquals(3, t_lResults.size());
 
-      List<Parameter> t_lParameters = t_Parser.getParameters();
+      final List<Parameter> t_lParameters = t_Parser.getParameters();
       assertEquals(1, t_lParameters.size());
 
-      List<ParameterRef> t_lParameterRefs = t_Parser.getParameterRefs();
+      final List<ParameterRef> t_lParameterRefs = t_Parser.getParameterRefs();
       assertEquals(0, t_lParameterRefs.size());
 
-      List<Property> t_lProperties = t_Parser.getProperties();
+      final List<Property> t_lProperties = t_Parser.getProperties();
       assertEquals(6, t_lProperties.size());
 
-      List<PropertyRef> t_lPropertyRefs = t_Parser.getPropertyRefs();
+      final List<PropertyRef> t_lPropertyRefs = t_Parser.getPropertyRefs();
       assertEquals(0, t_lPropertyRefs.size());
 
-      List<ConnectionFlags> t_lConnectionFlags = t_Parser.getConnectionFlagList();
+      final List<ConnectionFlags> t_lConnectionFlags = t_Parser.getConnectionFlagList();
       assertEquals(5, t_lConnectionFlags.size());
 
-      List<StatementFlags> t_lStatementFlags = t_Parser.getStatementFlagList();
+      final List<StatementFlags> t_lStatementFlags = t_Parser.getStatementFlagList();
       assertEquals(1, t_lStatementFlags.size());
 
-      List<ResultSetFlags> t_lResultSetFlags = t_Parser.getResultSetFlagList();
+      final List<ResultSetFlags> t_lResultSetFlags = t_Parser.getResultSetFlagList();
       assertEquals(1, t_lResultSetFlags.size());
 
     // JUnitDoclet end method parse
@@ -354,7 +355,7 @@ extends TestCase
     // JUnitDoclet end method testcase.testVault
   }
   
-  public static void main(String[] args)
+  public static void main(final String[] args)
   {
     // JUnitDoclet begin method testcase.main
     junit.textui.TestRunner.run(SqlXmlParserTest.class);

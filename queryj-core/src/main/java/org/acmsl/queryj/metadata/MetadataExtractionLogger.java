@@ -80,6 +80,8 @@ public class MetadataExtractionLogger
     @Nullable
     final static Log LOG = UniqueLogFactory.getLog(MetadataExtractionLogger.class);
 
+    private static final long serialVersionUID = 8177528056282777278L;
+
     /**
      * Logs a debug message.
      * @param message the message to log as debug.

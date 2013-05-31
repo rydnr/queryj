@@ -36,13 +36,14 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /**
  * Marks all template handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface TemplateHandler
-    extends QueryJCommandHandler
+public interface TemplateHandler<C extends QueryJCommand>
+    extends QueryJCommandHandler<C>
 {
 }

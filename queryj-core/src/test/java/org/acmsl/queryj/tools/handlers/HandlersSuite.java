@@ -43,8 +43,6 @@ package org.acmsl.queryj.tools.handlers;
 * Importing project classes.
 */
 
-import org.acmsl.queryj.tools.handlers.oracle.OracleSuite;
-
 
 /*
 /* Importing JUnit classes.
@@ -93,13 +91,9 @@ public class HandlersSuite
   
   public static TestSuite suite()
   {
-    TestSuite suite;
-    
-    suite =
-    new TestSuite("org.acmsl.queryj.tools.handlers");
+    final TestSuite suite = new TestSuite("org.acmsl.queryj.tools.handlers");
     
     suite.addTestSuite(org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandlerTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.handlers.MetaDataBasedTableRepositoryBuildHandlerTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandlerTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandlerTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandlerTest.class);
@@ -108,16 +102,13 @@ public class HandlersSuite
     suite.addTestSuite(org.acmsl.queryj.tools.handlers.ParameterValidationHandlerTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.handlers.DatabaseEngineHandlerTest.class);
     
-    suite.addTest(org.acmsl.queryj.tools.handlers.oracle.OracleSuite.suite());
-    
-    
     // JUnitDoclet begin method suite
     // JUnitDoclet end method suite
     
     return suite;
   }
   
-  public static void main(String[] args)
+  public static void main(final String[] args)
   {
     // JUnitDoclet begin method testsuite.main
     junit.textui.TestRunner.run(suite());

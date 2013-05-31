@@ -86,13 +86,18 @@ public class JdbcConnectionOpeningHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        storeConnection(openConnection(parameters), parameters);
-        
+        @Nullable final Connection connection = openConnection((Map<String, String>) parameters);
+
+        if (connection != null)
+        {
+            storeConnection(connection, (Map <String, Connection>) parameters);
+        }
+
         return false;
     }
 
@@ -102,26 +107,21 @@ public class JdbcConnectionOpeningHandler
      * @param parameters the parameter map.
      * @return the JDBC connection.
      * @throws QueryJBuildException if the connection cannot be opened.
-     * @precondition parameters != null
      */
     @Nullable
-    protected Connection openConnection(@NotNull final Map parameters)
+    protected Connection openConnection(@NotNull final Map<String, String> parameters)
         throws  QueryJBuildException
     {
         return
             openConnection(
-                (String)
-                    parameters.get(
-                        ParameterValidationHandler.JDBC_DRIVER),
-                (String)
-                    parameters.get(
-                        ParameterValidationHandler.JDBC_URL),
-                (String)
-                    parameters.get(
-                        ParameterValidationHandler.JDBC_USERNAME),
-                (String)
-                    parameters.get(
-                        ParameterValidationHandler.JDBC_PASSWORD));
+                parameters.get(
+                    ParameterValidationHandler.JDBC_DRIVER),
+                parameters.get(
+                    ParameterValidationHandler.JDBC_URL),
+                parameters.get(
+                    ParameterValidationHandler.JDBC_USERNAME),
+                parameters.get(
+                    ParameterValidationHandler.JDBC_PASSWORD));
     }
 
     /**
@@ -133,27 +133,22 @@ public class JdbcConnectionOpeningHandler
      * @return the JDBC connection.
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
-     * @precondition driver != null
-     * @precondition url != null
-     * @precondition username != null
      */
     @Nullable
     protected Connection openConnection(
-        final String driver,
-        final String url,
-        final String username,
-        final String password)
+        @NotNull final String driver,
+        @NotNull final String url,
+        @NotNull final String username,
+        @Nullable final String password)
       throws  QueryJBuildException
     {
-        @Nullable Connection result = null;
+        @Nullable final Connection result;
 
         try 
         {
             Class.forName(driver);
 
-            result =
-                DriverManager.getConnection(
-                    url, username, password);
+            result = DriverManager.getConnection(url, username, password);
         }
         catch  (@NotNull final RuntimeException exception)
         {
@@ -179,11 +174,9 @@ public class JdbcConnectionOpeningHandler
      * Stores the JDBC connection in given attribute map.
      * @param connection the connection to store.
      * @param parameters the parameter map.
-     * @precondition connection != null
-     * @precondition parameters != null
      */
     protected void storeConnection(
-        final Connection connection, @NotNull final Map parameters)
+        @NotNull final Connection connection, @NotNull final Map<String, Connection> parameters)
     {
         parameters.put(JDBC_CONNECTION, connection);
     }

@@ -33,6 +33,7 @@ package org.acmsl.queryj.templates;
 /*
  * Importing some project-specific classes.
  */
+import com.sun.org.apache.bcel.internal.classfile.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
 /*
@@ -44,6 +45,7 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -54,8 +56,10 @@ import java.util.Collection;
  * Base logic for all per-foreign-key templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public abstract class AbstractBasePerForeignKeyTemplate<C extends BasePerForeignKeyTemplateContext>
     extends  AbstractTemplate<C>
+    implements BasePerForeignKeyTemplate<C>
 {
     /**
      * Builds a <code>AbstractBasePerForeignKeyTemplate</code> using
@@ -113,9 +117,9 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends BasePerForeign
      * Concatenates given list.
      * @param list the list.
      * @param separator the separator.
-     * @precondition list != null
      */
-    protected String concat(final Collection list, final String separator)
+    @NotNull
+    protected String concat(@NotNull final Collection<?> list, @NotNull final String separator)
     {
         return concat(list, separator, StringUtils.getInstance());
     }
@@ -125,14 +129,32 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends BasePerForeign
      * @param list the list.
      * @param separator the separator.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @precondition list != null
-     * @precondition stringUtils != null
      */
+    @NotNull
     protected String concat(
-        final Collection list,
-        final String separator,
-        @NotNull final StringUtils stringUtils)
+        @NotNull final Collection<?> list,
+        @NotNull final String separator,
+        @Nullable final StringUtils stringUtils)
     {
-        return stringUtils.concatenate(list, separator);
+        @NotNull final String result;
+        if (stringUtils != null)
+        {
+            result = stringUtils.concatenate(list, separator);
+        }
+        else
+        {
+            @NotNull final StringBuilder builder = new StringBuilder();
+            for (@Nullable final Object item : list)
+            {
+                if (item != null)
+                {
+                    builder.append(item);
+                }
+            }
+
+            result = builder.toString();
+        }
+
+        return result;
     }
 }

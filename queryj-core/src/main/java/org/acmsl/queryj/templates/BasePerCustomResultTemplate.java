@@ -32,11 +32,6 @@
 package org.acmsl.queryj.templates;
 
 /*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.templates.handlers.fillhandlers.BasePerCustomResultFillTemplateChain;
-
-/*
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplate;
@@ -50,57 +45,30 @@ import org.jetbrains.annotations.NotNull;
  * Base logic for all templates to be processed once per custom result.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class BasePerCustomResultTemplate<C extends BasePerCustomResultTemplateContext>
-    extends  AbstractBasePerCustomResultTemplate<C>
+public interface BasePerCustomResultTemplate<C extends BasePerCustomResultTemplateContext>
+    extends  Template<C>
 {
     /**
-     * Builds a <code>BasePerCustomResultTemplate</code> using given
-     * information.
-     * @param context the {@link BasePerCustomResultTemplateContext} instance.
-     */
-    public BasePerCustomResultTemplate(@NotNull final C context)
-    {
-        super(context);
-    }
-
-    /**
      * Builds the correct chain.
-     *
      * @param context the context.
      * @param relevantOnly whether to include only relevant placeholders.
-     * @return the specific {@link FillTemplateChain}.
+     * @return the specific {@link AbstractFillTemplateChain}.
      */
+    @SuppressWarnings("unused")
     @NotNull
-    @Override
-    protected FillTemplateChain buildFillTemplateChain(
-        @NotNull final C context, final boolean relevantOnly)
-    {
-        return new BasePerCustomResultFillTemplateChain(context, relevantOnly);
-    }
+    public FillTemplateChain<C> buildFillTemplateChain(
+        @NotNull final C context, final boolean relevantOnly);
 
     /**
      * Builds a context-specific exception.
-     *
      * @param context  the context.
-     * @param template the {@link org.antlr.stringtemplate.StringTemplate} instance.
-     * @return the specific {@link org.acmsl.queryj.templates.InvalidTemplateException} for the template.
+     * @param template the {@link StringTemplate} instance.
+     * @return the specific {@link InvalidTemplateException} for the template.
      */
+    @SuppressWarnings("unused")
     @NotNull
-    @Override
-    protected InvalidTemplateException buildInvalidTemplateException(
+    public InvalidTemplateException buildInvalidTemplateException(
         @NotNull final C context,
         @NotNull final StringTemplate template,
-        @NotNull final Throwable actualException)
-    {
-        return
-            new InvalidTemplateException(
-                "invalid.per.custom-result.template",
-                new Object[]
-                {
-                    template.getName(),
-                    getTemplateName(),
-                    context.getResult().getId()
-                },
-                actualException);
-    }
+        @NotNull final Throwable actualException);
 }

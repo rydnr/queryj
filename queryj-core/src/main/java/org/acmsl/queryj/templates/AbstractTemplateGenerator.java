@@ -251,7 +251,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         @NotNull final File rootFolder,
         @NotNull final Charset charset,
         @NotNull final FileUtils fileUtils,
-        @NotNull final Log log)
+        @Nullable final Log log)
         throws IOException,
         QueryJBuildException
     {
@@ -263,7 +263,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         {
             @NotNull final String newHash = computeHash(relevantContent, charset);
 
-            @Nullable final String oldHash = retrieveHash(fileName, outputDir, rootFolder, fileUtils);
+            @Nullable final String oldHash = retrieveHash(fileName, outputDir, rootFolder, charset, fileUtils);
 
             if (   (oldHash == null)
                 || (!newHash.equals(oldHash)))
@@ -273,7 +273,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
 
             if (result)
             {
-                String t_strOutputFile =
+                @NotNull final String t_strOutputFile =
                       outputDir.getAbsolutePath()
                     + File.separator
                     + fileName;
@@ -285,11 +285,11 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
                         getOutputDir(outputDir, rootFolder).getAbsolutePath() + File.separator + "." + fileName + ".ser");
                 }
 
-                String t_strFileContents = template.generate(false);
+                @Nullable final String t_strFileContents = template.generate(false);
 
                 if  (!"".equals(t_strFileContents))
                 {
-                    boolean folderCreated = outputDir.mkdirs();
+                    final boolean folderCreated = outputDir.mkdirs();
 
                     if (   (!folderCreated)
                         && (!outputDir.exists()))
@@ -299,22 +299,33 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
                     }
                     else if (t_strFileContents != null)
                     {
-                        log.debug(
-                              "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
-                            + t_strOutputFile);
+                        if (   (log != null)
+                            && (log.isDebugEnabled()))
+                        {
+                            log.debug(
+                                  "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
+                                + t_strOutputFile);
+                        }
                     }
 
-                    fileUtils.writeFile(
-                        t_strOutputFile,
-                        t_strFileContents,
-                        charset);
+                    if (t_strFileContents != null)
+                    {
+                        fileUtils.writeFile(
+                            t_strOutputFile,
+                            t_strFileContents,
+                            charset);
+                    }
 
                     writeHash(newHash, fileName, outputDir, rootFolder, charset, fileUtils);
                 }
                 else
                 {
-                    log.debug(
-                        "Not writing " + t_strOutputFile + " since the generated content is empty");
+                    if (   (log != null)
+                           && (log.isDebugEnabled()))
+                    {
+                        log.debug(
+                            "Not writing " + t_strOutputFile + " since the generated content is empty");
+                    }
                 }
             }
         }
@@ -334,10 +345,11 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         @NotNull final String fileName,
         @NotNull final File outputDir,
         @NotNull final File rootFolder,
+        @NotNull final Charset charset,
         @NotNull final FileUtils fileUtils)
     {
         @Nullable String result =
-            fileUtils.readFileIfPossible(buildHashFile(fileName, outputDir, rootFolder));
+            fileUtils.readFileIfPossible(buildHashFile(fileName, outputDir, rootFolder), charset);
 
         if (   (result != null)
             && (result.endsWith("\n")))
@@ -399,12 +411,15 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         }
         catch (@NotNull IOException cannotSerialize)
         {
-            @NotNull final Log t_Log =
+            @Nullable final Log t_Log =
                 UniqueLogFactory.getLog(AbstractTemplateGenerator.class);
 
-            t_Log.warn(
-                "Cannot serialize template " + outputFilePath + " (" + cannotSerialize + ")",
-                cannotSerialize);
+            if (t_Log != null)
+            {
+                t_Log.warn(
+                    "Cannot serialize template " + outputFilePath + " (" + cannotSerialize + ")",
+                    cannotSerialize);
+            }
         }
         finally
         {
@@ -416,12 +431,15 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
                 }
                 catch (@NotNull final IOException cannotCloseCacheFile)
                 {
-                    @NotNull final Log t_Log =
+                    @Nullable final Log t_Log =
                         UniqueLogFactory.getLog(AbstractTemplateGenerator.class);
 
-                    t_Log.warn(
-                        "Cannot serialize template " + outputFilePath + " (" + cannotCloseCacheFile + ")",
+                    if (t_Log != null)
+                    {
+                        t_Log.warn(
+                            "Cannot serialize template " + outputFilePath + " (" + cannotCloseCacheFile + ")",
                         cannotCloseCacheFile);
+                    }
                 }
             }
         }
@@ -436,9 +454,9 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     @NotNull
     protected File getOutputDir(@NotNull final File outputDir, @NotNull final File rootFolder)
     {
-        File result = outputDir;
+        @NotNull File result = outputDir;
 
-        String rootPath = rootFolder.getAbsolutePath();
+        final String rootPath = rootFolder.getAbsolutePath();
         String outputPath = outputDir.getAbsolutePath();
 
         if (outputPath.startsWith(rootPath))
@@ -482,17 +500,18 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param relevantContent the content.
      * @return the hash.
      */
+    @NotNull
     protected String computeHash(
         @NotNull final String relevantContent, @NotNull final Charset charset)
         throws QueryJBuildException
     {
-        byte[] content = relevantContent.getBytes(charset);
+        @NotNull final byte[] content = relevantContent.getBytes(charset);
 
         byte[] buffer = new byte[content.length];
 
         try
         {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            @NotNull final MessageDigest md = MessageDigest.getInstance("SHA-256");
 
             md.update(content, 0, buffer.length);
 
@@ -514,13 +533,22 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     @NotNull
     protected String toHex(@NotNull final byte[] buffer)
     {
-        @NotNull StringBuilder result = new StringBuilder(buffer.length);
+        @NotNull final StringBuilder result = new StringBuilder(buffer.length);
 
-        for (byte currentByte : buffer)
+        for (final byte currentByte : buffer)
         {
             result.append(Integer.toHexString(0xFF & currentByte));
         }
 
         return result.toString();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "AbstractTemplateGenerator{" +
+               "m__bCaching=" + m__bCaching +
+               ", m__iThreadCount=" + m__iThreadCount +
+               '}';
     }
 }

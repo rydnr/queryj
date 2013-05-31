@@ -29,8 +29,10 @@
 
   <modules>
     <module>queryj-core</module>
+    <module>queryj-placeholders</module>
     <module>queryj-templates</module>
     <module>queryj-maven</module>
+    <module>queryj-template-packaging-maven-plugin</module>
   </modules>
 
   <repositories>

@@ -52,6 +52,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class QueryJException
     extends  Exception
 {
+
+    private static final long serialVersionUID = 8317680063407659021L;
+
     /**
      * Builds a QueryJ exception with a certain message.
      * @param message the message.

@@ -33,11 +33,6 @@
 package org.acmsl.queryj.templates;
 
 /*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.templates.handlers.fillhandlers.BasePerRepositoryFillTemplateChain;
-
-/*
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplate;
@@ -71,8 +66,8 @@ public abstract class BasePerRepositoryTemplate<C extends BasePerRepositoryTempl
      * @return the specific {@link InvalidTemplateException} for the template.
      */
     @NotNull
-    protected  InvalidTemplateException buildInvalidTemplateException(
-        @NotNull final BasePerRepositoryTemplateContext context,
+    public InvalidTemplateException buildInvalidTemplateException(
+        @NotNull final C context,
         @NotNull final StringTemplate template,
         @NotNull final Throwable actualException)
     {
@@ -86,19 +81,5 @@ public abstract class BasePerRepositoryTemplate<C extends BasePerRepositoryTempl
                     context.getRepositoryName()
                 },
                 actualException);
-    }
-
-    /**
-     * Builds the correct chain.
-     * @param context the context.
-     * @param relevantOnly whether to include only relevant placeholders.
-     * @return the specific {@link FillTemplateChain}.
-     */
-    @NotNull
-    @Override
-    protected FillTemplateChain buildFillTemplateChain(
-        @NotNull final C context, final boolean relevantOnly)
-    {
-        return new BasePerRepositoryFillTemplateChain(context, relevantOnly);
     }
 }

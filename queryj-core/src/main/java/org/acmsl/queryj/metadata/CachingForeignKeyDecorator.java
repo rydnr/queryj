@@ -67,6 +67,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class CachingForeignKeyDecorator
     extends  AbstractForeignKeyDecorator
 {
+
+    private static final long serialVersionUID = -34906355516994108L;
     /**
      * The cached source table.
      */

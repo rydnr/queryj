@@ -109,7 +109,7 @@ public class BasePerTableTemplateContext
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
-        @NotNull String jndiLocation,
+        @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
@@ -201,7 +201,7 @@ public class BasePerTableTemplateContext
     {
         @Nullable List<Row> result = null;
 
-        @Nullable List<Row> t_lRows = immutableGetStaticValues();
+        @Nullable final List<Row> t_lRows = immutableGetStaticValues();
 
         if (t_lRows != null)
         {
@@ -268,5 +268,13 @@ public class BasePerTableTemplateContext
         final BasePerTableTemplateContext other = (BasePerTableTemplateContext) obj;
         return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.tableName, other.tableName)
             .append(this.m__lStaticValues, other.m__lStaticValues).isEquals();
+    }
+
+    @Override
+    public String toString()
+    {
+        return
+              "BasePerTableTemplateContext{ staticValues=" + m__lStaticValues
+            + ", tableName='" + tableName + "' }";
     }
 }

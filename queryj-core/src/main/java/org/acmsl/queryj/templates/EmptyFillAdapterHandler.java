@@ -45,11 +45,6 @@ import org.acmsl.queryj.templates.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Command;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -65,11 +60,17 @@ import org.checkthread.annotations.ThreadSafe;
  * @since 2012/07/12
  */
 @ThreadSafe
-public class EmptyFillAdapterHandler
-    extends FillAdapterHandler
+public class EmptyFillAdapterHandler<F extends FillHandler<P>, P>
+    extends FillAdapterHandler<F, P>
 {
 
-    public EmptyFillAdapterHandler(final FillHandler handler)
+    private static final long serialVersionUID = 4606530594124602364L;
+
+    /**
+     * Creates an empty fill adapter handler.
+     * @param handler the actual handler.
+     */
+    public EmptyFillAdapterHandler(final F handler)
     {
         super(handler);
     }
@@ -81,7 +82,7 @@ public class EmptyFillAdapterHandler
      */
     @NotNull
     @Override
-    public FillHandler getFillHandler()
+    public F getFillHandler()
     {
         return wrap(super.getFillHandler());
     }
@@ -91,24 +92,27 @@ public class EmptyFillAdapterHandler
      * @param handler the handler.
      * @return the wrapped handler.
      */
-    protected FillHandler wrap(final FillHandler handler)
+    @SuppressWarnings("unchecked")
+    protected F wrap(final F handler)
     {
-        return new EmptyFillHandler(handler);
+        return (F) new EmptyFillHandler(handler);
     }
 
-    protected static class EmptyFillHandler
-        implements FillHandler
+    protected static class EmptyFillHandler<F extends FillHandler<P>, P>
+        implements FillHandler<P>
     {
+
+        private static final long serialVersionUID = -1540206214719043458L;
         /**
          * The fill handler to wrap.
          */
-        private FillHandler fillHandler;
+        private F fillHandler;
 
         /**
          * Creates a new wrapper for given handler.
          * @param handler the handler to wrap.
          */
-        public EmptyFillHandler(@NotNull final FillHandler handler)
+        public EmptyFillHandler(@NotNull final F handler)
         {
             immutableSetFillHandler(handler);
         }
@@ -117,7 +121,7 @@ public class EmptyFillAdapterHandler
          * Specifies the wrapped handler.
          * @param handler the handler.
          */
-        protected final void immutableSetFillHandler(@NotNull final FillHandler handler)
+        protected final void immutableSetFillHandler(@NotNull final F handler)
         {
             this.fillHandler = handler;
         }
@@ -127,7 +131,7 @@ public class EmptyFillAdapterHandler
          * @param handler the handler.
          */
         @SuppressWarnings("unused")
-        protected void setFillHandler(@NotNull final FillHandler handler)
+        protected void setFillHandler(@NotNull final F handler)
         {
             immutableSetFillHandler(handler);
         }
@@ -136,7 +140,8 @@ public class EmptyFillAdapterHandler
          * Retrieves the wrapped handler.
          * @return such handler.
          */
-        public FillHandler getFillHandler()
+        @NotNull
+        public F getFillHandler()
         {
             return this.fillHandler;
         }
@@ -158,7 +163,7 @@ public class EmptyFillAdapterHandler
          * @return such placeholder.
          */
         @NotNull
-        protected String getPlaceHolder(@NotNull final FillHandler fillHandler)
+        protected String getPlaceHolder(@NotNull final F fillHandler)
         {
             return fillHandler.getPlaceHolder();
         }
@@ -168,9 +173,9 @@ public class EmptyFillAdapterHandler
          * @return the dynamic value.
          */
         @Override
-        public Object getValue() throws QueryJBuildException
+        public P getValue() throws QueryJBuildException
         {
-            return "";
+            return getFillHandler().getValue();
         }
 
         /**
@@ -183,25 +188,17 @@ public class EmptyFillAdapterHandler
          *          if the build process cannot be performed.
          */
         @Override
-        public boolean handle(final QueryJCommand command) throws QueryJBuildException
+        public boolean handle(@NotNull final QueryJCommand command)
+            throws QueryJBuildException
         {
             return false;
         }
 
-        /**
-         * Asks the handler to process the command. The idea is that each
-         * command handler decides if such command is suitable of being
-         * processed, and if so perform the concrete actions the command
-         * represents.
-         *
-         * @param command the command to process (or not).
-         * @return <code>true</code> if the handler actually process the command,
-         *         or maybe because it's not desirable to continue the chain.
-         */
+        @NotNull
         @Override
-        public boolean handle(final Command command)
+        public String toString()
         {
-            return false;
+            return "EmptyFillHandler{ fillHandler=" + fillHandler + '}';
         }
     }
 }
