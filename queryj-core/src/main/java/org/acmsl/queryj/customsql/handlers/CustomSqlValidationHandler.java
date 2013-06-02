@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -73,15 +74,17 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
-import org.acmsl.queryj.metadata.vo.Attribute;
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -120,26 +123,28 @@ public class CustomSqlValidationHandler
      * @return <code>true</code> in case the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected boolean handle(@NotNull final Map parameters)
+    @Override
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
       throws  QueryJBuildException
     {
         boolean result = false;
 
-        MetadataManager t_MetadataManager =
-            retrieveMetadataManager(parameters);
-        CustomSqlProvider t_CustomSqlProvider =
-            retrieveCustomSqlProvider(parameters);
+        @Nullable final MetadataManager t_MetadataManager =
+            retrieveMetadataManager((Map<String, MetadataManager>) parameters);
+
+        @NotNull final CustomSqlProvider t_CustomSqlProvider =
+            retrieveCustomSqlProvider((Map<String, CustomSqlProvider>) parameters);
 
         if (t_MetadataManager == null)
         {
             result = true;
         }
-        else if  (!retrieveDisableCustomSqlValidation(parameters))
+        else if  (!retrieveDisableCustomSqlValidation((Map<String, Boolean>) parameters))
         {
             validate(
                 t_CustomSqlProvider,
                 t_CustomSqlProvider.getSqlDAO(),
-                retrieveConnection(parameters),
+                retrieveConnection((Map<String, Connection>) parameters),
                 t_MetadataManager);
         }
 
@@ -271,7 +276,7 @@ public class CustomSqlValidationHandler
                 {
                     t_ResultSet = t_PreparedStatement.executeQuery();
 
-                    ResultRef t_ResultRef = sql.getResultRef();
+                    @Nullable final ResultRef t_ResultRef = sql.getResultRef();
                     
                     if  (t_ResultRef != null)
                     {
@@ -375,11 +380,6 @@ public class CustomSqlValidationHandler
      * @param conversionUtils the <code>ConversionUtils</code> instance.
      * @throws SQLException if the binding process fails.
      * @throws QueryJBuildException if some problem occurs.
-     * @precondition sql != null
-     * @precondition statement != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataTypeManager != null
-     * @precondition conversionUtils != null
      */
     protected void bindParameters(
         @NotNull final Sql sql,
@@ -392,7 +392,7 @@ public class CustomSqlValidationHandler
     {
         @Nullable QueryJBuildException exceptionToThrow = null;
 
-        Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
         @Nullable Method t_Method;
 
@@ -404,7 +404,7 @@ public class CustomSqlValidationHandler
 
         int t_iParameterIndex = 0;
 
-        for (@Nullable Parameter t_Parameter : retrieveParameterElements(sql, customSqlProvider.getSqlParameterDAO()))
+        for (@Nullable final Parameter t_Parameter : retrieveParameterElements(sql, customSqlProvider.getSqlParameterDAO()))
         {
             if  (t_Parameter == null)
             {
@@ -458,7 +458,7 @@ public class CustomSqlValidationHandler
 
                 try
                 {
-                    @Nullable Method t_ParameterMethod;
+                    @Nullable final Method t_ParameterMethod;
 
                     if  (   (   ("Date".equals(t_strType))
                              || ("Timestamp".equals(t_strType)))
@@ -534,7 +534,7 @@ public class CustomSqlValidationHandler
                         // We have only once chance: constructor call.
                         try
                         {
-                            Constructor t_Constructor =
+                            @Nullable final Constructor t_Constructor =
                                 t_Type.getConstructor(CLASS_ARRAY_OF_ONE_STRING);
 
                             if  (t_Constructor != null)
@@ -664,11 +664,11 @@ public class CustomSqlValidationHandler
     protected List<Parameter> retrieveParameterElements(
         @NotNull final Sql sql, @NotNull final SqlParameterDAO parameterDAO)
     {
-        @NotNull List<Parameter> result = new ArrayList<Parameter>();
+        @NotNull final List<Parameter> result = new ArrayList<Parameter>();
 
         Parameter t_Parameter;
 
-        for (@Nullable ParameterRef t_ParameterRef : sql.getParameterRefs())
+        for (@Nullable final ParameterRef t_ParameterRef : sql.getParameterRefs())
         {
             if (t_ParameterRef != null)
             {
@@ -689,8 +689,6 @@ public class CustomSqlValidationHandler
      * @param type the data type.
      * @param metadataTypeManager the metadata type manager.
      * @return the associated setter method.
-     * @precondition type != null
-     * @precondition metadataTypeManager the metadata type manager.
      */
     protected String getSetterMethod(
         final String type, @NotNull final MetadataTypeManager metadataTypeManager)
@@ -705,11 +703,10 @@ public class CustomSqlValidationHandler
      * @param type the data type.
      * @param metadataTypeManager the metadata type manager.
      * @return the associated getter method.
-     * @precondition type != null
-     * @precondition metadataTypeManager the metadata type manager.
      */
+    @NotNull
     protected String getGetterMethod(
-        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             getAccessorMethod(
@@ -723,17 +720,14 @@ public class CustomSqlValidationHandler
      * @param metadataTypeManager the metadata type manager.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the associated getter method.
-     * @precondition type != null
-     * @precondition metaDataUtils != null
-     * @precondition stringUtils != null
      */
     protected String getAccessorMethod(
-        final String prefix,
-        final String type,
+        @NotNull final String prefix,
+        @NotNull final String type,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final StringUtils stringUtils)
     {
-        String result = prefix;
+        @NotNull String result = prefix;
 
         if  (   ("Date".equals(type))
              || ("Timestamp".equals(type)))
@@ -761,12 +755,6 @@ public class CustomSqlValidationHandler
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @throws SQLException if the SQL operation fails.
      * @throws QueryJBuildException if the expected result cannot be extracted.
-     * @precondition resultSet != null
-     * @precondition sql != null
-     * @precondition sqlResult != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
      */
     protected void validateResultSet(
         @NotNull final ResultSet resultSet,
@@ -778,9 +766,9 @@ public class CustomSqlValidationHandler
       throws SQLException,
              QueryJBuildException
     {
-        Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
-        @NotNull Collection t_cProperties =
+        @NotNull final Collection<Property> t_cProperties =
             retrieveProperties(
                 sql,
                 sqlResult,
@@ -798,18 +786,12 @@ public class CustomSqlValidationHandler
         {
             if  (resultSet.next())
             {
-                Iterator t_Iterator = t_cProperties.iterator();
+                Method t_Method;
 
-                if  (t_Iterator != null)
+                for (@Nullable final Property t_Property : t_cProperties)
                 {
-                    Method t_Method;
-
-                    Property t_Property;
-
-                    while  (t_Iterator.hasNext())
+                    if (t_Property != null)
                     {
-                        t_Property = (Property) t_Iterator.next();
-
                         try
                         {
                             t_Method =
@@ -843,9 +825,9 @@ public class CustomSqlValidationHandler
             }
             else
             {
-                ResultSetMetaData t_Metadata = resultSet.getMetaData();
+                @NotNull final ResultSetMetaData t_Metadata = resultSet.getMetaData();
 
-                int t_iColumnCount = t_Metadata.getColumnCount();
+                final int t_iColumnCount = t_Metadata.getColumnCount();
                 
                 if  (t_iColumnCount < t_cProperties.size())
                 {
@@ -905,11 +887,11 @@ public class CustomSqlValidationHandler
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
     {
-        @NotNull List<Property> result = new ArrayList<Property>();
+        @NotNull final List<Property> result = new ArrayList<Property>();
 
         Property t_Property;
 
-        for (@Nullable PropertyRef t_PropertyRef : sqlResult.getPropertyRefs())
+        for (@Nullable final PropertyRef t_PropertyRef : sqlResult.getPropertyRefs())
         {
             if (t_PropertyRef != null)
             {
@@ -971,9 +953,9 @@ public class CustomSqlValidationHandler
         @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
     {
-        @NotNull Collection<Property> result = new ArrayList<Property>();
+        @NotNull final Collection<Property> result = new ArrayList<Property>();
 
-        @Nullable String t_strTable =
+        @Nullable final String t_strTable =
             customResultUtils.retrieveTable(
                 sqlResult,
                 customSqlProvider,
@@ -981,10 +963,10 @@ public class CustomSqlValidationHandler
 
         if  (t_strTable != null)
         {
-            @Nullable List<Attribute> t_lColumns =
+            @Nullable final List<Attribute> t_lColumns =
                 metadataManager.getColumnDAO().findAllColumns(t_strTable);
 
-            int t_iCount = t_lColumns.size();
+            final int t_iCount = t_lColumns.size();
 
             String t_strId;
             Attribute t_Column;
@@ -1013,10 +995,10 @@ public class CustomSqlValidationHandler
         }
         else
         {
-            @NotNull String t_strErrorMessage =
+            @NotNull final String t_strErrorMessage =
                 "Cannot retrieve table associated to SQL result " + sqlResult.getId();
 
-            Log t_Log =
+            @Nullable final Log t_Log =
                 UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
             if  (t_Log != null)
@@ -1037,23 +1019,19 @@ public class CustomSqlValidationHandler
      * @param property the property.
      * @param sql the SQL element.
      * @throws QueryJBuildException if the validation fails.
-     * @precondition method != null
-     * @precondition resultSet != null
-     * @precondition property != null
-     * @precondition sql != null
      */
     protected void invokeResultSetGetter(
         @NotNull final Method method,
-        final ResultSet resultSet,
+        @NotNull final ResultSet resultSet,
         @NotNull final Property property,
         @NotNull final Sql sql)
       throws QueryJBuildException
     {
-        Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
         try
         {
-            @NotNull Object[] t_aParameters = new Object[1];
+            @NotNull final Object[] t_aParameters = new Object[1];
 
             if  (property.getIndex() > 0)
             {
@@ -1122,12 +1100,10 @@ public class CustomSqlValidationHandler
      * @param type the type name.
      * @param parameterType the parameter type.
      * @return such class.
-     * @precondition type != null
-     * @precondition parameterType != null
      */
     @Nullable
     protected Class retrieveType(
-        @NotNull final String type, final String parameterType)
+        @NotNull final String type, @NotNull final String parameterType)
     {
         @Nullable Class result = null;
 
@@ -1160,7 +1136,7 @@ public class CustomSqlValidationHandler
                     catch  (@NotNull final ClassNotFoundException
                                   fourthClassNotFoundException)
                     {
-                        Log t_Log =
+                        @Nullable final Log t_Log =
                             UniqueLogFactory.getLog(
                                 CustomSqlValidationHandler.class);
                         
@@ -1209,11 +1185,12 @@ public class CustomSqlValidationHandler
      * @param methodName the method name.
      * @return the <code>Method</code> instance.
      * @throws NoSuchMethodException if the desired method is not available.
-     * @precondition instanceClass != null
-     * @precondition methodName != null
      */
+    @NotNull
     protected Method retrieveMethod(
-        @NotNull final Class<?> instanceClass, final String methodName, final Class[] parameterClasses)
+        @NotNull final Class<?> instanceClass,
+        @NotNull final String methodName,
+        @NotNull final Class[] parameterClasses)
       throws  NoSuchMethodException
     {       
         return instanceClass.getDeclaredMethod(methodName, parameterClasses);
@@ -1228,45 +1205,32 @@ public class CustomSqlValidationHandler
      * @param properties the properties.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return <code>true</code> in such case.
-     * @precondition properties != null
-     * @precondition metadataTypeManager != null
      */
     protected boolean matches(
-        final String name,
+        @NotNull final String name,
         final int type,
         final int index,
-        @Nullable final Collection properties,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final Collection<Property> properties,
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         boolean result = false;
 
-        @Nullable Iterator t_Iterator =
-            (properties != null) ? properties.iterator() : null;
-        
-        if  (t_Iterator != null)
-        {
-            Object t_Item;
-            int t_iPropertyIndex = 1;
+        int t_iPropertyIndex = 0;
 
-            while  (t_Iterator.hasNext())
+        for (@Nullable final Property t_Property : properties)
+        {
+            if (t_Property != null)
             {
-                t_Item = t_Iterator.next();
-               
-                if  (t_Item instanceof Property)
+                final boolean t_bMatches =
+                    matches(
+                        name, type, index, t_Property, t_iPropertyIndex, metadataTypeManager);
+
+                if (t_bMatches)
                 {
-                    if  (matches(
-                             name,
-                             type,
-                             index,
-                             (Property) t_Item,
-                             t_iPropertyIndex,
-                             metadataTypeManager))
-                    {
-                        result = true;
-                        break;
-                    }
-                    t_iPropertyIndex++;
+                    result = true;
+                    break;
                 }
+                t_iPropertyIndex++;
             }
         }
         
@@ -1321,22 +1285,18 @@ public class CustomSqlValidationHandler
      * Retrieves whether to disable custom sql validation at all or not.
      * @param settings the settings.
      * @return <code>true</code> in such case.
-     * @precondition settings != null
      */
-    protected boolean retrieveDisableCustomSqlValidation(@NotNull final Map settings)
+    protected boolean retrieveDisableCustomSqlValidation(@NotNull final Map<String, Boolean> settings)
     {
-        boolean result = false;
+        return retrieveBoolean(settings, ParameterValidationHandler.DISABLE_CUSTOM_SQL_VALIDATION);
+    }
 
-        @Nullable Boolean flag =
-            (Boolean)
-                settings.get(
-                    ParameterValidationHandler.DISABLE_CUSTOM_SQL_VALIDATION);
-
-        if  (flag != null)
-        {
-            result = flag;
-        }
-
-        return result;
+    @Override
+    @NotNull
+    public String toString()
+    {
+        return "CustomSqlValidationHandler{" +
+               "DATE_FORMAT=" + DATE_FORMAT +
+               '}';
     }
 }

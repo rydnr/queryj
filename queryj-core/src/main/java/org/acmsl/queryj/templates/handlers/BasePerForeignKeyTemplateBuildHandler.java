@@ -91,15 +91,17 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
-    protected boolean handle(@NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
-        @NotNull MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+        @NotNull final MetadataManager t_MetadataManager =
+            retrieveMetadataManager((Map<String, MetadataManager>) parameters);
 
         buildTemplates(
             parameters,
             t_MetadataManager,
-            retrieveCustomSqlProvider(parameters),
+            retrieveCustomSqlProvider((Map<String, CustomSqlProvider>) parameters),
             retrieveTemplateFactory());
 
         return false;
@@ -113,8 +115,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param templateFactory the template factory.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
+    @SuppressWarnings("unchecked")
     protected void buildTemplates(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory)
@@ -125,17 +128,16 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             metadataManager,
             customSqlProvider,
             templateFactory,
-            retrieveProjectPackage(parameters),
-            retrieveTableRepositoryName(parameters),
-            retrieveHeader(parameters),
-            retrieveImplementMarkerInterfaces(parameters),
-            retrieveJmx(parameters),
-            retrieveJNDILocation(parameters),
-            retrieveDisableGenerationTimestamps(parameters),
-            retrieveDisableNotNullAnnotations(parameters),
-            retrieveDisableCheckthreadAnnotations(parameters),
-            retrieveForeignKeys(
-                parameters, metadataManager),
+            retrieveProjectPackage((Map<String, String>) parameters),
+            retrieveTableRepositoryName((Map<String, String>) parameters),
+            retrieveHeader((Map<String, String>) parameters),
+            retrieveImplementMarkerInterfaces((Map<String, Boolean>) parameters),
+            retrieveJmx((Map<String, Boolean>) parameters),
+            retrieveJNDILocation((Map<String, String>) parameters),
+            retrieveDisableGenerationTimestamps((Map<String, Boolean>) parameters),
+            retrieveDisableNotNullAnnotations((Map<String, Boolean>) parameters),
+            retrieveDisableCheckthreadAnnotations((Map<String, Boolean>) parameters),
+            retrieveForeignKeys((Map<String, List<ForeignKey>>) parameters, metadataManager),
             CachingDecoratorFactory.getInstance());
     }
     
@@ -165,8 +167,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
+    @SuppressWarnings("unchecked")
     protected void buildTemplates(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
@@ -183,9 +186,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
     {
-        @NotNull List<T> t_lTemplates = new ArrayList<T>();
+        @NotNull final List<T> t_lTemplates = new ArrayList<T>();
 
-        for  (@Nullable ForeignKey t_ForeignKey : foreignKeys)
+        for  (@Nullable final ForeignKey t_ForeignKey : foreignKeys)
         {
             if (   (t_ForeignKey != null)
                 && (metadataManager.isGenerationAllowedForForeignKey(t_ForeignKey)))
@@ -198,7 +201,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                         retrievePackage(
                             t_ForeignKey.getSourceTableName(),
                             metadataManager.getEngineName(),
-                            parameters),
+                            (Map<String, String>) parameters),
                         projectPackage,
                         repository,
                         header,
@@ -212,7 +215,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             }
         }
 
-        storeTemplates(t_lTemplates, parameters);
+        storeTemplates(t_lTemplates, (Map<String, List<T>>) parameters);
     }
 
     /**
@@ -224,7 +227,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      */
     @NotNull
     protected String retrievePackage(
-        @NotNull final String tableName, @NotNull final String engineName, @NotNull final Map parameters)
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final Map<String, String> parameters)
     {
         return
             retrievePackage(
@@ -255,7 +260,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param parameters the parameter map.
      */
     protected abstract void storeTemplates(
-        @NotNull final List<T> templates, @NotNull final Map parameters);
+        @NotNull final List<T> templates, @NotNull final Map<String, List<T>> parameters);
 
     /**
      * Retrieves the foreign keys.
@@ -266,10 +271,10 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     @NotNull
     @SuppressWarnings("unchecked")
     protected List<ForeignKey> retrieveForeignKeys(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, List<ForeignKey>> parameters,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<ForeignKey> result = (List<ForeignKey>) parameters.get(FOREIGN_KEYS);
+        @Nullable List<ForeignKey> result = parameters.get(FOREIGN_KEYS);
 
         if  (result == null)
         {
@@ -290,9 +295,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     {
         @Nullable List<ForeignKey> result = null;
 
-        List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
+        @NotNull final List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
 
-        for (@Nullable Table t_Table : t_lTables)
+        for (@Nullable final Table t_Table : t_lTables)
         {
             if (t_Table != null)
             {

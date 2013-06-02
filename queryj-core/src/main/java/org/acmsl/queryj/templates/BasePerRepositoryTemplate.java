@@ -21,13 +21,16 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
 
- *****************************************************************************
+ ******************************************************************************
  *
  * Filename: BasePerRepositoryTemplate.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Base logic for all per-repository templates.
+ * Description: Defines the external API for per-repository templates.
+ *
+ * Date: 6/1/13
+ * Time: 7:17 AM
  *
  */
 package org.acmsl.queryj.templates;
@@ -43,43 +46,34 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Base logic for all per-repository templates.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Defines the external API for per-repository templates.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @since 2013/06/01
  */
-public abstract class BasePerRepositoryTemplate<C extends BasePerRepositoryTemplateContext>
-    extends AbstractTemplate<C>
+public interface BasePerRepositoryTemplate<C extends BasePerRepositoryTemplateContext>
+    extends Template<C>
 {
     /**
-     * Builds a <code>BasePerRepositoryTemplate</code> using given
-     * information.
-     * @param context the {@link org.acmsl.queryj.templates.BasePerRepositoryTemplateContext} instance.
+     * Builds the correct chain.
+     * @param context the context.
+     * @param relevantOnly whether to include relevant-only placeholders.
+     * @return the specific {@link FillTemplateChain}.
      */
-    public BasePerRepositoryTemplate(@NotNull final C context)
-    {
-        super(context);
-    }
+    @SuppressWarnings("unused")
+    @NotNull
+    public FillTemplateChain buildFillTemplateChain(
+        @NotNull final C context, final boolean relevantOnly);
 
     /**
      * Builds a context-specific exception.
-     * @param context the context.
+     * @param context  the context.
      * @param template the {@link StringTemplate} instance.
      * @return the specific {@link InvalidTemplateException} for the template.
      */
     @NotNull
-    public InvalidTemplateException buildInvalidTemplateException(
-        @NotNull final C context,
-        @NotNull final StringTemplate template,
-        @NotNull final Throwable actualException)
-    {
-        return
-            new InvalidTemplateException(
-                "invalid.per.repository.template",
-                new Object[]
-                {
-                    template.getName(),
-                    getTemplateName(),
-                    context.getRepositoryName()
-                },
-                actualException);
-    }
+    InvalidTemplateException buildInvalidTemplateException(
+        @NotNull C context,
+        @NotNull StringTemplate template,
+        @NotNull Throwable actualException);
+
 }

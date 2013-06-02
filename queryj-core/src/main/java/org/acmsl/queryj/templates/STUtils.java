@@ -46,6 +46,7 @@ import org.acmsl.commons.patterns.Utils;
 import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
 import org.antlr.stringtemplate.StringTemplateErrorListener;
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -123,7 +124,7 @@ public class STUtils
         
         if  (result == null)
         {
-            @Nullable StringTemplateGroup t_Theme = retrieveGroup(theme, errorListener, charset);
+            @Nullable final StringTemplateGroup t_Theme = retrieveGroup(theme, errorListener, charset);
             result = retrieveUncachedGroup(path, errorListener, charset);
 
             if  (result != null)
@@ -174,7 +175,7 @@ public class STUtils
         @NotNull final StringTemplateErrorListener errorListener,
         @NotNull final Charset charset)
     {
-        @Nullable StringTemplateGroup result = null;
+        @Nullable final StringTemplateGroup result;
 
         @Nullable final InputStream t_Input = STUtils.class.getResourceAsStream(path);
 
@@ -188,7 +189,14 @@ public class STUtils
         }
         else
         {
-            UniqueLogFactory.getLog(STUtils.class).error("Missing " + path);
+            result = null;
+
+            @Nullable final Log t_Log = UniqueLogFactory.getLog(STUtils.class);
+
+            if (t_Log != null)
+            {
+                t_Log.error("Missing " + path);
+            }
         }
 
         return result;

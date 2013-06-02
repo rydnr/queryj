@@ -52,6 +52,7 @@ import org.acmsl.commons.patterns.Chain;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -64,8 +65,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/03
  */
-public abstract class AbstractFillTemplateChain<C extends TemplateContext>
-    extends AbstractQueryJChain
+public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH extends QueryJCommandHandler<QueryJCommand>>
+    extends AbstractQueryJChain<CH, QueryJCommand>
     implements FillTemplateChain<C>
 {
     /**
@@ -193,6 +194,29 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
         return result;
     }
 
+
+    /**
+     * Adds additional per-table handlers.
+     * @param chain the chain to be configured.
+     */
+    @Override
+    protected Chain<CH> buildChain(
+        @NotNull final Chain<CH> chain)
+    {
+        addHandlers(chain, getTemplateContext(), getRelevantOnly());
+
+        return chain;
+    }
+
+    /**
+     * Adds additional per-table handlers.
+     * @param chain the chain to be configured.
+     */
+    protected abstract void addHandlers(
+        @NotNull final Chain<CH> chain,
+        @NotNull final C context,
+        final boolean relevantOnly);
+
     /**
      * Adds given handler depending on whether it's relevant or not.
      * @param chain the chain.
@@ -226,8 +250,8 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
     {
         return
               "AbstractFillTemplateChain{"
-            + "relevantOnly=" + relevantOnly
+            + " relevantOnly=" + relevantOnly
             + ", templateContext=" + templateContext
-            + '}';
+            + " }";
     }
 }

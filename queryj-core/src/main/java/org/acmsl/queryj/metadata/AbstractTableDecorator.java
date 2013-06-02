@@ -451,8 +451,12 @@ public abstract class AbstractTableDecorator
         }
         catch (@NotNull final Throwable error)
         {
-            UniqueLogFactory.getLog(AbstractTableDecorator.class).error(
-                error);
+            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTableDecorator.class);
+
+            if (t_Log != null)
+            {
+                t_Log.error(error);
+            }
         }
 
         return result;
@@ -467,7 +471,7 @@ public abstract class AbstractTableDecorator
     {
         boolean result = false;
 
-        for (@Nullable ForeignKey t_ForeignKey : foreignKeys)
+        for (@Nullable final ForeignKey t_ForeignKey : foreignKeys)
         {
             if (t_ForeignKey instanceof ForeignKeyDecorator)
             {
@@ -490,7 +494,7 @@ public abstract class AbstractTableDecorator
         @NotNull final String name,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<ForeignKey> result;
+        @Nullable final List<ForeignKey> result;
 
         @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(name);
 
@@ -603,11 +607,11 @@ public abstract class AbstractTableDecorator
     @Nullable
     public ForeignKey getParentForeignKey()
     {
-        ForeignKey result = immutableGetParentForeignKey();
+        @Nullable ForeignKey result = immutableGetParentForeignKey();
 
         if  (result == null)
         {
-            Table t_Parent = getParentTable();
+            @Nullable final Table t_Parent = getParentTable();
 
             if  (t_Parent != null)
             {
@@ -636,7 +640,7 @@ public abstract class AbstractTableDecorator
     {
         @Nullable ForeignKey result = null;
 
-        for (@Nullable ForeignKey t_ForeignKey : foreignKeys)
+        for (@Nullable final ForeignKey t_ForeignKey : foreignKeys)
         {
             if (   (t_ForeignKey != null)
                  && (parent.getName().equalsIgnoreCase(
@@ -666,7 +670,7 @@ public abstract class AbstractTableDecorator
 
         if  (result)
         {
-            int t_iCount = first.size();
+            final int t_iCount = first.size();
             result = (t_iCount == second.size());
 
             if  (result)
@@ -704,7 +708,7 @@ public abstract class AbstractTableDecorator
 
         if  (result)
         {
-            @NotNull String t_strFirstName = first.getName();
+            @NotNull final String t_strFirstName = first.getName();
 
             result =
                 (   (first.getType().equals(second.getType()))
@@ -1037,7 +1041,7 @@ public abstract class AbstractTableDecorator
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull List<Attribute> result =
+        @NotNull final List<Attribute> result =
             decorateAttributes(
                 tableDecoratorHelper.removeReadOnly(attributes),
                 metadataManager,
@@ -1136,7 +1140,7 @@ public abstract class AbstractTableDecorator
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull List<Attribute> result =
+        @NotNull final List<Attribute> result =
                 tableDecoratorHelper.removeReadOnly(
                     decorateAttributes(nonPrimaryKeyAttributes, metadataManager, decoratorFactory));
 
@@ -1374,11 +1378,11 @@ public abstract class AbstractTableDecorator
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
-        Table t_ParentTable = getParentTable();
+        @Nullable final Table t_ParentTable = getParentTable();
 
         if  (t_ParentTable != null)
         {
-            TableDecorator t_ParentDecorator;
+            final TableDecorator t_ParentDecorator;
 
             if  (t_ParentTable instanceof TableDecorator)
             {
@@ -1495,7 +1499,7 @@ public abstract class AbstractTableDecorator
     {
         boolean result = false;
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute t_Attribute : attributes)
         {
             if (t_Attribute instanceof AttributeDecorator)
             {
@@ -1530,7 +1534,7 @@ public abstract class AbstractTableDecorator
 
         if  (result == null)
         {
-            @Nullable Table t_Table = metadataManager.getTableDAO().findByName(name);
+            @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(name);
 
             if (t_Table != null)
             {
@@ -1558,7 +1562,7 @@ public abstract class AbstractTableDecorator
         @NotNull final MetadataManager metadataManager,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        List<Attribute> result =
+        @NotNull final List<Attribute> result =
             tableDecoratorHelper.removeOverridden(
                 firstAttributes,
                 secondAttributes,
@@ -1691,9 +1695,9 @@ public abstract class AbstractTableDecorator
     protected List<Attribute> getNonParentNonExternallyManagedAttributes(
         @NotNull final List<Attribute> nonParentAttributes)
     {
-        List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
-        for (@Nullable Attribute t_Attribute : nonParentAttributes)
+        for (@Nullable final Attribute t_Attribute : nonParentAttributes)
         {
             if  (   (t_Attribute != null)
                  && (!t_Attribute.isExternallyManaged()))
@@ -1735,7 +1739,7 @@ public abstract class AbstractTableDecorator
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
-        for (@Nullable Attribute t_Attribute : nonParentAttributes)
+        for (@Nullable final Attribute t_Attribute : nonParentAttributes)
         {
             if  (   (t_Attribute != null)
                  && (   (!t_Attribute.isExternallyManaged())
@@ -1787,7 +1791,7 @@ public abstract class AbstractTableDecorator
 
         if  (parent != null)
         {
-            TableDecorator t_ParentDecorator;
+            final TableDecorator t_ParentDecorator;
 
             if  (parent instanceof TableDecorator)
             {
@@ -1853,7 +1857,7 @@ public abstract class AbstractTableDecorator
 
         if  (parent != null)
         {
-            TableDecorator t_ParentDecorator;
+            @Nullable final TableDecorator t_ParentDecorator;
 
             if  (parent instanceof TableDecorator)
             {
@@ -1899,7 +1903,7 @@ public abstract class AbstractTableDecorator
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
-        for (@Nullable Attribute t_Attribute : allAttributes)
+        for (@Nullable final Attribute t_Attribute : allAttributes)
         {
             if  (   (t_Attribute != null)
                  && (!t_Attribute.isExternallyManaged()))
@@ -1937,7 +1941,7 @@ public abstract class AbstractTableDecorator
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
-        for (@Nullable Attribute t_Attribute : allAttributes)
+        for (@Nullable final Attribute t_Attribute : allAttributes)
         {
             if  (   (t_Attribute != null)
                  && (   (!t_Attribute.isExternallyManaged())
@@ -1976,7 +1980,7 @@ public abstract class AbstractTableDecorator
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
-        for (@Nullable Attribute t_Attribute : allAttributes)
+        for (@Nullable final Attribute t_Attribute : allAttributes)
         {
             if  (   (t_Attribute != null)
                  && (   (   (!t_Attribute.isExternallyManaged())
@@ -2002,7 +2006,7 @@ public abstract class AbstractTableDecorator
     {
         boolean result = false;
 
-        for (@Nullable Attribute t_Attribute : list)
+        for (@Nullable final Attribute t_Attribute : list)
         {
             if  (attributesMatch(t_Attribute, attribute))
             {
@@ -2084,7 +2088,7 @@ public abstract class AbstractTableDecorator
     protected List<Attribute> getAllParentAndNonParentReadOnlyAttributes(
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        List<Attribute> result =
+        @NotNull final List<Attribute> result =
             tableDecoratorHelper.removeNonReadOnlyAttributes(
                 getAllParentAndNonParentAttributes());
 
@@ -2136,7 +2140,7 @@ public abstract class AbstractTableDecorator
 
         if  (parent != null)
         {
-            TableDecorator t_ParentDecorator;
+            final TableDecorator t_ParentDecorator;
 
             if  (parent instanceof TableDecorator)
             {
@@ -2187,7 +2191,7 @@ public abstract class AbstractTableDecorator
     {
         @NotNull final List<Table> result = new ArrayList<Table>(0);
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -2231,7 +2235,7 @@ public abstract class AbstractTableDecorator
         }
         catch (@NotNull final SQLException invalidQuery)
         {
-            @Nullable Log t_Log = UniqueLogFactory.getLog(AbstractTableDecorator.class);
+            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTableDecorator.class);
 
             if (t_Log != null)
             {
@@ -2253,7 +2257,12 @@ public abstract class AbstractTableDecorator
             }
             catch (@NotNull final Throwable throwable)
             {
-                UniqueLogFactory.getLog(AbstractTableDecorator.class).error(throwable);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTableDecorator.class);
+
+                if (t_Log != null)
+                {
+                    t_Log.error(throwable);
+                }
             }
         }
 
@@ -2321,7 +2330,7 @@ public abstract class AbstractTableDecorator
     protected List<Sql> getDynamicQueries(
         @NotNull final String tableName, @NotNull final SqlDAO sqlDAO)
     {
-        List<Sql> result = sqlDAO.findDynamic(tableName);
+        @NotNull final List<Sql> result = sqlDAO.findDynamic(tableName);
 
         Collections.sort(result);
 
@@ -2358,7 +2367,7 @@ public abstract class AbstractTableDecorator
     {
         @NotNull final List<Attribute> result =  new ArrayList<Attribute>(0);
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute t_Attribute : attributes)
         {
             if (   (t_Attribute != null)
                 && (t_Attribute.isReadOnly()))
@@ -2393,7 +2402,7 @@ public abstract class AbstractTableDecorator
     protected List<Attribute> filterAttributes(
         @NotNull final List<Attribute> attributes, @NotNull final List<Attribute> toExclude)
     {
-        @NotNull List<Attribute> result = new ArrayList<Attribute>(attributes);
+        @NotNull final List<Attribute> result = new ArrayList<Attribute>(attributes);
 
         result.removeAll(toExclude);
 
@@ -2434,7 +2443,7 @@ public abstract class AbstractTableDecorator
     @NotNull
     protected List<Sql> getCustomSelects(@NotNull final Table table, @NotNull final SqlDAO sqlDAO)
     {
-        List<Sql> result = sqlDAO.findSelects(table.getName());
+        @NotNull final List<Sql> result = sqlDAO.findSelects(table.getName());
 
         Collections.sort(result);
 
@@ -2474,7 +2483,7 @@ public abstract class AbstractTableDecorator
     @NotNull
     protected List<Sql> getCustomSelectsForUpdate(@NotNull final Table table, @NotNull final SqlDAO sqlDAO)
     {
-        List<Sql> result = sqlDAO.findSelectsForUpdate(table.getName());
+        @NotNull final List<Sql> result = sqlDAO.findSelectsForUpdate(table.getName());
 
         Collections.sort(result);
 
@@ -2505,9 +2514,9 @@ public abstract class AbstractTableDecorator
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
-        @NotNull List<Sql> result = new ArrayList<Sql>(queries.size());
+        @NotNull final List<Sql> result = new ArrayList<Sql>(queries.size());
 
-        for (@Nullable Sql t_Sql : queries)
+        for (@Nullable final Sql t_Sql : queries)
         {
             if (t_Sql != null)
             {
@@ -2630,9 +2639,9 @@ public abstract class AbstractTableDecorator
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        List<ResultDecorator> result;
+        @NotNull final List<ResultDecorator> result;
 
-        List<Result> aux = new ArrayList<Result>(2);
+        @NotNull final List<Result> aux = new ArrayList<Result>(2);
 
         @Nullable Result singleResult = resultDAO.findSingleMatch(tableName);
 
@@ -2670,33 +2679,39 @@ public abstract class AbstractTableDecorator
 
         List<Sql> sqlList = sqlDAO.findSelects(tableName);
 
-        for (Sql t_Sql : sqlList)
+        for (@Nullable final Sql t_Sql : sqlList)
         {
-            customResult = resultDAO.findBySqlId(t_Sql.getId());
-
-            if (   (customResult != null)
-                && (!aux.contains(customResult)))
+            if (t_Sql != null)
             {
-                aux.add(customResult);
+                customResult = resultDAO.findBySqlId(t_Sql.getId());
+
+                if (   (customResult != null)
+                    && (!aux.contains(customResult)))
+                {
+                    aux.add(customResult);
+                }
             }
         }
 
         sqlList = sqlDAO.findSelectsForUpdate(tableName);
 
-        for (Sql t_Sql : sqlList)
+        for (@Nullable final Sql t_Sql : sqlList)
         {
-            customResult = resultDAO.findBySqlId(t_Sql.getId());
-
-            if (   (customResult != null)
-                && (!aux.contains(customResult)))
+            if (t_Sql != null)
             {
-                aux.add(customResult);
+                customResult = resultDAO.findBySqlId(t_Sql.getId());
+
+                if (   (customResult != null)
+                    && (!aux.contains(customResult)))
+                {
+                    aux.add(customResult);
+                }
             }
         }
 
         result = new ArrayList<ResultDecorator>(aux.size());
 
-        for (@NotNull Result t_Result : aux)
+        for (@NotNull final Result t_Result : aux)
         {
             result.add(decorate(t_Result, customSqlProvider, metadataManager, decoratorFactory));
         }
@@ -2741,7 +2756,7 @@ public abstract class AbstractTableDecorator
     {
         @NotNull final List<ForeignKey> result = new ArrayList<ForeignKey>(foreignKeys.size());
 
-        for (@Nullable ForeignKey t_ForeignKey : foreignKeys)
+        for (@Nullable final ForeignKey t_ForeignKey : foreignKeys)
         {
             if (t_ForeignKey != null)
             {
@@ -2792,9 +2807,9 @@ public abstract class AbstractTableDecorator
     protected List<AttributeDecorator> getAllExternallyManagedAttributes(
         @NotNull final List<Attribute> attributes, @NotNull final MetadataManager metadataManager)
     {
-        List<AttributeDecorator> result = new ArrayList<AttributeDecorator>();
+        @NotNull final List<AttributeDecorator> result = new ArrayList<AttributeDecorator>();
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute t_Attribute : attributes)
         {
             if (   (t_Attribute != null)
                 && (t_Attribute.isExternallyManaged()))
@@ -2875,12 +2890,12 @@ public abstract class AbstractTableDecorator
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomResultUtils customResultUtils)
     {
-        List<Result> result = new ArrayList<Result>();
+        @NotNull final List<Result> result = new ArrayList<Result>();
 
         @NotNull final List<Sql> t_lSql = sqlDAO.findSelects(table);
         t_lSql.addAll(sqlDAO.findSelectsForUpdate(table));
 
-        for (@Nullable Sql t_Sql : t_lSql)
+        for (@Nullable final Sql t_Sql : t_lSql)
         {
             if (t_Sql != null)
             {
@@ -2918,7 +2933,7 @@ public abstract class AbstractTableDecorator
 
         if (classValue != null)
         {
-            String[] t_astrParts = classValue.split("\\.");
+            @NotNull final String[] t_astrParts = classValue.split("\\.");
 
             if (t_astrParts.length > 0)
             {
@@ -2927,5 +2942,21 @@ public abstract class AbstractTableDecorator
         }
 
         return result;
+    }
+
+    @Override
+    @NotNull
+    public String toString()
+    {
+        return "AbstractTableDecorator{" +
+               " attributesShouldBeCleanedUp=" + m__bAttributesShouldBeCleanedUp +
+               ", table=" + m__Table +
+               ", MetadataManager=" + m__MetadataManager +
+               ", DecoratorFactory=" + m__DecoratorFactory +
+               ", CustomSqlProvider=" + m__CustomSqlProvider +
+               ", ForeignKeys=" + m__lForeignKeys +
+               ", ParentForeignKey=" + m__ParentForeignKey +
+               ", ChildAttributes=" + m__lChildAttributes +
+               " }";
     }
 }

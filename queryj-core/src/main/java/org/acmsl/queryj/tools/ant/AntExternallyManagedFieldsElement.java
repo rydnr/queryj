@@ -93,10 +93,34 @@ public class AntExternallyManagedFieldsElement
      * Retrieves the field collection.
      * @return such collection.
      */
+    @Nullable
+    protected final Collection<AntFieldElement> immutableGetFields()
+    {
+        return m__cFields;
+    }
+
+    /**
+     * Retrieves the field collection.
+     * @return such collection.
+     */
     @NotNull
     public Collection<AntFieldElement> getFields()
     {
-        return m__cFields;
+        @Nullable final Collection<AntFieldElement> result;
+
+        @Nullable final Collection<AntFieldElement> t_cFields = immutableGetFields();
+
+        if (t_cFields == null)
+        {
+            result = new ArrayList<AntFieldElement>();
+            setFields(result);
+        }
+        else
+        {
+            result = t_cFields;
+        }
+
+        return result;
     }
 
     /**
@@ -124,13 +148,7 @@ public class AntExternallyManagedFieldsElement
         {
             result = new AntFieldElement();
 
-            Collection<AntFieldElement> t_cFields = getFields();
-
-            if  (t_cFields == null)
-            {
-                t_cFields = new ArrayList<AntFieldElement>();
-                setFields(t_cFields);
-            }
+            @NotNull final Collection<AntFieldElement> t_cFields = getFields();
 
             t_cFields.add(result);
         }

@@ -65,6 +65,10 @@ import java.util.Properties;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing JetBrains annotations,
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -185,7 +189,7 @@ public class QueryJCLIHelper
     @NotNull
     public Option[] createVerbosityOptions()
     {
-        @NotNull Collection<Option> t_cResult = new ArrayList<Option>();
+        @NotNull final Collection<Option> t_cResult = new ArrayList<Option>();
 
         Option t_Option =
             OptionBuilder
@@ -212,7 +216,7 @@ public class QueryJCLIHelper
                 .create(TRACE_VERBOSITY_OPTION);
         t_cResult.add(t_Option);
 
-        return (Option[]) t_cResult.toArray(EMPTY_OPTION_ARRAY);
+        return t_cResult.toArray(EMPTY_OPTION_ARRAY);
     }
 
     /**
@@ -263,7 +267,7 @@ public class QueryJCLIHelper
         @NotNull final Option[] verbosityOptions,
         @NotNull final Option helpOption)
     {
-        @NotNull Options result = new Options();
+        @NotNull final Options result = new Options();
 
         addOptions(
             result,
@@ -397,6 +401,7 @@ public class QueryJCLIHelper
                      && (t_File.canRead()))
                 {
                     stream = new FileInputStream(t_File);
+
                     result = readConfigurationSettings(stream, false);
                 }
 
@@ -407,7 +412,7 @@ public class QueryJCLIHelper
 
                     if  (result != null)
                     {
-                        Log t_Log =
+                        @Nullable final Log t_Log =
                             UniqueLogFactory.getLog(QueryJCLIHelper.class);
 
                         if  (t_Log != null)
@@ -421,7 +426,7 @@ public class QueryJCLIHelper
             }
             catch  (@NotNull final IOException ioException)
             {
-                Log t_Log =
+                @Nullable final Log t_Log =
                     UniqueLogFactory.getLog(QueryJCLIHelper.class);
 
                 if  (t_Log != null)
@@ -441,7 +446,7 @@ public class QueryJCLIHelper
                     }
                     catch  (@NotNull final IOException ioException)
                     {
-                        Log t_Log =
+                        @Nullable final Log t_Log =
                             UniqueLogFactory.getLog(QueryJCLIHelper.class);
 
                         if  (t_Log != null)

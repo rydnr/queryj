@@ -85,12 +85,10 @@ public class DatabaseMetaDataCacheReadingHandler
      * @param metaData the database metadata.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
      */
     @Override
     protected boolean handle(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         final boolean alreadyDone,
         @NotNull final DatabaseMetaData metaData)
         throws  QueryJBuildException
@@ -111,7 +109,6 @@ public class DatabaseMetaDataCacheReadingHandler
      * @param majorVersion the major version number.
      * @param minorVersion the minor version number.
      * @return <code>true</code> in case it matches.
-     * @precondition product != null
      */
     protected boolean checkVendor(
         @NotNull final String productName,
@@ -131,13 +128,15 @@ public class DatabaseMetaDataCacheReadingHandler
      */
     @Override
     protected boolean handle(
-        @NotNull final Map parameters, @Nullable final MetadataManager metadataManager)
+        @NotNull final Map<String, ?> parameters, @Nullable final MetadataManager metadataManager)
         throws  QueryJBuildException
     {
+        boolean result = false;
+
         // We only need the table names, if they're not extracted already.
         if (metadataManager != null)
         {
-            List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
+            @NotNull final List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
 
             if (   (t_lTables.size() == 0))
             {
@@ -147,7 +146,9 @@ public class DatabaseMetaDataCacheReadingHandler
                 }
                 catch (@NotNull final SQLException cannotExtractTableMetadata)
                 {
-                    Log t_Log = UniqueLogFactory.getLog(DatabaseMetaDataCacheReadingHandler.class);
+                    result = true;
+
+                    @Nullable final Log t_Log = UniqueLogFactory.getLog(DatabaseMetaDataCacheReadingHandler.class);
 
                     if (t_Log != null)
                     {
@@ -156,16 +157,18 @@ public class DatabaseMetaDataCacheReadingHandler
                 }
                 catch (@NotNull final QueryJException otherError)
                 {
-                    Log t_Log = UniqueLogFactory.getLog(DatabaseMetaDataCacheReadingHandler.class);
+                    @Nullable final Log t_Log = UniqueLogFactory.getLog(DatabaseMetaDataCacheReadingHandler.class);
 
                     if (t_Log != null)
                     {
                         t_Log.warn("Cannot extract table metadata", otherError);
                     }
+
+                    result = true;
                 }
             }
         }
 
-        return false;
+        return result;
     }
 }

@@ -81,7 +81,7 @@ public abstract class BasePerTableTemplateWritingHandler
         @NotNull final C context,
         @NotNull final File rootDir,
         @NotNull final String engineName,
-        @NotNull final Map parameters)
+        @NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
         return retrieveOutputDir(context.getTableName(), rootDir, engineName, parameters);
@@ -97,18 +97,19 @@ public abstract class BasePerTableTemplateWritingHandler
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      */
     @NotNull
+    @SuppressWarnings("unchecked")
     protected File retrieveOutputDir(
         @NotNull final String tableName,
         @NotNull final File rootDir,
         @NotNull final String engineName,
-        @NotNull final Map parameters)
+        @NotNull final Map<String, ?> parameters)
       throws  QueryJBuildException
     {
         return
             retrieveOutputDir(
                 rootDir,
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters),
+                retrieveProjectPackage((Map <String, String>) parameters),
+                retrieveUseSubfoldersFlag((Map <String, Boolean>) parameters),
                 tableName,
                 engineName,
                 parameters,
@@ -127,9 +128,6 @@ public abstract class BasePerTableTemplateWritingHandler
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
-     * @precondition engineName != null
-     * @precondition parameters != null
-     * @precondition packageUtils != null
      */
     @NotNull
     protected abstract File retrieveOutputDir(

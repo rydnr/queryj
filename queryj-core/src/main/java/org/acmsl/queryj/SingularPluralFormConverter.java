@@ -139,12 +139,12 @@ public class SingularPluralFormConverter
      * Retrieves the words bundle.
      * @return such bundle name.
      */
-    @Nullable
+    @NotNull
     protected String retrieveGrammarBundleName()
     {
-        String result = null;
+        @Nullable String result = null;
 
-        File grammar = getGrammarBundle();
+        final File grammar = getGrammarBundle();
 
         if  (grammar != null)
         {

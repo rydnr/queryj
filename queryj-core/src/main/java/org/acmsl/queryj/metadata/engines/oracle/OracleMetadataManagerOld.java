@@ -223,7 +223,7 @@ public class OracleMetadataManagerOld
 
         @Nullable PreparedStatement t_PreparedStatement = null;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
 
         try
         {
@@ -341,22 +341,18 @@ public class OracleMetadataManagerOld
       throws  SQLException,
               QueryJException
     {
-        String[] t_astrTableNames = getTableNames();
+        @NotNull String[] t_astrTableNames = getTableNames();
 
-        if (   (t_astrTableNames == null)
-            || (t_astrTableNames.length == 0))
+        if (t_astrTableNames.length == 0)
         {
             t_astrTableNames = getTableNames(metaData, catalog, schema, listener);
         }
 
-        if (t_astrTableNames != null)
-        {
-            extractForeignKeys(
-                metaData.getConnection(),
-                t_astrTableNames,
-                QueryFactory.getInstance(),
-                OracleTextFunctions.getInstance());
-        }
+        extractForeignKeys(
+            metaData.getConnection(),
+            t_astrTableNames,
+            QueryFactory.getInstance(),
+            OracleTextFunctions.getInstance());
     }
 
     /**
@@ -377,11 +373,11 @@ public class OracleMetadataManagerOld
         throws  SQLException,
         QueryJException
     {
-        @Nullable PreparedStatement t_PreparedStatement = null;
+        @Nullable final PreparedStatement t_PreparedStatement = null;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
 
-        int t_iLength = tableNames.length;
+        final int t_iLength = tableNames.length;
 
         ResultSet t_Results = null;
 
@@ -407,7 +403,7 @@ public class OracleMetadataManagerOld
                 //   and rcol.position = col.position
                 //   and upper(col.table_name) = ?
 
-                @NotNull StringBuilder t_sbSql =
+                @NotNull final StringBuilder t_sbSql =
                     new StringBuilder("select rcol.table_name rcol_table_name, ");
                 t_sbSql.append("rcol.column_name rcol_column_name, ");
                 t_sbSql.append("con.table_name con_table_name, ");
@@ -425,12 +421,12 @@ public class OracleMetadataManagerOld
                 t_sbSql.append("and rcol.position = col.position ");
                 t_sbSql.append("and upper(col.table_name) in (");
 
-                @NotNull StringBuilder t_sbSqlLog =
+                @NotNull final StringBuilder t_sbSqlLog =
                     new StringBuilder(t_sbSql.toString());
 
                 int t_iIndex = 0;
 
-                for (String t_strTableName : tableNames)
+                for (@Nullable final String t_strTableName : tableNames)
                 {
                     if (t_iIndex > 0)
                     {
@@ -450,9 +446,12 @@ public class OracleMetadataManagerOld
                 t_sbSql.append(")");
                 t_sbSqlLog.append(")");
 
-                t_Log.debug(t_sbSqlLog.toString());
+                if (t_Log != null)
+                {
+                    t_Log.debug(t_sbSqlLog.toString());
+                }
 
-                @NotNull PreparedStatement t_Statement =
+                @NotNull final PreparedStatement t_Statement =
                     connection.prepareStatement(t_sbSql.toString());
 
                 String t_strTableName;
@@ -781,8 +780,6 @@ public class OracleMetadataManagerOld
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
-     * @precondition connection != null
-     * @precondition queryFactory != null
      */
     @SuppressWarnings("unused")
     @NotNull
@@ -794,9 +791,9 @@ public class OracleMetadataManagerOld
       throws  SQLException,
               QueryJException
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        String[] result = new String[0];
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
         @Nullable QueryResultSet t_Results = null;
 
@@ -806,7 +803,7 @@ public class OracleMetadataManagerOld
         {
             try
             {
-                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
+                @NotNull final SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TABLES.TABLE_NAME);
 
@@ -890,11 +887,6 @@ public class OracleMetadataManagerOld
             }
         }
 
-        if  (result == null)
-        {
-            result = EMPTY_STRING_ARRAY;
-        }
-
         return result;
     }
 
@@ -903,7 +895,6 @@ public class OracleMetadataManagerOld
      * @param resultSet the result set with the table information.
      * @return the list of table names.
      * @throws SQLException if the database operation fails.
-     * @precondition resultSet != null
      */
     @NotNull
     protected String[] extractTableNames(@NotNull final QueryResultSet resultSet)
@@ -924,7 +915,6 @@ public class OracleMetadataManagerOld
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if the any other error occurs.
-     * @precondition metaData != null
      */
     @Override
     protected String[] getColumnNames(
@@ -952,12 +942,10 @@ public class OracleMetadataManagerOld
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if the any other error occurs.
-     * @precondition connection != null
-     * @precondition queryFactory != null
      */
     protected String[] getColumnNames(
         @NotNull final Connection connection,
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
@@ -965,7 +953,7 @@ public class OracleMetadataManagerOld
         // TODO: column names from parent table.
         String[] result;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
         @Nullable ResultSet t_rsResults = null;
 
@@ -975,7 +963,7 @@ public class OracleMetadataManagerOld
         {
             try
             {
-                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
+                @NotNull final SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TAB_COLUMNS.COLUMN_NAME);
 
@@ -1078,7 +1066,6 @@ public class OracleMetadataManagerOld
      * @param resultSet the result set with the table information.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
-     * @precondition resultSet != null
      */
     @NotNull
     protected String[] extractColumnNames(@NotNull final ResultSet resultSet)
@@ -1120,19 +1107,17 @@ public class OracleMetadataManagerOld
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
-     * @precondition connection != null
-     * @precondition queryFactory != null
      */
     protected int[] getColumnTypes(
         @NotNull final Connection connection,
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
         int[] result;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
         @Nullable ResultSet t_rsResults = null;
 
@@ -1142,7 +1127,7 @@ public class OracleMetadataManagerOld
         {
             try
             {
-                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
+                @NotNull final SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TAB_COLUMNS.DATA_TYPE);
 
@@ -1237,8 +1222,8 @@ public class OracleMetadataManagerOld
      * @param field the field name.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
-     * @precondition resultSet != null
      */
+    @NotNull
     protected int[] extractColumnTypes(
         @NotNull final ResultSet resultSet, final Field field)
       throws  SQLException
@@ -1254,9 +1239,9 @@ public class OracleMetadataManagerOld
      * @param fieldName the field name.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
-     * @precondition resultSet != null
      */
     @SuppressWarnings("unused")
+    @NotNull
     protected int[] extractColumnTypes(
         @NotNull final ResultSet resultSet, final String fieldName)
         throws  SQLException
@@ -1273,18 +1258,16 @@ public class OracleMetadataManagerOld
      * @param metadataTypeManager the metadata type manager.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
-     * @precondition resultSet != null
-     * @precondition metadataTypeManager != null
      */
     protected int[] extractColumnTypes(
         @NotNull final ResultSet resultSet,
-        final String fieldName,
+        @NotNull final String fieldName,
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws  SQLException
     {
-        int[] result;
+        final int[] result;
 
-        @NotNull String[] t_astrTypes = extractStringFields(resultSet, fieldName)[0];
+        @NotNull final String[] t_astrTypes = extractStringFields(resultSet, fieldName)[0];
 
         result = new int[t_astrTypes.length];
 
@@ -1306,17 +1289,17 @@ public class OracleMetadataManagerOld
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
-     * @precondition metaData != null
      */
     @Override
+    @NotNull
     protected boolean[] getAllowNulls(
         @NotNull final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema,
-        final String tableName,
-        final String parentTable,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @NotNull final String tableName,
+        @Nullable final String parentTable,
         final int size,
-        final MetadataExtractionListener listener)
+        @Nullable final MetadataExtractionListener listener)
       throws  SQLException,
               QueryJException
     {
@@ -1335,12 +1318,11 @@ public class OracleMetadataManagerOld
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
-     * @precondition connection != null
-     * @precondition queryFactory != null
      */
+    @NotNull
     protected boolean[] getAllowNulls(
         @NotNull final Connection connection,
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
@@ -1348,7 +1330,7 @@ public class OracleMetadataManagerOld
         // TODO: use parent table
         boolean[] result;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
         @Nullable ResultSet t_rsResults = null;
 
@@ -1358,7 +1340,7 @@ public class OracleMetadataManagerOld
         {
             try
             {
-                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
+                @NotNull final SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TAB_COLUMNS.NULLABLE);
 
@@ -1456,7 +1438,6 @@ public class OracleMetadataManagerOld
      * @param field the field.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
-     * @precondition resultSet != null
      */
     @NotNull
     protected boolean[] extractAllowNull(
@@ -1472,7 +1453,6 @@ public class OracleMetadataManagerOld
      * @param fieldName the field name.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
-     * @precondition resultSet != null
      */
     @NotNull
     protected boolean[] extractAllowNull(
@@ -1481,9 +1461,9 @@ public class OracleMetadataManagerOld
     {
         boolean[] result = null;
 
-        @NotNull String[] t_astrTypes = extractStringFields(resultSet, fieldName)[0];
+        @NotNull final String[] t_astrTypes = extractStringFields(resultSet, fieldName)[0];
 
-        int t_iCount = t_astrTypes.length;
+        final int t_iCount = t_astrTypes.length;
 
         if  (t_iCount > 0)
         {
@@ -1515,17 +1495,15 @@ public class OracleMetadataManagerOld
      * @return the table comments.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
-     * @precondition metaData != null
-     * @precondition tableName != null
      */
     @Override
     @Nullable
     protected String getTableComment(
         @NotNull final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema,
-        final String tableName,
-        final MetadataExtractionListener listener)
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @NotNull final String tableName,
+        @Nullable final MetadataExtractionListener listener)
       throws  SQLException,
               QueryJException
     {
@@ -1544,14 +1522,11 @@ public class OracleMetadataManagerOld
      * @return the table comments.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
-     * @precondition connection != null
-     * @precondition tableNames != null
-     * @precondition queryFactory != null
      */
     @Nullable
     protected String getTableComment(
         @NotNull final Connection connection,
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
@@ -1559,7 +1534,7 @@ public class OracleMetadataManagerOld
         // TODO: use listener
         @Nullable String result = "";
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
         @Nullable ResultSet t_rsResults = null;
 
@@ -1569,7 +1544,7 @@ public class OracleMetadataManagerOld
         {
             try
             {
-                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
+                @NotNull final SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TAB_COMMENTS.COMMENTS);
 
@@ -1707,14 +1682,13 @@ public class OracleMetadataManagerOld
      * Converts given values to upper case.
      * @param values the values to convert.
      * @return the upper-case version of given values.
-     * @precondition values != null
      */
     @NotNull
     protected String[] toUpperCase(@Nullable final String[] values)
     {
         @NotNull final String[] result = new String[(values != null) ? values.length : 0];
 
-        int t_iCount;
+        final int t_iCount;
 
         if (values != null)
         {
@@ -1746,7 +1720,6 @@ public class OracleMetadataManagerOld
      * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
-     * @precondition metaData != null
      */
     @Override
     @Nullable
@@ -1789,7 +1762,7 @@ public class OracleMetadataManagerOld
     {
         @Nullable String result = null;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
 
         @Nullable ResultSet t_rsResults = null;
 
@@ -1799,7 +1772,7 @@ public class OracleMetadataManagerOld
         {
             try
             {
-                @NotNull String t_strSql =
+                @NotNull final String t_strSql =
                     "SELECT COMMENTS FROM  USER_COL_COMMENTS WHERE TABLE_NAME = ? AND COLUMN_NAME = ?";
 
                 if  (t_Log != null)

@@ -54,6 +54,7 @@ import java.util.Map;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Checks whether we can use the cached metadata or not.
@@ -71,35 +72,34 @@ public class DatabaseMetaDataCacheWritingHandler
      * @param metaData the database metadata.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected boolean handle(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         final boolean alreadyDone,
         @NotNull final DatabaseMetaData metaData)
         throws  QueryJBuildException
     {
-        boolean result = false;
-
         if (alreadyDone)
         {
-            MetadataManager t_Manager = retrieveMetadataManager(parameters);
+            @Nullable final MetadataManager t_Manager =
+                retrieveMetadataManager((Map<String, MetadataManager >) parameters);
 
-            try
+            if (t_Manager != null)
             {
-                cache(t_Manager, retrieveProjectOutputDir(parameters));
-
-
-            }
-            catch (@NotNull final IOException cachingFailed)
-            {
-                throw new QueryJBuildException("could.not.write.cache", cachingFailed);
+                try
+                {
+                    cache(t_Manager, retrieveProjectOutputDir((Map<String, File>) parameters));
+                }
+                catch (@NotNull final IOException cachingFailed)
+                {
+                    throw new QueryJBuildException("could.not.write.cache", cachingFailed);
+                }
             }
         }
 
-        return result;
+        return false;
     }
 
     /**
@@ -109,7 +109,6 @@ public class DatabaseMetaDataCacheWritingHandler
      * @param majorVersion the major version number.
      * @param minorVersion the minor version number.
      * @return <code>true</code> in case it matches.
-     * @precondition product != null
      */
     @Override
     protected boolean checkVendor(

@@ -67,6 +67,7 @@ import java.util.Map;
  * Builds all templates to generate sources for each custom SQL.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public abstract class BasePerCustomSqlTemplateBuildHandler
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
@@ -89,21 +90,14 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected boolean handle(@NotNull final Map parameters)
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
-        boolean result = true;
+        @NotNull final DatabaseMetaData t_DatabaseMetadata = retrieveDatabaseMetaData(parameters);
 
-        @Nullable DatabaseMetaData t_DatabaseMetadata = retrieveDatabaseMetaData(parameters);
+        buildTemplates(parameters, t_DatabaseMetadata);
 
-        if (t_DatabaseMetadata != null)
-        {
-            buildTemplates(parameters, t_DatabaseMetadata);
-
-            result = false;
-        }
-
-        return result;
+        return false;
     }
 
     /**
@@ -113,7 +107,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
-        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
+        @NotNull final Map<String, ?> parameters, @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         try
@@ -143,7 +137,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final String engineName,
         @Nullable final String engineVersion,
         @NotNull final String quote)
@@ -154,8 +148,8 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
             engineName,
             engineVersion,
             quote,
-            retrieveMetadataManager(parameters),
-            retrieveCustomSqlProvider(parameters));
+            retrieveMetadataManager((Map <String, MetadataManager>) parameters),
+            retrieveCustomSqlProvider((Map<String, CustomSqlProvider>) parameters));
     }
 
     /**
@@ -169,7 +163,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final String engineName,
         @Nullable final String engineVersion,
         @NotNull final String quote,
@@ -185,11 +179,11 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
             metadataManager,
             customSqlProvider,
             retrieveTemplateFactory(),
-            retrieveProjectPackage(parameters),
-            retrieveTableRepositoryName(parameters),
+            retrieveProjectPackage((Map<String, String>) parameters),
+            retrieveTableRepositoryName((Map <String, String>) parameters),
             retrieveCustomSql(
-                parameters, customSqlProvider, metadataManager),
-            retrieveHeader(parameters));
+                (Map <String, List<Sql>>) parameters, customSqlProvider, metadataManager),
+            retrieveHeader((Map <String, String>) parameters));
     }
     
     /**
@@ -214,9 +208,8 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param header the header.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    @SuppressWarnings("unused")
     protected void buildTemplates(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final String engineName,
         @Nullable final String engineVersion,
         @NotNull final String quote,
@@ -229,12 +222,12 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
         @Nullable final String header)
       throws  QueryJBuildException
     {
-        @NotNull List<BasePerCustomSqlTemplate> t_lTemplates =
+        @NotNull final List<BasePerCustomSqlTemplate> t_lTemplates =
             new ArrayList<BasePerCustomSqlTemplate>(sqlElements.size());
 
-        @Nullable SqlElement t_SqlElement = null;
+        @Nullable final SqlElement t_SqlElement = null;
 
-        for (@Nullable Sql t_Sql : sqlElements)
+        for (@Nullable final Sql t_Sql : sqlElements)
         {
             if (t_Sql != null)
             {
@@ -243,7 +236,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
                         t_Sql,
                         customSqlProvider,
                         metadataManager,
-                        retrievePackage(t_Sql, engineName, parameters),
+                        retrievePackage(t_Sql, engineName, (Map<String, String>) parameters),
                         engineName,
                         engineVersion,
                         projectPackage,
@@ -252,7 +245,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
             }
         }
 
-        storeTemplates(t_lTemplates, parameters);
+        storeTemplates(t_lTemplates, (Map <String, List<BasePerCustomSqlTemplate>>) parameters);
     }
 
     /**
@@ -266,7 +259,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
     protected String retrievePackage(
         @NotNull final Sql customSql,
         @NotNull final String engineName,
-        @NotNull final Map parameters)
+        @NotNull final Map<String, String> parameters)
     {
         return
             retrievePackage(
@@ -297,7 +290,8 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param parameters the parameter map.
      */
     protected abstract void storeTemplates(
-        @NotNull final List<BasePerCustomSqlTemplate> templates, @NotNull final Map parameters);
+        @NotNull final List<BasePerCustomSqlTemplate> templates,
+        @NotNull final Map<String, List<BasePerCustomSqlTemplate>> parameters);
 
     /**
      * Retrieves the foreign keys.
@@ -309,11 +303,11 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
     @SuppressWarnings("unchecked")
     @NotNull
     protected List<Sql> retrieveCustomSql(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, List<Sql>> parameters,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<Sql> result = (List<Sql>) parameters.get(CUSTOM_SQL);
+        @Nullable List<Sql> result = parameters.get(CUSTOM_SQL);
 
         if  (result == null)
         {

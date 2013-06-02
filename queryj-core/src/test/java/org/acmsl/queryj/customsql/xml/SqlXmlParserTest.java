@@ -304,9 +304,10 @@ extends TestCase
   public void testParse()
   throws Exception
   {
+
     // JUnitDoclet begin method parse
       @NotNull final SqlXmlParser t_Parser =
-          new SqlXmlParserImpl(new ByteArrayInputStream(TEST_INPUT.getBytes())) {};
+          new SqlXmlParserImpl(new ByteArrayInputStream(TEST_INPUT.getBytes()));
       assertNotNull(t_Parser);
       t_Parser.parse();
       final List<Sql> t_lQueries = t_Parser.getQueries();

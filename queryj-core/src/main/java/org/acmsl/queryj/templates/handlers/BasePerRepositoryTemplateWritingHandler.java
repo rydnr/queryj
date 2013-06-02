@@ -35,8 +35,8 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.AbstractBasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
 
@@ -56,7 +56,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerRepositoryTemplateWritingHandler
-    <T extends BasePerRepositoryTemplate<C>, G extends BasePerRepositoryTemplateGenerator<T,C>, C extends BasePerRepositoryTemplateContext>
+    <T extends AbstractBasePerRepositoryTemplate<C>, G extends BasePerRepositoryTemplateGenerator<T,C>, C extends BasePerRepositoryTemplateContext>
     extends    AbstractTemplateWritingHandler<T, G, C>
     implements TemplateWritingHandler
 {
@@ -70,17 +70,18 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      */
     @Override
     @NotNull
+    @SuppressWarnings("unchecked")
     protected File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
         @NotNull final String engineName,
-        @NotNull final Map parameters)
+        @NotNull final Map<String, ?> parameters)
     {
         return
             retrieveOutputDir(
                 rootDir,
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters),
+                retrieveProjectPackage((Map<String, String>) parameters),
+                retrieveUseSubfoldersFlag((Map <String, Boolean>) parameters),
                 engineName,
                 parameters,
                 PackageUtils.getInstance());

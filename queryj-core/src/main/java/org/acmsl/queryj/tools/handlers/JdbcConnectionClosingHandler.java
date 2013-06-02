@@ -95,25 +95,29 @@ public class JdbcConnectionClosingHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException the build process cannot be performed.
      */
-    protected boolean handle(@NotNull final Map parameters)
+    @Override
+    @SuppressWarnings("unchecked")
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
         waitUntilGenerationThreadsFinish(parameters);
 
-        closeConnection(parameters);
+        closeConnection((Map <String, Connection>) parameters);
 
-        removeConnection(parameters);
+        removeConnection((Map <String, Connection>) parameters);
 
         return false;
     }
 
     /**
      * Waits until all generation threads have finish.
+     * @param parameters the parameters.
      */
-    protected void waitUntilGenerationThreadsFinish(@NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected void waitUntilGenerationThreadsFinish(@NotNull final Map<String, ?> parameters)
     {
         waitUntilGenerationThreadsFinish(
-            retrieveGenerationTasks(parameters),
+            retrieveGenerationTasks((Map<String, List<Future<Template>>>) parameters),
             UniqueLogFactory.getLog(JdbcConnectionClosingHandler.class));
     }
 
@@ -123,46 +127,58 @@ public class JdbcConnectionClosingHandler
      * @param log the {@link Log} instance.
      */
     protected void waitUntilGenerationThreadsFinish(
-        @Nullable final List<Future<Template>> tasks, @NotNull final Log log)
+        @NotNull final List<Future<Template>> tasks, @Nullable final Log log)
     {
-        if (tasks != null)
+        for (@Nullable final Future<Template> t_Task : tasks)
         {
-            for (@Nullable Future<Template> t_Task : tasks)
+            if (t_Task != null)
             {
-                if (t_Task != null)
+                while (!t_Task.isDone())
                 {
-                    while (!t_Task.isDone())
+                    try
                     {
-                        try
+                        if (log != null)
                         {
                             log.debug(
                                 "Waiting for " + t_Task.get().getTemplateContext().getTemplateName() + " to finish");
                         }
-                        catch (@NotNull final InterruptedException interrupted)
+                    }
+                    catch (@NotNull final InterruptedException interrupted)
+                    {
+                        if (log != null)
                         {
                             log.info(
                                 "Interrupted while waiting for the threads to finish", interrupted);
                         }
-                        catch (@NotNull final ExecutionException interrupted)
+                    }
+                    catch (@NotNull final ExecutionException interrupted)
+                    {
+                        if (log != null)
                         {
                             log.info(interrupted.getMessage());
-
-                            Throwable cause = interrupted.getCause();
-
-                            while (cause != null)
-                            {
-                                log.error(cause.getMessage(), cause);
-                                cause = cause.getCause();
-                            }
                         }
 
-                        synchronized(LOCK)
+                        Throwable cause = interrupted.getCause();
+
+                        while (cause != null)
                         {
-                            try
+                            if (log != null)
                             {
-                                LOCK.wait(1000);
+                                log.error(cause.getMessage(), cause);
                             }
-                            catch (@NotNull final InterruptedException interrupted)
+                            cause = cause.getCause();
+                        }
+                    }
+
+                    synchronized(LOCK)
+                    {
+                        try
+                        {
+                            LOCK.wait(1000);
+                        }
+                        catch (@NotNull final InterruptedException interrupted)
+                        {
+                            if (log != null)
                             {
                                 log.info(
                                     "Interrupted while waiting for the threads to finish", interrupted);
@@ -178,15 +194,11 @@ public class JdbcConnectionClosingHandler
      * Closes the JDBC connection stored in the attribute map.
      * @param parameters the parameter map.
      * @throws QueryJBuildException if the connection cannot be closed.
-     * @precondition parameters != null
      */
-    protected void closeConnection(@NotNull final Map parameters)
+    protected void closeConnection(@NotNull final Map<String, Connection> parameters)
         throws  QueryJBuildException
     {
-        closeConnection(
-            (Connection)
-                parameters.get(
-                    JdbcConnectionOpeningHandler.JDBC_CONNECTION));
+        closeConnection(parameters.get(JdbcConnectionOpeningHandler.JDBC_CONNECTION));
     }
 
     /**
@@ -218,9 +230,8 @@ public class JdbcConnectionClosingHandler
      * @param parameters the parameter map.
      * @throws QueryJBuildException if the connection cannot be removed for
      * any reason.
-     * @precondition parameters != null
      */
-    protected void removeConnection(@NotNull final Map parameters)
+    protected void removeConnection(@NotNull final Map<String, Connection> parameters)
         throws  QueryJBuildException
     {
         parameters.remove(JdbcConnectionOpeningHandler.JDBC_CONNECTION);

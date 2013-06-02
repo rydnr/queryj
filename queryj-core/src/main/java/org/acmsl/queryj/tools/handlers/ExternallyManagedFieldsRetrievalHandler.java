@@ -56,8 +56,6 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 /*
@@ -87,16 +85,16 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     @Override
-    protected boolean handle(@NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
         return
             handle(
-                retrieveMetadataManager(parameters),
-                retrieveExternallyManagedFieldsElement(parameters),
+                retrieveMetadataManager((Map<String, MetadataManager>) parameters),
+                retrieveExternallyManagedFieldsElement((Map<String, AntExternallyManagedFieldsElement>) parameters),
                 StringValidator.getInstance());
     }
                 
@@ -108,7 +106,6 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @param stringValidator the {@link StringValidator} instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition metadataManager != null
      */
     protected boolean handle(
         @Nullable final MetadataManager metadataManager,
@@ -116,45 +113,33 @@ public class ExternallyManagedFieldsRetrievalHandler
         @NotNull final StringValidator stringValidator)
       throws  QueryJBuildException
     {
-        boolean result = false;
+        final boolean result = false;
 
         if  (   (metadataManager != null)
              && (externallyManagedFields != null))
         {
-            Collection t_cFieldElements =
-                externallyManagedFields.getFields();
-
-            @Nullable Iterator t_itFieldIterator =
-                (t_cFieldElements != null)
-                ?  t_cFieldElements.iterator()
-                :  null;
-
-            if  (t_itFieldIterator != null)
+            for (@Nullable final AntFieldElement t_Field : externallyManagedFields.getFields())
             {
-                AntFieldElement t_Field;
-
-                while  (t_itFieldIterator.hasNext())
+                if  (t_Field != null)
                 {
-                    t_Field = (AntFieldElement) t_itFieldIterator.next();
-
-                    if  (t_Field != null)
+                    if  (stringValidator.isEmpty(t_Field.getName()))
                     {
-                        if  (stringValidator.isEmpty(t_Field.getName()))
+                        throw
+                            new QueryJBuildException(
+                                "Field name not specified.");
+                    }
+                    else
+                    {
+                        if (stringValidator.isEmpty(
+                            t_Field.getTableName()))
                         {
                             throw
                                 new QueryJBuildException(
                                     "Field name not specified.");
                         }
-                        else if  (stringValidator.isEmpty(
-                                      t_Field.getTableName()))
+                        else
                         {
-                            throw
-                                new QueryJBuildException(
-                                    "Field name not specified.");
-                        }
-                        else 
-                        {
-                            @Nullable Attribute t_Attribute =
+                            @Nullable final Attribute t_Attribute =
                                 metadataManager.getColumnDAO().findColumn(
                                     t_Field.getTableName(),
                                     t_Field.getName());
@@ -195,15 +180,12 @@ public class ExternallyManagedFieldsRetrievalHandler
      * attribute map.
      * @param parameters the parameter map.
      * @return the externally-managed-fields information.
-     * @precondition parameters != null
      */
     @NotNull
     protected AntExternallyManagedFieldsElement
-        retrieveExternallyManagedFieldsElement(@NotNull final Map parameters)
+        retrieveExternallyManagedFieldsElement(
+        @NotNull final Map<String, AntExternallyManagedFieldsElement> parameters)
     {
-        return
-            (AntExternallyManagedFieldsElement)
-                parameters.get(
-                    ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS);
+        return parameters.get(ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS);
     }
 }

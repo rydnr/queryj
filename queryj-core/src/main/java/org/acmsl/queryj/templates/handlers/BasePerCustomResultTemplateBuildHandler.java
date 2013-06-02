@@ -104,17 +104,29 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     @ThreadSafe
     @Override
-    protected boolean handle(@NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
-        @NotNull final MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+        final boolean result;
 
-        buildTemplates(
-            parameters,
-            t_MetadataManager,
-            retrieveCustomSqlProvider(parameters));
+        @Nullable final MetadataManager t_MetadataManager =
+            retrieveMetadataManager((Map <String, MetadataManager>) parameters);
 
-        return false;
+        if (t_MetadataManager != null)
+        {
+            buildTemplates(
+                parameters,
+                t_MetadataManager,
+                retrieveCustomSqlProvider((Map <String, CustomSqlProvider>) parameters));
+            result = false;
+        }
+        else
+        {
+            result = true;
+        }
+
+        return result;
     }
 
     /**
@@ -126,7 +138,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     @ThreadSafe
     protected void buildTemplates(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider)
       throws  QueryJBuildException
@@ -137,15 +149,15 @@ public abstract class BasePerCustomResultTemplateBuildHandler
             customSqlProvider,
             retrieveTemplateFactory(),
             CachingDecoratorFactory.getInstance(),
-            retrieveProjectPackage(parameters),
-            retrieveTableRepositoryName(parameters),
-            retrieveHeader(parameters),
-            retrieveImplementMarkerInterfaces(parameters),
-            retrieveJmx(parameters),
-            retrieveJNDILocation(parameters),
-            retrieveDisableGenerationTimestamps(parameters),
-            retrieveDisableNotNullAnnotations(parameters),
-            retrieveDisableCheckthreadAnnotations(parameters),
+            retrieveProjectPackage((Map<String, String>) parameters),
+            retrieveTableRepositoryName((Map<String, String>) parameters),
+            retrieveHeader((Map <String, String>) parameters),
+            retrieveImplementMarkerInterfaces((Map<String, Boolean>) parameters),
+            retrieveJmx((Map <String, Boolean>) parameters),
+            retrieveJNDILocation((Map <String, String>) parameters),
+            retrieveDisableGenerationTimestamps((Map<String, Boolean>) parameters),
+            retrieveDisableNotNullAnnotations((Map<String, Boolean>) parameters),
+            retrieveDisableCheckthreadAnnotations((Map<String, Boolean>) parameters),
             retrieveCustomResults(parameters, customSqlProvider, isDuplicatedResultsAllowed()),
             CustomResultUtils.getInstance());
     }
@@ -187,8 +199,9 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @throws QueryJBuildException if the templates cannot be built.
      */
     @ThreadSafe
+    @SuppressWarnings("unchecked")
     protected void buildTemplates(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
@@ -206,11 +219,11 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
     {
-        @NotNull List<T> t_lTemplates = new ArrayList<T>();
+        @NotNull final List<T> t_lTemplates = new ArrayList<T>();
 
         @Nullable T t_Template;
 
-        for  (Result t_ResultElement: resultElements)
+        for  (@Nullable final Result t_ResultElement: resultElements)
         {
             if (   (t_ResultElement != null)
                 && (isGenerationAllowedForResult(
@@ -228,7 +241,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                                 customSqlProvider,
                                 metadataManager,
                                 metadataManager.getEngineName(),
-                                parameters),
+                                (Map<String, String>) parameters),
                             projectPackage,
                             repository,
                             header,
@@ -256,7 +269,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
             }
         }
 
-        storeTemplates(t_lTemplates, parameters);
+        storeTemplates(t_lTemplates, (Map <String, List<T>>) parameters);
     }
 
     /**
@@ -309,7 +322,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final String engineName,
-        @NotNull final Map parameters)
+        @NotNull final Map<String, String> parameters)
       throws  QueryJBuildException
     {
         return
@@ -347,7 +360,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param parameters the parameter map.
      */
     protected abstract void storeTemplates(
-        @NotNull final List<T> templates, @NotNull final Map parameters);
+        @NotNull final List<T> templates, @NotNull final Map<String, List<T>>  parameters);
 
     /**
      * Retrieves the foreign keys.
@@ -398,7 +411,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     {
         @NotNull final List<Result> result = new ArrayList<Result>(results.size());
 
-        @NotNull HashSet<Result> t_Aux = new HashSet<Result>(results.size());
+        @NotNull final HashSet<Result> t_Aux = new HashSet<Result>(results.size());
 
         t_Aux.addAll(results);
 

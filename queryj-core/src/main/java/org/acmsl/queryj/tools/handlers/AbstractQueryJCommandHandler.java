@@ -47,7 +47,6 @@ import org.acmsl.queryj.metadata.MetadataManager;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
@@ -58,6 +57,7 @@ import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -79,50 +79,8 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractQueryJCommandHandler
-    implements  QueryJCommandHandler
+    implements  QueryJCommandHandler<QueryJCommand>
 {
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(@NotNull final Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof QueryJCommand)
-        {
-            @NotNull QueryJCommand t_Command = (QueryJCommand) command;
-            
-            @Nullable final Log t_OtherLog =
-                UniqueLogFactory.getLog(
-                    AbstractQueryJCommandHandler.class);
-
-            if  (t_OtherLog != null)
-            {
-                t_OtherLog.info("Executing handler: " + this);
-            }
-
-            try 
-            {
-                result = handle(t_Command);
-            }
-            catch  (@NotNull final QueryJBuildException buildException)
-            {
-                @Nullable final Log t_Log =
-                    UniqueLogFactory.getLog(
-                        AbstractQueryJCommandHandler.class);
-
-                if  (t_Log != null)
-                {
-                    t_Log.error("Chain step failed.", buildException);
-                }
-            }
-        }
-        
-        return result;
-    }
-
     /**
      * Handles given command.
      * @param command the command to handle.
@@ -144,7 +102,7 @@ public abstract class AbstractQueryJCommandHandler
      * by different handlers.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected abstract boolean handle(@NotNull final Map parameters)
+    protected abstract boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException;
 
     /**
@@ -153,10 +111,9 @@ public abstract class AbstractQueryJCommandHandler
      * @return such folder.
      */
     @NotNull
-    protected File retrieveProjectOutputDir(@NotNull final Map parameters)
+    protected File retrieveProjectOutputDir(@NotNull final Map<String, File> parameters)
     {
-        return
-            (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
+        return parameters.get(ParameterValidationHandler.OUTPUT_DIR);
     }
 
     /**
@@ -165,9 +122,9 @@ public abstract class AbstractQueryJCommandHandler
      * @return the package name.
      */
     @NotNull
-    protected String retrieveProjectPackage(@NotNull final Map parameters)
+    protected String retrieveProjectPackage(@NotNull final Map<String, String> parameters)
     {
-        return (String) parameters.get(ParameterValidationHandler.PACKAGE);
+        return parameters.get(ParameterValidationHandler.PACKAGE);
     }
 
     /**
@@ -177,7 +134,7 @@ public abstract class AbstractQueryJCommandHandler
      * @throws QueryJBuildException if the database metadata is not accessible.
      */
     @NotNull
-    protected DatabaseMetaData retrieveDatabaseMetaData(@NotNull final Map parameters)
+    protected DatabaseMetaData retrieveDatabaseMetaData(@NotNull final Map<String, ?> parameters)
       throws QueryJBuildException
     {
         @Nullable DatabaseMetaData result =
@@ -205,6 +162,11 @@ public abstract class AbstractQueryJCommandHandler
                             exception);
                 }
             }
+            else
+            {
+                throw
+                    new QueryJBuildException("cannot.retrieve.database.metadata");
+            }
         }
 
         return result;
@@ -215,13 +177,10 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return the manager.
      */
-    @NotNull
-    protected MetadataManager retrieveMetadataManager(@NotNull final Map parameters)
+    @Nullable
+    protected MetadataManager retrieveMetadataManager(@NotNull final Map<String, MetadataManager> parameters)
     {
-        return
-            (MetadataManager)
-                parameters.get(
-                    DatabaseMetaDataRetrievalHandler.METADATA_MANAGER);
+        return parameters.get(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER);
     }
 
     /**
@@ -229,72 +188,19 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameters.
      * @return such flag.
      */
-    protected boolean retrieveUseSubfoldersFlag(@NotNull final Map parameters)
+    protected boolean retrieveUseSubfoldersFlag(@NotNull final Map<String, Boolean> parameters)
     {
         boolean result = false;
 
-        Object t_Flag =
+        @Nullable final Boolean t_Flag =
             parameters.get(ParameterValidationHandler.OUTPUT_DIR_SUBFOLDERS);
 
-        if  (   (t_Flag != null)
-             && (t_Flag instanceof Boolean))
+        if  (t_Flag != null)
         {
-            result = (Boolean) t_Flag;
+            result = t_Flag;
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the JDBC driver from the attribute map.
-     * @param parameters the parameter map.
-     * @return the driver name.
-     */
-    @NotNull
-    @SuppressWarnings("unused")
-    protected String retrieveJdbcDriver(@NotNull final Map parameters)
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.JDBC_DRIVER);
-    }
-
-    /**
-     * Retrieves the JDBC url from the attribute map.
-     * @param parameters the parameter map.
-     * @return the url name.
-     */
-    @NotNull
-    @SuppressWarnings("unused")
-    protected String retrieveJdbcUrl(@NotNull final Map parameters)
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.JDBC_URL);
-    }
-
-    /**
-     * Retrieves the JDBC username from the attribute map.
-     * @param parameters the parameter map.
-     * @return the username name.
-     */
-    @NotNull
-    @SuppressWarnings("unused")
-    protected String retrieveJdbcUsername(@NotNull final Map parameters)
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.JDBC_USERNAME);
-    }
-
-    /**
-     * Retrieves the JDBC password from the attribute map.
-     * @param parameters the parameter map.
-     * @return the password name.
-     */
-    @NotNull
-    @SuppressWarnings("unused")
-    protected String retrieveJdbcPassword(@NotNull final Map parameters)
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.JDBC_PASSWORD);
     }
 
     /**
@@ -326,12 +232,11 @@ public abstract class AbstractQueryJCommandHandler
      * @return the provider.
      */
     @NotNull
-    public static CustomSqlProvider retrieveCustomSqlProvider(@NotNull final Map parameters)
+    public static CustomSqlProvider retrieveCustomSqlProvider(
+        @NotNull final Map<String, CustomSqlProvider> parameters)
     {
         return
-            (CustomSqlProvider)
-                parameters.get(
-                    CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
+            parameters.get(CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
     }
 
     /**
@@ -340,12 +245,9 @@ public abstract class AbstractQueryJCommandHandler
      * @return the repository's name.
      */
     @NotNull
-    protected String retrieveTableRepositoryName(@NotNull final Map parameters)
+    protected String retrieveTableRepositoryName(@NotNull final Map<String, String> parameters)
     {
-        return
-            (String)
-                parameters.get(
-                    ParameterValidationHandler.REPOSITORY);
+        return parameters.get(ParameterValidationHandler.REPOSITORY);
     }
 
     /**
@@ -354,9 +256,9 @@ public abstract class AbstractQueryJCommandHandler
      * @return the header.
      */
     @Nullable
-    protected String retrieveHeader(@NotNull final Map parameters)
+    protected String retrieveHeader(@NotNull final Map<String, String> parameters)
     {
-        return (String) parameters.get(ParameterValidationHandler.HEADER);
+        return parameters.get(ParameterValidationHandler.HEADER);
     }
 
     /**
@@ -364,11 +266,11 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return such condition.
      */
-    protected boolean retrieveJmx(@NotNull final Map parameters)
+    protected boolean retrieveJmx(@NotNull final Map<String, Boolean> parameters)
     {
         boolean result = false;
 
-        Boolean jmx = (Boolean) parameters.get(ParameterValidationHandler.JMX);
+        @Nullable final Boolean jmx = parameters.get(ParameterValidationHandler.JMX);
 
         if (jmx != null)
         {
@@ -383,16 +285,21 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return such condition.
      */
-    protected boolean retrieveImplementMarkerInterfaces(@NotNull final Map parameters)
+    protected boolean retrieveImplementMarkerInterfaces(@NotNull final Map<String, Boolean> parameters)
     {
-        Boolean result =
-            (Boolean)
-                parameters.get(
-                    ParameterValidationHandler.IMPLEMENT_MARKER_INTERFACES);
+        final boolean result;
 
-        if  (result == null)
+        @Nullable final Boolean aux =
+            parameters.get(
+                ParameterValidationHandler.IMPLEMENT_MARKER_INTERFACES);
+
+        if  (aux == null)
         {
             result = Boolean.FALSE;
+        }
+        else
+        {
+            result = aux;
         }
 
         return result;
@@ -415,7 +322,7 @@ public abstract class AbstractQueryJCommandHandler
         }
         catch  (@NotNull final Throwable throwable)
         {
-            Log t_Log =
+            @Nullable final Log t_Log =
                 UniqueLogFactory.getLog(AbstractQueryJCommandHandler.class);
 
             if  (t_Log != null)
@@ -439,13 +346,10 @@ public abstract class AbstractQueryJCommandHandler
      * any reason.
      */
     @NotNull
-    protected Connection retrieveConnection(@NotNull final Map parameters)
+    protected Connection retrieveConnection(@NotNull final Map<String, Connection> parameters)
       throws  QueryJBuildException
     {
-        return
-            (Connection)
-                parameters.get(
-                    JdbcConnectionOpeningHandler.JDBC_CONNECTION);
+        return parameters.get(JdbcConnectionOpeningHandler.JDBC_CONNECTION);
     }
 
     /**
@@ -455,7 +359,7 @@ public abstract class AbstractQueryJCommandHandler
      * @throws QueryJBuildException if the charset is not valid.
      */
     @SuppressWarnings("unchecked")
-    protected Charset retrieveCharset(@NotNull final Map parameters)
+    protected Charset retrieveCharset(@NotNull final Map<String, ?> parameters)
       throws  QueryJBuildException
     {
         Charset result =
@@ -465,13 +369,13 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            @Nullable String encoding =
+            @Nullable final String encoding =
                 (String) parameters.get(ParameterValidationHandler.ENCODING);
 
             if (encoding == null)
             {
                 result = Charset.defaultCharset();
-                parameters.put(ParameterValidationHandler.CHARSET, result);
+                ((Map <String, Charset>) parameters).put(ParameterValidationHandler.CHARSET, result);
             }
             else
             {
@@ -480,7 +384,7 @@ public abstract class AbstractQueryJCommandHandler
                     try
                     {
                         result = Charset.forName(encoding);
-                        parameters.put(ParameterValidationHandler.CHARSET, result);
+                        ((Map <String, Charset>) parameters).put(ParameterValidationHandler.CHARSET, result);
                     }
                     catch (@NotNull final IllegalArgumentException nullCharset)
                     {
@@ -524,15 +428,61 @@ public abstract class AbstractQueryJCommandHandler
 
 
     /**
+     * Retrieves whether to disable generation timestamps or not.
+     * @param parameters the parameter map.
+     * @return such condition.
+     */
+    protected boolean retrieveBoolean(@NotNull final Map<String, Boolean> parameters, @NotNull final String key)
+    {
+        final boolean result;
+
+        @Nullable final Boolean aux = parameters.get(key);
+
+        if  (aux == null)
+        {
+            result = Boolean.FALSE;
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves whether to disable generation timestamps or not.
+     * @param parameters the parameter map.
+     * @return such condition.
+     */
+    protected int retrieveInteger(@NotNull final Map<String, Integer> parameters, @NotNull final String key)
+    {
+        final int result;
+
+        @Nullable final Integer aux = parameters.get(key);
+
+        if  (aux == null)
+        {
+            result = -1;
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the JNDI location from the attribute map.
      * @param parameters the parameter map.
      * @return the location.
      */
     @NotNull
     @SuppressWarnings("unchecked")
-    protected String retrieveJNDILocation(@NotNull final Map parameters)
+    protected String retrieveJNDILocation(@NotNull final Map<String, String> parameters)
     {
-        String result = (String) parameters.get(ParameterValidationHandler.JNDI_DATASOURCES);
+        @Nullable String result = parameters.get(ParameterValidationHandler.JNDI_DATASOURCES);
 
         if (result == null)
         {
@@ -549,9 +499,9 @@ public abstract class AbstractQueryJCommandHandler
      * @return <code>true</code> in such case.
      */
     @SuppressWarnings("unchecked")
-    protected boolean retrieveCaching(@NotNull final Map parameters)
+    protected boolean retrieveCaching(@NotNull final Map<String, Boolean> parameters)
     {
-        return (Boolean) parameters.get(ParameterValidationHandler.CACHING);
+        return retrieveBoolean(parameters, ParameterValidationHandler.CACHING);
     }
 
     /**
@@ -560,9 +510,9 @@ public abstract class AbstractQueryJCommandHandler
      * @return the number of threads to use.
      */
     @SuppressWarnings("unchecked")
-    protected int retrieveThreadCount(@NotNull final Map parameters)
+    protected int retrieveThreadCount(@NotNull final Map<String, Integer> parameters)
     {
-        return (Integer) parameters.get(ParameterValidationHandler.THREAD_COUNT);
+        return parameters.get(ParameterValidationHandler.THREAD_COUNT);
     }
 
     /**
@@ -570,19 +520,9 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return such condition.
      */
-    protected boolean retrieveDisableGenerationTimestamps(@NotNull final Map parameters)
+    protected boolean retrieveDisableGenerationTimestamps(@NotNull final Map<String, Boolean> parameters)
     {
-        Boolean result =
-            (Boolean)
-                parameters.get(
-                    ParameterValidationHandler.DISABLE_TIMESTAMPS);
-
-        if  (result == null)
-        {
-            result = Boolean.FALSE;
-        }
-
-        return result;
+        return retrieveBoolean(parameters, ParameterValidationHandler.DISABLE_TIMESTAMPS);
     }
 
     /**
@@ -590,19 +530,9 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return such condition.
      */
-    protected boolean retrieveDisableNotNullAnnotations(@NotNull final Map parameters)
+    protected boolean retrieveDisableNotNullAnnotations(@NotNull final Map<String, Boolean> parameters)
     {
-        Boolean result =
-            (Boolean)
-                parameters.get(
-                    ParameterValidationHandler.DISABLE_NOTNULL_ANNOTATIONS);
-
-        if  (result == null)
-        {
-            result = Boolean.FALSE;
-        }
-
-        return result;
+        return retrieveBoolean(parameters, ParameterValidationHandler.DISABLE_NOTNULL_ANNOTATIONS);
     }
 
     /**
@@ -610,19 +540,9 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return such condition.
      */
-    protected boolean retrieveDisableCheckthreadAnnotations(@NotNull final Map parameters)
+    protected boolean retrieveDisableCheckthreadAnnotations(@NotNull final Map<String, Boolean> parameters)
     {
-        Boolean result =
-            (Boolean)
-                parameters.get(
-                    ParameterValidationHandler.DISABLE_CHECKTHREAD_ANNOTATIONS);
-
-        if  (result == null)
-        {
-            result = Boolean.FALSE;
-        }
-
-        return result;
+        return retrieveBoolean(parameters, ParameterValidationHandler.DISABLE_CHECKTHREAD_ANNOTATIONS);
     }
 
     /**
@@ -630,9 +550,8 @@ public abstract class AbstractQueryJCommandHandler
      * @param tasks the tasks to track.
      * @param parameters the parameter map.
      */
-    @SuppressWarnings("unchecked")
     protected <T extends Template> void annotateGenerationTasks(
-        @NotNull final List<Future<T>> tasks, @NotNull final Map parameters)
+        @NotNull final List<Future<T>> tasks, @NotNull final Map<String, List<Future<T>>> parameters)
     {
         parameters.put(buildGenerationTasksKey(), tasks);
     }
@@ -642,11 +561,18 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return such list.
      */
-    @SuppressWarnings("unchecked")
-    @Nullable
-    protected <T extends Template> List<Future<T>> retrieveGenerationTasks(@NotNull final Map parameters)
+    @NotNull
+    protected <W> List<W> retrieveGenerationTasks(
+        @NotNull final Map<String, List<W>> parameters)
     {
-        return (List<Future<T>>) parameters.get(buildGenerationTasksKey());
+        List<W> result = parameters.get(buildGenerationTasksKey());
+
+        if (result == null)
+        {
+            result = new ArrayList<W>(0);
+        }
+
+        return result;
     }
 
     /**

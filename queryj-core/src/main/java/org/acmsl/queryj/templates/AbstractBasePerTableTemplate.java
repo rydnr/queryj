@@ -29,6 +29,11 @@
 package org.acmsl.queryj.templates;
 
 /*
+ * Importing StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplate;
+
+/*
  * Importing some jetbrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -95,4 +100,31 @@ public abstract class AbstractBasePerTableTemplate<C extends BasePerTableTemplat
      */
     @NotNull
     public abstract String getTemplateName();
+
+
+    /**
+     * Builds a context-specific exception.
+     * @param context the context.
+     * @param template the {@link StringTemplate} instance.
+     * @return the specific {@link InvalidTemplateException} for the template.
+     */
+    @Override
+    @NotNull
+    public InvalidTemplateException buildInvalidTemplateException(
+        @NotNull final C context,
+        @NotNull final StringTemplate template,
+        @NotNull final Throwable actualException)
+    {
+        return
+            new InvalidTemplateException(
+                "invalid.per.custom.sql.template",
+                new Object[]
+                    {
+                        template.getName(),
+                        getTemplateName(),
+                        context.getRepositoryName(),
+                        context.getTableName()
+                    },
+                actualException);
+    }
 }

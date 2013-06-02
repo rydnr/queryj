@@ -38,7 +38,7 @@ import org.acmsl.queryj.QueryJCommand;
  * Marks all template writing handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface TemplateWritingHandler<C extends QueryJCommand>
-    extends TemplateHandler<C>
+public interface TemplateWritingHandler
+    extends TemplateHandler<QueryJCommand>
 {
 }

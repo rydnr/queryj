@@ -48,6 +48,7 @@ import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
  * Importing Jetbrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -77,23 +78,25 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      */
     @Override
     @NotNull
+    @SuppressWarnings("unchecked")
     protected File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
         @NotNull final String engineName,
-        @NotNull final Map parameters)
+        @NotNull final Map<String, ?> parameters)
       throws QueryJBuildException
     {
-        File result;
+        final File result;
 
-        MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+        @Nullable final MetadataManager t_MetadataManager =
+            retrieveMetadataManager((Map <String, MetadataManager>) parameters);
 
         if (t_MetadataManager != null)
         {
             result =
                 retrieveOutputDir(
                     context.getResult(),
-                    retrieveCustomSqlProvider(parameters),
+                    retrieveCustomSqlProvider((Map<String, CustomSqlProvider>) parameters),
                     t_MetadataManager,
                     engineName,
                     parameters);
@@ -117,12 +120,13 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      */
     @NotNull
+    @SuppressWarnings("unchecked")
     protected File retrieveOutputDir(
         @NotNull final Result resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final String engineName,
-        @NotNull final Map parameters)
+        @NotNull final Map<String, ?> parameters)
       throws  QueryJBuildException
     {
         return
@@ -130,9 +134,9 @@ public abstract class BasePerCustomResultTemplateWritingHandler
                 resultElement,
                 customSqlProvider,
                 metadataManager,
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters),
+                retrieveProjectOutputDir((Map<String, File>) parameters),
+                retrieveProjectPackage((Map<String, String>) parameters),
+                retrieveUseSubfoldersFlag((Map<String, Boolean>) parameters),
                 engineName,
                 parameters,
                 PackageUtils.getInstance());
@@ -162,7 +166,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
         @NotNull final String projectPackage,
         final boolean useSubFolders,
         @NotNull final String engineName,
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final PackageUtils packageUtils)
       throws  QueryJBuildException;
 

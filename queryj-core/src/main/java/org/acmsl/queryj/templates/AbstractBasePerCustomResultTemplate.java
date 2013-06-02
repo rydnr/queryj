@@ -21,9 +21,15 @@
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
+
+ *****************************************************************************
+ *
+ * Filename: AbstractBasePerCustomResultTemplate.java
+ *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Base logic for all per-custom result templates.
+ * Description: Logic-less container for all templates to be processed once
+ *              per custom result.
  *
  */
 package org.acmsl.queryj.templates;
@@ -36,14 +42,16 @@ import org.acmsl.queryj.customsql.Result;
 /*
  * Importing some JetBrains annotations.
  */
+import org.antlr.stringtemplate.StringTemplate;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Logicless container for all templates to be processed once per custom result.
+ * Logic-less container for all templates to be processed once per custom result.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractBasePerCustomResultTemplate<C extends BasePerCustomResultTemplateContext>
     extends  AbstractTemplate<C>
+    implements BasePerCustomResultTemplate<C>
 {
     /**
      * Builds a <code>AbstractBasePerCustomResultTemplate</code> using
@@ -92,4 +100,29 @@ public abstract class AbstractBasePerCustomResultTemplate<C extends BasePerCusto
               "Generating " + templateName + " for " + result.getId();
     }
 
+    /**
+     * Builds a context-specific exception.
+     * @param context the context.
+     * @param template the {@link StringTemplate} instance.
+     * @return the specific {@link InvalidTemplateException} for the template.
+     */
+    @Override
+    @NotNull
+    public InvalidTemplateException buildInvalidTemplateException(
+        @NotNull final C context,
+        @NotNull final StringTemplate template,
+        @NotNull final Throwable actualException)
+    {
+        return
+            new InvalidTemplateException(
+                "invalid.per.custom.result.template",
+                new Object[]
+                    {
+                        template.getName(),
+                        getTemplateName(),
+                        context.getRepositoryName(),
+                        context.getResult()
+                    },
+                actualException);
+    }
 }

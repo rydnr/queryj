@@ -21,9 +21,15 @@
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
+
+ *****************************************************************************
+ *
+ * Filename: AbstractBasePerCustomSqlTemplate.java
+ *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Base logic for all per-custom sql templates.
+ * Description: Logic-less container for all templates to be processed once
+ *              per custom SQL.
  *
  */
 package org.acmsl.queryj.templates;
@@ -36,10 +42,11 @@ import org.acmsl.queryj.customsql.Sql;
 /*
  * Importing some JetBrains annotations.
  */
+import org.antlr.stringtemplate.StringTemplate;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Logicless container for all templates to be processed once per custom SQL.
+ * Logic-less container for all templates to be processed once per custom SQL.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractBasePerCustomSqlTemplate<C extends BasePerCustomSqlTemplateContext>
@@ -89,5 +96,31 @@ public abstract class AbstractBasePerCustomSqlTemplate<C extends BasePerCustomSq
         final String templateName, @NotNull final Sql sql)
     {
         return "Generating " + templateName + " for " + sql.getName();
+    }
+
+    /**
+     * Builds a context-specific exception.
+     * @param context the context.
+     * @param template the {@link org.antlr.stringtemplate.StringTemplate} instance.
+     * @return the specific {@link InvalidTemplateException} for the template.
+     */
+    @Override
+    @NotNull
+    public InvalidTemplateException buildInvalidTemplateException(
+        @NotNull final C context,
+        @NotNull final StringTemplate template,
+        @NotNull final Throwable actualException)
+    {
+        return
+            new InvalidTemplateException(
+                "invalid.per.custom.sql.template",
+                new Object[]
+                    {
+                        template.getName(),
+                        getTemplateName(),
+                        context.getRepositoryName(),
+                        context.getSql()
+                    },
+                actualException);
     }
 }

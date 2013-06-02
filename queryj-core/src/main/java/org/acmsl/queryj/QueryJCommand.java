@@ -121,7 +121,6 @@ public class QueryJCommand
      * @return the map.
      */
     @NotNull
-    @SuppressWarnings("unchecked")
     public Map<String,?> getAttributeMap()
     {
         return m__mAttributes;
@@ -144,12 +143,12 @@ public class QueryJCommand
      * @param map the actual attribute map.
      */
     @SuppressWarnings("unchecked")
-    protected void setAttribute(
-        @NotNull final String name, @NotNull final Object value, @Nullable final Map map)
+    protected <T> void setAttribute(
+        @NotNull final String name, @NotNull final T value, @Nullable final Map<String, ?> map)
     {
         if  (map != null) 
         {
-            map.put(name, value);
+            ((Map <String, T>) map).put(name, value);
         }
     }
 
@@ -244,6 +243,6 @@ public class QueryJCommand
     @Override
     public String toString()
     {
-        return "QueryJCommand{" + "log=" + m__Log + ", attributes=" + m__mAttributes + '}';
+        return "QueryJCommand{ log=" + m__Log + ", attributes=" + m__mAttributes + " }";
     }
 }

@@ -43,6 +43,7 @@ package org.acmsl.queryj.templates.handlers;
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.SqlDAO;
+import org.acmsl.queryj.templates.AbstractBasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
@@ -51,7 +52,6 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 
@@ -73,7 +73,7 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public abstract class BasePerRepositoryTemplateBuildHandler
-    <T extends BasePerRepositoryTemplate<C>,
+    <T extends AbstractBasePerRepositoryTemplate<C>,
      TF extends BasePerRepositoryTemplateFactory<T>,
      C extends BasePerRepositoryTemplateContext>
     extends    AbstractQueryJCommandHandler
@@ -109,11 +109,13 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected boolean handle(@NotNull final Map parameters)
+    @Override
+    @SuppressWarnings("unchecked")
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
         return
-            handle(parameters, retrieveProjectPackage(parameters));
+            handle(parameters, retrieveProjectPackage((Map<String, String>) parameters));
     }
 
     /**
@@ -123,26 +125,39 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected boolean handle(@NotNull final Map parameters, @NotNull final String projectPackage)
+    @SuppressWarnings("unchecked")
+    protected boolean handle(@NotNull final Map<String, ?> parameters, @NotNull final String projectPackage)
         throws  QueryJBuildException
     {
-        @NotNull final MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+        final boolean result;
 
-        buildTemplate(
-            parameters,
-            t_MetadataManager,
-            retrieveCustomSqlProvider(parameters),
-            retrieveTemplateFactory(),
-            retrievePackage(t_MetadataManager.getEngineName(), projectPackage, PackageUtils.getInstance()),
-            projectPackage,
-            retrieveTableRepositoryName(parameters),
-            retrieveHeader(parameters),
-            retrieveImplementMarkerInterfaces(parameters),
-            retrieveJmx(parameters),
-            retrieveJNDILocation(parameters),
-            CachingDecoratorFactory.getInstance());
+        @Nullable final MetadataManager t_MetadataManager =
+            retrieveMetadataManager((Map<String, MetadataManager>) parameters);
 
-        return false;
+        if (t_MetadataManager != null)
+        {
+            result = false;
+
+            buildTemplate(
+                parameters,
+                t_MetadataManager,
+                retrieveCustomSqlProvider((Map<String, CustomSqlProvider>) parameters),
+                retrieveTemplateFactory(),
+                retrievePackage(t_MetadataManager.getEngineName(), projectPackage, PackageUtils.getInstance()),
+                projectPackage,
+                retrieveTableRepositoryName((Map<String, String>) parameters),
+                retrieveHeader((Map <String, String>) parameters),
+                retrieveImplementMarkerInterfaces((Map <String, Boolean>) parameters),
+                retrieveJmx((Map<String, Boolean>) parameters),
+                retrieveJNDILocation((Map <String, String>) parameters),
+                CachingDecoratorFactory.getInstance());
+        }
+        else
+        {
+            result = true;
+        }
+
+        return result;
     }
 
     /**
@@ -161,9 +176,9 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unchecked")
     protected void buildTemplate(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?>  parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
@@ -194,15 +209,15 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                     implementMarkerInterfaces,
                     jmx,
                     t_lTableNames,
-                    retrieveJNDILocation(parameters),
-                    retrieveDisableGenerationTimestamps(parameters),
-                    retrieveDisableNotNullAnnotations(parameters),
-                    retrieveDisableCheckthreadAnnotations(parameters),
+                    retrieveJNDILocation((Map <String, String>) parameters),
+                    retrieveDisableGenerationTimestamps((Map<String, Boolean>) parameters),
+                    retrieveDisableNotNullAnnotations((Map <String, Boolean>) parameters),
+                    retrieveDisableCheckthreadAnnotations((Map <String, Boolean>) parameters),
                     parameters);
 
             if (t_Template != null)
             {
-                storeTemplate(t_Template, parameters);
+                storeTemplate(t_Template, (Map<String, List<T>>) parameters);
             }
         }
     }
@@ -211,10 +226,13 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * Checks whether template generation is enabled for this kind of template.
      * @return <code>true</code> in such case.
      */
+    @SuppressWarnings("unchecked")
     protected boolean isGenerationEnabled(
-        @NotNull final CustomSqlProvider customSqlProvider, @NotNull final Map parameters)
+        @NotNull final CustomSqlProvider customSqlProvider, @NotNull final Map<String, ?> parameters)
     {
-        return definesRepositoryScopedSql(customSqlProvider, getAllowEmptyRepositoryDAOSetting(parameters));
+        return
+            definesRepositoryScopedSql(
+                customSqlProvider, getAllowEmptyRepositoryDAOSetting((Map <String, Boolean >) parameters));
     }
 
     /**
@@ -312,7 +330,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param parameters the parameter map.
      */
     protected abstract void storeTemplate(
-        @NotNull final T template, @NotNull final Map parameters);
+        @NotNull final T template, @NotNull final Map<String, List<T>> parameters);
 
     /**
      * Checks whether there's any custom SQL for the whole repository.
@@ -362,15 +380,12 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param parameters the parameters.
      * @return <code>true</code> in such case.
      */
-    @SuppressWarnings("unchecked")
-    protected boolean getAllowEmptyRepositoryDAOSetting(@NotNull final Map parameters)
+    protected boolean getAllowEmptyRepositoryDAOSetting(@NotNull final Map<String, Boolean> parameters)
     {
         final boolean result;
 
         @Nullable final Boolean t_Result =
-            (Boolean)
-                parameters.get(
-                    ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO);
+            parameters.get(ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO);
 
         result = (t_Result != null) && t_Result;
 

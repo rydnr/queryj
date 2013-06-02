@@ -40,11 +40,11 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.templates.handlers.TemplateHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,5 +75,6 @@ public interface FillHandler<P>
      * @return the dynamic value.
      */
     @Nullable
-    P getValue() throws QueryJBuildException;
+    P getValue()
+    throws QueryJBuildException;
 }

@@ -87,11 +87,8 @@ public class DatabaseMetaDataLoggingHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition project != null
-     * @precondition task != null
      */
-    protected boolean handle(@NotNull final Map parameters)
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
         return handle(retrieveDatabaseMetaData(parameters));
@@ -102,12 +99,11 @@ public class DatabaseMetaDataLoggingHandler
      * @param metaData the database metadata.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition metaData != null
      */
     protected boolean handle(@NotNull final DatabaseMetaData metaData)
         throws  QueryJBuildException
     {
-        boolean result = false;
+        final boolean result = false;
 
         @Nullable Log t_Log = null;
         

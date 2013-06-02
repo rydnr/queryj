@@ -146,7 +146,7 @@ public class MySQL4xMetaDataRetrievalHandler
         @NotNull final String quote)
         throws  QueryJBuildException
     {
-        MetadataManager result;
+        final MetadataManager result;
 
         result = null;
 

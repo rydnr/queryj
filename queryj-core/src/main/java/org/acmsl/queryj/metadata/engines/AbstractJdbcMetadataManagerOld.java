@@ -92,32 +92,32 @@ public abstract class AbstractJdbcMetadataManagerOld
     /**
      * An empty String array.
      */
-    protected static final String[] EMPTY_STRING_ARRAY = new String[0];
+    static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     /**
      * An empty int array.
      */
-    protected static final int[] EMPTY_INT_ARRAY = new int[0];
+    static final int[] EMPTY_INT_ARRAY = new int[0];
 
     /**
      * An empty integer array.
      */
-    protected static final Integer[] EMPTY_INTEGER_ARRAY = new Integer[0];
+    static final Integer[] EMPTY_INTEGER_ARRAY = new Integer[0];
 
     /**
      * An empty boolean array.
      */
-    protected static final boolean[] EMPTY_BOOL_ARRAY = new boolean[0];
+    static final boolean[] EMPTY_BOOL_ARRAY = new boolean[0];
 
     /**
      * An empty boolean array.
      */
-    protected static final Boolean[] EMPTY_BOOLEAN_ARRAY = new Boolean[0];
+    static final Boolean[] EMPTY_BOOLEAN_ARRAY = new Boolean[0];
 
     /**
      * An empty array of String arrays.
      */
-    protected static final String[][] EMPTY_ARRAY_OF_STRING_ARRAYS = new String[0][0];
+    static final String[][] EMPTY_ARRAY_OF_STRING_ARRAYS = new String[0][0];
 
     /**
      * An empty array of <code>ProcedureMetadata</code> instances.
@@ -1073,9 +1073,6 @@ public abstract class AbstractJdbcMetadataManagerOld
      * @param tableName the table name.
      * @param columnName the column name.
      * @param columnComment the column comment.
-     * @precondition tableName != null
-     * @precondition columnName != null
-     * @precondition columnComment != null
      */
     public void addColumnComment(
         final String tableName,
@@ -4586,12 +4583,11 @@ public abstract class AbstractJdbcMetadataManagerOld
     {
         try 
         {
-            String[] t_astrTableNames = getTableNames();
+            @NotNull final String[] t_astrTableNames = getTableNames();
 
             String t_strTableName;
 
-            int t_iLength =
-                (t_astrTableNames != null) ? t_astrTableNames.length : 0;
+            int t_iLength = t_astrTableNames.length;
 
             for  (int t_iTableIndex = 0;
                       t_iTableIndex < t_iLength;

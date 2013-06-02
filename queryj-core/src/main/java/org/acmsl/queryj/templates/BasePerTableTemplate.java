@@ -58,7 +58,7 @@ public interface BasePerTableTemplate<C extends BasePerTableTemplateContext>
     @SuppressWarnings("unused")
     @NotNull
     public InvalidTemplateException buildInvalidTemplateException(
-        @NotNull final BasePerTableTemplateContext context,
+        @NotNull final C context,
         @NotNull final StringTemplate template,
         @NotNull final Throwable actualException);
 

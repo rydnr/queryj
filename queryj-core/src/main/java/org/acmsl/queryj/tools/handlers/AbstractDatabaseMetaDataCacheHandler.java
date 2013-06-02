@@ -72,16 +72,13 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
      * @return such file.
      */
     @NotNull
-    protected File retrieveCacheFile(@NotNull File outputDir)
+    protected File retrieveCacheFile(@NotNull final File outputDir)
     {
-        StringBuilder t_sbFilePath = new StringBuilder();
+        @NotNull final StringBuilder t_sbFilePath = new StringBuilder();
 
-        String t_strCurrentPath = outputDir.getAbsolutePath();
+        @NotNull final String t_strCurrentPath = outputDir.getAbsolutePath();
 
-        if (t_strCurrentPath != null)
-        {
-            t_sbFilePath.append(t_strCurrentPath);
-        }
+        t_sbFilePath.append(t_strCurrentPath);
 
         t_sbFilePath.append(CACHE_FILENAME);
 
@@ -94,10 +91,10 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
      * @param outputDir the output dir.
      * @throws IOException if the information could not be written to disk.
      */
-    protected void cache(@NotNull MetadataManager manager, @NotNull final File outputDir)
+    protected void cache(@NotNull final MetadataManager manager, @NotNull final File outputDir)
         throws IOException
     {
-        @NotNull File t_CacheFile = retrieveCacheFile(outputDir);
+        @NotNull final File t_CacheFile = retrieveCacheFile(outputDir);
 
         @Nullable ObjectOutputStream t_osCache = null;
         try
@@ -131,11 +128,12 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
      * @param outputDir the output dir.
      * @return <code>true</code> in such case.
      */
+    @SuppressWarnings("unused")
     protected boolean isCacheAvailable(@NotNull final File outputDir)
     {
         boolean result = false;
 
-        @NotNull File t_File = retrieveCacheFile(outputDir);
+        @NotNull final File t_File = retrieveCacheFile(outputDir);
 
         if (t_File.exists())
         {
@@ -152,7 +150,8 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
      * @throws IOException if the cache cannot be read.
      */
     @Nullable
-    MetadataManager retrieveCache(@NotNull final File outputDir)
+    @SuppressWarnings("unused")
+    protected MetadataManager retrieveCache(@NotNull final File outputDir)
         throws IOException,
                ClassNotFoundException
     {

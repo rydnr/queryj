@@ -86,13 +86,15 @@ public class CustomSqlProvisioningHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected boolean handle(@NotNull final Map parameters)
+    @Override
+    @SuppressWarnings("unchecked")
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
         return
             handle(
-                retrieveCustomSqlProvider(parameters),
-                retrieveMetadataManager(parameters));
+                retrieveCustomSqlProvider((Map<String, CustomSqlProvider>) parameters),
+                retrieveMetadataManager((Map<String, MetadataManager>) parameters));
     }
 
     /**
@@ -127,9 +129,9 @@ public class CustomSqlProvisioningHandler
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
     {
-        boolean result = false;
+        final boolean result = false;
 
-        List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
+        @NotNull final List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
 
         String t_strTableName;
         String t_strResultName;
@@ -138,11 +140,11 @@ public class CustomSqlProvisioningHandler
         String t_strPropertyName;
         int t_iAttributeCount;
 
-        for  (@Nullable Table t_Table : t_lTables)
+        for  (@Nullable final Table t_Table : t_lTables)
         {
             if (t_Table != null)
             {
-                for (@Nullable Attribute t_Attribute : t_Table.getAttributes())
+                for (@Nullable final Attribute t_Attribute : t_Table.getAttributes())
                 {
                     if (t_Attribute != null)
                     {

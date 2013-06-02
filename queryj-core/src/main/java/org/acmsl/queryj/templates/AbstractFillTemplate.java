@@ -45,6 +45,7 @@ import org.acmsl.queryj.QueryJCommand;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,7 +56,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 2012/06/03
  */
 @SuppressWarnings("unused")
-public abstract class AbstractFillTemplate<C extends TemplateContext>
+public abstract class AbstractFillTemplate<C extends TemplateContext, CH extends QueryJCommandHandler<QueryJCommand>>
     extends AbstractTemplate<C>
 {
     /**
@@ -81,12 +82,10 @@ public abstract class AbstractFillTemplate<C extends TemplateContext>
         @Nullable final String header, @NotNull final C context, final boolean relevantOnly)
         throws InvalidTemplateException
     {
-        String result = "";
+        final String result = "";
 
         try
         {
-            QueryJCommand command = null;
-
             createChain().process();
         }
         catch (@NotNull final QueryJBuildException processFailed)
@@ -94,7 +93,7 @@ public abstract class AbstractFillTemplate<C extends TemplateContext>
             //
         }
 
-        return result;
+        return "";
     }
 
     /**
@@ -102,5 +101,5 @@ public abstract class AbstractFillTemplate<C extends TemplateContext>
      * @return such chain.
      */
     @NotNull
-    protected abstract AbstractFillTemplateChain<C> createChain();
+    protected abstract AbstractFillTemplateChain<C, CH> createChain();
 }

@@ -81,7 +81,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
         @NotNull final C context,
         @NotNull final File rootDir,
         @NotNull final String engineName,
-        @NotNull final Map parameters)
+        @NotNull final Map<String, ?> parameters)
     {
         return retrieveOutputDir(engineName, context.getForeignKey().getSourceTableName(), parameters);
     }
@@ -94,16 +94,17 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      * @return such folder.
      */
     @NotNull
+    @SuppressWarnings("unchecked")
     protected File retrieveOutputDir(
-        @NotNull final String engineName, @NotNull final String tableName, @NotNull final Map parameters)
+        @NotNull final String engineName, @NotNull final String tableName, @NotNull final Map<String, ?> parameters)
     {
         return
             retrieveOutputDir(
                 engineName,
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
+                retrieveProjectOutputDir((Map <String, File>) parameters),
+                retrieveProjectPackage((Map <String, String>) parameters),
                 tableName,
-                retrieveUseSubfoldersFlag(parameters),
+                retrieveUseSubfoldersFlag((Map <String, Boolean>) parameters),
                 PackageUtils.getInstance());
     }
 

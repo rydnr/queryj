@@ -201,7 +201,7 @@ public class SqlXmlParserImpl
      */
     protected void processCollection(@NotNull final List<? extends IdentifiableElement> collection)
     {
-        for (@Nullable IdentifiableElement t_Item : collection)
+        for (@Nullable final IdentifiableElement t_Item : collection)
         {
             if (t_Item instanceof Sql)
             {
@@ -241,8 +241,12 @@ public class SqlXmlParserImpl
             }
             else
             {
-                UniqueLogFactory.getLog(SqlXmlParserImpl.class).fatal(
-                    "Unexpected element : " + t_Item);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(SqlXmlParserImpl.class);
+
+                if (t_Log != null)
+                {
+                    t_Log.fatal("Unexpected element : " + t_Item);
+                }
             }
         }
     }
@@ -646,7 +650,7 @@ public class SqlXmlParserImpl
     {
         if  (digester != null)
         {
-            @NotNull List<? extends IdentifiableElement> collection = new ArrayList<IdentifiableElement>();
+            @NotNull final List<? extends IdentifiableElement> collection = new ArrayList<IdentifiableElement>();
 
             digester.push(collection);
 
@@ -667,7 +671,7 @@ public class SqlXmlParserImpl
             {
                 try
                 {
-                    Log t_Log = UniqueLogFactory.getLog(SqlXmlParser.class);
+                    @Nullable final Log t_Log = UniqueLogFactory.getLog(SqlXmlParser.class);
 
                     if  (t_Log != null)
                     {
@@ -697,7 +701,7 @@ public class SqlXmlParserImpl
     @NotNull
     protected Digester configureDigester(@Nullable final ClassLoader classLoader)
     {
-        @NotNull Digester result = new Digester();
+        @NotNull final Digester result = new Digester();
 
         if  (classLoader != null)
         {
@@ -846,7 +850,7 @@ public class SqlXmlParserImpl
     public void parse()
         throws  QueryJBuildException
     {
-        @Nullable List<Sql> queries = getQueries();
+        @Nullable final List<Sql> queries = getQueries();
 
         if  (queries.size() == 0)
         {
@@ -878,9 +882,9 @@ public class SqlXmlParserImpl
     @NotNull
     protected <T extends IdentifiableElement> List<T> postProcess(@NotNull final List<T> items)
     {
-        List<T> result;
+        final List<T> result;
 
-        HashSet<T> aux = new HashSet<T>(items.size());
+        final HashSet<T> aux = new HashSet<T>(items.size());
         aux.addAll(items);
 
         result = new ArrayList<T>(aux.size());
@@ -914,8 +918,12 @@ public class SqlXmlParserImpl
         }
         else
         {
-            UniqueLogFactory.getLog(SqlXmlParserImpl.class).warn(
-                id + " is defined more than once");
+            @Nullable final Log t_Log = UniqueLogFactory.getLog(SqlXmlParserImpl.class);
+
+            if (t_Log != null)
+            {
+                t_Log.fatal(id + " is defined more than once");
+            }
         }
     }
 
@@ -969,6 +977,24 @@ public class SqlXmlParserImpl
     public SqlResultSetFlagsDAO getSqlResultSetFlagsDAO()
     {
         return new SqlXmlParserResultSetFlagsDAO(this);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "SqlXmlParserImpl{" +
+               "m__ClassLoader=" + m__ClassLoader +
+               ", m__isInput=" + m__isInput +
+               ", m__lQueries=" + m__lQueries +
+               ", m__lResults=" + m__lResults +
+               ", m__lParameters=" + m__lParameters +
+               ", m__lParameterRefs=" + m__lParameterRefs +
+               ", m__lProperties=" + m__lProperties +
+               ", m__lPropertyRefs=" + m__lPropertyRefs +
+               ", m__lConnectionFlags=" + m__lConnectionFlags +
+               ", m__lStatementFlags=" + m__lStatementFlags +
+               ", m__lResultSetFlags=" + m__lResultSetFlags +
+               '}';
     }
 }
 

@@ -83,6 +83,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -403,7 +404,8 @@ public abstract class AbstractTemplatesTest<G, F>
     {
         for (@NotNull final File outputFile : outputFiles.values())
         {
-            FileUtils.getInstance().copyIfPossible(outputFile, new File(outputFile.getName()));
+            FileUtils.getInstance().copyIfPossible(
+                outputFile, new File(outputFile.getName()), Charset.defaultCharset());
 
             if (   (outputFile.getAbsolutePath().endsWith(outputName))
                 && (isJava(outputFile)))
@@ -636,7 +638,7 @@ public abstract class AbstractTemplatesTest<G, F>
     {
         for (@NotNull final File outputFile : outputFiles.values())
         {
-            FileUtils.getInstance().copyIfPossible(outputFile, new File(outputFile.getName()));
+            FileUtils.getInstance().copyIfPossible(outputFile, new File(outputFile.getName()), Charset.defaultCharset());
 
             if (   (outputFile.getAbsolutePath().endsWith(outputName))
                 && (isProperties(outputFile)))

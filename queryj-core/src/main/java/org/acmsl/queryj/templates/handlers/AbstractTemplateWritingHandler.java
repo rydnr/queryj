@@ -112,14 +112,15 @@ public abstract class AbstractTemplateWritingHandler
      */
     @ThreadSafe
     @Override
-    protected boolean handle(@NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
       throws  QueryJBuildException
     {
         writeTemplates(
             parameters,
             retrieveProductName(parameters, retrieveDatabaseMetaData(parameters)),
-            retrieveThreadCount(parameters),
-            retrieveProjectOutputDir(parameters));
+            retrieveThreadCount((Map<String, Integer>) parameters),
+            retrieveProjectOutputDir((Map<String, File>) parameters));
 
         return false;
     }
@@ -133,8 +134,9 @@ public abstract class AbstractTemplateWritingHandler
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      */
     @ThreadSafe
+    @SuppressWarnings("unchecked")
     protected void writeTemplates(
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final String engineName,
         final int threadCount,
         @NotNull final File rootDir)
@@ -142,40 +144,36 @@ public abstract class AbstractTemplateWritingHandler
     {
         if (threadCount > 1)
         {
-            List<Future<T>> t_lTasks =
+            @NotNull final List<Future<T>> t_lTasks =
                 writeTemplatesMultithread(
-                    retrieveTemplates(parameters),
+                    retrieveTemplates((Map<String, List<T>>) parameters),
                     engineName,
                     parameters,
                     retrieveCharset(parameters),
-                    retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)),
+                    retrieveTemplateGenerator(
+                        retrieveCaching((Map <String, Boolean >) parameters),
+                        retrieveThreadCount((Map<String, Integer>) parameters)),
                     threadCount,
                     rootDir);
 
             synchronized (AbstractTemplateWritingHandler.class)
             {
-                List<Future<T>> t_lTrackedTasks =
-                    retrieveGenerationTasks(parameters);
+                @NotNull final List<Future<T>> t_lTrackedTasks =
+                    retrieveGenerationTasks((Map <String, List<Future<T>>>) parameters);
 
-                if (t_lTrackedTasks == null)
-                {
-                    t_lTrackedTasks = t_lTasks;
-                    annotateGenerationTasks(t_lTrackedTasks, parameters);
-                }
-                else
-                {
-                    t_lTrackedTasks.addAll(t_lTasks);
-                }
+                t_lTrackedTasks.addAll(t_lTasks);
             }
         }
         else
         {
             writeTemplatesSequentially(
-                retrieveTemplates(parameters),
+                retrieveTemplates((Map<String, List<T>>) parameters),
                 engineName,
                 parameters,
                 retrieveCharset(parameters),
-                retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)),
+                retrieveTemplateGenerator(
+                    retrieveCaching((Map <String, Boolean >) parameters),
+                    retrieveThreadCount((Map<String, Integer>) parameters)),
                 rootDir);
         }
     }
@@ -195,7 +193,7 @@ public abstract class AbstractTemplateWritingHandler
     protected void writeTemplatesSequentially(
         @Nullable final List<T> templates,
         @NotNull final String engineName,
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final Charset charset,
         @NotNull final TG templateGenerator,
         @NotNull final File rootDir)
@@ -203,7 +201,7 @@ public abstract class AbstractTemplateWritingHandler
     {
         if (templates != null)
         {
-            for  (T t_Template : templates)
+            for  (@Nullable final T t_Template : templates)
             {
                 if  (t_Template != null)
                 {
@@ -217,8 +215,12 @@ public abstract class AbstractTemplateWritingHandler
                     }
                     catch (@NotNull final IOException ioException)
                     {
-                        UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).warn(
-                            "Error writing template", ioException);
+                        @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class);
+
+                        if (t_Log != null)
+                        {
+                            t_Log.warn("Error writing template", ioException);
+                        }
                     }
                 }
             }
@@ -242,24 +244,24 @@ public abstract class AbstractTemplateWritingHandler
     protected List<Future<T>> writeTemplatesMultithread(
         @Nullable final List<T> templates,
         @NotNull final String engineName,
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final Charset charset,
         @NotNull final TG templateGenerator,
         final int threadCount,
         @NotNull final File rootDir)
       throws  QueryJBuildException
     {
-        List<Future<T>> result;
+        @NotNull final List<Future<T>> result;
 
         if (templates != null)
         {
             result = new ArrayList<Future<T>>(templates.size());
 
-            ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
+            @NotNull final ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 
             for  (int t_iIndex = 0 ; t_iIndex < templates.size(); t_iIndex++)
             {
-                T t_Template = templates.get(t_iIndex);
+                @Nullable final T t_Template = templates.get(t_iIndex);
 
                 if  (t_Template != null)
                 {
@@ -312,28 +314,31 @@ public abstract class AbstractTemplateWritingHandler
     protected List<Future> writeTemplatesMultithread2ndVersion(
         @Nullable final List<T> templates,
         @NotNull final String engineName,
-        @NotNull final Map parameters,
+        @NotNull final Map<String, ?> parameters,
         @NotNull final Charset charset,
         @NotNull final TG templateGenerator,
         final int threadCount,
         @NotNull final File rootDir)
         throws  QueryJBuildException
     {
-        List<Future> result;
+        @NotNull final List<Future> result;
 
         if (templates != null)
         {
             result = new ArrayList<Future>(templates.size());
 
-            ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
+            @NotNull final ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 
-            final CyclicBarrier round = new CyclicBarrier(threadCount);
+            @NotNull final CyclicBarrier round = new CyclicBarrier(threadCount);
 
-            AtomicInteger index = new AtomicInteger(0);
+            @NotNull AtomicInteger index = new AtomicInteger(0);
 
             int intIndex;
 
-            for (T t_Template : templates)
+            @Nullable final Log t_Log =
+                UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class);
+
+            for (@Nullable final T t_Template : templates)
             {
                 if (t_Template != null)
                 {
@@ -341,15 +346,19 @@ public abstract class AbstractTemplateWritingHandler
 
                     if (intIndex <= threadCount)
                     {
-                        UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).info(
-                            "Starting a new thread " + intIndex + "/" + threadCount);
+                        if (t_Log != null)
+                        {
+                            t_Log.info(
+                                "Starting a new thread " + intIndex + "/" + threadCount);
+                        }
 
                         result.add(
                             threadPool.submit(
                                 new TemplateGeneratorThread<T, TG, C>(
                                     templateGenerator,
                                     t_Template,
-                                    retrieveOutputDir(t_Template.getTemplateContext(), rootDir, engineName, parameters),
+                                    retrieveOutputDir(
+                                        t_Template.getTemplateContext(), rootDir, engineName, parameters),
                                     rootDir,
                                     charset,
                                     intIndex,
@@ -357,8 +366,11 @@ public abstract class AbstractTemplateWritingHandler
                     }
                     else
                     {
-                        UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).info(
-                            "No threads available " + intIndex + "/" + threadCount);
+                        if (t_Log != null)
+                        {
+                            t_Log.info(
+                                "No threads available " + intIndex + "/" + threadCount);
+                        }
 
                         index = new AtomicInteger(0);
 
@@ -368,18 +380,25 @@ public abstract class AbstractTemplateWritingHandler
                         }
                         catch (@NotNull final InterruptedException interrupted)
                         {
-                            UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).info(
-                                "Thread pool interrupted while waiting", interrupted);
-
+                            if (t_Log != null)
+                            {
+                                t_Log.info(
+                                    "Thread pool interrupted while waiting", interrupted);
+                            }
                         }
                         catch (@NotNull final BrokenBarrierException brokenBarrier)
                         {
-                            UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).info(
-                                "Broken barrier", brokenBarrier);
+                            if (t_Log != null)
+                            {
+                                t_Log.info("Broken barrier", brokenBarrier);
+                            }
                         }
 
-                        UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).info(
-                            "Resetting thread pool (shutdown? " + threadPool.isShutdown() + ")");
+                        if (t_Log != null)
+                        {
+                            t_Log.info(
+                                "Resetting thread pool (shutdown? " + threadPool.isShutdown() + ")");
+                        }
 
                         round.reset();
                     }
@@ -405,13 +424,12 @@ public abstract class AbstractTemplateWritingHandler
 
     /**
      * Retrieves the templates from the attribute map.
-     *
      * @param parameters the parameter map.
      * @return the template.
-     * @throws org.acmsl.queryj.tools.QueryJBuildException if the template retrieval process if faulty.
+     * @throws QueryJBuildException if the template retrieval process if faulty.
      */
     @Nullable
-    protected abstract List<T> retrieveTemplates(@NotNull final Map parameters)
+    protected abstract List<T> retrieveTemplates(@NotNull final Map<String, List<T>> parameters)
         throws QueryJBuildException;
 
     /**
@@ -435,7 +453,7 @@ public abstract class AbstractTemplateWritingHandler
             }
             catch  (@NotNull final SQLException sqlException)
             {
-                Log t_Log = UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class);
 
                 if (t_Log != null)
                 {
@@ -464,13 +482,13 @@ public abstract class AbstractTemplateWritingHandler
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws org.acmsl.queryj.tools.QueryJBuildException if the output-dir retrieval process if faulty.
+     * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      */
     @NotNull
     protected abstract File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
         @NotNull final String engineName,
-        @NotNull final Map parameters)
+        @NotNull final Map<String, ?> parameters)
       throws  QueryJBuildException;
 }

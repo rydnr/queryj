@@ -32,13 +32,11 @@
  */
 package org.acmsl.queryj.templates;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Represents entities able to write per-repository templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerRepositoryTemplateGenerator<N extends BasePerRepositoryTemplate<C>, C extends BasePerRepositoryTemplateContext>
+public interface BasePerRepositoryTemplateGenerator<N extends AbstractBasePerRepositoryTemplate<C>, C extends BasePerRepositoryTemplateContext>
     extends TemplateGenerator<N,C>
 {
 }

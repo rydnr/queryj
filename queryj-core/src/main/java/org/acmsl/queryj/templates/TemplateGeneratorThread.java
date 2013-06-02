@@ -399,7 +399,7 @@ public class TemplateGeneratorThread
         @NotNull final Charset charset,
         final int threadIndex,
         @Nullable final CyclicBarrier barrier,
-        @NotNull final Log log)
+        @Nullable final Log log)
     {
         boolean generated = false;
 
@@ -414,17 +414,26 @@ public class TemplateGeneratorThread
         }
         catch (@NotNull final QueryJBuildException unknownException)
         {
-            log.warn(unknownException);
+            if (log != null)
+            {
+                log.warn(unknownException);
+            }
         }
         catch (@NotNull final IOException ioException)
         {
-            log.warn(ioException);
+            if (log != null)
+            {
+                log.warn(ioException);
+            }
         }
 
         if (generated)
         {
-            UniqueLogFactory.getLog(TemplateGeneratorThread.class).debug(
-                "Thread " + template.getTemplateContext().getTemplateName() + ":" + threadIndex + " finished");
+            if (log != null)
+            {
+                log.debug(
+                    "Thread " + template.getTemplateContext().getTemplateName() + ":" + threadIndex + " finished");
+            }
         }
 
         if (barrier != null)
@@ -435,14 +444,34 @@ public class TemplateGeneratorThread
             }
             catch (@NotNull final InterruptedException interrupted)
             {
-                log.debug("Interrupted thread", interrupted);
+                if (log != null)
+                {
+                    log.debug("Interrupted thread", interrupted);
+                }
 
                 Thread.currentThread().interrupt();
             }
             catch (@NotNull final BrokenBarrierException brokenBarrier)
             {
-                log.warn("Broken barrier", brokenBarrier);
+                if (log != null)
+                {
+                    log.warn("Broken barrier", brokenBarrier);
+                }
             }
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return "TemplateGeneratorThread{" +
+               "charset=" + charset +
+               ", templateGenerator=" + templateGenerator +
+               ", template=" + template +
+               ", outputDir=" + outputDir +
+               ", rootDir=" + rootDir +
+               ", threadIndex=" + threadIndex +
+               ", cyclicBarrier=" + cyclicBarrier +
+               '}';
     }
 }

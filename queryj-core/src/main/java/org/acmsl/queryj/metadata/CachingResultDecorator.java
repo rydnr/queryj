@@ -44,6 +44,7 @@ import org.acmsl.queryj.customsql.Result;
 /*
  * Importing some JetBrains annotations.
  */
+import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -557,8 +558,13 @@ public class CachingResultDecorator
             }
             catch (final Throwable throwable)
             {
-                UniqueLogFactory.getLog(CachingResultDecorator.class).fatal(
-                    "Error in Result.getVoName()", throwable);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(CachingResultDecorator.class);
+
+                if (t_Log != null)
+                {
+                    t_Log.fatal(
+                        "Error in Result.getVoName()", throwable);
+                }
             }
             setCachedVoName(result);
         }

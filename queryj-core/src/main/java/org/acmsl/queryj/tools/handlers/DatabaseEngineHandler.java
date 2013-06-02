@@ -70,9 +70,9 @@ public class DatabaseEngineHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
-    protected boolean handle(@NotNull final Map parameters)
+    @Override
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
         retrieveDatabaseMetaData(parameters);

@@ -23,9 +23,12 @@
 
  ******************************************************************************
  *
+ * Filename: AbstractBasePerForeignKeyTemplate.java
+ *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Base logic for all per-foreign-key templates.
+ * Description: Logic-less container for all templates to be processed once
+ *              per custom Foreign Key.
  *
  */
 package org.acmsl.queryj.templates;
@@ -33,7 +36,6 @@ package org.acmsl.queryj.templates;
 /*
  * Importing some project-specific classes.
  */
-import com.sun.org.apache.bcel.internal.classfile.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
 /*
@@ -44,6 +46,7 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some JetBrains annotations.
  */
+import org.antlr.stringtemplate.StringTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,7 +56,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 /**
- * Base logic for all per-foreign-key templates.
+ * Logic-less container for all templates to be processed once per custom Foreign Key.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @SuppressWarnings("unused")
@@ -70,7 +73,6 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends BasePerForeign
     {
         super(context);
     }
-
 
     /**
      * Builds the header for logging purposes.
@@ -117,6 +119,7 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends BasePerForeign
      * Concatenates given list.
      * @param list the list.
      * @param separator the separator.
+     * @return the concatenation of the elements in the list.
      */
     @NotNull
     protected String concat(@NotNull final Collection<?> list, @NotNull final String separator)
@@ -129,6 +132,7 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends BasePerForeign
      * @param list the list.
      * @param separator the separator.
      * @param stringUtils the <code>StringUtils</code> instance.
+     * @return the concatenation of the elements in the list.
      */
     @NotNull
     protected String concat(
@@ -157,4 +161,29 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends BasePerForeign
 
         return result;
     }
-}
+
+    /**
+     * Builds a context-specific exception.
+     * @param context the context.
+     * @param template the {@link StringTemplate} instance.
+     * @return the specific {@link InvalidTemplateException} for the template.
+     */
+    @Override
+    @NotNull
+    public InvalidTemplateException buildInvalidTemplateException(
+        @NotNull final C context,
+        @NotNull final StringTemplate template,
+        @NotNull final Throwable actualException)
+    {
+        return
+            new InvalidTemplateException(
+                "invalid.per.custom.sql.template",
+                new Object[]
+                    {
+                        template.getName(),
+                        getTemplateName(),
+                        context.getRepositoryName(),
+                        context.getForeignKey()
+                    },
+                actualException);
+    }}

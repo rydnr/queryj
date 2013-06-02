@@ -59,9 +59,9 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class TemplateHandlerBundle<C extends QueryJCommand, CH extends TemplateHandler<C>, CHB extends CH, CHW extends CH>
-    extends    CompositeQueryJCommandHandler<C, CH>
-    implements TemplateHandler<C>
+public class TemplateHandlerBundle<CHB extends TemplateHandler<QueryJCommand>, CHW extends TemplateHandler<QueryJCommand>>
+    extends    CompositeQueryJCommandHandler<QueryJCommand, TemplateHandler<QueryJCommand>>
+    implements TemplateHandler<QueryJCommand>
 {
     /**
      * The system property prefix to disable concrete (or all, with *) template handlers.
@@ -93,11 +93,11 @@ public class TemplateHandlerBundle<C extends QueryJCommand, CH extends TemplateH
      * Builds a bundle with given ones.
      * @param bundles the first bundle.
      */
-    public TemplateHandlerBundle(@Nullable final CH[] bundles)
+    public TemplateHandlerBundle(@Nullable final TemplateHandler<QueryJCommand>[] bundles)
     {
         if (bundles != null)
         {
-            for (@Nullable final CH t_Bundle : bundles)
+            for (@Nullable final TemplateHandler<QueryJCommand> t_Bundle : bundles)
             {
                 if  (t_Bundle != null)
                 {
@@ -114,7 +114,7 @@ public class TemplateHandlerBundle<C extends QueryJCommand, CH extends TemplateH
      * Adds a new handler to the collection.
      * @param handler the new handler to add.
      */
-    protected final void immutableAddHandler(@NotNull final CH handler)
+    protected final void immutableAddHandler(@NotNull final TemplateHandler<QueryJCommand> handler)
     {
         super.addHandler(handler);
     }
