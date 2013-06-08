@@ -40,9 +40,13 @@ package org.acmsl.queryj.templates;
 import org.acmsl.queryj.customsql.Result;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplate;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /**

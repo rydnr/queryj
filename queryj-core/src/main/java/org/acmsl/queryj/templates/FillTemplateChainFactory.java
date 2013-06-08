@@ -23,56 +23,37 @@
 
  ******************************************************************************
  *
- * Filename: FillTemplateChain.java
+ * Filename: FillTemplateChainFactory.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Is able to create FillTemplateChains for a given context.
  *
- * Date: 5/30/13
- * Time: 6:29 PM
+ * Date: 6/8/13
+ * Time: 7:49 AM
  *
  */
 package org.acmsl.queryj.templates;
 
 /*
- * Importing project classes.
- */
-import org.acmsl.queryj.tools.QueryJBuildException;
-
-/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing JDK classes.
- */
-import java.util.Map;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Chain to provide placeholders.
- * @param <C> the TemplateContext.
+ * Is able to create {@link FillTemplateChain}s for a given context.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/05/30
+ * @since 2013/06/08
  */
-public interface FillTemplateChain<C extends TemplateContext>
+public interface FillTemplateChainFactory<C extends TemplateContext>
 {
     /**
-     * Retrieves the template context.
-     * @return such information.
+     * Creates {@link FillTemplateChain} instances for given context.
+     * @param context the {@link TemplateContext} needed.
+     * @return the FillTemplateChain, or <code>null</code> if the context is invalid.
      */
-    @NotNull
-    C getTemplateContext();
-
-    /**
-     * Performs the required processing.
-     * @param relevantOnly to include only the relevant ones: the ones that are necessary to
-     * be able to find out if two template realizations are equivalent. Usually, generation timestamps,
-     * documentation, etc. can be considered not relevant.
-     * @throws QueryJBuildException if the process fails.
-     */
-    @NotNull
-    Map<String, ?> providePlaceholders(final boolean relevantOnly)
-        throws QueryJBuildException;
+    @SuppressWarnings("unused")
+    @Nullable
+    public FillTemplateChain<C> createFillChain(@NotNull final C context);
 }

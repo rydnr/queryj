@@ -41,6 +41,8 @@ import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
+import org.acmsl.queryj.templates.handlers.TemplateHandler;
+import org.acmsl.queryj.templates.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataCacheWritingHandler;
@@ -69,6 +71,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ServiceLoader;
 
 /*
  * Importing some Apache Commons Logging classes.
@@ -2604,27 +2607,53 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
 
         chain.add((CH) new ExternallyManagedFieldsRetrievalHandler());
 
-//        chain.add(new OtherBundle());
-
-//        chain.add(new TableTemplateHandlerBundle());
-
-//        chain.add(new BaseRepositoryDAOTemplateHandlerBundle());
-//        chain.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
-
-//        chain.add(new RepositoryDAOTemplateHandlerBundle());
-//        chain.add(new RepositoryDAOFactoryTemplateHandlerBundle());
-
-//        //chain.add(new TableRepositoryTemplateHandlerBundle());
-//        //chain.add(new FunctionsBundle());
-//        //chain.add(new KeywordRepositoryTemplateHandlerBundle());
-
-//        chain.add(new DAOBundle(generateMock, generateXML));
-
-//        chain.add(new VOBundle(generateMock, generateXML));
+        fillTemplateHandlers(chain);
 
         chain.add((CH) new JdbcConnectionClosingHandler());
 
         return chain;
+    }
+
+    /**
+     * Fills given chain with external template bundles.
+     * @param chain the chain.
+     */
+    @SuppressWarnings("unchecked")
+    protected void fillTemplateHandlers(@NotNull final Chain<CH> chain)
+    {
+         @NotNull final ServiceLoader<TemplateChainProvider> loader =
+             ServiceLoader.load(TemplateChainProvider.class);
+
+        @NotNull final TemplateChainProvider<TemplateHandler> provider = loader.iterator().next();
+
+        for (@Nullable final TemplateHandler handler : provider.getHandlers())
+        {
+            if (handler != null)
+            {
+                chain.add((CH) handler);
+            }
+        }
+    }
+
+    /**
+     * Fills given chain with external template bundles.
+     * @param chain the chain.
+     */
+    @SuppressWarnings("unchecked")
+    protected void fillPlaceholderHandlers(@NotNull final Chain<CH> chain)
+    {
+        @NotNull final ServiceLoader<PlaceholderChainProvider> loader =
+            ServiceLoader.load(PlaceholderChainProvider.class);
+
+        @NotNull final PlaceholderChainProvider<FillHandler> provider = loader.iterator().next();
+
+        for (@Nullable final FillHandler handler : provider.getHandlers())
+        {
+            if (handler != null)
+            {
+                chain.add((CH) handler);
+            }
+        }
     }
 
     /**
@@ -2693,7 +2722,7 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
      * @return the initialized command.
      */
     @NotNull
-    protected org.acmsl.queryj.QueryJCommand buildCommandFromSettingsIfPossible(
+    protected QueryJCommand buildCommandFromSettingsIfPossible(
         @NotNull final QueryJCommand command, @Nullable final Properties settings)
     {
         mapAttributes(
@@ -3034,7 +3063,7 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
      * @param value the value.
      * @return the converted value.
      */
-    protected boolean toBoolean(final String value)
+    protected boolean toBoolean(@Nullable final String value)
     {
         return toBoolean(value, true);
     }

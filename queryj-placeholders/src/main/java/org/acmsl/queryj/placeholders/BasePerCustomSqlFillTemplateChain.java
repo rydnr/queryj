@@ -70,13 +70,10 @@ public class BasePerCustomSqlFillTemplateChain
     /**
      * Creates a {@link BasePerCustomSqlFillTemplateChain} using given context.
      * @param context the {@link BasePerCustomSqlTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
      */
-    public BasePerCustomSqlFillTemplateChain(
-        @NotNull final BasePerCustomSqlTemplateContext context,
-        final boolean relevantOnly)
+    public BasePerCustomSqlFillTemplateChain(@NotNull final BasePerCustomSqlTemplateContext context)
     {
-        super(context, relevantOnly);
+        super(context);
     }
 
     /**

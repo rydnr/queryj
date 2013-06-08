@@ -80,13 +80,10 @@ public class BasePerTableFillTemplateChain
     /**
      * Creates a {@link BasePerTableFillTemplateChain} using given context.
      * @param context the {@link org.acmsl.queryj.templates.BasePerTableTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
      */
-    public BasePerTableFillTemplateChain(
-        @NotNull final BasePerTableTemplateContext context,
-        final boolean relevantOnly)
+    public BasePerTableFillTemplateChain(@NotNull final BasePerTableTemplateContext context)
     {
-        super(context, relevantOnly);
+        super(context);
     }
 
     /**

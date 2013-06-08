@@ -23,22 +23,24 @@
 
  ******************************************************************************
  *
- * Filename: FillTemplateChain.java
+ * Filename: TemplateChainProvider.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Provides the chain required to generate custom templates.
  *
- * Date: 5/30/13
- * Time: 6:29 PM
+ * Date: 6/4/13
+ * Time: 4:30 PM
  *
  */
-package org.acmsl.queryj.templates;
+package org.acmsl.queryj.tools;
 
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.templates.handlers.TemplateHandler;
+import org.acmsl.queryj.templates.handlers.fillhandlers.TemplateContextFillHandler;
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
  * Importing JetBrains annotations.
@@ -48,31 +50,19 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing JDK classes.
  */
-import java.util.Map;
+import java.util.List;
 
 /**
- * Chain to provide placeholders.
- * @param <C> the TemplateContext.
+ * Provides the chain required to generate custom templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/05/30
+ * @since 2013/06/04
  */
-public interface FillTemplateChain<C extends TemplateContext>
+public interface TemplateChainProvider<CH extends TemplateHandler>
 {
     /**
-     * Retrieves the template context.
-     * @return such information.
+     * Retrieves the custom handlers.
+     * @return such handlers.
      */
     @NotNull
-    C getTemplateContext();
-
-    /**
-     * Performs the required processing.
-     * @param relevantOnly to include only the relevant ones: the ones that are necessary to
-     * be able to find out if two template realizations are equivalent. Usually, generation timestamps,
-     * documentation, etc. can be considered not relevant.
-     * @throws QueryJBuildException if the process fails.
-     */
-    @NotNull
-    Map<String, ?> providePlaceholders(final boolean relevantOnly)
-        throws QueryJBuildException;
+    public List<CH> getHandlers();
 }

@@ -76,7 +76,6 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<C>, C 
      * Specifies the chain.
      * @param chain the new chain.
      */
-    @SuppressWarnings("unchecked")
     protected final void immutableSetChain(@NotNull final Chain<CH> chain)
     {
         m__Chain = chain;

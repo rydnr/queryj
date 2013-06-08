@@ -74,13 +74,10 @@ public class BasePerForeignKeyFillTemplateChain
     /**
      * Creates a {@link BasePerForeignKeyFillTemplateChain} using given context.
      * @param context the {@link BasePerForeignKeyTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
      */
-    public BasePerForeignKeyFillTemplateChain(
-        @NotNull final BasePerForeignKeyTemplateContext context,
-        final boolean relevantOnly)
+    public BasePerForeignKeyFillTemplateChain(@NotNull final BasePerForeignKeyTemplateContext context)
     {
-        super(context, relevantOnly);
+        super(context);
     }
 
     /**

@@ -23,56 +23,27 @@
 
  ******************************************************************************
  *
- * Filename: FillTemplateChain.java
+ * Filename: PerCustomResultFillTemplateChainFactory.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: JDK 6 Services'-compatible per-table
+ *              FillTemplateChainFactory implementation.
  *
- * Date: 5/30/13
- * Time: 6:29 PM
+ * Date: 6/8/13
+ * Time: 8:44 AM
  *
  */
 package org.acmsl.queryj.templates;
 
-/*
- * Importing project classes.
- */
-import org.acmsl.queryj.tools.QueryJBuildException;
-
-/*
- * Importing JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing JDK classes.
- */
-import java.util.Map;
-
 /**
- * Chain to provide placeholders.
- * @param <C> the TemplateContext.
+ * JDK 6 Services'-compatible per-table {@link FillTemplateChainFactory}
+ * implementation.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/05/30
+ * @since 2013/06/08
  */
-public interface FillTemplateChain<C extends TemplateContext>
+@SuppressWarnings("unused")
+public interface PerTableFillTemplateChainFactory
+    extends FillTemplateChainFactory<BasePerTableTemplateContext>
 {
-    /**
-     * Retrieves the template context.
-     * @return such information.
-     */
-    @NotNull
-    C getTemplateContext();
-
-    /**
-     * Performs the required processing.
-     * @param relevantOnly to include only the relevant ones: the ones that are necessary to
-     * be able to find out if two template realizations are equivalent. Usually, generation timestamps,
-     * documentation, etc. can be considered not relevant.
-     * @throws QueryJBuildException if the process fails.
-     */
-    @NotNull
-    Map<String, ?> providePlaceholders(final boolean relevantOnly)
-        throws QueryJBuildException;
 }

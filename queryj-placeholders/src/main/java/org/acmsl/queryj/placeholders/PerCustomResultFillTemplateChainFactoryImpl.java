@@ -23,56 +23,51 @@
 
  ******************************************************************************
  *
- * Filename: FillTemplateChain.java
+ * Filename: PerCustomResultFillTemplateChainFactoryImpl.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Creates the chain to provide all per-custom-result
+ *              placeholders.
  *
- * Date: 5/30/13
- * Time: 6:29 PM
+ * Date: 6/8/13
+ * Time: 7:56 AM
  *
  */
-package org.acmsl.queryj.templates;
+package org.acmsl.queryj.placeholders;
 
 /*
- * Importing project classes.
+ * Importing queryj-core classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
+import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.templates.PerCustomResultFillTemplateChainFactory;
 
 /*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing JDK classes.
- */
-import java.util.Map;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Chain to provide placeholders.
- * @param <C> the TemplateContext.
+ * Creates the chain to provide all per-custom-result placeholders.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/05/30
+ * @since 2013/06/08
  */
-public interface FillTemplateChain<C extends TemplateContext>
+@SuppressWarnings("unused")
+public class PerCustomResultFillTemplateChainFactoryImpl
+    implements PerCustomResultFillTemplateChainFactory
 {
     /**
-     * Retrieves the template context.
-     * @return such information.
+     * Creates {@link FillTemplateChain} instances for given context.
+     * @param context the {@link BasePerCustomResultTemplateContext} needed.
+     * @return the FillTemplateChain, or <code>null</code> if the context is invalid.
      */
-    @NotNull
-    C getTemplateContext();
-
-    /**
-     * Performs the required processing.
-     * @param relevantOnly to include only the relevant ones: the ones that are necessary to
-     * be able to find out if two template realizations are equivalent. Usually, generation timestamps,
-     * documentation, etc. can be considered not relevant.
-     * @throws QueryJBuildException if the process fails.
-     */
-    @NotNull
-    Map<String, ?> providePlaceholders(final boolean relevantOnly)
-        throws QueryJBuildException;
+    @Nullable
+    @Override
+    public FillTemplateChain<BasePerCustomResultTemplateContext> createFillChain(
+        @NotNull final BasePerCustomResultTemplateContext context)
+    {
+        return new BasePerCustomResultFillTemplateChain(context);
+    }
 }

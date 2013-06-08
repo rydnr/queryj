@@ -77,13 +77,10 @@ public class BasePerRepositoryFillTemplateChain
     /**
      * Creates a {@link BasePerRepositoryFillTemplateChain} using given context.
      * @param context the {@link BasePerRepositoryTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
      */
-    public BasePerRepositoryFillTemplateChain(
-        @NotNull final BasePerRepositoryTemplateContext context,
-        final boolean relevantOnly)
+    public BasePerRepositoryFillTemplateChain(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        super(context, relevantOnly);
+        super(context);
     }
 
     /**

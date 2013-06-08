@@ -76,15 +76,12 @@ public class BasePerCustomResultFillTemplateChain
     extends AbstractFillTemplateChain<BasePerCustomResultTemplateContext, CustomResultHandler>
 {
     /**
-     * Creates a {@link org.acmsl.queryj.templates.handlers.fillhandlers.BasePerCustomResultFillTemplateChain} using given context.
+     * Creates a {@link BasePerCustomResultFillTemplateChain} using given context.
      * @param context the {@link BasePerCustomResultTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
      */
-    public BasePerCustomResultFillTemplateChain(
-        @NotNull final BasePerCustomResultTemplateContext context,
-        final boolean relevantOnly)
+    public BasePerCustomResultFillTemplateChain(@NotNull final BasePerCustomResultTemplateContext context)
     {
-        super(context, relevantOnly);
+        super(context);
     }
 
     /**

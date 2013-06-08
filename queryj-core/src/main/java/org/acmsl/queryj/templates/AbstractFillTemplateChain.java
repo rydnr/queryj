@@ -75,20 +75,13 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH ex
     private C templateContext;
 
     /**
-     * Whether to include only relevant placeholders.
-     */
-    private boolean relevantOnly;
-
-    /**
      * Creates a new {@link AbstractFillTemplateChain} associated to given
      * {@link TemplateContext}.
      * @param context the template.
-     * @param relevantOnly whether to include only relevant placeholders.
      */
-    protected AbstractFillTemplateChain(@NotNull final C context, final boolean relevantOnly)
+    protected AbstractFillTemplateChain(@NotNull final C context)
     {
         immutableSetTemplateContext(context);
-        immutableSetRelevantOnly(relevantOnly);
     }
 
     /**
@@ -122,35 +115,6 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH ex
     }
 
     /**
-     * Specifies whether to include only relevant placeholders.
-     * @param relevantOnly such condition.
-     */
-    protected final void immutableSetRelevantOnly(final boolean relevantOnly)
-    {
-        this.relevantOnly = relevantOnly;
-    }
-
-    /**
-     * Specifies whether to include only relevant placeholders.
-     * @param relevantOnly such condition.
-     */
-    @SuppressWarnings("unused")
-    protected void setRelevantOnly(final boolean relevantOnly)
-    {
-        this.relevantOnly = relevantOnly;
-    }
-
-    /**
-     * Retrieves whether to include only relevant placeholders.
-     * @return such condition.
-     */
-    @SuppressWarnings("unused")
-    protected boolean getRelevantOnly()
-    {
-        return this.relevantOnly;
-    }
-
-    /**
      * Builds the command.
      * @param command the command to be initialized.
      * @return the initialized command.
@@ -175,19 +139,19 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH ex
     }
 
     /**
-     * Performs the required processing.
-     * @throws QueryJBuildException if the process fails.
+     * {@inheritDoc}
      */
+    @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    public Map<String, ?> providePlaceholders()
+    public Map<String, ?> providePlaceholders(final boolean relevantOnly)
         throws QueryJBuildException
     {
         final Map<String, ?> result;
 
         @NotNull final QueryJCommand t_Command = buildCommand();
 
-        super.process(buildChain(getChain()), t_Command);
+        super.process(buildChain(getChain(), relevantOnly), t_Command);
 
         result = t_Command.getAttributeMap();
 
@@ -198,12 +162,24 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH ex
     /**
      * Adds additional per-table handlers.
      * @param chain the chain to be configured.
+     * documentation, etc. can be considered not relevant.
      */
     @Override
-    protected Chain<CH> buildChain(
-        @NotNull final Chain<CH> chain)
+    protected Chain<CH> buildChain(@NotNull final Chain<CH> chain)
     {
-        addHandlers(chain, getTemplateContext(), getRelevantOnly());
+        return buildChain(chain, false);
+    }
+
+    /**
+     * Adds additional per-table handlers.
+     * @param chain the chain to be configured.
+     * @param relevantOnly to include only the relevant ones: the ones that are necessary to
+     * be able to find out if two template realizations are equivalent. Usually, generation timestamps,
+     * documentation, etc. can be considered not relevant.
+     */
+    protected Chain<CH> buildChain(@NotNull final Chain<CH> chain, final boolean relevantOnly)
+    {
+        addHandlers(chain, getTemplateContext(), relevantOnly);
 
         return chain;
     }
@@ -250,8 +226,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH ex
     {
         return
               "AbstractFillTemplateChain{"
-            + " relevantOnly=" + relevantOnly
-            + ", templateContext=" + templateContext
+            + " templateContext=" + templateContext
             + " }";
     }
 }

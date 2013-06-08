@@ -35,6 +35,8 @@ package org.acmsl.queryj.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.templates.handlers.fillhandlers.FillHandler;
+import org.acmsl.queryj.tools.PlaceholderChainProvider;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -48,7 +50,6 @@ import org.acmsl.commons.utils.ClassLoaderUtils;
 /*
  * Importing Commons-Logging classes.
  */
-import org.antlr.stringtemplate.misc.StringTemplateTreeView;
 import org.apache.commons.logging.Log;
 
 /*
@@ -60,6 +61,7 @@ import org.antlr.grammar.v3.ANTLRParser;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
+import org.antlr.stringtemplate.misc.StringTemplateTreeView;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateErrorListener;
 import org.antlr.stringtemplate.StringTemplateGroup;
@@ -77,6 +79,7 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 /**
  * Represents generic templates.
@@ -143,7 +146,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * The cached processed header.
      */
     private String m__strCachedProcessedHeader;
-    
+
     /**
      * A singleton container to avoid the double-checking lock idiom.
      */
@@ -250,6 +253,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such information.
      */
     @Nullable
+    @SuppressWarnings("unused")
     public String getProcessedHeader(@NotNull final Map input)
     {
         @Nullable String result = getCachedProcessedHeader();
@@ -691,32 +695,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
 
     /**
-     * Converts given value to lower-case.
-     * @param value the value.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such output.
-     */
-    @NotNull
-    protected String lowercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.lowerCase(value);
-    }
-
-    /**
-     * Normalizes given value.
-     * @param value the value.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such output.
-     */
-    @NotNull
-    protected String normalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalize(value);
-    }
-
-    /**
      * Normalizes given value, in lower-case.
      * @param value the value.
      * @param decorationUtils the {@link DecorationUtils} instance.
@@ -728,19 +706,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
-    }
-
-    /**
-     * Normalizes given value, in upper-case.
-     * @param value the value.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such output.
-     */
-    @NotNull
-    protected String normalizeUppercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalizeUppercase(value);
     }
 
     /**
@@ -819,7 +784,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
             try
             {
                 @NotNull final Map<String, ?> placeHolders =
-                    buildFillTemplateChain(context, relevantOnly).providePlaceholders();
+                    buildFillTemplateChain(context).providePlaceholders(relevantOnly);
                 t_Template.setAttributes(placeHolders);
                 t_Template.setErrorListener(
                     new StringTemplateErrorListener()
@@ -902,11 +867,69 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Builds the correct chain.
      * @param context the context.
-     * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link AbstractFillTemplateChain}.
+     * @return the specific {@link FillTemplateChain}.
      */
+    @SuppressWarnings("unchecked")
     @NotNull
-    public abstract FillTemplateChain<C> buildFillTemplateChain(@NotNull final C context, final boolean relevantOnly);
+    public FillTemplateChain<? extends FillHandler> buildFillTemplateChain(@NotNull final C context)
+    {
+        @NotNull final FillTemplateChain<? extends FillHandler> result;
+
+        @NotNull final ServiceLoader<FillTemplateChainFactory<C>> loader =
+            ServiceLoader.load(retrieveFillTemplateChainFactoryClass(context));
+
+        result = (FillTemplateChain <? extends FillHandler >) loader.iterator().next().createFillChain(context);
+
+        return result;
+    }
+
+    /**
+     *  Retrieves the placeholder chain provider.
+     * @param context the context.
+     * @return the {@link PlaceholderChainProvider} class.
+     */
+    @Nullable
+    @SuppressWarnings("unchecked")
+    protected Class<FillTemplateChainFactory<C>> retrieveFillTemplateChainFactoryClass(@NotNull final C context)
+    {
+        @Nullable Class<FillTemplateChainFactory<C>> result = null;
+
+        @NotNull final String contextName = context.getClass().getSimpleName();
+
+        @NotNull String baseName = contextName;
+
+        if (baseName.startsWith("Base"))
+        {
+            baseName = baseName.substring("Base".length());
+        }
+
+        if (baseName.endsWith("Context"))
+        {
+            baseName = baseName.substring(0, baseName.lastIndexOf("Context"));
+        }
+
+        if (!baseName.endsWith("Factory"))
+        {
+            baseName = baseName + "Factory";
+        }
+
+        try
+        {
+            result = (Class<FillTemplateChainFactory<C>>) Class.forName(baseName);
+        }
+        catch (@NotNull final ClassNotFoundException classNotFound)
+        {
+            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
+
+            if (t_Log != null)
+            {
+                t_Log.fatal("Template context " + contextName + " not supported", classNotFound);
+            }
+        }
+
+        return result;
+    }
+
 
     /**
      * Builds a context-specific exception.
