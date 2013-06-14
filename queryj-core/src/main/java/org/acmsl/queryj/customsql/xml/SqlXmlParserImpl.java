@@ -35,12 +35,13 @@ package org.acmsl.queryj.customsql.xml;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.api.exceptions.CannotReadCustomSqlXmlFileException;
 import org.acmsl.queryj.customsql.*;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -685,10 +686,7 @@ public class SqlXmlParserImpl
                     // class-loading problem.
                 }
 
-                throw
-                    new QueryJBuildException(
-                        "cannot.read.custom.sql.xml",
-                        exception);
+                throw new CannotReadCustomSqlXmlFileException(input, exception);
             }
         }
     }

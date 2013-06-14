@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.NonRelevantFillHandler;
+import org.acmsl.queryj.api.NonRelevantFillHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -64,6 +64,8 @@ public class TimestampHandler
     extends AbstractFillHandler<String>
     implements NonRelevantFillHandler
 {
+    private static final long serialVersionUID = 2312284463910738810L;
+
     /**
      * Retrieves the placeholder.
      *

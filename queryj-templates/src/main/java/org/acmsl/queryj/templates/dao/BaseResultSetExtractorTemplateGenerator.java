@@ -42,9 +42,9 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -63,8 +63,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class BaseResultSetExtractorTemplateGenerator
-    extends AbstractTemplateGenerator<BaseResultSetExtractorTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<BaseResultSetExtractorTemplate, BasePerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<BaseResultSetExtractorTemplate, PerRepositoryTemplateContext>
+    implements PerRepositoryTemplateGenerator<BaseResultSetExtractorTemplate, PerRepositoryTemplateContext>
 {
     /**
      * Creates a new {@link BaseRepositoryDAOFactoryTemplateGenerator} with given settings.
@@ -81,7 +81,7 @@ public class BaseResultSetExtractorTemplateGenerator
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull BasePerRepositoryTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull PerRepositoryTemplateContext context)
     {
         return retrieveTemplateFileName(context, DecorationUtils.getInstance());
     }
@@ -94,7 +94,7 @@ public class BaseResultSetExtractorTemplateGenerator
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final PerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
     {
         return
               decorationUtils.capitalize(context.getRepositoryName())

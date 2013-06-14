@@ -41,7 +41,7 @@ package org.acmsl.queryj.placeholders;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -66,13 +66,16 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class ForeignKeyListHandler
-    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, List<ForeignKey>>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<ForeignKey>>
 {
+
+    private static final long serialVersionUID = 7359967862456047176L;
+
     /**
-     * Creates a {@link ForeignKeyListHandler} with given {@link BasePerTableTemplateContext context}.
+     * Creates a {@link ForeignKeyListHandler} with given {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      * @param context the context.
      */
-    public ForeignKeyListHandler(@NotNull final BasePerTableTemplateContext context)
+    public ForeignKeyListHandler(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -94,7 +97,7 @@ public class ForeignKeyListHandler
      */
     @NotNull
     @Override
-    protected List<ForeignKey> getValue(@NotNull final BasePerTableTemplateContext context)
+    protected List<ForeignKey> getValue(@NotNull final PerTableTemplateContext context)
     {
         return
             retrieveForeignKeys(

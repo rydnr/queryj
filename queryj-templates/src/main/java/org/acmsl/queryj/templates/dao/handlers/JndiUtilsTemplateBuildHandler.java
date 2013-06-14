@@ -36,11 +36,11 @@ package org.acmsl.queryj.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.TemplateMappingManager;
 import org.acmsl.queryj.templates.dao.JndiUtilsTemplate;
 import org.acmsl.queryj.templates.dao.JndiUtilsTemplateFactory;
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
+import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
@@ -67,7 +67,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class JndiUtilsTemplateBuildHandler
       extends BasePerRepositoryTemplateBuildHandler
-                  <JndiUtilsTemplate, JndiUtilsTemplateFactory, BasePerRepositoryTemplateContext>
+                  <JndiUtilsTemplate, JndiUtilsTemplateFactory, PerRepositoryTemplateContext>
 {
     /**
      * Checks whether template generation is enabled for this kind of template.

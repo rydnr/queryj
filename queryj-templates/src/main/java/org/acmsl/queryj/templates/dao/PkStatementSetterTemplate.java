@@ -37,9 +37,9 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerTableTemplate;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.AbstractBasePerTableTemplate;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -64,16 +64,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class PkStatementSetterTemplate
-    extends AbstractBasePerTableTemplate<BasePerTableTemplateContext>
+    extends AbstractBasePerTableTemplate<PerTableTemplateContext>
 {
     private static final long serialVersionUID = -6422269452007001943L;
 
     /**
      * Builds a <code>PkStatementSetterTemplate</code> using given
      * information.
-     * @param context the {@link BasePerTableTemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext} instance.
      */
-    public PkStatementSetterTemplate(@NotNull final BasePerTableTemplateContext context)
+    public PkStatementSetterTemplate(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -109,8 +109,8 @@ public class PkStatementSetterTemplate
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerTableTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerTableTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerTableTemplateContext> buildFillTemplateChain(
+        @NotNull final PerTableTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

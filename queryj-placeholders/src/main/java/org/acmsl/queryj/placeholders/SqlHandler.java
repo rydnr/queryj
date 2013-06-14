@@ -39,7 +39,7 @@ package org.acmsl.queryj.placeholders;
  * Importing some project classes.
  */
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.templates.BasePerCustomSqlTemplateContext;
+import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -52,21 +52,23 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Is able to resolve "sql" placeholders using {@link BasePerCustomSqlTemplateContext contexts}.
+ * Is able to resolve "sql" placeholders using {@link org.acmsl.queryj.api.PerCustomSqlTemplateContext contexts}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/23
  */
 @SuppressWarnings("unused")
 @ThreadSafe
 public class SqlHandler
-    extends AbstractTemplateContextFillHandler<BasePerCustomSqlTemplateContext,Sql>
+    extends AbstractTemplateContextFillHandler<PerCustomSqlTemplateContext,Sql>
 {
+    private static final long serialVersionUID = -481624324619973502L;
+
     /**
-     * Creates a {@link SqlHandler} using given {@link BasePerCustomSqlTemplateContext context}.
-     * @param context the {@link BasePerCustomSqlTemplateContext context}.
+     * Creates a {@link SqlHandler} using given {@link org.acmsl.queryj.api.PerCustomSqlTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomSqlTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public SqlHandler(@NotNull final BasePerCustomSqlTemplateContext context)
+    public SqlHandler(@NotNull final PerCustomSqlTemplateContext context)
     {
         super(context);
     }
@@ -87,7 +89,7 @@ public class SqlHandler
      */
     @NotNull
     @Override
-    protected Sql getValue(@NotNull final BasePerCustomSqlTemplateContext context)
+    protected Sql getValue(@NotNull final PerCustomSqlTemplateContext context)
     {
         return context.getSql();
     }

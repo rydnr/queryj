@@ -35,15 +35,13 @@ package org.acmsl.queryj.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerTableTemplate;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.AbstractBasePerTableTemplate;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 
 /*
  * Importing StringTemplate classes.
  */
-import org.acmsl.queryj.templates.FillTemplateChain;
-import org.acmsl.queryj.templates.InvalidTemplateException;
-import org.antlr.stringtemplate.StringTemplate;
+import org.acmsl.queryj.api.FillTemplateChain;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -63,16 +61,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ValueObjectTemplate
-    extends AbstractBasePerTableTemplate<BasePerTableTemplateContext>
+    extends AbstractBasePerTableTemplate<PerTableTemplateContext>
 {
     private static final long serialVersionUID = -3590003720847495760L;
 
     /**
      * Builds a <code>ValueObjectTemplate</code> using given
      * information.
-     * @param context the {@link BasePerTableTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      */
-    public ValueObjectTemplate(@NotNull final BasePerTableTemplateContext context)
+    public ValueObjectTemplate(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -106,8 +104,8 @@ public class ValueObjectTemplate
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerTableTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerTableTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerTableTemplateContext> buildFillTemplateChain(
+        @NotNull final PerTableTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

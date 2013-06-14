@@ -35,8 +35,9 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.Template;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.Template;
+import org.acmsl.queryj.api.exceptions.CannotCloseJdbcConnectionException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -218,9 +219,7 @@ public class JdbcConnectionClosingHandler
             }
             catch  (@NotNull final SQLException sqlException)
             {
-                throw
-                    new QueryJBuildException(
-                        "Cannot close the database connection", sqlException);
+                throw new CannotCloseJdbcConnectionException(sqlException);
             }
         }
     }

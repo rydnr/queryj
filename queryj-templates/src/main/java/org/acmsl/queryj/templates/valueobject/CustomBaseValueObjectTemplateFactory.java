@@ -39,8 +39,8 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateFactory;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.PerCustomResultTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -65,7 +65,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CustomBaseValueObjectTemplateFactory
-    implements BasePerCustomResultTemplateFactory<CustomBaseValueObjectTemplate>,
+    implements PerCustomResultTemplateFactory<CustomBaseValueObjectTemplate>,
                Singleton
 {
     /**
@@ -120,7 +120,7 @@ public class CustomBaseValueObjectTemplateFactory
         {
             result =
                 new CustomBaseValueObjectTemplate(
-                    new BasePerCustomResultTemplateContext(
+                    new PerCustomResultTemplateContext(
                         metadataManager,
                         customSqlProvider,
                         header,

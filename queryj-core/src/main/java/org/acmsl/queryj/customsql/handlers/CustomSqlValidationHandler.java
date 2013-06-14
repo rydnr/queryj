@@ -36,11 +36,19 @@ package org.acmsl.queryj.customsql.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.exceptions.CustomResultWithInvalidNumberOfColumnsException;
+import org.acmsl.queryj.api.exceptions.CustomResultWithNoPropertiesException;
+import org.acmsl.queryj.api.exceptions.InvalidCustomSqlException;
+import org.acmsl.queryj.api.exceptions.InvalidCustomSqlParameterException;
+import org.acmsl.queryj.api.exceptions.NoTableMatchingCustomResultException;
+import org.acmsl.queryj.api.exceptions.NoValidationValueForCustomSqlDateParameterException;
+import org.acmsl.queryj.api.exceptions.UnsupportedCustomResultPropertyTypeException;
+import org.acmsl.queryj.api.exceptions.UnsupportedCustomSqlParameterTypeException;
 import org.acmsl.queryj.customsql.*;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -124,6 +132,7 @@ public class CustomSqlValidationHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected boolean handle(@NotNull final Map<String, ?> parameters)
       throws  QueryJBuildException
     {
@@ -364,10 +373,7 @@ public class CustomSqlValidationHandler
         }
         else if  (t_ExceptionToWrap != null)
         {
-            throw
-                new QueryJBuildException(
-                    "Invalid SQL (" + sql.getId() + "):\n"+ t_strSql,
-                    t_ExceptionToWrap);
+            throw new InvalidCustomSqlException(sql, t_ExceptionToWrap);
         }
     }
 
@@ -408,10 +414,7 @@ public class CustomSqlValidationHandler
         {
             if  (t_Parameter == null)
             {
-                exceptionToThrow =
-                    new QueryJBuildException(
-                          "Invalid parameter at position " + t_iParameterIndex
-                        + " in sql element whose id is " + sql.getId());
+                exceptionToThrow = new InvalidCustomSqlParameterException(t_iParameterIndex, sql);
 
                 break;
             }
@@ -450,9 +453,10 @@ public class CustomSqlValidationHandler
                 catch  (@NotNull final NoSuchMethodException noSuchMethodException)
                 {
                     exceptionToThrow =
-                        new QueryJBuildException(
-                            "Cannot bind parameter whose type is "
-                            + t_strType,
+                        new UnsupportedCustomSqlParameterTypeException(
+                            t_strType,
+                            t_iParameterIndex,
+                            sql,
                             noSuchMethodException);
                 }
 
@@ -524,9 +528,8 @@ public class CustomSqlValidationHandler
                         if  (t_bInvalidValidationValue)
                         {
                             exceptionToThrow =
-                                new QueryJBuildException(
-                                    "No validation value specified for "
-                                    + "date parameter [" + t_Parameter.getId() + "]");
+                                new NoValidationValueForCustomSqlDateParameterException(
+                                    t_Parameter, sql);
                         }
                     }
                     catch  (@NotNull final ParseException parseException)
@@ -547,41 +550,46 @@ public class CustomSqlValidationHandler
                         catch  (@NotNull final NoSuchMethodException noSuchMethod)
                         {
                             exceptionToThrow =
-                                new QueryJBuildException(
-                                      "Cannot bind parameter whose type is "
-                                    + t_strType,
+                                new UnsupportedCustomSqlParameterTypeException(
+                                    t_strType,
+                                    t_iParameterIndex,
+                                    sql,
                                     noSuchMethod);
                         }
                         catch  (@NotNull final SecurityException securityException)
                         {
                             exceptionToThrow =
-                                new QueryJBuildException(
-                                      "Cannot bind parameter whose type is "
-                                    + t_strType,
+                                new UnsupportedCustomSqlParameterTypeException(
+                                    t_strType,
+                                    t_iParameterIndex,
+                                    sql,
                                     securityException);
                         }
                         catch  (@NotNull final IllegalAccessException illegalAccessException)
                         {
                             exceptionToThrow =
-                                new QueryJBuildException(
-                                      "Cannot bind parameter whose type is "
-                                    + t_strType,
+                                new UnsupportedCustomSqlParameterTypeException(
+                                    t_strType,
+                                    t_iParameterIndex,
+                                    sql,
                                     illegalAccessException);
                         }
                         catch  (@NotNull final InstantiationException instantiationException)
                         {
                             exceptionToThrow =
-                                new QueryJBuildException(
-                                      "Cannot bind parameter whose type is "
-                                    + t_strType,
+                                new UnsupportedCustomSqlParameterTypeException(
+                                    t_strType,
+                                    t_iParameterIndex,
+                                    sql,
                                     instantiationException);
                         }
                         catch  (@NotNull final InvocationTargetException invocationTargetException)
                         {
                             exceptionToThrow =
-                                new QueryJBuildException(
-                                      "Cannot bind parameter whose type is "
-                                    + t_strType,
+                                new UnsupportedCustomSqlParameterTypeException(
+                                    t_strType,
+                                    t_iParameterIndex,
+                                    sql,
                                     invocationTargetException);
                         }
                     }
@@ -591,9 +599,10 @@ public class CustomSqlValidationHandler
                      && (t_Method == null))
                 {
                     exceptionToThrow =
-                        new QueryJBuildException(
-                              "Cannot bind parameter [" + t_Parameter.getId()
-                            + "] in sql [" + sql.getId() + "]");
+                        new UnsupportedCustomSqlParameterTypeException(
+                            t_strType,
+                            t_iParameterIndex,
+                            sql);
                 }
 
                 if  (exceptionToThrow == null)
@@ -618,9 +627,10 @@ public class CustomSqlValidationHandler
                         }
 
                         exceptionToThrow =
-                            new QueryJBuildException(
-                                "Cannot bind parameter whose type is "
-                                + t_strType,
+                            new UnsupportedCustomSqlParameterTypeException(
+                                t_strType,
+                                t_iParameterIndex,
+                                sql,
                                 illegalAccessException);
                     }
                     catch  (@NotNull final InvocationTargetException invocationTargetException)
@@ -635,9 +645,10 @@ public class CustomSqlValidationHandler
                         }
 
                         exceptionToThrow =
-                            new QueryJBuildException(
-                                "Cannot bind parameter whose type is "
-                                + t_strType,
+                            new UnsupportedCustomSqlParameterTypeException(
+                                t_strType,
+                                t_iParameterIndex,
+                                sql,
                                 invocationTargetException);
                     }
                 }
@@ -778,9 +789,7 @@ public class CustomSqlValidationHandler
         
         if  (t_cProperties.size() == 0)
         {
-            throw
-                new QueryJBuildException(
-                    "No return properties for " + sql.getId());
+            throw new CustomResultWithNoPropertiesException(sqlResult, sql);
         }
         else
         {
@@ -810,16 +819,12 @@ public class CustomSqlValidationHandler
                         catch  (@NotNull final NoSuchMethodException noSuchMethod)
                         {
                             throw
-                                new QueryJBuildException(
-                                      "Cannot retrieve result for "
-                                    + "property type "
-                                    + t_Property.getType()
-                                    + " (" + t_Property.getId() + ")",
-                                    noSuchMethod);
+                                new UnsupportedCustomResultPropertyTypeException(
+                                    t_Property, sqlResult, sql, noSuchMethod);
                         }
 
                         invokeResultSetGetter(
-                            t_Method, resultSet, t_Property, sql);
+                            t_Method, resultSet, t_Property, sqlResult, sql);
                     }
                 }
             }
@@ -832,10 +837,8 @@ public class CustomSqlValidationHandler
                 if  (t_iColumnCount < t_cProperties.size())
                 {
                     throw
-                        new QueryJBuildException(
-                              "Invalid number of columns ("
-                            + t_iColumnCount + "): "
-                            + "expecting at least " + t_cProperties.size());
+                        new CustomResultWithInvalidNumberOfColumnsException(
+                            t_iColumnCount, t_cProperties.size());
                 }
 
                 String t_strColumnName;
@@ -1006,7 +1009,7 @@ public class CustomSqlValidationHandler
                 t_Log.warn(t_strErrorMessage);
             }
 
-            throw new QueryJBuildException(t_strErrorMessage);
+            throw new NoTableMatchingCustomResultException(sqlResult);
         }
 
         return result;
@@ -1015,8 +1018,9 @@ public class CustomSqlValidationHandler
     /**
      * Executes the <code>ResultSet.getXXX</code> method.
      * @param method the <code>ResultSet</code> getter method for given property.
-     * @param resultSet the <code>ResultSet</code> instance.
+     * @param resultSet the {@link ResultSet} instance.
      * @param property the property.
+     * @param sqlResult the {@link Result} instance.
      * @param sql the SQL element.
      * @throws QueryJBuildException if the validation fails.
      */
@@ -1024,6 +1028,7 @@ public class CustomSqlValidationHandler
         @NotNull final Method method,
         @NotNull final ResultSet resultSet,
         @NotNull final Property property,
+        @NotNull final Result sqlResult,
         @NotNull final Sql sql)
       throws QueryJBuildException
     {
@@ -1061,12 +1066,8 @@ public class CustomSqlValidationHandler
             }
 
             throw
-                new QueryJBuildException(
-                      "Could not retrieve result property "
-                    + (   (property.getIndex() > 0)
-                       ?  "" + property.getIndex()
-                       :  property.getColumnName()),
-                    illegalAccessException);
+                new UnsupportedCustomResultPropertyTypeException(
+                    property, sqlResult, sql, illegalAccessException);
         }
         catch  (@NotNull final InvocationTargetException invocationTargetException)
         {
@@ -1085,13 +1086,8 @@ public class CustomSqlValidationHandler
             }
 
             throw
-                new QueryJBuildException(
-                      "Validation failed for " + sql.getId() + ":\n"
-                    + "Could not retrieve result property "
-                    + (   (property.getIndex() > 0)
-                       ?  "" + property.getIndex()
-                       :  property.getColumnName()),
-                    invocationTargetException);
+                new UnsupportedCustomResultPropertyTypeException(
+                    property, sqlResult, sql, invocationTargetException);
         }
     }
 

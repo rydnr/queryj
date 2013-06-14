@@ -40,12 +40,12 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplate;
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
+import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplateGenerator;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -75,7 +75,7 @@ public class BaseResultSetExtractorTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
                  <BaseResultSetExtractorTemplate,
                      BaseResultSetExtractorTemplateGenerator,
-                     BasePerRepositoryTemplateContext>
+                     PerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}

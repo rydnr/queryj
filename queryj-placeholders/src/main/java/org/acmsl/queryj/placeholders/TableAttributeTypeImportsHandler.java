@@ -44,7 +44,7 @@ import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -73,13 +73,15 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class TableAttributeTypeImportsHandler
-    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, List<String>>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<String>>
 {
+    private static final long serialVersionUID = -358047028615374625L;
+
     /**
-     * Creates a {@link TableAttributeTypeImportsHandler} using given {@link BasePerTableTemplateContext context}
+     * Creates a {@link TableAttributeTypeImportsHandler} using given {@link org.acmsl.queryj.api.PerTableTemplateContext context}
      * @param context the context.
      */
-    public TableAttributeTypeImportsHandler(@NotNull final BasePerTableTemplateContext context)
+    public TableAttributeTypeImportsHandler(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -101,7 +103,7 @@ public class TableAttributeTypeImportsHandler
      */
     @NotNull
     @Override
-    protected List<String> getValue(@NotNull final BasePerTableTemplateContext context)
+    protected List<String> getValue(@NotNull final PerTableTemplateContext context)
     {
         return retrieveImports(context.getTableName(), context.getMetadataManager());
     }

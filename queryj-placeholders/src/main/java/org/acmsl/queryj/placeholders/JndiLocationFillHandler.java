@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importign some project classes.
  */
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -60,6 +60,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class JndiLocationFillHandler
     extends AbstractDecoratedStringHandler<TemplateContext>
 {
+    private static final long serialVersionUID = -4111639313234855152L;
+
     /**
      * Creates a {@link JndiLocationFillHandler} with given context.
      * @param context the {@link TemplateContext context}.

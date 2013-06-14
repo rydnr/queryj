@@ -35,25 +35,21 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateFactory;
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateGenerator;
+import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
+import org.acmsl.queryj.api.PerForeignKeyTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -72,8 +68,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class FkStatementSetterTemplateGenerator
-    extends AbstractTemplateGenerator<FkStatementSetterTemplate, BasePerForeignKeyTemplateContext>
-    implements BasePerForeignKeyTemplateGenerator<FkStatementSetterTemplate, BasePerForeignKeyTemplateContext>
+    extends AbstractTemplateGenerator<FkStatementSetterTemplate, PerForeignKeyTemplateContext>
+    implements PerForeignKeyTemplateGenerator<FkStatementSetterTemplate, PerForeignKeyTemplateContext>
 {
     /**
      * Creates a new {@link FkStatementSetterTemplateGenerator} with given settings.
@@ -100,7 +96,7 @@ public class FkStatementSetterTemplateGenerator
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BasePerForeignKeyTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerForeignKeyTemplateContext context)
     {
         return
             retrieveTemplateFileName(

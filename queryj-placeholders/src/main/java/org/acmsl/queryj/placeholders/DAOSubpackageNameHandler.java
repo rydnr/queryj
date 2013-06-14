@@ -41,7 +41,7 @@ package org.acmsl.queryj.placeholders;
  */
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -63,6 +63,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class DAOSubpackageNameHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, String>
 {
+    private static final long serialVersionUID = -81347851565126388L;
+
     /**
      * Creates a {@link DAOSubpackageNameHandler} using given {@link TemplateContext context}.
      * @param context the {@link TemplateContext context}.

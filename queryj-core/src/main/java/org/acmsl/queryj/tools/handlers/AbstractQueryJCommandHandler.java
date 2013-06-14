@@ -37,8 +37,10 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.Template;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseMetadataException;
+import org.acmsl.queryj.api.Template;
+import org.acmsl.queryj.api.exceptions.UnsupportedCharsetQueryjException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
@@ -54,6 +56,8 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  */
 import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -156,16 +160,12 @@ public abstract class AbstractQueryJCommandHandler
                 }
                 catch  (@NotNull final SQLException exception)
                 {
-                    throw
-                        new QueryJBuildException(
-                            "cannot.retrieve.database.metadata",
-                            exception);
+                    throw new CannotRetrieveDatabaseMetadataException(exception);
                 }
             }
             else
             {
-                throw
-                    new QueryJBuildException("cannot.retrieve.database.metadata");
+                throw new CannotRetrieveDatabaseMetadataException();
             }
         }
 
@@ -386,34 +386,21 @@ public abstract class AbstractQueryJCommandHandler
                         result = Charset.forName(encoding);
                         ((Map <String, Charset>) parameters).put(ParameterValidationHandler.CHARSET, result);
                     }
-                    catch (@NotNull final IllegalArgumentException nullCharset)
+                    catch (final UnsupportedCharsetException unsupportedCharset)
                     {
-                        // should not happen since encoding is optional anyway.
-                        exceptionToThrow =
-                            new QueryJBuildException(
-                                "encoding is null", nullCharset);
+                         // Should not happen since this has been checked beforehand.
+                         exceptionToThrow =
+                             new UnsupportedCharsetQueryjException(encoding, unsupportedCharset);
                     }
-                    // catch (final UnsupportedCharsetException unsupportedCharset)
-                    // {
-                    //     // Should not happen since this has been checked beforehand.
-                    //     exceptionToThrow =
-                    //         new QueryJBuildException(
-                    //             ParameterValidationHandler.UNSUPPORTED_ENCODING,
-                    //             unsupportedCharset);
-                    // }
-                    // catch (final IllegalCharsetNameException illegalCharset)
-                    // {
-                    //     exceptionToThrow =
-                    //         new QueryJBuildException(
-                    //             ParameterValidationHandler.ILLEGAL_ENCODING,
-                    //             illegalCharset);
-                    // }
+                    catch (final IllegalCharsetNameException illegalCharset)
+                    {
+                         exceptionToThrow =
+                             new UnsupportedCharsetQueryjException(encoding, illegalCharset);
+                    }
                 }
                 else
                 {
-                    exceptionToThrow =
-                        new QueryJBuildException(
-                            ParameterValidationHandler.UNSUPPORTED_ENCODING);
+                    exceptionToThrow = new UnsupportedCharsetQueryjException(encoding);
                 }
             }
         }
@@ -550,6 +537,7 @@ public abstract class AbstractQueryJCommandHandler
      * @param tasks the tasks to track.
      * @param parameters the parameter map.
      */
+    @SuppressWarnings("unused")
     protected <T extends Template> void annotateGenerationTasks(
         @NotNull final List<Future<T>> tasks, @NotNull final Map<String, List<Future<T>>> parameters)
     {

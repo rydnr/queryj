@@ -42,7 +42,7 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.TableDecorator;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 
 /**
  * Importing some JetBrains annotations.
@@ -63,13 +63,15 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class TableHandler
-    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, TableDecorator>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, TableDecorator>
 {
+    private static final long serialVersionUID = -3398602147547759354L;
+
     /**
      * Creates a {@link TableHandler} using given context.
-     * @param context the {@link BasePerTableTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      */
-    public TableHandler(@NotNull final BasePerTableTemplateContext context)
+    public TableHandler(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -86,13 +88,13 @@ public class TableHandler
     }
 
     /**
-     * Retrieves a {@link TableDecorator} using given {@link BasePerTableTemplateContext context} information.
+     * Retrieves a {@link TableDecorator} using given {@link org.acmsl.queryj.api.PerTableTemplateContext context} information.
      * @param context such context.
      * @return such value.
      */
     @Nullable
     @Override
-    protected TableDecorator getValue(@NotNull final BasePerTableTemplateContext context)
+    protected TableDecorator getValue(@NotNull final PerTableTemplateContext context)
     {
         return
             decorate(

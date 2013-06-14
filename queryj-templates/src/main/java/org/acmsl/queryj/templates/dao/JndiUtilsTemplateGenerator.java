@@ -36,9 +36,9 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -56,8 +56,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class JndiUtilsTemplateGenerator
-    extends AbstractTemplateGenerator<JndiUtilsTemplate, BasePerRepositoryTemplateContext>
-    implements BasePerRepositoryTemplateGenerator<JndiUtilsTemplate, BasePerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<JndiUtilsTemplate, PerRepositoryTemplateContext>
+    implements PerRepositoryTemplateGenerator<JndiUtilsTemplate, PerRepositoryTemplateContext>
 {
     /**
      * Creates a new {@link JndiUtilsTemplateGenerator} with given settings.
@@ -74,7 +74,7 @@ public class JndiUtilsTemplateGenerator
      */
     @NotNull
     @Override
-    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
     {
         return retrieveTemplateFileName(context, DecorationUtils.getInstance());
     }
@@ -87,7 +87,7 @@ public class JndiUtilsTemplateGenerator
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final PerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
     {
         return
               decorationUtils.capitalize(context.getRepositoryName())

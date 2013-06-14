@@ -38,9 +38,9 @@ package org.acmsl.queryj.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerCustomResultTemplate;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.AbstractBasePerCustomResultTemplate;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -65,16 +65,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CustomValueObjectFactoryTemplate
-    extends AbstractBasePerCustomResultTemplate<BasePerCustomResultTemplateContext>
+    extends AbstractBasePerCustomResultTemplate<PerCustomResultTemplateContext>
 {
     private static final long serialVersionUID = -1424240157388443640L;
 
     /**
      * Builds a <code>CustomValueObjectTemplate</code> using
      * information.
-     * @param context the {@link BasePerCustomResultTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
      */
-    public CustomValueObjectFactoryTemplate(@NotNull final BasePerCustomResultTemplateContext context)
+    public CustomValueObjectFactoryTemplate(@NotNull final PerCustomResultTemplateContext context)
     {
         super(context);
     }
@@ -110,8 +110,8 @@ public class CustomValueObjectFactoryTemplate
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerCustomResultTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerCustomResultTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerCustomResultTemplateContext> buildFillTemplateChain(
+        @NotNull final PerCustomResultTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

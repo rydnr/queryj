@@ -36,9 +36,9 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -62,8 +62,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ConfigurationPropertiesTemplateGenerator
-    extends AbstractTemplateGenerator<ConfigurationPropertiesTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<ConfigurationPropertiesTemplate, BasePerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<ConfigurationPropertiesTemplate, PerRepositoryTemplateContext>
+    implements PerRepositoryTemplateGenerator<ConfigurationPropertiesTemplate, PerRepositoryTemplateContext>
 {
     /**
      * Creates a new {@link ConfigurationPropertiesTemplateGenerator} with given settings.
@@ -80,7 +80,7 @@ public class ConfigurationPropertiesTemplateGenerator
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
     {
         return context.getRepositoryName().toLowerCase(Locale.US) + "-queryj.properties";
     }

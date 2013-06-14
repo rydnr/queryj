@@ -37,7 +37,7 @@ package org.acmsl.queryj.metadata.engines.oracle;
  */
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.QueryFactory;
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.QueryResultSet;
 import org.acmsl.queryj.SelectQuery;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
@@ -520,10 +520,10 @@ public class OracleMetadataManagerOld
             }
             catch  (@NotNull final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.foreign.keys",
-                        sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.foreign.keys",
+//                        sqlException);
             }
         }
         finally
@@ -708,10 +708,10 @@ public class OracleMetadataManagerOld
             }
             catch  (@NotNull final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.foreign.keys",
-                        sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.foreign.keys",
+//                        sqlException);
             }
         }
         finally
@@ -817,10 +817,10 @@ public class OracleMetadataManagerOld
             }
             catch  (@NotNull final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.database.table.names",
-                            sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.database.table.names",
+//                            sqlException);
             }
 
             if (t_Results != null)
@@ -839,17 +839,17 @@ public class OracleMetadataManagerOld
 
             throw sqlException;
         }
-        catch  (@NotNull final QueryJException queryjException)
-        {
-            if  (t_Log != null)
-            {
-                t_Log.error(
-                    "Cannot retrieve the table names.",
-                    queryjException);
-            }
-
-            throw queryjException;
-        }
+//        catch  (@NotNull final QueryJException queryjException)
+//        {
+//            if  (t_Log != null)
+//            {
+//                t_Log.error(
+//                    "Cannot retrieve the table names.",
+//                    queryjException);
+//            }
+//
+//            throw queryjException;
+//        }
         finally 
         {
             try 
@@ -991,10 +991,10 @@ public class OracleMetadataManagerOld
             }
             catch  (@NotNull final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.database.column.names",
-                        sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.database.column.names",
+//                        sqlException);
             }
 
             result = extractColumnNames(t_rsResults);
@@ -1010,17 +1010,17 @@ public class OracleMetadataManagerOld
 
             throw sqlException;
         }
-        catch  (@NotNull final QueryJException queryjException)
-        {
-            if  (t_Log != null)
-            {
-                t_Log.error(
-                    "Cannot retrieve the column names.",
-                    queryjException);
-            }
-
-            throw queryjException;
-        }
+//        catch  (@NotNull final QueryJException queryjException)
+//        {
+//            if  (t_Log != null)
+//            {
+//                t_Log.error(
+//                    "Cannot retrieve the column names.",
+//                    queryjException);
+//            }
+//
+//            throw queryjException;
+//        }
         finally 
         {
             try 
@@ -1146,10 +1146,10 @@ public class OracleMetadataManagerOld
             }
             catch  (@NotNull final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.database.column.types",
-                        sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.database.column.types",
+//                        sqlException);
             }
 
             result = extractColumnTypes(t_rsResults, USER_TAB_COLUMNS.DATA_TYPE);
@@ -1165,17 +1165,17 @@ public class OracleMetadataManagerOld
 
             throw sqlException;
         }
-        catch  (@NotNull final QueryJException queryjException)
-        {
-            if  (t_Log != null)
-            {
-                t_Log.error(
-                    "Cannot retrieve the column types.",
-                    queryjException);
-            }
-
-            throw queryjException;
-        }
+//        catch  (@NotNull final QueryJException queryjException)
+//        {
+//            if  (t_Log != null)
+//            {
+//                t_Log.error(
+//                    "Cannot retrieve the column types.",
+//                    queryjException);
+//            }
+//
+//            throw queryjException;
+//        }
         finally 
         {
             try 
@@ -1359,10 +1359,10 @@ public class OracleMetadataManagerOld
             }
             catch  (@NotNull final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.database.column.types",
-                        sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.database.column.types",
+//                        sqlException);
             }
 
             result =
@@ -1381,17 +1381,17 @@ public class OracleMetadataManagerOld
 
             throw sqlException;
         }
-        catch  (@NotNull final QueryJException queryjException)
-        {
-            if  (t_Log != null)
-            {
-                t_Log.error(
-                    "Cannot retrieve the column types.",
-                    queryjException);
-            }
-
-            throw queryjException;
-        }
+//        catch  (@NotNull final QueryJException queryjException)
+//        {
+//            if  (t_Log != null)
+//            {
+//                t_Log.error(
+//                    "Cannot retrieve the column types.",
+//                    queryjException);
+//            }
+//
+//            throw queryjException;
+//        }
         finally 
         {
             try 
@@ -1593,10 +1593,10 @@ public class OracleMetadataManagerOld
             }
             catch  (@NotNull final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.table.comments",
-                        sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.table.comments",
+//                        sqlException);
             }
         }
         finally
@@ -1812,10 +1812,10 @@ public class OracleMetadataManagerOld
             }
             catch  (@NotNull final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.table.comments",
-                        sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.table.comments",
+//                        sqlException);
             }
         }
         finally

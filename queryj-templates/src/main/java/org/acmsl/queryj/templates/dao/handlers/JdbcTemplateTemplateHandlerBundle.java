@@ -41,7 +41,7 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
+import org.acmsl.queryj.api.handlers.TemplateHandlerBundle;
 
 /*
  * Importing checkthread.org annotations.

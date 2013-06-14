@@ -38,9 +38,9 @@ package org.acmsl.queryj.templates.valueobject;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -59,8 +59,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CustomValueObjectImplTemplateGenerator
-    extends AbstractTemplateGenerator<CustomValueObjectImplTemplate, BasePerCustomResultTemplateContext>
-    implements BasePerCustomResultTemplateGenerator<CustomValueObjectImplTemplate, BasePerCustomResultTemplateContext>
+    extends AbstractTemplateGenerator<CustomValueObjectImplTemplate, PerCustomResultTemplateContext>
+    implements PerCustomResultTemplateGenerator<CustomValueObjectImplTemplate, PerCustomResultTemplateContext>
 {
     /**
      * Creates a new {@link CustomBaseValueObjectTemplateGenerator} with given settings.
@@ -100,7 +100,7 @@ public class CustomValueObjectImplTemplateGenerator
         {
             result =
                 new CustomValueObjectImplTemplate(
-                    new BasePerCustomResultTemplateContext(
+                    new PerCustomResultTemplateContext(
                         metadataManager,
                         customSqlProvider,
                         header,
@@ -125,7 +125,7 @@ public class CustomValueObjectImplTemplateGenerator
      */
     @NotNull
     @Override
-    public String retrieveTemplateFileName(@NotNull final BasePerCustomResultTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerCustomResultTemplateContext context)
     {
         String result = "";
 

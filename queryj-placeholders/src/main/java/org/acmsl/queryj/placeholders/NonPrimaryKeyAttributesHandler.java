@@ -41,7 +41,7 @@ package org.acmsl.queryj.placeholders;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
 import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 
 /*
  * Importing some Jetbrains annotations.
@@ -66,13 +66,15 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class NonPrimaryKeyAttributesHandler
-    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, List<Attribute>>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Attribute>>
 {
+    private static final long serialVersionUID = 2484558064912624673L;
+
     /**
-     * Creates a {@link NonPrimaryKeyAttributesHandler} with given {@link BasePerTableTemplateContext}
+     * Creates a {@link NonPrimaryKeyAttributesHandler} with given {@link org.acmsl.queryj.api.PerTableTemplateContext}
      * @param context the context.
      */
-    public NonPrimaryKeyAttributesHandler(@NotNull final BasePerTableTemplateContext context)
+    public NonPrimaryKeyAttributesHandler(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -90,12 +92,12 @@ public class NonPrimaryKeyAttributesHandler
 
     /**
      * Retrieves the attributes not part of the primary key.
-     * @param context the {@link BasePerTableTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      * @return such value.
      */
     @NotNull
     @Override
-    protected List<Attribute> getValue(@NotNull final BasePerTableTemplateContext context)
+    protected List<Attribute> getValue(@NotNull final PerTableTemplateContext context)
     {
         return
             retrieveNonPkAttributes(

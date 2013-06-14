@@ -36,9 +36,9 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerTableTemplate;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.AbstractBasePerTableTemplate;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -63,15 +63,15 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOFactoryTemplate
-     extends AbstractBasePerTableTemplate<BasePerTableTemplateContext>
+     extends AbstractBasePerTableTemplate<PerTableTemplateContext>
 {
     private static final long serialVersionUID = -836140578744901008L;
 
     /**
      * Builds a <code>DAOFactoryTemplate</code> using given information.
-     * @param context the {@link BasePerTableTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      */
-    public DAOFactoryTemplate(@NotNull final BasePerTableTemplateContext context)
+    public DAOFactoryTemplate(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -89,11 +89,11 @@ public class DAOFactoryTemplate
 
     /**
      * Builds the header for logging purposes.
-     * @param context the {@link org.acmsl.queryj.templates.BasePerTableTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      * @return such header.
      */
     @NotNull
-    protected String buildHeader(@NotNull final BasePerTableTemplateContext context)
+    protected String buildHeader(@NotNull final PerTableTemplateContext context)
     {
         return
             "Generating DAOFactory for "
@@ -129,8 +129,8 @@ public class DAOFactoryTemplate
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerTableTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerTableTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerTableTemplateContext> buildFillTemplateChain(
+        @NotNull final PerTableTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

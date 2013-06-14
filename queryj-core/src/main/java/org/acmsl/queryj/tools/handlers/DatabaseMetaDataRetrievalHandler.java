@@ -35,12 +35,14 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.api.exceptions.QueryJException;
+import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseMetadataException;
+import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseInformationException;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.MetadataExtractionLogger;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
@@ -1094,14 +1096,12 @@ public abstract class DatabaseMetaDataRetrievalHandler
         catch  (@NotNull final SQLException sqlException)
         {
             throw
-                new QueryJBuildException(
-                    "Cannot retrieve metadata.", sqlException);
+                new CannotRetrieveDatabaseMetadataException(sqlException);
         }
         catch  (@NotNull final QueryJException queryjException)
         {
             throw
-                new QueryJBuildException(
-                    "Cannot retrieve metadata.", queryjException);
+                new CannotRetrieveDatabaseMetadataException(queryjException);
         }
 
         return result;
@@ -1229,8 +1229,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             }
 
             throw
-                new QueryJBuildException(
-                    "Cannot retrieve database metadata", exception);
+                new CannotRetrieveDatabaseMetadataException(exception);
         }
 
         return result;
@@ -1448,9 +1447,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             }
 
             t_ExceptionToThrow =
-                new QueryJBuildException(
-                    "cannot.retrieve.vendor.product.name",
-                    sqlException);
+                new CannotRetrieveDatabaseInformationException(sqlException);
         }
 
         if (t_ExceptionToThrow != null)
@@ -1523,9 +1520,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             }
 
             t_ExceptionToThrow =
-                new QueryJBuildException(
-                    "cannot.retrieve.vendor.quote.string",
-                    sqlException);
+                new CannotRetrieveDatabaseInformationException(sqlException);
         }
 
         if (t_ExceptionToThrow != null)

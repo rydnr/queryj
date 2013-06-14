@@ -36,9 +36,9 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerTableTemplate;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.AbstractBasePerTableTemplate;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -63,16 +63,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOTemplate
-    extends AbstractBasePerTableTemplate<BasePerTableTemplateContext>
+    extends AbstractBasePerTableTemplate<PerTableTemplateContext>
 {
 
     private static final long serialVersionUID = 3085645762313515830L;
 
     /**
      * Builds a {@link DAOTemplate} using given context.
-     * @param context the {@link BasePerTableTemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext} instance.
      */
-    public DAOTemplate(@NotNull final BasePerTableTemplateContext context)
+    public DAOTemplate(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -102,12 +102,12 @@ public class DAOTemplate
      * Builds the correct chain.
      * @param context the context.
      * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link org.acmsl.queryj.templates.FillTemplateChain}.
+     * @return the specific {@link org.acmsl.queryj.api.FillTemplateChain}.
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerTableTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerTableTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerTableTemplateContext> buildFillTemplateChain(
+        @NotNull final PerTableTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

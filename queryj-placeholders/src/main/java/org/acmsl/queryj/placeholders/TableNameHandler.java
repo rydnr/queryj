@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -58,14 +58,16 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class TableNameHandler
-    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, DecoratedString>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, DecoratedString>
 {
+    private static final long serialVersionUID = -5250098336492826609L;
+
     /**
-     * Creates a {@link TableNameHandler} for given {@link BasePerTableTemplateContext}.
+     * Creates a {@link TableNameHandler} for given {@link org.acmsl.queryj.api.PerTableTemplateContext}.
      * @param context the template context.
      */
     @SuppressWarnings("unused")
-    public TableNameHandler(@NotNull final BasePerTableTemplateContext context)
+    public TableNameHandler(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -83,11 +85,11 @@ public class TableNameHandler
 
     /**
      * Retrieves the table name from given template.
-     * @param context the {@link BasePerTableTemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext} instance.
      * @return the table name.
      */
     @NotNull
-    protected DecoratedString getValue(@NotNull final BasePerTableTemplateContext context)
+    protected DecoratedString getValue(@NotNull final PerTableTemplateContext context)
     {
         return new DecoratedString(context.getTableName());
     }

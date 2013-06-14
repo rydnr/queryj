@@ -37,9 +37,9 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -58,8 +58,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DataAccessManagerTemplateGenerator
-    extends AbstractTemplateGenerator<DataAccessManagerTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<DataAccessManagerTemplate, BasePerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<DataAccessManagerTemplate, PerRepositoryTemplateContext>
+    implements PerRepositoryTemplateGenerator<DataAccessManagerTemplate, PerRepositoryTemplateContext>
 {
     /**
      * Creates a new {@link DataAccessContextLocalTemplateGenerator} with given settings.
@@ -76,7 +76,7 @@ public class DataAccessManagerTemplateGenerator
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
     {
         return
               capitalize(context.getRepositoryName())

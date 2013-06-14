@@ -37,12 +37,12 @@ package org.acmsl.queryj.templates.valueobject.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.templates.valueobject.ValueObjectTemplate;
 import org.acmsl.queryj.templates.valueobject.ValueObjectTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerTableTemplateWritingHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerTableTemplateWritingHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -68,7 +68,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class ValueObjectTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
-                 <ValueObjectTemplate, ValueObjectTemplateGenerator, BasePerTableTemplateContext>
+                 <ValueObjectTemplate, ValueObjectTemplateGenerator, PerTableTemplateContext>
 {
     /**
      * Creates a <code>ValueObjectTemplateWritingHandler</code> instance.
@@ -91,7 +91,7 @@ public class ValueObjectTemplateWritingHandler
      *
      * @param parameters the parameter map.
      * @return the template.
-     * @throws org.acmsl.queryj.tools.QueryJBuildException if the template retrieval process if faulty.
+     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the template retrieval process if faulty.
      */
     @NotNull
     @Override

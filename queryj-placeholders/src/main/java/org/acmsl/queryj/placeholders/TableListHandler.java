@@ -42,7 +42,7 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.TableDecorator;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -68,14 +68,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class TableListHandler
-    extends AbstractTemplateContextFillHandler<BasePerRepositoryTemplateContext, List<TableDecorator>>
+    extends AbstractTemplateContextFillHandler<PerRepositoryTemplateContext, List<TableDecorator>>
 {
+    private static final long serialVersionUID = 2643478887195465616L;
+
     /**
      * Creates a {@link TableListHandler} to resolve "tables" placeholders using given
-     * {@link BasePerRepositoryTemplateContext context}.
-     * @param context the {@link BasePerRepositoryTemplateContext context}.
+     * {@link org.acmsl.queryj.api.PerRepositoryTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext context}.
      */
-    public TableListHandler(@NotNull final BasePerRepositoryTemplateContext context)
+    public TableListHandler(@NotNull final PerRepositoryTemplateContext context)
     {
         super(context);
     }
@@ -93,12 +95,12 @@ public class TableListHandler
 
     /**
      * Retrieves the list of decorated tables belonging to the repository.
-     * @param context the {@link BasePerRepositoryTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext context}.
      * @return such value.
      */
     @NotNull
     @Override
-    protected List<TableDecorator> getValue(@NotNull final BasePerRepositoryTemplateContext context)
+    protected List<TableDecorator> getValue(@NotNull final PerRepositoryTemplateContext context)
     {
         return
             decorateTables(

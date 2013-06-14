@@ -35,9 +35,9 @@ package org.acmsl.queryj.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -55,8 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CustomValueObjectFactoryTemplateGenerator
-    extends AbstractTemplateGenerator<CustomValueObjectFactoryTemplate, BasePerCustomResultTemplateContext>
-    implements BasePerCustomResultTemplateGenerator<CustomValueObjectFactoryTemplate, BasePerCustomResultTemplateContext>
+    extends AbstractTemplateGenerator<CustomValueObjectFactoryTemplate, PerCustomResultTemplateContext>
+    implements PerCustomResultTemplateGenerator<CustomValueObjectFactoryTemplate, PerCustomResultTemplateContext>
 {
     /**
      * Creates a new {@link CustomBaseValueObjectTemplateGenerator} with given settings.
@@ -73,7 +73,7 @@ public class CustomValueObjectFactoryTemplateGenerator
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BasePerCustomResultTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerCustomResultTemplateContext context)
     {
         return
               extractClassName(context.getResult().getClassValue())

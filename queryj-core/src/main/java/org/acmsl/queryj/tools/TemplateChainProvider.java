@@ -38,9 +38,7 @@ package org.acmsl.queryj.tools;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.handlers.TemplateHandler;
-import org.acmsl.queryj.templates.handlers.fillhandlers.TemplateContextFillHandler;
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
+import org.acmsl.queryj.api.handlers.TemplateHandler;
 
 /*
  * Importing JetBrains annotations.

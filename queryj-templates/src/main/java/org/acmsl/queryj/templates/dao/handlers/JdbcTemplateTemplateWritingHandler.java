@@ -41,11 +41,11 @@ package org.acmsl.queryj.templates.dao.handlers;
  * Importing some project classes.
  */
 
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.TemplateMappingManager;
 import org.acmsl.queryj.templates.dao.JdbcTemplateTemplate;
 import org.acmsl.queryj.templates.dao.JdbcTemplateTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
+import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
 
@@ -78,7 +78,7 @@ public class JdbcTemplateTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
                  <JdbcTemplateTemplate,
                      JdbcTemplateTemplateGenerator,
-                     BasePerRepositoryTemplateContext>
+                     PerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}

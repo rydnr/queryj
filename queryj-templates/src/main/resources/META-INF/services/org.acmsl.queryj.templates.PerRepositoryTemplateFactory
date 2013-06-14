@@ -1,0 +1,17 @@
+org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateFactory
+org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplateFactory
+org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplateFactory
+org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplateFactory
+org.acmsl.queryj.templates.dao.ConfigurationPropertiesTemplateFactory
+org.acmsl.queryj.templates.dao.CucumberFeatureTemplateFactory
+org.acmsl.queryj.templates.dao.DAOChooserTemplateFactory
+org.acmsl.queryj.templates.dao.DAOListenerImplTemplateFactory
+org.acmsl.queryj.templates.dao.DAOListenerTemplateFactory
+org.acmsl.queryj.templates.dao.DataAccessContextLocalTemplateFactory
+org.acmsl.queryj.templates.dao.DataAccessManagerTemplateFactory
+org.acmsl.queryj.templates.dao.JdbcTemplateTemplateFactory
+org.acmsl.queryj.templates.dao.JndiUtilsTemplateFactory
+org.acmsl.queryj.templates.dao.RepositoryDAOFactoryTemplateFactory
+org.acmsl.queryj.templates.dao.RepositoryDAOTemplateFactory
+org.acmsl.queryj.templates.dao.StatisticsProviderTemplateFactory
+org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateFactory

@@ -41,14 +41,14 @@ package org.acmsl.queryj.metadata.engines;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.Field;
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.metadata.MetadataManagerOld;
 import org.acmsl.queryj.metadata.ProcedureMetadata;
 import org.acmsl.queryj.metadata.ProcedureParameterMetadata;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.templates.MetaLanguageUtils;
+import org.acmsl.queryj.api.MetaLanguageUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -3446,10 +3446,10 @@ public abstract class AbstractJdbcMetadataManagerOld
             }
             catch  (final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.database.table.names",
-                        sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.database.table.names",
+//                        sqlException);
             }
 
             result = extractTableNames(t_rsTables, metadataExtractionListener);
@@ -3462,10 +3462,10 @@ public abstract class AbstractJdbcMetadataManagerOld
 
             throw sqlException;
         }
-        catch  (final QueryJException queryjException)
-        {
-            throw queryjException;
-        }
+//        catch  (final QueryJException queryjException)
+//        {
+//            throw queryjException;
+//        }
         finally 
         {
             if  (t_rsTables != null)
@@ -4167,10 +4167,10 @@ public abstract class AbstractJdbcMetadataManagerOld
             }
             catch  (final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.database.procedure.names",
-                        sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.database.procedure.names",
+//                        sqlException);
             }
 
             result =
@@ -4184,13 +4184,13 @@ public abstract class AbstractJdbcMetadataManagerOld
                 sqlException);
 //            throw sqlException;
         }
-        catch  (final QueryJException queryjException)
-        {
-            logWarn(
-                "cannot.retrieve.database.procedure.names",
-                queryjException);
-//              throw queryjException;
-        }
+//        catch  (final QueryJException queryjException)
+//        {
+//            logWarn(
+//                "cannot.retrieve.database.procedure.names",
+//                queryjException);
+////              throw queryjException;
+//        }
         finally 
         {
             if  (t_rsProcedures != null)
@@ -4786,10 +4786,10 @@ public abstract class AbstractJdbcMetadataManagerOld
             }
             catch  (final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.database.table.names",
-                        sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.database.table.names",
+//                        sqlException);
             }
 
             result = extractComment(t_rsTables);
@@ -4804,10 +4804,10 @@ public abstract class AbstractJdbcMetadataManagerOld
         {
             throw sqlException;
         }
-        catch  (final QueryJException queryjException)
-        {
-            throw queryjException;
-        }
+//        catch  (final QueryJException queryjException)
+//        {
+//            throw queryjException;
+//        }
         finally 
         {
             if  (t_rsTables != null)
@@ -4857,10 +4857,10 @@ public abstract class AbstractJdbcMetadataManagerOld
             }
             catch  (final SQLException sqlException)
             {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.database.table.names",
-                        sqlException);
+//                throw
+//                    new QueryJException(
+//                        "cannot.retrieve.database.table.names",
+//                        sqlException);
             }
 
             result = extractComment(t_rsColumns);
@@ -4875,11 +4875,11 @@ public abstract class AbstractJdbcMetadataManagerOld
         {
             throw sqlException;
         }
-        catch  (final QueryJException queryjException)
-        {
-            throw queryjException;
-        }
-        finally 
+//        catch  (final QueryJException queryjException)
+//        {
+//            throw queryjException;
+//        }
+        finally
         {
             if  (t_rsColumns != null)
             {

@@ -36,9 +36,9 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerTableTemplate;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.AbstractBasePerTableTemplate;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -63,16 +63,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class BaseDAOFactoryTemplate
-    extends AbstractBasePerTableTemplate<BasePerTableTemplateContext>
+    extends AbstractBasePerTableTemplate<PerTableTemplateContext>
 {
     private static final long serialVersionUID = 5048749126915731614L;
 
     /**
      * Builds a <code>BaseDAOFactoryTemplate</code> using given
      * information.
-     * @param context the {@link BasePerTableTemplateContext context}
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}
      */
-    public BaseDAOFactoryTemplate(@NotNull final BasePerTableTemplateContext context)
+    public BaseDAOFactoryTemplate(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -105,8 +105,8 @@ public class BaseDAOFactoryTemplate
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerTableTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerTableTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerTableTemplateContext> buildFillTemplateChain(
+        @NotNull final PerTableTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

@@ -37,13 +37,13 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerRepositoryTemplate;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.api.AbstractBasePerRepositoryTemplate;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 
 /*
  * Importing StringTemplate classes.
  */
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.FillTemplateChain;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -64,7 +64,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DataAccessManagerTemplate
-    extends AbstractBasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
+    extends AbstractBasePerRepositoryTemplate<PerRepositoryTemplateContext>
 {
 
     private static final long serialVersionUID = -408832173547546376L;
@@ -72,9 +72,9 @@ public class DataAccessManagerTemplate
     /**
      * Builds a <code>DataAccessManagerTemplate</code> using given
      * information.
-     * @param context the {@link BasePerRepositoryTemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext} instance.
      */
-    public DataAccessManagerTemplate(@NotNull final BasePerRepositoryTemplateContext context)
+    public DataAccessManagerTemplate(@NotNull final PerRepositoryTemplateContext context)
     {
         super(context);
     }
@@ -109,8 +109,8 @@ public class DataAccessManagerTemplate
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerRepositoryTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerRepositoryTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerRepositoryTemplateContext> buildFillTemplateChain(
+        @NotNull final PerRepositoryTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

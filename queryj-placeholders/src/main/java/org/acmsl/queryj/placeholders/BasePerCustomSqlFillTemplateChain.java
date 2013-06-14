@@ -39,8 +39,8 @@ package org.acmsl.queryj.placeholders;
 /*
  *Importing project classes.
 */
-import org.acmsl.queryj.templates.AbstractFillTemplateChain;
-import org.acmsl.queryj.templates.BasePerCustomSqlTemplateContext;
+import org.acmsl.queryj.api.AbstractFillTemplateChain;
+import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -59,19 +59,19 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
- * {@link org.acmsl.queryj.templates.BasePerCustomSqlTemplate per-custom-sql templates}.
+ * {@link org.acmsl.queryj.api.PerCustomSqlTemplate per-custom-sql templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/07/07
  */
 @ThreadSafe
 public class BasePerCustomSqlFillTemplateChain
-    extends AbstractFillTemplateChain<BasePerCustomSqlTemplateContext, CustomSqlHandler>
+    extends AbstractFillTemplateChain<PerCustomSqlTemplateContext, CustomSqlHandler>
 {
     /**
      * Creates a {@link BasePerCustomSqlFillTemplateChain} using given context.
-     * @param context the {@link BasePerCustomSqlTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomSqlTemplateContext context}.
      */
-    public BasePerCustomSqlFillTemplateChain(@NotNull final BasePerCustomSqlTemplateContext context)
+    public BasePerCustomSqlFillTemplateChain(@NotNull final PerCustomSqlTemplateContext context)
     {
         super(context);
     }
@@ -79,14 +79,14 @@ public class BasePerCustomSqlFillTemplateChain
     /**
      * Adds additional per-custom-sql handlers.
      * @param chain the chain to be configured.
-     * @param context the {@link BasePerCustomSqlTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomSqlTemplateContext context}.
      * @param relevantOnly whether to include only relevant placeholders.
      */
     @SuppressWarnings("unused")
     @Override
     protected void addHandlers(
         @NotNull final Chain<CustomSqlHandler> chain,
-        @NotNull final BasePerCustomSqlTemplateContext context,
+        @NotNull final PerCustomSqlTemplateContext context,
         final boolean relevantOnly)
     {
         // TODO

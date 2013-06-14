@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing JetBrains annotations.
@@ -60,6 +60,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class ProjectPackageHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
 {
+    private static final long serialVersionUID = -6033273825952509723L;
+
     /**
      * Creates a handler to resolve "project_package" placeholders.
      * @param context the {@link TemplateContext context}.

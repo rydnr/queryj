@@ -37,9 +37,9 @@ package org.acmsl.queryj.templates.dao;
  */
 import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -57,8 +57,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class RepositoryDAOTemplateGenerator
-    extends AbstractTemplateGenerator<RepositoryDAOTemplate,BasePerRepositoryTemplateContext>
-    implements BasePerRepositoryTemplateGenerator<RepositoryDAOTemplate,BasePerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<RepositoryDAOTemplate,PerRepositoryTemplateContext>
+    implements PerRepositoryTemplateGenerator<RepositoryDAOTemplate,PerRepositoryTemplateContext>
 {
     /**
      * Creates a new {@link RepositoryDAOFactoryTemplateGenerator} with given settings.
@@ -75,7 +75,7 @@ public class RepositoryDAOTemplateGenerator
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
     {
         return retrieveTemplateFileName(context, DecorationUtils.getInstance());
     }
@@ -88,7 +88,7 @@ public class RepositoryDAOTemplateGenerator
      */
     @NotNull
     public String retrieveTemplateFileName(
-        @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final PerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
     {
         return retrieveTemplateFileName(context, context.getMetadataManager(), decorationUtils);
     }
@@ -102,7 +102,7 @@ public class RepositoryDAOTemplateGenerator
      */
     @NotNull
     public String retrieveTemplateFileName(
-        @NotNull final BasePerRepositoryTemplateContext context,
+        @NotNull final PerRepositoryTemplateContext context,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecorationUtils decorationUtils)
     {

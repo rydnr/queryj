@@ -35,7 +35,7 @@
  */
 package org.acmsl.queryj.placeholders;
 
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -53,6 +53,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class SerialVersionUIDHandler
     extends AbstractTemplateContextFillHandler<TemplateContext,Long>
 {
+    private static final long serialVersionUID = -5163560123997499139L;
+
     public SerialVersionUIDHandler(@NotNull final TemplateContext context)
     {
         super(context);

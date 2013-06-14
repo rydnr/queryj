@@ -41,9 +41,9 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -62,8 +62,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOListenerTemplateGenerator
-    extends AbstractTemplateGenerator<DAOListenerTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<DAOListenerTemplate, BasePerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<DAOListenerTemplate, PerRepositoryTemplateContext>
+    implements PerRepositoryTemplateGenerator<DAOListenerTemplate, PerRepositoryTemplateContext>
 {
     /**
      * Creates a new {@link DAOListenerImplTemplateGenerator} with given settings.
@@ -80,20 +80,20 @@ public class DAOListenerTemplateGenerator
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
     {
         return retrieveTemplateFileName(context, DecorationUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     * @param context the {@link BasePerRepositoryTemplateContext} context.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext} context.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final PerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
     {
         return
               decorationUtils.capitalize(context.getRepositoryName())

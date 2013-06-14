@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.templates.dao.handlers.AttributesStatementSetterTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.BaseAbstractDAOTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.BaseDAOFactoryTemplateHandlerBundle;
@@ -78,13 +79,12 @@ import org.acmsl.queryj.templates.valueobject.handlers.ValueObjectTemplateHandle
  * Importing queryj-core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.templates.handlers.TemplateHandler;
+import org.acmsl.queryj.api.handlers.TemplateHandler;
 import org.acmsl.queryj.tools.TemplateChainProvider;
 
 /*
  * Importing queryj-placeholders classes.
  */
-import org.acmsl.queryj.placeholders.FillHandler;
 
 /*
  * Importing JetBrains annotations.

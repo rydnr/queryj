@@ -39,7 +39,7 @@ package org.acmsl.queryj.placeholders;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -60,6 +60,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class DatabaseEngineNameHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
 {
+    private static final long serialVersionUID = -3471879288390673346L;
+
     /**
      * Creates a {@link DatabaseEngineNameHandler} for given {@link TemplateContext}.
      * @param context the template context.

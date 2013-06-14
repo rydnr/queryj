@@ -37,11 +37,11 @@ package org.acmsl.queryj.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.templates.dao.PkStatementSetterTemplate;
 import org.acmsl.queryj.templates.dao.PkStatementSetterTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerTableTemplateWritingHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerTableTemplateWritingHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,7 +64,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class PkStatementSetterTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
-                 <PkStatementSetterTemplate, PkStatementSetterTemplateGenerator, BasePerTableTemplateContext>
+                 <PkStatementSetterTemplate, PkStatementSetterTemplateGenerator, PerTableTemplateContext>
 {
     /**
      * Creates a PkStatementSetterTemplateWritingHandler.

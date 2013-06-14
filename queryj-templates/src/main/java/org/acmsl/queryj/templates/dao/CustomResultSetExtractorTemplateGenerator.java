@@ -36,9 +36,9 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -62,8 +62,8 @@ import org.jetbrains.annotations.Nullable;
  */
 @ThreadSafe
 public class CustomResultSetExtractorTemplateGenerator
-    extends  AbstractTemplateGenerator<CustomResultSetExtractorTemplate, BasePerCustomResultTemplateContext>
-    implements BasePerCustomResultTemplateGenerator<CustomResultSetExtractorTemplate, BasePerCustomResultTemplateContext>
+    extends  AbstractTemplateGenerator<CustomResultSetExtractorTemplate, PerCustomResultTemplateContext>
+    implements PerCustomResultTemplateGenerator<CustomResultSetExtractorTemplate, PerCustomResultTemplateContext>
 {
     /**
      * Creates a new {@link CustomResultSetExtractorTemplateGenerator} with given settings.
@@ -91,20 +91,20 @@ public class CustomResultSetExtractorTemplateGenerator
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BasePerCustomResultTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerCustomResultTemplateContext context)
     {
         return retrieveTemplateFileName(context, StringUtils.getInstance());
     }
 
     /**
      * Retrieves the file name for given template.
-     * @param context the {@link BasePerCustomResultTemplateContext} context.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext} context.
      * @param stringUtils the {@link StringUtils} instance.
      * @return the file name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final BasePerCustomResultTemplateContext context,
+        @NotNull final PerCustomResultTemplateContext context,
         @Nullable final StringUtils stringUtils)
     {
         @NotNull final String result;

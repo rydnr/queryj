@@ -54,7 +54,7 @@ import org.acmsl.queryj.metadata.vo.LazyAttribute;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.SingularPluralFormConverter;
-import org.acmsl.queryj.templates.dao.DAOTemplateUtils;
+import org.acmsl.queryj.api.dao.DAOTemplateUtils;
 
 /*
  * Importing some ACM-SL Commons classes.

@@ -35,7 +35,7 @@ package org.acmsl.queryj.tools.ant;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.tools.QueryJChain;
@@ -1518,8 +1518,7 @@ public class QueryJTask
         catch  (@NotNull final QueryJBuildException buildException)
         {
             throw
-                new BuildException(
-                    buildException.getMessage(), buildException);
+                new BuildException(buildException.getMessage(), buildException);
         }
     }
 

@@ -38,13 +38,13 @@ package org.acmsl.queryj.templates.dao.handlers;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.RepositoryDAOFactoryTemplate;
 import org.acmsl.queryj.templates.dao.RepositoryDAOFactoryTemplateFactory;
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateBuildHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing some JDK classes.
@@ -71,7 +71,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class RepositoryDAOFactoryTemplateBuildHandler
     extends BasePerRepositoryTemplateBuildHandler<
-    RepositoryDAOFactoryTemplate, RepositoryDAOFactoryTemplateFactory, BasePerRepositoryTemplateContext>
+    RepositoryDAOFactoryTemplate, RepositoryDAOFactoryTemplateFactory, PerRepositoryTemplateContext>
 {
     /**
      * Retrieves the per-repository template factory.

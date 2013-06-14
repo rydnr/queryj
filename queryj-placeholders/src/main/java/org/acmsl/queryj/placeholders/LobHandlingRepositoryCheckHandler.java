@@ -39,7 +39,7 @@ package org.acmsl.queryj.placeholders;
  * Importing some project classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -61,6 +61,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class LobHandlingRepositoryCheckHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
 {
+    private static final long serialVersionUID = -5971998558261921698L;
+
     /**
      * Creates a {@link LobHandlingRepositoryCheckHandler} instance.
      * @param context the context.

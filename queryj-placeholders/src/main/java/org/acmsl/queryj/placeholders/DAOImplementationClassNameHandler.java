@@ -39,8 +39,8 @@ package org.acmsl.queryj.placeholders;
  * Importing some project classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.DefaultThemeUtils;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.DefaultThemeUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -66,15 +66,17 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class DAOImplementationClassNameHandler
-    extends AbstractDecoratedStringHandler<BasePerTableTemplateContext>
+    extends AbstractDecoratedStringHandler<PerTableTemplateContext>
 {
+    private static final long serialVersionUID = 5319051009737434878L;
+
     /**
      * Creates a new {@link DAOImplementationClassNameHandler} using
-     * given {@link BasePerTableTemplateContext context}.
-     * @param context the {@link BasePerTableTemplateContext context}.
+     * given {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public DAOImplementationClassNameHandler(@NotNull final BasePerTableTemplateContext context)
+    public DAOImplementationClassNameHandler(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -91,13 +93,13 @@ public class DAOImplementationClassNameHandler
     }
 
     /**
-     * Resolves the actual value using given {@link BasePerTableTemplateContext context}.
-     * @param context the {@link BasePerTableTemplateContext context}.
+     * Resolves the actual value using given {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      * @return such value.
      */
     @NotNull
     @Override
-    protected String resolveContextValue(@NotNull final BasePerTableTemplateContext context)
+    protected String resolveContextValue(@NotNull final PerTableTemplateContext context)
     {
         return
             retrieveClassName(

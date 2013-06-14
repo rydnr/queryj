@@ -38,10 +38,11 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.handlers.fillhandlers.FillHandler;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.CannotProcessTemplateException;
+import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.templates.InvalidTemplateException;
+import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 
 /*
  * Importing some JetBrains annotations.
@@ -79,7 +80,7 @@ public abstract class AbstractFillHandler<P>
         }
         catch (@NotNull final InvalidTemplateException invalidTemplate)
         {
-            throw new QueryJBuildException("Error processing template", invalidTemplate);
+            throw new CannotProcessTemplateException(invalidTemplate);
         }
 
         return result;

@@ -39,8 +39,8 @@ package org.acmsl.queryj.placeholders;
  * Importing some project classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.TemplateContext;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing some JetBrains annotations.
@@ -62,6 +62,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class LobHandlingFlavorHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
 {
+    private static final long serialVersionUID = -5828495921646881041L;
+
     /**
      * Creates a new {@link LobHandlingFlavorHandler} with given context.
      * @param context the {@link TemplateContext} instance.
@@ -85,7 +87,7 @@ public class LobHandlingFlavorHandler
     /**
      * Retrieves the template value for this placeholder.
      * @return such value.
-     * @throws org.acmsl.queryj.tools.QueryJBuildException
+     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException
      *          if there inconsistencies in the custom SQL
      *          model.
      */

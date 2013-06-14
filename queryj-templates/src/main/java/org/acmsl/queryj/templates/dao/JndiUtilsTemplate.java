@@ -36,9 +36,9 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerRepositoryTemplate;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.AbstractBasePerRepositoryTemplate;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing some StringTemplate classes.
@@ -62,16 +62,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class JndiUtilsTemplate
-    extends AbstractBasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
+    extends AbstractBasePerRepositoryTemplate<PerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = 7460585072288459673L;
 
     /**
      * Builds a {@link JndiUtilsTemplate} using given
      * information.
-     * @param context the {@link BasePerRepositoryTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext context}.
      */
-    public JndiUtilsTemplate(@NotNull final BasePerRepositoryTemplateContext context)
+    public JndiUtilsTemplate(@NotNull final PerRepositoryTemplateContext context)
     {
         super(context);
     }
@@ -106,8 +106,8 @@ public class JndiUtilsTemplate
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerRepositoryTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerRepositoryTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerRepositoryTemplateContext> buildFillTemplateChain(
+        @NotNull final PerRepositoryTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

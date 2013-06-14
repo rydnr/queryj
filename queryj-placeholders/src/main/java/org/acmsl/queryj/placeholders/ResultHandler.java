@@ -40,7 +40,7 @@ package org.acmsl.queryj.placeholders;
  * Importing project classes.
  */
 import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -53,21 +53,23 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Is able to resolve "result" placeholders using {@link BasePerCustomResultTemplateContext contexts}.
+ * Is able to resolve "result" placeholders using {@link org.acmsl.queryj.api.PerCustomResultTemplateContext contexts}.
  * <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/23
  */
 @SuppressWarnings("unused")
 @ThreadSafe
 public class ResultHandler
-    extends AbstractTemplateContextFillHandler<BasePerCustomResultTemplateContext, Result>
+    extends AbstractTemplateContextFillHandler<PerCustomResultTemplateContext, Result>
 {
+    private static final long serialVersionUID = 366716893509078380L;
+
     /**
      * Creates a {@link ResultHandler} to resolve "result" placeholders.
-     * @param context the {@link BasePerCustomResultTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public ResultHandler(@NotNull final BasePerCustomResultTemplateContext context)
+    public ResultHandler(@NotNull final PerCustomResultTemplateContext context)
     {
         super(context);
     }
@@ -88,7 +90,7 @@ public class ResultHandler
      */
     @NotNull
     @Override
-    protected Result getValue(@NotNull final BasePerCustomResultTemplateContext context)
+    protected Result getValue(@NotNull final PerCustomResultTemplateContext context)
     {
         return context.getResult();
     }

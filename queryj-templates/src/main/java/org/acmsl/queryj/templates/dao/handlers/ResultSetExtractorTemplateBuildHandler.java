@@ -37,11 +37,11 @@ package org.acmsl.queryj.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.templates.dao.ResultSetExtractorTemplateFactory;
-import org.acmsl.queryj.templates.handlers.BasePerTableTemplateBuildHandler;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.handlers.BasePerTableTemplateBuildHandler;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.dao.ResultSetExtractorTemplate;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.

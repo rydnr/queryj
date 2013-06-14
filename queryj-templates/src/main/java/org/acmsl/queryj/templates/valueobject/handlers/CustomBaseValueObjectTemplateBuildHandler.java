@@ -35,14 +35,13 @@ package org.acmsl.queryj.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.handlers.BasePerCustomResultTemplateBuildHandler;
+import org.acmsl.queryj.api.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplate;
 import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateFactory;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*

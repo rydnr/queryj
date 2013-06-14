@@ -36,7 +36,8 @@ package org.acmsl.queryj.customsql.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.UnsupportedCustomSqlFileFormatException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.xml.SqlXmlParser;
 import org.acmsl.queryj.customsql.xml.SqlXmlParserFactory;
@@ -89,14 +90,13 @@ public class CustomSqlProviderRetrievalHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         boolean result = true;
 
-        CustomSqlProvider t_CustomSqlProvider = buildCustomSqlProvider(parameters);
+        @Nullable final CustomSqlProvider t_CustomSqlProvider = buildCustomSqlProvider(parameters);
 
         if (t_CustomSqlProvider != null)
         {
@@ -113,7 +113,6 @@ public class CustomSqlProviderRetrievalHandler
      * @param parameters the parameter map.
      * @return such provider.
      * @throws QueryJBuildException if some problem occurs.
-     * @precondition parameters != null
      */
     @Nullable
     protected CustomSqlProvider buildCustomSqlProvider(@NotNull final Map parameters)
@@ -130,7 +129,6 @@ public class CustomSqlProviderRetrievalHandler
      * Retrieves the custom sql model from the attribute map.
      * @param parameters the parameters.
      * @return such model.
-     * @precondition parameters != null
      */
     @NotNull
     protected String retrieveCustomSqlModel(@NotNull final Map parameters)
@@ -144,7 +142,6 @@ public class CustomSqlProviderRetrievalHandler
      * Retrieves the custom sql model XML file from the attribute map.
      * @param parameters the parameters.
      * @return such reference.
-     * @precondition parameters != null
      */
     @NotNull
     protected File retrieveCustomSqlModelXmlFile(@NotNull final Map parameters)
@@ -160,8 +157,6 @@ public class CustomSqlProviderRetrievalHandler
      * @param factory the <code>SqlXmlParserFactory</code> instance.
      * @return such provider..
      * @throws QueryJBuildException if some problem occurs.
-     * @precondition model != null
-     * @precondition sqlXmlParserFactory != null
      */
     @Nullable
     protected CustomSqlProvider buildCustomSqlProvider(
@@ -178,15 +173,13 @@ public class CustomSqlProviderRetrievalHandler
                      model))
             {
                 throw
-                    new QueryJBuildException(
-                          "Custom queries can only be provided via sql.xml "
-                        + "so far.");
+                    new UnsupportedCustomSqlFileFormatException(model);
             }
         }
 
         if  (xmlFile != null)
         {
-            @Nullable SqlXmlParser t_Parser = factory.createSqlXmlParser(xmlFile);
+            @Nullable final SqlXmlParser t_Parser = factory.createSqlXmlParser(xmlFile);
 
             /*
               t_Parser.setClassLoader(

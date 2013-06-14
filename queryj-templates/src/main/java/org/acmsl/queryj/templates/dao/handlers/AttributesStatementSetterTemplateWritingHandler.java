@@ -35,12 +35,12 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.templates.dao.AttributesStatementSetterTemplate;
 import org.acmsl.queryj.templates.dao.AttributesStatementSetterTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerTableTemplateWritingHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerTableTemplateWritingHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -69,7 +69,7 @@ public class AttributesStatementSetterTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
                  <AttributesStatementSetterTemplate,
                   AttributesStatementSetterTemplateGenerator,
-                  BasePerTableTemplateContext>
+                     PerTableTemplateContext>
 {
     /**
      * Creates a AttributesStatementSetterTemplateWritingHandler.

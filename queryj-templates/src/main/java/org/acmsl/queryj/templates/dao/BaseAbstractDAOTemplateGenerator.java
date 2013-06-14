@@ -37,9 +37,9 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -69,8 +69,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class BaseAbstractDAOTemplateGenerator
-    extends AbstractTemplateGenerator<BaseAbstractDAOTemplate, BasePerTableTemplateContext>
-    implements BasePerTableTemplateGenerator<BaseAbstractDAOTemplate, BasePerTableTemplateContext>
+    extends AbstractTemplateGenerator<BaseAbstractDAOTemplate, PerTableTemplateContext>
+    implements PerTableTemplateGenerator<BaseAbstractDAOTemplate, PerTableTemplateContext>
 {
     /**
      * Creates a new {@link BaseAbstractDAOTemplateGenerator} with given settings.
@@ -98,7 +98,7 @@ public class BaseAbstractDAOTemplateGenerator
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull BasePerTableTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull PerTableTemplateContext context)
     {
         return retrieveTemplateFileName(context, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
     }
@@ -112,7 +112,7 @@ public class BaseAbstractDAOTemplateGenerator
      */
     @NotNull
     public String retrieveTemplateFileName(
-        @NotNull final BasePerTableTemplateContext context,
+        @NotNull final PerTableTemplateContext context,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {

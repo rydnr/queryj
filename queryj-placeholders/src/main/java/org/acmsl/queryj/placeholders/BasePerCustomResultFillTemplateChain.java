@@ -40,9 +40,9 @@ package org.acmsl.queryj.placeholders;
  *Importing project classes.
 */
 import org.acmsl.queryj.metadata.ResultDecorator;
-import org.acmsl.queryj.templates.AbstractFillTemplateChain;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
+import org.acmsl.queryj.api.AbstractFillTemplateChain;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -66,20 +66,20 @@ import java.util.List;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
- * {@link org.acmsl.queryj.templates.BasePerCustomResultTemplate per-custom-result templates}.
+ * {@link org.acmsl.queryj.api.PerCustomResultTemplate per-custom-result templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/17
  */
 @ThreadSafe
 @SuppressWarnings("unused")
 public class BasePerCustomResultFillTemplateChain
-    extends AbstractFillTemplateChain<BasePerCustomResultTemplateContext, CustomResultHandler>
+    extends AbstractFillTemplateChain<PerCustomResultTemplateContext, CustomResultHandler>
 {
     /**
      * Creates a {@link BasePerCustomResultFillTemplateChain} using given context.
-     * @param context the {@link BasePerCustomResultTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
      */
-    public BasePerCustomResultFillTemplateChain(@NotNull final BasePerCustomResultTemplateContext context)
+    public BasePerCustomResultFillTemplateChain(@NotNull final PerCustomResultTemplateContext context)
     {
         super(context);
     }
@@ -87,29 +87,30 @@ public class BasePerCustomResultFillTemplateChain
     /**
      * Adds additional per-custom-result handlers.
      * @param chain the chain to be configured.
-     * @param context the {@link BasePerCustomResultTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
      * @param relevantOnly whether to include only relevant placeholders.
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected void addHandlers(
-        @NotNull final Chain chain,
-        @NotNull final BasePerCustomResultTemplateContext context,
+        @NotNull final Chain<CustomResultHandler> chain,
+        @NotNull final PerCustomResultTemplateContext context,
         final boolean relevantOnly)
     {
         add(
             chain,
-            new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext, CustomResultHandler,ResultDecorator>(
+            new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, CustomResultHandler, ResultDecorator>(
                 new CustomResultHandler(context)),
             relevantOnly);
         add(
             chain,
-            new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext, CustomResultTypeImportsHandler,List<String>>(
+            new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, CustomResultTypeImportsHandler, List<String>>(
                 new CustomResultTypeImportsHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext, ResultIdHandler, DecoratedString>(
+            new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, ResultIdHandler, DecoratedString>(
                 new ResultIdHandler(context)),
             relevantOnly);
     }

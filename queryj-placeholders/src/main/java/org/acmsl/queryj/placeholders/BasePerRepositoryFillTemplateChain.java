@@ -40,9 +40,9 @@ package org.acmsl.queryj.placeholders;
  *Importing project classes.
 */
 import org.acmsl.queryj.metadata.TableDecorator;
-import org.acmsl.queryj.templates.AbstractFillTemplateChain;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
+import org.acmsl.queryj.api.AbstractFillTemplateChain;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -66,19 +66,19 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
- * {@link org.acmsl.queryj.templates.BasePerTableTemplate per-table templates}.
+ * {@link org.acmsl.queryj.api.PerTableTemplate per-table templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/18
  */
 @ThreadSafe
 public class BasePerRepositoryFillTemplateChain
-    extends AbstractFillTemplateChain<BasePerRepositoryTemplateContext, TableListHandler>
+    extends AbstractFillTemplateChain<PerRepositoryTemplateContext, TableListHandler>
 {
     /**
      * Creates a {@link BasePerRepositoryFillTemplateChain} using given context.
-     * @param context the {@link BasePerRepositoryTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext context}.
      */
-    public BasePerRepositoryFillTemplateChain(@NotNull final BasePerRepositoryTemplateContext context)
+    public BasePerRepositoryFillTemplateChain(@NotNull final PerRepositoryTemplateContext context)
     {
         super(context);
     }
@@ -86,19 +86,19 @@ public class BasePerRepositoryFillTemplateChain
     /**
      * Adds additional per-repository handlers.
      * @param chain the chain to be configured.
-     * @param context the {@link BasePerRepositoryTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext context}.
      * @param relevantOnly whether to include only relevant placeholders.
      */
     @Override
     protected void addHandlers(
         @NotNull final Chain chain,
-        @NotNull final BasePerRepositoryTemplateContext context,
+        @NotNull final PerRepositoryTemplateContext context,
         final boolean relevantOnly)
     {
         add(
             chain,
             new TemplateContextFillAdapterHandler
-                <BasePerRepositoryTemplateContext, TableListHandler,List<TableDecorator>>(
+                <PerRepositoryTemplateContext, TableListHandler,List<TableDecorator>>(
                 new TableListHandler(context)),
             relevantOnly);
     }

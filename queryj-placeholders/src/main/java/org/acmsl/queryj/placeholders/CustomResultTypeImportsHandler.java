@@ -46,7 +46,7 @@ import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -73,13 +73,15 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CustomResultTypeImportsHandler
-    extends AbstractTemplateContextFillHandler<BasePerCustomResultTemplateContext, List<String>>
+    extends AbstractTemplateContextFillHandler<PerCustomResultTemplateContext, List<String>>
 {
+    private static final long serialVersionUID = -3410211570531493763L;
+
     /**
-     * Creates a {@link CustomResultTypeImportsHandler} using given {@link BasePerCustomResultTemplateContext context}
+     * Creates a {@link CustomResultTypeImportsHandler} using given {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}
      * @param context the context.
      */
-    public CustomResultTypeImportsHandler(@NotNull final BasePerCustomResultTemplateContext context)
+    public CustomResultTypeImportsHandler(@NotNull final PerCustomResultTemplateContext context)
     {
         super(context);
     }
@@ -101,7 +103,7 @@ public class CustomResultTypeImportsHandler
      */
     @NotNull
     @Override
-    protected List<String> getValue(@NotNull final BasePerCustomResultTemplateContext context)
+    protected List<String> getValue(@NotNull final PerCustomResultTemplateContext context)
     {
         return retrieveImports(context.getResult(), context.getCustomSqlProvider(), context.getMetadataManager());
     }

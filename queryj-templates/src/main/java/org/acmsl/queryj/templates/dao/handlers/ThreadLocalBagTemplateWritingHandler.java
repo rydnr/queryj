@@ -40,11 +40,11 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.TemplateMappingManager;
 import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplate;
 import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
+import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
@@ -76,7 +76,7 @@ public class ThreadLocalBagTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
                  <ThreadLocalBagTemplate,
                      ThreadLocalBagTemplateGenerator,
-                     BasePerRepositoryTemplateContext>
+                     PerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}

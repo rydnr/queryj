@@ -39,8 +39,8 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.NonRelevantFillHandler;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.NonRelevantFillHandler;
 
 /*
  * Importing some JetBrains annotations.
@@ -53,22 +53,24 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Is able to resolve "result" placeholders using {@link org.acmsl.queryj.templates.BasePerCustomResultTemplateContext contexts}.
+ * Is able to resolve "result" placeholders using {@link org.acmsl.queryj.api.PerCustomResultTemplateContext contexts}.
  * <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/23
  */
 @SuppressWarnings("unused")
 @ThreadSafe
 public class ResultIdHandler
-    extends AbstractTemplateContextFillHandler<BasePerCustomResultTemplateContext, DecoratedString>
+    extends AbstractTemplateContextFillHandler<PerCustomResultTemplateContext, DecoratedString>
     implements NonRelevantFillHandler
 {
+    private static final long serialVersionUID = 9076416303622921539L;
+
     /**
      * Creates a {@link ResultIdHandler} to resolve "result" placeholders.
-     * @param context the {@link BasePerCustomResultTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public ResultIdHandler(@NotNull final BasePerCustomResultTemplateContext context)
+    public ResultIdHandler(@NotNull final PerCustomResultTemplateContext context)
     {
         super(context);
     }
@@ -89,7 +91,7 @@ public class ResultIdHandler
      */
     @NotNull
     @Override
-    protected DecoratedString getValue(@NotNull final BasePerCustomResultTemplateContext context)
+    protected DecoratedString getValue(@NotNull final PerCustomResultTemplateContext context)
     {
         return new DecoratedString(context.getResult().getId());
     }

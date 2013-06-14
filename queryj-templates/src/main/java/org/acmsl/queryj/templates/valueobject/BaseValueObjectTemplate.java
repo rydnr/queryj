@@ -35,15 +35,13 @@ package org.acmsl.queryj.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerTableTemplate;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.AbstractBasePerTableTemplate;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 
 /*
  * Importing StringTemplate classes.
  */
-import org.acmsl.queryj.templates.FillTemplateChain;
-import org.acmsl.queryj.templates.InvalidTemplateException;
-import org.antlr.stringtemplate.StringTemplate;
+import org.acmsl.queryj.api.FillTemplateChain;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -63,16 +61,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class BaseValueObjectTemplate
-    extends AbstractBasePerTableTemplate<BasePerTableTemplateContext>
+    extends AbstractBasePerTableTemplate<PerTableTemplateContext>
 {
     private static final long serialVersionUID = -5201412597415586486L;
 
     /**
      * Builds a <code>BaseValueObjectTemplate</code> using given
      * information.
-     * @param context the {@link BasePerTableTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      */
-    public BaseValueObjectTemplate(@NotNull final BasePerTableTemplateContext context)
+    public BaseValueObjectTemplate(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -107,8 +105,8 @@ public class BaseValueObjectTemplate
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerTableTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerTableTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerTableTemplateContext> buildFillTemplateChain(
+        @NotNull final PerTableTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

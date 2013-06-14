@@ -43,8 +43,7 @@ package org.acmsl.queryj.tools;
 * Importing project classes.
 */
 
-import org.acmsl.queryj.tools.handlers.HandlersSuite;
-import org.acmsl.queryj.templates.TemplatesSuite;
+import org.acmsl.queryj.api.TemplatesSuite;
 
 
 /*
@@ -102,7 +101,7 @@ public class ToolsSuite
     suite.addTestSuite(org.acmsl.queryj.tools.PackageUtilsTest.class);
     
     suite.addTest(org.acmsl.queryj.tools.handlers.HandlersSuite.suite());
-    suite.addTest(org.acmsl.queryj.templates.TemplatesSuite.suite());
+    suite.addTest(TemplatesSuite.suite());
     
     
     // JUnitDoclet begin method suite

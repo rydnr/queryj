@@ -41,7 +41,7 @@ package org.acmsl.queryj.placeholders;
 import org.acmsl.queryj.metadata.CachingForeignKeyDecorator;
 import org.acmsl.queryj.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
+import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -61,15 +61,18 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class ForeignKeyHandler
-    extends AbstractTemplateContextFillHandler<BasePerForeignKeyTemplateContext, ForeignKeyDecorator>
+    extends AbstractTemplateContextFillHandler<PerForeignKeyTemplateContext, ForeignKeyDecorator>
 {
+
+    private static final long serialVersionUID = -8241292451651391465L;
+
     /**
      * Creates a new {@link ForeignKeyHandler} to resolve "foreign_key" placeholders using
-     * given {@link BasePerForeignKeyTemplateContext context}.
-     * @param context the {@link BasePerForeignKeyTemplateContext context}
+     * given {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext context}
      */
     @SuppressWarnings("unused")
-    public ForeignKeyHandler(@NotNull final BasePerForeignKeyTemplateContext context)
+    public ForeignKeyHandler(@NotNull final PerForeignKeyTemplateContext context)
     {
         super(context);
     }
@@ -86,12 +89,12 @@ public class ForeignKeyHandler
     }
 
     /**
-     * Retrieves the {@link ForeignKey} from given {@link BasePerForeignKeyTemplateContext context}.
+     * Retrieves the {@link ForeignKey} from given {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext context}.
      * @return such value.
      */
     @NotNull
     @Override
-    protected ForeignKeyDecorator getValue(@NotNull final BasePerForeignKeyTemplateContext context)
+    protected ForeignKeyDecorator getValue(@NotNull final PerForeignKeyTemplateContext context)
     {
         return
             new CachingForeignKeyDecorator(

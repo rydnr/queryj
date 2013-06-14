@@ -38,7 +38,7 @@ package org.acmsl.queryj.metadata.engines;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.metadata.ColumnDAO;
 import org.acmsl.queryj.metadata.ForeignKeyDAO;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
@@ -54,7 +54,7 @@ import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
 import org.acmsl.queryj.metadata.vo.TableValueObject;
-import org.acmsl.queryj.templates.MetaLanguageUtils;
+import org.acmsl.queryj.api.MetaLanguageUtils;
 
 /*
  * Importing some ACM-SL Commons classes.

@@ -39,9 +39,9 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing queryj-core classes.
  */
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
-import org.acmsl.queryj.templates.PerCustomResultFillTemplateChainFactory;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
+import org.acmsl.queryj.api.placeholders.PerCustomResultFillTemplateChainFactory;
 
 /*
  * Importing JetBrains annotations.
@@ -60,14 +60,16 @@ public class PerCustomResultFillTemplateChainFactoryImpl
 {
     /**
      * Creates {@link FillTemplateChain} instances for given context.
-     * @param context the {@link BasePerCustomResultTemplateContext} needed.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext} needed.
      * @return the FillTemplateChain, or <code>null</code> if the context is invalid.
      */
     @Nullable
     @Override
-    public FillTemplateChain<BasePerCustomResultTemplateContext> createFillChain(
-        @NotNull final BasePerCustomResultTemplateContext context)
+    public FillTemplateChain<PerCustomResultTemplateContext> createFillChain(
+        @NotNull final PerCustomResultTemplateContext context)
     {
-        return new BasePerCustomResultFillTemplateChain(context);
+        return
+            new FillTemplateChainWrapper<PerCustomResultTemplateContext>(
+                new BasePerCustomResultFillTemplateChain(context));
     }
 }

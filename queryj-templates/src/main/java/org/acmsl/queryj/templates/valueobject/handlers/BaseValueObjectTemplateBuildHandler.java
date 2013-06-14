@@ -37,10 +37,10 @@ package org.acmsl.queryj.templates.valueobject.handlers;
  */
 import org.acmsl.queryj.templates.valueobject.BaseValueObjectTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.templates.valueobject.BaseValueObjectTemplate;
-import org.acmsl.queryj.templates.handlers.BasePerTableTemplateBuildHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerTableTemplateBuildHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.

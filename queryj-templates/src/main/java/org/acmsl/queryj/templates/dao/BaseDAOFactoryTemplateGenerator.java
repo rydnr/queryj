@@ -35,9 +35,9 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -66,8 +66,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class BaseDAOFactoryTemplateGenerator
-    extends AbstractTemplateGenerator<BaseDAOFactoryTemplate, BasePerTableTemplateContext>
-    implements  BasePerTableTemplateGenerator<BaseDAOFactoryTemplate, BasePerTableTemplateContext>
+    extends AbstractTemplateGenerator<BaseDAOFactoryTemplate, PerTableTemplateContext>
+    implements PerTableTemplateGenerator<BaseDAOFactoryTemplate, PerTableTemplateContext>
 {
     /**
      * Creates a new {@link BaseDAOFactoryTemplateGenerator} with given settings.
@@ -83,21 +83,21 @@ public class BaseDAOFactoryTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BasePerTableTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerTableTemplateContext context)
     {
         return retrieveTemplateFileName(context, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     * @param context the {@link BasePerTableTemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext} instance.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final BasePerTableTemplateContext context,
+        @NotNull final PerTableTemplateContext context,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {

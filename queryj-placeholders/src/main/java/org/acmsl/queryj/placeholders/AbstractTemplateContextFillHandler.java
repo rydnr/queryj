@@ -38,9 +38,9 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.TemplateContext;
-import org.acmsl.queryj.templates.handlers.fillhandlers.TemplateContextFillHandler;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.handlers.fillhandlers.TemplateContextFillHandler;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 

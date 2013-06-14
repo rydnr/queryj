@@ -42,9 +42,9 @@ import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.templates.BasePerTableTemplate;
-import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
-import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
+import org.acmsl.queryj.api.PerTableTemplate;
+import org.acmsl.queryj.api.PerTableTemplateFactory;
+import org.acmsl.queryj.api.PerTableTemplateGenerator;
 import org.acmsl.queryj.templates.dao.BaseDAOTemplateFactory;
 import org.acmsl.queryj.templates.dao.BaseDAOTemplateGenerator;
 import org.acmsl.queryj.templates.dao.DAOFactoryTemplateFactory;
@@ -62,7 +62,7 @@ import org.acmsl.queryj.templates.valueobject.ValueObjectFactoryTemplateGenerato
 import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateFactory;
 import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateGenerator;
 import org.acmsl.queryj.templates.valueobject.ValueObjectTemplateGenerator;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing ACM-SL Commons classes.
@@ -111,7 +111,7 @@ import java.util.Map;
  * @since 2013/05/04
  */
 public class PerTableTemplatesTest
-    extends AbstractTemplatesTest<BasePerTableTemplateGenerator, BasePerTableTemplateFactory>
+    extends AbstractTemplatesTest<PerTableTemplateGenerator, PerTableTemplateFactory>
 {
     /**
      * Creates an instance.
@@ -262,7 +262,7 @@ public class PerTableTemplatesTest
      */
     @NotNull
     @Override
-    protected DecoratorFactory retrieveDecoratorFactory(@NotNull final BasePerTableTemplateGenerator generator)
+    protected DecoratorFactory retrieveDecoratorFactory(@NotNull final PerTableTemplateGenerator generator)
     {
         return generator.getDecoratorFactory();
     }
@@ -292,18 +292,18 @@ public class PerTableTemplatesTest
         @NotNull final Map<String, Table> tables,
         @NotNull final Map<String, File> outputFiles)
     {
-        @Nullable final BasePerTableTemplateGenerator generator =
+        @Nullable final PerTableTemplateGenerator generator =
             retrieveTemplateGenerator(templateName);
 
         Assert.assertNotNull("No template generator found for " + templateName, generator);
 
         for (@NotNull final Table table : tables.values())
         {
-            @Nullable final BasePerTableTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
+            @Nullable final PerTableTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
 
             Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
-            @Nullable final BasePerTableTemplate template =
+            @Nullable final PerTableTemplate template =
                 templateFactory.createTemplate(
                     retrieveMetadataManager(engine, table),
                     retrieveCustomSqlProvider(),

@@ -38,7 +38,8 @@ package org.acmsl.queryj.metadata.engines;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.api.exceptions.QueryJException;
+import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseTableNamesException;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.acmsl.queryj.metadata.TableDAO;
@@ -180,12 +181,10 @@ public class JdbcMetadataManager
                         null,
                         new String[]{ "TABLE" });
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 throw
-                    new QueryJException(
-                        "cannot.retrieve.database.table.names",
-                        sqlException);
+                    new CannotRetrieveDatabaseTableNamesException(catalog, schema, sqlException);
             }
 
             TableIncompleteValueObject t_Table;
@@ -344,7 +343,7 @@ public class JdbcMetadataManager
      * @param caseSensitiveness whether the table names are case sensitive or not.
      * @param metadataExtractionListener the metadata extraction listener.
      * @throws java.sql.SQLException if the database operation fails.
-     * @throws org.acmsl.queryj.QueryJException if the any other error occurs.
+     * @throws org.acmsl.queryj.api.exceptions.QueryJException if the any other error occurs.
      */
     @Override
     protected void extractPrimaryKeys(

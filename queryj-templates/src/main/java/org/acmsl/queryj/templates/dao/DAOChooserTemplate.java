@@ -36,9 +36,9 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerRepositoryTemplate;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.AbstractBasePerRepositoryTemplate;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -63,16 +63,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOChooserTemplate
-    extends AbstractBasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
+    extends AbstractBasePerRepositoryTemplate<PerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = 7102196328163453291L;
 
     /**
      * Builds a <code>DAOChooserTemplate</code> using given
      * information.
-     * @param context the {@link BasePerRepositoryTemplateContext} context.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext} context.
      */
-    public DAOChooserTemplate(@NotNull final BasePerRepositoryTemplateContext context)
+    public DAOChooserTemplate(@NotNull final PerRepositoryTemplateContext context)
     {
         super(context);
     }
@@ -106,8 +106,8 @@ public class DAOChooserTemplate
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerRepositoryTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerRepositoryTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerRepositoryTemplateContext> buildFillTemplateChain(
+        @NotNull final PerRepositoryTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

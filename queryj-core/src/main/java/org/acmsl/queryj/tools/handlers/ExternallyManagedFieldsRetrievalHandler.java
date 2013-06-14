@@ -36,9 +36,11 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.exceptions.MissingExternallyManagedFieldNameException;
+import org.acmsl.queryj.api.exceptions.MissingExternallyManagedFieldTableNameException;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 
@@ -124,18 +126,14 @@ public class ExternallyManagedFieldsRetrievalHandler
                 {
                     if  (stringValidator.isEmpty(t_Field.getName()))
                     {
-                        throw
-                            new QueryJBuildException(
-                                "Field name not specified.");
+                        throw new MissingExternallyManagedFieldNameException(t_Field);
                     }
                     else
                     {
                         if (stringValidator.isEmpty(
                             t_Field.getTableName()))
                         {
-                            throw
-                                new QueryJBuildException(
-                                    "Field name not specified.");
+                            throw new MissingExternallyManagedFieldTableNameException(t_Field);
                         }
                         else
                         {

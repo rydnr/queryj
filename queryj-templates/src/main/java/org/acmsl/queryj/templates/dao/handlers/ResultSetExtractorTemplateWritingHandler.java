@@ -35,12 +35,12 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.templates.dao.ResultSetExtractorTemplate;
 import org.acmsl.queryj.templates.dao.ResultSetExtractorTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerTableTemplateWritingHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerTableTemplateWritingHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -66,7 +66,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class ResultSetExtractorTemplateWritingHandler
     extends BasePerTableTemplateWritingHandler
-                <ResultSetExtractorTemplate, ResultSetExtractorTemplateGenerator, BasePerTableTemplateContext>
+                <ResultSetExtractorTemplate, ResultSetExtractorTemplateGenerator, PerTableTemplateContext>
 {
     /**
      * Creates a {@link ResultSetExtractorTemplateWritingHandler}

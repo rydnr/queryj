@@ -38,11 +38,12 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.jetbrains.annotations.NotNull;
 
 /**

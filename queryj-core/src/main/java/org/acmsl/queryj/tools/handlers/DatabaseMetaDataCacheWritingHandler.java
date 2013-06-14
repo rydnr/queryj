@@ -35,8 +35,9 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.exceptions.CannotWriteCacheException;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing jetbrains annotations.
@@ -88,13 +89,14 @@ public class DatabaseMetaDataCacheWritingHandler
 
             if (t_Manager != null)
             {
+                @NotNull final File outputDir = retrieveProjectOutputDir((Map<String, File>) parameters);
                 try
                 {
-                    cache(t_Manager, retrieveProjectOutputDir((Map<String, File>) parameters));
+                    cache(t_Manager, outputDir);
                 }
                 catch (@NotNull final IOException cachingFailed)
                 {
-                    throw new QueryJBuildException("could.not.write.cache", cachingFailed);
+                    throw new CannotWriteCacheException(outputDir, cachingFailed);
                 }
             }
         }

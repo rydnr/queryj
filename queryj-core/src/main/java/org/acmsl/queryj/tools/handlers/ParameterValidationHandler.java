@@ -31,9 +31,29 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.exceptions.NullCharsetException;
+import org.acmsl.queryj.api.exceptions.UnsupportedCharsetQueryjException;
+import org.acmsl.queryj.api.exceptions.CannotReadHeaderFileException;
+import org.acmsl.queryj.api.exceptions.GrammarBundleDoesNotExistException;
+import org.acmsl.queryj.api.exceptions.GrammarFolderDoesNotExistException;
+import org.acmsl.queryj.api.exceptions.IllegalThreadCountException;
+import org.acmsl.queryj.api.exceptions.InvalidJndiLocationException;
+import org.acmsl.queryj.api.exceptions.MissingClasspathException;
+import org.acmsl.queryj.api.exceptions.MissingCustomSqlXmlFileException;
+import org.acmsl.queryj.api.exceptions.MissingExternallyManagedFieldsException;
+import org.acmsl.queryj.api.exceptions.MissingJdbcDriverException;
+import org.acmsl.queryj.api.exceptions.MissingJdbcSchemaException;
+import org.acmsl.queryj.api.exceptions.MissingJdbcUrlException;
+import org.acmsl.queryj.api.exceptions.MissingJdbcUsernameException;
+import org.acmsl.queryj.api.exceptions.MissingJndiLocationException;
+import org.acmsl.queryj.api.exceptions.MissingOutputFolderException;
+import org.acmsl.queryj.api.exceptions.MissingPackageException;
+import org.acmsl.queryj.api.exceptions.MissingRepositoryException;
+import org.acmsl.queryj.api.exceptions.MissingTablesException;
+import org.acmsl.queryj.api.exceptions.OutputDirIsNotAFolderException;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.tools.logging.QueryJAntLog;
 import org.acmsl.queryj.tools.logging.QueryJLog;
@@ -85,29 +105,14 @@ public class ParameterValidationHandler
     public static final String JDBC_DRIVER = "jdbc.driver";
 
     /**
-     * The missing driver error message.
-     */
-    public static final String DRIVER_MISSING = "JDBC driver is missing.";
-
-    /**
      * The JDBC URL attribute name.
      */
     public static final String JDBC_URL = "jdbc.url";
 
     /**
-     * The missing url error message.
-     */
-    public static final String URL_MISSING = "JDBC url is missing.";
-
-    /**
      * The JDBC username attribute name.
      */
     public static final String JDBC_USERNAME = "jdbc.username";
-
-    /**
-     * The missing username error message.
-     */
-    public static final String USERNAME_MISSING = "JDBC username is missing.";
 
     /**
      * The JDBC password attribute name.
@@ -137,19 +142,9 @@ public class ParameterValidationHandler
     public static final String JDBC_SCHEMA = "jdbc.schema";
 
     /**
-     * The missing schema error message.
-     */
-    public static final String SCHEMA_MISSING = "JDBC schema is missing.";
-
-    /**
      * The repository attribute name.
      */
     public static final String REPOSITORY = "repository";
-
-    /**
-     * The missing repository error message.
-     */
-    public static final String REPOSITORY_MISSING = "Repository name is missing.";
 
     /**
      * The package attribute name.
@@ -157,36 +152,14 @@ public class ParameterValidationHandler
     public static final String PACKAGE = "package";
 
     /**
-     * The missing package error message.
-     */
-    public static final String PACKAGE_MISSING = "Package is missing.";
-
-    /**
      * The classpath attribute name.
      */
     public static final String CLASSPATH = "classpath";
 
     /**
-     * The missing classpath error message.
-     */
-    public static final String CLASSPATH_MISSING = "Classpath not specified.";
-
-    /**
      * The output-dir attribute name.
      */
     public static final String OUTPUT_DIR = "outputdir";
-
-    /**
-     * The missing output dir error message.
-     */
-    public static final String OUTPUTDIR_MISSING =
-        "Output directory not specified.";
-
-    /**
-     * The missing output dir not folder error message.
-     */
-    public static final String OUTPUTDIR_NOT_FOLDER =
-        "Specified Outputdir is not a folder.";
 
     /**
      * The header-file attribute name.
@@ -197,12 +170,6 @@ public class ParameterValidationHandler
      * The header attribute name.
      */
     public static final String HEADER = "header";
-
-    /**
-     * The header unreadable error message.
-     */
-    public static final String HEADER_NOT_READABLE =
-        "Specified header is not readable";
 
     /**
      * The output-dir-subfolders attribute name.
@@ -228,18 +195,6 @@ public class ParameterValidationHandler
      * The JNDI location for data sources  attribute name.
      */
     public static final String JNDI_DATASOURCES = "jndi.datasources";
-
-    /**
-     * The missing JNDI data sources error message.
-     */
-    public static final String JNDI_DATASOURCES_MISSING =
-        "No JNDI location specified for retrieving DataSource instances.";
-
-    /**
-     * The invalid JNDI data sources error message.
-     */
-    public static final String JNDI_DATASOURCES_INVALID =
-        "Invalid JNDI location for retrieving DataSource instances.";
 
     /**
      * The generate-mock-dao attribute name.
@@ -279,22 +234,10 @@ public class ParameterValidationHandler
     public static final String EXPLICIT_TABLES = "explicit-tables";
 
     /**
-     * The missing tables error message.
-     */
-    public static final String TABLES_MISSING =
-         "Empty table information specified.";
-
-    /**
      * The externally-managed-fields element name.
      */
     public static final String EXTERNALLY_MANAGED_FIELDS =
         "externally.managed.fields";
-
-    /**
-     * The missing externally-managed-fields error message.
-     */
-    public static final String EXTERNALLY_MANAGED_FIELDS_MISSING =
-         "Empty externally-managed fields information specified.";
 
     /**
      * The custom-sql model.
@@ -311,12 +254,6 @@ public class ParameterValidationHandler
      * The sql.xml file.
      */
     public static final String SQL_XML_FILE = "sqlXmlFile";
-
-    /**
-     * The missing tables error message.
-     */
-    public static final String SQL_XML_FILE_MISSING =
-         "No sql.xml file specified or it cannot be read.";
 
     /**
      * The custom-sql XML model.
@@ -339,31 +276,9 @@ public class ParameterValidationHandler
     public static final String GRAMMAR_SUFFIX = "grammarSuffix";
 
     /**
-     * The missing grammar folder error message.
-     */
-    public static final String GRAMMAR_FOLDER_NOT_FOUND =
-        "Specified grammar folder cannot be found";
-
-    /**
-     * The missing grammar bundle error message.
-     */
-    public static final String GRAMMAR_BUNDLE_NOT_FOUND =
-            "Specified grammar bundle cannot be found";
-
-    /**
      * The file encoding.
      */
     public static final String ENCODING = "encoding";
-
-    /**
-     * Unsupported encoding error message.
-     */
-    public static final String UNSUPPORTED_ENCODING = "Unsupported encoding";
-
-    /**
-     * Illegal encoding error message.
-     */
-    public static final String ILLEGAL_ENCODING = "Illegal encoding";
 
     /**
      * The charset associated to given encoding.
@@ -384,11 +299,6 @@ public class ParameterValidationHandler
      * The thread count.
      */
     public static final String THREAD_COUNT = "threads";
-
-    /**
-     * Invalid thread count.
-     */
-    public static final String ILLEGAL_THREAD_COUNT = "Invalid thread count";
 
     /**
      * Whether to disable generation timestamps or not.
@@ -443,7 +353,7 @@ public class ParameterValidationHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected boolean handle(@NotNull final Map parameters)
+    protected boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
         validateParameters(parameters, false);
@@ -574,17 +484,17 @@ public class ParameterValidationHandler
                 
         if  (driver == null) 
         {
-            throw new QueryJBuildException(DRIVER_MISSING);
+            throw new MissingJdbcDriverException();
         }
 
         if  (url == null) 
         {
-            throw new QueryJBuildException(URL_MISSING);
+            throw new MissingJdbcUrlException();
         }
 
         if  (username == null) 
         {
-            throw new QueryJBuildException(USERNAME_MISSING);
+            throw new MissingJdbcUsernameException();
         }
 
         /* Not mandatory.
@@ -603,22 +513,22 @@ public class ParameterValidationHandler
 
         if  (schema == null) 
         {
-            throw new QueryJBuildException(SCHEMA_MISSING);
+            throw new MissingJdbcSchemaException();
         }
 
         if  (repository == null) 
         {
-            throw new QueryJBuildException(REPOSITORY_MISSING);
+            throw new MissingRepositoryException();
         }
 
         if  (packageName == null) 
         {
-            throw new QueryJBuildException(PACKAGE_MISSING);
+            throw new MissingPackageException();
         }
 
         if  (outputDir == null)
         {
-            throw new QueryJBuildException(OUTPUTDIR_MISSING);
+            throw new MissingOutputFolderException();
         }
 
         if  (header == null)
@@ -632,65 +542,56 @@ public class ParameterValidationHandler
         }
         else
         {
-            boolean t_bExceptionReadingHeader = false;
-            
             try
             {
                 parameters.put(HEADER, readFile(header, Charset.forName(encoding)));
             }
             catch  (@NotNull final FileNotFoundException fileNotFoundException)
             {
-                t_bExceptionReadingHeader = true;
-                
                 if  (t_Log != null)
                 {
                     t_Log.warn(
                         "Header file not found.",
                         fileNotFoundException);
                 }
+                throw new CannotReadHeaderFileException(header, fileNotFoundException);
             }
             catch  (@NotNull final SecurityException securityException)
             {
-                t_bExceptionReadingHeader = true;
-                
                 if  (t_Log != null)
                 {
                     t_Log.warn(
                         "No permission to read header file.",
                         securityException);
                 }
+                throw new CannotReadHeaderFileException(header, securityException);
             }
             catch  (@NotNull final IOException ioException)
             {
-                t_bExceptionReadingHeader = true;
-                
                 if  (t_Log != null)
                 {
                     t_Log.warn(
                         "Could not read header file.",
                         ioException);
                 }
-            }
-            if  (t_bExceptionReadingHeader)
-            {
-                throw new QueryJBuildException(HEADER_NOT_READABLE);
+                throw new CannotReadHeaderFileException(header, ioException);
             }
         }
         
         if  (!outputDir.isDirectory())
         {
-            throw new QueryJBuildException(OUTPUTDIR_NOT_FOLDER);
+            throw new OutputDirIsNotAFolderException(outputDir);
         }
 
         if  (jndiDataSources == null)
         {
-            throw new QueryJBuildException(JNDI_DATASOURCES_MISSING);
+            throw new MissingJndiLocationException();
         }
 
         if  (   (jndiDataSources.contains("\""))
              || (jndiDataSources.contains("\n")))
         {
-            throw new QueryJBuildException(JNDI_DATASOURCES_INVALID);
+            throw new InvalidJndiLocationException(jndiDataSources);
         }
 
         /* Not mandatory
@@ -704,7 +605,7 @@ public class ParameterValidationHandler
                  || (!sqlXmlFile.exists())
                  || (!sqlXmlFile.canRead())))
         {
-            throw new QueryJBuildException(SQL_XML_FILE_MISSING);
+            throw new MissingCustomSqlXmlFileException();
         }
 
         // Not mandatory
@@ -712,7 +613,7 @@ public class ParameterValidationHandler
         {
             if (!grammarFolder.exists())
             {
-                throw new QueryJBuildException(GRAMMAR_FOLDER_NOT_FOUND);
+                throw new GrammarFolderDoesNotExistException(grammarFolder);
             }
 
             String suffix = grammarSuffix;
@@ -741,7 +642,7 @@ public class ParameterValidationHandler
 
             if (!file.exists())
             {
-                throw new QueryJBuildException(GRAMMAR_BUNDLE_NOT_FOUND);
+                throw new GrammarBundleDoesNotExistException(grammarBundleName, grammarFolder);
             }
         }
 
@@ -749,7 +650,7 @@ public class ParameterValidationHandler
         {
             if (!Charset.isSupported(encoding))
             {
-                throw new QueryJBuildException(UNSUPPORTED_ENCODING);
+                throw new UnsupportedCharsetQueryjException(encoding);
             }
             else
             {
@@ -759,12 +660,12 @@ public class ParameterValidationHandler
                 }
                 catch (@NotNull final IllegalCharsetNameException illegalCharset)
                 {
-                    throw new QueryJBuildException(ILLEGAL_ENCODING);
+                    throw new UnsupportedCharsetQueryjException(encoding, illegalCharset);
                 }
                 catch (@NotNull final IllegalArgumentException nullCharset)
                 {
                     // should not happen since encoding is optional anyway.
-                    throw new QueryJBuildException("encoding is null");
+                    throw new NullCharsetException(nullCharset);
                 }
                 // catch (final UnsupportedCharsetException unsupportedCharset)
                 // {
@@ -776,7 +677,7 @@ public class ParameterValidationHandler
 
         if (threadCount <= 0)
         {
-            throw new QueryJBuildException(ILLEGAL_THREAD_COUNT);
+            throw new IllegalThreadCountException(threadCount);
         }
     }
 
@@ -801,21 +702,20 @@ public class ParameterValidationHandler
     {
         if  (classpath == null) 
         {
-            throw new QueryJBuildException(CLASSPATH_MISSING);
+            throw new MissingClasspathException();
         }
 
         if  (   (tables != null)
              && (   (tables.getTables() == null)
                  || (tables.getTables().size() == 0)))
         {
-            throw new QueryJBuildException(TABLES_MISSING);
+            throw new MissingTablesException();
         }
 
         if  (   (externallyManagedFields != null)
-             && (   (externallyManagedFields.getFields() == null)
-                 || (externallyManagedFields.getFields().size() == 0)))
+             && (externallyManagedFields.getFields().size() == 0))
         {
-            throw new QueryJBuildException(EXTERNALLY_MANAGED_FIELDS_MISSING);
+            throw new MissingExternallyManagedFieldsException();
         }
     }
 

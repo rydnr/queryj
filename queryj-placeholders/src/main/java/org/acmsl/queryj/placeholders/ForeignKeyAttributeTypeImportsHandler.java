@@ -42,7 +42,7 @@ package org.acmsl.queryj.placeholders;
 
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
+import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -67,14 +67,17 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ForeignKeyAttributeTypeImportsHandler
-    extends AbstractTemplateContextFillHandler<BasePerForeignKeyTemplateContext, List<String>>
+    extends AbstractTemplateContextFillHandler<PerForeignKeyTemplateContext, List<String>>
 {
+
+    private static final long serialVersionUID = 8119119964410665114L;
+
     /**
      * Creates a {@link ForeignKeyAttributeTypeImportsHandler} using
-     * given {@link BasePerForeignKeyTemplateContext context}
+     * given {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext context}
      * @param context the context.
      */
-    public ForeignKeyAttributeTypeImportsHandler(@NotNull final BasePerForeignKeyTemplateContext context)
+    public ForeignKeyAttributeTypeImportsHandler(@NotNull final PerForeignKeyTemplateContext context)
     {
         super(context);
     }
@@ -96,7 +99,7 @@ public class ForeignKeyAttributeTypeImportsHandler
      */
     @NotNull
     @Override
-    protected List<String> getValue(@NotNull final BasePerForeignKeyTemplateContext context)
+    protected List<String> getValue(@NotNull final PerForeignKeyTemplateContext context)
     {
         return retrieveImports(context.getForeignKey(), context.getMetadataManager());
     }

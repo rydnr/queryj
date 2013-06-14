@@ -36,7 +36,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -58,6 +58,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class UseCheckthreadAnnotationsHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
 {
+    private static final long serialVersionUID = -3562776675071756624L;
+
     /**
      * Creates a {@link UseCheckthreadAnnotationsHandler} to resolve placeholders
      * using given {@link TemplateContext context}.

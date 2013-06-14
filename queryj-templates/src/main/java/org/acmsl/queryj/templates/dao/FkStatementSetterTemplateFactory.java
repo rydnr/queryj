@@ -39,8 +39,8 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateFactory;
+import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
+import org.acmsl.queryj.api.PerForeignKeyTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -65,7 +65,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class FkStatementSetterTemplateFactory
-    implements BasePerForeignKeyTemplateFactory<FkStatementSetterTemplate>,
+    implements PerForeignKeyTemplateFactory<FkStatementSetterTemplate>,
                Singleton
 {
     /**
@@ -113,7 +113,7 @@ public class FkStatementSetterTemplateFactory
     {
         return
             new FkStatementSetterTemplate(
-                new BasePerForeignKeyTemplateContext(
+                new PerForeignKeyTemplateContext(
                     metadataManager,
                     customSqlProvider,
                     header,

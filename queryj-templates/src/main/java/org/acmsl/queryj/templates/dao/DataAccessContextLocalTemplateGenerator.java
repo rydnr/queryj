@@ -36,9 +36,9 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -56,8 +56,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DataAccessContextLocalTemplateGenerator
-    extends AbstractTemplateGenerator<DataAccessContextLocalTemplate, BasePerRepositoryTemplateContext>
-    implements BasePerRepositoryTemplateGenerator<DataAccessContextLocalTemplate, BasePerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<DataAccessContextLocalTemplate, PerRepositoryTemplateContext>
+    implements PerRepositoryTemplateGenerator<DataAccessContextLocalTemplate, PerRepositoryTemplateContext>
     {
     /**
      * Creates a new {@link DataAccessContextLocalTemplateGenerator} with given settings.
@@ -71,12 +71,12 @@ public class DataAccessContextLocalTemplateGenerator
 
     /**
      * Returns "[repository]-dataAccessContext-local.xml.sample".
-     * @param context the {@link BasePerRepositoryTemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext} instance.
      * @return such file name.
      */
     @SuppressWarnings("unused")
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
     {
         return context.getRepositoryName().concat("-dataAccessContext-local.xml.sample");
     }

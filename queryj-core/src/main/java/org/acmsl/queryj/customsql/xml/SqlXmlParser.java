@@ -45,7 +45,7 @@ import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultSetFlags;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.StatementFlags;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing some JetBrains annotations.
@@ -130,7 +130,7 @@ public interface SqlXmlParser
 
     /**
      * Parses the sql.xml associated to this instance.
-     * @throws org.acmsl.queryj.tools.QueryJBuildException if the information cannot be read.
+     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the information cannot be read.
      */
     void parse()
         throws  QueryJBuildException;

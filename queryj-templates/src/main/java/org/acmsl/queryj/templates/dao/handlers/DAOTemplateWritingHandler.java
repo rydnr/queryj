@@ -36,11 +36,11 @@ package org.acmsl.queryj.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.templates.dao.DAOTemplate;
 import org.acmsl.queryj.templates.dao.DAOTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerTableTemplateWritingHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerTableTemplateWritingHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -66,7 +66,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOTemplateWritingHandler
-    extends  BasePerTableTemplateWritingHandler<DAOTemplate, DAOTemplateGenerator, BasePerTableTemplateContext>
+    extends  BasePerTableTemplateWritingHandler<DAOTemplate, DAOTemplateGenerator, PerTableTemplateContext>
 {
     /**
      * Creates a <code>DAOTemplateWritingHandler</code> instance.

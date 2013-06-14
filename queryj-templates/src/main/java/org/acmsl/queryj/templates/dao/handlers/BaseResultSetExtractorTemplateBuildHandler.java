@@ -41,11 +41,11 @@ package org.acmsl.queryj.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplate;
 import org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplateFactory;
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateBuildHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
@@ -74,7 +74,7 @@ import org.checkthread.annotations.ThreadSafe;
 public class BaseResultSetExtractorTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <BaseResultSetExtractorTemplate,
-                     BaseResultSetExtractorTemplateFactory, BasePerRepositoryTemplateContext>
+                     BaseResultSetExtractorTemplateFactory, PerRepositoryTemplateContext>
 {
     /**
      * Checks whether template generation is enabled for this kind of template.

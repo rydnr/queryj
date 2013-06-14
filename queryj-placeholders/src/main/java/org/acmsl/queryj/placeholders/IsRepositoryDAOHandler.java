@@ -42,7 +42,7 @@ package org.acmsl.queryj.placeholders;
 
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.SqlDAO;
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -64,6 +64,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class IsRepositoryDAOHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
 {
+    private static final long serialVersionUID = 5018265597468636823L;
+
     /**
      * Creates a {@link IsRepositoryDAOHandler} to resolve placeholders
      * using given {@link TemplateContext context}.

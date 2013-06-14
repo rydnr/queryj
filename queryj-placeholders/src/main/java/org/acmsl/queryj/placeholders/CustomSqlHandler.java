@@ -41,8 +41,7 @@ package org.acmsl.queryj.placeholders;
 import org.acmsl.queryj.metadata.CachingSqlDecorator;
 import org.acmsl.queryj.metadata.SqlDecorator;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.templates.BasePerCustomSqlTemplateContext;
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
+import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -62,15 +61,17 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class CustomSqlHandler
-    extends AbstractTemplateContextFillHandler<BasePerCustomSqlTemplateContext, SqlDecorator>
+    extends AbstractTemplateContextFillHandler<PerCustomSqlTemplateContext, SqlDecorator>
 {
+    private static final long serialVersionUID = -2128401810822396537L;
+
     /**
      * Creates a new {@link ForeignKeyHandler} to resolve "foreign_key" placeholders using
-     * given {@link BasePerForeignKeyTemplateContext context}.
-     * @param context the {@link BasePerForeignKeyTemplateContext context}
+     * given {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext context}
      */
     @SuppressWarnings("unused")
-    public CustomSqlHandler(@NotNull final BasePerCustomSqlTemplateContext context)
+    public CustomSqlHandler(@NotNull final PerCustomSqlTemplateContext context)
     {
         super(context);
     }
@@ -87,12 +88,12 @@ public class CustomSqlHandler
     }
 
     /**
-     * Retrieves the {@link ForeignKey} from given {@link BasePerForeignKeyTemplateContext context}.
+     * Retrieves the {@link ForeignKey} from given {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext context}.
      * @return such value.
      */
     @NotNull
     @Override
-    protected SqlDecorator getValue(@NotNull final BasePerCustomSqlTemplateContext context)
+    protected SqlDecorator getValue(@NotNull final PerCustomSqlTemplateContext context)
     {
         return
             new CachingSqlDecorator(

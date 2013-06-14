@@ -38,13 +38,13 @@ package org.acmsl.queryj.templates.other;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerRepositoryTemplate;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.api.AbstractBasePerRepositoryTemplate;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 
 /*
  * Importing StringTemplate classes.
  */
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.FillTemplateChain;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -65,16 +65,16 @@ import org.jetbrains.annotations.Nullable;
  */
 @ThreadSafe
 public class CucumberFeatureTemplate
-    extends AbstractBasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
+    extends AbstractBasePerRepositoryTemplate<PerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = 5236574342911947317L;
 
     /**
      * Builds a {@link CucumberFeatureTemplate} using given
      * information.
-     * @param context the {@link BasePerRepositoryTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext context}.
      */
-    public CucumberFeatureTemplate(@NotNull final BasePerRepositoryTemplateContext context)
+    public CucumberFeatureTemplate(@NotNull final PerRepositoryTemplateContext context)
     {
         super(context);
     }
@@ -105,12 +105,12 @@ public class CucumberFeatureTemplate
      * Builds the correct chain.
      * @param context the context.
      * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link org.acmsl.queryj.templates.FillTemplateChain}.
+     * @return the specific {@link org.acmsl.queryj.api.FillTemplateChain}.
      */
     @SuppressWarnings("unused")
     @NotNull
-    public FillTemplateChain<BasePerRepositoryTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerRepositoryTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerRepositoryTemplateContext> buildFillTemplateChain(
+        @NotNull final PerRepositoryTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

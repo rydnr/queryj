@@ -41,11 +41,11 @@ package org.acmsl.queryj.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.TemplateMappingManager;
 import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplate;
 import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateFactory;
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
+import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
@@ -74,7 +74,7 @@ import org.checkthread.annotations.ThreadSafe;
 public class ThreadLocalBagTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <ThreadLocalBagTemplate,
-                     ThreadLocalBagTemplateFactory, BasePerRepositoryTemplateContext>
+                     ThreadLocalBagTemplateFactory, PerRepositoryTemplateContext>
 {
     /**
      * Checks whether template generation is enabled for this kind of template.

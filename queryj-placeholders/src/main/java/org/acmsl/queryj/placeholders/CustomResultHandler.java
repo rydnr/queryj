@@ -41,7 +41,7 @@ package org.acmsl.queryj.placeholders;
  */
 import org.acmsl.queryj.metadata.CachingResultDecorator;
 import org.acmsl.queryj.metadata.ResultDecorator;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -61,9 +61,12 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 @SuppressWarnings("unused")
 public class CustomResultHandler
-    extends AbstractTemplateContextFillHandler<BasePerCustomResultTemplateContext, ResultDecorator>
+    extends AbstractTemplateContextFillHandler<PerCustomResultTemplateContext, ResultDecorator>
 {
-    public CustomResultHandler(@NotNull final BasePerCustomResultTemplateContext context)
+
+    private static final long serialVersionUID = -1257476640731147692L;
+
+    public CustomResultHandler(@NotNull final PerCustomResultTemplateContext context)
     {
         super(context);
     }
@@ -74,7 +77,7 @@ public class CustomResultHandler
      * @return such value.
      */
     @Override
-    protected ResultDecorator getValue(@NotNull final BasePerCustomResultTemplateContext context)
+    protected ResultDecorator getValue(@NotNull final PerCustomResultTemplateContext context)
     {
         return
             new CachingResultDecorator(

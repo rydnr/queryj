@@ -36,12 +36,12 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
 import org.acmsl.queryj.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.templates.dao.FkStatementSetterTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerForeignKeyTemplateWritingHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerForeignKeyTemplateWritingHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -67,7 +67,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class FkStatementSetterTemplateWritingHandler
     extends BasePerForeignKeyTemplateWritingHandler
-                <FkStatementSetterTemplate, BasePerForeignKeyTemplateContext, FkStatementSetterTemplateGenerator>
+                <FkStatementSetterTemplate, PerForeignKeyTemplateContext, FkStatementSetterTemplateGenerator>
 {
     /**
      * Creates a <code>FkStatementSetterTemplateWritingHandler</code>

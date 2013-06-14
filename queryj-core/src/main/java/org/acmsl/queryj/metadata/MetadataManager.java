@@ -42,7 +42,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;

@@ -43,8 +43,8 @@ package org.acmsl.queryj.templates.dao;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -75,7 +75,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ThreadLocalBagTemplateFactory
-    implements  BasePerRepositoryTemplateFactory<ThreadLocalBagTemplate>,
+    implements PerRepositoryTemplateFactory<ThreadLocalBagTemplate>,
                 Singleton
 {
     /**
@@ -121,7 +121,7 @@ public class ThreadLocalBagTemplateFactory
     {
         return
             new ThreadLocalBagTemplate(
-                new BasePerRepositoryTemplateContext(
+                new PerRepositoryTemplateContext(
                     metadataManager,
                     customSqlProvider,
                     header,

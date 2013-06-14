@@ -36,16 +36,16 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplate;
 import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplateGenerator;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
+import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,7 +68,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class BaseRepositoryDAOTemplateWritingHandler
     extends BasePerRepositoryTemplateWritingHandler
-                <BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
+                <BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateGenerator, PerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}

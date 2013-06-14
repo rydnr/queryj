@@ -37,11 +37,11 @@ package org.acmsl.queryj.templates.valueobject.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.templates.valueobject.ValueObjectFactoryTemplate;
 import org.acmsl.queryj.templates.valueobject.ValueObjectFactoryTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerTableTemplateWritingHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerTableTemplateWritingHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some Ant classes.
@@ -72,7 +72,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class ValueObjectFactoryTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
-                 <ValueObjectFactoryTemplate, ValueObjectFactoryTemplateGenerator, BasePerTableTemplateContext>
+                 <ValueObjectFactoryTemplate, ValueObjectFactoryTemplateGenerator, PerTableTemplateContext>
 {
     /**
      * Creates a <code>ValueObjectFactoryTemplateWritingHandler</code> instance.

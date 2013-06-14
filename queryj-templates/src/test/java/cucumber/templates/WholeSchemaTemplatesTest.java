@@ -42,9 +42,8 @@ import cucumber.api.java.en.And;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.PerRepositoryTemplateFactory;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 import org.acmsl.queryj.templates.other.CucumberFeatureTemplateFactory;
 import org.acmsl.queryj.templates.other.CucumberFeatureTemplateGenerator;
 
@@ -72,8 +71,6 @@ import org.junit.Assert;
  */
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +82,7 @@ import java.util.Map;
  */
 @SuppressWarnings("unused")
 public class WholeSchemaTemplatesTest
-    extends AbstractPerRepositoryTemplatesTest<BasePerRepositoryTemplateGenerator, BasePerRepositoryTemplateFactory>
+    extends AbstractPerRepositoryTemplatesTest<PerRepositoryTemplateGenerator, PerRepositoryTemplateFactory>
 {
     /**
      * Creates an instance.
@@ -105,7 +102,7 @@ public class WholeSchemaTemplatesTest
      */
     @NotNull
     @Override
-    protected DecoratorFactory retrieveDecoratorFactory(@NotNull final BasePerRepositoryTemplateGenerator generator)
+    protected DecoratorFactory retrieveDecoratorFactory(@NotNull final PerRepositoryTemplateGenerator generator)
     {
         return generator.getDecoratorFactory();
     }

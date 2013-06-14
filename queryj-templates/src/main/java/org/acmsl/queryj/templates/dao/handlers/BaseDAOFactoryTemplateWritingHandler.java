@@ -36,12 +36,12 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.templates.dao.BaseDAOFactoryTemplate;
 import org.acmsl.queryj.templates.dao.BaseDAOFactoryTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerTableTemplateWritingHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerTableTemplateWritingHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -68,7 +68,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class BaseDAOFactoryTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
-                 <BaseDAOFactoryTemplate, BaseDAOFactoryTemplateGenerator, BasePerTableTemplateContext>
+                 <BaseDAOFactoryTemplate, BaseDAOFactoryTemplateGenerator, PerTableTemplateContext>
 {
     /**
      * Creates a <code>BaseDAOFactoryTemplateWritingHandler</code> instance.

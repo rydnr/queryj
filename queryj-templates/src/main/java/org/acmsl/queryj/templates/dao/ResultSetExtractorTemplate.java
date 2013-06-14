@@ -37,9 +37,9 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerTableTemplate;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.AbstractBasePerTableTemplate;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -64,16 +64,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ResultSetExtractorTemplate
-    extends AbstractBasePerTableTemplate<BasePerTableTemplateContext>
+    extends AbstractBasePerTableTemplate<PerTableTemplateContext>
 {
     private static final long serialVersionUID = -1298718907920446761L;
 
     /**
      * Builds a <code>ResultSetExtractorTemplate</code> using given
      * information.
-     * @param context the {@link BasePerTableTemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext} instance.
      */
-    public ResultSetExtractorTemplate(@NotNull final BasePerTableTemplateContext context)
+    public ResultSetExtractorTemplate(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -104,12 +104,12 @@ public class ResultSetExtractorTemplate
      * Builds the correct chain.
      * @param context the context.
      * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link org.acmsl.queryj.templates.FillTemplateChain}.
+     * @return the specific {@link org.acmsl.queryj.api.FillTemplateChain}.
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerTableTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerTableTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerTableTemplateContext> buildFillTemplateChain(
+        @NotNull final PerTableTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

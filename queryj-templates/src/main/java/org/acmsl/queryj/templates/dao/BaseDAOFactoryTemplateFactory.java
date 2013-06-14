@@ -39,8 +39,8 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Row;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -70,7 +70,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class BaseDAOFactoryTemplateFactory
-    implements  BasePerTableTemplateFactory<BaseDAOFactoryTemplate>,
+    implements PerTableTemplateFactory<BaseDAOFactoryTemplate>,
                 Singleton
 {
     /**
@@ -134,7 +134,7 @@ public class BaseDAOFactoryTemplateFactory
     {
         return
             new BaseDAOFactoryTemplate(
-                new BasePerTableTemplateContext(
+                new PerTableTemplateContext(
                     metadataManager,
                     customSqlProvider,
                     header,

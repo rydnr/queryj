@@ -35,16 +35,16 @@ package org.acmsl.queryj.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.handlers.BasePerCustomResultTemplateWritingHandler;
+import org.acmsl.queryj.api.handlers.BasePerCustomResultTemplateWritingHandler;
 import org.acmsl.queryj.templates.valueobject.CustomValueObjectFactoryTemplate;
 import org.acmsl.queryj.templates.valueobject.CustomValueObjectFactoryTemplateGenerator;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -71,7 +71,7 @@ import org.checkthread.annotations.ThreadSafe;
 public class CustomValueObjectFactoryTemplateWritingHandler
     extends BasePerCustomResultTemplateWritingHandler
                 <CustomValueObjectFactoryTemplate,
-                    BasePerCustomResultTemplateContext,
+                    PerCustomResultTemplateContext,
                     CustomValueObjectFactoryTemplateGenerator>
 {
     /**

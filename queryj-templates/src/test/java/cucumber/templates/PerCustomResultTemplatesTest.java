@@ -45,9 +45,9 @@ import org.acmsl.queryj.customsql.PropertyRefElement;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplate;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateFactory;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
+import org.acmsl.queryj.api.PerCustomResultTemplate;
+import org.acmsl.queryj.api.PerCustomResultTemplateFactory;
+import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
 import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateFactory;
 import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateFactory;
@@ -58,7 +58,7 @@ import org.acmsl.queryj.templates.valueobject.CustomValueObjectImplTemplateFacto
 import org.acmsl.queryj.templates.valueobject.CustomValueObjectImplTemplateGenerator;
 import org.acmsl.queryj.templates.valueobject.CustomValueObjectTemplateFactory;
 import org.acmsl.queryj.templates.valueobject.CustomValueObjectTemplateGenerator;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing ACM-SL Commons classes.
@@ -106,7 +106,7 @@ import java.util.Map;
  * @since 2013/05/04
  */
 public class PerCustomResultTemplatesTest
-    extends AbstractTemplatesTest<BasePerCustomResultTemplateGenerator, BasePerCustomResultTemplateFactory>
+    extends AbstractTemplatesTest<PerCustomResultTemplateGenerator, PerCustomResultTemplateFactory>
 {
     /**
      * The results.
@@ -287,7 +287,7 @@ public class PerCustomResultTemplatesTest
      */
     @NotNull
     @Override
-    protected DecoratorFactory retrieveDecoratorFactory(@NotNull final BasePerCustomResultTemplateGenerator generator)
+    protected DecoratorFactory retrieveDecoratorFactory(@NotNull final PerCustomResultTemplateGenerator generator)
     {
         return generator.getDecoratorFactory();
     }
@@ -320,18 +320,18 @@ public class PerCustomResultTemplatesTest
         @NotNull final Map<String, Property> properties,
         @NotNull final Map<String, File> outputFiles)
     {
-        @Nullable final BasePerCustomResultTemplateGenerator generator =
+        @Nullable final PerCustomResultTemplateGenerator generator =
             retrieveTemplateGenerator(templateName);
 
         Assert.assertNotNull("No template generator found for " + templateName, generator);
 
         for (@NotNull final Result currentResult : results.values())
         {
-            @Nullable final BasePerCustomResultTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
+            @Nullable final PerCustomResultTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
 
             Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
-            @Nullable final BasePerCustomResultTemplate template =
+            @Nullable final PerCustomResultTemplate template =
                 templateFactory.createTemplate(
                     retrieveCustomSqlProvider(currentResult, retrieveProperties(currentResult, properties)),
                     retrieveMetadataManager(engine),

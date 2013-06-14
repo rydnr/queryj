@@ -35,11 +35,11 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.TemplateMappingManager;
 import org.acmsl.queryj.templates.dao.JndiUtilsTemplate;
 import org.acmsl.queryj.templates.dao.JndiUtilsTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
+import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
@@ -67,7 +67,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class JndiUtilsTemplateWritingHandler
     extends BasePerRepositoryTemplateWritingHandler
-                <JndiUtilsTemplate, JndiUtilsTemplateGenerator, BasePerRepositoryTemplateContext>
+                <JndiUtilsTemplate, JndiUtilsTemplateGenerator, PerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}

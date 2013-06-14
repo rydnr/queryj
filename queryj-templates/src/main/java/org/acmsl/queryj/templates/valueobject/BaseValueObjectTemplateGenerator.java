@@ -36,9 +36,9 @@ package org.acmsl.queryj.templates.valueobject;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -62,8 +62,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class BaseValueObjectTemplateGenerator
-    extends AbstractTemplateGenerator<BaseValueObjectTemplate, BasePerTableTemplateContext>
-    implements  BasePerTableTemplateGenerator<BaseValueObjectTemplate, BasePerTableTemplateContext>
+    extends AbstractTemplateGenerator<BaseValueObjectTemplate, PerTableTemplateContext>
+    implements PerTableTemplateGenerator<BaseValueObjectTemplate, PerTableTemplateContext>
 {
     /**
      * Creates a new {@link BaseValueObjectTemplateGenerator} with given settings.
@@ -91,7 +91,7 @@ public class BaseValueObjectTemplateGenerator
      */
     @NotNull
     @Override
-    public String retrieveTemplateFileName(@NotNull final BasePerTableTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerTableTemplateContext context)
     {
         return
             retrieveTemplateFileName(
@@ -103,7 +103,7 @@ public class BaseValueObjectTemplateGenerator
 
     /**
      * Retrieves given template's file name.
-     * @param context the {@link BasePerTableTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
      * @param valueObjectUtils the {@link ValueObjectUtils} instance.
@@ -111,7 +111,7 @@ public class BaseValueObjectTemplateGenerator
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final BasePerTableTemplateContext context,
+        @NotNull final PerTableTemplateContext context,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils,
         @NotNull final ValueObjectUtils valueObjectUtils)

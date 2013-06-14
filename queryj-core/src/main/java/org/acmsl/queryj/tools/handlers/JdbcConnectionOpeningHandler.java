@@ -36,7 +36,9 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.CannotEstablishDatabaseConnectionException;
+import org.acmsl.queryj.api.exceptions.JdbcDriverNotFoundException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -156,15 +158,11 @@ public class JdbcConnectionOpeningHandler
         }
         catch  (@NotNull final ClassNotFoundException classNotFoundException)
         {
-            throw
-                new QueryJBuildException(
-                    "JDBC driver not found", classNotFoundException);
+            throw new JdbcDriverNotFoundException(driver, classNotFoundException);
         }
         catch  (@NotNull final SQLException sqlException)
         {
-            throw
-                new QueryJBuildException(
-                    "Cannot establish the database connection", sqlException);
+            throw new CannotEstablishDatabaseConnectionException(url, username, sqlException);
         }
 
         return result;

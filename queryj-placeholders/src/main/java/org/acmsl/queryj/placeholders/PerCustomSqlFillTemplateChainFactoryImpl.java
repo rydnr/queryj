@@ -39,9 +39,9 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing queryj-core classes.
  */
-import org.acmsl.queryj.templates.BasePerCustomSqlTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
-import org.acmsl.queryj.templates.PerCustomSqlFillTemplateChainFactory;
+import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
+import org.acmsl.queryj.api.placeholders.PerCustomSqlFillTemplateChainFactory;
 
 /*
  * Importing JetBrains annotations.
@@ -60,14 +60,16 @@ public class PerCustomSqlFillTemplateChainFactoryImpl
 {
     /**
      * Creates {@link FillTemplateChain} instances for given context.
-     * @param context the {@link BasePerCustomSqlTemplateContext} needed.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomSqlTemplateContext} needed.
      * @return the FillTemplateChain, or <code>null</code> if the context is invalid.
      */
     @Nullable
     @Override
-    public FillTemplateChain<BasePerCustomSqlTemplateContext> createFillChain(
-        @NotNull final BasePerCustomSqlTemplateContext context)
+    public FillTemplateChain<PerCustomSqlTemplateContext> createFillChain(
+        @NotNull final PerCustomSqlTemplateContext context)
     {
-        return new BasePerCustomSqlFillTemplateChain(context);
+        return
+            new FillTemplateChainWrapper<PerCustomSqlTemplateContext>(
+                new BasePerCustomSqlFillTemplateChain(context));
     }
 }

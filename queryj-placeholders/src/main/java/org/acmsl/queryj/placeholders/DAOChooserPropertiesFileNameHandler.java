@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
 * Importing some JetBrains annotations.
@@ -62,6 +62,9 @@ import java.util.Locale;
 public class DAOChooserPropertiesFileNameHandler
     extends AbstractDecoratedStringHandler<TemplateContext>
 {
+
+    private static final long serialVersionUID = 9017942007372222265L;
+
     /**
      * Creates a new {@link DAOChooserPropertiesFileNameHandler} associated to given
      * {@link TemplateContext}.

@@ -41,7 +41,7 @@ package org.acmsl.queryj.placeholders;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
 import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -59,21 +59,24 @@ import java.util.List;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Resolves "pk_attributes" placeholders with the primary key information from given {@link org.acmsl.queryj.templates.BasePerTableTemplateContext}
+ * Resolves "pk_attributes" placeholders with the primary key information from given {@link org.acmsl.queryj.api.PerTableTemplateContext}
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/31
  */
 @SuppressWarnings("unused")
 @ThreadSafe
 public class PrimaryKeyHandler
-    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, List<Attribute>>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Attribute>>
 {
+
+    private static final long serialVersionUID = -8692058693572483344L;
+
     /**
-     *  Creates a {@link PrimaryKeyHandler} with given {@link BasePerTableTemplateContext context}.
+     *  Creates a {@link PrimaryKeyHandler} with given {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      * @param context the context
      */
     @SuppressWarnings("unused")
-    public PrimaryKeyHandler(@NotNull final BasePerTableTemplateContext context)
+    public PrimaryKeyHandler(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -85,7 +88,7 @@ public class PrimaryKeyHandler
      */
     @NotNull
     @Override
-    protected List<Attribute> getValue(@NotNull final BasePerTableTemplateContext context)
+    protected List<Attribute> getValue(@NotNull final PerTableTemplateContext context)
     {
         return
             retrievePrimaryKeyAttributes(

@@ -39,7 +39,7 @@ package org.acmsl.queryj.metadata.engines.oracle;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

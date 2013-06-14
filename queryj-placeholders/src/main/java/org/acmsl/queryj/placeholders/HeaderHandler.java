@@ -38,8 +38,8 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.NonRelevantFillHandler;
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.NonRelevantFillHandler;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -62,6 +62,8 @@ public class HeaderHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
     implements NonRelevantFillHandler
 {
+    private static final long serialVersionUID = -6297477975848530513L;
+
     /**
      * Creates a handler able to resolve "header" placeholders.
      * @param context the {@link TemplateContext context}.

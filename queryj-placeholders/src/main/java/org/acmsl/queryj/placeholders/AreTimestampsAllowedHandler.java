@@ -36,7 +36,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -58,10 +58,12 @@ import org.checkthread.annotations.ThreadSafe;
 public class AreTimestampsAllowedHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
 {
+    private static final long serialVersionUID = -3522961683638627590L;
+
     /**
      * Creates a {@link AreTimestampsAllowedHandler} to resolve placeholders
-     * using given {@link org.acmsl.queryj.templates.TemplateContext context}.
-     * @param context the {@link org.acmsl.queryj.templates.TemplateContext context}.
+     * using given {@link org.acmsl.queryj.api.TemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.TemplateContext context}.
      */
     @SuppressWarnings("unused")
     public AreTimestampsAllowedHandler(@NotNull final TemplateContext context)

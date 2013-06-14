@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
 * Importing some JetBrains annotations.
@@ -60,6 +60,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class RepositoryNameHandler
     extends AbstractDecoratedStringHandler<TemplateContext>
 {
+    private static final long serialVersionUID = 7727414526536102572L;
+
     /**
      * Creates a new {@link RepositoryNameHandler} associated to given
      * {@link TemplateContext}.

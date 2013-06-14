@@ -1,0 +1,5 @@
+org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateFactory
+org.acmsl.queryj.templates.valueobject.CustomResultSetExtractorTemplateFactory
+org.acmsl.queryj.templates.valueobject.CustomValueObjectFactoryTemplateFactory
+org.acmsl.queryj.templates.valueobject.CustomValueObjectImplTemplateFactory
+org.acmsl.queryj.templates.valueobject.CustomValueObjectTemplateFactory

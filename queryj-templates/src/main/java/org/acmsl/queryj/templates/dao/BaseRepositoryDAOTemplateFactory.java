@@ -36,13 +36,10 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.SqlDAO;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -72,7 +69,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class BaseRepositoryDAOTemplateFactory
-    implements BasePerRepositoryTemplateFactory<BaseRepositoryDAOTemplate>,
+    implements PerRepositoryTemplateFactory<BaseRepositoryDAOTemplate>,
                Singleton
 {
     /**
@@ -123,7 +120,7 @@ public class BaseRepositoryDAOTemplateFactory
         {
             result =
                 new BaseRepositoryDAOTemplate(
-                    new BasePerRepositoryTemplateContext(
+                    new PerRepositoryTemplateContext(
                         metadataManager,
                         customSqlProvider,
                         header,

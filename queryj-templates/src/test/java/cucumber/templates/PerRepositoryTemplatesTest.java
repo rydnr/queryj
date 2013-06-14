@@ -42,8 +42,8 @@ package cucumber.templates;
 import cucumber.templates.xml.BeanElement;
 import cucumber.templates.xml.DataAccessContextLocalTestHelper;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.PerRepositoryTemplateFactory;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateFactory;
 import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateGenerator;
 import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplateFactory;
@@ -130,7 +130,7 @@ import java.util.Properties;
  */
 @SuppressWarnings("unused")
 public class PerRepositoryTemplatesTest
-    extends AbstractPerRepositoryTemplatesTest<BasePerRepositoryTemplateGenerator, BasePerRepositoryTemplateFactory>
+    extends AbstractPerRepositoryTemplatesTest<PerRepositoryTemplateGenerator, PerRepositoryTemplateFactory>
 {
     /**
      * Creates an instance.
@@ -178,7 +178,7 @@ public class PerRepositoryTemplatesTest
      */
     @NotNull
     @Override
-    protected DecoratorFactory retrieveDecoratorFactory(@NotNull final BasePerRepositoryTemplateGenerator generator)
+    protected DecoratorFactory retrieveDecoratorFactory(@NotNull final PerRepositoryTemplateGenerator generator)
     {
         return generator.getDecoratorFactory();
     }

@@ -40,10 +40,10 @@ package cucumber.templates;
  */
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.PerRepositoryTemplate;
+import org.acmsl.queryj.api.PerRepositoryTemplateFactory;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing ACM S.L. classes.
@@ -82,7 +82,7 @@ import java.util.Map;
  * @since 2013/05/26
  */
 public abstract class AbstractPerRepositoryTemplatesTest
-    <G extends BasePerRepositoryTemplateGenerator, F extends BasePerRepositoryTemplateFactory>
+    <G extends PerRepositoryTemplateGenerator, F extends PerRepositoryTemplateFactory>
     extends AbstractTemplatesTest<G, F>
 {
     /**
@@ -282,7 +282,7 @@ public abstract class AbstractPerRepositoryTemplatesTest
 
         Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
-        final BasePerRepositoryTemplate template =
+        final PerRepositoryTemplate template =
             templateFactory.createTemplate(
                 retrieveMetadataManager(engine, tables, wrapTables(tables)),
                 retrieveCustomSqlProvider(),

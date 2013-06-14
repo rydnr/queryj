@@ -39,9 +39,9 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing queryj-core classes.
  */
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
-import org.acmsl.queryj.templates.PerForeignKeyFillTemplateChainFactory;
+import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
+import org.acmsl.queryj.api.placeholders.PerForeignKeyFillTemplateChainFactory;
 
 /*
  * Importing JetBrains annotations.
@@ -60,14 +60,16 @@ public class PerForeignKeyFillTemplateChainFactoryImpl
 {
     /**
      * Creates {@link FillTemplateChain} instances for given context.
-     * @param context the {@link BasePerForeignKeyTemplateContext} needed.
+     * @param context the {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext} needed.
      * @return the FillTemplateChain, or <code>null</code> if the context is invalid.
      */
     @Nullable
     @Override
-    public FillTemplateChain<BasePerForeignKeyTemplateContext> createFillChain(
-        @NotNull final BasePerForeignKeyTemplateContext context)
+    public FillTemplateChain<PerForeignKeyTemplateContext> createFillChain(
+        @NotNull final PerForeignKeyTemplateContext context)
     {
-        return new BasePerForeignKeyFillTemplateChain(context);
+        return
+            new FillTemplateChainWrapper<PerForeignKeyTemplateContext>(
+                new BasePerForeignKeyFillTemplateChain(context));
     }
 }

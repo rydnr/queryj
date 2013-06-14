@@ -36,15 +36,13 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerForeignKeyTemplate;
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
-import org.acmsl.queryj.templates.InvalidTemplateException;
+import org.acmsl.queryj.api.AbstractBasePerForeignKeyTemplate;
+import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -65,16 +63,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class FkStatementSetterTemplate
-    extends AbstractBasePerForeignKeyTemplate<BasePerForeignKeyTemplateContext>
+    extends AbstractBasePerForeignKeyTemplate<PerForeignKeyTemplateContext>
 {
     private static final long serialVersionUID = 7268173474744893352L;
 
     /**
      * Builds a <code>FkStatementSetterTemplate</code> using given
      * information.
-     * @param context the {@link BasePerForeignKeyTemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext} instance.
      */
-    public FkStatementSetterTemplate(@NotNull final BasePerForeignKeyTemplateContext context)
+    public FkStatementSetterTemplate(@NotNull final PerForeignKeyTemplateContext context)
     {
         super(context);
     }
@@ -106,12 +104,12 @@ public class FkStatementSetterTemplate
      * Builds the correct chain.
      * @param context the context.
      * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link org.acmsl.queryj.templates.FillTemplateChain}.
+     * @return the specific {@link org.acmsl.queryj.api.FillTemplateChain}.
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerForeignKeyTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerForeignKeyTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerForeignKeyTemplateContext> buildFillTemplateChain(
+        @NotNull final PerForeignKeyTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

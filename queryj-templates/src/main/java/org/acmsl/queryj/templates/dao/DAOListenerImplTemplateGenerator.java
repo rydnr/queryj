@@ -42,9 +42,9 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -63,8 +63,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOListenerImplTemplateGenerator
-    extends AbstractTemplateGenerator<DAOListenerImplTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<DAOListenerImplTemplate, BasePerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<DAOListenerImplTemplate, PerRepositoryTemplateContext>
+    implements PerRepositoryTemplateGenerator<DAOListenerImplTemplate, PerRepositoryTemplateContext>
 {
     /**
      * Creates a new {@link DAOListenerImplTemplateGenerator} with given settings.
@@ -81,7 +81,7 @@ public class DAOListenerImplTemplateGenerator
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
     {
         return retrieveTemplateFileName(context, DecorationUtils.getInstance());
     }
@@ -94,7 +94,7 @@ public class DAOListenerImplTemplateGenerator
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final PerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
     {
         return
               decorationUtils.capitalize(context.getRepositoryName())

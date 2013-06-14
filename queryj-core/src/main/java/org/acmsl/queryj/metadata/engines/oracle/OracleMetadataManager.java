@@ -40,7 +40,7 @@ package org.acmsl.queryj.metadata.engines.oracle;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataManager;
@@ -48,7 +48,7 @@ import org.acmsl.queryj.metadata.vo.AttributeIncompleteValueObject;
 import org.acmsl.queryj.metadata.vo.ForeignKeyIncompleteValueObject;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
-import org.acmsl.queryj.templates.MetaLanguageUtils;
+import org.acmsl.queryj.api.MetaLanguageUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -157,10 +157,10 @@ public class OracleMetadataManager
      * @param caseSensitiveness          whether it's case sensitive or not.
      * @param metadataExtractionListener the
      *                                   <code>MetadataExtractionListener</code> instance.
-     * @param metaLanguageUtils          the {@link org.acmsl.queryj.templates.MetaLanguageUtils} instance.
+     * @param metaLanguageUtils          the {@link org.acmsl.queryj.api.MetaLanguageUtils} instance.
      * @return the list of tables.
      * @throws java.sql.SQLException if the database operation fails.
-     * @throws org.acmsl.queryj.QueryJException
+     * @throws org.acmsl.queryj.api.exceptions.QueryJException
      *                               if an error, which is identified by QueryJ,
      *                               occurs.
      */

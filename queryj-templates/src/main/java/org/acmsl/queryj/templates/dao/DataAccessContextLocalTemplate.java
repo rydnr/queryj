@@ -37,9 +37,9 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerRepositoryTemplate;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.AbstractBasePerRepositoryTemplate;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -64,16 +64,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DataAccessContextLocalTemplate
-    extends AbstractBasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
+    extends AbstractBasePerRepositoryTemplate<PerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = 8433308475023899936L;
 
     /**
      * Builds a <code>DataAccessContextLocalTemplate</code> using given
      * information.
-     * @param context the {@link BasePerRepositoryTemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext} instance.
      */
-    public DataAccessContextLocalTemplate(@NotNull final BasePerRepositoryTemplateContext context)
+    public DataAccessContextLocalTemplate(@NotNull final PerRepositoryTemplateContext context)
     {
         super(context);
     }
@@ -107,8 +107,8 @@ public class DataAccessContextLocalTemplate
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerRepositoryTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerRepositoryTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerRepositoryTemplateContext> buildFillTemplateChain(
+        @NotNull final PerRepositoryTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

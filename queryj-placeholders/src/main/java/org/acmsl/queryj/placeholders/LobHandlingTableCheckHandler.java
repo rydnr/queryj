@@ -41,7 +41,7 @@ package org.acmsl.queryj.placeholders;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -62,14 +62,16 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class LobHandlingTableCheckHandler
-    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, Boolean>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, Boolean>
 {
+    private static final long serialVersionUID = 4161845997256694350L;
+
     /**
      * Creates a {@link LobHandlingTableCheckHandler} instance.
      * @param context the context.
      */
     @SuppressWarnings("unused")
-    public LobHandlingTableCheckHandler(@NotNull final BasePerTableTemplateContext context)
+    public LobHandlingTableCheckHandler(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -91,7 +93,7 @@ public class LobHandlingTableCheckHandler
      */
     @NotNull
     @Override
-    protected Boolean getValue(@NotNull final BasePerTableTemplateContext context)
+    protected Boolean getValue(@NotNull final PerTableTemplateContext context)
     {
         return isLobHandlingRequired(context.getTableName(), context.getMetadataManager());
     }

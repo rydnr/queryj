@@ -40,9 +40,9 @@ package org.acmsl.queryj.placeholders;
  *Importing project classes.
 */
 import org.acmsl.queryj.metadata.ForeignKeyDecorator;
-import org.acmsl.queryj.templates.AbstractFillTemplateChain;
-import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
-import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
+import org.acmsl.queryj.api.AbstractFillTemplateChain;
+import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
+import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -63,19 +63,19 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
- * {@link org.acmsl.queryj.templates.BasePerForeignKeyTemplate per-foreign-key templates}.
+ * {@link org.acmsl.queryj.api.PerForeignKeyTemplate per-foreign-key templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/18
  */
 @ThreadSafe
 public class BasePerForeignKeyFillTemplateChain
-    extends AbstractFillTemplateChain<BasePerForeignKeyTemplateContext, ForeignKeyHandler>
+    extends AbstractFillTemplateChain<PerForeignKeyTemplateContext, ForeignKeyHandler>
 {
     /**
      * Creates a {@link BasePerForeignKeyFillTemplateChain} using given context.
-     * @param context the {@link BasePerForeignKeyTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext context}.
      */
-    public BasePerForeignKeyFillTemplateChain(@NotNull final BasePerForeignKeyTemplateContext context)
+    public BasePerForeignKeyFillTemplateChain(@NotNull final PerForeignKeyTemplateContext context)
     {
         super(context);
     }
@@ -83,23 +83,23 @@ public class BasePerForeignKeyFillTemplateChain
     /**
      * Adds additional per-foreign-key handlers.
      * @param chain the chain to be configured.
-     * @param context the {@link BasePerForeignKeyTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext context}.
      * @param relevantOnly whether to include only relevant placeholders.
      */
     @Override
     protected void addHandlers(
         @NotNull final Chain chain,
-        @NotNull final BasePerForeignKeyTemplateContext context,
+        @NotNull final PerForeignKeyTemplateContext context,
         final boolean relevantOnly)
     {
         add(
             chain,
-            new TemplateContextFillAdapterHandler<BasePerForeignKeyTemplateContext, ForeignKeyHandler,ForeignKeyDecorator>(
+            new TemplateContextFillAdapterHandler<PerForeignKeyTemplateContext, ForeignKeyHandler,ForeignKeyDecorator>(
                 new ForeignKeyHandler(context)),
             relevantOnly);
         add(
             chain,
-            new TemplateContextFillAdapterHandler<BasePerForeignKeyTemplateContext, ForeignKeyAttributeTypeImportsHandler,List<String>>(
+            new TemplateContextFillAdapterHandler<PerForeignKeyTemplateContext, ForeignKeyAttributeTypeImportsHandler,List<String>>(
                 new ForeignKeyAttributeTypeImportsHandler(context)),
             relevantOnly);
     }

@@ -39,9 +39,9 @@ package org.acmsl.queryj.templates.other;
  * Importing project classes.
  */
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 
 /*
  * Importing checkthread.org annotations.
@@ -60,8 +60,8 @@ import org.jetbrains.annotations.NotNull;
  */
 @ThreadSafe
 public class CucumberFeatureTemplateGenerator
-    extends AbstractTemplateGenerator<CucumberFeatureTemplate, BasePerRepositoryTemplateContext>
-    implements BasePerRepositoryTemplateGenerator<CucumberFeatureTemplate, BasePerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<CucumberFeatureTemplate, PerRepositoryTemplateContext>
+    implements PerRepositoryTemplateGenerator<CucumberFeatureTemplate, PerRepositoryTemplateContext>
 {
     /**
      * Creates a new {@link CucumberFeatureTemplateGenerator} with given settings.
@@ -78,7 +78,7 @@ public class CucumberFeatureTemplateGenerator
      */
     @NotNull
     @Override
-    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
     {
         return retrieveTemplateFileName(context, DecorationUtils.getInstance());
     }
@@ -91,7 +91,7 @@ public class CucumberFeatureTemplateGenerator
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final PerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
     {
         return
             decorationUtils.capitalize(context.getRepositoryName())

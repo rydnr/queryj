@@ -35,12 +35,12 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.DataAccessManagerTemplate;
 import org.acmsl.queryj.templates.dao.DataAccessManagerTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateWritingHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -67,7 +67,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class DataAccessManagerTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
-                 <DataAccessManagerTemplate, DataAccessManagerTemplateGenerator, BasePerRepositoryTemplateContext>
+                 <DataAccessManagerTemplate, DataAccessManagerTemplateGenerator, PerRepositoryTemplateContext>
 {
     /**
      * Creates a <code>DataAccessManagerTemplateWritingHandler</code>

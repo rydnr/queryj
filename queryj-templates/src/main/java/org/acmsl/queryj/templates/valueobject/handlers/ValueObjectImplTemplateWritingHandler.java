@@ -37,11 +37,11 @@ package org.acmsl.queryj.templates.valueobject.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplate;
 import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerTableTemplateWritingHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerTableTemplateWritingHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -67,7 +67,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class ValueObjectImplTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
-                 <ValueObjectImplTemplate, ValueObjectImplTemplateGenerator, BasePerTableTemplateContext>
+                 <ValueObjectImplTemplate, ValueObjectImplTemplateGenerator, PerTableTemplateContext>
 {
     /**
      * Creates a <code>ValueObjectImplTemplateWritingHandler</code> instance.

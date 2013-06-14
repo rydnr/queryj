@@ -37,7 +37,7 @@ package org.acmsl.queryj.metadata.engines.mysql;
  */
 import org.acmsl.queryj.metadata.engines.JdbcMetadataManagerOld;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.api.exceptions.QueryJException;
 
 /*
  * Importing some JetBrains annotations.

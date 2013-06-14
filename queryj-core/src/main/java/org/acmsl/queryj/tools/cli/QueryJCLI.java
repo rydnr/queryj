@@ -38,7 +38,7 @@ package org.acmsl.queryj.tools.cli;
  */
 import org.acmsl.queryj.tools.logging.QueryJCLILog;
 import org.acmsl.queryj.tools.logging.QueryJLog;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJChain;
 import org.acmsl.queryj.QueryJCommand;
 

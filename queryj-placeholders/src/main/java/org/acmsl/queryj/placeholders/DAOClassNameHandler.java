@@ -38,8 +38,8 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.DefaultThemeUtils;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.DefaultThemeUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -65,15 +65,17 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class DAOClassNameHandler
-    extends AbstractDecoratedStringHandler<BasePerTableTemplateContext>
+    extends AbstractDecoratedStringHandler<PerTableTemplateContext>
 {
+    private static final long serialVersionUID = 4567838577335701238L;
+
     /**
      * Creates a new {@link DAOClassNameHandler} using
-     * given {@link BasePerTableTemplateContext context}.
-     * @param context the {@link BasePerTableTemplateContext context}.
+     * given {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public DAOClassNameHandler(@NotNull final BasePerTableTemplateContext context)
+    public DAOClassNameHandler(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
@@ -90,13 +92,13 @@ public class DAOClassNameHandler
     }
 
     /**
-     * Resolves the actual value using given {@link BasePerTableTemplateContext context}.
-     * @param context the {@link BasePerTableTemplateContext context}.
+     * Resolves the actual value using given {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      * @return such value.
      */
     @NotNull
     @Override
-    protected String resolveContextValue(@NotNull final BasePerTableTemplateContext context)
+    protected String resolveContextValue(@NotNull final PerTableTemplateContext context)
     {
         return
             retrieveClassName(

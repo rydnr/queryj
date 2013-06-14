@@ -38,9 +38,9 @@ package org.acmsl.queryj.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.templates.AbstractBasePerCustomResultTemplate;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.api.AbstractBasePerCustomResultTemplate;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -56,7 +56,6 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -70,16 +69,16 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CustomValueObjectTemplate
-    extends AbstractBasePerCustomResultTemplate<BasePerCustomResultTemplateContext>
+    extends AbstractBasePerCustomResultTemplate<PerCustomResultTemplateContext>
 {
     private static final long serialVersionUID = 2996313642901416338L;
 
     /**
      * Builds a <code>CustomValueObjectTemplate</code> using
      * information.
-     * @param context the {@link BasePerCustomResultTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
      */
-    public CustomValueObjectTemplate(@NotNull final BasePerCustomResultTemplateContext context)
+    public CustomValueObjectTemplate(@NotNull final PerCustomResultTemplateContext context)
     {
         super(context);
     }
@@ -115,8 +114,8 @@ public class CustomValueObjectTemplate
      */
     @NotNull
     @Override
-    public FillTemplateChain<BasePerCustomResultTemplateContext> buildFillTemplateChain(
-        @NotNull final BasePerCustomResultTemplateContext context, final boolean relevantOnly)
+    public FillTemplateChain<PerCustomResultTemplateContext> buildFillTemplateChain(
+        @NotNull final PerCustomResultTemplateContext context, final boolean relevantOnly)
     {
         // TODO
         return null;

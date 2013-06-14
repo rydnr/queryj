@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.NonRelevantFillHandler;
+import org.acmsl.queryj.api.NonRelevantFillHandler;
 
 /*
  * Importing checkthreads.org annotations.

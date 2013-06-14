@@ -39,12 +39,12 @@ import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplate;
-import org.acmsl.queryj.templates.handlers.BasePerCustomResultTemplateBuildHandler;
-import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerCustomResultTemplateBuildHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -164,10 +164,10 @@ public class CustomResultSetExtractorTemplateBuildHandler
     /**
      * Checks whether the template matches the filter consisting of
      * finding out if there's any custom sql defined for the custom result.
-     * @param context the {@link BasePerCustomResultTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
      * @return <code>true</code> in such case.
      */
-    protected boolean matchesSqlFilter(@NotNull final BasePerCustomResultTemplateContext context)
+    protected boolean matchesSqlFilter(@NotNull final PerCustomResultTemplateContext context)
     {
         return
             matchesSqlFilter(

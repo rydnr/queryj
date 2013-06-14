@@ -39,9 +39,9 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing queryj-core classes.
  */
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.FillTemplateChain;
-import org.acmsl.queryj.templates.PerRepositoryFillTemplateChainFactory;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.FillTemplateChain;
+import org.acmsl.queryj.api.placeholders.PerRepositoryFillTemplateChainFactory;
 
 /*
  * Importing JetBrains annotations.
@@ -60,14 +60,16 @@ public class PerRepositoryFillTemplateChainFactoryImpl
 {
     /**
      * Creates {@link FillTemplateChain} instances for given context.
-     * @param context the {@link BasePerRepositoryTemplateContext} needed.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext} needed.
      * @return the FillTemplateChain, or <code>null</code> if the context is invalid.
      */
     @Nullable
     @Override
-    public FillTemplateChain<BasePerRepositoryTemplateContext> createFillChain(
-        @NotNull final BasePerRepositoryTemplateContext context)
+    public FillTemplateChain<PerRepositoryTemplateContext> createFillChain(
+        @NotNull final PerRepositoryTemplateContext context)
     {
-        return new BasePerRepositoryFillTemplateChain(context);
+        return
+            new FillTemplateChainWrapper<PerRepositoryTemplateContext>(
+                new BasePerRepositoryFillTemplateChain(context));
     }
 }

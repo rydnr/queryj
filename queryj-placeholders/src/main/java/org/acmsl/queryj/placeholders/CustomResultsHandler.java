@@ -43,10 +43,10 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.TemplateUtils;
-import org.acmsl.queryj.templates.dao.DAOTemplateUtils;
-import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.TemplateUtils;
+import org.acmsl.queryj.api.dao.DAOTemplateUtils;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing some JetBrains annotations.
@@ -65,26 +65,28 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Resolves "custom_results" placeholders in
- * {@link org.acmsl.queryj.templates.BasePerTableTemplate BasePerTableTemplates}.
+ * {@link org.acmsl.queryj.api.PerTableTemplate BasePerTableTemplates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/31
  */
 @ThreadSafe
 public class CustomResultsHandler
-    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, List<Result>>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Result>>
 {
+    private static final long serialVersionUID = 6281653014442667192L;
+
     /**
      * Creates a new {@link CustomResultsHandler} to resolve placeholders with information
-     * in given {@link BasePerTableTemplateContext context}.
+     * in given {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      * @param context the context.
      */
-    public CustomResultsHandler(@NotNull final BasePerTableTemplateContext context)
+    public CustomResultsHandler(@NotNull final PerTableTemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Retrieves the {@link List} of {@link Result}s for given {@link BasePerTableTemplateContext context}.
+     * Retrieves the {@link List} of {@link Result}s for given {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      * @param context the context.
      * @return such value.
      * @throws QueryJBuildException if there inconsistencies in the custom SQL
@@ -92,7 +94,7 @@ public class CustomResultsHandler
      */
     @NotNull
     @Override
-    protected List<Result> getValue(@NotNull final BasePerTableTemplateContext context)
+    protected List<Result> getValue(@NotNull final PerTableTemplateContext context)
         throws QueryJBuildException
     {
         return

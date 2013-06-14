@@ -36,11 +36,11 @@ package org.acmsl.queryj.templates.other.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.templates.other.CucumberFeatureTemplate;
 import org.acmsl.queryj.templates.other.CucumberFeatureTemplateGenerator;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -67,7 +67,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class CucumberFeatureTemplateWritingHandler
     extends BasePerRepositoryTemplateWritingHandler<CucumberFeatureTemplate,
-    CucumberFeatureTemplateGenerator, BasePerRepositoryTemplateContext>
+    CucumberFeatureTemplateGenerator, PerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}

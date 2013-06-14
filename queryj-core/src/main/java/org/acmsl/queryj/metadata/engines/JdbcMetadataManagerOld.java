@@ -36,7 +36,7 @@ package org.acmsl.queryj.metadata.engines;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.metadata.MetadataManagerOld;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
