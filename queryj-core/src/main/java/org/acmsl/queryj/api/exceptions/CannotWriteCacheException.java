@@ -23,56 +23,52 @@
 
  ******************************************************************************
  *
- * Filename: TemplateFillHandler.java
+ * Filename: CannotWriteCacheException.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Represents an error writing the QueryJ cache.
  *
- * Date: 5/13/12
- * Time: 6:01 AM
+ * Date: 6/14/13
+ * Time: 7:03 AM
  *
  */
-package org.acmsl.queryj.placeholders;
+package org.acmsl.queryj.api.exceptions;
 
 /*
- * Importing project classes.
+ * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.templates.handlers.TemplateHandler;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.acmsl.queryj.tools.QueryJBuildException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing JDK classes.
  */
-import java.io.Serializable;
+import java.io.File;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Used to fill the template's dynamic parameters based on a chain-of-responsibility pattern,
- * for clarity sake.
- * @author <a href="mailto:jose@acm-sl.org">Jose San Leandro</a>
- * @since 2012/05/13
+ * Represents an error writing the QueryJ cache.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @since 2013/06/14
  */
-public interface FillHandler<P>
-    extends TemplateHandler,
-            Serializable
+@ThreadSafe
+public class CannotWriteCacheException
+    extends QueryJBuildException
 {
-    /**
-     * Retrieves the placeholder.
-     * @return such placeholder.
-     */
-    @NotNull
-    String getPlaceHolder();
+    private static final long serialVersionUID = 7235668180840410228L;
 
     /**
-     * Retrieves the template value for that placeholder.
-     * @return the dynamic value.
+     * Creates an instance with given context.
+     * @param outputDir the output dir.
+     * @param cause the underlying cause.
      */
-    @Nullable
-    P getValue() throws QueryJBuildException;
+    public CannotWriteCacheException(
+        @NotNull final File outputDir, @NotNull final Throwable cause)
+    {
+        super("cannot.write.cache", new Object[] { outputDir.getAbsolutePath() }, cause);
+    }
 }

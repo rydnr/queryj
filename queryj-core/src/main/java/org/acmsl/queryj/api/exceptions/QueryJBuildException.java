@@ -24,20 +24,20 @@
 
  ******************************************************************************
  *
- * Filename: QueryJException.java
+ * Filename: QueryJBuildException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents abnormal situations regarding QueryJ processing.
+ * Description: Represents abnormal situations regarding QueryJ generation
+ *              process.
  *
  */
-package org.acmsl.queryj;
+package org.acmsl.queryj.api.exceptions;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -45,65 +45,34 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Represents abnormal situations regarding QueryJ processing.
+ * Represents abnormal situations regarding QueryJ generation process.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class QueryJException
-    extends  Exception
+public abstract class QueryJBuildException
+    extends QueryJException
 {
-
-    private static final long serialVersionUID = 8317680063407659021L;
+    private static final long serialVersionUID = 3970924778495193437L;
 
     /**
-     * Builds a QueryJ exception with a certain message.
+     * Builds a QueryJ build exception with a certain message.
      * @param message the message.
+     * @param params the parameters.
      */
-    public QueryJException(@NotNull final String message)
+    public QueryJBuildException(@NotNull final String message, @NotNull final Object[] params)
     {
-        super(message);
+        super(message, params);
     }
 
     /**
      * Builds a QueryJ exception to wrap given one.
      * @param message the message.
+     * @param params the parameters.
      * @param cause the exception to wrap.
      */
-    public QueryJException(@NotNull final String message, @NotNull final Throwable cause)
+    public QueryJBuildException(
+        @NotNull final String message,  @NotNull final Object[] params, @NotNull final Throwable cause)
     {
-        super(message, cause);
-    }
-
-    /**
-     * Outputs a text representation of this exception.
-     * @return the error description.
-     */
-    @NotNull
-    public String toString()
-    {
-        return toString(getMessage(), getCause());
-    }
-
-    /**
-     * Outputs a text representation of this exception.
-     * @param message the message.
-     * @param cause the cause.
-     * @return the error description.
-     */
-    @NotNull
-    public String toString(@NotNull final String message, @Nullable final Throwable cause)
-    {
-        @NotNull StringBuffer t_sbResult = new StringBuffer();
-
-        t_sbResult.append(message);
-
-        if  (cause != null) 
-        {
-            t_sbResult.append(" (");
-            t_sbResult.append(cause.getMessage());
-            t_sbResult.append(")");
-        }
-
-        return t_sbResult.toString();
+        super(message, params, cause);
     }
 }
