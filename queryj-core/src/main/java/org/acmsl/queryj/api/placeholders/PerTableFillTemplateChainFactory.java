@@ -34,8 +34,9 @@
  * Time: 8:44 AM
  *
  */
-package org.acmsl.queryj.api;
+package org.acmsl.queryj.api.placeholders;
 
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.placeholders.FillTemplateChainFactory;
 
 /**

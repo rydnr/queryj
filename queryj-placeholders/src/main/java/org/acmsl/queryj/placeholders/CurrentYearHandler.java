@@ -62,7 +62,6 @@ import org.checkthread.annotations.ThreadSafe;
  * @since 2012/05/13
  */
 @ThreadSafe
-@SuppressWarnings("unused")
 public class CurrentYearHandler
     extends AbstractFillHandler<String>
     implements NonRelevantFillHandler

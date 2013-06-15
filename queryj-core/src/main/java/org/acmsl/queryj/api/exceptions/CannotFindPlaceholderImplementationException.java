@@ -58,6 +58,15 @@ public class CannotFindPlaceholderImplementationException
 {
     /**
      * Creates an instance for given class.
+     * @param contextClassName the class name of the context.
+     */
+    public CannotFindPlaceholderImplementationException(@NotNull final String contextClassName)
+    {
+        super("null.placeholder.implementation", new Object[] { contextClassName });
+    }
+
+    /**
+     * Creates an instance for given class.
      * @param factoryClass the factory class.
      */
     public CannotFindPlaceholderImplementationException(@NotNull final Class factoryClass)

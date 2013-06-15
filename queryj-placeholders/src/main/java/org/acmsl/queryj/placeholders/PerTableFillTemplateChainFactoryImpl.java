@@ -40,7 +40,7 @@ package org.acmsl.queryj.placeholders;
  */
 import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.FillTemplateChain;
-import org.acmsl.queryj.api.PerTableFillTemplateChainFactory;
+import org.acmsl.queryj.api.placeholders.PerTableFillTemplateChainFactory;
 
 /*
  * Importing JetBrains annotations.

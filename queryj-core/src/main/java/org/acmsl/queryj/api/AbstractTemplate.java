@@ -915,6 +915,11 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     new CannotFindPlaceholderImplementationException(factoryClass);
             }
         }
+        else
+        {
+            throw
+                new CannotFindPlaceholderImplementationException(context.getClass().getName());
+        }
 
         return result;
     }
