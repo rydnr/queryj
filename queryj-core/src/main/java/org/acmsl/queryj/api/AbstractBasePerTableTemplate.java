@@ -31,6 +31,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing StringTemplate classes.
  */
+import org.acmsl.queryj.api.exceptions.InvalidPerTableTemplateException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.antlr.stringtemplate.StringTemplate;
 
@@ -117,15 +118,10 @@ public abstract class AbstractBasePerTableTemplate<C extends PerTableTemplateCon
         @NotNull final Throwable actualException)
     {
         return
-            new InvalidTemplateException(
-                "invalid.per.custom.sql.template",
-                new Object[]
-                    {
-                        template.getName(),
-                        getTemplateName(),
-                        context.getRepositoryName(),
-                        context.getTableName()
-                    },
+            new InvalidPerTableTemplateException(
+                getTemplateName(),
+                context.getTableName(),
+                context.getRepositoryName(),
                 actualException);
     }
 }

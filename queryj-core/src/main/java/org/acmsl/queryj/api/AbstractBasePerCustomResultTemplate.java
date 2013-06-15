@@ -37,6 +37,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.api.exceptions.InvalidPerCustomResultTemplateException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.acmsl.queryj.customsql.Result;
 
@@ -119,15 +120,10 @@ public abstract class AbstractBasePerCustomResultTemplate<C extends PerCustomRes
         @NotNull final Throwable actualException)
     {
         return
-            new InvalidTemplateException(
-                "invalid.per.custom.result.template",
-                new Object[]
-                    {
-                        template.getName(),
-                        getTemplateName(),
-                        context.getRepositoryName(),
-                        context.getResult()
-                    },
+            new InvalidPerCustomResultTemplateException(
+                getTemplateName(),
+                context.getResult(),
+                context.getRepositoryName(),
                 actualException);
     }
 }

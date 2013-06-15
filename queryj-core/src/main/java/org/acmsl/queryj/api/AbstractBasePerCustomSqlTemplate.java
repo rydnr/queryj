@@ -37,6 +37,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.api.exceptions.InvalidPerCustomSqlTemplateException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.acmsl.queryj.customsql.Sql;
 
@@ -45,6 +46,7 @@ import org.acmsl.queryj.customsql.Sql;
  */
 import org.antlr.stringtemplate.StringTemplate;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Logic-less container for all templates to be processed once per custom SQL.
@@ -112,16 +114,21 @@ public abstract class AbstractBasePerCustomSqlTemplate<C extends PerCustomSqlTem
         @NotNull final StringTemplate template,
         @NotNull final Throwable actualException)
     {
-        return
-            new InvalidTemplateException(
-                "invalid.per.custom.sql.template",
-                new Object[]
-                    {
-                        template.getName(),
-                        getTemplateName(),
-                        context.getRepositoryName(),
-                        context.getSql()
-                    },
+        @NotNull final InvalidTemplateException result;
+
+        @NotNull final Sql sql = context.getSql();
+
+        @Nullable final String aux = sql.getDao();
+
+        @NotNull final String dao = (aux != null) ? aux : context.getRepositoryName();
+
+        result =
+            new InvalidPerCustomSqlTemplateException(
+                getTemplateName(),
+                sql,
+                dao,
                 actualException);
+
+        return result;
     }
 }

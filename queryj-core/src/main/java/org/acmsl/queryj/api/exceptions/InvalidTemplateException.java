@@ -53,7 +53,7 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class InvalidTemplateException
+public abstract class InvalidTemplateException
     extends  NonCheckedException
 {
     private static final long serialVersionUID = 1693494071070753650L;

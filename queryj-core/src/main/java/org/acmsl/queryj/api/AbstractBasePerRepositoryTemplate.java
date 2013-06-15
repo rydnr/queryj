@@ -36,6 +36,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing StringTemplate classes.
  */
+import org.acmsl.queryj.api.exceptions.InvalidPerRepositoryTemplateException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.antlr.stringtemplate.StringTemplate;
 
@@ -76,14 +77,9 @@ public abstract class AbstractBasePerRepositoryTemplate<C extends PerRepositoryT
         @NotNull final Throwable actualException)
     {
         return
-            new InvalidTemplateException(
-                "invalid.per.repository.template",
-                new Object[]
-                {
-                    template.getName(),
-                    getTemplateName(),
-                    context.getRepositoryName()
-                },
+            new InvalidPerRepositoryTemplateException(
+                getTemplateName(),
+                context.getRepositoryName(),
                 actualException);
     }
 }

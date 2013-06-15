@@ -36,6 +36,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.api.exceptions.InvalidPerForeignKeyTemplateException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
@@ -167,7 +168,7 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends PerForeignKeyT
      * Builds a context-specific exception.
      * @param context the context.
      * @param template the {@link StringTemplate} instance.
-     * @return the specific {@link org.acmsl.queryj.api.exceptions.InvalidTemplateException} for the template.
+     * @return the specific {@link InvalidTemplateException} for the template.
      */
     @Override
     @NotNull
@@ -177,14 +178,9 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends PerForeignKeyT
         @NotNull final Throwable actualException)
     {
         return
-            new InvalidTemplateException(
-                "invalid.per.custom.sql.template",
-                new Object[]
-                    {
-                        template.getName(),
-                        getTemplateName(),
-                        context.getRepositoryName(),
-                        context.getForeignKey()
-                    },
+            new InvalidPerForeignKeyTemplateException(
+                getTemplateName(),
+                context.getForeignKey(),
+                context.getRepositoryName(),
                 actualException);
     }}
