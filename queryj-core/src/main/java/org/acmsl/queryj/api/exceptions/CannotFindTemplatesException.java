@@ -23,12 +23,12 @@
 
  ******************************************************************************
  *
- * Filename: CannotFindPlaceholderImplementationException.java
+ * Filename: CannotFindTemplatesException.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Represents the exceptional situation when the placeholder implementation is missing,
- *              which is a bug in the way QueryJ placeholder module is built.
+ * Description: Represents the exceptional situation when the template chain
+ * implementation is missing, which means the templates cannot be loaded.
  *
  * Date: 6/11/13
  * Time: 7:36 PM
@@ -47,30 +47,30 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Represents the exceptional situation when the placeholder
- * implementation is missing, which is a bug in the way QueryJ placeholder module is built.
+ * Represents the exceptional situation when the template chain
+ * implementation is missing, which means the templates cannot be loaded.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2013/06/11
  */
 @ThreadSafe
-public class CannotFindPlaceholderImplementationException
+public class CannotFindTemplatesException
     extends QueryJBuildException
 {
     /**
      * Creates an instance for given class.
      * @param contextClassName the class name of the context.
      */
-    public CannotFindPlaceholderImplementationException(@NotNull final String contextClassName)
+    public CannotFindTemplatesException(@NotNull final String contextClassName)
     {
-        super("null.placeholder.implementation", new Object[] { contextClassName });
+        super("null.template.chain.provider.implementation", new Object[] { contextClassName });
     }
 
     /**
      * Creates an instance for given class.
      * @param factoryClass the factory class.
      */
-    public CannotFindPlaceholderImplementationException(@NotNull final Class factoryClass)
+    public CannotFindTemplatesException(@NotNull final Class factoryClass)
     {
-        super("cannot.find.placeholder.implementation", new Object[] { factoryClass.getName() } );
+        super("cannot.find.template.chain.provider.implementation", new Object[] { factoryClass.getName() } );
     }
 }
