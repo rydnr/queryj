@@ -23,15 +23,15 @@
 
  ******************************************************************************
  *
- * Filename: CannotReadCustomSqlXmlFileException.java
+ * Filename: CustomSqlXmlFileDoesNotExistException.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Represents the error when XML file with the custom SQL cannot
- *              be read.
+ * Description: Represents an error when the XML file with the custom SQL
+ * sentences does not exist.
  *
- * Date: 6/13/13
- * Time: 9:54 PM
+ * Date: 6/16/13
+ * Time: 3:28 PM
  *
  */
 package org.acmsl.queryj.api.exceptions;
@@ -42,44 +42,31 @@ package org.acmsl.queryj.api.exceptions;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing JDK classes.
- */
-import java.io.File;
-import java.io.InputStream;
-
-/*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
+import java.io.File;
+
 /**
- * Represents the error when XML file with the custom SQL cannot be read.
+ * Represents an error when the XML file with the custom SQL sentences
+ * does not exist.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/13
+ * @since 2013/06/16
  */
 @ThreadSafe
-public class CannotReadCustomSqlXmlFileException
+public class CustomSqlXmlFileDoesNotExistException
     extends QueryJBuildException
 {
-    private static final long serialVersionUID = -8064000429461780536L;
-
     /**
      * Creates an instance with given context.
      * @param file the file.
      */
-    public CannotReadCustomSqlXmlFileException(@NotNull final File file)
+    public CustomSqlXmlFileDoesNotExistException(@NotNull final File file)
     {
-        super("cannot.read.custom-sql.xml.file", new Object[] { file.getAbsolutePath() });
-    }
-
-    /**
-     * Creates an instance with given context.
-     * @param stream the custom SQL file stream.
-     * @param cause the exception to wrap.
-     */
-    public CannotReadCustomSqlXmlFileException(
-        @NotNull final InputStream stream, @NotNull final Throwable cause)
-    {
-        super("cannot.read.custom-sql.xml.file", new Object[] { stream }, cause);
+        super("custom-sql.xml.file.does.not.exist", new Object[] { file.getAbsolutePath() });
     }
 }

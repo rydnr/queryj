@@ -58,6 +58,6 @@ public class MissingCustomSqlXmlFileException
      */
     public MissingCustomSqlXmlFileException()
     {
-        super("jndi-location.not.specified", new Object[0]);
+        super("custom-sql.xml.file.not.specified", new Object[0]);
     }
 }

@@ -31,6 +31,8 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.exceptions.CannotReadCustomSqlXmlFileException;
+import org.acmsl.queryj.api.exceptions.CustomSqlXmlFileDoesNotExistException;
 import org.acmsl.queryj.api.exceptions.NullCharsetException;
 import org.acmsl.queryj.api.exceptions.UnsupportedCharsetQueryjException;
 import org.acmsl.queryj.api.exceptions.CannotReadHeaderFileException;
@@ -51,6 +53,7 @@ import org.acmsl.queryj.api.exceptions.MissingPackageException;
 import org.acmsl.queryj.api.exceptions.MissingRepositoryException;
 import org.acmsl.queryj.api.exceptions.MissingTablesException;
 import org.acmsl.queryj.api.exceptions.OutputDirIsNotAFolderException;
+import org.acmsl.queryj.api.exceptions.UnsupportedCustomSqlFileFormatException;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -600,10 +603,22 @@ public class ParameterValidationHandler
             throw new QueryJBuildException(CUSTOM_SQL_MODEL_MISSING);
         }
         */
-        if  (   (CUSTOM_SQL_MODEL_XML.equals(customSqlModel))
-             && (   (sqlXmlFile == null)
-                 || (!sqlXmlFile.exists())
-                 || (!sqlXmlFile.canRead())))
+        if  (!CUSTOM_SQL_MODEL_XML.equals(customSqlModel))
+        {
+            throw new UnsupportedCustomSqlFileFormatException(customSqlModel);
+        }
+
+        if (sqlXmlFile == null)
+        {
+            throw new MissingCustomSqlXmlFileException();
+        }
+
+        if (!sqlXmlFile.exists())
+        {
+            throw new CannotReadCustomSqlXmlFileException(sqlXmlFile);
+        }
+
+        if (!sqlXmlFile.canRead())
         {
             throw new MissingCustomSqlXmlFileException();
         }
