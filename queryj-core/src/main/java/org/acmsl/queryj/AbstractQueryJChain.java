@@ -116,8 +116,10 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<C>, C 
      * Builds the chain.
      * @param chain the chain to be configured.
      * @return the updated chain.
+     * @throws QueryJBuildException if the chain cannot be built successfully.
      */
-    protected abstract Chain<CH> buildChain(@NotNull final Chain<CH> chain);
+    protected abstract Chain<CH> buildChain(@NotNull final Chain<CH> chain)
+        throws QueryJBuildException;
 
     /**
      * Builds the command.

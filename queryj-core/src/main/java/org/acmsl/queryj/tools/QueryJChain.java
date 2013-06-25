@@ -39,6 +39,7 @@ import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.SingularPluralFormConverter;
+import org.acmsl.queryj.api.exceptions.CannotFindTemplatesException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
@@ -2583,10 +2584,12 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
      * Builds the chain.
      * @param chain the chain to be configured.
      * @return the updated chain.
+     * @throws QueryJBuildException if the chain cannot be built successfully.
      */
     @SuppressWarnings("unchecked")
     @NotNull
     protected Chain<CH> buildChain(@NotNull final Chain<CH> chain)
+       throws QueryJBuildException
     {
         chain.add((CH) new ParameterValidationHandler());
 
@@ -2618,42 +2621,30 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
     /**
      * Fills given chain with external template bundles.
      * @param chain the chain.
+     * @throws QueryJBuildException if the chain cannot be built successfully.
      */
     @SuppressWarnings("unchecked")
     protected void fillTemplateHandlers(@NotNull final Chain<CH> chain)
+        throws QueryJBuildException
     {
          @NotNull final ServiceLoader<TemplateChainProvider> loader =
              ServiceLoader.load(TemplateChainProvider.class);
 
-        @NotNull final TemplateChainProvider<TemplateHandler> provider = loader.iterator().next();
-
-        for (@Nullable final TemplateHandler handler : provider.getHandlers())
+        if (loader.iterator().hasNext())
         {
-            if (handler != null)
+            @NotNull final TemplateChainProvider<TemplateHandler> provider = loader.iterator().next();
+
+            for (@Nullable final TemplateHandler handler : provider.getHandlers())
             {
-                chain.add((CH) handler);
+                if (handler != null)
+                {
+                    chain.add((CH) handler);
+                }
             }
         }
-    }
-
-    /**
-     * Fills given chain with external template bundles.
-     * @param chain the chain.
-     */
-    @SuppressWarnings("unchecked")
-    protected void fillPlaceholderHandlers(@NotNull final Chain<CH> chain)
-    {
-        @NotNull final ServiceLoader<PlaceholderChainProvider> loader =
-            ServiceLoader.load(PlaceholderChainProvider.class);
-
-        @NotNull final PlaceholderChainProvider<FillHandler> provider = loader.iterator().next();
-
-        for (@Nullable final FillHandler handler : provider.getHandlers())
+        else
         {
-            if (handler != null)
-            {
-                chain.add((CH) handler);
-            }
+            throw new CannotFindTemplatesException(TemplateChainProvider.class);
         }
     }
 

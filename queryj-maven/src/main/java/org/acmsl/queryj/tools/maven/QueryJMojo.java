@@ -65,6 +65,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -96,7 +97,7 @@ public class QueryJMojo
      * The location of pom.properties within the jar file.
      */
     protected static final String POM_PROPERTIES_LOCATION =
-        "META-INF/maven/org.acmsl/queryj/pom.properties";
+        "META-INF/maven/org.acmsl/queryj-maven/pom.properties";
 
     /**
      * The driver.
@@ -688,9 +689,9 @@ public class QueryJMojo
     @Nullable
     protected File getOutputDir()
     {
-        File result;
+        final File result;
 
-        String aux = System.getProperty("queryj.package");
+        final String aux = System.getProperty("queryj.package");
 
         if (aux == null)
         {
@@ -784,9 +785,9 @@ public class QueryJMojo
     @Nullable
     protected File getSqlXmlFile()
     {
-        File result;
+        final File result;
 
-        String aux = System.getProperty("queryj.sqlXmlFile");
+        @Nullable final String aux = System.getProperty("queryj.sqlXmlFile");
 
         if (aux == null)
         {
@@ -882,7 +883,7 @@ public class QueryJMojo
     {
         Boolean result = null;
 
-        String aux = System.getProperty("queryj.generateXmlDAO");
+        @Nullable final String aux = System.getProperty("queryj.generateXmlDAO");
 
         if (aux == null)
         {
@@ -934,7 +935,7 @@ public class QueryJMojo
     {
         Boolean result = null;
 
-        String aux = System.getProperty("queryj.generateMockDAO");
+        @Nullable final String aux = System.getProperty("queryj.generateMockDAO");
 
         if (aux == null)
         {
@@ -986,7 +987,7 @@ public class QueryJMojo
     {
         Boolean result = null;
 
-        String aux = System.getProperty("queryj.generateTests");
+        @Nullable final String aux = System.getProperty("queryj.generateTests");
 
         if (aux == null)
         {
@@ -1036,9 +1037,9 @@ public class QueryJMojo
     @Nullable
     protected File getHeaderFile()
     {
-        File result;
+        final File result;
 
-        String aux = System.getProperty("queryj.headerFile");
+        final String aux = System.getProperty("queryj.headerFile");
 
         if (aux == null)
         {
@@ -1089,7 +1090,7 @@ public class QueryJMojo
     {
         Boolean result = null;
 
-        String aux = System.getProperty("queryj.extractFunctions");
+        @Nullable final String aux = System.getProperty("queryj.extractFunctions");
 
         if (aux == null)
         {
@@ -1141,7 +1142,7 @@ public class QueryJMojo
     {
         Boolean result = null;
 
-        String aux = System.getProperty("queryj.extractProcedures");
+        @Nullable final String aux = System.getProperty("queryj.extractProcedures");
 
         if (aux == null)
         {
@@ -1232,9 +1233,9 @@ public class QueryJMojo
     @Nullable
     protected File getGrammarFolder()
     {
-        File result;
+        final File result;
 
-        String aux = System.getProperty("queryj.grammarFolder");
+        @Nullable final String aux = System.getProperty("queryj.grammarFolder");
 
         if (aux == null)
         {
@@ -1379,9 +1380,9 @@ public class QueryJMojo
     @Nullable
     public Boolean getUseOutputSubfolders()
     {
-        Boolean result;
+        final Boolean result;
 
-        String aux = System.getProperty("queryj.useOutputSubfolders");
+        @Nullable final String aux = System.getProperty("queryj.useOutputSubfolders");
 
         if (aux == null)
         {
@@ -1515,7 +1516,7 @@ public class QueryJMojo
     {
         Boolean result;
 
-        String aux = System.getProperty("queryj.caching");
+        @Nullable final String aux = System.getProperty("queryj.caching");
 
         if (aux == null)
         {
@@ -1571,7 +1572,7 @@ public class QueryJMojo
     {
         Boolean result = null;
 
-        String aux = System.getProperty("queryj.disableTimestamps");
+        @Nullable final String aux = System.getProperty("queryj.disableTimestamps");
 
         if (aux == null)
         {
@@ -1623,7 +1624,7 @@ public class QueryJMojo
     {
         Boolean result = null;
 
-        String aux = System.getProperty("queryj.disableNotNullAnnotations");
+        @Nullable final String aux = System.getProperty("queryj.disableNotNullAnnotations");
 
         if (aux == null)
         {
@@ -1675,7 +1676,7 @@ public class QueryJMojo
     {
         Boolean result = null;
 
-        String aux = System.getProperty("queryj.disableCheckthreadAnnotations");
+        @Nullable final String aux = System.getProperty("queryj.disableCheckthreadAnnotations");
 
         if (aux == null)
         {
@@ -1740,14 +1741,14 @@ public class QueryJMojo
     {
         boolean running = false;
 
-        File outputDirPath = getOutputDir();
+        @Nullable final File outputDirPath = getOutputDir();
 
-        @Nullable QueryJTask task;
+        @Nullable final QueryJTask task;
 
         if  (outputDirPath != null)
         {
             //initialize directories
-            File outputDir = outputDirPath.getAbsoluteFile();
+            @NotNull final File outputDir = outputDirPath.getAbsoluteFile();
 
             if (   (!outputDir.exists())
                 && (!outputDir.mkdirs()))
@@ -1788,12 +1789,15 @@ public class QueryJMojo
 
         try
         {
-            InputStream pomProperties =
+            @Nullable final InputStream pomProperties =
                 getClass().getClassLoader().getResourceAsStream(POM_PROPERTIES_LOCATION);
 
-            result = new Properties();
+            if (pomProperties != null)
+            {
+                result = new Properties();
 
-            result.load(pomProperties);
+                result.load(pomProperties);
+            }
         }
         catch (@NotNull final IOException ioException)
         {
@@ -1813,13 +1817,13 @@ public class QueryJMojo
     @NotNull
     protected QueryJTask buildTask(@NotNull final Log log)
     {
-        @NotNull QueryJTask result = new QueryJTask();
+        @NotNull final QueryJTask result = new QueryJTask();
 
-        @NotNull Project project = new AntProjectAdapter(new Project(), log);
+        @NotNull final Project project = new AntProjectAdapter(new Project(), log);
 
         result.setProject(project);
 
-        @NotNull Path path = new Path(project);
+        @NotNull final Path path = new Path(project);
         result.setClasspath(path);
 
         log.debug("Catalog: " + getCatalog());
@@ -1896,7 +1900,7 @@ public class QueryJMojo
         buildExternallyManagedFields(result);
         buildTables(result);
 
-        @Nullable String encoding = getEncoding();
+        @Nullable final String encoding = getEncoding();
 
         if (encoding == null)
         {
@@ -1910,7 +1914,7 @@ public class QueryJMojo
 
         boolean caching = true;
 
-        @Nullable Boolean auxCaching = isCaching();
+        @Nullable final Boolean auxCaching = isCaching();
         if (auxCaching != null)
         {
             caching = auxCaching;
@@ -1919,20 +1923,20 @@ public class QueryJMojo
         log.debug("Caching: " + caching);
         result.setCaching(caching);
 
-        int threadCount = getRequestThreadCount();
+        final int threadCount = getRequestThreadCount();
 
         log.info("Using " + threadCount + " threads");
         result.setThreadCount(threadCount);
 
-        boolean disableGenerationTimestamps = getDisableGenerationTimestamps();
+        final boolean disableGenerationTimestamps = getDisableGenerationTimestamps();
 
         result.setDisableGenerationTimestamps(disableGenerationTimestamps);
 
-        boolean disableNotNullAnnotations = getDisableNotNullAnnotations();
+        final boolean disableNotNullAnnotations = getDisableNotNullAnnotations();
 
         result.setDisableNotNullAnnotations(disableNotNullAnnotations);
 
-        boolean disableCheckthreadAnnotations = getDisableCheckthreadAnnotations();
+        final boolean disableCheckthreadAnnotations = getDisableCheckthreadAnnotations();
 
         result.setDisableCheckthreadAnnotations(disableCheckthreadAnnotations);
 
@@ -1949,10 +1953,10 @@ public class QueryJMojo
     protected void buildExternallyManagedFields(
         @NotNull final QueryJTask task)
     {
-        ExternallyManagedField[] array = getExternallyManagedFields();
+        @NotNull final ExternallyManagedField[] array = getExternallyManagedFields();
 
-        int count = array.length;
-        @Nullable AntExternallyManagedFieldsElement element;
+        final int count = array.length;
+        @Nullable final AntExternallyManagedFieldsElement element;
         ExternallyManagedField field;
         @Nullable AntFieldElement fieldElement;
 
@@ -1964,7 +1968,7 @@ public class QueryJMojo
 
             if (element != null)
             {
-                for (ExternallyManagedField anArray : array)
+                for (@Nullable final ExternallyManagedField anArray : array)
                 {
                     field = anArray;
 
@@ -1998,16 +2002,16 @@ public class QueryJMojo
      */
     protected void buildTables(@NotNull final QueryJTask task)
     {
-        Table[] array = getTables();
+        @NotNull final Table[] array = getTables();
         Table table;
-        @Nullable AntTablesElement element;
+        @Nullable final AntTablesElement element;
         @Nullable AntTableElement tableElement;
         List<Field> fields;
         int fieldCount;
         Field field;
         @Nullable AntFieldElement fieldElement;
 
-        int count =  array.length;
+        final int count =  array.length;
 
         if  (count > 0)
         {
@@ -2016,16 +2020,22 @@ public class QueryJMojo
 
             if (element != null)
             {
-                for (Table anArray : array)
+                for (@Nullable final Table anArray : array)
                 {
                     table = anArray;
 
                     tableElement =
                         (AntTableElement) element.createDynamicElement("table");
 
-                    if (tableElement != null)
+                    if (   (table != null)
+                        && (tableElement != null))
                     {
-                        tableElement.setDynamicAttribute("name", table.getName());
+                        @Nullable final String name = table.getName();
+
+                        if (name != null)
+                        {
+                            tableElement.setDynamicAttribute("name", name);
+                        }
 
                         fields = table.getFields();
 
@@ -2098,13 +2108,13 @@ public class QueryJMojo
 
         try
         {
-            Method getRequestMethod = this.session.getClass().getMethod( "getRequest" );
-            Object mavenExecutionRequest = getRequestMethod.invoke( this.session );
-            Method getThreadCountMethod = mavenExecutionRequest.getClass().getMethod( "getThreadCount" );
-            String threadCount = (String) getThreadCountMethod.invoke( mavenExecutionRequest );
-            result  = Integer.valueOf( threadCount );
+            final Method getRequestMethod = this.session.getClass().getMethod("getRequest");
+            final Object mavenExecutionRequest = getRequestMethod.invoke(this.session);
+            final Method getThreadCountMethod = mavenExecutionRequest.getClass().getMethod("getThreadCount");
+            final String threadCount = (String) getThreadCountMethod.invoke(mavenExecutionRequest);
+            result  = Integer.valueOf(threadCount);
         }
-        catch (final Throwable unexpectedError)
+        catch (@NotNull final Throwable unexpectedError)
         {
             getLog().debug( "unable to get thread count for the current build: " + unexpectedError.getMessage());
         }
@@ -2130,9 +2140,9 @@ public class QueryJMojo
     @SuppressWarnings("unchecked")
     protected boolean isMultithreadEnabled()
     {
-        Set<Map.Entry> entrySet = (Set<Map.Entry>) super.getPluginContext().entrySet();
+        @NotNull final Set<Map.Entry> entrySet = (Set<Map.Entry>) super.getPluginContext().entrySet();
 
-        for (Map.Entry item : entrySet)
+        for (@NotNull final Map.Entry item : entrySet)
         {
             getLog().info(item.getKey() + " -> " + item.getValue());
         }
@@ -2144,7 +2154,7 @@ public class QueryJMojo
     {
         int result = 0;
 
-        String aux = System.getProperty("queryj.threadCount");
+        @Nullable final String aux = System.getProperty("queryj.threadCount");
 
         if (aux != null)
         {
@@ -2152,5 +2162,42 @@ public class QueryJMojo
         }
 
         return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "QueryJMojo{" +
+               "catalog='" + catalog + '\'' +
+               ", driver='" + m__strDriver + '\'' +
+               ", url='" + m__strUrl + '\'' +
+               ", username='" + m__strUsername + '\'' +
+               ", password='" + m__strPassword + '\'' +
+               ", schema='" + schema + '\'' +
+               ", repository='" + m__strRepository + '\'' +
+               ", packageName='" + m__strPackageName + '\'' +
+               ", outputDir=" + m__OutputDir +
+               ", jndiDataSource='" + m__strJndiDataSource + '\'' +
+               ", sqlXmlFile=" + m__SqlXmlFile +
+               ", customSqlModel='" + m__strCustomSqlModel + '\'' +
+               ", generateXmlDAOImplementation=" + m__bGenerateXmlDAOImplementation +
+               ", generateMockDAOImplementation=" + m__bGenerateMockDAOImplementation +
+               ", generateTests=" + m__bGenerateTests +
+               ", headerFile=" + m__HeaderFile +
+               ", extractFunctions=" + m__bExtractFunctions +
+               ", extractProcedures=" + m__bExtractProcedures +
+               ", externallyManagedFields=" + Arrays.toString(externallyManagedFields) +
+               ", grammarFolder=" + m__GrammarFolder +
+               ", grammarName='" + m__strGrammarName + '\'' +
+               ", grammarSuffix='" + m__strGrammarSuffix + '\'' +
+               ", outputSubfolders=" + m__bOutputSubfolders +
+               ", tables=" + Arrays.toString(m__aTables) +
+               ", encoding='" + m__strEncoding + '\'' +
+               ", disableGenerationTimestamps=" + m__bDisableGenerationTimestamps +
+               ", disableNotNullAnnotations=" + m__bDisableNotNullAnnotations +
+               ", disableCheckthreadAnnotations=" + m__bDisableCheckthreadAnnotations +
+               ", session=" + session +
+               ", disableCaching=" + m__bDisableCaching +
+               '}';
     }
 }

@@ -1122,7 +1122,7 @@ custom_select_template_call(sql, result, table) ::= <<
  @param result the sql result.
  @param table the table.
  !>
-(<custom_select_return_cast(table=table, result=result)>) <actual_custom_select_template_call(sql=sql, result=result)>;
+(/* */<custom_select_return_cast(table=table, result=result)>/* */) <actual_custom_select_template_call(sql=sql, result=result)>;
 >>
 
 actual_custom_select_template_call(sql, result) ::= <<

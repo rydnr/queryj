@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Helper class for per-table Cucumber tests.
  *
  * Date: 5/26/13
  * Time: 5:46 PM
@@ -35,7 +35,17 @@
  */
 package cucumber.templates;
 
+/*
+ * Importing Cucumber classes.
+ */
 import cucumber.api.DataTable;
+
+/*
+ * Importing QueryJ-Core classes.
+ */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.AttributeValueObject;
@@ -43,16 +53,28 @@ import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableValueObject;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Helper class for per-table Cucumber tests.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @since 2013/05/26
+ */
 public class TableTestHelper
 {
-
     /**
      * Singleton implementation to avoid double-locking check.
      */
@@ -399,5 +421,41 @@ public class TableTestHelper
         }
     }
 
+    /**
+     * Defines custom SQL sentences.
+     * @param provider the {@link CustomSqlProvider} implementation.
+     */
+    @NotNull
+    public Map<String, Sql> defineSql(@NotNull final CustomSqlProvider provider)
+    {
+        @NotNull final Map<String, Sql> result = new HashMap<String, Sql>();
 
+        for (@NotNull final Sql query : provider.getSqlDAO().findAll())
+        {
+            result.put(query.getDao(), query);
+        }
+
+        return result;
+    }
+
+    /**
+     * Defines the parameters in SQL sentences.
+     * @param provider the {@link CustomSqlProvider} instance.
+     * @param queries the queries.
+     */
+    public Map<String, List<Parameter>> defineParameters(
+        @NotNull final CustomSqlProvider provider, @NotNull final List<Sql> queries)
+    {
+        @NotNull final Map<String, List<Parameter>> result = new HashMap<String, List<Parameter>>();
+
+        for (@NotNull final Sql query : queries)
+        {
+            @NotNull final List<Parameter> parameters =
+                provider.getSqlParameterDAO().findBySql(query.getId());
+
+            result.put(query.getId(), parameters);
+        }
+
+        return result;
+    }
 }

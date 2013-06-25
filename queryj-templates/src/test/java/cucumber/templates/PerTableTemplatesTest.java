@@ -38,6 +38,8 @@ package cucumber.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
@@ -242,6 +244,83 @@ public class PerTableTemplatesTest
         @NotNull final TableTestHelper helper)
     {
         helper.defineValues(values, tables);
+    }
+
+    /**
+     * Defines SQL sentences via cucumber features.
+     * @param values such information.
+     */
+    @SuppressWarnings("unused")
+    @And("^the following custom sql:$")
+    public void defineSql(@NotNull final DataTable values)
+    {
+        defineSql(retrieveSqlList(values), TableTestHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the list of {@link Sql} from a Cucumber table.\
+     * @param values the Cucumber table.
+     * @return the list of SQL items.
+     */
+    protected List<Sql> retrieveSqlList(@NotNull final DataTable values)
+    {
+        @NotNull final List<Sql> result = new ArrayList<Sql>(0);
+
+        // TODO
+
+        setSqlList(result);
+
+        return result;
+    }
+
+    /**
+     * Defines SQL sentences via cucumber features.
+     * @param sqlList such information.
+     * @param helper the {@link TableTestHelper} instance.
+     */
+    protected void defineSql(
+        @NotNull final List<Sql> sqlList,
+        @NotNull final TableTestHelper helper)
+    {
+        helper.defineSql(retrieveCustomSqlProvider(sqlList));
+    }
+
+    /**
+     * Defines SQL sentences via cucumber features.
+     * @param values such information.
+     */
+    @SuppressWarnings("unused")
+    @And("^the following parameters:$")
+    public void defineParameters(@NotNull final DataTable values)
+    {
+        defineParameters(retrieveParameterList(values), getSqlList(), TableTestHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the list of {@link Parameter} from given Cucumber table.
+     * @param values the Cucumber table.
+     * @return the list of parameters.
+     */
+    @NotNull
+    protected List<Parameter> retrieveParameterList(final DataTable values)
+    {
+        // TODO
+        return new ArrayList<Parameter>(0);
+    }
+
+    /**
+     * Defines SQL parameters via cucumber features.
+     * @param parameters such information.
+     * @param sqlList the SQL sentences.
+     * @param helper the {@link TableTestHelper} instance.
+     */
+    protected void defineParameters(
+        @NotNull final List<Parameter> parameters,
+        @NotNull final List<Sql> sqlList,
+        @NotNull final TableTestHelper helper)
+    {
+        // TODO
+        helper.defineParameters(retrieveCustomSqlProvider(sqlList), sqlList);
     }
 
     /**

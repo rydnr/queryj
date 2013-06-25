@@ -825,7 +825,7 @@ public class QueryJTask
     }
 
     /**
-     * Specifices the JNDI location for the data sources.
+     * Specifies the JNDI location for the data sources.
      * @param jndiLocation the JNDI location.
      */
     public void setJndiDataSource(@Nullable final String jndiLocation)
@@ -834,7 +834,7 @@ public class QueryJTask
     }
 
     /**
-     * Specifices the JNDI location for the data sources.
+     * Specifies the JNDI location for the data sources.
      * @param jndiLocation the JNDI location.
      * @param delegee the delegee.
      */

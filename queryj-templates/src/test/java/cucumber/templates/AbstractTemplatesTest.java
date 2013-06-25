@@ -38,10 +38,17 @@ package cucumber.templates;
 /*
  * Importing project classes.
  */
+import cucumber.templates.sql.CucumberSqlDAO;
+import cucumber.templates.sql.CucumberSqlPropertyDAO;
+import cucumber.templates.sql.CucumberSqlResultDAO;
+
+/*
+ * Importing QueryJ-Core classes.
+ */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
-import org.acmsl.queryj.customsql.PropertyElement;
 import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 
@@ -55,11 +62,16 @@ import org.acmsl.commons.utils.io.FileUtils;
  */
 import org.acmsl.queryj.metadata.MetadataExtractionLogger;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
+
+/*
+ * Importing ANTLR classes.
+ */
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
 
@@ -139,6 +151,11 @@ public abstract class AbstractTemplatesTest<G, F>
     private List<ForeignKey> m__lForeignKeys;
 
     /**
+     * The list of SQL queries.
+     */
+    private List<Sql> m__lSql;
+
+    /**
      * Creates an empty instance.
      */
     protected AbstractTemplatesTest()
@@ -146,6 +163,8 @@ public abstract class AbstractTemplatesTest<G, F>
         immutableSetOutputFiles(new HashMap<String, File>());
         immutableSetTables(new HashMap<String, Table>());
         immutableSetForeignKeys(new ArrayList<ForeignKey>());
+        immutableSetSqlList(new ArrayList<Sql>());
+
     }
 
     /**
@@ -232,6 +251,34 @@ public abstract class AbstractTemplatesTest<G, F>
     }
 
     /**
+     * Specifies the {@link Sql} list.
+     * @param sqlList such list.
+     */
+    protected final void immutableSetSqlList(@NotNull final List<Sql> sqlList)
+    {
+        this.m__lSql = sqlList;
+    }
+
+    /**
+     * Specifies the {@link Sql} list.
+     * @param sqlList such list.
+     */
+    @SuppressWarnings("unused")
+    protected void setSqlList(@NotNull final List<Sql> sqlList)
+    {
+        immutableSetSqlList(sqlList);
+    }
+
+    /**
+     * Retrieves the list of {@link Sql}.
+     * @return such table.
+     */
+    protected List<Sql> getSqlList()
+    {
+        return this.m__lSql;
+    }
+
+    /**
      * Retrieves an empty {@link CustomSqlProvider} instance.
      * @return such instance.
      */
@@ -251,6 +298,31 @@ public abstract class AbstractTemplatesTest<G, F>
     protected CustomSqlProvider retrieveCustomSqlProvider(
         @NotNull final Result customResult, @NotNull final List<Property> properties)
     {
+        return retrieveCustomSqlProvider(new ArrayList<Sql>(0), customResult, properties);
+    }
+
+    /**
+     * Retrieves a {@link CustomSqlProvider} instance adapted for given result.
+     * @param sqlList the list of {@link Sql}.
+     * @return such instance.
+     */
+    @NotNull
+    protected CustomSqlProvider retrieveCustomSqlProvider(@NotNull final List<Sql> sqlList)
+    {
+        return retrieveCustomSqlProvider(sqlList, null, new ArrayList<Property>(0));
+    }
+
+    /**
+     * Retrieves a {@link CustomSqlProvider} instance adapted for given result.
+     * @param sqlList the list of {@link Sql}.
+     * @param customResult the {@link Result}.
+     * @param properties the {@link Property properties}.
+     * @return such instance.
+     */
+    @NotNull
+    protected CustomSqlProvider retrieveCustomSqlProvider(
+        @NotNull final List<Sql> sqlList, @Nullable final Result customResult, @NotNull final List<Property> properties)
+    {
         return
             new SqlXmlParserImpl(new ByteArrayInputStream("".getBytes()))
             {
@@ -258,138 +330,43 @@ public abstract class AbstractTemplatesTest<G, F>
                 @NotNull
                 public SqlResultDAO getSqlResultDAO()
                 {
-                    return
-                        new SqlResultDAO()
-                        {
-                            @Nullable
-                            @Override
-                            public Result findByPrimaryKey(@NotNull final String id)
-                            {
-                                @Nullable Result result = null;
+                    @NotNull final SqlResultDAO result;
 
-                                if (id.equals(customResult.getId()))
-                                {
-                                    result = customResult;
-                                }
+                    if (customResult != null)
+                    {
+                        result = new CucumberSqlResultDAO(customResult);
+                    }
+                    else
+                    {
+                        result = super.getSqlResultDAO();
+                    }
 
-                                return result;
-                            }
-
-                            @Nullable
-                            @Override
-                            public Result findSingleMatch(@NotNull final String table)
-                            {
-                                return null;
-                            }
-
-                            @Nullable
-                            @Override
-                            public Result findMultipleMatch(@NotNull final String table)
-                            {
-                                return null;
-                            }
-
-                            @Nullable
-                            @Override
-                            public Result findBySqlId(@NotNull final String sqlId)
-                            {
-                                return null;
-                            }
-
-                            @NotNull
-                            @Override
-                            public List<Result> findByType(@NotNull final String type)
-                            {
-                                @NotNull final List<Result> result = new ArrayList<Result>(1);
-
-                                if (type.equals(customResult.getClassValue()))
-                                {
-                                    result.add(customResult);
-                                }
-
-                                return result;
-                            }
-
-                            @NotNull
-                            @Override
-                            public List<Result> findAll()
-                            {
-                                @NotNull final List<Result> result = new ArrayList<Result>(1);
-
-                                result.add(customResult);
-
-                                return result;
-                            }
-                        };
+                    return result;
                 }
 
                 @Override
                 @NotNull
                 public SqlPropertyDAO getSqlPropertyDAO()
                 {
-                    return
-                        new SqlPropertyDAO()
-                        {
-                            /**
-                             * Retrieves the {@link org.acmsl.queryj.customsql.Property} associated to given id.
-                             *
-                             * @param id the parameter id.
-                             * @return the {@link org.acmsl.queryj.customsql.Property}, or <code>null</code> if
-                             * not found.
-                             */
-                            @Nullable
-                            @Override
-                            public Property findByPrimaryKey(@NotNull final String id)
-                            {
-                                @Nullable Property result = null;
+                    @NotNull final SqlPropertyDAO result;
 
-                                for (@NotNull final Property property : properties)
-                                {
-                                    if (id.equals(property.getId()))
-                                    {
-                                        result = property;
-                                        break;
-                                    }
-                                }
+                    if (customResult != null)
+                    {
+                        result = new CucumberSqlPropertyDAO(properties, customResult);
+                    }
+                    else
+                    {
+                        result = super.getSqlPropertyDAO();
+                    }
 
-                                return result;
-                            }
+                    return result;
+                }
 
-                            /**
-                             * Retrieves all {@link org.acmsl.queryj.customsql.Parameter parameters} used in given
-                             * {@link org.acmsl.queryj.customsql.Result}.
-                             *
-                             * @param resultId the {@link org.acmsl.queryj.customsql.Result} identifier.
-                             * @return the list of properties associated to given {@link org.acmsl.queryj.customsql.Result}.
-                             */
-                            @NotNull
-                            @Override
-                            public List<Property> findByResult(@NotNull final String resultId)
-                            {
-                                @NotNull List<Property> result = properties;
-
-                                if (!resultId.equals(customResult.getId()))
-                                {
-                                    result = new ArrayList<Property>(0);
-                                }
-
-                                return result;
-                            }
-
-                            /**
-                             * Inserts a new property.
-                             * @param id         the property id.
-                             * @param columnName the column name.
-                             * @param index      the property index.
-                             * @param type       the type.
-                             * @param nullable   whether it allows null or not.
-                             */
-                            @Override
-                            public void insert(@NotNull final String id, @NotNull final String columnName, final int index, @NotNull final String type, final boolean nullable)
-                            {
-                                properties.add(new PropertyElement(id, columnName, index, type, nullable));
-                            }
-                        };
+                @Override
+                @NotNull
+                public SqlDAO getSqlDAO()
+                {
+                    return new CucumberSqlDAO(sqlList);
                 }
             };
     }
@@ -746,12 +723,14 @@ public abstract class AbstractTemplatesTest<G, F>
         result.append(GENERATOR_MAPPINGS);
         result.append(", rootFolder=");
         result.append(rootFolder);
-        result.append(", m__mOutputFiles=");
+        result.append(", outputFiles=");
         result.append(m__mOutputFiles);
-        result.append(", m__mTables=");
+        result.append(", tables=");
         result.append(m__mTables);
-        result.append(", m__lForeignKeys=");
+        result.append(", foreignKeys=");
         result.append(m__lForeignKeys);
+        result.append(", sqlList=");
+        result.append(m__lSql);
         result.append("}");
 
         return result.toString();

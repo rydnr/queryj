@@ -19,6 +19,16 @@ Feature: Per-table templates
     | source table | source columns | target table | allows null |
     | user         | company_id     | companies    | true        |
 
+    And the following custom sql:
+      |       id      |     name      |  dao |  type  |                     value                         |
+      | first.select  | first-select  | user | select | select user_id, name from users where user_id = ? |
+      | second.select | second-select | user | select | select user_id, name from users where name = ?    |
+
+    And the following parameters:
+      |       id     | index |  type  |  name  |
+      | user.user_id |   1   |  long  | userId |
+      | user.name    |   1   | String |  name  |
+
     When I generate with per-table <template>.stg for Oracle
 
     Then the generated per-table <output> file compiles successfully
