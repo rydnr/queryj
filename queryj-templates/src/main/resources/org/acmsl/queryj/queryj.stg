@@ -1373,9 +1373,9 @@ custom_select_return(table, result) ::= <<
 
 custom_select_return_decorated(result) ::= <<
 <if(result.multiple)>
-<custom_select_declaration_decorated_multiple(result=result)>
+<custom_select_return_decorated_multiple(result=result)>
 <else>
-<custom_select_declaration_decorated_single(result=result)>
+<custom_select_return_decorated_single(result=result)>
 <endif>
 >>
 

@@ -109,7 +109,7 @@ public class JdbcTableDAO
 
         final boolean t_bCaseSensitive = getMetadataManager().isCaseSensitive();
 
-        for (@Nullable Table t_Table : getMetadataManager().getTables())
+        for (@Nullable final Table t_Table : getMetadataManager().getTables())
         {
             if (t_Table != null)
             {

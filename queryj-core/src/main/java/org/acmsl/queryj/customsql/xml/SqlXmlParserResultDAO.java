@@ -154,7 +154,7 @@ public class SqlXmlParserResultDAO
     {
         @Nullable Result result = null;
 
-        List<Result> t_lCachedResults = getCachedResults(table);
+        @Nullable final List<Result> t_lCachedResults = getCachedResults(table);
 
         if (t_lCachedResults != null)
         {
@@ -169,7 +169,7 @@ public class SqlXmlParserResultDAO
 
             boolean t_bBreak = false;
 
-            for (@Nullable Result t_Result : findAll())
+            for (@Nullable final Result t_Result : findAll())
             {
                 if (t_Result != null)
                 {
@@ -177,18 +177,13 @@ public class SqlXmlParserResultDAO
                     {
                         t_lSql = findSqlByResultId(t_Result.getId());
 
-                        for (@Nullable Sql t_Sql : t_lSql)
+                        for (@Nullable final Sql t_Sql : t_lSql)
                         {
                             if (t_Sql != null)
                             {
                                 t_strDAO = t_Sql.getDao();
                             }
 
-                            if ("g_cycle_metadata".equals(t_strDAO))
-                            {
-                                @SuppressWarnings("unused")
-                                int a = 1;
-                            }
                             if (   (t_strDAO != null)
                                 && (matches(table, t_strDAO, englishGrammarUtils)))
                             {
@@ -255,7 +250,7 @@ public class SqlXmlParserResultDAO
     {
         @Nullable Result result = null;
 
-        for (@Nullable Result t_Result : results)
+        for (@Nullable final Result t_Result : results)
         {
             if (   (t_Result != null)
                 && (type.equalsIgnoreCase(t_Result.getMatches())))
@@ -319,14 +314,14 @@ public class SqlXmlParserResultDAO
     @NotNull
     protected List<Sql> findSqlByResultId(@NotNull final String id, @NotNull final SqlXmlParser sqlXmlParser)
     {
-        @Nullable List<Sql> result = new ArrayList<Sql>(2);
+        @Nullable final List<Sql> result = new ArrayList<Sql>(2);
 
-        @Nullable Result t_CustomResult = findByPrimaryKey(id);
+        @Nullable final Result t_CustomResult = findByPrimaryKey(id);
         @Nullable ResultRef t_ResultRef;
 
         if (t_CustomResult != null)
         {
-            for (@Nullable Sql t_Sql : sqlXmlParser.getQueries())
+            for (@Nullable final Sql t_Sql : sqlXmlParser.getQueries())
             {
                 if (t_Sql != null)
                 {
@@ -369,7 +364,7 @@ public class SqlXmlParserResultDAO
 
         @Nullable ResultRef t_ResultRef;
 
-        for (@Nullable Sql t_Sql : sqlXmlParser.getQueries())
+        for (@Nullable final Sql t_Sql : sqlXmlParser.getQueries())
         {
             if (t_Sql != null)
             {
@@ -404,13 +399,13 @@ public class SqlXmlParserResultDAO
     {
         boolean result;
 
-        String t_strTableInLowerCase = tableName.trim().toLowerCase();
+        @NotNull final String t_strTableInLowerCase = tableName.trim().toLowerCase();
 
         result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
 
         if  (!result)
         {
-            String t_strSingularName =
+            @NotNull final String t_strSingularName =
                 englishGrammarUtils.getSingular(t_strTableInLowerCase);
 
             result = daoId.equalsIgnoreCase(t_strSingularName);
@@ -418,7 +413,7 @@ public class SqlXmlParserResultDAO
 
         if  (!result)
         {
-            String t_strPluralName =
+            @NotNull final String t_strPluralName =
                 englishGrammarUtils.getPlural(t_strTableInLowerCase);
 
             result = daoId.equalsIgnoreCase(t_strPluralName);

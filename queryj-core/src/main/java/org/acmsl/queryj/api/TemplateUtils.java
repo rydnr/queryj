@@ -41,9 +41,11 @@ import org.acmsl.queryj.api.exceptions.MissingResultException;
 import org.acmsl.queryj.api.exceptions.ReferencedResultNotFoundException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
+import org.acmsl.queryj.metadata.CachingTableDecorator;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlDAO;
@@ -60,6 +62,10 @@ import org.acmsl.commons.patterns.Utils;
  * Importing some Apache Commons-Logging classes.
  */
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.metadata.TableDAO;
+import org.acmsl.queryj.metadata.TableDecorator;
+import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.tools.PackageUtils;
 import org.apache.commons.logging.Log;
 
 /*
@@ -73,6 +79,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /*
  * Importing checkthread.org annotations.
@@ -451,6 +458,17 @@ public class TemplateUtils
         @Nullable String t_strDao;
         boolean t_bMatches;
 
+        if (tableName != null)
+        {
+            result.addAll(
+                buildImplicitResults(
+                    tableName,
+                    metadataManager.getTableDAO(),
+                    customSqlProvider,
+                    metadataManager,
+                    decoratorFactory));
+        }
+
         for (@Nullable final Sql t_Sql : sqlDAO.findAll())
         {
             if  (t_Sql != null)
@@ -517,29 +535,70 @@ public class TemplateUtils
                             throw new ReferencedResultNotFoundException(t_ResultRef, t_Sql);
                         }
                     }
-                    else
-                    {
-                        try
-                        {
-                            @Nullable final Log t_Log = UniqueLogFactory.getLog(TemplateUtils.class);
-
-                            if (t_Log != null)
-                            {
-                                t_Log.error(
-                                    "Referenced result not found:"
-                                    + t_Sql.getId());
-                            }
-                        }
-                        catch  (@NotNull final Throwable throwable)
-                        {
-                            // class-loading problem.
-                            System.err.println(
-                                "Referenced result not found:"
-                                + t_Sql.getId());
-                        }
-                        throw new MissingResultException(t_Sql);
-                    }
                 }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Builds the implicit results for given table.
+     * @param tableName the table name.
+     * @param tableDAO the {@link TableDAO} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return the implicit results.
+     */
+    @NotNull
+    protected List<Result> buildImplicitResults(
+        @NotNull final String tableName,
+        @NotNull final TableDAO tableDAO,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        @NotNull final List<Result> result = new ArrayList<Result>(2);
+
+        @Nullable final Table table = tableDAO.findByName(tableName);
+
+        if (table != null)
+        {
+            @Nullable final TableDecorator tableDecorator =
+                decoratorFactory.createTableDecorator(table.getName(), metadataManager, customSqlProvider);
+
+            @Nullable final String classValue = (tableDecorator != null) ? tableDecorator.getVoName() : null;
+
+            @NotNull final Result singleResult =
+                new ResultElement(
+                    "_single." + tableName.toLowerCase(Locale.getDefault()) + ".result",
+                    classValue,
+                    Result.SINGLE);
+            result.add(singleResult);
+
+            @NotNull final Result multipleResult =
+                new ResultElement(
+                    "_multiple." + tableName.toLowerCase(Locale.getDefault()) + ".result",
+                    classValue,
+                    Result.MULTIPLE);
+            result.add(multipleResult);
+        }
+        else
+        {
+            try
+            {
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(TemplateUtils.class);
+
+                if (t_Log != null)
+                {
+                    t_Log.error("Table not found:" + table);
+                }
+            }
+            catch  (@NotNull final Throwable throwable)
+            {
+                // class-loading problem.
+                System.err.println("Table not found:" + table);
             }
         }
 
