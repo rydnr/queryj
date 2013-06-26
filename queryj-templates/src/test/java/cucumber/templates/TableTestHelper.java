@@ -43,9 +43,10 @@ import cucumber.api.DataTable;
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.customsql.ParameterElement;
 import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.AttributeValueObject;
@@ -423,37 +424,58 @@ public class TableTestHelper
 
     /**
      * Defines custom SQL sentences.
-     * @param provider the {@link CustomSqlProvider} implementation.
+     * @param sqlInfo the SQL information in Cucumber table format.
+     * @return a Map of DAO-name, Sql pairs.
      */
     @NotNull
-    public Map<String, Sql> defineSql(@NotNull final CustomSqlProvider provider)
+    public List<Sql> defineSql(@NotNull final DataTable sqlInfo)
     {
-        @NotNull final Map<String, Sql> result = new HashMap<String, Sql>();
+        @NotNull final List<Sql> result = new ArrayList<Sql>();
 
-        for (@NotNull final Sql query : provider.getSqlDAO().findAll())
+        for (@NotNull final Map<String, String> sqlRow: sqlInfo.asMaps())
         {
-            result.put(query.getDao(), query);
+            @NotNull final String id = sqlRow.get("id");
+            @NotNull final String name = sqlRow.get("name");
+            @NotNull final String dao = sqlRow.get("dao");
+            @NotNull final String type = sqlRow.get("type");
+            @NotNull final String value = sqlRow.get("value");
+
+            @NotNull final SqlElement sql = new SqlElement(id, dao, name, type, "all", false, false);
+            sql.setValue(value);
+
+            result.add(sql);
         }
 
         return result;
     }
 
     /**
-     * Defines the parameters in SQL sentences.
-     * @param provider the {@link CustomSqlProvider} instance.
-     * @param queries the queries.
+     * Defines parameters in custom SQL sentences.
+     * @param parameterInfo the SQL information in Cucumber table format.
+     * @return a Map of DAO-name, Sql pairs.
      */
-    public Map<String, List<Parameter>> defineParameters(
-        @NotNull final CustomSqlProvider provider, @NotNull final List<Sql> queries)
+    @NotNull
+    public Map<String, List<Parameter>> defineParameters(@NotNull final DataTable parameterInfo)
     {
         @NotNull final Map<String, List<Parameter>> result = new HashMap<String, List<Parameter>>();
 
-        for (@NotNull final Sql query : queries)
+        for (@NotNull final Map<String, String> sqlRow: parameterInfo.asMaps())
         {
-            @NotNull final List<Parameter> parameters =
-                provider.getSqlParameterDAO().findBySql(query.getId());
+            @NotNull final String id = sqlRow.get("id");
+            @NotNull final String sql = sqlRow.get("sql");
+            @NotNull final String index = sqlRow.get("index");
+            @NotNull final String name = sqlRow.get("name");
+            @NotNull final String type = sqlRow.get("type");
 
-            result.put(query.getId(), parameters);
+            @NotNull final ParameterElement parameter = new ParameterElement(id, Integer.parseInt(index), name, type, null);
+
+            @Nullable List<Parameter> parameters = result.get(sql);
+            if (parameters == null)
+            {
+                parameters = new ArrayList<Parameter>();
+                result.put(sql, parameters);
+            }
+            parameters.add(parameter);
         }
 
         return result;

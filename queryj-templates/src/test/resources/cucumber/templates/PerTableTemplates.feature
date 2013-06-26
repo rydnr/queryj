@@ -19,15 +19,15 @@ Feature: Per-table templates
     | source table | source columns | target table | allows null |
     | user         | company_id     | companies    | true        |
 
-    And the following custom sql:
+    And the following queries:
       |       id      |     name      |  dao |  type  |                     value                         |
       | first.select  | first-select  | user | select | select user_id, name from users where user_id = ? |
       | second.select | second-select | user | select | select user_id, name from users where name = ?    |
 
-    And the following parameters:
-      |       id     | index |  type  |  name  |
-      | user.user_id |   1   |  long  | userId |
-      | user.name    |   1   | String |  name  |
+    And the following query parameters:
+      |      id      |      sql       | index |  type  |  name  |
+      | user.user_id |  first.select  |   1   |  long  | userId |
+      | user.name    |  second.select |   1   | String |  name  |
 
     When I generate with per-table <template>.stg for Oracle
 

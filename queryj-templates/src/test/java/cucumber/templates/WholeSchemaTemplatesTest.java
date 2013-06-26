@@ -233,7 +233,13 @@ public class WholeSchemaTemplatesTest
     @When("^I generate with schema-wide (.*)\\.stg$")
     public void generateFile(@NotNull final String template)
     {
-        generateFile(template, getRepositoryName(), getVendor(), getTableNames(), getOutputFiles());
+        generateFile(
+            template,
+            getRepositoryName(),
+            getVendor(),
+            getTableNames(),
+            getOutputFiles(),
+            retrieveCustomSqlProvider(getSqlList(), getParameters()));
     }
 
     /**

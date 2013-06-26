@@ -39,15 +39,13 @@ package cucumber.templates;
  * Importing project classes.
  */
 import cucumber.templates.sql.CucumberSqlDAO;
-import cucumber.templates.sql.CucumberSqlPropertyDAO;
-import cucumber.templates.sql.CucumberSqlResultDAO;
+import cucumber.templates.sql.CucumberSqlParameterDAO;
 
 /*
  * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.Property;
-import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
 import org.acmsl.queryj.metadata.DecoratorFactory;
@@ -63,8 +61,7 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.queryj.metadata.MetadataExtractionLogger;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlDAO;
-import org.acmsl.queryj.metadata.SqlPropertyDAO;
-import org.acmsl.queryj.metadata.SqlResultDAO;
+import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
@@ -156,6 +153,11 @@ public abstract class AbstractTemplatesTest<G, F>
     private List<Sql> m__lSql;
 
     /**
+     * The SQL query parameters.
+     */
+    private Map<String, List<Parameter>> m__mParameters;
+
+    /**
      * Creates an empty instance.
      */
     protected AbstractTemplatesTest()
@@ -163,8 +165,6 @@ public abstract class AbstractTemplatesTest<G, F>
         immutableSetOutputFiles(new HashMap<String, File>());
         immutableSetTables(new HashMap<String, Table>());
         immutableSetForeignKeys(new ArrayList<ForeignKey>());
-        immutableSetSqlList(new ArrayList<Sql>());
-
     }
 
     /**
@@ -273,100 +273,71 @@ public abstract class AbstractTemplatesTest<G, F>
      * Retrieves the list of {@link Sql}.
      * @return such table.
      */
+    @SuppressWarnings("unused")
     protected List<Sql> getSqlList()
     {
         return this.m__lSql;
     }
 
     /**
-     * Retrieves an empty {@link CustomSqlProvider} instance.
-     * @return such instance.
+     * Specifies the SQL queries' parameters.
+     * @param parameters such map.
      */
-    @NotNull
-    protected CustomSqlProvider retrieveCustomSqlProvider()
+    protected final void immutableSetParameters(@NotNull final Map<String, List<Parameter>> parameters)
     {
-        return new SqlXmlParserImpl(new ByteArrayInputStream("".getBytes()));
+        this.m__mParameters = parameters;
     }
 
     /**
-     * Retrieves a {@link CustomSqlProvider} instance adapted for given result.
-     * @param customResult the {@link Result}.
-     * @param properties the {@link Property properties}.
+     * Specifies the SQL queries' parameters.
+     * @param parameters such map.
+     */
+    protected void setParameters(@NotNull final Map<String, List<Parameter>> parameters)
+    {
+        immutableSetParameters(parameters);
+    }
+
+    /**
+     * Retrieves the SQL queries parameters.
+     * @return such parameters.
+     */
+    @SuppressWarnings("unused")
+    protected final Map<String, List<Parameter>> getParameters()
+    {
+        return m__mParameters;
+    }
+
+    /**
+     * Retrieves a {@link org.acmsl.queryj.customsql.CustomSqlProvider} instance adapted for given result.
+     * @param sqlList the list of {@link Sql}.
+     * @param parameters the {@link Parameter} map.
      * @return such instance.
      */
     @NotNull
     protected CustomSqlProvider retrieveCustomSqlProvider(
-        @NotNull final Result customResult, @NotNull final List<Property> properties)
-    {
-        return retrieveCustomSqlProvider(new ArrayList<Sql>(0), customResult, properties);
-    }
-
-    /**
-     * Retrieves a {@link CustomSqlProvider} instance adapted for given result.
-     * @param sqlList the list of {@link Sql}.
-     * @return such instance.
-     */
-    @NotNull
-    protected CustomSqlProvider retrieveCustomSqlProvider(@NotNull final List<Sql> sqlList)
-    {
-        return retrieveCustomSqlProvider(sqlList, null, new ArrayList<Property>(0));
-    }
-
-    /**
-     * Retrieves a {@link CustomSqlProvider} instance adapted for given result.
-     * @param sqlList the list of {@link Sql}.
-     * @param customResult the {@link Result}.
-     * @param properties the {@link Property properties}.
-     * @return such instance.
-     */
-    @NotNull
-    protected CustomSqlProvider retrieveCustomSqlProvider(
-        @NotNull final List<Sql> sqlList, @Nullable final Result customResult, @NotNull final List<Property> properties)
+        @NotNull final List<Sql> sqlList,
+        @NotNull final Map<String, List<Parameter>> parameters)
     {
         return
             new SqlXmlParserImpl(new ByteArrayInputStream("".getBytes()))
             {
                 @Override
                 @NotNull
-                public SqlResultDAO getSqlResultDAO()
-                {
-                    @NotNull final SqlResultDAO result;
-
-                    if (customResult != null)
-                    {
-                        result = new CucumberSqlResultDAO(customResult);
-                    }
-                    else
-                    {
-                        result = super.getSqlResultDAO();
-                    }
-
-                    return result;
-                }
-
-                @Override
-                @NotNull
-                public SqlPropertyDAO getSqlPropertyDAO()
-                {
-                    @NotNull final SqlPropertyDAO result;
-
-                    if (customResult != null)
-                    {
-                        result = new CucumberSqlPropertyDAO(properties, customResult);
-                    }
-                    else
-                    {
-                        result = super.getSqlPropertyDAO();
-                    }
-
-                    return result;
-                }
-
-                @Override
-                @NotNull
                 public SqlDAO getSqlDAO()
                 {
                     return new CucumberSqlDAO(sqlList);
+                }
+
+                /**
+                 * Retrieves the {@link org.acmsl.queryj.metadata.SqlParameterDAO} instance.
+                 *
+                 * @return such instance.
+                 */
+                @NotNull
+                @Override
+                public SqlParameterDAO getSqlParameterDAO()
+                {
+                    return new CucumberSqlParameterDAO(parameters);
                 }
             };
     }
@@ -731,6 +702,8 @@ public abstract class AbstractTemplatesTest<G, F>
         result.append(m__lForeignKeys);
         result.append(", sqlList=");
         result.append(m__lSql);
+        result.append(", sqlParameters=");
+        result.append(m__mParameters);
         result.append("}");
 
         return result.toString();

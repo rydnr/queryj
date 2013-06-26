@@ -38,15 +38,6 @@ package cucumber.templates;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.customsql.Parameter;
-import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.metadata.vo.Row;
-import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.api.PerTableTemplate;
-import org.acmsl.queryj.api.PerTableTemplateFactory;
-import org.acmsl.queryj.api.PerTableTemplateGenerator;
 import org.acmsl.queryj.templates.dao.BaseDAOTemplateFactory;
 import org.acmsl.queryj.templates.dao.BaseDAOTemplateGenerator;
 import org.acmsl.queryj.templates.dao.DAOFactoryTemplateFactory;
@@ -64,6 +55,20 @@ import org.acmsl.queryj.templates.valueobject.ValueObjectFactoryTemplateGenerato
 import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateFactory;
 import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateGenerator;
 import org.acmsl.queryj.templates.valueobject.ValueObjectTemplateGenerator;
+
+/*
+ * Importing QueryJ-Core classes.
+ */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.vo.ForeignKey;
+import org.acmsl.queryj.metadata.vo.Row;
+import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.api.PerTableTemplate;
+import org.acmsl.queryj.api.PerTableTemplateFactory;
+import org.acmsl.queryj.api.PerTableTemplateGenerator;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
@@ -103,7 +108,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -120,8 +124,7 @@ public class PerTableTemplatesTest
      */
     public PerTableTemplatesTest()
     {
-        immutableSetTables(new HashMap<String, Table>());
-        immutableSetForeignKeys(new ArrayList<ForeignKey>());
+        super();
 
         // dao
         GENERATOR_MAPPINGS.put("DAO", new DAOTemplateGenerator(false, 1));
@@ -251,38 +254,22 @@ public class PerTableTemplatesTest
      * @param values such information.
      */
     @SuppressWarnings("unused")
-    @And("^the following custom sql:$")
+    @And("^the following queries:$")
     public void defineSql(@NotNull final DataTable values)
     {
-        defineSql(retrieveSqlList(values), TableTestHelper.getInstance());
+        setSqlList(defineSql(values, TableTestHelper.getInstance()));
     }
 
     /**
      * Retrieves the list of {@link Sql} from a Cucumber table.\
      * @param values the Cucumber table.
+     * @param helper the {@link TableTestHelper} instance.
      * @return the list of SQL items.
      */
-    protected List<Sql> retrieveSqlList(@NotNull final DataTable values)
+    @NotNull
+    protected List<Sql> defineSql(@NotNull final DataTable values, @NotNull final TableTestHelper helper)
     {
-        @NotNull final List<Sql> result = new ArrayList<Sql>(0);
-
-        // TODO
-
-        setSqlList(result);
-
-        return result;
-    }
-
-    /**
-     * Defines SQL sentences via cucumber features.
-     * @param sqlList such information.
-     * @param helper the {@link TableTestHelper} instance.
-     */
-    protected void defineSql(
-        @NotNull final List<Sql> sqlList,
-        @NotNull final TableTestHelper helper)
-    {
-        helper.defineSql(retrieveCustomSqlProvider(sqlList));
+        return helper.defineSql(values);
     }
 
     /**
@@ -290,37 +277,23 @@ public class PerTableTemplatesTest
      * @param values such information.
      */
     @SuppressWarnings("unused")
-    @And("^the following parameters:$")
+    @And("^the following query parameters:$")
     public void defineParameters(@NotNull final DataTable values)
     {
-        defineParameters(retrieveParameterList(values), getSqlList(), TableTestHelper.getInstance());
-    }
-
-    /**
-     * Retrieves the list of {@link Parameter} from given Cucumber table.
-     * @param values the Cucumber table.
-     * @return the list of parameters.
-     */
-    @NotNull
-    protected List<Parameter> retrieveParameterList(final DataTable values)
-    {
-        // TODO
-        return new ArrayList<Parameter>(0);
+        setParameters(defineParameters(values, TableTestHelper.getInstance()));
     }
 
     /**
      * Defines SQL parameters via cucumber features.
-     * @param parameters such information.
-     * @param sqlList the SQL sentences.
+     * @param values the SQL parameters in Cucumber table format.
      * @param helper the {@link TableTestHelper} instance.
      */
-    protected void defineParameters(
-        @NotNull final List<Parameter> parameters,
-        @NotNull final List<Sql> sqlList,
+    @NotNull
+    protected Map<String, List<Parameter>> defineParameters(
+        @NotNull final DataTable values,
         @NotNull final TableTestHelper helper)
     {
-        // TODO
-        helper.defineParameters(retrieveCustomSqlProvider(sqlList), sqlList);
+        return helper.defineParameters(values);
     }
 
     /**
@@ -355,21 +328,29 @@ public class PerTableTemplatesTest
     @When("^I generate with per-table (.*)\\.stg for (.*)$")
     public void generateFile(@NotNull final String template, @NotNull final String engine)
     {
-        generateFile(template, engine, getTables(), getOutputFiles());
+        generateFile(
+            template,
+            engine,
+            getTables(),
+            getOutputFiles(),
+            retrieveCustomSqlProvider(getSqlList(), getParameters()));
     }
 
     /**
      * Generates a file with the information from the feature.
      * @param templateName the template.
+     * @param engine the engine name.
      * @param tables the tables.
      * @param outputFiles the output files.
+     * @param sqlProvider the {@link CustomSqlProvider} instance.
      */
     @SuppressWarnings("unchecked")
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
         @NotNull final Map<String, Table> tables,
-        @NotNull final Map<String, File> outputFiles)
+        @NotNull final Map<String, File> outputFiles,
+        @NotNull final CustomSqlProvider sqlProvider)
     {
         @Nullable final PerTableTemplateGenerator generator =
             retrieveTemplateGenerator(templateName);
@@ -385,7 +366,7 @@ public class PerTableTemplatesTest
             @Nullable final PerTableTemplate template =
                 templateFactory.createTemplate(
                     retrieveMetadataManager(engine, table),
-                    retrieveCustomSqlProvider(),
+                    sqlProvider,
                     retrieveDecoratorFactory(generator),
                     "com.foo.bar.dao",
                     "com.foo.bar",

@@ -116,10 +116,10 @@ public class TemplateUtils
 
     /**
      * Retrieves the custom selects.
-     * @param customSqlProvider the provider.
-     * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom selects.
      */
     @SuppressWarnings("unused")
@@ -143,10 +143,10 @@ public class TemplateUtils
      * Retrieves the custom selects.
      * @param tableName the table name, or <code>null</code> for
      * repository-wide results.
-     * @param customSqlProvider the provider.
-     * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom selects.
      */
     @NotNull
@@ -173,10 +173,10 @@ public class TemplateUtils
 
     /**
      * Retrieves the custom updates or inserts.
-     * @param customSqlProvider the provider.
-     * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom sql.
      */
     @SuppressWarnings("unused")
@@ -199,10 +199,10 @@ public class TemplateUtils
     /**
      * Retrieves the custom updates or inserts.
      * @param tableName the table name.
-     * @param customSqlProvider the provider.
-     * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom sql.
      */
     @NotNull
@@ -231,10 +231,10 @@ public class TemplateUtils
 
     /**
      * Retrieves the custom selects.
-     * @param customSqlProvider the provider.
-     * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom selects.
      */
     @SuppressWarnings("unused")
@@ -257,10 +257,10 @@ public class TemplateUtils
     /**
      * Retrieves the custom selects.
      * @param tableName the table name.
-     * @param customSqlProvider the provider.
-     * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom selects.
      */
     @NotNull
@@ -292,9 +292,9 @@ public class TemplateUtils
      * repository-wide results.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param sqlDAO the {@link SqlDAO} instance.
-     * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom sql.
      */
     @NotNull
@@ -307,12 +307,12 @@ public class TemplateUtils
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
-        @NotNull List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql> result = new ArrayList<Sql>();
 
         boolean t_bMatches;
         String t_strDao;
 
-        for (@Nullable Sql t_Sql : sqlDAO.findAll())
+        for (@Nullable final Sql t_Sql : sqlDAO.findAll())
         {
             if (t_Sql != null)
             {
@@ -332,7 +332,7 @@ public class TemplateUtils
                 {
                     boolean t_bAdd = false;
 
-                    for (@Nullable String t_strCurrentType : types)
+                    for (@Nullable final String t_strCurrentType : types)
                     {
                         if  (   (t_strCurrentType != null)
                              && (t_strCurrentType.equals(t_Sql.getType())))
@@ -359,19 +359,20 @@ public class TemplateUtils
 
     /**
      * Retrieves the custom results.
-     * @param customSqlProvider the provider.
-     * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom results.
      * @throws QueryJBuildException if there inconsistencies in the custom SQL
      * model.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public List<Result> retrieveCustomResults(
         @NotNull final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
       throws QueryJBuildException
     {
@@ -391,9 +392,9 @@ public class TemplateUtils
      * @param tableName the table name, or <code>null</code> for
      * repository-wide results.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom results.
      * @throws QueryJBuildException if there inconsistencies in the custom SQL
      * model.
@@ -425,9 +426,9 @@ public class TemplateUtils
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param sqlDAO the {@link SqlDAO} instance.
      * @param resultDAO the {@link SqlResultDAO} instance.
-     * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom results.
      * @throws QueryJBuildException if there inconsistencies in the custom SQL
      * model.
@@ -443,11 +444,11 @@ public class TemplateUtils
         @NotNull final DAOTemplateUtils daoTemplateUtils)
       throws QueryJBuildException
     {
-        @NotNull List<Result> result = new ArrayList<Result>();
+        @NotNull final List<Result> result = new ArrayList<Result>();
 
         @Nullable ResultRef t_ResultRef;
         @Nullable Result t_ResultElement;
-        String t_strDao;
+        @Nullable String t_strDao;
         boolean t_bMatches;
 
         for (@Nullable final Sql t_Sql : sqlDAO.findAll())

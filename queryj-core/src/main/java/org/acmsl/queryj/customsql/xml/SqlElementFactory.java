@@ -90,23 +90,23 @@ public class SqlElementFactory
         @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable SqlElement result;
+        @Nullable final SqlElement result;
 
-        String t_strId = attributes.getValue("id");
+        @NotNull final String t_strId = attributes.getValue("id");
 
-        String t_strDAO = attributes.getValue("dao");
+        @Nullable final String t_strDAO = attributes.getValue("dao");
 
-        String t_strRepositoryScope = attributes.getValue("repositoryScope");
+        @Nullable final String t_strRepositoryScope = attributes.getValue("repositoryScope");
 
-        String t_strName = attributes.getValue("name");
+        @NotNull final String t_strName = attributes.getValue("name");
 
-        String t_strType = attributes.getValue("type");
+        @NotNull final String t_strType = attributes.getValue("type");
 
-        String t_strImplementation = attributes.getValue("implementation");
+        @NotNull final String t_strImplementation = attributes.getValue("implementation");
 
         boolean t_bValidate = false;
 
-        String t_strValidate = attributes.getValue("validate");
+        @Nullable final String t_strValidate = attributes.getValue("validate");
 
         if  (t_strValidate != null)
         {
@@ -115,7 +115,7 @@ public class SqlElementFactory
 
         boolean t_bDynamic = false;
 
-        String t_strDynamic = attributes.getValue("dynamic");
+        @Nullable final String t_strDynamic = attributes.getValue("dynamic");
 
         if  (t_strDynamic != null)
         {

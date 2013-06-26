@@ -38,16 +38,22 @@ package cucumber.templates;
 /*
  * Importing project classes.
  */
+import cucumber.templates.sql.CucumberSqlPropertyDAO;
+import cucumber.templates.sql.CucumberSqlResultDAO;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
 import org.acmsl.queryj.customsql.PropertyRef;
 import org.acmsl.queryj.customsql.PropertyRefElement;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
+import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.api.PerCustomResultTemplate;
 import org.acmsl.queryj.api.PerCustomResultTemplateFactory;
 import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
+import org.acmsl.queryj.metadata.SqlPropertyDAO;
+import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateFactory;
 import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateFactory;
@@ -92,6 +98,7 @@ import org.junit.Assert;
 /*
  * Importing JDK classes.
  */
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -195,6 +202,58 @@ public class PerCustomResultTemplatesTest
     protected Map<String, Property> getProperties()
     {
         return m__mProperties;
+    }
+
+    /**
+     * Retrieves a {@link CustomSqlProvider} instance adapted for given result.
+     * @param customResult the {@link Result}.
+     * @param properties the {@link Property properties}.
+     * @return such instance.
+     */
+    @NotNull
+    protected CustomSqlProvider retrieveCustomSqlProvider(
+        @Nullable final Result customResult,
+        @NotNull final List<Property> properties)
+    {
+        return
+            new SqlXmlParserImpl(new ByteArrayInputStream("".getBytes()))
+            {
+                @Override
+                @NotNull
+                public SqlResultDAO getSqlResultDAO()
+                {
+                    @NotNull final SqlResultDAO result;
+
+                    if (customResult != null)
+                    {
+                        result = new CucumberSqlResultDAO(customResult);
+                    }
+                    else
+                    {
+                        result = super.getSqlResultDAO();
+                    }
+
+                    return result;
+                }
+
+                @Override
+                @NotNull
+                public SqlPropertyDAO getSqlPropertyDAO()
+                {
+                    @NotNull final SqlPropertyDAO result;
+
+                    if (customResult != null)
+                    {
+                        result = new CucumberSqlPropertyDAO(properties, customResult);
+                    }
+                    else
+                    {
+                        result = super.getSqlPropertyDAO();
+                    }
+
+                    return result;
+                }
+            };
     }
 
     /**
@@ -442,5 +501,14 @@ public class PerCustomResultTemplatesTest
                 Integer.valueOf(propertyEntry.get("index")),
                 propertyEntry.get("type"),
                 Boolean.valueOf(propertyEntry.get("nullable")));
+    }
+
+    @Override
+    public String toString()
+    {
+        return "PerCustomResultTemplatesTest{" +
+               " properties=" + m__mProperties +
+               ", results=" + m__mResults +
+               '}';
     }
 }

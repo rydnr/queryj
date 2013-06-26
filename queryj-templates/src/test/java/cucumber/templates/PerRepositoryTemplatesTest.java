@@ -41,9 +41,6 @@ package cucumber.templates;
  */
 import cucumber.templates.xml.BeanElement;
 import cucumber.templates.xml.DataAccessContextLocalTestHelper;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.api.PerRepositoryTemplateFactory;
-import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateFactory;
 import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateGenerator;
 import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplateFactory;
@@ -76,6 +73,13 @@ import org.acmsl.queryj.templates.dao.StatisticsProviderTemplateFactory;
 import org.acmsl.queryj.templates.dao.StatisticsProviderTemplateGenerator;
 import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateFactory;
 import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateGenerator;
+
+/*
+ * Importing QueryJ-Core classes.
+ */
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.api.PerRepositoryTemplateFactory;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 
 /*
  * Importing ACM S.L. Commons classes.
@@ -229,7 +233,13 @@ public class PerRepositoryTemplatesTest
     @When("^I generate with per-repository (.*)\\.stg$")
     public void generateFile(@NotNull final String template)
     {
-        generateFile(template, getRepositoryName(), getVendor(), getTableNames(), getOutputFiles());
+        generateFile(
+            template,
+            getRepositoryName(),
+            getVendor(),
+            getTableNames(),
+            getOutputFiles(),
+            retrieveCustomSqlProvider(getSqlList(), getParameters()));
     }
 
     /**

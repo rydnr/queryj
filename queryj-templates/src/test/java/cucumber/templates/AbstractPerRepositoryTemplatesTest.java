@@ -38,6 +38,7 @@ package cucumber.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
 import org.acmsl.queryj.api.PerRepositoryTemplate;
@@ -271,7 +272,8 @@ public abstract class AbstractPerRepositoryTemplatesTest
         @NotNull final String repository,
         @NotNull final String engine,
         @NotNull final List<String> tables,
-        @NotNull final Map<String, File> outputFiles)
+        @NotNull final Map<String, File> outputFiles,
+        @NotNull final CustomSqlProvider sqlProvider)
     {
         final G generator =
             retrieveTemplateGenerator(templateName);
@@ -285,7 +287,7 @@ public abstract class AbstractPerRepositoryTemplatesTest
         final PerRepositoryTemplate template =
             templateFactory.createTemplate(
                 retrieveMetadataManager(engine, tables, wrapTables(tables)),
-                retrieveCustomSqlProvider(),
+                sqlProvider,
                 retrieveDecoratorFactory(generator),
                 DAO_PACKAGE_NAME,
                 PACKAGE_NAME,

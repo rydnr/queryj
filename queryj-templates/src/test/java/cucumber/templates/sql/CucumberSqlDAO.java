@@ -38,6 +38,7 @@ package cucumber.templates.sql;
 /*
  * Importing QueryJ-core classes.
  */
+import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.SqlDAO;
 
@@ -50,6 +51,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -109,38 +111,102 @@ public class CucumberSqlDAO
     @Override
     public boolean containsRepositoryScopedSql()
     {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return containsRepositoryScopedSql(getSqlList());
     }
 
     /**
-     * Finds a given {@link org.acmsl.queryj.customsql.Sql} by its id.
-     *
+     * Checks whether it contains repository-scoped SQL or not.
+     * @param sqlList the list of {@link Sql} queries.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean containsRepositoryScopedSql(@NotNull final List<Sql> sqlList)
+    {
+        boolean result = false;
+
+        for (@NotNull final Sql sql : sqlList)
+        {
+            if (sql.getDao() == null)
+            {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Finds a given {@link Sql} by its id.
      * @param id the id.
-     * @return the associated {@link org.acmsl.queryj.customsql.Sql}, or <code>null</code> if not found.
+     * @return the associated {@link Sql}, or <code>null</code> if not found.
      */
     @Nullable
     @Override
     public Sql findByPrimaryKey(@NotNull final String id)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return findByPrimaryKey(id, getSqlList());
     }
 
     /**
-     * Retrieves all {@link org.acmsl.queryj.customsql.Sql} associated to a given DAO (table).
-     *
+     * Finds a given {@link Sql} by its id.
+     * @param id the id.
+     * @param sqlList the list of {@link Sql} queries.
+     * @return the associated {@link Sql}, or <code>null</code> if not found.
+     */
+    @Nullable
+    public Sql findByPrimaryKey(@NotNull final String id, @NotNull final List<Sql> sqlList)
+    {
+        @Nullable Sql result = null;
+
+        for (@NotNull final Sql sql : sqlList)
+        {
+            if (id.equals(sql.getId()))
+            {
+                result = sql;
+                break;
+            }
+        }
+
+        return result;
+
+    }
+
+    /**
+     * Retrieves all {@link Sql} associated to a given DAO (table).
      * @param table the table.
-     * @return the associated {@link org.acmsl.queryj.customsql.Sql} instances.
+     * @return the associated {@link Sql} instances.
      */
     @NotNull
     @Override
     public List<Sql> findByDAO(@NotNull final String table)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return findByDAO(table, getSqlList());
+    }
+
+    /**
+     * Retrieves all {@link Sql} associated to a given DAO (table).
+     * @param table the table.
+     * @param sqlList the list of {@link Sql} queries.
+     * @return the associated {@link Sql} instances.
+     */
+    @NotNull
+    protected List<Sql> findByDAO(@NotNull final String table, @NotNull final List<Sql> sqlList)
+    {
+        @NotNull final List<Sql> result = new ArrayList<Sql>();
+
+        for (@NotNull final Sql sql : sqlList)
+        {
+            if (table.equals(sql.getDao()))
+            {
+                result.add(sql);
+            }
+        }
+
+        return result;
     }
 
     /**
      * Retrieves all <i>selects-for-update</i> for a given DAO (table).
-     *
      * @param table the table.
      * @return all matching <i>selects-for-update</i> queries.
      */
@@ -148,7 +214,7 @@ public class CucumberSqlDAO
     @Override
     public List<Sql> findSelectsForUpdate(@NotNull final String table)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return findByDAO(table, findByType(Sql.SELECT_FOR_UPDATE));
     }
 
     /**
@@ -161,7 +227,7 @@ public class CucumberSqlDAO
     @Override
     public List<Sql> findInserts(@NotNull final String table)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return findByDAO(table, findByType(Sql.INSERT));
     }
 
     /**
@@ -174,7 +240,7 @@ public class CucumberSqlDAO
     @Override
     public List<Sql> findUpdates(@NotNull final String table)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return findByDAO(table, findByType(Sql.UPDATE));
     }
 
     /**
@@ -187,7 +253,7 @@ public class CucumberSqlDAO
     @Override
     public List<Sql> findDeletes(@NotNull final String table)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return findByDAO(table, findByType(Sql.DELETE));
     }
 
     /**
@@ -199,50 +265,113 @@ public class CucumberSqlDAO
     @Override
     public List<Sql> findAll()
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return getSqlList();
     }
 
     /**
      * Retrieves all SQL matching given result id.
-     *
      * @param resultId the result id.
-     * @return the list of matching {@link org.acmsl.queryj.customsql.Sql}.
+     * @return the list of matching {@link Sql}.
      */
     @NotNull
     @Override
     public List<Sql> findByResultId(@NotNull final String resultId)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return findByResultId(resultId, getSqlList());
+    }
+
+    /**
+     * Retrieves all SQL matching given result id.
+     * @param resultId the result id.
+     * @return the list of matching {@link Sql}.
+     */
+    @NotNull
+    protected List<Sql> findByResultId(@NotNull final String resultId, @NotNull final List<Sql> sqlList)
+    {
+        @NotNull final List<Sql> result = new ArrayList<Sql>();
+
+        for (@NotNull final Sql sql : sqlList)
+        {
+            @Nullable final ResultRef resultRef = sql.getResultRef();
+
+            if (   (resultRef != null)
+                && (resultRef.getId().equals(resultId)))
+            {
+                result.add(sql);
+            }
+        }
+
+        return result;
     }
 
     /**
      * Retrieves all SQL matching given type.
-     *
      * @param type the type.
-     * @return the list of matching {@link org.acmsl.queryj.customsql.Sql}.
+     * @return the list of matching {@link Sql}.
      */
     @NotNull
     @Override
     public List<Sql> findByType(@NotNull final String type)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return findByType(type, getSqlList());
+    }
+
+    /**
+     * Retrieves all SQL matching given type.
+     * @param type the type.
+     * @param sqlList the list of {@link Sql} queries.
+     * @return the list of matching {@link Sql}.
+     */
+    @NotNull
+    protected List<Sql> findByType(@NotNull final String type, @NotNull final List<Sql> sqlList)
+    {
+        @NotNull final List<Sql> result = new ArrayList<Sql>();
+
+        for (@NotNull final Sql sql : sqlList)
+        {
+            if (type.equals(sql.getType()))
+            {
+                result.add(sql);
+            }
+        }
+
+        return result;
     }
 
     /**
      * Retrieves all repository-scoped SQL.
-     *
      * @return such list.
      */
     @NotNull
     @Override
     public List<Sql> findAllRepositoryScopedSql()
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return findAllRepositoryScopedSql(getSqlList());
+    }
+
+    /**
+     * Retrieves all repository-scoped SQL.
+     * @param sqlList the list of {@link Sql} queries.
+     * @return such list.
+     */
+    @NotNull
+    protected List<Sql> findAllRepositoryScopedSql(@NotNull final List<Sql> sqlList)
+    {
+        @NotNull final List<Sql> result = new ArrayList<Sql>();
+
+        for (@NotNull final Sql sql : sqlList)
+        {
+            if (sql.getDao() == null)
+            {
+                result.add(sql);
+            }
+        }
+
+        return result;
     }
 
     /**
      * Retrieves all plain selects.
-     *
      * @param table the name of the table.
      * @return such list.
      */
@@ -250,19 +379,39 @@ public class CucumberSqlDAO
     @Override
     public List<Sql> findSelects(@NotNull final String table)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return findByDAO(table, findByType(Sql.SELECT));
     }
 
     /**
      * Retrieves all dynamic queries.
-     *
      * @param tableName the name of the table.
      * @return such list.
      */
     @Override
+    @NotNull
     public List<Sql> findDynamic(@NotNull final String tableName)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return findByDAO(tableName, findDynamic(getSqlList()));
+    }
+
+    /**
+     * Retrieves all dynamic queries.
+     * @param sqlList the list of {@link Sql} queries.
+     * @return such list.
+     */
+    protected List<Sql> findDynamic(@NotNull final List<Sql> sqlList)
+    {
+        @NotNull final List<Sql> result = new ArrayList<Sql>();
+
+        for (@NotNull final Sql sql : sqlList)
+        {
+            if (sql.isDynamic())
+            {
+                result.add(sql);
+            }
+        }
+
+        return result;
     }
 
     @Override
