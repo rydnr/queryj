@@ -98,19 +98,4 @@ public class RepositoryDAOTemplate
     {
         return "Repository DAO";
     }
-
-    /**
-     * Builds the correct chain.
-     * @param context the context.
-     * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link FillTemplateChain}.
-     */
-    @NotNull
-    @Override
-    public FillTemplateChain<PerRepositoryTemplateContext> buildFillTemplateChain(
-        @NotNull final PerRepositoryTemplateContext context, final boolean relevantOnly)
-    {
-        // TODO
-        return null;
-    }
 }

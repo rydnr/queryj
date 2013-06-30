@@ -321,10 +321,10 @@
 */
 grammar Java;
 
-options {
-  backtrack=true;
-  memoize=true;
-}
+//options {
+//  backtrack=true;
+//  memoize=true;
+//}
 @parser::header
 {
 /*
@@ -608,7 +608,7 @@ packageDeclaration
         ';'
     ;
 
-fragment importDeclaration returns [String result]
+importDeclaration returns [String result]
 @init { result = null; }
     :   'import' 
         ( 'static' )?
@@ -1714,35 +1714,35 @@ WS
     ;
     
 COMMENT
-         @init{
-            boolean isJavaDoc = false;
-        }
-    :   '/*'
-            {
-                if((char)input.LA(1) == '*'){
-                    isJavaDoc = true;
-                }
-            }
-        (options {greedy=false;} : . )* 
+//@init{
+//    boolean isJavaDoc = false;
+//}
+:   '/*'
+//            {
+//                if((char)input.LA(1) == '*'){
+//                    isJavaDoc = true;
+//                }
+//            }
+        (. )*? 
         '*/'
-            {
-                if(isJavaDoc==true){
-                    $channel=HIDDEN;
-                }else{
-                    skip();
-                }
-            }
+//            {
+//                if(isJavaDoc==true){
+//                    $channel=HIDDEN;
+//                }else{
+//                    skip();
+//                }
+//            }
     ;
 
 LINE_COMMENT
     :   '//' ~('\n'|'\r')*  ('\r\n' | '\r' | '\n') 
-            {
-                skip();
-            }
+//            {
+//                skip();
+//            }
     |   '//' ~('\n'|'\r')*     // a line comment could appear at the end of the file without CR/LF
-            {
-                skip();
-            }
+//            {
+//                skip();
+//            }
     ;   
         
 ABSTRACT

@@ -38,7 +38,6 @@ package org.acmsl.queryj.templates.dao;
  */
 import org.acmsl.queryj.api.AbstractBasePerTableTemplate;
 import org.acmsl.queryj.api.PerTableTemplateContext;
-import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -96,21 +95,6 @@ public class DAOTemplate
     public String getTemplateName()
     {
         return "DAO";
-    }
-
-    /**
-     * Builds the correct chain.
-     * @param context the context.
-     * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link org.acmsl.queryj.api.FillTemplateChain}.
-     */
-    @NotNull
-    @Override
-    public FillTemplateChain<PerTableTemplateContext> buildFillTemplateChain(
-        @NotNull final PerTableTemplateContext context, final boolean relevantOnly)
-    {
-        // TODO
-        return null;
     }
 }
             

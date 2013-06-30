@@ -56,9 +56,9 @@ import org.acmsl.commons.utils.StringValidator;
  * Importing some ANTLR 3 classes.
  */
 import org.acmsl.queryj.metadata.vo.Table;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
 
 /*
  * Importing some Commons-Logging classes.
@@ -470,7 +470,7 @@ public class MetaLanguageUtils
 
             @NotNull final  PerCommentLexer t_Lexer =
                 new PerCommentLexer(
-                    new ANTLRStringStream(comment));
+                    new ANTLRInputStream(comment));
             
             @NotNull final CommonTokenStream t_Tokens =
                 new CommonTokenStream(t_Lexer);
@@ -526,4 +526,11 @@ public class MetaLanguageUtils
         return result;
     }
 
+    @Override
+    public String toString()
+    {
+        return "MetaLanguageUtils{" +
+               "PARSER_CACHE=" + PARSER_CACHE +
+               '}';
+    }
 }

@@ -40,7 +40,6 @@ package org.acmsl.queryj.templates.dao;
  */
 import org.acmsl.queryj.api.AbstractBasePerCustomResultTemplate;
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
-import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -101,20 +100,5 @@ public class CustomResultSetExtractorTemplate
     public String getTemplateName()
     {
         return "CustomResultSetExtractor";
-    }
-
-    /**
-     * Builds the correct chain.
-     * @param context the context.
-     * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link FillTemplateChain}.
-     */
-    @NotNull
-    @Override
-    public FillTemplateChain<PerCustomResultTemplateContext> buildFillTemplateChain(
-        @NotNull final PerCustomResultTemplateContext context, final boolean relevantOnly)
-    {
-        // TODO
-        return null;
     }
 }

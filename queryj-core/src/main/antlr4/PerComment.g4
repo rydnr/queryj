@@ -518,7 +518,7 @@ tableComment : (t=text)? ( tab_annotation )* { setTableComment(t); };
         
 columnComment : (t=text)? ( col_annotation )* { setColumnComment(t); };
 
-fragment text returns [String result]
+text returns [String result]
 @init { result = null; StringBuffer aux = new StringBuffer(); }
   : (  t=text_or_id  { aux.append($t.text); }
      | c=COMMA { aux.append($c.text); }
@@ -529,7 +529,7 @@ fragment text returns [String result]
     { result = aux.toString(); }
   ;
         
-fragment tab_annotation
+tab_annotation
   : (
         s=tab_static       { setTableStatic(s); }
       | i=tab_isa          { setTableIsa(i); }
@@ -539,24 +539,24 @@ fragment tab_annotation
     )
   ;
 
-fragment tab_static returns [String result]
+tab_static returns [String result]
 @init { result = null; }
   : STATIC WS i=ident WS? { result = $i.text; }
   ;
 
-fragment tab_isa returns [String result]
+tab_isa returns [String result]
 @init { result = null; }
   : ISA WS i=ident WS? { result = $i.text; }
   ;
 
-fragment tab_isatype returns [String result]
+tab_isatype returns [String result]
 @init { result = null; }
   : ISATYPE WS i=ident WS? { result = $i.text; }
   ;
 
-fragment tab_decorator :  DECORATOR WS?;
+tab_decorator :  DECORATOR WS?;
 
-fragment tab_relationship
+tab_relationship
 @init
 {
     List<List<String>> contents = new ArrayList<List<String>>();
@@ -595,7 +595,7 @@ fragment tab_relationship
      }
   ;
 
-fragment col_annotation
+col_annotation
   : (
          col_readonly { setColumnReadOnly(true); }
      |   col_bool
@@ -603,9 +603,9 @@ fragment col_annotation
      | s=col_oraseq   { setColumnOraSeq(s); }
     );
 
-fragment col_readonly :  READONLY WS?;
+col_readonly :  READONLY WS?;
 
-fragment col_bool
+col_bool
   : BOOL WS
     i=ident
     {
@@ -616,19 +616,19 @@ fragment col_bool
     WS? (COMMA WS? k=ident WS? { setColumnBoolNull($k.text); })?
   ;
 
-fragment text_or_id 
+text_or_id 
     :    ID
     |     TEXT
     ;
 
-fragment ident returns [String text]
-@init {text = null;}
+ident returns [String tet]
+@init {txt = null;}
     :   (SQUOTE i=ID SQUOTE) {text = ($i.text);}
     |   (DQUOTE j=ID DQUOTE) {text = ($j.text);}
     | k=ID {text = $k.text;}
     ;
 
-fragment col_isarefs
+col_isarefs
 @init
 {
     List<List<String>> contents = new ArrayList<List<String>>();
@@ -666,7 +666,7 @@ fragment col_isarefs
      }
   ;
 
-fragment col_oraseq returns [String result]
+col_oraseq returns [String result]
 @init { result = null; }
   : ORASEQ WS i=ident WS? { result = $i.text; }
   ;
@@ -676,15 +676,15 @@ fragment col_oraseq returns [String result]
  *------------------------------------------------------------------*/
 
 AT
-    :  (  ('@static')    => STATIC    {$type = STATIC;}
-        | ('@isa')       => ISA       {$type = ISA;}
-        | ('@isatype')   => ISATYPE   {$type = ISATYPE;}
-        | ('@decorator') => DECORATOR {$type = DECORATOR;}
-        | ('@isarefs')   => ISAREFS   {$type = ISAREFS;}
-        | ('@readonly')  => READONLY  {$type = READONLY;}
-        | ('@bool')      => BOOL      {$type = BOOL;}
-        | ('@oraseq')    => ORASEQ    {$type = ORASEQ;}
-        | ('@relationship')  => RELATIONSHIP  {$type = RELATIONSHIP;}
+    :  (  STATIC
+        | ISA
+        | ISATYPE
+        | DECORATOR
+        | ISAREFS
+        | READONLY
+        | BOOL
+        | ORASEQ
+        | RELATIONSHIP
         | '@')
     ;
 
@@ -711,21 +711,17 @@ fragment ORASEQ : '@oraseq';
 WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+;// {$channel = HIDDEN;};
 
 ID
-    : (LETTER | '_' | DIGIT ) (NAMECHAR)* WS? {$type = ID;}
+    : (LETTER | '_' | DIGIT ) (NAMECHAR)* WS?
     ;
 
 TEXT
-   : (  (ID) => ID {$type = ID;}
-      | ('\t') => WS {$type = WS;}
-      | (' ')  => WS {$type = WS;}
-      | ('\r') => WS {$type = WS;}
-      | ('\n') => WS {$type = WS;}
-      | ('\u000C') => WS {$type = WS;}
-      | ('(') => OPEN_PAREN {$type = OPEN_PAREN;}
-      | (')') => CLOSE_PAREN {$type = CLOSE_PAREN;}
-      | (',') => COMMA {$type = COMMA;}
-      | ('\''|'"') => QUOTE {$type = QUOTE;}
-      | ('@') => AT
+   : (  ID
+      | WS
+      | OPEN_PAREN
+      | CLOSE_PAREN
+      | COMMA
+      | QUOTE
+      | AT
       | (~('@'|','|'('|')'|'\''|'"')+))
    ;
 

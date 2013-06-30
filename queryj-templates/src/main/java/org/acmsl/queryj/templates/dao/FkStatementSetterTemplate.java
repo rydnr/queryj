@@ -38,7 +38,6 @@ package org.acmsl.queryj.templates.dao;
  */
 import org.acmsl.queryj.api.AbstractBasePerForeignKeyTemplate;
 import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
-import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
@@ -98,20 +97,5 @@ public class FkStatementSetterTemplate
     public String getTemplateName()
     {
         return "FkStatementSetter";
-    }
-
-    /**
-     * Builds the correct chain.
-     * @param context the context.
-     * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link org.acmsl.queryj.api.FillTemplateChain}.
-     */
-    @NotNull
-    @Override
-    public FillTemplateChain<PerForeignKeyTemplateContext> buildFillTemplateChain(
-        @NotNull final PerForeignKeyTemplateContext context, final boolean relevantOnly)
-    {
-        // TODO
-        return null;
     }
 }

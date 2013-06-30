@@ -36,25 +36,25 @@ package org.acmsl.queryj.api;
 /*
  * Importing ACM-SL Commons classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 
 /*
  * Importing StringTemplate classes.
  */
-import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
-import org.antlr.stringtemplate.StringTemplateErrorListener;
-import org.antlr.stringtemplate.StringTemplateGroup;
-import org.apache.commons.logging.Log;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STErrorListener;
+import org.stringtemplate.v4.STGroup;
+
+/*
+ * Importing Jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.WeakHashMap;
 import java.util.Map;
@@ -63,6 +63,7 @@ import java.util.Map;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.stringtemplate.v4.STGroupDir;
 
 /**
  * Provides some methods commonly-used when working with ST templates.
@@ -76,7 +77,7 @@ public class STUtils
     /**
      * The cached template groups.
      */
-    private static final Map<String, StringTemplateGroup> ST_GROUPS = new WeakHashMap<String, StringTemplateGroup>();
+    private static final Map<String, STGroup> ST_GROUPS = new WeakHashMap<String, STGroup>();
 
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -107,50 +108,17 @@ public class STUtils
     /**
      * Retrieves the string template group.
      * @param path the path.
-     * @param theme the theme.
-     * @param errorListener the {@link StringTemplateErrorListener}
-     * instance.
+     * @param errorListener the {@link STErrorListener} instance.
      * @param charset the charset.
      * @return such instance.
      */
     @Nullable
-    public StringTemplateGroup retrieveGroup(
+    protected STGroup retrieveGroup(
         @NotNull final String path,
-        @NotNull final String theme,
-        @NotNull final StringTemplateErrorListener errorListener,
+        @NotNull final STErrorListener errorListener,
         @NotNull final Charset charset)
     {
-        @Nullable StringTemplateGroup result = ST_GROUPS.get(path);
-        
-        if  (result == null)
-        {
-            @Nullable final StringTemplateGroup t_Theme = retrieveGroup(theme, errorListener, charset);
-            result = retrieveUncachedGroup(path, errorListener, charset);
-
-            if  (result != null)
-            {
-                result.setSuperGroup(t_Theme);
-                ST_GROUPS.put(path, result);
-            }
-        }
-        
-        return result;
-    }
-            
-    /**
-     * Retrieves the string template group.
-     * @param path the path.
-     * @param errorListener the {@link StringTemplateErrorListener} instance.
-     * @param charset the charset.
-     * @return such instance.
-     */
-    @Nullable
-    protected StringTemplateGroup retrieveGroup(
-        @NotNull final String path,
-        @NotNull final StringTemplateErrorListener errorListener,
-        @NotNull final Charset charset)
-    {
-        @Nullable StringTemplateGroup result = ST_GROUPS.get(path);
+        @Nullable STGroup result = ST_GROUPS.get(path);
         
         if  (result == null)
         {
@@ -164,40 +132,27 @@ public class STUtils
     /**
      * Retrieves the string template group.
      * @param path the path.
-     * @param errorListener the {@link StringTemplateErrorListener}
+     * @param errorListener the {@link STErrorListener}
      * instance.
      * @param charset the charset.
      * @return such instance.
      */
     @Nullable
-    protected StringTemplateGroup retrieveUncachedGroup(
+    protected STGroup retrieveUncachedGroup(
         @NotNull final String path,
-        @NotNull final StringTemplateErrorListener errorListener,
+        @NotNull final STErrorListener errorListener,
         @NotNull final Charset charset)
     {
-        @Nullable final StringTemplateGroup result;
+        @Nullable final STGroup result;
 
-        @Nullable final InputStream t_Input = STUtils.class.getResourceAsStream(path);
+        result = new STGroupDir(path, charset.displayName());
 
-        if (t_Input != null)
-        {
-            result =
-                new StringTemplateGroup(
-                    new InputStreamReader(t_Input, charset),
-                    AngleBracketTemplateLexer.class,
-                    errorListener);
-        }
-        else
-        {
-            result = null;
+        result.setListener(errorListener);
 
-            @Nullable final Log t_Log = UniqueLogFactory.getLog(STUtils.class);
+//        STGroup.registerGroupLoader(loader);
+//        STroup.registerDefaultLexer(AngleBracketTemplateLexer.class);
 
-            if (t_Log != null)
-            {
-                t_Log.error("Missing " + path);
-            }
-        }
+//        result = STGroup.loadGroup(path);
 
         return result;
     }

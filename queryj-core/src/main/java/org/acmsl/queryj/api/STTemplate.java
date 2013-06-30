@@ -38,7 +38,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing some StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.STGroup;
 
 /*
  * Importing some JetBrains annotations.
@@ -58,7 +58,7 @@ public interface STTemplate<T extends TemplateContext>
      * @return such group.
      */
     public @Nullable
-    StringTemplateGroup retrieveGroup();
+    STGroup retrieveGroup();
 
     /**
      * Retrieves the template name.

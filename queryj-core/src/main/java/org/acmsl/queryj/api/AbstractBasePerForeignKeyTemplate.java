@@ -46,9 +46,13 @@ import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
+
+/*
  * Importing some JetBrains annotations.
  */
-import org.antlr.stringtemplate.StringTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -167,14 +171,14 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends PerForeignKeyT
     /**
      * Builds a context-specific exception.
      * @param context the context.
-     * @param template the {@link StringTemplate} instance.
+     * @param template the {@link ST} instance.
      * @return the specific {@link InvalidTemplateException} for the template.
      */
     @Override
     @NotNull
     public InvalidTemplateException buildInvalidTemplateException(
         @NotNull final C context,
-        @NotNull final StringTemplate template,
+        @NotNull final ST template,
         @NotNull final Throwable actualException)
     {
         return

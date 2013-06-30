@@ -44,7 +44,6 @@ import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 /*
  * Importing StringTemplate classes.
  */
-import org.acmsl.queryj.api.FillTemplateChain;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -99,20 +98,5 @@ public class CucumberFeatureTemplate
     public String getTemplateName()
     {
         return "CucumberFeature";
-    }
-
-    /**
-     * Builds the correct chain.
-     * @param context the context.
-     * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link org.acmsl.queryj.api.FillTemplateChain}.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    public FillTemplateChain<PerRepositoryTemplateContext> buildFillTemplateChain(
-        @NotNull final PerRepositoryTemplateContext context, final boolean relevantOnly)
-    {
-        // TODO
-        return null;
     }
 }

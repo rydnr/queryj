@@ -42,7 +42,6 @@ package org.acmsl.queryj.templates.dao;
  */
 import org.acmsl.queryj.api.AbstractBasePerRepositoryTemplate;
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
-import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing some StringTemplate classes.
@@ -111,20 +110,5 @@ public class DAOListenerImplTemplate
     public String getTemplateName()
     {
         return "DAOListenerImpl";
-    }
-
-    /**
-     * Builds the correct chain.
-     * @param context the context.
-     * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link FillTemplateChain}.
-     */
-    @NotNull
-    @Override
-    public FillTemplateChain<PerRepositoryTemplateContext> buildFillTemplateChain(
-        @NotNull final PerRepositoryTemplateContext context, final boolean relevantOnly)
-    {
-        // TODO
-        return null;
     }
 }

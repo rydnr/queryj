@@ -53,21 +53,20 @@ import org.acmsl.commons.utils.ClassLoaderUtils;
 /*
  * Importing Commons-Logging classes.
  */
+import org.antlr.v4.parse.ANTLRParser;
 import org.apache.commons.logging.Log;
 
 /*
  * Importing ANTLR classes.
  */
-import org.antlr.grammar.v3.ANTLRParser;
 
 /*
  * Importing StringTemplate classes.
  */
-import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
-import org.antlr.stringtemplate.misc.StringTemplateTreeView;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateErrorListener;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STErrorListener;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.misc.STMessage;
 
 /*
  * Importing some JetBrains annotations.
@@ -85,6 +84,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.Set;
 
 /**
  * Represents generic templates.
@@ -101,38 +101,51 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * The default StringTemplate error listener.
      */
     @NotNull
-    protected static final StringTemplateErrorListener
+    protected static final STErrorListener
         DEFAULT_ST_ERROR_LISTENER =
-            new StringTemplateErrorListener()
+            new STErrorListener()
             {
-                /**
-                 * Receives a warning message.
-                 * @param message the warning message.
-                 */
-                public void warning(@Nullable final String message)
+                @Override
+                public void compileTimeError(@NotNull final STMessage stMessage)
                 {
-                    @Nullable final Log t_Log =
-                        UniqueLogFactory.getLog(AbstractTemplate.class);
+                    @Nullable final Log log = UniqueLogFactory.getLog(AbstractTemplate.class);
 
-                    if  (t_Log != null)
+                    if (log != null)
                     {
-                        t_Log.warn(message);
+                        log.error(stMessage.toString());
                     }
                 }
 
-                /**
-                 * Receives the error.
-                 * @param message the error message.
-                 * @param cause the cause.
-                 */
-                public void error(@Nullable final String message, @NotNull final Throwable cause)
+                @Override
+                public void runTimeError(@NotNull final STMessage stMessage)
                 {
-                    @Nullable final Log t_Log =
-                        UniqueLogFactory.getLog(AbstractTemplate.class);
+                    @Nullable final Log log = UniqueLogFactory.getLog(AbstractTemplate.class);
 
-                    if  (t_Log != null)
+                    if (log != null)
                     {
-                        t_Log.fatal(message, cause);
+                        log.error(stMessage.toString());
+                    }
+                }
+
+                @Override
+                public void IOError(@NotNull final STMessage stMessage)
+                {
+                    @Nullable final Log log = UniqueLogFactory.getLog(AbstractTemplate.class);
+
+                    if (log != null)
+                    {
+                        log.error(stMessage.toString());
+                    }
+                }
+
+                @Override
+                public void internalError(@NotNull final STMessage stMessage)
+                {
+                    @Nullable final Log log = UniqueLogFactory.getLog(AbstractTemplate.class);
+
+                    if (log != null)
+                    {
+                        log.error(stMessage.toString());
                     }
                 }
             };
@@ -265,25 +278,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         
         if  (result == null)
         {
-            result = processHeader(input, getHeader(getTemplateContext()));
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the processed header.
-     * @param input the input.
-     * @return such information.
-     */
-    @Nullable
-    public String processHeader(@NotNull final Map input, @Nullable final String header)
-    {
-        @Nullable final String result = processInnerTemplate(header, input);
-
-        if (result != null)
-        {
-            setCachedProcessedHeader(result);
+//            result = processHeader(input, getHeader(getTemplateContext()));
         }
         
         return result;
@@ -313,7 +308,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such instance.
      */
     @Nullable
-    public abstract StringTemplateGroup retrieveGroup();
+    public abstract STGroup retrieveGroup();
 
     /**
      * Retrieves the string template group.
@@ -321,12 +316,11 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such instance.
      */
     @Nullable
-    protected StringTemplateGroup retrieveGroup(@NotNull final String path)
+    protected STGroup retrieveGroup(@NotNull final String path)
     {
         return
             retrieveGroup(
                 path,
-                "/org/acmsl/queryj/queryj.stg",
                 Charset.defaultCharset(),
                 getSTCache());
     }
@@ -334,31 +328,28 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Retrieves the string template group.
      * @param path the path.
-     * @param theme the theme.
      * @param charset the charset.
      * @param cache the ST cache.
      * @return such instance.
      */
     @SuppressWarnings("unchecked")
     @Nullable
-    protected StringTemplateGroup retrieveGroup(
+    protected STGroup retrieveGroup(
         @NotNull final String path,
-        @NotNull final String theme,
         @NotNull final Charset charset,
         @NotNull final Map cache)
     {
-        @Nullable StringTemplateGroup result;
+        @Nullable STGroup result;
         
-        @NotNull final Object t_Key = buildSTGroupKey(path, theme);
+        @NotNull final Object t_Key = buildSTGroupKey(path);
 
-        result = (StringTemplateGroup) cache.get(t_Key);
+        result = (STGroup) cache.get(t_Key);
 
         if  (result == null)
         {
             result =
                 retrieveGroup(
                     path,
-                    theme,
                     retrieveStErrorListener(),
                     charset,
                     STUtils.getInstance());
@@ -377,7 +368,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such instance.
      */
     @NotNull
-    protected StringTemplateErrorListener retrieveStErrorListener()
+    protected STErrorListener retrieveStErrorListener()
     {
         return DEFAULT_ST_ERROR_LISTENER;
     }
@@ -386,47 +377,43 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Builds a key to store the ST group associated to
      * given path and theme.
      * @param path the ST path.
-     * @param theme the ST theme.
      * @return such key.
      */
     @NotNull
-    protected final Object buildSTGroupKey(
-        @NotNull final String path, @NotNull final String theme)
+    protected final Object buildSTGroupKey(@NotNull final String path)
     {
-        return ".:\\AbstractTemplate//STCACHE//" + path + "//" + theme;
+        return ".:\\AbstractTemplate//STCACHE//" + path + "//";
     }
 
     /**
      * Retrieves the string template group.
      * @param path the path.
-     * @param theme the theme.
-     * @param errorListener the {@link StringTemplateErrorListener}
+     * @param errorListener the {@link STErrorListener}
      * instance.
      * @param charset the charset.
      * @param stUtils the {@link STUtils} instance.
      * @return such instance.
      */
     @Nullable
-    protected StringTemplateGroup retrieveGroup(
+    protected STGroup retrieveGroup(
         @NotNull final String path,
-        @NotNull final String theme,
-        @NotNull final StringTemplateErrorListener errorListener,
+        @NotNull final STErrorListener errorListener,
         @NotNull final Charset charset,
         @NotNull final STUtils stUtils)
     {
-        return stUtils.retrieveGroup(path, theme, errorListener, charset);
+        return stUtils.retrieveGroup(path, errorListener, charset);
     }
 
     /**
-     * Configures given {@link StringTemplate} instance.
+     * Configures given {@link ST} instance.
      * @param stringTemplate such template.
      */
     @SuppressWarnings("unused")
-    protected void configure(@NotNull final StringTemplate stringTemplate)
+    protected void configure(@NotNull final ST stringTemplate)
     {
-        stringTemplate.setPassThroughAttributes(true);
-        StringTemplate.setLintMode(true);
-        stringTemplate.setErrorListener(retrieveStErrorListener());
+        //stringTemplate.setPassThroughAttributes(true);
+        //stringTemplate.setLintMode(true);
+        //stringTemplate.setErrorListener(retrieveStErrorListener());
     }
 
     /**
@@ -435,9 +422,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return the template.
      */
     @Nullable
-    protected StringTemplate retrieveTemplate(@Nullable final StringTemplateGroup group)
+    protected ST retrieveTemplate(@Nullable final STGroup group)
     {
-        @Nullable StringTemplate result = null;
+        @Nullable ST result = null;
         
         if  (group != null)
         {
@@ -509,32 +496,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     protected String buildHeader()
     {
         return "Generating " + getClass().getName() + ".";
-    }
-
-    /**
-     * Processes given text as a template.
-     * @param template the template.
-     * @param input the input.
-     * @return the processed text.
-     */
-    @Nullable
-    protected String processInnerTemplate(
-        @Nullable final String template, final Map input)
-    {
-        @Nullable String result = null;
-        
-        if  (template != null)
-        {
-            @NotNull final StringTemplate t_strInnerTemplate =
-                new StringTemplate(
-                    template, AngleBracketTemplateLexer.class);
-
-            t_strInnerTemplate.setAttribute("input", input);
-        
-            result = t_strInnerTemplate.toString();
-        }
-        
-        return result;
     }
 
     /**
@@ -641,12 +602,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
             @NotNull final StringBuilder t_sbMessage = new StringBuilder();
 
             @Nullable final String t_strAntlrLocation =
-                t_ClassLoaderUtils.findLocation(
-                    ANTLRParser.class);
+                t_ClassLoaderUtils.findLocation(ANTLRParser.class);
 
             @Nullable final String t_strStringTemplateLocation =
-                t_ClassLoaderUtils.findLocation(
-                    StringTemplate.class);
+                t_ClassLoaderUtils.findLocation(ST.class);
 
             t_sbMessage.append(
                   "A fatal error in StringTemplate-based generation "
@@ -780,9 +739,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         @Nullable Throwable t_ExceptionToWrap = null;
 
-        @Nullable final StringTemplateGroup t_Group = retrieveGroup();
+        @Nullable final STGroup t_Group = retrieveGroup();
 
-        @Nullable final StringTemplate t_Template = retrieveTemplate(t_Group);
+        @Nullable final ST t_Template = retrieveTemplate(t_Group);
 
         if (t_Template != null)
         {
@@ -799,33 +758,11 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     placeHolders.putAll(chain.providePlaceholders(relevantOnly));
                 }
 
-                t_Template.setAttributes(placeHolders);
-                t_Template.setErrorListener(
-                    new StringTemplateErrorListener()
-                    {
-                        @Override
-                        public void error(@NotNull final String s, @NotNull final Throwable throwable)
-                        {
-                            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
-
-                            if (t_Log != null)
-                            {
-                                t_Log.error(s, throwable);
-                            }
-                        }
-
-                        @Override
-                        public void warning(@NotNull final String s)
-                        {
-                            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
-
-                            if (t_Log != null)
-                            {
-                                t_Log.warn(s);
-                            }
-                        }
-                    }
-                );
+                for (final Map.Entry<Object, Object> placeHolder : (Set <Map.Entry<Object, Object>>) placeHolders.entrySet())
+                {
+                    t_Template.add(placeHolder.getKey().toString(), placeHolder.getValue());
+                }
+                //t_Template.setErrorListener(DEFAULT_ST_ERROR_LISTENER);
             }
             catch (@NotNull final QueryJBuildException invalidTemplate)
             {
@@ -836,7 +773,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
             {
                 try
                 {
-                    result = t_Template.toString();
+                    result = t_Template.render();
                 }
                 catch (@NotNull final Throwable throwable)
                 {
@@ -850,7 +787,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                             "Error in template " + getTemplateName(), throwable);
                     }
 
-                    @Nullable final StringTemplateTreeView debugTool =
+/*                    @Nullable final STTreeView debugTool =
                         new StringTemplateTreeView("Debugging " + getTemplateName(), t_Template);
 
                     debugTool.setVisible(true);
@@ -865,7 +802,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                         {
                             e.printStackTrace();
                         }
-                    }
+                    }*/
                 }
             }
         }
@@ -979,13 +916,13 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Builds a context-specific exception.
      * @param context the context.
-     * @param template the {@link StringTemplate} instance.
+     * @param template the {@link ST} instance.
      * @return the specific {@link InvalidTemplateException} for the template.
      */
     @NotNull
     public abstract InvalidTemplateException buildInvalidTemplateException(
         @NotNull final C context,
-        @NotNull final StringTemplate template,
+        @NotNull final ST template,
         @NotNull final Throwable actualException);
 
     @Override

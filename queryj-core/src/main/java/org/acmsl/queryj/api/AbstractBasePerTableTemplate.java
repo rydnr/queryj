@@ -29,11 +29,15 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing StringTemplate classes.
+ * Importing project classes.
  */
 import org.acmsl.queryj.api.exceptions.InvalidPerTableTemplateException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
-import org.antlr.stringtemplate.StringTemplate;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
 
 /*
  * Importing some jetbrains annotations.
@@ -107,14 +111,14 @@ public abstract class AbstractBasePerTableTemplate<C extends PerTableTemplateCon
     /**
      * Builds a context-specific exception.
      * @param context the context.
-     * @param template the {@link StringTemplate} instance.
-     * @return the specific {@link org.acmsl.queryj.api.exceptions.InvalidTemplateException} for the template.
+     * @param template the {@link ST} instance.
+     * @return the specific {@link InvalidTemplateException} for the template.
      */
     @Override
     @NotNull
     public InvalidTemplateException buildInvalidTemplateException(
         @NotNull final C context,
-        @NotNull final StringTemplate template,
+        @NotNull final ST template,
         @NotNull final Throwable actualException)
     {
         return

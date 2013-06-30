@@ -32,10 +32,14 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing StringTemplate classes.
+ * Importing project classes.
  */
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
-import org.antlr.stringtemplate.StringTemplate;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
 
 /*
  * Importing some JetBrains annotations.
@@ -50,26 +54,15 @@ public interface PerCustomResultTemplate<C extends PerCustomResultTemplateContex
     extends  Template<C>
 {
     /**
-     * Builds the correct chain.
-     * @param context the context.
-     * @param relevantOnly whether to include only relevant placeholders.
-     * @return the specific {@link AbstractFillTemplateChain}.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    public FillTemplateChain<C> buildFillTemplateChain(
-        @NotNull final C context, final boolean relevantOnly);
-
-    /**
      * Builds a context-specific exception.
      * @param context  the context.
-     * @param template the {@link StringTemplate} instance.
-     * @return the specific {@link org.acmsl.queryj.api.exceptions.InvalidTemplateException} for the template.
+     * @param template the {@link ST} instance.
+     * @return the specific {@link InvalidTemplateException} for the template.
      */
     @SuppressWarnings("unused")
     @NotNull
     public InvalidTemplateException buildInvalidTemplateException(
         @NotNull final C context,
-        @NotNull final StringTemplate template,
+        @NotNull final ST template,
         @NotNull final Throwable actualException);
 }

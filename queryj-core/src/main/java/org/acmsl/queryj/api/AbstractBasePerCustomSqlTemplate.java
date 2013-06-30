@@ -42,9 +42,13 @@ import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.acmsl.queryj.customsql.Sql;
 
 /*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
+
+/*
  * Importing some JetBrains annotations.
  */
-import org.antlr.stringtemplate.StringTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -104,14 +108,14 @@ public abstract class AbstractBasePerCustomSqlTemplate<C extends PerCustomSqlTem
     /**
      * Builds a context-specific exception.
      * @param context the context.
-     * @param template the {@link org.antlr.stringtemplate.StringTemplate} instance.
-     * @return the specific {@link org.acmsl.queryj.api.exceptions.InvalidTemplateException} for the template.
+     * @param template the {@link ST} instance.
+     * @return the specific {@link InvalidTemplateException} for the template.
      */
     @Override
     @NotNull
     public InvalidTemplateException buildInvalidTemplateException(
         @NotNull final C context,
-        @NotNull final StringTemplate template,
+        @NotNull final ST template,
         @NotNull final Throwable actualException)
     {
         @NotNull final InvalidTemplateException result;

@@ -32,11 +32,6 @@
  */
 package org.acmsl.queryj.api;
 
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Base logic for all per-fk templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -44,15 +39,4 @@ import org.jetbrains.annotations.NotNull;
 public interface PerForeignKeyTemplate<C extends PerForeignKeyTemplateContext>
     extends  Template<C>
 {
-    /**
-     * Builds the correct chain.
-     *
-     * @param context the context.
-     * @param relevantOnly whether to include only relevant placeholders.
-     * @return the specific {@link AbstractFillTemplateChain}.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    public FillTemplateChain buildFillTemplateChain(
-        @NotNull final C context, final boolean relevantOnly);
 }

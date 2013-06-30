@@ -43,7 +43,6 @@ import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 /*
  * Importing StringTemplate classes.
  */
-import org.acmsl.queryj.api.FillTemplateChain;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -97,20 +96,5 @@ public class ConfigurationPropertiesTemplate
     public String getTemplateName()
     {
         return "ConfigurationProperties";
-    }
-
-    /**
-     * Builds the correct chain.
-     * @param context the context.
-     * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link FillTemplateChain}.
-     */
-    @NotNull
-    @Override
-    public FillTemplateChain<PerRepositoryTemplateContext> buildFillTemplateChain(
-        @NotNull final PerRepositoryTemplateContext context, final boolean relevantOnly)
-    {
-        // TODO
-        return null;
     }
 }

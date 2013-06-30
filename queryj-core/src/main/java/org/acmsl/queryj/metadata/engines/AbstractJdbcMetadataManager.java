@@ -72,7 +72,6 @@ import org.apache.commons.logging.Log;
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.stringtemplate.v4.ST.AttributeList;
 
 /*
  * Importing some JDK classes.
@@ -353,7 +352,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the columns.
      * @param columns the information about all columns for all tables.
      */
-    protected final void immutableSetColumns(@NotNull Map<String,List<Attribute>> columns)
+    protected final void immutableSetColumns(@NotNull final Map<String,List<Attribute>> columns)
     {
         m__mColumns = columns;
     }
@@ -362,7 +361,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the columns.
      * @param columns the information about all columns for all tables.
      */
-    protected void setColumns(@NotNull Map<String,List<Attribute>> columns)
+    protected void setColumns(@NotNull final Map<String,List<Attribute>> columns)
     {
         immutableSetColumns(columns);
     }
@@ -423,7 +422,7 @@ public abstract class AbstractJdbcMetadataManager
     @Override
     public DatabaseMetaData getMetaData()
     {
-        DatabaseMetaData result = m__MetaData;
+        final DatabaseMetaData result = m__MetaData;
 
         if (result == null)
         {
@@ -717,7 +716,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected void logVerbose(@NotNull final String message)
     {
-        Log t_Log = UniqueLogFactory.getLog(AbstractJdbcMetadataManager.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractJdbcMetadataManager.class);
 
         if  (t_Log != null)
         {
@@ -732,7 +731,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected void logWarn(@NotNull final String message, @NotNull final Exception exception)
     {
-        Log t_Log = UniqueLogFactory.getLog(AbstractJdbcMetadataManager.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractJdbcMetadataManager.class);
 
         if  (t_Log != null)
         {
@@ -751,11 +750,11 @@ public abstract class AbstractJdbcMetadataManager
     protected String concat(
         @NotNull final String[] values, @NotNull final String separator)
     {
-        StringBuilder result = new StringBuilder();
+        @NotNull final StringBuilder result = new StringBuilder();
 
         for (int t_iIndex = 0; t_iIndex < values.length; t_iIndex++)
         {
-            String t_strValue = values[t_iIndex];
+            @Nullable final String t_strValue = values[t_iIndex];
 
             if  (t_strValue != null)
             {
@@ -853,7 +852,7 @@ public abstract class AbstractJdbcMetadataManager
             t_lTableNames = new ArrayList<String>();
         }
 
-        List<TableIncompleteValueObject> t_lTables =
+        @NotNull final List<TableIncompleteValueObject> t_lTables =
             extractTableNamesAndComments(
                 metaData, catalog, schema, t_lTableNames, metadataExtractionListener, caseSensitiveness);
 
@@ -908,7 +907,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>(list.size());
 
-        for (@Nullable AttributeIncompleteValueObject t_Attribute : list)
+        for (@Nullable final AttributeIncompleteValueObject t_Attribute : list)
         {
             result.add(t_Attribute);
         }
@@ -925,7 +924,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         @NotNull final List<ForeignKey> result = new ArrayList<ForeignKey>(list.size());
 
-        for (@Nullable ForeignKey t_Item : list)
+        for (@Nullable final ForeignKey t_Item : list)
         {
             result.add(t_Item);
         }
@@ -942,7 +941,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         @NotNull final List<Table> result = new ArrayList<Table>(tables.size());
 
-        for (@Nullable Table t_Table : tables)
+        for (@Nullable final Table t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -959,7 +958,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected Table cloneTable(@NotNull final Table table)
     {
-        @NotNull Table result;
+        @NotNull final Table result;
 
         if (table instanceof TableValueObject)
         {
@@ -998,7 +997,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>(attributes.size());
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {
@@ -1036,9 +1035,9 @@ public abstract class AbstractJdbcMetadataManager
     protected List<ForeignKey> cloneForeignKeys(
         @NotNull final List<ForeignKey> foreignKeys)
     {
-        @NotNull final List<ForeignKey> result = new AttributeList<ForeignKey>(foreignKeys.size());
+        @NotNull final List<ForeignKey> result = new ArrayList<ForeignKey>(foreignKeys.size());
 
-        for (@Nullable ForeignKey t_ForeignKey : foreignKeys)
+        for (@Nullable final ForeignKey t_ForeignKey : foreignKeys)
         {
             if (t_ForeignKey != null)
             {
@@ -1060,14 +1059,14 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected void bindAttributes(
         @NotNull final Collection<TableIncompleteValueObject> tables,
-        @NotNull Map<String, List<AttributeIncompleteValueObject>> attributes)
+        @NotNull final Map<String, List<AttributeIncompleteValueObject>> attributes)
     {
         Table t_ParentTable;
         List<Attribute> t_lParentTableAttributes;
         List<AttributeIncompleteValueObject> t_lChildTableAttributes;
         List<Attribute> t_lCompleteAttributes;
 
-        for (TableIncompleteValueObject t_Table : tables)
+        for (@NotNull final TableIncompleteValueObject t_Table : tables)
         {
             t_lChildTableAttributes = attributes.get(t_Table.getName());
 
@@ -1105,7 +1104,7 @@ public abstract class AbstractJdbcMetadataManager
         String t_strTableName;
         Table t_Parent;
 
-        for (TableIncompleteValueObject t_Table : tables)
+        for (@NotNull final TableIncompleteValueObject t_Table : tables)
         {
             t_strTableName = t_Table.getName();
             t_Parent =
@@ -1135,7 +1134,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         Table result = null;
 
-        @Nullable String t_strParentTable = metaLanguageUtils.retrieveDeclaredParent(tableComment);
+        @Nullable final String t_strParentTable = metaLanguageUtils.retrieveDeclaredParent(tableComment);
 
         if (t_strParentTable != null)
         {
@@ -1158,7 +1157,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         @Nullable Table result = null;
 
-        for (@Nullable Table t_Table : tables)
+        for (@Nullable final Table t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -1192,9 +1191,9 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected List<String> retrieveTableNames(@NotNull final List<? extends AbstractTable> tables)
     {
-        List<String> result = new ArrayList<String>(tables.size());
+        @NotNull final List<String> result = new ArrayList<String>(tables.size());
 
-        for (AbstractTable t_Table : tables)
+        for (@Nullable final AbstractTable t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -1332,8 +1331,8 @@ public abstract class AbstractJdbcMetadataManager
     {
         if (DebugUtils.getInstance().debugEnabledForTable(tableName))
         {
-            @SuppressWarnings("unused")
-            int a = 1;
+//            @SuppressWarnings("unused")
+//            int a = 1;
         }
 
         return
@@ -1370,7 +1369,7 @@ public abstract class AbstractJdbcMetadataManager
             && (enabled != null)
             && (disabled != null))
         {
-            List<String> t_lDisabled = Arrays.asList(disabled);
+            @NotNull final List<String> t_lDisabled = Arrays.asList(disabled);
 
             result =
                 !(   (t_lDisabled.contains("*"))
@@ -1391,7 +1390,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         String[] result = null;
 
-        String t_strProperty = System.getProperty(TABLES_ENABLED);
+        @Nullable final String t_strProperty = System.getProperty(TABLES_ENABLED);
 
         if (t_strProperty != null)
         {
@@ -1416,7 +1415,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         String[] result = null;
 
-        String t_strProperty = System.getProperty(TABLES_DISABLED);
+        @Nullable final String t_strProperty = System.getProperty(TABLES_DISABLED);
 
         if (t_strProperty != null)
         {
@@ -1480,11 +1479,11 @@ public abstract class AbstractJdbcMetadataManager
     @NotNull
     protected String toNormalizedString(@NotNull final List<Attribute> attributes)
     {
-        StringBuilder t_sbResult = new StringBuilder();
+        @NotNull final StringBuilder t_sbResult = new StringBuilder();
 
         boolean t_bFirstTime = true;
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute t_Attribute : attributes)
         {
             if (!t_bFirstTime)
             {
@@ -1514,7 +1513,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         String[] result = null;
 
-        String t_strProperty = System.getProperty(FOREIGN_KEYS_ENABLED);
+        @Nullable final String t_strProperty = System.getProperty(FOREIGN_KEYS_ENABLED);
 
         if (t_strProperty != null)
         {
@@ -1539,7 +1538,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         String[] result = null;
 
-        String t_strProperty = System.getProperty(FOREIGN_KEYS_DISABLED);
+        @Nullable final String t_strProperty = System.getProperty(FOREIGN_KEYS_DISABLED);
 
         if (t_strProperty != null)
         {
@@ -1566,7 +1565,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         boolean result = true;
 
-        for (Table t_FixedTable : fixedTables)
+        for (@Nullable final Table t_FixedTable : fixedTables)
         {
             if (t_FixedTable != null)
             {
@@ -1601,7 +1600,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         boolean result = true;
 
-        for (Table t_FixedTable : fixedTables)
+        for (@Nullable final Table t_FixedTable : fixedTables)
         {
             if (t_FixedTable != null)
             {
@@ -1636,7 +1635,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         boolean result = true;
 
-        for (String t_strFixedTable : fixedTables)
+        for (@Nullable final String t_strFixedTable : fixedTables)
         {
             if (caseSensitiveness)
             {
@@ -1669,7 +1668,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         @Nullable Table result = null;
 
-        for (@Nullable Table t_Table : tables)
+        for (@Nullable final Table t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -1706,7 +1705,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         @Nullable Attribute result = null;
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {
@@ -1801,7 +1800,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         @NotNull final List<String> result = new ArrayList<String>(tables.size());
 
-        for (@Nullable Table t_Table : tables)
+        for (@Nullable final Table t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -1810,5 +1809,26 @@ public abstract class AbstractJdbcMetadataManager
         }
 
         return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "AbstractJdbcMetadataManager{" +
+               "caseSensitive=" + m__bCaseSensitive +
+               ", name='" + m__strName + '\'' +
+               ", metaData=" + m__MetaData +
+               ", metadataExtractionListener=" + m__MetadataExtractionListener +
+               ", catalog='" + m__strCatalog + '\'' +
+               ", schema='" + m__strSchema + '\'' +
+               ", tableNames=" + m__lTableNames +
+               ", tables=" + m__lTables +
+               ", columns=" + m__mColumns +
+               ", disableTableExtraction=" + m__bDisableTableExtraction +
+               ", lazyTableExtraction=" + m__bLazyTableExtraction +
+               ", engineName='" + m__strEngineName + '\'' +
+               ", engineVersion='" + m__strEngineVersion + '\'' +
+               ", quote='" + m__strQuote + '\'' +
+               '}';
     }
 }

@@ -41,12 +41,12 @@ import org.acmsl.queryj.api.PerTableTemplateContext;
 /*
  * Importing StringTemplate classes.
  */
-import org.acmsl.queryj.api.FillTemplateChain;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some JetBrains annotations.
  */
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -95,19 +95,5 @@ public class ValueObjectTemplate
     public String getTemplateName()
     {
         return "ValueObject";
-    }
-    /**
-     * Builds the correct chain.
-     * @param context the context.
-     * @param relevantOnly whether to include relevant-only placeholders.
-     * @return the specific {@link FillTemplateChain}.
-     */
-    @NotNull
-    @Override
-    public FillTemplateChain<PerTableTemplateContext> buildFillTemplateChain(
-        @NotNull final PerTableTemplateContext context, final boolean relevantOnly)
-    {
-        // TODO
-        return null;
     }
 }
