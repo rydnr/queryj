@@ -41,6 +41,7 @@ package org.acmsl.queryj.api;
  * Importing some project classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.tools.antlr.PerCommentLexer;
 import org.acmsl.queryj.tools.antlr.PerCommentParser;
 
@@ -53,9 +54,10 @@ import org.acmsl.commons.patterns.Utils;
 import org.acmsl.commons.utils.StringValidator;
 
 /*
- * Importing some ANTLR 3 classes.
+ * Importing some ANTLR classes.
  */
-import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.tools.antlr.PerCommentVisitor;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
@@ -152,9 +154,11 @@ public class MetaLanguageUtils
                 assert tableComment != null;
                 @NotNull final PerCommentParser t_Parser = setUpParser(tableComment);
 
-                t_Parser.tableComment();
+                final ParseTree tree = t_Parser.tableComment();
 
-                result = t_Parser.getTableStatic();
+                final PerCommentVisitor<String> visitor = new PerCommentTabStaticVisitor();
+
+                result = visitor.visit(tree);
             }
             catch  (@NotNull final RecognitionException recognitionException)
             {
@@ -191,7 +195,11 @@ public class MetaLanguageUtils
 
                 t_Parser.tableComment();
 
-                result = t_Parser.getTableIsa();
+                @NotNull final ParseTree tree = t_Parser.tableComment();
+
+                @NotNull final PerCommentVisitor<String> visitor = new PerCommentTabIsaVisitor();
+
+                result = visitor.visit(tree);
             }
             catch  (@NotNull final RecognitionException recognitionException)
             {
@@ -227,9 +235,11 @@ public class MetaLanguageUtils
             {
                 @NotNull final PerCommentParser t_Parser = setUpParser(tableComment);
 
-                t_Parser.tableComment();
+                @NotNull final ParseTree tree = t_Parser.tableComment();
 
-                result = t_Parser.getTableIsaType();
+                @NotNull final PerCommentVisitor<String> visitor = new PerCommentTabIsatypeVisitor();
+
+                result = visitor.visit(tree);
             }
             catch  (@NotNull final RecognitionException recognitionException)
             {
@@ -258,7 +268,9 @@ public class MetaLanguageUtils
     @NotNull
     public String[] retrieveColumnBool(@NotNull final String columnComment)
     {
-        @Nullable String[] result = null;
+        @Nullable String[] result = new String[3];
+
+        boolean done = false;
 
         if  (!isEmpty(columnComment))
         {
@@ -266,16 +278,16 @@ public class MetaLanguageUtils
              {
                  @NotNull final PerCommentParser t_Parser = setUpParser(columnComment);
 
-                 t_Parser.columnComment();
+                 @NotNull final ParseTree tree = t_Parser.columnComment();
 
-                 @Nullable final String t_strTrue = t_Parser.getColumnBoolTrue();
+                 @NotNull final PerCommentVisitor<List<String>> visitor = new PerCommentColBoolVisitor();
 
-                 if  (t_strTrue != null)
+                 @NotNull final List<String> boolDefs = visitor.visit(tree);
+
+                 if (boolDefs.size() > 1)
                  {
-                     result = new String[3];
-                     result[0] = t_strTrue;
-                     result[1] = t_Parser.getColumnBoolFalse();
-                     result[2] = t_Parser.getColumnBoolNull();
+                     done = true;
+                     result = boolDefs.toArray(result);
                  }
              }
              catch  (@NotNull final RecognitionException recognitionException)
@@ -291,7 +303,7 @@ public class MetaLanguageUtils
              }
         }
 
-        if (result == null)
+        if (!done)
         {
             result = new String[0];
         }
@@ -315,9 +327,11 @@ public class MetaLanguageUtils
             {
                 @NotNull final PerCommentParser t_Parser = setUpParser(columnComment);
 
-                t_Parser.columnComment();
+                @NotNull final ParseTree tree = t_Parser.columnComment();
 
-                result = t_Parser.getColumnReadOnly();
+                @NotNull final PerCommentVisitor<Boolean> visitor = new PerCommentColReadonlyVisitor();
+
+                result = visitor.visit(tree);
             }
             catch  (@NotNull final RecognitionException recognitionException)
             {
@@ -354,9 +368,11 @@ public class MetaLanguageUtils
             {
                 @NotNull final PerCommentParser t_Parser = setUpParser(columnComment);
 
-                t_Parser.columnComment();
+                @NotNull final ParseTree tree = t_Parser.columnComment();
 
-                result = t_Parser.getColumnIsaRefs();
+                @NotNull final PerCommentVisitor<List<List<String>>> visitor = new PerCommentColIsarefsVisitor();
+
+                result = visitor.visit(tree);
             }
             catch  (@NotNull final RecognitionException recognitionException)
             {
@@ -389,9 +405,11 @@ public class MetaLanguageUtils
             {
                 @NotNull final  PerCommentParser t_Parser = setUpParser(tableComment);
 
-                t_Parser.tableComment();
+                @NotNull final ParseTree tree = t_Parser.tableComment();
 
-                result = t_Parser.getTableDecorator();
+                @NotNull final PerCommentVisitor<Boolean> visitor = new PerCommentTabDecoratorVisitor();
+
+                result = visitor.visit(tree);
             }
             catch  (@NotNull final RecognitionException recognitionException)
             {
@@ -426,9 +444,11 @@ public class MetaLanguageUtils
             {
                 @NotNull final PerCommentParser t_Parser = setUpParser(tableComment);
 
-                t_Parser.tableComment();
+                @NotNull final ParseTree tree = t_Parser.tableComment();
 
-                result = t_Parser.getTableRelationship();
+                @NotNull final PerCommentVisitor<List<List<String>>> visitor = new PerCommentTabRelationshipVisitor();
+
+                result = visitor.visit(tree);
             }
             catch  (final RecognitionException recognitionException)
             {
