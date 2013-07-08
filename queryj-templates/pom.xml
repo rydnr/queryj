@@ -86,10 +86,6 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.apache.ant</groupId>
-      <artifactId>ant</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-logging</artifactId>
       <scope>runtime</scope>
@@ -100,11 +96,10 @@
       <artifactId>oracle-driver</artifactId>
       <optional>true</optional>
     </dependency>
-    <dependency>
+    <!--dependency>
       <groupId>org.antlr</groupId>
       <artifactId>antlr</artifactId>
-      <version>3.4</version>
-    </dependency>
+    </dependency-->
     <!--dependency>
       <groupId>org.antlr</groupId>
       <artifactId>antlr-2</artifactId>
@@ -119,80 +114,28 @@
       <optional>true</optional>
     </dependency-->
     <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>ST4</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-    </dependency>
-    <!--dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-      <optional>true</optional>
-    </dependency-->
-    <!--dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-dao</artifactId>
-      <optional>true</optional>
-    </dependency-->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-jdbc</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>test</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>info.cukes</groupId>
-      <artifactId>gherkin</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>info.cukes</groupId>
-      <artifactId>cucumber-jvm-deps</artifactId>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>com.thoughtworks.xstream</groupId>
-          <artifactId>xstream</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.googlecode.java-diff-utils</groupId>
-          <artifactId>diffutils</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>info.cukes</groupId>
-      <artifactId>cucumber-java</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>info.cukes</groupId>
-      <artifactId>cucumber-junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.rubiconproject.oss</groupId>
-      <artifactId>jchronic</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr4-maven-plugin</artifactId>
+        <goals>
+          <goal>antlr4</goal>
+        </goals>
+        <configuration>
+          <encoding>UTF-8</encoding>
+          <!--listener>true</listener-->
+          <visitor>true</visitor>
+          <outputDirectory>${project.build.directory}/generated-sources/org/acmsl/queryj/templates/antlr</outputDirectory>
+        </configuration>
+      </plugin>
+   </plugins>
+  </build>
+
 
 </project>

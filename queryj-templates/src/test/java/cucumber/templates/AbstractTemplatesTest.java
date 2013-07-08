@@ -40,6 +40,9 @@ package cucumber.templates;
  */
 import cucumber.templates.sql.CucumberSqlDAO;
 import cucumber.templates.sql.CucumberSqlParameterDAO;
+import org.acmsl.queryj.templates.antlr.JavaLexer;
+import org.acmsl.queryj.templates.antlr.JavaPackageVisitor;
+import org.acmsl.queryj.templates.antlr.JavaParser;
 
 /*
  * Importing QueryJ-Core classes.
@@ -69,8 +72,11 @@ import org.acmsl.queryj.metadata.vo.Table;
 /*
  * Importing ANTLR classes.
  */
-import org.antlr.runtime.ANTLRFileStream;
-import org.antlr.runtime.CommonTokenStream;
+import org.acmsl.queryj.templates.antlr.JavaVisitor;
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 /*
  * Importing Jetbrains annotations.
@@ -344,6 +350,31 @@ public abstract class AbstractTemplatesTest<G, F>
     }
 
     /**
+     * Sets up the Java parser.
+     * @param javaFile the Java contents to parse.
+     * @return the {@link JavaParser} instance.
+     * @throws RecognitionException if the comment cannot be parsed.
+     * @throws IOException if the file could not be read.
+     */
+    @SuppressWarnings("unchecked")
+    @NotNull
+    protected JavaParser setUpParser(@NotNull final File javaFile)
+        throws RecognitionException,
+               IOException
+    {
+        @NotNull final JavaParser result;
+
+        @NotNull final JavaLexer t_Lexer =
+            new JavaLexer(new ANTLRFileStream(javaFile.getAbsolutePath()));
+
+        @NotNull final CommonTokenStream t_Tokens = new CommonTokenStream(t_Lexer);
+
+        result = new JavaParser(t_Tokens);
+
+        return result;
+    }
+
+    /**
      * Checks the generated files compile.
      * @param outputName the name of the output file.
      * @param outputFiles the output files.
@@ -359,27 +390,35 @@ public abstract class AbstractTemplatesTest<G, F>
             if (   (outputFile.getAbsolutePath().endsWith(outputName))
                 && (isJava(outputFile)))
             {
-                @Nullable org.acmsl.queryj.tools.antlr.JavaLexer t_Lexer = null;
+                @Nullable JavaParser t_Parser = null;
 
                 try
                 {
-                    t_Lexer =
-                        new org.acmsl.queryj.tools.antlr.JavaLexer(new ANTLRFileStream(outputFile.getAbsolutePath()));
+                    t_Parser = setUpParser(outputFile);
                 }
                 catch (final IOException missingFile)
                 {
-                    Assert.fail("Lexer error: " + missingFile.getMessage());
+                    Assert.fail("Missing file: " + missingFile.getMessage());
                 }
 
-                @NotNull final CommonTokenStream t_Tokens =
-                    new CommonTokenStream(t_Lexer);
-
-                @NotNull final org.acmsl.queryj.tools.antlr.JavaParser
-                    t_Parser = new org.acmsl.queryj.tools.antlr.JavaParser(t_Tokens);
+                @Nullable ParseTree tree = null;
 
                 try
                 {
-                    t_Parser.compilationUnit();
+                    tree = t_Parser.compilationUnit();
+                }
+                catch (@NotNull final Throwable invalidClass)
+                {
+                    Assert.fail("Parser error: " + invalidClass.getMessage());
+                }
+
+                @NotNull final JavaVisitor<String> packageVisitor = new JavaPackageVisitor();
+
+                @Nullable String packageName = null;
+
+                try
+                {
+                    packageName = packageVisitor.visit(tree);
                 }
                 catch (@NotNull final Throwable invalidClass)
                 {
@@ -387,13 +426,26 @@ public abstract class AbstractTemplatesTest<G, F>
                 }
 
                 Assert.assertNotNull(
-                    "Missing package in file " + outputFile.getAbsolutePath(), t_Parser.getPackageName());
+                    "Missing package in file " + outputFile.getAbsolutePath(), packageName);
                 Assert.assertEquals(
                     "Invalid package in file " + outputFile.getAbsolutePath(),
                     "com.foo.bar.dao",
-                    t_Parser.getPackageName());
+                    packageName);
 
-                Assert.assertNotNull("Missing class in file " + outputFile.getAbsolutePath(), t_Parser.getRootClass());
+                @NotNull final JavaVisitor<String> rootClassVisitor = new JavaRootClassNameVisitor();
+
+                @Nullable String rootClass = null;
+
+                try
+                {
+                    rootClass = rootClassVisitor.visit(tree);
+                }
+                catch (@NotNull final Throwable invalidClass)
+                {
+                    Assert.fail("Parser error: " + invalidClass.getMessage());
+                }
+
+                Assert.assertNotNull("Missing class in file " + outputFile.getAbsolutePath(), rootClass);
             }
         }
     }
