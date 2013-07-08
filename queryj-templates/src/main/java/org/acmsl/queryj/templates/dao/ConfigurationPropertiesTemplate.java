@@ -43,7 +43,7 @@ import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 /*
  * Importing StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.STGroup;
 
 /*
  * Importing some JetBrains annotations.
@@ -83,7 +83,7 @@ public class ConfigurationPropertiesTemplate
      */
     @Nullable
     @Override
-    public StringTemplateGroup retrieveGroup()
+    public STGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/" + getTemplateName() + ".stg");
     }

@@ -46,7 +46,7 @@ import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 /*
  * Importing StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.STGroup;
 
 /*
  * Importing some JetBrains annotations.
@@ -61,8 +61,7 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Is able to create BaseResultSetExtractor sources.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
 @ThreadSafe
 public class BaseResultSetExtractorTemplate
@@ -96,7 +95,7 @@ public class BaseResultSetExtractorTemplate
      */
     @Nullable
     @Override
-    public StringTemplateGroup retrieveGroup()
+    public STGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
     }

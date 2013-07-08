@@ -469,7 +469,7 @@ public class MetaLanguageUtils
     /**
      * Sets up the comment parser.
      * @param comment the comment to parse.
-     * @return the <code>PerCommentParser</code> instance.
+     * @return the {@link PerCommentParser} instance.
      * @throws RecognitionException if the comment cannot be parsed.
      */
     @SuppressWarnings("unchecked")

@@ -42,7 +42,7 @@ import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 /*
  * Importing some StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.STGroup;
 
 /*
  * Importing JetBrains annotations.
@@ -81,7 +81,7 @@ public class JndiUtilsTemplate
      */
     @Nullable
     @Override
-    public StringTemplateGroup retrieveGroup()
+    public STGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/JndiUtils.stg");
     }

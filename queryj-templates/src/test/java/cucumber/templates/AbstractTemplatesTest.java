@@ -43,6 +43,8 @@ import cucumber.templates.sql.CucumberSqlParameterDAO;
 import org.acmsl.queryj.templates.antlr.JavaLexer;
 import org.acmsl.queryj.templates.antlr.JavaPackageVisitor;
 import org.acmsl.queryj.templates.antlr.JavaParser;
+import org.acmsl.queryj.templates.antlr.JavaRootClassNameVisitor;
+import org.acmsl.queryj.templates.antlr.JavaVisitor;
 
 /*
  * Importing QueryJ-Core classes.
@@ -72,7 +74,6 @@ import org.acmsl.queryj.metadata.vo.Table;
 /*
  * Importing ANTLR classes.
  */
-import org.acmsl.queryj.templates.antlr.JavaVisitor;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;

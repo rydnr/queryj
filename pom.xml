@@ -211,12 +211,11 @@
         <groupId>org.antlr</groupId>
         <artifactId>ST4</artifactId>
         <version>4.0.7</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr-runtime</artifactId>
-          </exclusion>
-        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr</artifactId>
+        <version>3.5</version>
       </dependency>
       <dependency>
         <groupId>commons-digester</groupId>
@@ -307,11 +306,6 @@
         <groupId>com.rubiconproject.oss</groupId>
         <artifactId>jchronic</artifactId>
         <version>0.2.6</version>
-      </dependency>
-      <dependency>
-        <groupId>org.antlr</groupId>
-        <artifactId>ST4</artifactId>
-        <version>4.0.7</version>
       </dependency>
 
     </dependencies>    

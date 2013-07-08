@@ -43,7 +43,7 @@ import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 /*
  * Importing some StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.STGroup;
 
 /*
  * Importing some JetBrains annotations.
@@ -70,7 +70,7 @@ public class BaseRepositoryDAOFactoryTemplate
     /**
      * Builds a <code>BaseRepositoryDAOFactoryTemplate</code> using given
      * information.
-     * @param context thre {@link org.acmsl.queryj.api.PerRepositoryTemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext} instance.
      */
     public BaseRepositoryDAOFactoryTemplate(@NotNull final PerRepositoryTemplateContext context)
     {
@@ -83,7 +83,7 @@ public class BaseRepositoryDAOFactoryTemplate
      */
     @Override
     @Nullable
-    public StringTemplateGroup retrieveGroup()
+    public STGroup retrieveGroup()
     {
         return
             retrieveGroup(

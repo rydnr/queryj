@@ -39,12 +39,11 @@ package org.acmsl.queryj.templates.dao;
  */
 import org.acmsl.queryj.api.AbstractBasePerRepositoryTemplate;
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
-import org.acmsl.queryj.api.FillTemplateChain;
 
 /*
  * Importing some StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.STGroup;
 
 /*
  * Importing some JetBrains annotations.
@@ -56,6 +55,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.stringtemplate.v4.STGroup;
 
 /**
  * Is able to generate DAO repository implementations according to database
@@ -84,7 +84,7 @@ public class RepositoryDAOTemplate
      */
     @Nullable
     @Override
-    public StringTemplateGroup retrieveGroup()
+    public STGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/RepositoryDAO.stg");
     }

@@ -70,11 +70,11 @@ grammar PerComment;
 
  ******************************************************************************
  *
- * Generated from PerComment.g by ANTLR.
+ * Generated from PerComment.g4 by ANTLR.
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: ANTLR parser for PerComment.g
+ * Description: ANTLR parser for PerComment.g4
  *
  */
 package org.acmsl.queryj.tools.antlr;
@@ -112,11 +112,11 @@ package org.acmsl.queryj.tools.antlr;
 
  ******************************************************************************
  *
- * Generated from PerComment.g by ANTLR.
+ * Generated from PerComment.g4 by ANTLR.
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: ANTLR lexer for PerComment.g
+ * Description: ANTLR lexer for PerComment.g4
  *
  */
 package org.acmsl.queryj.tools.antlr;

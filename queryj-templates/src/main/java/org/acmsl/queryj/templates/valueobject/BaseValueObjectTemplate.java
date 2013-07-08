@@ -41,7 +41,7 @@ import org.acmsl.queryj.api.PerTableTemplateContext;
 /*
  * Importing StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.STGroup;
 
 /*
  * Importing some JetBrains annotations.
@@ -80,7 +80,7 @@ public class BaseValueObjectTemplate
      */
     @Nullable
     @Override
-    public StringTemplateGroup retrieveGroup()
+    public STGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
     }
