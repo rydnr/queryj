@@ -42,7 +42,6 @@ import org.acmsl.commons.patterns.Utils;
 /*
  * Importing StringTemplate classes.
  */
-import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STErrorListener;
 import org.stringtemplate.v4.STGroup;
 
@@ -64,6 +63,7 @@ import java.util.Map;
  */
 import org.checkthread.annotations.ThreadSafe;
 import org.stringtemplate.v4.STGroupDir;
+import org.stringtemplate.v4.STGroupFile;
 
 /**
  * Provides some methods commonly-used when working with ST templates.
@@ -145,7 +145,7 @@ public class STUtils
     {
         @Nullable final STGroup result;
 
-        result = new STGroupDir(path, charset.displayName());
+        result = new STGroupFile(path, charset.displayName());
 
         result.setListener(errorListener);
 
