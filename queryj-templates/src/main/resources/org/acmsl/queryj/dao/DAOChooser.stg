@@ -152,7 +152,7 @@ public class <repository.capitalized>DAOChooser
     /**
      * The configuration settings.
      */
-    private static final String PROPERTIES_FILE = "<dao_chooser_properties_file_name>";
+    private static final String PROPERTIES_FILE = "queryj-<repository>.properties";
 
     /**
      * The configuration settings.
