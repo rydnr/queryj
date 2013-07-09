@@ -83,7 +83,7 @@ public class JndiUtilsTemplate
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/JndiUtils.stg");
+        return retrieveGroup("org/acmsl/queryj/dao/JndiUtils.stg");
     }
 
     /**

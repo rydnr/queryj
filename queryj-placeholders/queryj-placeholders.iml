@@ -31,6 +31,9 @@
     <orderEntry type="library" name="Maven: logkit:logkit:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: avalon-framework:avalon-framework:4.1.3" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:servlet-api:2.3" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.5" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:stringtemplate:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: antlr:antlr:2.7.7" level="project" />
     <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang:2.4" level="project" />
     <orderEntry type="library" name="Maven: org.checkthread:checkthread-annotations:1.0.9" level="project" />

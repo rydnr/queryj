@@ -86,7 +86,7 @@ public class FkStatementSetterTemplate
     {
         return
             retrieveGroup(
-                "/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
+                "org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
     }
 
     /**

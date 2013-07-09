@@ -133,7 +133,7 @@ public class CustomValueObjectImplTemplateGenerator
 
         if (classValue != null)
         {
-            result = extractClassName(classValue) + "ValueObject.java";
+            result = extractClassName(classValue) + "ValueObjectImpl.java";
         }
 
         return result;

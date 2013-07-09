@@ -87,7 +87,7 @@ public class CustomValueObjectFactoryTemplate
     public STGroup retrieveGroup()
     {
         return
-            retrieveGroup("/org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
+            retrieveGroup("org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
     }
 
     /**

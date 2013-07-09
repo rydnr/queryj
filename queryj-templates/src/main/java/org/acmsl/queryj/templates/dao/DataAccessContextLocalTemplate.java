@@ -85,7 +85,7 @@ public class DataAccessContextLocalTemplate
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/DataAccessContextLocal.stg");
+        return retrieveGroup("org/acmsl/queryj/DataAccessContextLocal.stg");
     }
 
     /**

@@ -36,6 +36,8 @@ package org.acmsl.queryj.api;
  * Importing project classes.
  */
 import org.acmsl.queryj.api.exceptions.CannotFindPlaceholderImplementationException;
+import org.acmsl.queryj.api.exceptions.CannotFindTemplateGroupException;
+import org.acmsl.queryj.api.exceptions.CannotFindTemplateInGroupException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.api.placeholders.FillTemplateChainFactory;
@@ -741,75 +743,87 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         @Nullable final STGroup t_Group = retrieveGroup();
 
-        @Nullable final ST t_Template = retrieveTemplate(t_Group);
+        @Nullable final ST t_Template;
 
-        if (t_Template != null)
+        if (t_Group == null)
         {
-            try
-            {
-                @SuppressWarnings("unchecked")
-                @NotNull final Map placeHolders = new HashMap();
+            t_ExceptionToWrap = new CannotFindTemplateGroupException(getTemplateName());
+        }
+        else
+        {
+            t_Template = retrieveTemplate(t_Group);
 
-                @NotNull final List<FillTemplateChain<? extends FillHandler>> fillChains =
-                    buildFillTemplateChains(context);
-
-                for (@NotNull final FillTemplateChain<? extends FillHandler> chain : fillChains)
-                {
-                    placeHolders.putAll(chain.providePlaceholders(relevantOnly));
-                }
-
-                for (final Map.Entry<Object, Object> placeHolder : (Set <Map.Entry<Object, Object>>) placeHolders.entrySet())
-                {
-                    t_Template.add(placeHolder.getKey().toString(), placeHolder.getValue());
-                }
-                //t_Template.setErrorListener(DEFAULT_ST_ERROR_LISTENER);
-            }
-            catch (@NotNull final QueryJBuildException invalidTemplate)
-            {
-                t_ExceptionToWrap = invalidTemplate;
-            }
-
-            if (t_ExceptionToWrap == null)
+            if (t_Template != null)
             {
                 try
                 {
-                    result = t_Template.render();
-                }
-                catch (@NotNull final Throwable throwable)
-                {
-                    t_ExceptionToWrap = throwable;
+                    @SuppressWarnings("unchecked")
+                    @NotNull final Map placeHolders = new HashMap();
 
-                    @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
+                    @NotNull final List<FillTemplateChain<? extends FillHandler>> fillChains =
+                        buildFillTemplateChains(context);
 
-                    if (t_Log != null)
+                    for (@NotNull final FillTemplateChain<? extends FillHandler> chain : fillChains)
                     {
-                        t_Log.error(
-                            "Error in template " + getTemplateName(), throwable);
+                        placeHolders.putAll(chain.providePlaceholders(relevantOnly));
                     }
 
-/*                    @Nullable final STTreeView debugTool =
-                        new StringTemplateTreeView("Debugging " + getTemplateName(), t_Template);
-
-                    debugTool.setVisible(true);
-
-                    while (debugTool.isVisible())
+                    for (final Map.Entry<Object, Object> placeHolder : (Set <Map.Entry<Object, Object>>) placeHolders.entrySet())
                     {
-                        try
+                        t_Template.add(placeHolder.getKey().toString(), placeHolder.getValue());
+                    }
+                    //t_Template.setErrorListener(DEFAULT_ST_ERROR_LISTENER);
+                }
+                catch (@NotNull final QueryJBuildException invalidTemplate)
+                {
+                    t_ExceptionToWrap = invalidTemplate;
+                }
+
+                if (t_ExceptionToWrap == null)
+                {
+                    try
+                    {
+                        result = t_Template.render();
+                    }
+                    catch (@NotNull final Throwable throwable)
+                    {
+                        t_ExceptionToWrap = throwable;
+
+                        @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
+
+                        if (t_Log != null)
                         {
-                            Thread.sleep(1000);
+                            t_Log.error(
+                                "Error in template " + getTemplateName(), throwable);
                         }
-                        catch (InterruptedException e)
+
+    /*                    @Nullable final STTreeView debugTool =
+                            new StringTemplateTreeView("Debugging " + getTemplateName(), t_Template);
+
+                        debugTool.setVisible(true);
+
+                        while (debugTool.isVisible())
                         {
-                            e.printStackTrace();
-                        }
-                    }*/
+                            try
+                            {
+                                Thread.sleep(1000);
+                            }
+                            catch (InterruptedException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }*/
+                    }
+                }
+                if (t_ExceptionToWrap != null)
+                {
+                    throw buildInvalidTemplateException(context, t_Template, t_ExceptionToWrap);
                 }
             }
-        }
-
-        if (t_ExceptionToWrap != null)
-        {
-            throw buildInvalidTemplateException(context, t_Template, t_ExceptionToWrap);
+            else
+            {
+                throw new CannotFindTemplateInGroupException(t_Group, TEMPLATE_NAME);
+            }
         }
 
         return result;

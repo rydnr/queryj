@@ -83,7 +83,7 @@ public class ValueObjectImplTemplate
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
+        return retrieveGroup("org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
     }
 
     /**

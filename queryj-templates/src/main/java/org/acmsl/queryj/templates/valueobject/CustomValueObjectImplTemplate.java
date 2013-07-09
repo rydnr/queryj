@@ -88,7 +88,7 @@ public class CustomValueObjectImplTemplate
     {
         return
             retrieveGroup(
-                "/org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
+                "org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
     }
 
     /**

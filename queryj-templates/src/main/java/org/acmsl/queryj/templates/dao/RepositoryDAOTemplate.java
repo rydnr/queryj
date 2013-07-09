@@ -86,7 +86,7 @@ public class RepositoryDAOTemplate
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/RepositoryDAO.stg");
+        return retrieveGroup("org/acmsl/queryj/dao/RepositoryDAO.stg");
     }
 
     /**

@@ -84,7 +84,7 @@ public class DAOTemplate
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
+        return retrieveGroup("org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
     }
 
     /**

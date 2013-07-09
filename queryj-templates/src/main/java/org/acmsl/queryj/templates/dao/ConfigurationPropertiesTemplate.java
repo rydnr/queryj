@@ -85,7 +85,7 @@ public class ConfigurationPropertiesTemplate
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/" + getTemplateName() + ".stg");
+        return retrieveGroup("org/acmsl/queryj/" + getTemplateName() + ".stg");
     }
 
     /**

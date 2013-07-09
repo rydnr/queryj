@@ -145,6 +145,7 @@
         </goals>
         <configuration>
           <encoding>UTF-8</encoding>
+          <sourceDirectory>${project.basedir}/src/test/antlr4</sourceDirectory>
           <!--listener>true</listener-->
           <visitor>true</visitor>
           <outputDirectory>${project.build.directory}/generated-sources/org/acmsl/queryj/templates/antlr</outputDirectory>

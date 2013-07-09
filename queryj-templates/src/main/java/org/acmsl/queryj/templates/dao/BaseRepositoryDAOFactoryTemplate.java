@@ -87,7 +87,7 @@ public class BaseRepositoryDAOFactoryTemplate
     {
         return
             retrieveGroup(
-                "/org/acmsl/queryj/dao/BaseRepositoryDAOFactory.stg");
+                "org/acmsl/queryj/dao/BaseRepositoryDAOFactory.stg");
     }
 
     /**

@@ -76,7 +76,7 @@ public class CustomBaseValueObjectTemplateGenerator
     @Override
     public String retrieveTemplateFileName(@NotNull final PerCustomResultTemplateContext context)
     {
-        @NotNull String result;
+        @NotNull final String result;
 
         @Nullable final String t_strClassValue = context.getResult().getClassValue();
 

@@ -86,7 +86,7 @@ public class CucumberFeatureTemplate
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/CucumberFeature.stg");
+        return retrieveGroup("org/acmsl/queryj/CucumberFeature.stg");
     }
 
     /**
