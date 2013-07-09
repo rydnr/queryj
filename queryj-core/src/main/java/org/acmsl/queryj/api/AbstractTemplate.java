@@ -747,7 +747,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         if (t_Group == null)
         {
-            t_ExceptionToWrap = new CannotFindTemplateGroupException(getTemplateName());
+            throw new CannotFindTemplateGroupException(getTemplateName());
         }
         else
         {

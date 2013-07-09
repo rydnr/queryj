@@ -55,7 +55,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CannotFindTemplateGroupException
-    extends QueryJBuildException
+    extends InvalidTemplateException
 {
     /**
      * Creates an instance for given class.
