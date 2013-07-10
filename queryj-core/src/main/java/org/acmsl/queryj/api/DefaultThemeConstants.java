@@ -53,4 +53,9 @@ public interface DefaultThemeConstants
      * The template name.
      */
     public static final String TEMPLATE_NAME = "source";
+
+    /**
+     * The placeholder context name within the template itself.
+     */
+    public static final String CONTEXT = "c";
 }

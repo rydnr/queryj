@@ -6,263 +6,105 @@
   <groupId>org.acmsl</groupId>
   <artifactId>queryj-maven</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>2.1-SNAPSHOT</version>
+  <version>3.2-SNAPSHOT</version>
   <name>QueryJ Maven</name>
   <inceptionYear>2002</inceptionYear>
-  <licenses>
-    <license>
-      <name>GPL</name>
-      <url>http://www.fsf.org/licensing/licenses/gpl.html</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <organization>
-    <name>ACM-SL</name>
-    <url>http://www.acm-sl.org</url>
-  </organization>
 
-  <properties>
-    <!-- to ensure encoding is not platform-dependent -->
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+  <parent>
+    <groupId>queryj</groupId>
+    <artifactId>queryj</artifactId>
+    <version>3.0-SNAPSHOT</version>
+  </parent>
 
   <dependencies>
     <dependency>
       <groupId>org.checkthread</groupId>
       <artifactId>checkthread-annotations</artifactId>
-      <version>1.0.9</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.acmsl</groupId>
       <artifactId>queryj-core</artifactId>
-      <version>2.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.acmsl</groupId>
       <artifactId>queryj-templates</artifactId>
-      <version>2.1-SNAPSHOT</version>
-      <!--scope>runtime</scope-->
     </dependency>
     <dependency>
       <groupId>org.acmsl</groupId>
       <artifactId>queryj-placeholders</artifactId>
-      <version>2.1-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.acmsl</groupId>
       <artifactId>acmsl-commons</artifactId>
-      <version>0.7.1-SNAPSHOT</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.commons</groupId>
-          <artifactId>commons-beanutils</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>gnu-regexp</groupId>
-          <artifactId>gnu-regexp</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>regexp</groupId>
-          <artifactId>regexp</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.servlet</groupId>
-          <artifactId>servlet-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>mx4j</groupId>
-          <artifactId>mx4j</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.junit</groupId>
-          <artifactId>junit</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.12</version>
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
-      <version>1.8.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
-      <version>3.0.3</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
-      <version>3.0.3</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-logging</artifactId>
-      <version>1.1</version>
       <scope>runtime</scope>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.oracle</groupId>
       <artifactId>oracle-driver</artifactId>
-      <version>1.4</version>
       <optional>true</optional>
     </dependency>
-    <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>antlr</artifactId>
-      <version>3.4</version>
-    </dependency>
-    <!--dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>antlr-2</artifactId>
-      <version>2.7.7</version>
-    </dependency-->
     <dependency>
       <groupId>commons-digester</groupId>
       <artifactId>commons-digester</artifactId>
-      <version>1.8</version>
-    </dependency>
-    <!--dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>stringtemplate-2</artifactId>
-      <version>2.2</version>
-      <optional>true</optional>
-    </dependency-->
-    <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>stringtemplate</artifactId>
-      <version>3.0</version>
-      <!--version>4.0.4</version-->
-      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.beanshell</groupId>
       <artifactId>bsh</artifactId>
-      <version>1.3.0</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
       <artifactId>commons-cli</artifactId>
-      <version>1.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang</artifactId>
-      <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
-      <version>3.2.1</version>
     </dependency>
     <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
-      <version>1.8.0</version>
     </dependency>
     <dependency>
       <groupId>com.jetbrains</groupId>
       <artifactId>annotations</artifactId>
-      <version>11.1.1</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
       <scope>test</scope>
       <optional>true</optional>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.0.2</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <version>2.6</version>
-      </plugin>
-    </plugins>
-  </build>
-
-  <repositories>
-    <repository>
-      <id>acmsl-libs-releases</id>
-      <name>acmsl-libs-releases</name>
-      <url>http://maven.acm-sl.org/artifactory/libs-releases-local</url>
-      <releases><enabled>true</enabled></releases>
-      <snapshots><enabled>false</enabled></snapshots>
-    </repository>
-    <repository>
-      <id>acmsl-ext-releases</id>
-      <name>acmsl-ext-releases</name>
-      <url>http://maven.acm-sl.org/artifactory/ext-releases-local</url>
-      <releases><enabled>true</enabled></releases>
-      <snapshots><enabled>false</enabled></snapshots>
-    </repository>
-    <repository>
-      <id>acmsl-libs-snapshots</id>
-      <name>acmsl-libs-snapshots</name>
-      <url>http://maven.acm-sl.org/artifactory/libs-snapshots-local</url>
-      <releases><enabled>false</enabled></releases>
-      <snapshots><enabled>true</enabled></snapshots>
-    </repository>
-    <repository>
-      <id>acmsl-ext-snapshots</id>
-      <name>acmsl-ext-snapshots</name>
-      <url>http://maven.acm-sl.org/artifactory/ext-snapshots-local</url>
-      <releases><enabled>false</enabled></releases>
-      <snapshots><enabled>true</enabled></snapshots>
-    </repository>
-  </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>acmsl-plugins-releases</id>
-      <name>acmsl-plugins-releases</name>
-      <url>http://maven.acm-sl.org/artifactory/plugins-releases-local</url>
-      <releases><enabled>true</enabled></releases>
-      <snapshots><enabled>false</enabled></snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>acmsl-plugins-snapshots</id>
-      <name>acmsl-plugins-snapshots</name>
-      <url>http://maven.acm-sl.org/artifactory/plugins-snapshots-local</url>
-      <releases><enabled>false</enabled></releases>
-      <snapshots><enabled>true</enabled></snapshots>
-    </pluginRepository>
-  </pluginRepositories>
-
-  <distributionManagement>
-    <repository>
-      <id>acmsl-plugins-releases</id>
-      <name>acmsl-plugin-releases</name>
-      <url>http://maven.acm-sl.org/artifactory/plugins-releases-local</url>
-    </repository>
-    <snapshotRepository>
-      <id>acmsl-plugins-snapshots</id>
-      <name>acmsl-plugin-snapshots</name>
-      <url>http://maven.acm-sl.org/artifactory/plugins-snapshots-local</url>
-    </snapshotRepository>
-  </distributionManagement>
 
 </project>

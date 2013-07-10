@@ -768,10 +768,12 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                         placeHolders.putAll(chain.providePlaceholders(relevantOnly));
                     }
 
-                    for (final Map.Entry<Object, Object> placeHolder : (Set <Map.Entry<Object, Object>>) placeHolders.entrySet())
-                    {
-                        t_Template.add(placeHolder.getKey().toString(), placeHolder.getValue());
-                    }
+                    t_Template.add(CONTEXT, placeHolders);
+
+//                    for (final Map.Entry<Object, Object> placeHolder : (Set <Map.Entry<Object, Object>>) placeHolders.entrySet())
+//                    {
+//                        t_Template.add(placeHolder.getKey().toString(), placeHolder.getValue());
+//                    }
                     //t_Template.setErrorListener(DEFAULT_ST_ERROR_LISTENER);
                 }
                 catch (@NotNull final QueryJBuildException invalidTemplate)

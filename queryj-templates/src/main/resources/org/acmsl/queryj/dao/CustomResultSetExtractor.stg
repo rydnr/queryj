@@ -37,36 +37,38 @@
 //
 // CustomResultSetExtractor.stg
 //
+//import "queryj.stg";
+
 group CustomResultSetExtractor;
 
-source() ::= <<
+source(c) ::= <<
 <!
   Generates a CustomResultSetExtractor source file.
 !>
-<if(header)>
-<header>
+<if(c.header)>
+<c.header>
 <else>
 <java_header(
-  year=current_year,
+  year=c.current_year,
   description=
   [
-    first_line_description(result=result),
-    second_line_description(result=result)
+    first_line_description(result=c.result),
+    second_line_description(result=c.result)
   ],
-  timestamp=timestamp)>
+  timestamp=c.timestamp)>
 <endif>
-<if(generation_timestamps_enabled)>
-// Generated using org/acmsl/queryj/dao/CustomResultSetExtractor.stg at <timestamp>
+<if(c.generation_timestamps_enabled)>
+// Generated using org/acmsl/queryj/dao/CustomResultSetExtractor.stg at <c.timestamp>
 <endif>
 
-<package_declaration(package=package)>
+<package_declaration(package=c.package)>
 
 <project_imports(
-  result=result,
-  basePackageName=project_package,
+  result=c.result,
+  basePackageName=c.project_package,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   rdbSubpackageName=typeInitMap.rdbSubpackageName,
-  trName=repository.capitalized)>
+  trName=c.repository.capitalized)>
 
 <checkers_import()>
 /*
@@ -92,7 +94,7 @@ import java.util.List;
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(result=result)>
+<class(result=c.result)>
 >>
 
 first_line_description(result) ::= <<
