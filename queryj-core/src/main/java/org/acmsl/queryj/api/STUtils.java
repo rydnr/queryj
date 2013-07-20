@@ -137,16 +137,18 @@ public class STUtils
      * @param charset the charset.
      * @return such instance.
      */
-    @Nullable
+    @NotNull
     protected STGroup retrieveUncachedGroup(
         @NotNull final String path,
         @NotNull final STErrorListener errorListener,
         @NotNull final Charset charset)
     {
-        @Nullable final STGroup result;
+        @NotNull final STGroupFile result = new STGroupFile(path, charset.displayName());
 
-        result = new STGroupFile(path, charset.displayName());
-
+//        result.importTemplates(new STGroupDir("org/acmsl/queryj/dao", charset.displayName()));
+//        result.importTemplates(new STGroupDir("org/acmsl/queryj/vo", charset.displayName()));
+        result.importTemplates(new STGroupDir("org/acmsl/queryj/", charset.displayName()));
+        result.isDefined("source");
         result.setListener(errorListener);
 
 //        STGroup.registerGroupLoader(loader);

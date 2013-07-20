@@ -1,0 +1,499 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: custom_selects.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the common templates dealing with custom selects.
+//
+group custom_selects;
+
+custom_select(cs, table) ::= <<
+<!
+ Writes the code for a custom select query.
+ @param cs the custom select.
+ @param table the table.
+!>
+<if(!cs.dynamic)>
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator="\n">
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+public <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
+    <cs.parameters:{ p | <attribute_declaration(attr=p)>}; separator=",\n">)
+  throws DataAccessException
+{
+    <notnull()>final String t_strSql = auditSql(<cs.idAsConstant>_SQL);
+
+    return
+        <cs.nameUncapitalized>(
+            <cs.parameters:{p | <p.nameLowercased>,}; separator="\n">
+            t_strSql,
+            new PreparedStatementCreatorFactory(t_strSql),
+            new Object[]
+            {
+                <cs.parameters:{ p | <custom_select_parameter_value(
+                  name=p.nameLowercased,
+                  objectType=p.objectType,
+                  object=p.object)>}; separator=",\n">
+            },
+            getDataSource());
+}
+
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator="\n">
+ * @param sql the SQL.
+ * @param preparedStatementCreatorFactory the
+ * {@link PreparedStatementCreatorFactory} instance
+ * specific for this operation.
+ * @param params the query parameters.
+ * @param dataSource the {@link DataSource{@link  instance.
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
+    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p)>}; separator="\n">
+    <notnull()>final String sql,
+    <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    <nullable()>final Object[] params,
+    <notnull()>final DataSource dataSource)
+  throws DataAccessException
+{
+    return
+        <cs.nameUncapitalized>(
+            <cs.parameters:{ p | <p.nameLowercased>,}; separator="\n">
+            sql,
+            preparedStatementCreatorFactory,
+            params,
+            new DataSourceTransactionManager(dataSource));
+}
+
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator="\n">
+ * @param sql the SQL.
+ * @param preparedStatementCreatorFactory the
+ * {@link PreparedStatementCreatorFactory} instance
+ * specific for this operation.
+ * @param params the query parameters.
+ * @param transactionManager the {@link PlatformTransactionManager{@link
+ * instance.
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
+    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p)>}; separator="\n">
+    <notnull()>final String sql,
+    <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    <nullable()>final Object[] params,
+    <notnull()>final PlatformTransactionManager transactionManager)
+  throws DataAccessException
+{
+    <custom_select_result_declaration(sql=cs, result=cs.result, table=table)>
+
+    result =
+        <cs.nameUncapitalized>(
+            <cs.parameters:{ p | <p.nameLowercased>,}; separator="\n">
+            sql,
+            preparedStatementCreatorFactory,
+            params,
+            new TransactionTemplate(transactionManager));
+
+    return result;
+}
+
+/**
+ * Custom select \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator="\n">
+ * @param sql the SQL.
+ * @param preparedStatementCreatorFactory the
+ * {@link PreparedStatementCreatorFactory} instance
+ * specific for this operation.
+ * @param params the query parameters.
+ * @param transactionTemplate the {@link TransactionTemplate{@link
+ * instance.
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
+    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p)>}; separator="\n">
+    <notnull()>final String sql,
+    <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    <nullable()>final Object[] params,
+    <notnull()>final TransactionTemplate transactionTemplate)
+  throws DataAccessException
+{
+    <custom_select_result_declaration(sql=cs, result=cs.result, table=table)>
+
+    /*
+    preparedStatementCreatorFactory.setResultSetType(..);
+    preparedStatementCreatorFactory.setUpdatableResults(..);
+    preparedStatementCreatorFactory.setReturnGeneratedKeys(..);
+    preparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
+    */
+
+    <cs.parameters:{ p | <custom_select_parameter_type_specification(
+      type=p.sqlType)>}; separator="\n">
+
+    result =
+        <custom_select_template_call(sql=cs, result=cs.result, table=table)>
+
+    return result;
+}
+<endif>
+>>
+
+custom_select_parameter_type_specification(type) ::= <<
+<!
+  Specifies the type of the parameter of a custom select.
+  @param type the SQL type.
+!>
+preparedStatementCreatorFactory.addParameter(
+    new SqlParameter(Types.<type>));
+>>
+
+custom_select_parameter_value(name, objectType, object) ::= <<
+<!
+  Writes the value for a parameter of a custom select.
+  @param name the parameter name.
+  @param objectType the object type of the parameter.
+  @param object whether the parameter type is a class or a primitive.
+!>
+<if(object)>
+<name>
+<else>
+new <objectType>(<name>)
+<endif>
+>>
+
+custom_update_or_insert(cs) ::= <<
+<!
+ Writes the subtemplate for custom updates or inserts.
+  @param cs the custom sql.
+!>
+<if(!cs.dynamic)>
+/**
+ * Custom sql \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator="\n">
+ * @return the number of entities updated.
+ * @throws DataAccessException if the operation fails.
+ */
+public int <cs.nameUncapitalized>(
+    <cs.parameters:{ p | <attribute_declaration(attr=p)>}; separator=",\n">)
+  throws DataAccessException
+{
+    int result = -10;
+
+    final PreparedStatementCreatorFactory
+        preparedStatementCreatorFactory =
+            new PreparedStatementCreatorFactory(
+                auditSql(<cs.idAsConstant>_SQL));
+
+    /*
+    t_PreparedStatementCreatorFactory.setResultSetType(..);
+    t_PreparedStatementCreatorFactory.setUpdatableResults(..);
+    t_PreparedStatementCreatorFactory.setReturnGeneratedKeys(..);
+    t_PreparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
+     */
+
+    <cs.parameters:{ p | <custom_select_parameter_type_specification(
+      type=p.sqlType)>}; separator="\n">
+
+    final Object[] params =
+       new Object[]
+       {
+           <cs.parameters:{ p | <custom_select_parameter_value(
+             name=p.nameLowercased,
+             objectType=p.objectType,
+             object=p.object)>}; separator=",\n">
+        };
+
+    final DataSourceTransactionManager transactionManager =
+        new DataSourceTransactionManager(getDataSource());
+    final TransactionTemplate transactionTemplate =
+        new TransactionTemplate(transactionManager);
+
+    final Object t_Result =
+        transactionTemplate.execute(
+            new UpdateTransactionCallback(
+                preparedStatementCreatorFactory
+                    .newPreparedStatementCreator(params),
+                preparedStatementCreatorFactory
+                    .newPreparedStatementSetter(params),
+                this));
+
+
+    if  (t_Result instanceof Integer)
+    {
+        result = ((Integer) t_Result).intValue();
+    }
+
+    /*
+    result =
+        update(
+            t_PreparedStatementCreatorFactory
+               .newPreparedStatementCreator(params),
+            t_PreparedStatementCreatorFactory
+               .newPreparedStatementSetter(params));
+     */
+
+    return result;
+}
+<endif>
+>>
+
+custom_select_for_update(cs, table) ::= <<
+<!
+ Writes the code for a custom select for update.
+ @param cs the custom select.
+ @param table the table.
+!>
+<if(!cs.dynamic)>
+/**
+ * Custom select for update \<i><cs.id>\</i>:\<br/>
+ * \<b><cs.description>\</b>.
+ <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator=",\n">
+ * @return the \<i><cs.resultClass>\</i> information retrieved.
+ * @throws DataAccessException if the operation fails.
+ */
+<if(cs.resultClass)>
+<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
+public <cs.resultClass> <cs.nameUncapitalized>(
+<else>
+<if(rs.multiple)>
+public <cs.resultClass> <cs.nameUncapitalized>(
+<else>
+public <cs.resultClass>Decorator <cs.nameUncapitalized>(
+<endif>
+<endif>
+<else>
+public <cs.resultClass> <cs.nameUncapitalized>(
+<endif>}>
+<else>
+public void <cs.nameUncapitalized>(
+<endif>
+
+    <cs.parameters:{ p | <attribute_declaration(attr=p)>}; separator=",\n">)
+  throws DataAccessException
+{
+<if(cs.resultClass)>
+<cs.result:{rs|<if(table.voDecorated)><if(!rs.implicitProperties)><if(rs.multiple)>
+    <cs.resultClass> result = null;
+<else>
+    <cs.resultClass>Decorator result = null;
+<endif>
+<endif>
+<else>
+    <cs.resultClass> result = null;
+<endif>}>
+<else>
+<endif>
+
+    SqlQuery t_Query =
+        new SqlQuery(
+            getDataSource(), <cs.idAsConstant>_SQL);
+
+<if(cs.resultClass)>
+    List\<<cs.resultClass>\> t_lResult = (List\<<cs.resultClass>\>) t_Query.execute();
+
+    if  (   (t_lResult != null)
+         && (t_lResult.size() > 0))
+    {
+        result = t_lResult.get(0);
+    }
+
+    return result;
+<else>
+    t_Query.execute();
+<endif>
+
+}
+<endif>
+>>
+
+custom_select_result_declaration(sql, result, table) ::= <<
+<!
+ Generates code to declare the custom-select result.
+ @param sql the custom select.
+ @param result the sql result.
+ @param table the table.
+ !>
+<custom_select_return(table=table, result=result)> result;
+>>
+
+implicit_custom_select_attribute_declaration(sql, attr) ::= <<
+<!
+ Generates the declaration of the property.
+ @param sql the custom sql.
+ @param attr the implicit property.
+!>
+<if(attr.nullable)>
+<sql.resultClass> result = null;
+<else>
+<attr.javaType> result = null;
+<endif>
+
+>>
+
+custom_select_template_call(sql, result, table) ::= <<
+<!
+ Generates the call to execute the custom select.
+ @param sql the custom select.
+ @param result the sql result.
+ @param table the table.
+ !>
+(/* */<custom_select_return_cast(table=table, result=result)>/* */) <actual_custom_select_template_call(sql=sql, result=result)>;
+>>
+
+actual_custom_select_template_call(sql, result) ::= <<
+<!
+ Generates the actual call to the template for the custom select.
+ @param sql the custom select.
+ @param result the sql result.
+ !>
+transactionTemplate.execute(
+    new QueryTransactionCallback(
+        preparedStatementCreatorFactory
+            .newPreparedStatementCreator(params),
+        null,
+        // calls setXXX twice
+        // preparedStatementCreatorFactory
+        //     .newPreparedStatementSetter(t_aParams),
+        new <sql.resultIdCapitalized>Extractor(sql, getDAOListener()),
+        this))
+>>
+
+custom_select_return(table, result) ::= <<
+<if(table.voDecorated)>
+<custom_select_return_decorated(result=result)>
+<else>
+<custom_select_return_nondecorated(result=result)>
+<endif>
+>>
+
+custom_select_return_decorated(result) ::= <<
+<if(result.multiple)>
+<custom_select_return_decorated_multiple(result=result)>
+<else>
+<custom_select_return_decorated_single(result=result)>
+<endif>
+>>
+
+custom_select_return_decorated_multiple(result) ::= <<
+List\<<result.voName>Decorator\>
+>>
+
+custom_select_return_decorated_single(result) ::= <<
+<result.voName>Decorator
+>>
+
+custom_select_return_nondecorated(result) ::= <<
+<if(result.multiple)>
+<custom_select_return_nondecorated_multiple(result=result)>
+<else>
+<custom_select_return_nondecorated_single(result=result)>
+<endif>
+>>
+
+custom_select_return_nondecorated_multiple(result) ::= <<
+<if(result.wrappingASingleProperty)>
+<custom_select_return_property_multiple(result=result)>
+<else>
+List\<<result.voName>\>
+<endif>
+>>
+
+custom_select_return_nondecorated_single(result) ::= <<
+<if(result.wrappingASingleProperty)>
+<custom_select_return_property_single(result=result)>
+<else>
+<result.voName>
+<endif>
+>>
+
+custom_select_return_property_multiple(result) ::= <<
+<notnull()>
+List\<<result.properties:{property|<property.objectType>}>\>
+>>
+
+custom_select_return_property_single(select, result) ::= <<
+<result.properties:{property|<if(!property.primitive)><if(property.nullable)><nullable()><else><notnull()><endif><endif><property.type>}>
+>>
+
+
+custom_select_return_import(table, result, package) ::= <<
+<if(result.wrappingASingleProperty)>
+<custom_select_return_import_property_single(result=result, package=package)>
+<else><if(result.voName)>
+import <package>.<typeInitMap.voSubpackageName>.<result.voName>;
+<endif><endif>
+>>
+
+custom_select_return_import_property_single(select, result, package) ::= <<
+<!<result.properties:{property|<if(!property.primitive)>import <property.type>;<endif>}>!>
+>>
+
+custom_select_return_cast(table, result) ::= <<
+<if(table.voDecorated)>
+<custom_select_return_decorated(result=result)>
+<else>
+<custom_select_return_cast_nondecorated(result=result)>
+<endif>
+>>
+
+custom_select_return_cast_nondecorated(result) ::= <<
+<if(result.multiple)>
+<custom_select_return_nondecorated_multiple(result=result)>
+<else>
+<custom_select_return_cast_nondecorated_single(result=result)>
+<endif>
+>>
+
+custom_select_return_cast_nondecorated_single(result) ::= <<
+<if(result.wrappingASingleProperty)>
+<custom_select_return_cast_property_single(result=result)>
+<else>
+<result.voName>
+<endif>
+>>
+
+custom_select_return_cast_property_single(select, result) ::= <<
+<result.properties:{property|<property.objectType>}>
+>>

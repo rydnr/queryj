@@ -37,9 +37,9 @@
 //
 // CustomResultSetExtractor.stg
 //
-//import "queryj.stg";
-
 group CustomResultSetExtractor;
+
+import "../queryj.stg"
 
 source(c) ::= <<
 <!
@@ -94,7 +94,7 @@ import java.util.List;
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(result=c.result)>
+<class(result=c.result, repository=c.repository)>
 >>
 
 first_line_description(result) ::= <<
@@ -110,7 +110,7 @@ second_line_description(result) ::= <<
   Generates the second line of the generated file description.
   @param result the result.
 !>
- from java.sql.ResultSets.
+ from {@link java.sql.ResultSet}s.
 >>
 
 project_imports(result, basePackageName, baseDAOSubpackageName, rdbSubpackageName, trName) ::= <<
@@ -136,16 +136,17 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>Res
 
 >>
 
-class(result) ::= <<
+class(result, repository) ::= <<
 <!
  Generates the class body.
  @param result the result.
+ @param repository the repository.
 !>
 /**
  * <[
       first_line_description(result=result),
       second_line_description(result=result)
-    ]:{line |<line>}; separator="\n * ")>
+    ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/CustomResultSetExtractor.stg")>
  */
 <class_annotations()>
@@ -157,8 +158,8 @@ public class <result.idCapitalized>Extractor
      * @param daoListener the dao listener.
      */
     public <result.idCapitalized>Extractor(
-        <notnull()>final String sql,
-        <notnull()>final <repository.capitalized>DAOListener daoListener)
+       <notnull()>final String sql,
+       <notnull()>final <repository.capitalized>DAOListener daoListener)
     {
         super(sql, daoListener);
     }
@@ -170,10 +171,10 @@ public class <result.idCapitalized>Extractor
      * @param sql the original sql.
      * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
 <if(result.multiple)>
-     * @return the \<i><result.classValue>\</i> instances or {@link null}
+     * @return the list of {@link <result.classValue>} instances or an empty list
      * if the operation returned no data.
 <else>
-     * @return the \<i><result.classValue>\</i> instance or {@link null}
+     * @return the {@link <result.classValue>} instance or {@link null}
      * if the operation returned no data.
 <endif>
 
@@ -192,7 +193,8 @@ public class <result.idCapitalized>Extractor
     {
 <if(result.wrappingASingleProperty)>
 <if(result.multiple)>
-        List\<<single_property_wrapper_return(result=result)>\> result = new ArrayList\<<single_property_wrapper_return(result=result)>\>();
+        List\<<single_property_wrapper_return(result=result)>\> result =
+            new ArrayList\<<single_property_wrapper_return(result=result)>\>();
 <else>
         <single_property_wrapper_return(result=result)> result = null;
 <endif>
@@ -210,16 +212,14 @@ public class <result.idCapitalized>Extractor
      * @param resultSet the result set.
      * @param sql the original sql.
      * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
-     * @param factory the value object factory.
-
+     * @param factory the {@link <result.classValue>ValueObjectFactory value object factory}.
 <if(result.multiple)>
-     * @return a list of {@link <result.classValue> instances} or \<code>null\</code>
+     * @return a list of {@link <result.classValue>} instances or an empty list
      * if the operation returned no data.
 <else>
-     * @return the {@link <result.classValue>} instance or \<code>null\</code>
+     * @return the {@link <result.classValue>} instance or {@code null}
      * if the operation returned no data.
 <endif>
-     * if the operation returned no data.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      * @throws DataAccessException with information about any
      * custom exception.
@@ -233,7 +233,7 @@ public class <result.idCapitalized>Extractor
               DataAccessException
     {
 <if(result.multiple)>
-        List\<<result.classValue>\> result = new ArrayList\<<result.classValue>\>();
+        final List\<<result.classValue>\> result = new ArrayList\<<result.classValue>\>();
 <else>
         <result.classValue> result = null;
 <endif>
@@ -252,7 +252,6 @@ public class <result.idCapitalized>Extractor
             t_iRowCount++;
 
             daoListener.resultSetMovedForward(sql, t_iRowCount);
-
             <result.properties:nullable_attribute_extraction(value=it)>
             <result.lobProperties:special_attribute_extraction(result=result, value=it)>
 
@@ -271,7 +270,8 @@ public class <result.idCapitalized>Extractor
                     <result.implicitProperties:implicit_nullable_attribute_extraction(value=it); separator=",\n">)<if(result.multiple)>)<endif>;
                     <result.implicitProperties:{prop|/*<prop.columnName>-><prop.index>*/}; separator="\n">
 <else>
-                    <result.properties:attribute_extraction(value=it); separator=",\n"><if(!result.wrappingASingleProperty)>)<endif><if(result.multiple)>)<endif>;
+// not implicit
+                    <result.properties:{ v | <attribute_extraction(value=v)>}; separator=",\n"><if(!result.wrappingASingleProperty)>)<endif><if(result.multiple)>)<endif>;
 <endif>
 
         }
@@ -312,10 +312,10 @@ nullable_attribute_extraction(value) ::= <<
  @param value the attribute.
 !>
 <if(lob_handling_required)>
-<indirect_template(
-  name=lob_handling_flavor+"_nullable_attribute_extraction", extra1=value)>
+<!indirect_template(
+  name=lob_handling_flavor+"_nullable_attribute_extraction", extra1=value)!>
 <else>
-<default_nullable_attribute_extraction(value=value )>
+<default_nullable_attribute_extraction(value=value)>
 <endif>
 
 >>
@@ -336,16 +336,16 @@ Timestamp t_<value.columnNameNormalizedCapitalized>AsTimestamp =
 <endif>
 
 <if(value.primitive)>
-<if(lob_handling_required)>
+<if(typeInitMap.lob_handling_required)>
     <object_nullable_clobhandling_attribute_extractor(value=value)>
 <else>
     <primitive_nullable_attribute_extractor(value=value)>
 <endif>
 <else>
 <if(lob_handling_required)>
-    <indirect_template(name=value.objectType+"_nullable_clobhandling_attribute_extractor", extra1=value)>
+    <!indirect_template(name=<value:{ v | <v.objectType>_nullable_clobhandling_attribute_extractor}>, extra1=value)!>
 <else>
-    <indirect_template(name=value.objectType+"_nullable_attribute_extractor", extra1=value)>
+    <!indirect_template(name=<value:{ v | <v.objectType>_nullable_attribute_extractor}>, extra1=value)!>
 <endif>
 <endif>
 
@@ -539,8 +539,8 @@ attribute_extraction(value) ::= <<
  @param value the attribute.
 !>
 <if(lob_handling_required)>
-<indirect_template(
-  name=lob_handling_flavor+"_attribute_extraction", extra1=value)>
+<!indirect_template(
+  name=lob_handling_flavor+"_attribute_extraction", extra1=value)!>
 <else>
 <default_attribute_extraction(value)>
 <endif>
@@ -613,8 +613,8 @@ special_attribute_extraction(value) ::= <<
  @param value the attribute.
 !>
 <if(lob_handling_required)>
-<indirect_template(
-  name=lob_handling_flavor+"_special_attribute_extraction", extra1=value)>
+<!indirect_template(
+  name=lob_handling_flavor+"_special_attribute_extraction", extra1=value)!>
 <endif>
 >>
 

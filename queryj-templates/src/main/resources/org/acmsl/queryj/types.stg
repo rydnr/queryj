@@ -1,0 +1,229 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: types.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the common templates dealing with type conversions.
+//
+group types;
+
+Integer_to_primitive(value) ::= <<
+<!
+ Generates the method call to convert the attribute into an int primitive.
+ @param value the attribute.
+!><value.nameLowercased>.intValue()>>
+
+primitive_to_Integer(value) ::= <<
+<!
+ Generates the method call to convert the primitive into an Integer.
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Integer.valueOf(<value.nameLowercased>)<endif>
+>>
+
+primitive_to_Integer_value(value) ::= <<
+<!
+ Generates the method call to convert the primitive into an Integer.
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Integer.valueOf(<value.value>)<endif>
+>>
+
+Long_to_primitive(value) ::= <<
+<!
+ Generates the method call to convert the attribute into a long primitive.
+ @param value the attribute.
+!><value.nameLowercased>.longValue()>>
+
+primitive_to_Long(value) ::= <<
+<!
+ Generates the method call to convert the primitive into a Long.
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Long.valueOf(<value.nameLowercased>)<endif>
+>>
+
+primitive_to_Long_value(value) ::= <<
+<!
+ Generates the method call to convert the primitive into a Long.
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Long.valueOf(<value.value>)<endif>
+>>
+
+Float_to_primitive(value) ::= <<
+<!
+ Generates the method call to convert the attribute into a float primitive.
+ @param value the attribute.
+!><value.nameLowercased>.floatValue()>>
+
+primitive_to_Float(value) ::= <<
+<!
+ Generates the method call to convert the primitive into a Float.
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Float.valueOf(<value.nameLowercased>)<endif>
+>>
+
+primitive_to_Float_value(value) ::= <<
+<!
+ Generates the method call to convert the primitive into a Float.
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Float.valueOf(<value.value>)<endif>
+>>
+
+Double_to_primitive(value) ::= <<
+<!
+ Generates the method call to convert the attribute into a double primitive.
+ @param value the attribute.
+!><value.nameLowercased>.doubleValue()>>
+
+primitive_to_Double(value) ::= <<
+<!
+ Generates the method call to convert the primitive into a Double.
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Double.valueOf(<value.nameLowercased>)<endif>
+>>
+
+primitive_to_Double_value(value) ::= <<
+<!
+ Generates the method call to convert the primitive into a Double.
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Double.valueOf(<value.value>)<endif>
+>>
+
+String_to_primitive(value) ::= <<
+<!
+ Don't try to convert the String to anything.
+ @param value the attribute.
+!><Object_to_primitive(value=value)>
+>>
+
+primitive_to_String(value) ::= <<
+<!
+ Don't try to convert the primitive to anything.
+ @param value the attribute.
+!><primitive_to_Object(value=value)>
+>>
+
+primitive_to_String_value(value) ::= <<
+<!
+ Don't try to convert the primitive to anything.
+ @param value the attribute.
+!>"<primitive_to_Object_value(value=value)>"
+>>
+
+BigDecimal_to_primitive(value) ::= <<
+<!
+ Don't try to convert the BigDecimal to anything.
+ @param value the attribute.
+!><Object_to_primitive(value=value)>
+>>
+
+primitive_to_BigDecimal(value) ::= <<
+<!
+ Don't try to convert the primitive to anything.
+ @param value the attribute.
+!><if(value.valueNull)>null<else>new BigDecimal("<value.nameLowerCased>")<endif>
+>>
+
+primitive_to_BigDecimal_value(value) ::= <<
+<!
+ Don't try to convert the primitive to anything.
+ @param value the attribute.
+!><if(value.valueNull)>null<else>new BigDecimal("<value.value>")<endif>
+>>
+
+Timestamp_to_primitive(value) ::= <<
+<!
+ Don't try to convert the Timestamp to anything.
+ @param value the attribute.
+!>
+<if(value.date)>
+new Timestamp(<value.nameLowercased>.getTime())
+<else>
+<Object_to_primitive(value=value)>
+<endif>
+>>
+
+primitive_to_Timestamp(value) ::= <<
+<!
+ Don't try to convert the primitive to anything.
+ @param value the attribute.
+!><primitive_to_Object(value=value)>
+>>
+
+primitive_to_Timestamp_value(value) ::= <<
+<!
+ Don't try to convert the primitive to anything.
+ @param value the attribute.
+!><primitive_to_Object_value(value=value)>
+>>
+
+Date_to_primitive(value) ::= <<
+<if(value.date)>
+new Timestamp(<value.nameLowercased>.getTime())
+<else>
+<Object_to_primitive(value=value)>
+<endif>
+>>
+
+primitive_to_Date(value) ::= <<
+<!
+ Don't try to convert the primitive to anything.
+ @param value the attribute.
+!><primitive_to_Object(value=value)>
+>>
+
+primitive_to_Date_value(value) ::= <<
+<!
+ Don't try to convert the primitive to anything.
+ @param value the attribute.
+!><primitive_to_Object_value(value=value)>
+>>
+
+Object_to_primitive(value) ::= <<
+<!
+ Don't try to convert the attribute to anything.
+ @param value the attribute.
+!><value.nameLowercased>
+>>
+
+primitive_to_Object(value) ::= <<
+<!
+ Don't try to convert the attribute to anything.
+ @param value the attribute.
+!><value.nameLowercased>
+>>
+
+primitive_to_Object_value(value) ::= <<
+<!
+ Don't try to convert the attribute to anything.
+ @param value the attribute.
+!><value.value>
+>>
