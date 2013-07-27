@@ -54,7 +54,7 @@ import org.acmsl.queryj.api.PerCustomResultTemplateFactory;
 import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
-import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateFactory;
+import org.acmsl.queryj.templates.dao.CustomRowMapperTemplateFactory;
 import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateFactory;
 import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateGenerator;
@@ -134,7 +134,7 @@ public class PerCustomResultTemplatesTest
         immutableSetProperties(new HashMap<String, Property>());
 
         GENERATOR_MAPPINGS.put("CustomResultSetExtractor", new CustomResultSetExtractorTemplateGenerator(false, 1));
-        FACTORY_MAPPINGS.put("CustomResultSetExtractor", CustomResultSetExtractorTemplateFactory.getInstance());
+        FACTORY_MAPPINGS.put("CustomResultSetExtractor", CustomRowMapperTemplateFactory.getInstance());
         // vo
         GENERATOR_MAPPINGS.put("CustomBaseValueObject", new CustomBaseValueObjectTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("CustomBaseValueObject", CustomBaseValueObjectTemplateFactory.getInstance());

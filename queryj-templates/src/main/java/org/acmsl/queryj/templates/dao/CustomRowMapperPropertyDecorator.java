@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: CustomResultSetExtractorPropertyDecorator.java
+ * Filename: CustomRowMapperPropertyDecorator.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Property decorator specific for CustomResultSetExtractor
+ * Description: Property decorator specific for CustomRowMapperTemplate
  *              template.
  *
  */
@@ -41,6 +41,10 @@ import org.acmsl.queryj.metadata.CachingPropertyDecorator;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.acmsl.queryj.metadata.MetadataTypeUtils;
+
+/*
+ * Importing Jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,27 +54,26 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Property decorator specific for CustomResultSetExtractor template.
+ * Property decorator specific for {@link CustomRowMapperTemplate} template.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CustomResultSetExtractorPropertyDecorator
+public class CustomRowMapperPropertyDecorator
     extends  CachingPropertyDecorator
 {
-    private static final long serialVersionUID = 3352072015467667634L;
+    private static final long serialVersionUID = -5664852348664462293L;
     /**
      * The cached Java type, capitalized.
      */
     private String m__strCachedTypeCapitalized;
 
     /**
-     * Creates a {@link CustomResultSetExtractorPropertyDecorator} to
+     * Creates a {@link CustomRowMapperPropertyDecorator} to
      * decorate given property.
      * @param property the property to decorate.
-     * @precondition property != null
-     * @precondition metadataManager != null
+     * @param metadataManager the {@link MetadataManager} instance.
      */
-    public CustomResultSetExtractorPropertyDecorator(
+    public CustomRowMapperPropertyDecorator(
         @NotNull final Property property, @NotNull final MetadataManager metadataManager)
     {
         super(property, metadataManager);
@@ -80,7 +83,7 @@ public class CustomResultSetExtractorPropertyDecorator
      * Specifies the cached Java type, capitalized.
      * @param type such type.
      */
-    protected final void immutableSetCachedTypeCapitalized(final String type)
+    protected final void immutableSetCachedTypeCapitalized(@Nullable final String type)
     {
         m__strCachedTypeCapitalized = type;
     }
@@ -90,7 +93,7 @@ public class CustomResultSetExtractorPropertyDecorator
      * @param type such type.
      */
     @SuppressWarnings("unused")
-    protected void setCachedTypeCapitalized(final String type)
+    protected void setCachedTypeCapitalized(@Nullable final String type)
     {
         immutableSetCachedTypeCapitalized(type);
     }
@@ -100,6 +103,7 @@ public class CustomResultSetExtractorPropertyDecorator
      * @return such type.
      */
     @SuppressWarnings("unused")
+    @Nullable
     public String getCachedTypeCapitalized()
     {
         return m__strCachedTypeCapitalized;
@@ -109,6 +113,8 @@ public class CustomResultSetExtractorPropertyDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
+    @SuppressWarnings("unused")
+    @Nullable
     public String getTypeCapitalized()
     {
         String result = getCachedTypeCapitalized();
@@ -144,6 +150,7 @@ public class CustomResultSetExtractorPropertyDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
+    @NotNull
     protected String retrieveType()
     {
         return retrieveType(getType(), getMetadataManager(), isNullable());
@@ -152,10 +159,9 @@ public class CustomResultSetExtractorPropertyDecorator
     /**
      * Retrieves the Java type of the property.
      * @param type the declared type.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param isNullable whether it allows nulls.
      * @return such information.
-     * @precondition metadataManager != null
      */
     protected String retrieveType(
         final String type,
@@ -173,14 +179,13 @@ public class CustomResultSetExtractorPropertyDecorator
     /**
      * Retrieves the type of the property.
      * @param type the declared type.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @param isNullable whether it allows nulls.
-     * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
+     * @param metadataTypeUtils the {@link MetadataTypeUtils} instance.
      * @return such information.
-     * @precondition metadataTypeManager != null
-     * @precondition metadataTypeUtils != null
      */
     @SuppressWarnings("unused")
+    @NotNull
     protected String retrieveType(
         final String type,
         final MetadataTypeManager metadataTypeManager,
@@ -211,9 +216,8 @@ public class CustomResultSetExtractorPropertyDecorator
     /**
      * Retrieves the attribute's object type.
      * @param type the attribute type.
-     * @param metadataTypeManager the metadata type manager.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @return such type.
-     * @precondition metadataTypeManager != null
      */
     @Nullable
     protected String getObjectType(
@@ -222,5 +226,14 @@ public class CustomResultSetExtractorPropertyDecorator
         return
             metadataTypeManager.getStatementSetterFieldType(
                 metadataTypeManager.getJavaType(type));
+    }
+
+    @Override
+    @NotNull
+    public String toString()
+    {
+        return "CustomRowMapperPropertyDecorator{" +
+               "m__strCachedTypeCapitalized='" + m__strCachedTypeCapitalized + '\'' +
+               '}';
     }
 }

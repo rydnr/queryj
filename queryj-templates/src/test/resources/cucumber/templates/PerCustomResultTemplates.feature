@@ -17,7 +17,7 @@ Feature: Per-custom-results templates
 
     Examples:
       | template                 | output                                          |
-      | CustomResultSetExtractor | OracleMultipleUserReportResultSetExtractor.java |
+      | RowMapper                | UserReportRowMapper.java                        |
 #      | CustomBaseValueObject    | AbstractUserReport.java                         |
 #      | CustomValueObject        | UserReport.java                                 |
 #      | CustomValueObjectFactory | UserReportFactory.java                          |

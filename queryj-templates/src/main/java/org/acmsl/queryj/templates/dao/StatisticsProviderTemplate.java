@@ -100,7 +100,7 @@ public class StatisticsProviderTemplate
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup("org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
+        return retrieveGroup(DAO_GROUP + getTemplateName() + ".stg");
     }
 
     /**

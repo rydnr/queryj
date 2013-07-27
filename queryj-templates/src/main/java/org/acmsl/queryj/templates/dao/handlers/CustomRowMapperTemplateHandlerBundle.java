@@ -24,7 +24,7 @@
 
  ******************************************************************************
  *
- * Filename: CustomResultSetExtractorTemplateHandlerBundle.java
+ * Filename: CustomRowMapperTemplateHandlerBundle.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -50,16 +50,16 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CustomResultSetExtractorTemplateHandlerBundle
-    extends  TemplateHandlerBundle<CustomResultSetExtractorTemplateBuildHandler, CustomResultSetExtractorTemplateWritingHandler>
+public class CustomRowMapperTemplateHandlerBundle
+    extends  TemplateHandlerBundle<CustomRowMapperTemplateBuildHandler, CustomRowMapperTemplateWritingHandler>
 {
     /**
      * Builds a bundle.
      */
-    public CustomResultSetExtractorTemplateHandlerBundle()
+    public CustomRowMapperTemplateHandlerBundle()
     {
         super(
-            new CustomResultSetExtractorTemplateBuildHandler(),
-            new CustomResultSetExtractorTemplateWritingHandler());
+            new CustomRowMapperTemplateBuildHandler(),
+            new CustomRowMapperTemplateWritingHandler());
     }
 }

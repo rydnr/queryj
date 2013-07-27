@@ -23,7 +23,7 @@
 
  ******************************************************************************
  *
- * Filename: CustomResultSetExtractorTemplateBuildHandler.java
+ * Filename: CustomRowMapperTemplateBuildHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -40,9 +40,9 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateFactory;
+import org.acmsl.queryj.templates.dao.CustomRowMapperTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplate;
+import org.acmsl.queryj.templates.dao.CustomRowMapperTemplate;
 import org.acmsl.queryj.api.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.api.TemplateMappingManager;
 
@@ -65,27 +65,26 @@ import java.util.Map;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Builds custom ResultSetExtractor templates.
+ * Builds {@link CustomRowMapperTemplate} templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CustomResultSetExtractorTemplateBuildHandler
+public class CustomRowMapperTemplateBuildHandler
     extends  BasePerCustomResultTemplateBuildHandler
-                 <CustomResultSetExtractorTemplate, CustomResultSetExtractorTemplateFactory>
+                 <CustomRowMapperTemplate, CustomRowMapperTemplateFactory>
 {
     /**
-     * Creates a CustomResultSetExtractorTemplateBuildHandler.
+     * Creates a CustomRowMapperTemplateBuildHandler.
      */
-    public CustomResultSetExtractorTemplateBuildHandler() {}
+    public CustomRowMapperTemplateBuildHandler() {}
 
     /**
      * Checks whether the generation is allowed for given result.
-     *
-     * @param customResult      the custom result.
-     * @param customSqlProvider the {@link org.acmsl.queryj.customsql.CustomSqlProvider} instance.
-     * @param metadataManager   the {@link org.acmsl.queryj.metadata.MetadataManager} instance.
-     * @param customResultUtils the {@link org.acmsl.queryj.customsql.CustomResultUtils} instance.
-     * @return <code>true</code> in such case.
+     * @param customResult the custom result.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customResultUtils the {@link CustomResultUtils} instance.
+     * @return {@code true} in such case.
      */
     @Override
     protected boolean isGenerationAllowedForResult(
@@ -100,7 +99,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
     /**
      * Retrieves whether for this template type in particular, duplicated results
      * are allowed or not (i.e., results differing only in the multiplicity factor).
-     * @return <code>true</code> in such case.
+     * @return {@code true} in such case.
      */
     @Override
     protected boolean isDuplicatedResultsAllowed()
@@ -113,9 +112,9 @@ public class CustomResultSetExtractorTemplateBuildHandler
      */
     @NotNull
     @Override
-    protected CustomResultSetExtractorTemplateFactory retrieveTemplateFactory()
+    protected CustomRowMapperTemplateFactory retrieveTemplateFactory()
     {
-        return CustomResultSetExtractorTemplateFactory.getInstance();
+        return CustomRowMapperTemplateFactory.getInstance();
     }
 
     /**
@@ -142,13 +141,13 @@ public class CustomResultSetExtractorTemplateBuildHandler
     @Override
     @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        @NotNull final List<CustomResultSetExtractorTemplate> templates,
-        @NotNull final Map<String, List<CustomResultSetExtractorTemplate>>  parameters)
+        @NotNull final List<CustomRowMapperTemplate> templates,
+        @NotNull final Map<String, List<CustomRowMapperTemplate>>  parameters)
     {
-        @NotNull final List<CustomResultSetExtractorTemplate> t_lFilteredTemplates =
-            new ArrayList<CustomResultSetExtractorTemplate>();
+        @NotNull final List<CustomRowMapperTemplate> t_lFilteredTemplates =
+            new ArrayList<CustomRowMapperTemplate>();
         
-        for  (final CustomResultSetExtractorTemplate t_Template : templates)
+        for  (final CustomRowMapperTemplate t_Template : templates)
         {
             if  (matchesSqlFilter(t_Template.getTemplateContext()))
             {
@@ -165,7 +164,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * Checks whether the template matches the filter consisting of
      * finding out if there's any custom sql defined for the custom result.
      * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
-     * @return <code>true</code> in such case.
+     * @return {@code true} in such case.
      */
     protected boolean matchesSqlFilter(@NotNull final PerCustomResultTemplateContext context)
     {
@@ -184,7 +183,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param customResultUtils the {@link CustomResultUtils} instance.
-     * @return <code>true</code> in such case.
+     * @return {@code true} in such case.
      */
     protected boolean matchesSqlFilter(
         @NotNull final Result resultElement,
@@ -192,9 +191,9 @@ public class CustomResultSetExtractorTemplateBuildHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomResultUtils customResultUtils)
     {
-        boolean result;
+        final boolean result;
 
-        @Nullable String t_strTable =
+        @Nullable final String t_strTable =
             customResultUtils.retrieveTable(
                 resultElement, customSqlProvider, metadataManager);
         

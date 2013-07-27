@@ -48,7 +48,7 @@ import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOFactoryTemplateH
 import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.BaseResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.ConfigurationPropertiesTemplateHandlerBundle;
-import org.acmsl.queryj.templates.dao.handlers.CustomResultSetExtractorTemplateHandlerBundle;
+import org.acmsl.queryj.templates.dao.handlers.CustomRowMapperTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.DAOChooserTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.DAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.DAOListenerImplTemplateHandlerBundle;
@@ -130,7 +130,7 @@ public class DefaultTemplateChainProvider
         result.add(new ConfigurationPropertiesTemplateHandlerBundle());
         result.add(new CucumberFeatureTemplateHandlerBundle());
         result.add(new CustomBaseValueObjectTemplateHandlerBundle());
-        result.add(new CustomResultSetExtractorTemplateHandlerBundle());
+        result.add(new CustomRowMapperTemplateHandlerBundle());
         result.add(new CustomValueObjectFactoryTemplateHandlerBundle());
         result.add(new CustomValueObjectImplTemplateHandlerBundle());
         result.add(new CustomValueObjectTemplateHandlerBundle());

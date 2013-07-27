@@ -45,6 +45,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface Template<T extends TemplateContext>
 {
+    String DAO_GROUP = "org/acmsl/queryj/dao/";
+
     /**
      * Retrieves the template context.
      * @return such {@link TemplateContext} instance.

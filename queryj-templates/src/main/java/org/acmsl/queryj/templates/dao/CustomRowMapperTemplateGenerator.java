@@ -61,16 +61,16 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CustomResultSetExtractorTemplateGenerator
-    extends  AbstractTemplateGenerator<CustomResultSetExtractorTemplate, PerCustomResultTemplateContext>
-    implements PerCustomResultTemplateGenerator<CustomResultSetExtractorTemplate, PerCustomResultTemplateContext>
+public class CustomRowMapperTemplateGenerator
+    extends  AbstractTemplateGenerator<CustomRowMapperTemplate, PerCustomResultTemplateContext>
+    implements PerCustomResultTemplateGenerator<CustomRowMapperTemplate, PerCustomResultTemplateContext>
 {
     /**
-     * Creates a new {@link CustomResultSetExtractorTemplateGenerator} with given settings.
+     * Creates a new {@link CustomRowMapperTemplateGenerator} with given settings.
      * @param caching whether to enable caching.
      * @param threadCount the number of threads.
      */
-    public CustomResultSetExtractorTemplateGenerator(final boolean caching, final int threadCount)
+    public CustomRowMapperTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
     }
@@ -83,7 +83,7 @@ public class CustomResultSetExtractorTemplateGenerator
     @Override
     public DecoratorFactory getDecoratorFactory()
     {
-        return CustomResultSetExtractorDecoratorFactory.getInstance();
+        return CustomRowMapperDecoratorFactory.getInstance();
     }
 
     /**

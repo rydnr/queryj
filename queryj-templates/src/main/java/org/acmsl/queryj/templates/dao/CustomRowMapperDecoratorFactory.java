@@ -24,11 +24,11 @@
 
  ******************************************************************************
  *
- * Filename: CustomResultSetExtractorDecoratorFactory.java
+ * Filename: CustomRowMapperDecoratorFactory.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Provides custom decorators for the CustomResultSetExtractor
+ * Description: Provides custom decorators for the CustomRowMapperTemplate
  *              template.
  *
  */
@@ -53,33 +53,33 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Provides custom decorators for the CustomResultSetExtractor template.
+ * Provides custom decorators for the {@link CustomRowMapperTemplate} template.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CustomResultSetExtractorDecoratorFactory
+public class CustomRowMapperDecoratorFactory
     extends  CachingDecoratorFactory
 {
-    private static final long serialVersionUID = 1470687956486903790L;
+    private static final long serialVersionUID = -9156594021731628694L;
 
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
-    protected static class CustomResultSetExtractorDecoratorFactorySingletonContainer
+    protected static class CustomRowMapperDecoratorFactorySingletonContainer
     {
         /**
          * The actual singleton.
          */
-        public static final CustomResultSetExtractorDecoratorFactory SINGLETON =
-            new CustomResultSetExtractorDecoratorFactory();
+        public static final CustomRowMapperDecoratorFactory SINGLETON =
+            new CustomRowMapperDecoratorFactory();
     }
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected CustomResultSetExtractorDecoratorFactory() {};
+    protected CustomRowMapperDecoratorFactory() {};
 
     /**
-     * Retrieves a <code>CustomResultSetExtractorDecoratorFactory</code>
+     * Retrieves a {@link CustomRowMapperDecoratorFactory}
      * instance.
      * @return such instance.
      */
@@ -87,7 +87,7 @@ public class CustomResultSetExtractorDecoratorFactory
     public static CachingDecoratorFactory getInstance()
     {
         return
-            CustomResultSetExtractorDecoratorFactorySingletonContainer
+            CustomRowMapperDecoratorFactorySingletonContainer
                 .SINGLETON;
     }
 
@@ -95,15 +95,13 @@ public class CustomResultSetExtractorDecoratorFactory
      * Creates a <code>PropertyDecorator</code> for given
      * property instance.
      * @param property the attribute.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated property for the concrete template.
      */
     @NotNull
     public PropertyDecorator createDecorator(
         @NotNull final Property property, @NotNull final MetadataManager metadataManager)
     {
-        return
-            new CustomResultSetExtractorPropertyDecorator(
-                property, metadataManager);
+        return new CustomRowMapperPropertyDecorator(property, metadataManager);
     }
 }

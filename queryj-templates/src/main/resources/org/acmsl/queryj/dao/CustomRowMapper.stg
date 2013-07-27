@@ -29,21 +29,22 @@
 //
 //***************************************************************************
 //
-// Filename: CustomResultSetExtractor.stg
+// Filename: CustomRowMapper.stg
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate CustomResultSetExtractors.
+// Description: Defines the rules to generate custom RowMapper
+//              implementations.
 //
-// CustomResultSetExtractor.stg
+// CustomRowMapper.stg
 //
-group CustomResultSetExtractor;
+group CustomRowMapperExtractor;
 
 import "../queryj.stg"
 
 source(c) ::= <<
 <!
-  Generates a CustomResultSetExtractor source file.
+  Generates a CustomRowMapper source file.
 !>
 <if(c.header)>
 <c.header>
@@ -58,7 +59,7 @@ source(c) ::= <<
   timestamp=c.timestamp)>
 <endif>
 <if(c.generation_timestamps_enabled)>
-// Generated using org/acmsl/queryj/dao/CustomResultSetExtractor.stg at <c.timestamp>
+// Generated using org/acmsl/queryj/dao/CustomRowMapper.stg at <c.timestamp>
 <endif>
 
 <package_declaration(package=c.package)>
@@ -147,11 +148,11 @@ class(result, repository) ::= <<
       first_line_description(result=result),
       second_line_description(result=result)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(template="org/acmsl/queryj/dao/CustomResultSetExtractor.stg")>
+<class_common_javadoc(template="org/acmsl/queryj/dao/CustomRowMapper.stg")>
  */
 <class_annotations()>
-public class <result.idCapitalized>Extractor
-    extends  <repository.capitalized>ResultSetExtractor
+public class <result.idCapitalized>RowMapper
+    implements RowMapper
 {
     /**
      * Constructs a new {@link <result.idCapitalized>Extractor}.

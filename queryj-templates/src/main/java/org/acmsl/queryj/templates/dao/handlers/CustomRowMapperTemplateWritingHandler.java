@@ -38,9 +38,9 @@ package org.acmsl.queryj.templates.dao.handlers;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.templates.dao.CustomRowMapperTemplate;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplate;
 import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.api.handlers.BasePerCustomResultTemplateWritingHandler;
 import org.acmsl.queryj.api.TemplateMappingManager;
@@ -67,17 +67,17 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CustomResultSetExtractorTemplateWritingHandler
+public class CustomRowMapperTemplateWritingHandler
     extends  BasePerCustomResultTemplateWritingHandler
-                 <CustomResultSetExtractorTemplate,
+                 <CustomRowMapperTemplate,
                      PerCustomResultTemplateContext,
                      CustomResultSetExtractorTemplateGenerator>
 {
     /**
-     * Creates a {@link CustomResultSetExtractorTemplateWritingHandler}
+     * Creates a {@link CustomRowMapperTemplateWritingHandler}
      * instance.
      */
-    public CustomResultSetExtractorTemplateWritingHandler() {}
+    public CustomRowMapperTemplateWritingHandler() {}
 
     /**
      * {@inheritDoc}
@@ -98,11 +98,11 @@ public class CustomResultSetExtractorTemplateWritingHandler
     @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    protected List<CustomResultSetExtractorTemplate> retrieveTemplates(
+    protected List<CustomRowMapperTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (List<CustomResultSetExtractorTemplate>)
+            (List<CustomRowMapperTemplate>)
                 parameters.get(
                     TemplateMappingManager
                         .CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES);

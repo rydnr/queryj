@@ -24,11 +24,11 @@
 
  *****************************************************************************
  *
- * Filename: CustomResultSetExtractorTemplate.java
+ * Filename: CustomRowMapperTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create CustomResultSetExtractor implementation
+ * Description: Is able to create CustomRowMapper implementations
  *              for each custom query requiring so.
  *
  * $Id$
@@ -58,22 +58,22 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Is able to create CustomResultSetExtractor implementations for each
+ * Is able to create CustomRowMapperExtractor implementations for each
  * custom query requiring so.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CustomResultSetExtractorTemplate
+public class CustomRowMapperTemplate
     extends AbstractBasePerCustomResultTemplate<PerCustomResultTemplateContext>
 {
     private static final long serialVersionUID = 9130292102465717049L;
 
     /**
-     * Builds a <code>CustomResultSetExtractorTemplate</code> using
+     * Builds a <code>CustomRowMapperTemplate</code> using
      * information.
-     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext} instance.
+     * @param context the {@link PerCustomResultTemplateContext} instance.
      */
-    public CustomResultSetExtractorTemplate(@NotNull final PerCustomResultTemplateContext context)
+    public CustomRowMapperTemplate(@NotNull final PerCustomResultTemplateContext context)
     {
         super(context);
     }
@@ -86,7 +86,7 @@ public class CustomResultSetExtractorTemplate
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup("org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
+        return retrieveGroup(DAO_GROUP + getTemplateName() + ".stg");
     }
 
     /**

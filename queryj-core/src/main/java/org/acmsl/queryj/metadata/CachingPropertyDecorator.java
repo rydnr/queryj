@@ -318,8 +318,7 @@ public class CachingPropertyDecorator
      * Specifies the cached object type.
      * @param value the value to cache.
      */
-    protected final void immutableSetCachedObjectType(
-        @NotNull final String value)
+    protected final void immutableSetCachedObjectType(@Nullable final String value)
     {
         m__strCachedObjectType = value;
     }
@@ -329,7 +328,7 @@ public class CachingPropertyDecorator
      * @param value the value to cache.
      */
     @SuppressWarnings("unused")
-    protected void setCachedObjectType(@NotNull final String value)
+    protected void setCachedObjectType(@Nullable final String value)
     {
         immutableSetCachedObjectType(value);
     }
@@ -607,5 +606,23 @@ public class CachingPropertyDecorator
         }
 
         return result;
+    }
+
+    @Override
+    @NotNull
+    public String toString()
+    {
+        return "CachingPropertyDecorator{" +
+               "cachedDate=" + m__bCachedDate +
+               ", cachedType='" + m__strCachedType + '\'' +
+               ", cachedObjectType='" + m__strCachedObjectType + '\'' +
+               ", cachedNameUppercased='" + m__strCachedNameUppercased + '\'' +
+               ", cachedNameLowercased='" + m__strCachedNameLowercased + '\'' +
+               ", cachedNumberSmallerThanInt=" + m__bCachedNumberSmallerThanInt +
+               ", cachedNameCapitalized='" + m__strCachedNameCapitalized + '\'' +
+               ", cachedColumnNameNormalizedCapitalized='" + m__strCachedColumnNameNormalizedCapitalized + '\'' +
+               ", cachedColumnNameCapitalized='" + m__strCachedColumnNameCapitalized + '\'' +
+               ", cachedColumnNameNormalizedUncapitalized='" + m__strCachedColumnNameNormalizedUncapitalized + '\'' +
+               '}';
     }
 }

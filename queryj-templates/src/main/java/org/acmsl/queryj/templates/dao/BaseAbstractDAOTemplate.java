@@ -86,7 +86,7 @@ public class BaseAbstractDAOTemplate
     {
         return
             retrieveGroup(
-                "org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
+                DAO_GROUP + getTemplateName() + ".stg");
     }
 
     /**

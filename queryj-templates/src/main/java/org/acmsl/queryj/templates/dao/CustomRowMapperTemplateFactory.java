@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: CustomResultSetExtractorTemplateFactory.java
+ * Filename: CustomRowMapperTemplateFactory.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create CustomResultSetExtractorTemplate instances.
+ * Description: Is able to create CustomRowMapperTemplate instances.
  *
  */
 package org.acmsl.queryj.templates.dao;
@@ -59,36 +59,35 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Is able to create {@link CustomResultSetExtractorTemplate} instances.
+ * Is able to create {@link CustomRowMapperTemplate} instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 2012/07/09
  */
 @ThreadSafe
-public class CustomResultSetExtractorTemplateFactory
-    implements  PerCustomResultTemplateFactory<CustomResultSetExtractorTemplate>,
+public class CustomRowMapperTemplateFactory
+    implements  PerCustomResultTemplateFactory<CustomRowMapperTemplate>,
                 Singleton
 {
     /**
      * Singleton implementation to avoid double-locking check.
      */
-    protected static final class CustomResultSetExtractorTemplateFactorySingletonContainer
+    protected static final class CustomRowMapperTemplateFactorySingletonContainer
     {
         /**
          * The actual singleton.
          */
-        public static final CustomResultSetExtractorTemplateFactory SINGLETON =
-            new CustomResultSetExtractorTemplateFactory();
+        public static final CustomRowMapperTemplateFactory SINGLETON =
+            new CustomRowMapperTemplateFactory();
     }
 
     /**
      * Retrieves the singleton instance.
-     *
      * @return such instance.
      */
     @NotNull
-    public static CustomResultSetExtractorTemplateFactory getInstance()
+    public static CustomRowMapperTemplateFactory getInstance()
     {
-        return CustomResultSetExtractorTemplateFactorySingletonContainer.SINGLETON;
+        return CustomRowMapperTemplateFactorySingletonContainer.SINGLETON;
     }
 
     /**
@@ -96,7 +95,7 @@ public class CustomResultSetExtractorTemplateFactory
      */
     @Override
     @NotNull
-    public CustomResultSetExtractorTemplate createTemplate(
+    public CustomRowMapperTemplate createTemplate(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -113,7 +112,7 @@ public class CustomResultSetExtractorTemplateFactory
         @NotNull final Result customResult)
     {
         return
-            new CustomResultSetExtractorTemplate(
+            new CustomRowMapperTemplate(
                 new PerCustomResultTemplateContext(
                     metadataManager,
                     customSqlProvider,
