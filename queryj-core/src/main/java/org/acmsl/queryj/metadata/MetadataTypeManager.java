@@ -121,6 +121,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the QueryJ type.
      */
+    @NotNull
     public String getStatementSetterFieldType(final int dataType);
 
     /**
@@ -199,6 +200,7 @@ public interface MetadataTypeManager
      * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
+    @NotNull
     public String getObjectType(final int dataType, final boolean isBool);
 
     /**

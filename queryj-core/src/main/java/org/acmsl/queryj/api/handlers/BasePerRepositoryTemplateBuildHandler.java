@@ -400,6 +400,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     @Override
     public String toString()
     {
-        return "Builder:" + getClass().getSimpleName();
+        return PREFIX + getClass().getSimpleName();
     }
 }

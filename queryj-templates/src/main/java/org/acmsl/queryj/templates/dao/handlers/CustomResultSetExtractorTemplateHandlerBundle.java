@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -23,23 +24,43 @@
 
  ******************************************************************************
  *
- * Filename: TemplateBuildHandler.java
+ * Filename: CustomResultSetExtractorTemplateHandlerBundle.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Marks all template build handlers.
+ * Description: Bundles a pair of CustomResultSetExtractor template
+ *              build and writing handlers.
  *
  */
-package org.acmsl.queryj.api.handlers;
+package org.acmsl.queryj.templates.dao.handlers;
 
-import org.acmsl.queryj.QueryJCommand;
+/*
+ * Importing some QueryJ-API classes.
+ */
+import org.acmsl.queryj.api.handlers.TemplateHandlerBundle;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Marks all template build handlers.
+ * Bundles a pair of CustomResultSetExtractor template build and writing
+ * handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface TemplateBuildHandler
-    extends TemplateHandler<QueryJCommand>
+@ThreadSafe
+public class CustomResultSetExtractorTemplateHandlerBundle
+    extends  TemplateHandlerBundle<CustomResultSetExtractorTemplateBuildHandler,
+    CustomResultSetExtractorTemplateWritingHandler>
 {
-    String PREFIX = "Builder:";
+    /**
+     * Builds a bundle.
+     */
+    public CustomResultSetExtractorTemplateHandlerBundle()
+    {
+        super(
+            new CustomResultSetExtractorTemplateBuildHandler(),
+            new CustomResultSetExtractorTemplateWritingHandler());
+    }
 }

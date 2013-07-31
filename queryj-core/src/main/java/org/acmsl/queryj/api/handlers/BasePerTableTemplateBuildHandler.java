@@ -530,6 +530,6 @@ public abstract class BasePerTableTemplateBuildHandler
     @Override
     public String toString()
     {
-        return "Builder:" + getClass().getSimpleName();
+        return PREFIX + getClass().getSimpleName();
     }
 }

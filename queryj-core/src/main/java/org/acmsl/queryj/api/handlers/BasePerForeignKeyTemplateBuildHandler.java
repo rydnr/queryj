@@ -326,6 +326,6 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     @Override
     public String toString()
     {
-        return "Builder:" + getClass().getSimpleName();
+        return PREFIX + getClass().getSimpleName();
     }
 }

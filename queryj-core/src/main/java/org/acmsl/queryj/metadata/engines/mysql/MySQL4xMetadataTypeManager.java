@@ -129,7 +129,7 @@ public class MySQL4xMetadataTypeManager
      * @param isBool whether the type represents boolean values.
      * @return the associated object type.
      */
-    @Nullable
+    @NotNull
     public String getObjectType(final int dataType, final boolean isBool)
     {
         @Nullable String result;

@@ -152,6 +152,7 @@ public class OracleMetadataTypeManager
      * @param isBool whether the type represents boolean values.
      * @return the QueryJ type.
      */
+    @NotNull
     public String getFieldType(final int dataType, final boolean allowsNull, final boolean isBool)
     {
         String result;
@@ -175,7 +176,7 @@ public class OracleMetadataTypeManager
      * @param dataType the data type.
      * @return the QueryJ type.
      */
-    @Nullable
+    @NotNull
     public String getStatementSetterFieldType(final int dataType)
     {
         @Nullable String result;

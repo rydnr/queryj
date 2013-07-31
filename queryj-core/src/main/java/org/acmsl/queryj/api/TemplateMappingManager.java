@@ -60,11 +60,6 @@ public class TemplateMappingManager
                 Singleton
 {
     /**
-     * The table repository template attribute name.
-     */
-    public static final String TABLE_REPOSITORY_TEMPLATE = "table.repository";
-
-    /**
      * The data access manager template attribute name.
      */
     public static final String DATA_ACCESS_MANAGER_TEMPLATE =
@@ -208,12 +203,6 @@ public class TemplateMappingManager
         "dataAccessContext-local.xml.template";
 
     /**
-     * The keyword repository template attribute name.
-     */
-    public static final String KEYWORD_REPOSITORY_TEMPLATE =
-        "keyword.repository.template";
-
-    /**
      * The repository DAO template attribute name.
      */
     public static final String REPOSITORY_DAO_TEMPLATE = "repository.dao";
@@ -271,6 +260,11 @@ public class TemplateMappingManager
      */
     public static final String STATISTICS_PROVIDER_TEMPLATE =
         "statistics.provider.template";
+
+    /**
+     * The row mapper template type.
+     */
+    public static final String CUSTOM_ROW_MAPPER_TEMPLATES = "custom.row-mapper.templates";
 
     /**
      * Singleton implemented to avoid the double-checked locking.

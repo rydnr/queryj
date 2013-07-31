@@ -378,8 +378,8 @@ public class JdbcMetadataTypeManager
      * @param allowsNull whether the field allows null values or not.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the QueryJ type.
-     * @precondition stringUtils != null
      */
+    @NotNull
     protected String getQueryJFieldType(
         final int dataType, final boolean allowsNull, @NotNull final StringUtils stringUtils)
     {
@@ -398,7 +398,7 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the QueryJ type.
      */
-    @Nullable
+    @NotNull
     public String getStatementSetterFieldType(final int dataType)
     {
         return getFieldType(dataType, true, isBoolean(dataType));
@@ -409,6 +409,7 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the QueryJ type.
      */
+    @NotNull
     public String getFieldType(final int dataType)
     {
         return getFieldType(dataType, false, isBoolean(dataType));
@@ -421,6 +422,7 @@ public class JdbcMetadataTypeManager
      * @param isBool whether the type represents boolean values.
      * @return the QueryJ type.
      */
+    @NotNull
     public String getFieldType(final int dataType, final boolean allowsNull, final boolean isBool)
     {
         @NotNull String result = "";
@@ -499,7 +501,7 @@ public class JdbcMetadataTypeManager
      * @param paramName the parameter name.
      * @return the associated setter method name.
      */
-    @Nullable
+    @NotNull
     public String getSetterMethod(
         final int dataType, final int paramIndex, final String paramName)
     {
@@ -679,10 +681,10 @@ public class JdbcMetadataTypeManager
      * @param isBool whether the column allows null values or not.
      * @return the associated object type.
      */
-    @Nullable
+    @NotNull
     public String getObjectType(final int dataType, final boolean isBool)
     {
-        @Nullable String result;
+        @NotNull final String result;
 
         if (isBool)
         {
@@ -1570,5 +1572,13 @@ public class JdbcMetadataTypeManager
         }
 
         return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "JdbcMetadataTypeManager{" +
+               "native2JavaTypeMapping=" + m__mNative2JavaTypeMapping +
+               '}';
     }
 }

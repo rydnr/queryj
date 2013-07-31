@@ -455,6 +455,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     @Override
     public String toString()
     {
-        return "Builder:" + getClass().getSimpleName();
+        return PREFIX + getClass().getSimpleName();
     }
 }

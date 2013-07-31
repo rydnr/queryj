@@ -24,11 +24,11 @@
 
  *****************************************************************************
  *
- * Filename: CustomRowMapperTemplate.java
+ * Filename: CustomResultSetExtractorTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to create CustomRowMapperTemplate implementations
+ * Description: Is able to create CustomResultSetExtractor implementations
  *              for each custom query requiring so.
  *
  * $Id$
@@ -58,22 +58,22 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Is able to create CustomRowMapperExtractor implementations for each
+ * Is able to create CustomResultSetExtractor implementations for each
  * custom query requiring so.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CustomRowMapperTemplate
+public class CustomResultSetExtractorTemplate
     extends AbstractBasePerCustomResultTemplate<PerCustomResultTemplateContext>
 {
-    private static final long serialVersionUID = 9130292102465717049L;
+    private static final long serialVersionUID = 5166480399385527289L;
 
     /**
-     * Builds a <code>CustomRowMapperTemplate</code> using
+     * Builds a <code>CustomRowMapperTemplate</code> using context
      * information.
      * @param context the {@link PerCustomResultTemplateContext} instance.
      */
-    public CustomRowMapperTemplate(@NotNull final PerCustomResultTemplateContext context)
+    public CustomResultSetExtractorTemplate(@NotNull final PerCustomResultTemplateContext context)
     {
         super(context);
     }
@@ -90,13 +90,13 @@ public class CustomRowMapperTemplate
     }
 
     /**
-     * Returns "CustomRowMapperExtractor".
+     * Returns "CustomResultSetExtractor".
      * @return such information.
      */
     @Override
     @NotNull
     public String getTemplateName()
     {
-        return "CustomRowMapperExtractor";
+        return "CustomResultSetExtractor";
     }
 }

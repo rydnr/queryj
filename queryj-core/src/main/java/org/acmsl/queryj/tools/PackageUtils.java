@@ -321,7 +321,7 @@ public class PackageUtils
         @NotNull final StringUtils stringUtils,
         @NotNull final StringValidator stringValidator)
     {
-        @NotNull File result;
+        @NotNull final File result;
 
         String t_strWholePackage = packageName;
 
@@ -564,11 +564,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                    parentFolder,
-                    packageName,
-                    VALUE_OBJECT_SUBPACKAGE,
-                    useSubFolders,
-                    false);
+                parentFolder,
+                packageName,
+                VALUE_OBJECT_SUBPACKAGE,
+                useSubFolders,
+                false);
     }
 
     /**
@@ -601,7 +601,7 @@ public class PackageUtils
     {
         return
             retrieveValueObjectFolder(
-                    parentFolder, packageName, useSubFolders);
+                parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -633,11 +633,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                    parentFolder,
-                    packageName,
-                    BASE_VALUE_OBJECT_SUBPACKAGE,
-                    useSubFolders,
-                    false);
+                parentFolder,
+                packageName,
+                BASE_VALUE_OBJECT_SUBPACKAGE,
+                useSubFolders,
+                false);
     }
 
     /**
@@ -668,11 +668,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                    parentFolder,
-                    packageName,
-                    VALUE_OBJECT_IMPL_SUBPACKAGE,
-                    useSubFolders,
-                    false);
+                parentFolder,
+                packageName,
+                VALUE_OBJECT_IMPL_SUBPACKAGE,
+                useSubFolders,
+                false);
     }
 
     /**
@@ -714,7 +714,7 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                    retrieveBaseDAOPackage(packageName), RDB_SUBPACKAGE);
+                retrieveBaseDAOPackage(packageName), RDB_SUBPACKAGE);
     }
 
     /**
@@ -733,9 +733,9 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                    retrieveBaseDAOFolder(
-                            parentFolder, packageName, useSubFolders),
-                    RDB_SUBPACKAGE);
+                retrieveBaseDAOFolder(
+                    parentFolder, packageName, useSubFolders),
+                RDB_SUBPACKAGE);
     }
 
     /**
@@ -791,8 +791,8 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                    retrieveRdbPackage(packageName),
-                    retrieveDAOSubpackage(engineName));
+                retrieveRdbPackage(packageName),
+                retrieveDAOSubpackage(engineName));
     }
 
     /**
@@ -813,9 +813,9 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                    retrieveRdbFolder(
-                            parentFolder, packageName, useSubfolders),
-                    engineName.toLowerCase(Locale.US));
+                retrieveRdbFolder(
+                    parentFolder, packageName, useSubfolders),
+                engineName.toLowerCase(Locale.US));
     }
 
     /**
@@ -849,7 +849,7 @@ public class PackageUtils
     {
         return
             retrieveDAOFolder(
-                    parentFolder, packageName, engineName, useSubFolders);
+                parentFolder, packageName, engineName, useSubFolders);
     }
 
     /**
@@ -880,11 +880,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                    parentFolder,
-                    packageName,
-                    TABLE_REPOSITORY_SUBPACKAGE,
-                    useSubFolders,
-                    false);
+                parentFolder,
+                packageName,
+                TABLE_REPOSITORY_SUBPACKAGE,
+                useSubFolders,
+                false);
     }
 
     /**
@@ -893,6 +893,7 @@ public class PackageUtils
      * @return the package for the associated table classes.
      */
     @NotNull
+    @SuppressWarnings("unused")
     public String retrieveTablePackage(@NotNull final String packageName)
     {
         return retrieveTableRepositoryPackage(packageName);
@@ -906,6 +907,7 @@ public class PackageUtils
      * @return the folder in which the associated templates should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveTableFolder(
         @NotNull final File parentFolder,
@@ -914,7 +916,7 @@ public class PackageUtils
     {
         return
             retrieveTableRepositoryFolder(
-                    parentFolder, packageName, useSubFolders);
+                parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -932,7 +934,7 @@ public class PackageUtils
     {
         return
             retrieveTestPackage(
-                    retrieveDAOPackage(packageName, engineName), subFolders);
+                retrieveDAOPackage(packageName, engineName), subFolders);
     }
 
     /**
@@ -954,9 +956,9 @@ public class PackageUtils
     {
         return
             retrieveTestFolder(
-                    parentFolder,
-                    retrieveDAOTestPackage(packageName, engineName, useSubFolders),
-                    useSubFolders);
+                parentFolder,
+                retrieveDAOTestPackage(packageName, engineName, useSubFolders),
+                useSubFolders);
     }
 
     /**
@@ -990,8 +992,8 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                    retrieveTestFolder(parentFolder, useSubFolders),
-                    packageName);
+                retrieveTestFolder(parentFolder, useSubFolders),
+                packageName);
     }
 
     /**
@@ -1022,11 +1024,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                    parentFolder,
-                    packageName,
-                    FUNCTIONS_SUBPACKAGE,
-                    useSubFolders,
-                    false);
+                parentFolder,
+                packageName,
+                FUNCTIONS_SUBPACKAGE,
+                useSubFolders,
+                false);
     }
 
     /**
@@ -1041,7 +1043,7 @@ public class PackageUtils
     {
         return
             retrieveTestPackage(
-                    retrieveFunctionsPackage(packageName), subFolders);
+                retrieveFunctionsPackage(packageName), subFolders);
     }
 
     /**
@@ -1061,9 +1063,9 @@ public class PackageUtils
     {
         return
             retrieveTestFolder(
-                    parentFolder,
-                    retrieveTestFunctionsPackage(packageName, useSubFolders),
-                    useSubFolders);
+                parentFolder,
+                retrieveTestFunctionsPackage(packageName, useSubFolders),
+                useSubFolders);
     }
 
     /**
@@ -1130,6 +1132,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated repository class.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveKeywordRepositoryPackage(
         @NotNull final String packageName)
@@ -1145,6 +1148,7 @@ public class PackageUtils
      * @return the folder in which the associated template should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveKeywordRepositoryFolder(
         @NotNull final File parentFolder,
@@ -1153,7 +1157,7 @@ public class PackageUtils
     {
         return
             retrieveProcedureRepositoryFolder(
-                    parentFolder, packageName, useSubFolders);
+                parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -1166,8 +1170,8 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                    retrieveBaseDAOPackage(packageName),
-                    MOCK_DAO_SUBPACKAGE);
+                retrieveBaseDAOPackage(packageName),
+                MOCK_DAO_SUBPACKAGE);
     }
 
     /**
@@ -1186,8 +1190,8 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                    retrieveBaseDAOFolder(parentFolder, packageName, useSubFolders),
-                    MOCK_DAO_SUBPACKAGE);
+                retrieveBaseDAOFolder(parentFolder, packageName, useSubFolders),
+                MOCK_DAO_SUBPACKAGE);
     }
 
     /**
@@ -1233,7 +1237,7 @@ public class PackageUtils
     {
         return
             retrieveTestPackage(
-                    retrieveMockDAOPackage(packageName), subFolders);
+                retrieveMockDAOPackage(packageName), subFolders);
     }
 
     /**
@@ -1253,9 +1257,9 @@ public class PackageUtils
     {
         return
             retrieveMockDAOFolder(
-                    retrieveTestFolder(parentFolder, useSubFolders),
-                    packageName,
-                    useSubFolders);
+                retrieveTestFolder(parentFolder, useSubFolders),
+                packageName,
+                useSubFolders);
     }
 
     /**
@@ -1268,8 +1272,8 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                    retrieveBaseDAOPackage(packageName),
-                    XML_DAO_SUBPACKAGE);
+                retrieveBaseDAOPackage(packageName),
+                XML_DAO_SUBPACKAGE);
     }
 
     /**
@@ -1336,7 +1340,7 @@ public class PackageUtils
     {
         return
             retrieveTestPackage(
-                    retrieveXMLDAOPackage(packageName), subFolders);
+                retrieveXMLDAOPackage(packageName), subFolders);
     }
 
     /**
@@ -1356,9 +1360,9 @@ public class PackageUtils
     {
         return
             retrieveXMLDAOFolder(
-                    retrieveTestFolder(parentFolder, useSubFolders),
-                    packageName,
-                    useSubFolders);
+                retrieveTestFolder(parentFolder, useSubFolders),
+                packageName,
+                useSubFolders);
     }
 
     /**
@@ -1391,7 +1395,7 @@ public class PackageUtils
     {
         return
             retrieveXMLDAOFolder(
-                    parentFolder, packageName, useSubFolders);
+                parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -1409,10 +1413,10 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsPackage(
-                    packageName,
-                    engineName,
-                    tableName,
-                    StringUtils.getInstance());
+                packageName,
+                engineName,
+                tableName,
+                StringUtils.getInstance());
     }
 
     /**
@@ -1432,11 +1436,11 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                    retrieveDAOPackage(
-                            packageName, engineName),
-                    stringUtils.capitalize(
-                            tableName.toLowerCase(Locale.US),
-                            '_').toLowerCase(Locale.US));
+                retrieveDAOPackage(
+                    packageName, engineName),
+                stringUtils.capitalize(
+                    tableName.toLowerCase(Locale.US),
+                    '_').toLowerCase(Locale.US));
     }
 
     /**
@@ -1458,12 +1462,12 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsFolder(
-                    parentFolder,
-                    packageName,
-                    engineName,
-                    tableName,
-                    useSubFolders,
-                    StringUtils.getInstance());
+                parentFolder,
+                packageName,
+                engineName,
+                tableName,
+                useSubFolders,
+                StringUtils.getInstance());
     }
 
     /**
@@ -1487,11 +1491,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                    retrieveDAOFolder(
-                            parentFolder, packageName, engineName, useSubFolders),
-                    stringUtils.capitalize(
-                            tableName.toLowerCase(Locale.US),
-                            '_').toLowerCase(Locale.US));
+                retrieveDAOFolder(
+                    parentFolder, packageName, engineName, useSubFolders),
+                stringUtils.capitalize(
+                    tableName.toLowerCase(Locale.US),
+                    '_').toLowerCase(Locale.US));
     }
 
     /**
@@ -1540,7 +1544,7 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsPackage(
-                    packageName, engineName, tableName);
+                packageName, engineName, tableName);
     }
 
     /**
@@ -1600,7 +1604,27 @@ public class PackageUtils
     {
         return
             retrieveDAOFolder(
-                    parentFolder, packageName, engineName, useSubFolders);
+                parentFolder, packageName, engineName, useSubFolders);
+    }
+
+    /**
+     * Retrieves the folder for the ResultSetExtractor classes.
+     * @param projectOutputDir the parent folder.
+     * @param projectPackage the original package.
+     * @param engineName the engine.
+     * @param useSubfolders whether to use sub folders.
+     * @return the folder for the associated pointers.
+     */
+    @NotNull
+    public File retrieveCustomRowMapperFolder(
+        final File projectOutputDir,
+        final String projectPackage,
+        final String engineName,
+        final boolean useSubfolders)
+    {
+        return
+            retrieveCustomResultSetExtractorFolder(
+                projectOutputDir, projectPackage, engineName, useSubfolders);
     }
 
     /**
@@ -2036,7 +2060,7 @@ public class PackageUtils
 
     /**
      * Retrieves the package name for
-     * {@link org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplate}
+     * {@code org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplate}
      * class.
      * @param packageName the original package.
      * @return the package for such class.
@@ -2050,7 +2074,7 @@ public class PackageUtils
 
     /**
      * Retrieves the package name for
-     * {@link org.acmsl.queryj.templates.dao.JdbcTemplateTemplate}
+     * {@code org.acmsl.queryj.templates.dao.JdbcTemplateTemplate}
      * class.
      * @param packageName the original package.
      * @return the package for such class.
@@ -2064,7 +2088,7 @@ public class PackageUtils
 
     /**
      * Retrieves the package name for
-     * {@link org.acmsl.queryj.templates.dao.ThreadLocalBagTemplate}
+     * {@code org.acmsl.queryj.templates.dao.ThreadLocalBagTemplate}
      * class.
      * @param packageName the original package.
      * @return the package for such class.
@@ -2086,9 +2110,9 @@ public class PackageUtils
     {
         @Nullable String result = null;
 
-        String[] t_astrPieces = split(fqdn, ".");
+        @NotNull final String[] t_astrPieces = split(fqdn, ".");
 
-        int t_iCount = t_astrPieces.length;
+        final int t_iCount = t_astrPieces.length;
 
         if  (t_iCount > 0)
         {

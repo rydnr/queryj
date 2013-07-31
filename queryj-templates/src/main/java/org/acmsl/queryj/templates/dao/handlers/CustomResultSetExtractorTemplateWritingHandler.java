@@ -33,18 +33,21 @@
 package org.acmsl.queryj.templates.dao.handlers;
 
 /*
+ * Importing some QueryJ-API classes.
+ */
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.handlers.BasePerCustomResultTemplateWritingHandler;
+import org.acmsl.queryj.api.TemplateMappingManager;
+
+/*
  * Importing some project classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.api.PerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.dao.CustomRowMapperTemplate;
-import org.acmsl.queryj.templates.dao.CustomRowMapperTemplateGenerator;
-import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplate;
 import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateGenerator;
-import org.acmsl.queryj.api.handlers.BasePerCustomResultTemplateWritingHandler;
-import org.acmsl.queryj.api.TemplateMappingManager;
+import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing some JetBrains annotations.
@@ -68,27 +71,26 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CustomRowMapperTemplateWritingHandler
-    extends  BasePerCustomResultTemplateWritingHandler
-                 <CustomRowMapperTemplate,
-                     PerCustomResultTemplateContext,
-                     CustomRowMapperTemplateGenerator>
+public class CustomResultSetExtractorTemplateWritingHandler
+    extends BasePerCustomResultTemplateWritingHandler<CustomResultSetExtractorTemplate,
+                         PerCustomResultTemplateContext,
+                         CustomResultSetExtractorTemplateGenerator>
 {
     /**
      * Creates a {@link CustomRowMapperTemplateWritingHandler}
      * instance.
      */
-    public CustomRowMapperTemplateWritingHandler() {}
+    public CustomResultSetExtractorTemplateWritingHandler() {}
 
     /**
      * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected CustomRowMapperTemplateGenerator retrieveTemplateGenerator(
+    protected CustomResultSetExtractorTemplateGenerator retrieveTemplateGenerator(
         final boolean caching, final int threadCount)
     {
-        return new CustomRowMapperTemplateGenerator(caching, threadCount);
+        return new CustomResultSetExtractorTemplateGenerator(caching, threadCount);
     }
 
     /**
@@ -99,13 +101,14 @@ public class CustomRowMapperTemplateWritingHandler
     @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    protected List<CustomRowMapperTemplate> retrieveTemplates(
+    protected List<CustomResultSetExtractorTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (List<CustomRowMapperTemplate>)
+            (List<CustomResultSetExtractorTemplate>)
                 parameters.get(
-                    TemplateMappingManager.CUSTOM_ROW_MAPPER_TEMPLATES);
+                    TemplateMappingManager
+                        .CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES);
     }
 
     /**
@@ -139,7 +142,7 @@ public class CustomRowMapperTemplateWritingHandler
      * @param projectOutputDir the project output dir.
      * @param projectPackage the project package.
      * @param useSubfolders whether to use subfolders or not.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return such folder.
      */
     @NotNull
@@ -151,7 +154,7 @@ public class CustomRowMapperTemplateWritingHandler
         @NotNull final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveCustomRowMapperFolder(
+            packageUtils.retrieveCustomResultSetExtractorFolder(
                 projectOutputDir,
                 projectPackage,
                 engineName,

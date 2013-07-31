@@ -23,14 +23,21 @@
 
  ******************************************************************************
  *
- * Filename: CustomRowMapperTemplateBuildHandler.java
+ * Filename: CustomResultSetExtractorBuildHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a ResultSetExtractor template.
+ * Description: Builds a custom ResultSetExtractor template.
  *
  */
 package org.acmsl.queryj.templates.dao.handlers;
+
+/*
+ * Importing QueryJ-API classes.
+ */
+import org.acmsl.queryj.api.handlers.BasePerCustomResultTemplateBuildHandler;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some project classes.
@@ -39,12 +46,9 @@ import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.api.PerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.dao.CustomRowMapperTemplateFactory;
+import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplate;
+import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.templates.dao.CustomRowMapperTemplate;
-import org.acmsl.queryj.api.handlers.BasePerCustomResultTemplateBuildHandler;
-import org.acmsl.queryj.api.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -65,18 +69,17 @@ import java.util.Map;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Builds {@link CustomRowMapperTemplate} templates.
+ * Builds {@link CustomResultSetExtractorTemplate} templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CustomRowMapperTemplateBuildHandler
-    extends  BasePerCustomResultTemplateBuildHandler
-                 <CustomRowMapperTemplate, CustomRowMapperTemplateFactory>
+public class CustomResultSetExtractorTemplateBuildHandler
+    extends BasePerCustomResultTemplateBuildHandler<CustomResultSetExtractorTemplate, CustomResultSetExtractorTemplateFactory>
 {
     /**
-     * Creates a CustomRowMapperTemplateBuildHandler.
+     * Creates a CustomResultSetExtractorTemplateBuildHandler.
      */
-    public CustomRowMapperTemplateBuildHandler() {}
+    public CustomResultSetExtractorTemplateBuildHandler() {}
 
     /**
      * Checks whether the generation is allowed for given result.
@@ -112,9 +115,9 @@ public class CustomRowMapperTemplateBuildHandler
      */
     @NotNull
     @Override
-    protected CustomRowMapperTemplateFactory retrieveTemplateFactory()
+    protected CustomResultSetExtractorTemplateFactory retrieveTemplateFactory()
     {
-        return CustomRowMapperTemplateFactory.getInstance();
+        return CustomResultSetExtractorTemplateFactory.getInstance();
     }
 
     /**
@@ -141,13 +144,13 @@ public class CustomRowMapperTemplateBuildHandler
     @Override
     @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        @NotNull final List<CustomRowMapperTemplate> templates,
-        @NotNull final Map<String, List<CustomRowMapperTemplate>>  parameters)
+        @NotNull final List<CustomResultSetExtractorTemplate> templates,
+        @NotNull final Map<String, List<CustomResultSetExtractorTemplate>>  parameters)
     {
-        @NotNull final List<CustomRowMapperTemplate> t_lFilteredTemplates =
-            new ArrayList<CustomRowMapperTemplate>();
+        @NotNull final List<CustomResultSetExtractorTemplate> t_lFilteredTemplates =
+            new ArrayList<CustomResultSetExtractorTemplate>();
         
-        for  (final CustomRowMapperTemplate t_Template : templates)
+        for  (final CustomResultSetExtractorTemplate t_Template : templates)
         {
             if  (matchesSqlFilter(t_Template.getTemplateContext()))
             {

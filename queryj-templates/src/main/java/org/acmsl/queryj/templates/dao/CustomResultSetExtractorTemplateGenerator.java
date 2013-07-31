@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: CustomRowMapperTemplateGenerator.java
+ * Filename: CustomResultSetExtractorTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate custom RowMapper templates.
+ * Description: Is able to generate custom ResultSetExtractor templates.
  *
  */
 package org.acmsl.queryj.templates.dao;
@@ -57,20 +57,20 @@ import org.checkthread.annotations.ThreadSafe;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Is able to generate custom RowMapperExtractor templates.
+ * Is able to generate custom ResultSetExtractor templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CustomRowMapperTemplateGenerator
-    extends  AbstractTemplateGenerator<CustomRowMapperTemplate, PerCustomResultTemplateContext>
-    implements PerCustomResultTemplateGenerator<CustomRowMapperTemplate, PerCustomResultTemplateContext>
+public class CustomResultSetExtractorTemplateGenerator
+    extends  AbstractTemplateGenerator<CustomResultSetExtractorTemplate, PerCustomResultTemplateContext>
+    implements PerCustomResultTemplateGenerator<CustomResultSetExtractorTemplate, PerCustomResultTemplateContext>
 {
     /**
-     * Creates a new {@link CustomRowMapperTemplateGenerator} with given settings.
+     * Creates a new {@link CustomResultSetExtractorTemplateGenerator} with given settings.
      * @param caching whether to enable caching.
      * @param threadCount the number of threads.
      */
-    public CustomRowMapperTemplateGenerator(final boolean caching, final int threadCount)
+    public CustomResultSetExtractorTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
     }
@@ -83,7 +83,7 @@ public class CustomRowMapperTemplateGenerator
     @Override
     public DecoratorFactory getDecoratorFactory()
     {
-        return CustomRowMapperDecoratorFactory.getInstance();
+        return CustomResultSetExtractorDecoratorFactory.getInstance();
     }
 
     /**
