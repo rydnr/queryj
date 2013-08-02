@@ -57,5 +57,5 @@ public interface DefaultThemeConstants
     /**
      * The placeholder context name within the template itself.
      */
-    public static final String CONTEXT = "c";
+    public static final String CONTEXT = "C";
 }

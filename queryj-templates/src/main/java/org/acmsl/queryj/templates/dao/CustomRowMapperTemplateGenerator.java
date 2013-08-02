@@ -119,7 +119,7 @@ public class CustomRowMapperTemplateGenerator
                             '.'),
                         '_'),
                     '-')
-                + "Extractor.java";
+                + "RowMapper.java";
         }
         else
         {

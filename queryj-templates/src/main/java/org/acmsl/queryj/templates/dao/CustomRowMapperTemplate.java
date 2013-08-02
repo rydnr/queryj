@@ -97,6 +97,6 @@ public class CustomRowMapperTemplate
     @NotNull
     public String getTemplateName()
     {
-        return "CustomRowMapperExtractor";
+        return "CustomRowMapper";
     }
 }

@@ -16,10 +16,11 @@ Feature: Per-custom-results templates
     Then the generated per-custom-result <output> file compiles successfully
 
     Examples:
-      | template                 | output                                          |
-      | RowMapper                | UserReportRowMapper.java                        |
-#      | CustomBaseValueObject    | AbstractUserReport.java                         |
-#      | CustomValueObject        | UserReport.java                                 |
-#      | CustomValueObjectFactory | UserReportFactory.java                          |
-#      | CustomValueObjectImpl    | UserReportImpl.java                             |
+      | template                 | output                            |
+      | CustomRowMapper          | UserReportRowMapper.java          |
+#      | CustomResultSetExtractor | UserReportResultSetExtractor.java |
+#      | CustomBaseValueObject    | AbstractUserReport.java           |
+#      | CustomValueObject        | UserReport.java                   |
+#      | CustomValueObjectFactory | UserReportFactory.java            |
+#      | CustomValueObjectImpl    | UserReportImpl.java               |
 

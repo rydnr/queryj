@@ -40,6 +40,22 @@ package cucumber.templates;
  */
 import cucumber.templates.sql.CucumberSqlPropertyDAO;
 import cucumber.templates.sql.CucumberSqlResultDAO;
+import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateFactory;
+import org.acmsl.queryj.templates.dao.CustomRowMapperTemplateFactory;
+import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateGenerator;
+import org.acmsl.queryj.templates.dao.CustomRowMapperTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateFactory;
+import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.CustomValueObjectFactoryTemplateFactory;
+import org.acmsl.queryj.templates.valueobject.CustomValueObjectFactoryTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.CustomValueObjectImplTemplateFactory;
+import org.acmsl.queryj.templates.valueobject.CustomValueObjectImplTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.CustomValueObjectTemplateFactory;
+import org.acmsl.queryj.templates.valueobject.CustomValueObjectTemplateGenerator;
+
+/*
+ * Importing QueryJ-Core classes.
+ */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
@@ -49,22 +65,16 @@ import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
 import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.SqlPropertyDAO;
+import org.acmsl.queryj.metadata.SqlResultDAO;
+
+/*
+ * Importing QueryJ-API classes.
+ */
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.PerCustomResultTemplate;
 import org.acmsl.queryj.api.PerCustomResultTemplateFactory;
 import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
-import org.acmsl.queryj.metadata.SqlPropertyDAO;
-import org.acmsl.queryj.metadata.SqlResultDAO;
-import org.acmsl.queryj.templates.dao.CustomRowMapperTemplateFactory;
-import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateGenerator;
-import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateFactory;
-import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateGenerator;
-import org.acmsl.queryj.templates.valueobject.CustomValueObjectFactoryTemplateFactory;
-import org.acmsl.queryj.templates.valueobject.CustomValueObjectFactoryTemplateGenerator;
-import org.acmsl.queryj.templates.valueobject.CustomValueObjectImplTemplateFactory;
-import org.acmsl.queryj.templates.valueobject.CustomValueObjectImplTemplateGenerator;
-import org.acmsl.queryj.templates.valueobject.CustomValueObjectTemplateFactory;
-import org.acmsl.queryj.templates.valueobject.CustomValueObjectTemplateGenerator;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing ACM-SL Commons classes.
@@ -118,12 +128,12 @@ public class PerCustomResultTemplatesTest
     /**
      * The results.
      */
-    private Map<String, Result> m__mResults;
+    @NotNull private Map<String, Result> m__mResults;
 
     /**
      * The properties.
      */
-    private Map<String, Property> m__mProperties;
+    @NotNull private Map<String, Property> m__mProperties;
 
     /**
      * Creates an instance.
@@ -134,7 +144,9 @@ public class PerCustomResultTemplatesTest
         immutableSetProperties(new HashMap<String, Property>());
 
         GENERATOR_MAPPINGS.put("CustomResultSetExtractor", new CustomResultSetExtractorTemplateGenerator(false, 1));
-        FACTORY_MAPPINGS.put("CustomResultSetExtractor", CustomRowMapperTemplateFactory.getInstance());
+        FACTORY_MAPPINGS.put("CustomResultSetExtractor", CustomResultSetExtractorTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("CustomRowMapper", new CustomRowMapperTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("CustomRowMapper", CustomRowMapperTemplateFactory.getInstance());
         // vo
         GENERATOR_MAPPINGS.put("CustomBaseValueObject", new CustomBaseValueObjectTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("CustomBaseValueObject", CustomBaseValueObjectTemplateFactory.getInstance());
