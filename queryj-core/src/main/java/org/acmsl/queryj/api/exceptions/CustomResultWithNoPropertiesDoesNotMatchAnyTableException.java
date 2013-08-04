@@ -23,57 +23,38 @@
 
  ******************************************************************************
  *
- * Filename: CustomResultWithNoPropertiesException.java
+ * Filename: CustomResultWithNoPropertiesDoesNotMatchAnyTableException.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Represents the error when the Result used by a Sql, contains no
- *              properties.
+ * Description: Exception to represent a custom result with no properties
+ *              does not match any table either.
  *
- * Date: 6/12/13
- * Time: 9:56 PM
+ * Date: 2018/08/03
+ * Time: 18:15
  *
  */
 package org.acmsl.queryj.api.exceptions;
 
-/*
- * Importing project classes.
- */
 import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.customsql.Sql;
-
-/*
- * Importing some JetBrains annotations.
- */
 import org.jetbrains.annotations.NotNull;
 
-/*
- * Importing checkthread.org annotations.
- */
-import org.checkthread.annotations.ThreadSafe;
-
 /**
- * Represents the error when the {@link Result} used by a {@link Sql}, contains no
- * {@link org.acmsl.queryj.customsql.Property properties}.
+ * Exception to represent a custom result with no properties
+ * does not match any table either.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/12
+ * @since 2013/08/03
  */
-@ThreadSafe
-public class CustomResultWithNoPropertiesException
-    extends QueryJBuildException
+public class CustomResultWithNoPropertiesDoesNotMatchAnyTableException
+    extends QueryJNonCheckedException
 {
-    private static final long serialVersionUID = 5320900310750401486L;
-
     /**
-     * Creates an instance, indicating the {@link Result}, used by given {@link Sql}, contains no
-     * {@link org.acmsl.queryj.customsql.Property properties}.
-     * @param result the custom result.
-     * @param sql the Sql.
+     * Creates the exception with given custom result.
+     * @param customResult the custom result.
      */
-    public CustomResultWithNoPropertiesException(@NotNull final Result result, @NotNull final Sql sql)
+    public CustomResultWithNoPropertiesDoesNotMatchAnyTableException(
+        @NotNull final Result customResult)
     {
-        super(
-            "custom-result.with.no.properties",
-            new Object[] { result.getId(), sql.getId() });
+        super("")
     }
 }

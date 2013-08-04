@@ -100,7 +100,7 @@ public interface ResultDecorator
      * Retrieves the value-object name.
      * @return such value.
      */
-    @Nullable
+    @NotNull
     String getVoName();
 
 }

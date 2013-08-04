@@ -36,6 +36,7 @@ package org.acmsl.queryj.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.SingularPluralFormConverter;
+import org.acmsl.queryj.api.exceptions.CustomResultWithNoPropertiesException;
 import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
@@ -662,8 +663,8 @@ public abstract class AbstractResultDecorator
      * Retrieves the value-object name.
      * @return such value.
      */
-    @SuppressWarnings("unused")
-    @Nullable
+    @NotNull
+    @Override
     public String getVoName()
     {
         return getVoName(getResult(), getMetadataManager(), getCustomSqlProvider(), CustomResultUtils.getInstance());
@@ -676,7 +677,7 @@ public abstract class AbstractResultDecorator
      * @param customResultUtils the {@link CustomResultUtils} instance.
      * @return such value.
      */
-    @Nullable
+    @NotNull
     protected String getVoName(
         @NotNull final Result customResult,
         @NotNull final MetadataManager metadataManager,
@@ -687,16 +688,21 @@ public abstract class AbstractResultDecorator
 
         if (customResult.getPropertyRefs().size() == 0)
         {
-            String t_strTable = customResultUtils.retrieveTable(customResult, customSqlProvider, metadataManager);
+            @Nullable final String t_strTable =
+                customResultUtils.retrieveTable(
+                    customResult, customSqlProvider, metadataManager);
 
             if (t_strTable != null)
             {
-                result = capitalize(getSingular(t_strTable.toLowerCase(Locale.US)), DecorationUtils.getInstance());
+                result =
+                    capitalize(
+                        getSingular(t_strTable.toLowerCase(Locale.US)),
+                        DecorationUtils.getInstance());
             }
         }
         else if (result != null)
         {
-            String[] tokens = result.split("\\.");
+            @NotNull final String[] tokens = result.split("\\.");
 
             if (tokens.length > 0)
             {
@@ -704,6 +710,10 @@ public abstract class AbstractResultDecorator
             }
         }
 
+        if (result == null)
+        {
+            throw new CustomResultWithNoPropertiesException(customResult);
+        }
         return result;
     }
 

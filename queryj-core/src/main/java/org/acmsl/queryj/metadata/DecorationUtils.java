@@ -390,6 +390,39 @@ public class DecorationUtils
     }
 
     /**
+     * Retrieves the capitalized version of given value,
+     * using several characters as predefined separators.
+     * @param value the value.
+     * @return the capitalized value.
+     */
+    @NotNull
+    public String standardCapitalize(@NotNull final String value)
+    {
+        return standardCapitalize(value, StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the capitalized version of given value,
+     * using several characters as predefined separators.
+     * @param value the value.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return the capitalized value.
+     */
+    @NotNull
+    protected String standardCapitalize(
+        @NotNull final String value, @NotNull final StringUtils stringUtils)
+    {
+        return
+            stringUtils.capitalize(
+                stringUtils.capitalize(
+                    stringUtils.capitalize(
+                        value,
+                    '.'),
+                '_'),
+            '-');
+    }
+
+    /**
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */

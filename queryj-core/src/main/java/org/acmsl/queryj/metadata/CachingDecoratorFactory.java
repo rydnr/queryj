@@ -142,6 +142,7 @@ public class CachingDecoratorFactory
      * @return the decorated result for the concrete template.
      */
     @NotNull
+    @Override
     public ResultDecorator createDecorator(
         @NotNull final Result result,
         @NotNull final CustomSqlProvider customSqlProvider,
@@ -160,6 +161,7 @@ public class CachingDecoratorFactory
      * @return the decorated sql for the concrete template.
      */
     @NotNull
+    @Override
     public SqlDecorator createDecorator(
         @NotNull final Sql sql,
         @NotNull final CustomSqlProvider customSqlProvider,
@@ -180,6 +182,7 @@ public class CachingDecoratorFactory
      * @return the decorated attribute for the concrete template.
      */
     @NotNull
+    @Override
     public ParameterDecorator createDecorator(
         @NotNull final Parameter parameter, @NotNull final MetadataManager metadataManager)
     {
@@ -197,6 +200,7 @@ public class CachingDecoratorFactory
      * @return the decorated property for the concrete template.
      */
     @NotNull
+    @Override
     public PropertyDecorator createDecorator(
         @NotNull final Property property,
         @NotNull final Result result,
@@ -240,12 +244,13 @@ public class CachingDecoratorFactory
      * @return the attribute list
      */
     @NotNull
+    @Override
     public List<Attribute> decorateAttributes(
         @NotNull final String table, @NotNull final MetadataManager metadataManager)
     {
         @Nullable List<Attribute> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(table);
+        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(table);
 
         if (t_Table != null)
         {
@@ -267,12 +272,13 @@ public class CachingDecoratorFactory
      * @return the decorated version of the attribute list.
      */
     @NotNull
+    @Override
     public List<Attribute> decorateAttributes(
         @NotNull final List<Attribute> attributes, @NotNull final MetadataManager metadataManager)
     {
         @Nullable List<Attribute> result = null;
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {
@@ -301,18 +307,19 @@ public class CachingDecoratorFactory
      * @return the primary key.
      */
     @NotNull
+    @Override
     public List<Attribute> decoratePrimaryKey(
         @NotNull final String table, @NotNull final MetadataManager metadataManager)
     {
         @Nullable List<Attribute> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(table);
+        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(table);
 
         if (t_Table != null)
         {
-            List<Attribute> t_lPrimaryKey = t_Table.getPrimaryKey();
+            @NotNull final List<Attribute> t_lPrimaryKey = t_Table.getPrimaryKey();
 
-            for (Attribute t_Attribute : t_lPrimaryKey)
+            for (@Nullable final Attribute t_Attribute : t_lPrimaryKey)
             {
                 if (t_Attribute != null)
                 {
@@ -336,7 +343,6 @@ public class CachingDecoratorFactory
 
     /**
      * Creates a <code>ForeignKeyDecorator</code>.
-     *
      * @param sourceTableName the name of the source table.
      * @param attributes the foreign key attributes.
      * @param targetTableName the name of the target table.
@@ -346,6 +352,7 @@ public class CachingDecoratorFactory
      * @return the decorator instance.
      */
     @NotNull
+    @Override
     public ForeignKeyDecorator createDecorator(
         @NotNull final String sourceTableName,
         @NotNull final List<Attribute> attributes,
@@ -370,6 +377,8 @@ public class CachingDecoratorFactory
      * contained in this instance.
      * @return such information.
      */
+    @Override
+    @NotNull
     public String toString()
     {
         return
@@ -382,6 +391,7 @@ public class CachingDecoratorFactory
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -395,7 +405,8 @@ public class CachingDecoratorFactory
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    @Override
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 
@@ -417,7 +428,7 @@ public class CachingDecoratorFactory
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    public int compareTo(@Nullable final Object object)
         throws  ClassCastException
     {
         int result = 1;

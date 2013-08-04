@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -24,40 +23,52 @@
 
  ******************************************************************************
  *
- * Filename: InvalidTemplateException.java
+ * Filename: QueryJNonCheckedException.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Triggered whenever an invalid template is generated.
+ * Description: Non-checked QueryJ exceptions.
+ *
+ * Date: 2013/08/03
+ * Time: 18:25
  *
  */
 package org.acmsl.queryj.api.exceptions;
 
 /*
- * Importing JetBrains annotations.
+ * Importing ACM-SL Commons classes.
  */
-import org.jetbrains.annotations.NotNull;
+import org.acmsl.commons.NonCheckedException;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+
 /**
- * Triggered whenever an invalid template is generated.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Non-checked QueryJ exceptions.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @since 2013/08/03
  */
 @ThreadSafe
-public abstract class InvalidTemplateException
-    extends  QueryJNonCheckedException
+public class QueryJNonCheckedException
+    extends NonCheckedException
 {
+    private static final long serialVersionUID = -8100092770309110856L;
+
     /**
-     * Creates a InvalidTemplateException with given message.
+     * Creates a QueryJNonCheckedException with given message.
      * @param messageKey the key to build the exception message.
      * @param params the parameters to build the exception message.
      */
     @SuppressWarnings("unused")
-    public InvalidTemplateException(
+    public QueryJNonCheckedException(
         @NotNull final String messageKey,
         @NotNull final Object[] params)
     {
@@ -70,11 +81,32 @@ public abstract class InvalidTemplateException
      * @param params the parameters to build the exception message.
      * @param cause the error cause.
      */
-    public InvalidTemplateException(
+    public QueryJNonCheckedException(
         @NotNull final String messageKey,
         @NotNull final Object[] params,
         @NotNull final Throwable cause)
     {
         super(messageKey, params, cause);
     }
+
+    /**
+     * Retrieves the exceptions bundle.
+     * @return such bundle name.
+     */
+    @NotNull
+    protected String retrieveExceptionsBundleName()
+    {
+        return "queryj-exceptions";
+    }
+
+    /*
+     * Retrieves the exceptions system property.
+     * @return such bundle name.
+     */
+    @NotNull
+    protected String retrieveExceptionsBundleProperty()
+    {
+        return "org.acmsl.queryj.exceptions";
+    }
+
 }
