@@ -45,6 +45,7 @@ import org.acmsl.queryj.templates.antlr.JavaParser.ClassDeclarationContext;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Visits classDeclaration rules in Java.g4 grammar.
@@ -55,6 +56,51 @@ public class JavaRootClassNameVisitor
     extends JavaBaseVisitor<String>
 {
     /**
+     * The name of the root class in the file.
+     */
+    @Nullable
+    private String m__strRootClass;
+
+    /**
+     * Specifies the root class.
+     * @param value the root class name.
+     */
+    protected final void immutableSetRoocClass(@NotNull final String value)
+    {
+        this.m__strRootClass = value;
+    }
+
+    /**
+     * Specifies the name of the root class.
+     * @param value the root class name.
+     */
+    @SuppressWarnings("unused")
+    protected void setRootClass(@NotNull final String value)
+    {
+        immutableSetRoocClass(value);
+    }
+
+    /**
+     * Retrieves the name of the root class.
+     * @return such name.
+     */
+    @Nullable
+    protected final String immutableGetRootClass()
+    {
+        return this.m__strRootClass;
+    }
+
+    /**
+     * Retrieves the name of the root class.
+     * @return such name.
+     */
+    @Nullable
+    public String getRootClass()
+    {
+        return immutableGetRootClass();
+    }
+
+    /**
      * Visits the parser tree within the <pre>packageDeclaration</pre> rule.
      * @param context the parse context.
      * @return the package name.
@@ -63,6 +109,8 @@ public class JavaRootClassNameVisitor
     @Override
     public String visitClassDeclaration(@NotNull final ClassDeclarationContext context)
     {
-        return context.getText();
+        setRootClass(context.getChild(1).getText());
+
+        return super.visitClassDeclaration(context);
     }
 }

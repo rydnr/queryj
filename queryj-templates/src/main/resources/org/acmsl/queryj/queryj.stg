@@ -58,10 +58,12 @@ typeInitMap ::= [
   "mockSubpackageName":"mock"
 ]
 
-package_declaration(package) ::= <<
-<! Generates the package declaration !>
-<! @param package the package name !>
-package <package>;
+package_declaration(p) ::= <<
+<!
+  Generates the package declaration
+  @param package the package name
+!>
+package <p>;
 >>
 
 attribute_declaration(attr) ::= <<

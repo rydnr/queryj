@@ -102,5 +102,4 @@ public interface ResultDecorator
      */
     @NotNull
     String getVoName();
-
 }

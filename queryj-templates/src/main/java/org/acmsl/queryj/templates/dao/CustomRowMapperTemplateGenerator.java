@@ -33,10 +33,11 @@
 package org.acmsl.queryj.templates.dao;
 
 /*
- * Importing some project-specific classes.
+ * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
 import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
@@ -44,7 +45,6 @@ import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.ResultDecorator;
 import org.jetbrains.annotations.NotNull;
 
 /*

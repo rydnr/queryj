@@ -42,8 +42,19 @@ notnull() ::= <<
 <if(notnull_annotations_enabled)> @NotNull <else> <endif>
 >>
 
+notnull_arg_single_line() ::= <<
+<! Conditionally add @NotNull annotations. !>
+<if(notnull_annotations_enabled)>@NotNull <endif>
+>>
+
+notnull_method() ::= <<
+<! Conditionally add @NotNull annotations. !>
+<if(notnull_annotations_enabled)> @NotNull <else>
+<endif>
+>>
+
 nullable() ::= <<
-<if(notnull_annotations_enabled)> @Nullable <else> <endif>
+<if(notnull_annotations_enabled)> @Nullable <else><endif>
 >>
 
 type_checker(attribute) ::= <<

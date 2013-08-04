@@ -413,13 +413,15 @@ public abstract class AbstractTemplatesTest<G, F>
                     Assert.fail("Parser error: " + invalidClass.getMessage());
                 }
 
-                @NotNull final JavaVisitor<String> packageVisitor = new JavaPackageVisitor();
+                @NotNull final JavaPackageVisitor packageVisitor = new JavaPackageVisitor();
 
                 @Nullable String packageName = null;
 
                 try
                 {
-                    packageName = packageVisitor.visit(tree);
+                    packageVisitor.visit(tree);
+
+                    packageName = packageVisitor.getPackageName();
                 }
                 catch (@NotNull final Throwable invalidClass)
                 {
@@ -433,13 +435,15 @@ public abstract class AbstractTemplatesTest<G, F>
                     "com.foo.bar.dao",
                     packageName);
 
-                @NotNull final JavaVisitor<String> rootClassVisitor = new JavaRootClassNameVisitor();
+                @NotNull final JavaRootClassNameVisitor rootClassVisitor = new JavaRootClassNameVisitor();
 
                 @Nullable String rootClass = null;
 
                 try
                 {
-                    rootClass = rootClassVisitor.visit(tree);
+                    rootClassVisitor.visit(tree);
+
+                    rootClass = rootClassVisitor.getRootClass();
                 }
                 catch (@NotNull final Throwable invalidClass)
                 {

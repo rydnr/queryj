@@ -20,8 +20,8 @@
     <orderEntry type="library" name="Maven: com.jetbrains:annotations:11.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant:1.8.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.8.2" level="project" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr4:4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr4-runtime:4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr4:4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr4-runtime:4.1" level="project" />
     <orderEntry type="library" name="Maven: org.abego.treelayout:org.abego.treelayout.core:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.antlr:ST4:4.0.7" level="project" />
     <orderEntry type="library" name="Maven: commons-digester:commons-digester:1.8" level="project" />

@@ -37,7 +37,7 @@
 //
 group javadoc;
 
-java_header(year, description, timestamp) ::= <<
+java_header(year, description, timestamp, generation_timestamps_enabled) ::= <<
 <! Generates the copyright header. !>
 <! @param year the current year. !>
 <! @param description the description. !>
@@ -83,9 +83,8 @@ java_header(year, description, timestamp) ::= <<
  */
 >>
 
-class_common_javadoc(template) ::= <<
+class_common_javadoc(template, generation_timestamps_enabled, timestamp) ::= <<
  * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\> <if(template)>(<template>)<endif><if(generation_timestamps_enabled)>
-
  * @since <timestamp><endif>
 >>
 

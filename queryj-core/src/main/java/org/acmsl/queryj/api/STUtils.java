@@ -144,6 +144,7 @@ public class STUtils
         @NotNull final Charset charset)
     {
         @NotNull final STGroupFile result = new STGroupFile(path, charset.displayName());
+        STGroup.verbose = true;
 
 //        result.importTemplates(new STGroupDir("org/acmsl/queryj/dao", charset.displayName()));
 //        result.importTemplates(new STGroupDir("org/acmsl/queryj/vo", charset.displayName()));

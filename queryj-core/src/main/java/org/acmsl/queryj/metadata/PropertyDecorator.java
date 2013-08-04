@@ -75,4 +75,18 @@ public interface PropertyDecorator
      * @return such condition.
      */
     boolean isNumberSmallerThanInt();
+
+    /**
+     * Retrieves the Object type of the property.
+     * @return such information.
+     */
+    @NotNull
+    public String getObjectType();
+
+    /**
+     * Retrieves the Java type.
+     * @return such information.
+     */
+    @NotNull
+    public String getJavaType();
 }

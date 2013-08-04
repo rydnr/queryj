@@ -36,7 +36,8 @@ package org.acmsl.queryj.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.SingularPluralFormConverter;
-import org.acmsl.queryj.api.exceptions.CustomResultWithNoPropertiesException;
+import org.acmsl.queryj.api.exceptions.CustomResultWithNoPropertiesDoesNotMatchAnyTableException;
+import org.acmsl.queryj.api.exceptions.NullAttributeWhenConvertingToPropertyException;
 import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
@@ -430,11 +431,11 @@ public abstract class AbstractResultDecorator
         @NotNull final CustomResultUtils customResultUtils)
     {
 
-        @NotNull List<Property> result = new ArrayList<Property>();
+        @NotNull final List<Property> result = new ArrayList<Property>();
 
         @Nullable Property t_Property ;
 
-        for (@Nullable PropertyRef t_PropertyRef : propertyRefs)
+        for (@Nullable final PropertyRef t_PropertyRef : propertyRefs)
         {
             if  (t_PropertyRef != null)
             {
@@ -464,7 +465,7 @@ public abstract class AbstractResultDecorator
             }
             else
             {
-                @Nullable String t_strTable =
+                @Nullable final String t_strTable =
                     customResultUtils.retrieveTable(
                         resultElement,
                         customSqlProvider,
@@ -472,7 +473,8 @@ public abstract class AbstractResultDecorator
 
                 if  (t_strTable != null)
                 {
-                    for (@Nullable Attribute t_Attribute : metadataManager.getColumnDAO().findAllColumns(t_strTable))
+                    for (@Nullable final Attribute t_Attribute :
+                             metadataManager.getColumnDAO().findAllColumns(t_strTable))
                     {
                         if (t_Attribute != null)
                         {
@@ -636,7 +638,7 @@ public abstract class AbstractResultDecorator
     {
         @NotNull final List<Property> result = new ArrayList<Property>(attributes.size());
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {
@@ -651,6 +653,10 @@ public abstract class AbstractResultDecorator
                         sqlResult,
                         customSqlProvider,
                         metadataManager));
+            }
+            else
+            {
+                throw new NullAttributeWhenConvertingToPropertyException(sqlResult);
             }
         }
 
@@ -669,6 +675,7 @@ public abstract class AbstractResultDecorator
     {
         return getVoName(getResult(), getMetadataManager(), getCustomSqlProvider(), CustomResultUtils.getInstance());
     }
+
     /**
      * Retrieves the value-object name.
      * @param customResult the custom result.
@@ -712,8 +719,9 @@ public abstract class AbstractResultDecorator
 
         if (result == null)
         {
-            throw new CustomResultWithNoPropertiesException(customResult);
+            throw new CustomResultWithNoPropertiesDoesNotMatchAnyTableException(customResult);
         }
+
         return result;
     }
 
@@ -765,26 +773,19 @@ public abstract class AbstractResultDecorator
 
     /**
      * Provides a text representation of the information
-     * contained in this instance.
+     * contained in given instance.
      * @return such information.
      */
     @Override
     @NotNull
     public String toString()
     {
-        return toString(getResult());
-    }
-
-    /**
-     * Provides a text representation of the information
-     * contained in given instance.
-     * @param result the decorated result.
-     * @return such information.
-     */
-    @NotNull
-    protected String toString(final Result result)
-    {
-        return "" + result;
+        return "AbstractResultDecorator{" +
+               "customSqlProvider=" + m__CustomSqlProvider +
+               ",result=" + m__Result +
+               ",metadataManager=" + m__MetadataManager +
+               ",decoratorFactory=" + m__DecoratorFactory +
+               '}';
     }
 
     /**

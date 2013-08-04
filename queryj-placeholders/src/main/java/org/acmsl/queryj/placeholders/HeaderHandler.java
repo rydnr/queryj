@@ -50,6 +50,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Fills "header" placeholder in templates.
@@ -94,13 +95,19 @@ public class HeaderHandler
     @NotNull
     protected DecoratedString getValue(@NotNull final TemplateContext context)
     {
-        String header = context.getHeader();
+        @NotNull final String result;
+
+        @Nullable final String header = context.getHeader();
 
         if (header == null)
         {
-            header = "";
+            result = "";
+        }
+        else
+        {
+            result = header;
         }
 
-        return new DecoratedString(header);
+        return new DecoratedString(result);
     }
 }

@@ -27,6 +27,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <antlr4.visitor>true</antlr4.visitor>
     <antlr4.listener>true</antlr4.listener>
+    <version.antlr4>4.1</version.antlr4>
   </properties>
 
   <modules>
@@ -189,7 +190,7 @@
       <dependency>
         <groupId>org.antlr</groupId>
         <artifactId>antlr4</artifactId>
-        <version>4.0</version>
+        <version>${version.antlr4}</version>
         <exclusions>
           <exclusion>
             <groupId>org.antlr</groupId>
@@ -200,7 +201,7 @@
       <dependency>
         <groupId>org.antlr</groupId>
         <artifactId>antlr4-runtime</artifactId>
-        <version>4.0</version>
+        <version>${version.antlr4}</version>
       </dependency>
       <dependency>
         <groupId>org.antlr</groupId>
@@ -327,7 +328,7 @@
         <plugin>
           <groupId>org.antlr</groupId>
           <artifactId>antlr4-maven-plugin</artifactId>
-          <version>4.0</version>
+          <version>${version.antlr4}</version>
           <executions>
             <execution>
               <phase>generate-sources</phase>

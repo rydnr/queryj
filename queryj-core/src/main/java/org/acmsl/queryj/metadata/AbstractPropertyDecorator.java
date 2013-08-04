@@ -202,7 +202,7 @@ public abstract class AbstractPropertyDecorator
     protected String retrieveType(
         @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
-        int t_iJavaType = metadataTypeManager.getJavaType(type);
+        final int t_iJavaType = metadataTypeManager.getJavaType(type);
 
         // TODO: support boolean properties.
         return metadataTypeManager.getFieldType(t_iJavaType, isNullable(), false);
@@ -215,6 +215,7 @@ public abstract class AbstractPropertyDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
+    @Override
     public String getJavaType()
     {
         return getType();
@@ -225,6 +226,7 @@ public abstract class AbstractPropertyDecorator
      * @return such information.
      */
     @NotNull
+    @Override
     public String getObjectType()
     {
         return

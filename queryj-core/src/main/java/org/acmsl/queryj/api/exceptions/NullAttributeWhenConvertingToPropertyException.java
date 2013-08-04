@@ -23,15 +23,15 @@
 
  ******************************************************************************
  *
- * Filename: CustomResultWithNoPropertiesDoesNotMatchAnyTableException.java
+ * Filename: NullAttributeWhenConvertingToPropertyException.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Exception to represent a custom result with no properties
- *              does not match any table either.
+ * Description: A null attribute was found when converting attributes to
+ *              (implicit) properties.
  *
- * Date: 2018/08/03
- * Time: 18:15
+ * Date: 2013/08/04
+ * Time: 10:14
  *
  */
 package org.acmsl.queryj.api.exceptions;
@@ -52,27 +52,24 @@ import org.checkthread.annotations.ThreadSafe;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Exception to represent a custom result with no properties
- * does not match any table either.
+ * A null attribute was found when converting attributes to (implicit)
+ * properties.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/08/03
+ * @since 2013/08/04
  */
 @ThreadSafe
 @SuppressWarnings("unused")
-public class CustomResultWithNoPropertiesDoesNotMatchAnyTableException
+public class NullAttributeWhenConvertingToPropertyException
     extends QueryJNonCheckedException
 {
-    private static final long serialVersionUID = 5008246553975491960L;
+    private static final long serialVersionUID = -1912316398509090418L;
 
     /**
-     * Creates the exception with given custom result.
-     * @param customResult the custom result.
+     * Creates the exception with the {@link Result}.
+     * @param customResult the custom SQL result.
      */
-    public CustomResultWithNoPropertiesDoesNotMatchAnyTableException(
-        @NotNull final Result customResult)
+    public NullAttributeWhenConvertingToPropertyException(@NotNull final Result customResult)
     {
-        super(
-            "custom-result.with.no.properties.does.not.match.any.table",
-            new Object[] { customResult.getId() });
+        super("null.attribute.when.converting.to.property", new Object[] { customResult.getId() });
     }
 }

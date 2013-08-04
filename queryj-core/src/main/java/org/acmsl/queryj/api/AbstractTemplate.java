@@ -86,7 +86,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
-import java.util.Set;
 
 /**
  * Represents generic templates.
@@ -223,6 +222,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such context.
      */
     @NotNull
+    @Override
     public C getTemplateContext()
     {
         return m__TemplateContext;
@@ -241,6 +241,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Specifies the cached processed header.
      * @param header such value.
      */
+    @SuppressWarnings("unused")
     protected void setCachedProcessedHeader(@Nullable final String header)
     {
         immutableSetCachedProcessedHeader(header);
@@ -276,7 +277,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @SuppressWarnings("unused")
     public String getProcessedHeader(@NotNull final Map input)
     {
-        @Nullable String result = getCachedProcessedHeader();
+        @Nullable final String result = getCachedProcessedHeader();
         
         if  (result == null)
         {
@@ -310,6 +311,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such instance.
      */
     @Nullable
+    @Override
     public abstract STGroup retrieveGroup();
 
     /**
@@ -571,6 +573,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         /**
          * Runs the thread.
          */
+        @Override
         public void run()
         {
             traceANTLRClassLoadingIssues();

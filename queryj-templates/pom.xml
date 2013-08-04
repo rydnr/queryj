@@ -133,10 +133,6 @@
       <artifactId>antlr</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-    </dependency>
   </dependencies>
 
   <build>
@@ -150,8 +146,8 @@
         <configuration>
           <encoding>UTF-8</encoding>
           <sourceDirectory>${project.basedir}/src/test/antlr4</sourceDirectory>
-          <!--listener>true</listener-->
-          <visitor>true</visitor>
+          <listener>${antlr4.listener}</listener>
+          <visitor>${antlr4.visitor}</visitor>
           <outputDirectory>${project.build.directory}/generated-sources/org/acmsl/queryj/templates/antlr</outputDirectory>
         </configuration>
       </plugin>

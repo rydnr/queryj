@@ -45,6 +45,7 @@ import org.acmsl.queryj.templates.antlr.JavaParser.PackageDeclarationContext;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Visits packageDeclaration rules in Java.g4 grammar.
@@ -55,6 +56,49 @@ public class JavaPackageVisitor
     extends JavaBaseVisitor<String>
 {
     /**
+     * The package name.
+     */
+    private String m__strPackageName;
+
+    /**
+     * Specifies the package name.
+     * @param packageName the package name.
+     */
+    protected final void immutableSetPackageName(@NotNull final String packageName)
+    {
+        this.m__strPackageName = packageName;
+    }
+
+    /**
+     * Specifies the package name.
+     * @param packageName the package name.
+     */
+    protected void setPackageName(@NotNull final String packageName)
+    {
+        immutableSetPackageName(packageName);
+    }
+
+    /**
+     * Retrieves the package name.
+     * @return the package name.
+     */
+    @Nullable
+    protected String immutableGetPackageName()
+    {
+        return this.m__strPackageName;
+    }
+
+    /**
+     * Retrieves the package name.
+     * @return the package name.
+     */
+    @Nullable
+    public String getPackageName()
+    {
+        return immutableGetPackageName();
+    }
+
+    /**
      * Visits the parser tree within the <pre>packageDeclaration</pre> rule.
      * @param context the parse context.
      * @return the package name.
@@ -63,6 +107,8 @@ public class JavaPackageVisitor
     @Override
     public String visitPackageDeclaration(@NotNull final PackageDeclarationContext context)
     {
-        return context.getText();
+        setPackageName(context.getChild(1).getText());
+
+        return super.visitPackageDeclaration(context);
     }
 }
