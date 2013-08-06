@@ -149,5 +149,10 @@ public interface TemplateContext
      */
     boolean getDisableCheckthreadAnnotations();
 
-
+    /**
+     * Retrieves the file name.
+     * @return such instance.
+     */
+    @NotNull
+    String getFileName();
 }

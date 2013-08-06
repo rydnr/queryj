@@ -69,7 +69,7 @@ import org.checkthread.annotations.ThreadSafe;
 public class AttributesStatementSetterTemplateGenerator
     extends AbstractTemplateGenerator<AttributesStatementSetterTemplate, PerTableTemplateContext>
     implements PerTableTemplateGenerator<AttributesStatementSetterTemplate, PerTableTemplateContext>
-    {
+{
     /**
      * Creates a new {@link AttributesStatementSetterTemplateGenerator} with given settings.
      * @param caching whether to enable caching.

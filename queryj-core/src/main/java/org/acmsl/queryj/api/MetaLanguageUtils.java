@@ -77,9 +77,9 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /*
  * Importing checkthread.org annotations.
@@ -99,7 +99,7 @@ public class MetaLanguageUtils
     /**
      * The cache of parsers.
      */
-    private final Map PARSER_CACHE = new HashMap();
+    private final Map<String, PerCommentParser> PARSER_CACHE = new ConcurrentHashMap<String, PerCommentParser>();
 
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -476,7 +476,7 @@ public class MetaLanguageUtils
     protected PerCommentParser setUpParser(@NotNull final String comment)
         throws  RecognitionException
     {
-        @Nullable PerCommentParser result = (PerCommentParser) PARSER_CACHE.get(comment);
+        @Nullable PerCommentParser result = PARSER_CACHE.get(comment);
 
         if  (result == null)
         {
@@ -547,6 +547,7 @@ public class MetaLanguageUtils
     }
 
     @Override
+    @NotNull
     public String toString()
     {
         return "MetaLanguageUtils{" +

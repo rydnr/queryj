@@ -70,7 +70,6 @@ import org.checkthread.annotations.ThreadSafe;
 public class PerCustomSqlTemplateContext
     extends AbstractTemplateContext
 {
-
     private static final long serialVersionUID = -1302836113779801668L;
     /**
      * The Sql.
@@ -92,6 +91,7 @@ public class PerCustomSqlTemplateContext
      * @param disableGenerationTimestamps whether to disable generation timestamps.
      * @param disableNotNullAnnotations whether to disable NotNull annotations.
      * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
+     * @param fileName the file name.
      * @param sql the {@link Sql} instance.
      */
     public PerCustomSqlTemplateContext(
@@ -108,6 +108,7 @@ public class PerCustomSqlTemplateContext
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final Sql sql)
     {
         super(
@@ -123,7 +124,8 @@ public class PerCustomSqlTemplateContext
             jndiLocation,
             disableGenerationTimestamps,
             disableNotNullAnnotations,
-            disableCheckthreadAnnotations);
+            disableCheckthreadAnnotations,
+            fileName);
 
         immutableSetSql(sql);
     }

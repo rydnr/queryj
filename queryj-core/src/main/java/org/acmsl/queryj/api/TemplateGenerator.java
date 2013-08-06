@@ -51,15 +51,8 @@ import java.nio.charset.Charset;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface TemplateGenerator<T extends Template<C>, C extends TemplateContext>
+    extends FileNameResolver<C>
 {
-    /**
-     * Retrieves given template's file name.
-     * @param context the template context.
-     * @return such name.
-     */
-    @NotNull
-    String retrieveTemplateFileName(@NotNull final C context);
-
     /**
      * Writes a template to disk.
      * @param template the table template to write.

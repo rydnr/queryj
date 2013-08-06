@@ -113,7 +113,8 @@ public class ConfigurationPropertiesTemplateFactory
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations)
+        final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName)
     {
         return
             new ConfigurationPropertiesTemplate(
@@ -131,6 +132,7 @@ public class ConfigurationPropertiesTemplateFactory
                     jndiLocation,
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
-                    disableCheckthreadAnnotations));
+                    disableCheckthreadAnnotations,
+                    fileName));
     }
 }

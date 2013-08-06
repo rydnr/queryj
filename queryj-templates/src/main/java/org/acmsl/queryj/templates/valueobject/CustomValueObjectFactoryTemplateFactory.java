@@ -94,6 +94,7 @@ public class CustomValueObjectFactoryTemplateFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     @Nullable
     public CustomValueObjectFactoryTemplate createTemplate(
         @NotNull final CustomSqlProvider customSqlProvider,
@@ -109,6 +110,7 @@ public class CustomValueObjectFactoryTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final Result customResult)
     {
         @Nullable CustomValueObjectFactoryTemplate result = null;
@@ -116,9 +118,7 @@ public class CustomValueObjectFactoryTemplateFactory
         @Nullable final String t_strClassValue = customResult.getClassValue();
 
         if  (   (t_strClassValue != null)
-             && (!isStandard(
-                 extractClassName(t_strClassValue),
-                 metadataManager)))
+             && (!isStandard(extractClassName(t_strClassValue), metadataManager)))
         {
             result =
                 new CustomValueObjectFactoryTemplate(
@@ -136,6 +136,7 @@ public class CustomValueObjectFactoryTemplateFactory
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
+                        fileName,
                         customResult));
         }
 

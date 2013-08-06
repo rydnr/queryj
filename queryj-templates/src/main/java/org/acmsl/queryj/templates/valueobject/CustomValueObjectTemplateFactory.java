@@ -109,6 +109,7 @@ public class CustomValueObjectTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final Result customResult)
     {
         @Nullable CustomValueObjectTemplate result = null;
@@ -117,8 +118,8 @@ public class CustomValueObjectTemplateFactory
 
         if  (   (t_strClassName != null)
              && (!isStandard(
-                 extractClassName(t_strClassName),
-                 metadataManager)))
+                    extractClassName(t_strClassName),
+                    metadataManager)))
         {
             result =
                 new CustomValueObjectTemplate(
@@ -136,6 +137,7 @@ public class CustomValueObjectTemplateFactory
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
+                        fileName,
                         customResult));
         }
 

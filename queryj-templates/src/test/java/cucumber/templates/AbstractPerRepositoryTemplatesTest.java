@@ -299,7 +299,8 @@ public abstract class AbstractPerRepositoryTemplatesTest
                 "java:comp/env/db",
                 false, // disable generation timestamps
                 false, // disable NotNull annotations
-                true); // disable checkThread.org annotations
+                true, // disable checkThread.org annotations
+                ""); // TODO: file name
 
         Assert.assertNotNull("No template found for " + templateName, template);
 

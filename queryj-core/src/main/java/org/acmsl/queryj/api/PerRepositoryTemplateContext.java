@@ -108,11 +108,12 @@ public class PerRepositoryTemplateContext
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
-        @NotNull List<String> tableNames,
+        @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations)
+        final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName)
     {
         super(
             metadataManager,
@@ -127,7 +128,8 @@ public class PerRepositoryTemplateContext
             jndiLocation,
             disableGenerationTimestamps,
             disableNotNullAnnotations,
-            disableCheckthreadAnnotations);
+            disableCheckthreadAnnotations,
+            fileName);
 
         immutableSetTableNames(tableNames);
     }
@@ -136,7 +138,7 @@ public class PerRepositoryTemplateContext
      * Specifies the table names.
      * @param tableNames such list.
      */
-    protected final void immutableSetTableNames(@NotNull List<String> tableNames)
+    protected final void immutableSetTableNames(@NotNull final List<String> tableNames)
     {
         m__lTableNames = tableNames;
     }
@@ -146,7 +148,7 @@ public class PerRepositoryTemplateContext
      * @param tableNames such list.
      */
     @SuppressWarnings("unused")
-    protected void setTableNames(@NotNull List<String> tableNames)
+    protected void setTableNames(@NotNull final List<String> tableNames)
     {
         immutableSetTableNames(tableNames);
     }
@@ -201,5 +203,14 @@ public class PerRepositoryTemplateContext
         final PerRepositoryTemplateContext other = (PerRepositoryTemplateContext) obj;
         return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.m__lTableNames, other.m__lTableNames)
             .isEquals();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'PerRepositoryTemplateContext'," +
+               " 'tableNames': [" + m__lTableNames + "], " +
+               " parent: " + super.toString() +
+               '}';
     }
 }

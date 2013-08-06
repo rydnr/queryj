@@ -113,8 +113,9 @@ public class BaseAbstractDAOTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final String tableName,
-        @Nullable List<Row> staticContents)
+        @Nullable final List<Row> staticContents)
     {
         @Nullable BaseAbstractDAOTemplate result = null;
 
@@ -136,6 +137,7 @@ public class BaseAbstractDAOTemplateFactory
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
+                        fileName,
                         tableName,
                         staticContents));
         }

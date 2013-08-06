@@ -113,6 +113,7 @@ public class PerTableTemplateContext
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final String tableName,
         @Nullable final List<Row> staticValues)
     {
@@ -129,7 +130,8 @@ public class PerTableTemplateContext
             jndiLocation,
             disableGenerationTimestamps,
             disableNotNullAnnotations,
-            disableCheckthreadAnnotations);
+            disableCheckthreadAnnotations,
+            fileName);
 
         immutableSetTableName(tableName);
         immutableSetStaticValues(staticValues);

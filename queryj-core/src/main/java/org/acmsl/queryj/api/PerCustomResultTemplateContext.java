@@ -70,8 +70,8 @@ import org.jetbrains.annotations.Nullable;
 public class PerCustomResultTemplateContext
     extends AbstractTemplateContext
 {
-
     private static final long serialVersionUID = 5193168262427622240L;
+
     /**
      * The result.
      */
@@ -92,6 +92,7 @@ public class PerCustomResultTemplateContext
      * @param disableGenerationTimestamps whether to disable generation timestamps.
      * @param disableNotNullAnnotations whether to disable NotNull annotations.
      * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
+     * @param fileName the file name.
      * @param result the {@link Result} instance.
      */
     public PerCustomResultTemplateContext(
@@ -108,6 +109,7 @@ public class PerCustomResultTemplateContext
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final Result result)
     {
         super(
@@ -123,7 +125,8 @@ public class PerCustomResultTemplateContext
             jndiLocation,
             disableGenerationTimestamps,
             disableNotNullAnnotations,
-            disableCheckthreadAnnotations);
+            disableCheckthreadAnnotations,
+            fileName);
 
         immutableSetResult(result);
     }

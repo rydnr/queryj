@@ -357,6 +357,9 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {
+        // TODO
+        @NotNull final String t_strFileName = "";
+
         return
             templateFactory.createTemplate(
                 metadataManager,
@@ -372,6 +375,7 @@ public abstract class BasePerTableTemplateBuildHandler
                 disableGenerationTimestamps,
                 disableNotNullAnnotations,
                 disableCheckthreadAnnotations,
+                t_strFileName,
                 tableName,
                 staticContents);
     }

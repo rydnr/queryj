@@ -114,6 +114,7 @@ public class ValueObjectImplTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -133,6 +134,7 @@ public class ValueObjectImplTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
+                    fileName,
                     tableName,
                     staticContents));
     }

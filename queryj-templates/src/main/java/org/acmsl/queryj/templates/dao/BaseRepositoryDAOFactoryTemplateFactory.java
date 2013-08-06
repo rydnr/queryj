@@ -112,7 +112,8 @@ public class BaseRepositoryDAOFactoryTemplateFactory
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations)
+        final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName)
     {
         @Nullable
         BaseRepositoryDAOFactoryTemplate result = null;
@@ -135,7 +136,8 @@ public class BaseRepositoryDAOFactoryTemplateFactory
                         jndiLocation,
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
-                        disableCheckthreadAnnotations));
+                        disableCheckthreadAnnotations,
+                        fileName));
         }
 
         return result;

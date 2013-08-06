@@ -417,6 +417,7 @@ public class PerCustomResultTemplatesTest
                     false, // disable generation timestamps
                     false, // disable NotNull annotations
                     true, // disable checkThread.org annotations
+                    "", // TODO: filename
                     currentResult);
 
             Assert.assertNotNull("No template found for " + templateName, template);

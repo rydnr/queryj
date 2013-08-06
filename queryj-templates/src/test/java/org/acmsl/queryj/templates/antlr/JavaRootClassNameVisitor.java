@@ -42,6 +42,11 @@ package org.acmsl.queryj.templates.antlr;
 import org.acmsl.queryj.templates.antlr.JavaParser.ClassDeclarationContext;
 
 /*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +57,7 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2013/07/06
  */
+@ThreadSafe
 public class JavaRootClassNameVisitor
     extends JavaBaseVisitor<String>
 {
@@ -65,7 +71,7 @@ public class JavaRootClassNameVisitor
      * Specifies the root class.
      * @param value the root class name.
      */
-    protected final void immutableSetRoocClass(@NotNull final String value)
+    protected final void immutableSetRootClass(@NotNull final String value)
     {
         this.m__strRootClass = value;
     }
@@ -77,7 +83,7 @@ public class JavaRootClassNameVisitor
     @SuppressWarnings("unused")
     protected void setRootClass(@NotNull final String value)
     {
-        immutableSetRoocClass(value);
+        immutableSetRootClass(value);
     }
 
     /**
@@ -112,5 +118,13 @@ public class JavaRootClassNameVisitor
         setRootClass(context.getChild(1).getText());
 
         return super.visitClassDeclaration(context);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "JavaRootClassNameVisitor{" +
+               "rootClass='" + m__strRootClass + '\'' +
+               '}';
     }
 }

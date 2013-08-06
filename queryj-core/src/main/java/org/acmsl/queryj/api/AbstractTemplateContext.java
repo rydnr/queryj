@@ -132,6 +132,11 @@ public abstract class AbstractTemplateContext
     private boolean m__bDisableCheckthreadAnnotations;
 
     /**
+     * The file name.
+     */
+    private String m__strFileName;
+
+    /**
      * Creates an {@link AbstractTemplateContext} with given information.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
@@ -146,6 +151,7 @@ public abstract class AbstractTemplateContext
      * @param disableGenerationTimestamps whether to disable generation timestamps.
      * @param disableNotNullAnnotations whether to disable NotNull annotations.
      * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations.
+     * @param fileName the file name.
      */
     protected AbstractTemplateContext(
         @NotNull final MetadataManager metadataManager,
@@ -160,7 +166,8 @@ public abstract class AbstractTemplateContext
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations)
+        final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName)
     {
         immutableSetMetadataManager(metadataManager);
         immutableSetCustomSqlProvider(customSqlProvider);
@@ -175,6 +182,7 @@ public abstract class AbstractTemplateContext
         immutableSetDisableGenerationTimestamps(disableGenerationTimestamps);
         immutableSetDisableNotNullAnnotations(disableNotNullAnnotations);
         immutableSetDisableCheckthreadAnnotations(disableCheckthreadAnnotations);
+        immutableSetFileName(fileName);
     }
 
     /**
@@ -573,6 +581,36 @@ public abstract class AbstractTemplateContext
     }
 
     /**
+     * Specifies the file name.
+     * @param fileName the file name.
+     */
+    protected final void immutableSetFileName(@NotNull final String fileName)
+    {
+        this.m__strFileName = fileName;
+    }
+
+    /**
+     * Specifies the file name.
+     * @param fileName the file name.
+     */
+    @SuppressWarnings("unused")
+    protected void setFileName(@NotNull final String fileName)
+    {
+        immutableSetFileName(fileName);
+    }
+
+    /**
+     * Retrieves the file name.
+     * @return such information.
+     */
+    @Override
+    @NotNull
+    public String getFileName()
+    {
+        return this.m__strFileName;
+    }
+
+    /**
      * Concatenates given attributes.
      * @param attributes the attributes.
      * @return the CSV version of given list.
@@ -582,7 +620,7 @@ public abstract class AbstractTemplateContext
     {
         @NotNull final StringBuilder result = new StringBuilder();
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {
@@ -606,7 +644,7 @@ public abstract class AbstractTemplateContext
             .append(this.m__strBasePackageName).append(this.m__strRepositoryName)
             .append(this.m__bImplementMarkerInterfaces).append(this.m__bJmx).append(this.m__strJndiLocation)
             .append(this.m__bDisableGenerationTimestamps).append(this.m__bDisableNotNullAnnotations)
-            .append(this.m__bDisableCheckthreadAnnotations)
+            .append(this.m__bDisableCheckthreadAnnotations).append(this.m__strFileName)
             .toHashCode();
     }
 
@@ -636,6 +674,28 @@ public abstract class AbstractTemplateContext
             .append(this.m__bDisableGenerationTimestamps, other.m__bDisableGenerationTimestamps)
             .append(this.m__bDisableNotNullAnnotations, other.m__bDisableNotNullAnnotations)
             .append(this.m__bDisableCheckthreadAnnotations, other.m__bDisableCheckthreadAnnotations)
+            .append(this.m__strFileName, other.m__strFileName)
             .isEquals();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "AbstractTemplateContext{" +
+               "disableCheckthreadAnnotations=" + m__bDisableCheckthreadAnnotations +
+               ", header='" + m__strHeader + '\'' +
+               ", decoratorFactory=" + m__DecoratorFactory +
+               ", metadataManager=" + m__MetadataManager +
+               ", customSqlProvider=" + m__CustomSqlProvider +
+               ", packageName='" + m__strPackageName + '\'' +
+               ", basePackageName='" + m__strBasePackageName + '\'' +
+               ", repositoryName='" + m__strRepositoryName + '\'' +
+               ", implementMarkerInterfaces=" + m__bImplementMarkerInterfaces +
+               ", jmx=" + m__bJmx +
+               ", jndiLocation='" + m__strJndiLocation + '\'' +
+               ", disableGenerationTimestamps=" + m__bDisableGenerationTimestamps +
+               ", disableNotNullAnnotations=" + m__bDisableNotNullAnnotations +
+               ", fileName='" + m__strFileName + '\'' +
+               '}';
     }
 }

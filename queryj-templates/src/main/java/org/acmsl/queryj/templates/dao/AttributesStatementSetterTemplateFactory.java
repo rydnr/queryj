@@ -97,6 +97,7 @@ public class AttributesStatementSetterTemplateFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
     public AttributesStatementSetterTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
@@ -112,6 +113,7 @@ public class AttributesStatementSetterTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -131,6 +133,7 @@ public class AttributesStatementSetterTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
+                    fileName,
                     tableName,
                     staticContents));
     }

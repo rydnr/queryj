@@ -75,6 +75,7 @@ public interface PerRepositoryTemplateFactory<T extends AbstractBasePerRepositor
      * @param disableGenerationTimestamps whether to disable generation timestamps.
      * @param disableNotNullAnnotations whether to disable NotNull annotations.
      * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
+     * @param fileName the file name.
      * @return the new template.
      */
     @Nullable
@@ -92,5 +93,6 @@ public interface PerRepositoryTemplateFactory<T extends AbstractBasePerRepositor
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations);
+        final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName);
 }

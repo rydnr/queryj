@@ -378,6 +378,7 @@ public class PerTableTemplatesTest
                     false, // disable generation timestamps
                     false, // disable NotNull annotations
                     true, // disable checkThread.org annotations
+                    "", // TODO
                     table.getName(),
                     new ArrayList<Row>(0));
 

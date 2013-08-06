@@ -164,6 +164,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @return such instance.
      */
     @NotNull
+    @Override
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -547,9 +548,9 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     @Override
     public String toString()
     {
-        return "AbstractTemplateGenerator{" +
-               "m__bCaching=" + m__bCaching +
-               ", m__iThreadCount=" + m__iThreadCount +
+        return "{ 'class': 'AbstractTemplateGenerator', " +
+               " 'caching': " + m__bCaching +
+               ", 'threadCount':" + m__iThreadCount +
                '}';
     }
 }

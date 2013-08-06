@@ -91,20 +91,27 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked, cast")
     protected boolean handle(@NotNull final Map<String, ?> parameters)
         throws  QueryJBuildException
     {
-        @NotNull final MetadataManager t_MetadataManager =
+        boolean result = true;
+
+        @Nullable final MetadataManager t_MetadataManager =
             retrieveMetadataManager((Map<String, MetadataManager>) parameters);
 
-        buildTemplates(
-            parameters,
-            t_MetadataManager,
-            retrieveCustomSqlProvider((Map<String, CustomSqlProvider>) parameters),
-            retrieveTemplateFactory());
+        if (t_MetadataManager != null)
+        {
+            buildTemplates(
+                parameters,
+                t_MetadataManager,
+                retrieveCustomSqlProvider((Map<String, CustomSqlProvider>) parameters),
+                retrieveTemplateFactory());
 
-        return false;
+            result = false;
+        }
+
+        return result;
     }
 
     /**
@@ -115,7 +122,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param templateFactory the template factory.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked,cast")
     protected void buildTemplates(
         @NotNull final Map<String, ?> parameters,
         @NotNull final MetadataManager metadataManager,
@@ -167,7 +174,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked,cast")
     protected void buildTemplates(
         @NotNull final Map<String, ?> parameters,
         @NotNull final MetadataManager metadataManager,
@@ -193,6 +200,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             if (   (t_ForeignKey != null)
                 && (metadataManager.isGenerationAllowedForForeignKey(t_ForeignKey)))
             {
+                // TODO
+                @NotNull final String t_strFileName = "";
+
                 t_lTemplates.add(
                     templateFactory.createTemplate(
                         metadataManager,
@@ -211,6 +221,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
+                        t_strFileName,
                         t_ForeignKey));
             }
         }

@@ -117,7 +117,8 @@ public class ThreadLocalBagTemplateFactory
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations)
+        final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName)
     {
         return
             new ThreadLocalBagTemplate(
@@ -135,6 +136,7 @@ public class ThreadLocalBagTemplateFactory
                     jndiLocation,
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
-                    disableCheckthreadAnnotations));
+                    disableCheckthreadAnnotations,
+                    fileName));
     }
 }

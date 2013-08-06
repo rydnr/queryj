@@ -91,6 +91,7 @@ public class PerForeignKeyTemplateContext
      * @param disableGenerationTimestamps whether to disable generation timestamps.
      * @param disableNotNullAnnotations whether to disable NotNull annotations.
      * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
+     * @param fileName the file name.
      * @param foreignKey the {@link ForeignKey} instance.
      */
     public PerForeignKeyTemplateContext(
@@ -107,6 +108,7 @@ public class PerForeignKeyTemplateContext
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final ForeignKey foreignKey)
     {
         super(
@@ -122,7 +124,8 @@ public class PerForeignKeyTemplateContext
             jndiLocation,
             disableGenerationTimestamps,
             disableNotNullAnnotations,
-            disableCheckthreadAnnotations);
+            disableCheckthreadAnnotations,
+            fileName);
 
         immutableSetForeignKey(foreignKey);
     }

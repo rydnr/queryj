@@ -96,7 +96,7 @@ public class BaseRepositoryDAOTemplateFactory
     /**
      * {@inheritDoc}
      */
-    @NotNull
+    @Nullable
     @Override
     public BaseRepositoryDAOTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
@@ -112,7 +112,8 @@ public class BaseRepositoryDAOTemplateFactory
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations)
+        final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName)
     {
         @Nullable BaseRepositoryDAOTemplate result = null;
 
@@ -134,7 +135,8 @@ public class BaseRepositoryDAOTemplateFactory
                         jndiLocation,
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
-                        disableCheckthreadAnnotations));
+                        disableCheckthreadAnnotations,
+                        fileName));
         }
 
         return result;

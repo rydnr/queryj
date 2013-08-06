@@ -114,8 +114,9 @@ public class BaseDAOTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final String tableName,
-        @Nullable List<Row> staticContents)
+        @Nullable final List<Row> staticContents)
     {
         return
             new BaseDAOTemplate(
@@ -133,6 +134,7 @@ public class BaseDAOTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
+                    fileName,
                     tableName,
                     staticContents));
     }

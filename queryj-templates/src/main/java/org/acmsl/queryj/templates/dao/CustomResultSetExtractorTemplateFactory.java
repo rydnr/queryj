@@ -109,6 +109,7 @@ public class CustomResultSetExtractorTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final Result customResult)
     {
         return
@@ -127,6 +128,7 @@ public class CustomResultSetExtractorTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
+                    fileName,
                     customResult));
     }
 }

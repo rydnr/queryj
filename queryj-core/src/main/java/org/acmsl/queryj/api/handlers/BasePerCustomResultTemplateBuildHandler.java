@@ -230,6 +230,9 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 && (isGenerationAllowedForResult(
                         t_ResultElement, customSqlProvider, metadataManager, customResultUtils)))
             {
+                // TODO
+                @NotNull final String t_strFileName = "";
+
                 try
                 {
                     t_Template =
@@ -252,6 +255,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                             disableGenerationTimestamps,
                             disableNotNullAnnotations,
                             disableCheckthreadAnnotations,
+                            t_strFileName,
                             t_ResultElement);
 
                     if  (   (t_Template != null)

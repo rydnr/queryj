@@ -109,6 +109,7 @@ public class CustomBaseValueObjectTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final Result customResult)
     {
         @Nullable CustomBaseValueObjectTemplate result = null;
@@ -134,6 +135,7 @@ public class CustomBaseValueObjectTemplateFactory
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
+                        fileName,
                         customResult));
         }
 

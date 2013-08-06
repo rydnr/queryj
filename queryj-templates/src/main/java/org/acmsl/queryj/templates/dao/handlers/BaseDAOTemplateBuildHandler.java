@@ -158,6 +158,9 @@ public class BaseDAOTemplateBuildHandler
             t_cStaticValues = new ArrayList<Row>(0);
         }
 
+        // TODO
+        @NotNull final String t_strFileName = "";
+
         result =
             templateFactory.createTemplate(
                 metadataManager,
@@ -173,6 +176,7 @@ public class BaseDAOTemplateBuildHandler
                 disableGenerationTimestamps,
                 disableNotNullAnnotations,
                 disableCheckthreadAnnotations,
+                t_strFileName,
                 tableName,
                 t_cStaticValues);
 

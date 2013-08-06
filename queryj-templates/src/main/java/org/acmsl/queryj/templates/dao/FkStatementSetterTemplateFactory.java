@@ -109,6 +109,7 @@ public class FkStatementSetterTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
+        @NotNull final String fileName,
         @NotNull final ForeignKey foreignKey)
     {
         return
@@ -127,6 +128,7 @@ public class FkStatementSetterTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
+                    fileName,
                     foreignKey));
     }
 }
