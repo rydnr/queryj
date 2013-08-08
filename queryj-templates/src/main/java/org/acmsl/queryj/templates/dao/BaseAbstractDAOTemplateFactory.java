@@ -33,7 +33,7 @@
 package org.acmsl.queryj.templates.dao;
 
 /*
- * Importing some project-specific classes.
+ * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
@@ -47,6 +47,8 @@ import org.acmsl.queryj.api.MetaLanguageUtils;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JetBrains annotations.
@@ -58,6 +60,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.List;
+import java.util.Locale;
 
 /*
  * Importing checkthread.org annotations.
@@ -113,7 +116,6 @@ public class BaseAbstractDAOTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -137,7 +139,7 @@ public class BaseAbstractDAOTemplateFactory
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
-                        fileName,
+                        retrieveTemplateFileName(tableName),
                         tableName,
                         staticContents));
         }
@@ -186,5 +188,38 @@ public class BaseAbstractDAOTemplateFactory
          return
             metaLanguageUtils.containsStaticValues(
                 tableName, metadataManager);
+    }
+
+    /**
+     * Retrieves given template's file name.
+     * @param tableName the table name.
+     * @return such name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final String tableName)
+    {
+        return retrieveTemplateFileName(tableName, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
+    }
+
+    /**
+     * Retrieves given template's file name.
+     * @param tableName the table name.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @return such name.
+     */
+    @NotNull
+    protected String retrieveTemplateFileName(
+        @NotNull final String tableName,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
+    {
+        return
+            "Abstract"
+            + stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    tableName.toLowerCase(Locale.US)),
+                '_')
+            + "DAO.java";
     }
 }

@@ -417,7 +417,6 @@ public class PerCustomResultTemplatesTest
                     false, // disable generation timestamps
                     false, // disable NotNull annotations
                     true, // disable checkThread.org annotations
-                    "", // TODO: filename
                     currentResult);
 
             Assert.assertNotNull("No template found for " + templateName, template);
@@ -457,7 +456,7 @@ public class PerCustomResultTemplatesTest
 
             outputFiles.put(
                 currentResult.getId(),
-                new File(outputDir, generator.retrieveTemplateFileName(template.getTemplateContext())));
+                new File(outputDir, template.getTemplateContext().getTemplateName()));
         }
     }
 

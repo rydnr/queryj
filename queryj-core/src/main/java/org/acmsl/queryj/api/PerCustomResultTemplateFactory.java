@@ -56,7 +56,8 @@ import org.jetbrains.annotations.Nullable;
  * Represents entities able to create per-<i>custom result</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface PerCustomResultTemplateFactory<T extends PerCustomResultTemplate>
+public interface PerCustomResultTemplateFactory
+    <T extends PerCustomResultTemplate>
     extends  Factory
 {
     /**
@@ -74,7 +75,6 @@ public interface PerCustomResultTemplateFactory<T extends PerCustomResultTemplat
      * @param disableGenerationTimestamps whether to disable generation timestamps.
      * @param disableNotNullAnnotations whether to disable NotNull annotations.
      * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
-     * @param fileName the file name.
      * @param customResult the custom result.
      * @return the template.
      */
@@ -93,6 +93,5 @@ public interface PerCustomResultTemplateFactory<T extends PerCustomResultTemplat
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final Result customResult);
 }

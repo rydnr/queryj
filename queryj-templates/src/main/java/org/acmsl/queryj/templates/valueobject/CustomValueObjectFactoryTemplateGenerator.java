@@ -36,13 +36,7 @@ package org.acmsl.queryj.templates.valueobject;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -55,8 +49,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CustomValueObjectFactoryTemplateGenerator
-    extends AbstractTemplateGenerator<CustomValueObjectFactoryTemplate, PerCustomResultTemplateContext>
-    implements PerCustomResultTemplateGenerator<CustomValueObjectFactoryTemplate, PerCustomResultTemplateContext>
+    extends AbstractTemplateGenerator<CustomValueObjectFactoryTemplate>
+    implements PerCustomResultTemplateGenerator<CustomValueObjectFactoryTemplate>
 {
     /**
      * Creates a new {@link CustomBaseValueObjectTemplateGenerator} with given settings.
@@ -66,38 +60,5 @@ public class CustomValueObjectFactoryTemplateGenerator
     public CustomValueObjectFactoryTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerCustomResultTemplateContext context)
-    {
-        return
-              extractClassName(context.getResult().getClassValue())
-            + "ValueObjectFactory.java";
-    }
-
-    /**
-     * Extracts the class name.
-     * @param classValue the class value.
-     */
-    @NotNull
-    protected String extractClassName(@NotNull final String classValue)
-    {
-        return extractClassName(classValue, ValueObjectUtils.getInstance());
-    }
-
-    /**
-     * Extracts the class name.
-     * @param classValue the class value.
-     */
-    @NotNull
-    protected String extractClassName(
-        @NotNull final String classValue, @NotNull final ValueObjectUtils valueObjectUtils)
-    {
-        return valueObjectUtils.extractClassName(classValue);
     }
 }

@@ -36,6 +36,7 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
@@ -111,8 +112,7 @@ public class RepositoryDAOTemplateFactory
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName)
+        final boolean disableCheckthreadAnnotations)
     {
         @Nullable RepositoryDAOTemplate result = null;
 
@@ -135,9 +135,42 @@ public class RepositoryDAOTemplateFactory
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
-                        fileName));
+                        retrieveTemplateFileName(repository, metadataManager)));
         }
 
         return result;
     }
+
+    /**
+     * Retrieves given template's file name.
+     * @param repository the repository.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return such name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(
+        @NotNull final String repository, @NotNull final MetadataManager metadataManager)
+    {
+        return retrieveTemplateFileName(repository, metadataManager, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves given template's file name.
+     * @param repository the repository.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return such name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(
+        @NotNull final String repository,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecorationUtils decorationUtils)
+    {
+        return
+            metadataManager.getEngineName()
+            + decorationUtils.capitalize(repository)
+            + "DAO.java";
+    }
+
 }

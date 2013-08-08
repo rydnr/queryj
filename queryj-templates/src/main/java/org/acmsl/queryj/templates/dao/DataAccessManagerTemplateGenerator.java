@@ -36,15 +36,8 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -58,8 +51,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DataAccessManagerTemplateGenerator
-    extends AbstractTemplateGenerator<DataAccessManagerTemplate, PerRepositoryTemplateContext>
-    implements PerRepositoryTemplateGenerator<DataAccessManagerTemplate, PerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<DataAccessManagerTemplate>
+    implements PerRepositoryTemplateGenerator<DataAccessManagerTemplate>
 {
     /**
      * Creates a new {@link DataAccessContextLocalTemplateGenerator} with given settings.
@@ -69,43 +62,5 @@ public class DataAccessManagerTemplateGenerator
     public DataAccessManagerTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
-    {
-        return
-              capitalize(context.getRepositoryName())
-            + "DataAccessManager.java";
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @return the capitalized value.
-     * @precondition value != null
-     */
-    @NotNull
-    protected String capitalize(@NotNull final String value)
-    {
-        return capitalize(value, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return the capitalized value.
-     * @precondition value != null
-     */
-    @NotNull
-    protected String capitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(value);
     }
 }

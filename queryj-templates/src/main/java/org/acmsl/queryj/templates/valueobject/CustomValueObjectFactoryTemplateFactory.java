@@ -110,7 +110,6 @@ public class CustomValueObjectFactoryTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final Result customResult)
     {
         @Nullable CustomValueObjectFactoryTemplate result = null;
@@ -136,7 +135,7 @@ public class CustomValueObjectFactoryTemplateFactory
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
-                        fileName,
+                        retrieveTemplateFileName(customResult),
                         customResult));
         }
 
@@ -190,5 +189,18 @@ public class CustomValueObjectFactoryTemplateFactory
         @NotNull final String classValue, @NotNull final ValueObjectUtils valueObjectUtils)
     {
         return valueObjectUtils.extractClassName(classValue);
+    }
+
+    /**
+     * Retrieves the file name of the template.
+     * @param customResult the {@link Result},
+     * @return such file name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final Result customResult)
+    {
+        return
+            extractClassName(customResult.getClassValue())
+            + "ValueObjectFactory.java";
     }
 }

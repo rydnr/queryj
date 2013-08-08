@@ -57,7 +57,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerTableTemplateWritingHandler
-    <T extends PerTableTemplate<C>, TG extends PerTableTemplateGenerator<T,C>, C extends PerTableTemplateContext>
+    <T extends PerTableTemplate<C>, TG extends PerTableTemplateGenerator<T>, C extends PerTableTemplateContext>
     extends    AbstractTemplateWritingHandler<T, TG, C>
     implements TemplateWritingHandler
 {

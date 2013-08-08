@@ -35,16 +35,8 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -57,8 +49,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class RepositoryDAOFactoryTemplateGenerator
-    extends AbstractTemplateGenerator<RepositoryDAOFactoryTemplate, PerRepositoryTemplateContext>
-    implements PerRepositoryTemplateGenerator<RepositoryDAOFactoryTemplate, PerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<RepositoryDAOFactoryTemplate>
+    implements PerRepositoryTemplateGenerator<RepositoryDAOFactoryTemplate>
 {
     /**
      * Creates a new {@link RepositoryDAOFactoryTemplateGenerator} with given settings.
@@ -69,35 +61,5 @@ public class RepositoryDAOFactoryTemplateGenerator
     public RepositoryDAOFactoryTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @ThreadSafe
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
-    {
-        return retrieveTemplateFileName(context, context.getMetadataManager(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves given template's file name.
-     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext context}.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such name.
-     */
-    @ThreadSafe
-    @NotNull
-    protected String retrieveTemplateFileName(
-        @NotNull final PerRepositoryTemplateContext context,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecorationUtils decorationUtils)
-    {
-        return
-              metadataManager.getEngineName()
-            + decorationUtils.capitalize(context.getRepositoryName())
-            + "DAOFactory.java";
     }
 }

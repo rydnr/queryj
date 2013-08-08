@@ -78,8 +78,8 @@ import java.security.NoSuchAlgorithmException;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends TemplateContext>
-    implements TemplateGenerator<N, C>
+public abstract class AbstractTemplateGenerator<N extends Template>
+    implements TemplateGenerator<N>
 {
     /**
      * Whether to enable template caching.
@@ -192,7 +192,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
             write(
                 isCaching(),
                 template,
-                retrieveTemplateFileName(template.getTemplateContext()),
+                template.getTemplateContext().getFileName(),
                 outputDir,
                 rootFolder,
                 charset,

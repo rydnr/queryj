@@ -339,7 +339,7 @@
             </execution>
           </executions>
         </plugin>
-        <plugin>
+        <!--plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-antrun-plugin</artifactId>
           <executions>
@@ -370,7 +370,7 @@
               <scope>test</scope>
             </dependency>
           </dependencies>
-        </plugin>
+        </plugin-->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -418,38 +418,38 @@
           <useFile>false</useFile>
         </configuration>
       </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-antrun-plugin</artifactId>
-          <executions>
-            <execution>
-              <id>checkthread</id>
-              <phase>test</phase>
-              <configuration>
-                <tasks>
-                  <taskdef name="checkthread" classname="org.checkthread.anttask.CheckThreadTask" />
-                  <target name="analyze">
-                    <checkthread 
-                      targetpath="${classDir}/mypackage/" 
-                      classpath="${classDir}"
-                      verbose="false"/>
-                  </target>
-                </tasks>
-                <sourceRoot>${project.build.directory}/classes</sourceRoot>
-              </configuration>
-              <goals>
-                <goal>run</goal>
-              </goals>
-            </execution>
-          </executions>
-          <dependencies>
-            <dependency>
-              <groupId>org.checkthread</groupId>
-              <artifactId>checkthread-analyzer</artifactId>
-              <version>${version.checkthread}</version>
-            </dependency>
-          </dependencies>
-        </plugin>
+      <!--plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>checkthread</id>
+            <phase>test</phase>
+            <configuration>
+              <tasks>
+                <taskdef name="checkthread" classname="org.checkthread.anttask.CheckThreadTask" />
+                <target name="analyze">
+                  <checkthread 
+                    targetpath="${classDir}/mypackage/" 
+                    classpath="${classDir}"
+                    verbose="false"/>
+                </target>
+              </tasks>
+              <sourceRoot>${project.build.directory}/classes</sourceRoot>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.checkthread</groupId>
+            <artifactId>checkthread-analyzer</artifactId>
+            <version>${version.checkthread}</version>
+          </dependency>
+        </dependencies>
+      </plugin-->
 
     </plugins>
   </build>

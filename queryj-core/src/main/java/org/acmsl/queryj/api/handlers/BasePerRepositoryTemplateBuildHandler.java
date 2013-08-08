@@ -275,9 +275,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        // TODO
-        @NotNull final String t_strFileName = "";
-
         return
             templateFactory.createTemplate(
                 metadataManager,
@@ -293,8 +290,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                 jndiLocation,
                 disableGenerationTimestamps,
                 disableNotNullAnnotations,
-                disableCheckthreadAnnotations,
-                t_strFileName);
+                disableCheckthreadAnnotations);
     }
 
     /**

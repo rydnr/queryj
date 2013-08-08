@@ -35,17 +35,19 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateFactory;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Row;
-import org.acmsl.queryj.api.PerTableTemplateContext;
-import org.acmsl.queryj.api.PerTableTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JetBrains annotations.
@@ -57,6 +59,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.List;
+import java.util.Locale;
 
 /*
  * Importing checkthread.org annotations.
@@ -112,9 +115,8 @@ public class DAOTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final String tableName,
-        @Nullable final List<Row> staticContents)
+        @NotNull final List<Row> staticContents)
     {
         return
             new DAOTemplate(
@@ -132,8 +134,47 @@ public class DAOTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
-                    fileName,
+                    retrieveTemplateFileName(tableName, metadataManager),
                     tableName,
                     staticContents));
+    }
+
+    /**
+     * Retrieves the file name of the template.
+     * @param tableName the table name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return the file name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(
+        @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
+    {
+        return
+            retrieveTemplateFileName(
+                tableName, metadataManager, EnglishGrammarUtils.getInstance(), StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the file name of the template.
+     * @param tableName the table name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return the file name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final StringUtils stringUtils)
+    {
+        return
+              stringUtils.capitalize(metadataManager.getEngineName())
+            + stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    tableName.toLowerCase(Locale.US)),
+                '_')
+            + "DAO.java";
     }
 }

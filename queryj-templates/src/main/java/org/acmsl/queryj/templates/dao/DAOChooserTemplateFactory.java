@@ -36,6 +36,7 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
@@ -112,8 +113,7 @@ public class DAOChooserTemplateFactory
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName)
+        final boolean disableCheckthreadAnnotations)
     {
         return
             new DAOChooserTemplate(
@@ -132,6 +132,39 @@ public class DAOChooserTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
-                    fileName));
+                    retrieveTemplateFileName(repository)));
+    }
+
+    /**
+     * Retrieves the template's file name.
+     * @param repository the repository.
+     * @return the file name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final String repository)
+    {
+        return capitalize(repository) + "DAOChooser.java";
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @return the capitalized value.
+     */
+    protected String capitalize(@NotNull final String value)
+    {
+        return capitalize(value, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return the capitalized value.
+     */
+    protected String capitalize(
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value);
     }
 }

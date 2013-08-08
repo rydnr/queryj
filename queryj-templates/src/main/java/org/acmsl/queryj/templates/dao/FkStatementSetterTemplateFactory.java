@@ -35,6 +35,8 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -57,6 +59,8 @@ import org.jetbrains.annotations.Nullable;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+import java.util.Locale;
 
 /**
  * Is able to create {@link FkStatementSetterTemplate} instances.
@@ -109,7 +113,6 @@ public class FkStatementSetterTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final ForeignKey foreignKey)
     {
         return
@@ -128,7 +131,73 @@ public class FkStatementSetterTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
-                    fileName,
+                    retrieveFileName(foreignKey),
                     foreignKey));
     }
+
+    /**
+     * Retrieves given template's file name.
+     * @param foreignKey the {@link ForeignKey} instance.
+     * @return such name.
+     */
+    @NotNull
+    public String retrieveFileName(@NotNull final ForeignKey foreignKey)
+    {
+        return
+            retrieveFileName(
+                foreignKey,
+                StringUtils.getInstance(),
+                EnglishGrammarUtils.getInstance());
+    }
+
+    /**
+     * Retrieves given template's file name.
+     * @param foreignKey the {@link ForeignKey} instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @return such name.
+     */
+    @NotNull
+    protected String retrieveFileName(
+        @NotNull final ForeignKey foreignKey,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
+    {
+        return
+            retrieveFileName(
+                foreignKey.getSourceTableName(),
+                foreignKey.getTargetTableName(),
+                stringUtils,
+                englishGrammarUtils);
+    }
+
+    /**
+     * Retrieves given template's file name.
+     *
+     * @param sourceTable the source table.
+     * @param targetTable the target table.
+     * @param stringUtils the {@link org.acmsl.commons.utils.StringUtils} instance.
+     * @param englishGrammarUtils the {@link org.acmsl.commons.utils.EnglishGrammarUtils} instance.
+     * @return such name.
+     */
+    @NotNull
+    protected String retrieveFileName(
+        @NotNull final String sourceTable,
+        @NotNull final String targetTable,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
+    {
+        return
+            stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    sourceTable.toLowerCase(Locale.US)),
+                '_')
+            + "By"
+            + stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    targetTable.toLowerCase(Locale.US)),
+                '_')
+            + "StatementSetter.java";
+    }
+
 }

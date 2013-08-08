@@ -74,7 +74,6 @@ public interface PerTableTemplateFactory<T extends PerTableTemplate>
      * @param disableGenerationTimestamps whether to disable generation timestamps.
      * @param disableNotNullAnnotations whether to disable NotNull annotations.
      * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
-     * @param fileName the file name.
      * @param tableName the table name.
      * @param staticContents the table's static contents (optional).
      * @return a template.
@@ -94,7 +93,6 @@ public interface PerTableTemplateFactory<T extends PerTableTemplate>
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final String tableName,
-        @Nullable final List<Row> staticContents);
+        @NotNull final List<Row> staticContents);
 }

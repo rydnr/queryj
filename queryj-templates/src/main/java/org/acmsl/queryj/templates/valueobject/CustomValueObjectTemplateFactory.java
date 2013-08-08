@@ -109,7 +109,6 @@ public class CustomValueObjectTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final Result customResult)
     {
         @Nullable CustomValueObjectTemplate result = null;
@@ -137,7 +136,7 @@ public class CustomValueObjectTemplateFactory
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
-                        fileName,
+                        retrieveTemplateFileName(customResult),
                         customResult));
         }
 
@@ -191,5 +190,18 @@ public class CustomValueObjectTemplateFactory
         @NotNull final String classValue, @NotNull final ValueObjectUtils valueObjectUtils)
     {
         return valueObjectUtils.extractClassName(classValue);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final Result customResult)
+    {
+        // TODO: Deal with null class values.
+        return
+            extractClassName(customResult.getClassValue())
+            + ".java";
     }
 }

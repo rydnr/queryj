@@ -74,7 +74,6 @@ public interface PerForeignKeyTemplateFactory<T extends PerForeignKeyTemplate>
      * @param disableGenerationTimestamps whether to disable generation timestamps.
      * @param disableNotNullAnnotations whether to disable NotNull annotations.
      * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
-     * @param fileName the file name.
      * @param foreignKey the foreign key.
      */
     @NotNull
@@ -92,6 +91,5 @@ public interface PerForeignKeyTemplateFactory<T extends PerForeignKeyTemplate>
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final ForeignKey foreignKey);
 }

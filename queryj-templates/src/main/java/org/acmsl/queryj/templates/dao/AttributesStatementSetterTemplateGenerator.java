@@ -35,26 +35,14 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.PerTableTemplateGenerator;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Locale;
 
 /*
  * Importing checkthread.org annotations.
@@ -67,8 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class AttributesStatementSetterTemplateGenerator
-    extends AbstractTemplateGenerator<AttributesStatementSetterTemplate, PerTableTemplateContext>
-    implements PerTableTemplateGenerator<AttributesStatementSetterTemplate, PerTableTemplateContext>
+    extends AbstractTemplateGenerator<AttributesStatementSetterTemplate>
+    implements PerTableTemplateGenerator<AttributesStatementSetterTemplate>
 {
     /**
      * Creates a new {@link AttributesStatementSetterTemplateGenerator} with given settings.
@@ -89,38 +77,5 @@ public class AttributesStatementSetterTemplateGenerator
     public DecoratorFactory getDecoratorFactory()
     {
         return AttributeStatementSetterDecoratorFactory.getInstance();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerTableTemplateContext context)
-    {
-        return
-            retrieveTemplateFileName(
-                context, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
-    }
-
-    /**
-     * Retrieves given template's file name.
-     * @param context the template context.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
-     * @return such name.
-     */
-    @NotNull
-    protected String retrieveTemplateFileName(
-        @NotNull final PerTableTemplateContext context,
-        @NotNull final StringUtils stringUtils,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils)
-    {
-        return
-            stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                     context.getTableName().toLowerCase(Locale.US)),
-                '_')
-            + "AttributesStatementSetter.java";
     }
 }

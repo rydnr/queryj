@@ -378,7 +378,6 @@ public class PerTableTemplatesTest
                     false, // disable generation timestamps
                     false, // disable NotNull annotations
                     true, // disable checkThread.org annotations
-                    "", // TODO
                     table.getName(),
                     new ArrayList<Row>(0));
 
@@ -419,7 +418,7 @@ public class PerTableTemplatesTest
 
             outputFiles.put(
                 table.getName(),
-                new File(outputDir, generator.retrieveTemplateFileName(template.getTemplateContext())));
+                new File(outputDir, template.getTemplateContext().getTemplateName()));
         }
     }
 }

@@ -126,7 +126,7 @@ public class OracleMetaDataRetrievalHandler
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        @Nullable final DatabaseMetaData metaData,
+        @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
         final boolean caseSensitive,
@@ -135,7 +135,7 @@ public class OracleMetaDataRetrievalHandler
         @NotNull final String quote)
         throws  BuildException
     {
-        @Nullable MetadataManager result;
+        @Nullable final MetadataManager result;
 
         try 
         {

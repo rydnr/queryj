@@ -64,7 +64,7 @@ import java.util.Map;
 public abstract class BasePerCustomResultTemplateWritingHandler
     <T extends PerCustomResultTemplate<C>,
         C extends PerCustomResultTemplateContext,
-        TG extends PerCustomResultTemplateGenerator<T,C>>
+        TG extends PerCustomResultTemplateGenerator<T>>
     extends    AbstractTemplateWritingHandler<T, TG, C>
     implements TemplateWritingHandler
 {

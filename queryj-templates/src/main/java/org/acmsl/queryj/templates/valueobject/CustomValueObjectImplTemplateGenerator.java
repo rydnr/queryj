@@ -35,12 +35,12 @@ package org.acmsl.queryj.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -59,8 +59,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CustomValueObjectImplTemplateGenerator
-    extends AbstractTemplateGenerator<CustomValueObjectImplTemplate, PerCustomResultTemplateContext>
-    implements PerCustomResultTemplateGenerator<CustomValueObjectImplTemplate, PerCustomResultTemplateContext>
+    extends AbstractTemplateGenerator<CustomValueObjectImplTemplate>
+    implements PerCustomResultTemplateGenerator<CustomValueObjectImplTemplate>
 {
     /**
      * Creates a new {@link CustomBaseValueObjectTemplateGenerator} with given settings.
@@ -136,26 +136,6 @@ public class CustomValueObjectImplTemplateGenerator
 
         return result;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public String retrieveTemplateFileName(@NotNull final PerCustomResultTemplateContext context)
-    {
-        String result = "";
-
-        @Nullable final String classValue = context.getResult().getClassValue();
-
-        if (classValue != null)
-        {
-            result = extractClassName(classValue) + "ValueObjectImpl.java";
-        }
-
-        return result;
-    }
-
 
     /**
      * Checks whether given class name corresponds to a standard ValueObject or not.

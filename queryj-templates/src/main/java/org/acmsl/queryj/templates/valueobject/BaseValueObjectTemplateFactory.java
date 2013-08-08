@@ -35,17 +35,19 @@ package org.acmsl.queryj.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.PerTableTemplateFactory;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Row;
-import org.acmsl.queryj.api.PerTableTemplateContext;
-import org.acmsl.queryj.api.PerTableTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JetBrains annotations.
@@ -132,9 +134,8 @@ public class BaseValueObjectTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final String tableName,
-        @Nullable final List<Row> staticContents)
+        @NotNull final List<Row> staticContents)
     {
         return
             new BaseValueObjectTemplate(
@@ -152,8 +153,49 @@ public class BaseValueObjectTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
-                    fileName,
+                    retrieveTemplateFileName(tableName),
                     tableName,
                     staticContents));
     }
+
+    /**
+     * Retrieves given template's file name.
+     * @param tableName the table name.
+     * @return such name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final String tableName)
+    {
+        return
+            retrieveTemplateFileName(
+                tableName,
+                StringUtils.getInstance(),
+                EnglishGrammarUtils.getInstance(),
+                ValueObjectUtils.getInstance());
+    }
+
+    /**
+     * Retrieves given template's file name.
+     * @param tableName the table name.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @param valueObjectUtils the {@link ValueObjectUtils} instance.
+     * @return such name.
+     */
+    @NotNull
+    protected String retrieveTemplateFileName(
+        @NotNull final String tableName,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final ValueObjectUtils valueObjectUtils)
+    {
+        return
+            "Abstract"
+            + valueObjectUtils.getVoClassName(
+                tableName,
+                englishGrammarUtils,
+                stringUtils)
+            + "ValueObject.java";
+    }
+
 }

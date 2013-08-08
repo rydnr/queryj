@@ -41,15 +41,8 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -64,8 +57,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ThreadLocalBagTemplateGenerator
-    extends AbstractTemplateGenerator<ThreadLocalBagTemplate, PerRepositoryTemplateContext>
-    implements PerRepositoryTemplateGenerator<ThreadLocalBagTemplate, PerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<ThreadLocalBagTemplate>
+    implements PerRepositoryTemplateGenerator<ThreadLocalBagTemplate>
 {
     /**
      * Creates a new {@link ThreadLocalBagTemplateGenerator} with given settings.
@@ -75,29 +68,5 @@ public class ThreadLocalBagTemplateGenerator
     public ThreadLocalBagTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull PerRepositoryTemplateContext context)
-    {
-        return retrieveTemplateFileName(context, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves given template's file name.
-     * @param context the template.
-     * @param decorationUtils the {@link org.acmsl.queryj.metadata.DecorationUtils} instance.
-     * @return such name.
-     */
-    @NotNull
-    protected String retrieveTemplateFileName(
-        @NotNull final PerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
-    {
-        return
-              decorationUtils.capitalize(context.getRepositoryName())
-            + "ThreadLocalBag.java";
     }
 }

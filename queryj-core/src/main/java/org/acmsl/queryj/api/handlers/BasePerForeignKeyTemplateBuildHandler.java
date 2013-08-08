@@ -200,9 +200,6 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             if (   (t_ForeignKey != null)
                 && (metadataManager.isGenerationAllowedForForeignKey(t_ForeignKey)))
             {
-                // TODO
-                @NotNull final String t_strFileName = "";
-
                 t_lTemplates.add(
                     templateFactory.createTemplate(
                         metadataManager,
@@ -221,7 +218,6 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
-                        t_strFileName,
                         t_ForeignKey));
             }
         }

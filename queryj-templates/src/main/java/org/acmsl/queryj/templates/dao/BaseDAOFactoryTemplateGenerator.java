@@ -36,24 +36,7 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.PerTableTemplateGenerator;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Locale;
 
 /*
  * Importing checkthread.org annotations.
@@ -66,8 +49,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class BaseDAOFactoryTemplateGenerator
-    extends AbstractTemplateGenerator<BaseDAOFactoryTemplate, PerTableTemplateContext>
-    implements PerTableTemplateGenerator<BaseDAOFactoryTemplate, PerTableTemplateContext>
+    extends AbstractTemplateGenerator<BaseDAOFactoryTemplate>
+    implements PerTableTemplateGenerator<BaseDAOFactoryTemplate>
 {
     /**
      * Creates a new {@link BaseDAOFactoryTemplateGenerator} with given settings.
@@ -77,35 +60,5 @@ public class BaseDAOFactoryTemplateGenerator
     public BaseDAOFactoryTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerTableTemplateContext context)
-    {
-        return retrieveTemplateFileName(context, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
-    }
-
-    /**
-     * Retrieves given template's file name.
-     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext} instance.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
-     * @return such name.
-     */
-    @NotNull
-    protected String retrieveTemplateFileName(
-        @NotNull final PerTableTemplateContext context,
-        @NotNull final StringUtils stringUtils,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils)
-    {
-        return
-            stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    context.getTableName().toLowerCase(Locale.US)),
-                '_')
-                + "DAOFactory.java";
     }
 }

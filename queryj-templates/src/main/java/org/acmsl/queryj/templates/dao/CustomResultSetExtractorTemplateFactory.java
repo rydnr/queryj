@@ -35,6 +35,7 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.DecoratorFactory;
@@ -109,7 +110,6 @@ public class CustomResultSetExtractorTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final Result customResult)
     {
         return
@@ -128,7 +128,41 @@ public class CustomResultSetExtractorTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
-                    fileName,
+                    retrieveTemplateFileName(customResult),
                     customResult));
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final Result customResult)
+    {
+        return retrieveTemplateFileName(customResult, StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the file name for given template.
+     * @param customResult the {@link Result}.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return the file name.
+     */
+    @NotNull
+    protected String retrieveTemplateFileName(
+        @NotNull final Result customResult,
+        @NotNull final StringUtils stringUtils)
+    {
+        @NotNull final String result =
+            stringUtils.capitalize(
+                stringUtils.capitalize(
+                    stringUtils.capitalize(
+                        customResult.getId(),
+                        '.'),
+                    '_'),
+                '-')
+            + "Extractor.java";
+
+        return result;
+    }
+
 }

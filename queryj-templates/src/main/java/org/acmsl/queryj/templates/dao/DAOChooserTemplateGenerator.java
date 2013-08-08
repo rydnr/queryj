@@ -36,15 +36,8 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -58,8 +51,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOChooserTemplateGenerator
-    extends AbstractTemplateGenerator<DAOChooserTemplate, PerRepositoryTemplateContext>
-    implements PerRepositoryTemplateGenerator<DAOChooserTemplate, PerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<DAOChooserTemplate>
+    implements PerRepositoryTemplateGenerator<DAOChooserTemplate>
 {
     /**
      * Creates a new {@link DAOChooserTemplateGenerator} with given settings.
@@ -69,37 +62,5 @@ public class DAOChooserTemplateGenerator
     public DAOChooserTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
-    {
-        return capitalize(context.getRepositoryName()) + "DAOChooser.java";
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @return the capitalized value.
-     */
-    protected String capitalize(@NotNull final String value)
-    {
-        return capitalize(value, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return the capitalized value.
-     */
-    protected String capitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(value);
     }
 }

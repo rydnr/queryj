@@ -37,7 +37,6 @@ package org.acmsl.queryj.templates.valueobject;
  */
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
 
 /*
@@ -56,8 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CustomValueObjectTemplateGenerator
-    extends AbstractTemplateGenerator<CustomValueObjectTemplate, PerCustomResultTemplateContext>
-    implements PerCustomResultTemplateGenerator<CustomValueObjectTemplate, PerCustomResultTemplateContext>
+    extends AbstractTemplateGenerator<CustomValueObjectTemplate>
+    implements PerCustomResultTemplateGenerator<CustomValueObjectTemplate>
 {
     /**
      * Creates a new {@link CustomBaseValueObjectTemplateGenerator} with given settings.
@@ -70,27 +69,6 @@ public class CustomValueObjectTemplateGenerator
     }
 
     /**
-     * Extracts the class name.
-     * @param classValue the class value.
-     */
-    @NotNull
-    protected String extractClassName(@NotNull final String classValue)
-    {
-        return extractClassName(classValue, ValueObjectUtils.getInstance());
-    }
-
-    /**
-     * Extracts the class name.
-     * @param classValue the class value.
-     */
-    @NotNull
-    protected String extractClassName(
-        @NotNull final String classValue, @NotNull final ValueObjectUtils valueObjectUtils)
-    {
-        return valueObjectUtils.extractClassName(classValue);
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -98,17 +76,5 @@ public class CustomValueObjectTemplateGenerator
     public DecoratorFactory getDecoratorFactory()
     {
         return CustomValueObjectDecoratorFactory.getInstance();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public String retrieveTemplateFileName(@NotNull final PerCustomResultTemplateContext context)
-    {
-        return
-            extractClassName(context.getResult().getClassValue())
-            + ".java";
     }
 }

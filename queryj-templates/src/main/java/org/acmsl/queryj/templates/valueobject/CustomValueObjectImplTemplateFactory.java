@@ -109,7 +109,6 @@ public class CustomValueObjectImplTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final Result customResult)
     {
         @Nullable CustomValueObjectImplTemplate result = null;
@@ -137,7 +136,7 @@ public class CustomValueObjectImplTemplateFactory
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
-                        fileName,
+                        retrieveTemplateFileName(customResult),
                         customResult));
         }
 
@@ -191,5 +190,25 @@ public class CustomValueObjectImplTemplateFactory
         @NotNull final String classValue, @NotNull final ValueObjectUtils valueObjectUtils)
     {
         return valueObjectUtils.extractClassName(classValue);
+    }
+
+    /**
+     * Retrieves the template file name.
+     * @param customResult the {@link Result}.
+     * @return the file name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final Result customResult)
+    {
+        String result = "";
+
+        @Nullable final String classValue = customResult.getClassValue();
+
+        if (classValue != null)
+        {
+            result = extractClassName(classValue) + "ValueObjectImpl.java";
+        }
+
+        return result;
     }
 }

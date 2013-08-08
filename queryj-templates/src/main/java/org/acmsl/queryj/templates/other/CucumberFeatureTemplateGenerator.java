@@ -38,20 +38,13 @@ package org.acmsl.queryj.templates.other;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-
-/*
- * Importing Jetbrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to generate Cucumber feature files.
@@ -60,8 +53,8 @@ import org.jetbrains.annotations.NotNull;
  */
 @ThreadSafe
 public class CucumberFeatureTemplateGenerator
-    extends AbstractTemplateGenerator<CucumberFeatureTemplate, PerRepositoryTemplateContext>
-    implements PerRepositoryTemplateGenerator<CucumberFeatureTemplate, PerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<CucumberFeatureTemplate>
+    implements PerRepositoryTemplateGenerator<CucumberFeatureTemplate>
 {
     /**
      * Creates a new {@link CucumberFeatureTemplateGenerator} with given settings.
@@ -71,30 +64,5 @@ public class CucumberFeatureTemplateGenerator
     public CucumberFeatureTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
-    {
-        return retrieveTemplateFileName(context, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the template's file name.
-     * @param context the template.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return the template's file name.
-     */
-    @NotNull
-    protected String retrieveTemplateFileName(
-        @NotNull final PerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
-    {
-        return
-            decorationUtils.capitalize(context.getRepositoryName())
-            + "-tables.feature";
     }
 }

@@ -35,16 +35,8 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -57,8 +49,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class RepositoryDAOTemplateGenerator
-    extends AbstractTemplateGenerator<RepositoryDAOTemplate,PerRepositoryTemplateContext>
-    implements PerRepositoryTemplateGenerator<RepositoryDAOTemplate,PerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<RepositoryDAOTemplate>
+    implements PerRepositoryTemplateGenerator<RepositoryDAOTemplate>
 {
     /**
      * Creates a new {@link RepositoryDAOFactoryTemplateGenerator} with given settings.
@@ -68,47 +60,5 @@ public class RepositoryDAOTemplateGenerator
     public RepositoryDAOTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
-    {
-        return retrieveTemplateFileName(context, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves given template's file name.
-     * @param context the template context.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such name.
-     */
-    @NotNull
-    public String retrieveTemplateFileName(
-        @NotNull final PerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
-    {
-        return retrieveTemplateFileName(context, context.getMetadataManager(), decorationUtils);
-    }
-
-    /**
-     * Retrieves given template's file name.
-     * @param context the template context.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such name.
-     */
-    @NotNull
-    public String retrieveTemplateFileName(
-        @NotNull final PerRepositoryTemplateContext context,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecorationUtils decorationUtils)
-    {
-        return
-              metadataManager.getEngineName()
-            + decorationUtils.capitalize(context.getRepositoryName())
-            + "DAO.java";
     }
 }

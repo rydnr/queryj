@@ -37,18 +37,18 @@ package org.acmsl.queryj.api.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.api.exceptions.CannotCreateCustomResultTemplateException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.api.PerCustomResultTemplate;
 import org.acmsl.queryj.api.PerCustomResultTemplateFactory;
-import org.acmsl.queryj.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.SqlResultDAO;
-import org.acmsl.queryj.tools.DebugUtils;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.SqlResultDAO;
+import org.acmsl.queryj.tools.DebugUtils;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
@@ -107,7 +107,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     @Override
     @SuppressWarnings("unchecked")
     protected boolean handle(@NotNull final Map<String, ?> parameters)
-        throws  QueryJBuildException
+        throws QueryJBuildException
     {
         final boolean result;
 
@@ -120,6 +120,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 parameters,
                 t_MetadataManager,
                 retrieveCustomSqlProvider((Map <String, CustomSqlProvider>) parameters));
+
             result = false;
         }
         else
@@ -230,9 +231,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 && (isGenerationAllowedForResult(
                         t_ResultElement, customSqlProvider, metadataManager, customResultUtils)))
             {
-                // TODO
-                @NotNull final String t_strFileName = "";
-
                 try
                 {
                     t_Template =
@@ -255,7 +253,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                             disableGenerationTimestamps,
                             disableNotNullAnnotations,
                             disableCheckthreadAnnotations,
-                            t_strFileName,
                             t_ResultElement);
 
                     if  (   (t_Template != null)

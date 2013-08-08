@@ -41,6 +41,7 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
@@ -117,8 +118,7 @@ public class JdbcTemplateTemplateFactory
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName)
+        final boolean disableCheckthreadAnnotations)
     {
         return
             new JdbcTemplateTemplate(
@@ -137,6 +137,33 @@ public class JdbcTemplateTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
-                    fileName));
+                    retrieveTemplateFileName(repository)));
     }
+
+    /**
+     * Retrieves given template's file name.
+     * @param repository the repository.
+     * @return such name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final String repository)
+    {
+        return retrieveTemplateFileName(repository, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves given template's file name.
+     * @param repository the repository.
+     * @param decorationUtils the {@link org.acmsl.queryj.metadata.DecorationUtils} instance.
+     * @return such name.
+     */
+    @NotNull
+    protected String retrieveTemplateFileName(
+        @NotNull final String repository, @NotNull final DecorationUtils decorationUtils)
+    {
+        return
+            decorationUtils.capitalize(repository)
+            + "JdbcTemplate.java";
+    }
+
 }

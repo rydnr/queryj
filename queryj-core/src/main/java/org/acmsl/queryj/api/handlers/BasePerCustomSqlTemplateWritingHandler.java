@@ -48,7 +48,7 @@ import org.acmsl.queryj.api.PerCustomSqlTemplate;
 public abstract class BasePerCustomSqlTemplateWritingHandler
        <T extends PerCustomSqlTemplate<C>,
         C extends PerCustomSqlTemplateContext,
-        TG extends PerCustomSqlTemplateGenerator<T,C>>
+        TG extends PerCustomSqlTemplateGenerator<T>>
 extends    AbstractTemplateWritingHandler<T, TG, C>
     implements TemplateWritingHandler
 {

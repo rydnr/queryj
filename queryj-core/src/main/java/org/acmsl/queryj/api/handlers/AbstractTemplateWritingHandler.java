@@ -87,7 +87,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @ThreadSafe
 public abstract class AbstractTemplateWritingHandler
-    <T extends Template<C>, TG extends TemplateGenerator<T,C>, C extends TemplateContext>
+    <T extends Template<C>, TG extends TemplateGenerator<T>, C extends TemplateContext>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
@@ -267,7 +267,7 @@ public abstract class AbstractTemplateWritingHandler
                 {
                     result.add(
                         threadPool.submit(
-                            new TemplateGeneratorThread<T, TG, C>(
+                            new TemplateGeneratorThread<T, TG>(
                                 templateGenerator,
                                 t_Template,
                                 retrieveOutputDir(t_Template.getTemplateContext(), rootDir, engineName, parameters),
@@ -354,7 +354,7 @@ public abstract class AbstractTemplateWritingHandler
 
                         result.add(
                             threadPool.submit(
-                                new TemplateGeneratorThread<T, TG, C>(
+                                new TemplateGeneratorThread<T, TG>(
                                     templateGenerator,
                                     t_Template,
                                     retrieveOutputDir(

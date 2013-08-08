@@ -38,7 +38,6 @@ package org.acmsl.queryj.templates.dao;
  */
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.PerTableTemplateGenerator;
 
 /*
@@ -58,8 +57,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOTemplateGenerator
-    extends AbstractTemplateGenerator<DAOTemplate, PerTableTemplateContext>
-    implements PerTableTemplateGenerator<DAOTemplate, PerTableTemplateContext>
+    extends AbstractTemplateGenerator<DAOTemplate>
+    implements PerTableTemplateGenerator<DAOTemplate>
 {
     /**
      * Creates a new {@link DAOTemplateGenerator} with given settings.
@@ -79,15 +78,5 @@ public class DAOTemplateGenerator
     public DecoratorFactory getDecoratorFactory()
     {
         return DAODecoratorFactory.getInstance();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerTableTemplateContext context)
-    {
-        return new DAOTemplateFileNameResolver().retrieveTemplateFileName(context);
     }
 }

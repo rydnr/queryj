@@ -35,27 +35,14 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
+import org.acmsl.queryj.api.PerForeignKeyTemplateGenerator;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
-import org.acmsl.queryj.api.PerForeignKeyTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Locale;
 
 /*
  * Importing checkthread.org annotations.
@@ -68,8 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class FkStatementSetterTemplateGenerator
-    extends AbstractTemplateGenerator<FkStatementSetterTemplate, PerForeignKeyTemplateContext>
-    implements PerForeignKeyTemplateGenerator<FkStatementSetterTemplate, PerForeignKeyTemplateContext>
+    extends AbstractTemplateGenerator<FkStatementSetterTemplate>
+    implements PerForeignKeyTemplateGenerator<FkStatementSetterTemplate>
 {
     /**
      * Creates a new {@link FkStatementSetterTemplateGenerator} with given settings.
@@ -89,69 +76,5 @@ public class FkStatementSetterTemplateGenerator
     public DecoratorFactory getDecoratorFactory()
     {
         return FkStatementSetterDecoratorFactory.getInstance();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerForeignKeyTemplateContext context)
-    {
-        return
-            retrieveTemplateFileName(
-                context.getForeignKey(),
-                StringUtils.getInstance(),
-                EnglishGrammarUtils.getInstance());
-    }
-
-    /**
-     * Retrieves given template's file name.
-     * @param foreignKey the {@link ForeignKey} instance.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
-     * @return such name.
-     */
-    @NotNull
-    protected String retrieveTemplateFileName(
-        @NotNull final ForeignKey foreignKey,
-        @NotNull final StringUtils stringUtils,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils)
-    {
-        return
-            retrieveTemplateFileName(
-                foreignKey.getSourceTableName(),
-                foreignKey.getTargetTableName(),
-                stringUtils,
-                englishGrammarUtils);
-    }
-
-    /**
-     * Retrieves given template's file name.
-     *
-     * @param sourceTable the source table.
-     * @param targetTable the target table.
-     * @param stringUtils the {@link org.acmsl.commons.utils.StringUtils} instance.
-     * @param englishGrammarUtils the {@link org.acmsl.commons.utils.EnglishGrammarUtils} instance.
-     * @return such name.
-     */
-    @NotNull
-    protected String retrieveTemplateFileName(
-        @NotNull final String sourceTable,
-        @NotNull final String targetTable,
-        @NotNull final StringUtils stringUtils,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils)
-    {
-        return
-              stringUtils.capitalize(
-                  englishGrammarUtils.getSingular(
-                      sourceTable.toLowerCase(Locale.US)),
-                  '_')
-            + "By"
-            + stringUtils.capitalize(
-                  englishGrammarUtils.getSingular(
-                      targetTable.toLowerCase(Locale.US)),
-                  '_')
-            + "StatementSetter.java";
     }
 }

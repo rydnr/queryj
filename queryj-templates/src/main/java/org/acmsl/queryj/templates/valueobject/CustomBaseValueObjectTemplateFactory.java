@@ -35,6 +35,7 @@ package org.acmsl.queryj.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.api.FileNameResolver;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.DecoratorFactory;
@@ -109,7 +110,6 @@ public class CustomBaseValueObjectTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final Result customResult)
     {
         @Nullable CustomBaseValueObjectTemplate result = null;
@@ -135,7 +135,7 @@ public class CustomBaseValueObjectTemplateFactory
                         disableGenerationTimestamps,
                         disableNotNullAnnotations,
                         disableCheckthreadAnnotations,
-                        fileName,
+                        retrieveTemplateFileName(customResult),
                         customResult));
         }
 
@@ -189,5 +189,32 @@ public class CustomBaseValueObjectTemplateFactory
         @NotNull final String classValue, @NotNull final ValueObjectUtils valueObjectUtils)
     {
         return valueObjectUtils.extractClassName(classValue);
+    }
+
+    /**
+     * Retrieves the template file name based on given {@link Result}.
+     * @param customResult the custom result.
+     * @return the file name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final Result customResult)
+    {
+        @NotNull final String result;
+
+        @Nullable final String t_strClassValue = customResult.getClassValue();
+
+        if (t_strClassValue != null)
+        {
+            result =
+                  "Abstract"
+                + extractClassName(t_strClassValue)
+                + "ValueObject.java";
+        }
+        else
+        {
+            result = "Error_in_" + customResult.getId();
+        }
+
+        return result;
     }
 }

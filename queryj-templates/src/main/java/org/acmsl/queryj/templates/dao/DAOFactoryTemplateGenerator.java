@@ -36,26 +36,8 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.PerTableTemplateGenerator;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Locale;
 
 /*
  * Importing checkthread.org annotations.
@@ -69,8 +51,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOFactoryTemplateGenerator
-    extends AbstractTemplateGenerator<DAOFactoryTemplate, PerTableTemplateContext>
-    implements PerTableTemplateGenerator<DAOFactoryTemplate, PerTableTemplateContext>
+    extends AbstractTemplateGenerator<DAOFactoryTemplate>
+    implements PerTableTemplateGenerator<DAOFactoryTemplate>
 {
 
     /**
@@ -81,44 +63,5 @@ public class DAOFactoryTemplateGenerator
     public DAOFactoryTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerTableTemplateContext context)
-    {
-        return
-            retrieveTemplateFileName(
-                context,
-                context.getMetadataManager(),
-                StringUtils.getInstance(),
-                EnglishGrammarUtils.getInstance());
-    }
-
-    /**
-     * Retrieves given template's file name.
-     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
-     * @return such name.
-     */
-    @NotNull
-    protected String retrieveTemplateFileName(
-        @NotNull final PerTableTemplateContext context,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final StringUtils stringUtils,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils)
-    {
-        return
-              metadataManager.getEngineName()
-            + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    context.getTableName().toLowerCase(Locale.US)),
-                '_')
-            + "DAOFactory.java";
     }
 }

@@ -77,7 +77,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class TemplateGeneratorThread
-    <T extends Template<C>, TG extends TemplateGenerator<T,C>, C extends TemplateContext>
+    <T extends Template, TG extends TemplateGenerator<T>>
     extends Thread
 {
     /**

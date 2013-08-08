@@ -36,19 +36,12 @@ package org.acmsl.queryj.templates.valueobject;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate custom BaseValueObject templates.
@@ -56,8 +49,8 @@ import org.jetbrains.annotations.Nullable;
  */
 @ThreadSafe
 public class CustomBaseValueObjectTemplateGenerator
-    extends AbstractTemplateGenerator<CustomBaseValueObjectTemplate, PerCustomResultTemplateContext>
-    implements PerCustomResultTemplateGenerator<CustomBaseValueObjectTemplate, PerCustomResultTemplateContext>
+    extends AbstractTemplateGenerator<CustomBaseValueObjectTemplate>
+    implements PerCustomResultTemplateGenerator<CustomBaseValueObjectTemplate>
 {
     /**
      * Creates a new {@link CustomBaseValueObjectTemplateGenerator} with given settings.
@@ -67,52 +60,5 @@ public class CustomBaseValueObjectTemplateGenerator
     public CustomBaseValueObjectTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public String retrieveTemplateFileName(@NotNull final PerCustomResultTemplateContext context)
-    {
-        @NotNull final String result;
-
-        @Nullable final String t_strClassValue = context.getResult().getClassValue();
-
-        if (t_strClassValue != null)
-        {
-            result =
-                  "Abstract"
-                + extractClassName(t_strClassValue)
-                + "ValueObject.java";
-        }
-        else
-        {
-            result = "Error_in_" + context.getResult().getId();
-        }
-
-        return result;
-    }
-
-    /**
-     * Extracts the class name.
-     * @param classValue the class value.
-     */
-    @NotNull
-    protected String extractClassName(@NotNull final String classValue)
-    {
-        return extractClassName(classValue, ValueObjectUtils.getInstance());
-    }
-
-    /**
-     * Extracts the class name.
-     * @param classValue the class value.
-     */
-    @NotNull
-    protected String extractClassName(
-        @NotNull final String classValue, @NotNull final ValueObjectUtils valueObjectUtils)
-    {
-        return valueObjectUtils.extractClassName(classValue);
     }
 }

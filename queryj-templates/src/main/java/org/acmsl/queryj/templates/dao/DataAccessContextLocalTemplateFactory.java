@@ -63,7 +63,7 @@ import java.util.List;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Is able to craete {@link DataAccessContextLocalTemplate} instances.
+ * Is able to create {@link DataAccessContextLocalTemplate} instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 2012/07/09
  */
@@ -113,8 +113,7 @@ public class DataAccessContextLocalTemplateFactory
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName)
+        final boolean disableCheckthreadAnnotations)
     {
         return
             new DataAccessContextLocalTemplate(
@@ -133,6 +132,20 @@ public class DataAccessContextLocalTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
-                    fileName));
+                    retrieveTemplateFileName(repository)));
     }
+
+
+    /**
+     * Returns "[repository]-dataAccessContext-local.xml.sample".
+     * @param repository the repository.
+     * @return such file name.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final String repository)
+    {
+        return repository.concat("-dataAccessContext-local.xml.sample");
+    }
+
 }

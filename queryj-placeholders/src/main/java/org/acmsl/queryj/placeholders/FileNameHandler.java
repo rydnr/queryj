@@ -77,8 +77,7 @@ public class FileNameHandler
     @Override
     protected DecoratedString getValue(@NotNull final TemplateContext context)
     {
-        // TODO: Refactor generators to use TemplateContext.getFileNameBuilder()
-        return new DecoratedString(context.getTemplateName());
+        return new DecoratedString(context.getFileName());
     }
 
     /**

@@ -35,10 +35,7 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.ResultDecorator;
-import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
 import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
 
@@ -58,8 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CustomRowMapperTemplateGenerator
-    extends  AbstractTemplateGenerator<CustomRowMapperTemplate, PerCustomResultTemplateContext>
-    implements PerCustomResultTemplateGenerator<CustomRowMapperTemplate, PerCustomResultTemplateContext>
+    extends  AbstractTemplateGenerator<CustomRowMapperTemplate>
+    implements PerCustomResultTemplateGenerator<CustomRowMapperTemplate>
 {
     /**
      * Creates a new {@link CustomRowMapperTemplateGenerator} with given settings.
@@ -80,44 +77,5 @@ public class CustomRowMapperTemplateGenerator
     public DecoratorFactory getDecoratorFactory()
     {
         return CustomRowMapperDecoratorFactory.getInstance();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerCustomResultTemplateContext context)
-    {
-        return
-            retrieveTemplateFileName(
-                context, getDecoratorFactory(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the file name for given template.
-     * @param context the {@link PerCustomResultTemplateContext} context.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return the file name.
-     */
-    @NotNull
-    protected String retrieveTemplateFileName(
-        @NotNull final PerCustomResultTemplateContext context,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final DecorationUtils decorationUtils)
-    {
-        @NotNull final ResultDecorator customResult =
-            decoratorFactory.createDecorator(
-                context.getResult(),
-                context.getCustomSqlProvider(),
-                context.getMetadataManager());
-
-        @NotNull final String result =
-              decorationUtils.standardCapitalize(
-                  customResult.getVoName())
-            + "RowMapper.java";
-
-        return result;
     }
 }

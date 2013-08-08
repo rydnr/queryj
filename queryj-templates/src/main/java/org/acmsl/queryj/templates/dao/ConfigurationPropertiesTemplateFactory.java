@@ -56,6 +56,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.List;
+import java.util.Locale;
 
 /*
  * Importing checkthread.org annotations.
@@ -113,8 +114,7 @@ public class ConfigurationPropertiesTemplateFactory
         @NotNull final String jndiLocation,
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName)
+        final boolean disableCheckthreadAnnotations)
     {
         return
             new ConfigurationPropertiesTemplate(
@@ -133,6 +133,19 @@ public class ConfigurationPropertiesTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
-                    fileName));
+                    retrieveTemplateFileName(repository)));
     }
+
+
+    /**
+     * Retrieves the template's file name.
+     * @param repository the repository.
+     * @return the file name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final String repository)
+    {
+        return repository.toLowerCase(Locale.US) + "-queryj.properties";
+    }
+
 }

@@ -37,7 +37,7 @@ package org.acmsl.queryj.api;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface PerCustomResultTemplateGenerator
-    <N extends PerCustomResultTemplate<C>, C extends PerCustomResultTemplateContext>
-    extends TemplateGenerator<N,C>
+    <N extends PerCustomResultTemplate>
+    extends TemplateGenerator<N>
 {
 }

@@ -37,6 +37,7 @@ package org.acmsl.queryj.templates.dao;
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
@@ -50,6 +51,7 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.ResultDecorator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -109,7 +111,6 @@ public class CustomRowMapperTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
         @NotNull final Result customResult)
     {
         return
@@ -128,7 +129,59 @@ public class CustomRowMapperTemplateFactory
                     disableGenerationTimestamps,
                     disableNotNullAnnotations,
                     disableCheckthreadAnnotations,
-                    fileName,
+                    retrieveTemplateFileName(customResult, decoratorFactory, customSqlProvider, metadataManager),
                     customResult));
     }
+
+    /**
+     * Retrieves the file name for given template.
+     * @param customResult the {@link Result}.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param sqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return the file name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(
+        @NotNull final Result customResult,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider sqlProvider,
+        @NotNull final MetadataManager metadataManager)
+    {
+        return
+            retrieveTemplateFileName(
+                customResult, decoratorFactory, sqlProvider, metadataManager, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the file name for given template.
+     * @param customResult the {@link Result}.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param sqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return the file name.
+     */
+    @NotNull
+    protected String retrieveTemplateFileName(
+        @NotNull final Result customResult,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider sqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecorationUtils decorationUtils)
+    {
+        @NotNull final ResultDecorator customResultDecorator =
+            decoratorFactory.createDecorator(
+                customResult,
+                sqlProvider,
+                metadataManager);
+
+        @NotNull final String result =
+            decorationUtils.standardCapitalize(
+                customResultDecorator.getVoName())
+            + "RowMapper.java";
+
+        return result;
+    }
+
 }

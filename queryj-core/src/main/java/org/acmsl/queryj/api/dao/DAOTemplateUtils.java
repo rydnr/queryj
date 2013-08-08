@@ -393,7 +393,7 @@ public class DAOTemplateUtils
     {
         @NotNull String[] result = EMPTY_STRING_ARRAY;
 
-        int t_iCount = (array != null) ? array.length : 0;
+        final int t_iCount = (array != null) ? array.length : 0;
 
         if  (t_iCount > 0)
         {
@@ -450,11 +450,11 @@ public class DAOTemplateUtils
     {
         List<Row> result = null;
 
-        Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
-            @Nullable String t_strStaticAttribute =
+            @Nullable final String t_strStaticAttribute =
                 metaLanguageUtils.retrieveStaticAttribute(t_Table.getComment());
 
             if (t_strStaticAttribute != null)
@@ -569,11 +569,11 @@ public class DAOTemplateUtils
       throws  SQLException
     {
         // TODO: Move this to TableDAO
-        @NotNull List<Row> result = new ArrayList<Row>();
+        @NotNull final List<Row> result = new ArrayList<Row>();
 
-        Log t_Log = UniqueLogFactory.getLog(DAOTemplateUtils.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(DAOTemplateUtils.class);
         
-        int t_iColumnCount = attributes.size();
+        final int t_iColumnCount = attributes.size();
 
         @Nullable ResultSet t_rsResults = null;
 
@@ -587,9 +587,9 @@ public class DAOTemplateUtils
 
             t_rsResults = t_PreparedStatement.executeQuery();
 
-            @NotNull String[] t_astrColumnNames = new String[t_iColumnCount];
+            @NotNull final String[] t_astrColumnNames = new String[t_iColumnCount];
 
-            @NotNull String[] t_astrColumnValues = new String[t_iColumnCount];
+            @NotNull final String[] t_astrColumnValues = new String[t_iColumnCount];
 
             @Nullable String t_strRowName;
 
@@ -599,7 +599,7 @@ public class DAOTemplateUtils
                 {
                     t_strRowName = null;
 
-                    ResultSetMetaData t_rsMetaData =
+                    @NotNull final ResultSetMetaData t_rsMetaData =
                         t_rsResults.getMetaData();
 
                     int t_iArrayIndex;
@@ -626,13 +626,13 @@ public class DAOTemplateUtils
                     reorderAttributes(
                         attributes, t_astrColumnNames, t_astrColumnValues);
 
-                    List<Attribute> t_lAttributes = new ArrayList<Attribute>(t_astrColumnValues.length);
+                    @NotNull final List<Attribute> t_lAttributes = new ArrayList<Attribute>(t_astrColumnValues.length);
 
                     Attribute t_NewAttribute;
 
                     for (int t_iIndex = 0; t_iIndex < t_astrColumnValues.length; t_iIndex++)
                     {
-                        Attribute t_Attribute = attributes.get(t_iIndex);
+                        @Nullable final Attribute t_Attribute = attributes.get(t_iIndex);
 
                         if (t_Attribute != null)
                         {
@@ -684,7 +684,7 @@ public class DAOTemplateUtils
                 if  (t_Log != null)
                 {
                     t_Log.error(
-                        "Cannot close the result set.",
+                        "Cannot close the ResultSet.",
                         sqlException);
                 }
             }
@@ -701,7 +701,7 @@ public class DAOTemplateUtils
                 if  (t_Log != null)
                 {
                     t_Log.error(
-                        "Cannot close the statement.",
+                        "Cannot close the PreparedStatement.",
                         sqlException);
                 }
             }
@@ -743,7 +743,7 @@ public class DAOTemplateUtils
         @NotNull final String[] names,
         @NotNull final String[] values)
     {
-        @Nullable Iterator<Attribute> t_itAttributeIterator =
+        @Nullable final Iterator<Attribute> t_itAttributeIterator =
             (attributes != null) ? attributes.iterator() : null;
 
         if  (t_itAttributeIterator != null)
@@ -751,10 +751,10 @@ public class DAOTemplateUtils
             Attribute t_CurrentAttribute;
             int t_iIndex = 0;
             int t_iPosition;
-            int t_iCount = attributes.size();
+            final int t_iCount = attributes.size();
 
-            @NotNull String[] t_astrAuxNames = new String[t_iCount];
-            @NotNull String[] t_astrAuxValues = new String[t_iCount];
+            @NotNull final String[] t_astrAuxNames = new String[t_iCount];
+            @NotNull final String[] t_astrAuxValues = new String[t_iCount];
 
             while  (t_itAttributeIterator.hasNext())
             {
@@ -789,7 +789,7 @@ public class DAOTemplateUtils
     {
         int result = -1;
 
-        int t_iCount = (attributes != null) ? attributes.length : 0;
+        final int t_iCount = (attributes != null) ? attributes.length : 0;
 
         String t_strAttribute;
 

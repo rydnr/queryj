@@ -36,14 +36,7 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
-import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
-import org.acmsl.queryj.metadata.DecorationUtils;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -56,8 +49,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class BaseRepositoryDAOFactoryTemplateGenerator
-    extends AbstractTemplateGenerator<BaseRepositoryDAOFactoryTemplate, PerRepositoryTemplateContext>
-    implements PerRepositoryTemplateGenerator<BaseRepositoryDAOFactoryTemplate, PerRepositoryTemplateContext>
+    extends AbstractTemplateGenerator<BaseRepositoryDAOFactoryTemplate>
+    implements PerRepositoryTemplateGenerator<BaseRepositoryDAOFactoryTemplate>
 {
     /**
      * Creates a new {@link BaseRepositoryDAOFactoryTemplateGenerator} with given settings.
@@ -67,30 +60,5 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
     public BaseRepositoryDAOFactoryTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public String retrieveTemplateFileName(@NotNull final PerRepositoryTemplateContext context)
-    {
-        return retrieveTemplateFileName(context, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the template's file name.
-     * @param context the template.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return the template's file name.
-     */
-    @NotNull
-    protected String retrieveTemplateFileName(
-        @NotNull final PerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
-    {
-        return
-              decorationUtils.capitalize(context.getRepositoryName())
-            + "DAOFactory.java";
     }
 }

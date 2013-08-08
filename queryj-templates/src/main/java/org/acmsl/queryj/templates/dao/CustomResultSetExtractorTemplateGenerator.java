@@ -35,26 +35,19 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
 import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to generate custom ResultSetExtractor templates.
@@ -62,8 +55,8 @@ import org.jetbrains.annotations.Nullable;
  */
 @ThreadSafe
 public class CustomResultSetExtractorTemplateGenerator
-    extends  AbstractTemplateGenerator<CustomResultSetExtractorTemplate, PerCustomResultTemplateContext>
-    implements PerCustomResultTemplateGenerator<CustomResultSetExtractorTemplate, PerCustomResultTemplateContext>
+    extends  AbstractTemplateGenerator<CustomResultSetExtractorTemplate>
+    implements PerCustomResultTemplateGenerator<CustomResultSetExtractorTemplate>
 {
     /**
      * Creates a new {@link CustomResultSetExtractorTemplateGenerator} with given settings.
@@ -84,48 +77,5 @@ public class CustomResultSetExtractorTemplateGenerator
     public DecoratorFactory getDecoratorFactory()
     {
         return CustomResultSetExtractorDecoratorFactory.getInstance();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public String retrieveTemplateFileName(@NotNull final PerCustomResultTemplateContext context)
-    {
-        return retrieveTemplateFileName(context, StringUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the file name for given template.
-     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext} context.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @return the file name.
-     */
-    @NotNull
-    protected String retrieveTemplateFileName(
-        @NotNull final PerCustomResultTemplateContext context,
-        @Nullable final StringUtils stringUtils)
-    {
-        @NotNull final String result;
-
-        if (stringUtils != null)
-        {
-            result =
-                stringUtils.capitalize(
-                    stringUtils.capitalize(
-                        stringUtils.capitalize(
-                            context.getResult().getId(),
-                            '.'),
-                        '_'),
-                    '-')
-                + "Extractor.java";
-        }
-        else
-        {
-            result = "";
-        }
-
-        return result;
     }
 }

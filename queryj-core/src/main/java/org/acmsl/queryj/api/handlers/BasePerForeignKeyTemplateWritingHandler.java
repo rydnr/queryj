@@ -58,7 +58,7 @@ import java.util.Map;
 public abstract class BasePerForeignKeyTemplateWritingHandler
     <T extends PerForeignKeyTemplate<C>,
      C extends PerForeignKeyTemplateContext,
-     TG extends PerForeignKeyTemplateGenerator<T,C>>
+     TG extends PerForeignKeyTemplateGenerator<T>>
     extends    AbstractTemplateWritingHandler<T, TG, C>
     implements TemplateWritingHandler
 {
