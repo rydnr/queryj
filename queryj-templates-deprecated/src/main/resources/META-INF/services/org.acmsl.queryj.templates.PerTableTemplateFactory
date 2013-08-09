@@ -1,0 +1,12 @@
+org.acmsl.queryj.templates.dao.AttributesStatementSetterTemplateFactory
+org.acmsl.queryj.templates.dao.BaseAbstractDAOTemplateFactory
+org.acmsl.queryj.templates.dao.BaseDAOFactoryTemplateFactory
+org.acmsl.queryj.templates.dao.BaseDAOTemplateFactory
+org.acmsl.queryj.templates.valueobject.BaseValueObjectTemplateFactory
+org.acmsl.queryj.templates.dao.DAOFactoryTemplateFactory
+org.acmsl.queryj.templates.dao.DAOTemplateFactory
+org.acmsl.queryj.templates.dao.PkStatementSetterTemplateFactory
+org.acmsl.queryj.templates.dao.ResultSetExtractorTemplateFactory
+org.acmsl.queryj.templates.valueobject.ValueObjectFactoryTemplateFactory
+org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateFactory
+org.acmsl.queryj.templates.valueobject.ValueObjectTemplateFactory

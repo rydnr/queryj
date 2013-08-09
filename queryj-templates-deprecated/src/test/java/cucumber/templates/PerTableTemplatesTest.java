@@ -38,8 +38,21 @@ package cucumber.templates;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.dao.DAOTemplateFactory;
-import org.acmsl.queryj.templates.dao.DAOTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseDAOTemplateFactory;
+import org.acmsl.queryj.templates.dao.BaseDAOTemplateGenerator;
+import org.acmsl.queryj.templates.dao.DAOFactoryTemplateFactory;
+import org.acmsl.queryj.templates.dao.DAOFactoryTemplateGenerator;
+import org.acmsl.queryj.templates.dao.PkStatementSetterTemplateFactory;
+import org.acmsl.queryj.templates.dao.PkStatementSetterTemplateGenerator;
+import org.acmsl.queryj.templates.dao.ResultSetExtractorTemplateFactory;
+import org.acmsl.queryj.templates.dao.ResultSetExtractorTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.BaseValueObjectTemplateFactory;
+import org.acmsl.queryj.templates.valueobject.BaseValueObjectTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.ValueObjectFactoryTemplateFactory;
+import org.acmsl.queryj.templates.valueobject.ValueObjectFactoryTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateFactory;
+import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.ValueObjectTemplateGenerator;
 
 /*
  * Importing QueryJ-Core classes.
@@ -112,8 +125,23 @@ public class PerTableTemplatesTest
         super();
 
         // dao
-        GENERATOR_MAPPINGS.put("DAO", new DAOTemplateGenerator(false, 1));
-        FACTORY_MAPPINGS.put("DAO", DAOTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("BaseDAO", new BaseDAOTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("BaseDAO", BaseDAOTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("DAOFactory", new DAOFactoryTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("DAOFactory", DAOFactoryTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("PkStatementSetter", new PkStatementSetterTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("PkStatementSetter", PkStatementSetterTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("ResultSetExtractor", new ResultSetExtractorTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("ResultSetExtractor", ResultSetExtractorTemplateFactory.getInstance());
+        // vo
+        GENERATOR_MAPPINGS.put("BaseValueObject", new BaseValueObjectTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("BaseValueObject", BaseValueObjectTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("ValueObject", new ValueObjectTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("ValueObject", BaseValueObjectTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("ValueObjectFactory", new ValueObjectFactoryTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("ValueObjectFactory", ValueObjectFactoryTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("ValueObjectImpl", new ValueObjectImplTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("ValueObjectImpl", ValueObjectImplTemplateFactory.getInstance());
     }
 
     /**

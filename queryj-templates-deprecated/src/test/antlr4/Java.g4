@@ -1,0 +1,1 @@
+../../../../queryj-templates/src/test/antlr4/Java.g4
