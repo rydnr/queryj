@@ -36,6 +36,7 @@ package org.acmsl.queryj.customsql.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CustomResultWithInvalidNumberOfColumnsException;
 import org.acmsl.queryj.api.exceptions.CustomResultWithNoPropertiesException;
 import org.acmsl.queryj.api.exceptions.InvalidCustomSqlException;
@@ -49,6 +50,7 @@ import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -83,7 +85,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /*
  * Importing some Apache Commons Logging classes.
@@ -114,6 +115,11 @@ public class CustomSqlValidationHandler
      */
     private static final Class[] CLASS_ARRAY_OF_ONE_STRING =
         new Class[] { String.class };
+    protected static final String COULD_NOT_BIND_PARAMETER_VIA = "Could not bind parameter via ";
+    protected static final String PREPARED_STATEMENT_SET = "PreparedStatement.set";
+    protected static final String VALIDATION_FAILED_FOR = "Validation failed for ";
+    protected static final String COULD_NOT_RETRIEVE_RESULT_VIA = "Could not retrieve result via ";
+    protected static final String RESULT_SET = "ResultSet.";
 
     /**
      * The date format.
@@ -132,28 +138,27 @@ public class CustomSqlValidationHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
-    @SuppressWarnings("unchecked")
-    protected boolean handle(@NotNull final Map<String, ?> parameters)
+    public boolean handle(@NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         boolean result = false;
 
         @Nullable final MetadataManager t_MetadataManager =
-            retrieveMetadataManager((Map<String, MetadataManager>) parameters);
+            retrieveMetadataManager(parameters);
 
         @NotNull final CustomSqlProvider t_CustomSqlProvider =
-            retrieveCustomSqlProvider((Map<String, CustomSqlProvider>) parameters);
+            retrieveCustomSqlProvider(parameters);
 
         if (t_MetadataManager == null)
         {
             result = true;
         }
-        else if  (!retrieveDisableCustomSqlValidation((Map<String, Boolean>) parameters))
+        else if  (!retrieveDisableCustomSqlValidation(parameters))
         {
             validate(
                 t_CustomSqlProvider,
                 t_CustomSqlProvider.getSqlDAO(),
-                retrieveConnection((Map<String, Connection>) parameters),
+                retrieveConnection(parameters),
                 t_MetadataManager);
         }
 
@@ -175,7 +180,7 @@ public class CustomSqlValidationHandler
         @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
-        for (@Nullable Sql t_Sql : sqlDAO.findAll())
+        for (@Nullable final Sql t_Sql : sqlDAO.findAll())
         {
             if (   (t_Sql != null)
                 && (t_Sql.isValidate()))
@@ -207,13 +212,13 @@ public class CustomSqlValidationHandler
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
     {
-        String t_strSql = sql.getValue().trim();
+        @NotNull final String t_strSql = sql.getValue().trim();
 
         @Nullable SQLException t_ExceptionToWrap = null;
 
         @Nullable QueryJBuildException t_ExceptionToThrow = null;
 
-        Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
         if  (t_Log != null)
         {
@@ -465,7 +470,7 @@ public class CustomSqlValidationHandler
                     @Nullable final Method t_ParameterMethod;
 
                     if  (   (   ("Date".equals(t_strType))
-                             || ("Timestamp".equals(t_strType)))
+                             || (JdbcMetadataTypeManager.TIMESTAMP.equals(t_strType)))
                          && (t_Parameter.getValidationValue() != null))
                     {
                         t_ParameterValue = new Timestamp(new Date().getTime());
@@ -620,8 +625,8 @@ public class CustomSqlValidationHandler
                         if  (t_Log != null)
                         {
                             t_Log.warn(
-                                  "Could not bind parameter via "
-                                + "PreparedStatement.set" + t_strType
+                                  COULD_NOT_BIND_PARAMETER_VIA
+                                + PREPARED_STATEMENT_SET + t_strType
                                 + "(int, " + t_Type.getName() + ")",
                                 illegalAccessException);
                         }
@@ -638,8 +643,8 @@ public class CustomSqlValidationHandler
                         if  (t_Log != null)
                         {
                             t_Log.warn(
-                                  "Could not bind parameter via "
-                                + "PreparedStatement.set" + t_strType
+                                  COULD_NOT_BIND_PARAMETER_VIA
+                                + PREPARED_STATEMENT_SET + t_strType
                                 + "(int, " + t_Type.getName() + ")",
                                 invocationTargetException);
                         }
@@ -741,9 +746,9 @@ public class CustomSqlValidationHandler
         @NotNull String result = prefix;
 
         if  (   ("Date".equals(type))
-             || ("Timestamp".equals(type)))
+             || (JdbcMetadataTypeManager.TIMESTAMP.equals(type)))
         {
-            result += "Timestamp";
+            result += JdbcMetadataTypeManager.TIMESTAMP;
         }
         else
         {
@@ -1054,9 +1059,9 @@ public class CustomSqlValidationHandler
             if  (t_Log != null)
             {
                 t_Log.warn(
-                      "Validation failed for " + sql.getId() + ":\n"
-                    + "Could not retrieve result via "
-                    + "ResultSet." + method.getName()
+                      VALIDATION_FAILED_FOR + sql.getId() + ":\n"
+                    + COULD_NOT_RETRIEVE_RESULT_VIA
+                    + RESULT_SET + method.getName()
                     + "("
                     + (   (property.getIndex() > 0)
                        ?  "" + property.getIndex()
@@ -1074,9 +1079,9 @@ public class CustomSqlValidationHandler
             if  (t_Log != null)
             {
                 t_Log.warn(
-                      "Validation failed for " + sql.getId() + ":\n"
-                    + "Could not retrieve result via "
-                    + "ResultSet." + method.getName()
+                      VALIDATION_FAILED_FOR + sql.getId() + ":\n"
+                    + COULD_NOT_RETRIEVE_RESULT_VIA
+                    + RESULT_SET + method.getName()
                     + "("
                     + (   (property.getIndex() > 0)
                        ?  "" + property.getIndex()
@@ -1282,17 +1287,15 @@ public class CustomSqlValidationHandler
      * @param settings the settings.
      * @return <code>true</code> in such case.
      */
-    protected boolean retrieveDisableCustomSqlValidation(@NotNull final Map<String, Boolean> settings)
+    protected boolean retrieveDisableCustomSqlValidation(@NotNull final QueryJCommand settings)
     {
-        return retrieveBoolean(settings, ParameterValidationHandler.DISABLE_CUSTOM_SQL_VALIDATION);
+        return settings.getBooleanSetting(ParameterValidationHandler.DISABLE_CUSTOM_SQL_VALIDATION, false);
     }
 
     @Override
     @NotNull
     public String toString()
     {
-        return "CustomSqlValidationHandler{" +
-               "DATE_FORMAT=" + DATE_FORMAT +
-               '}';
+        return "{ 'class': 'CustomSqlValidationHandler', 'DATE_FORMAT': '" + DATE_FORMAT + "' }";
     }
 }

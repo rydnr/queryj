@@ -36,6 +36,8 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.templates.dao.DAOTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -52,7 +54,6 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.util.List;
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -104,8 +105,9 @@ public class DAOTemplateBuildHandler
     @Override
     protected void storeTemplates(
         @NotNull final List<DAOTemplate> templates,
-        @NotNull final Map<String, List<DAOTemplate>> parameters)
+        @NotNull final QueryJCommand parameters)
     {
-        parameters.put(TemplateMappingManager.DAO_TEMPLATES, templates);
+        new QueryJCommandWrapper<List<DAOTemplate>>(parameters)
+            .setSetting(TemplateMappingManager.DAO_TEMPLATES, templates);
     }
 }

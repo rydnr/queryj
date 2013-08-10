@@ -23,7 +23,7 @@
 
  ******************************************************************************
  *
- * Filename: FillTemplateChain.java
+ * Filename: FillTemplateCommandBuilder.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
@@ -40,9 +40,10 @@ package org.acmsl.queryj.api;
  */
 import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.FillAdapterHandler;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -52,21 +53,15 @@ import org.acmsl.commons.patterns.Chain;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Map;
 
 /**
  * Sets up the chain to provide all placeholder replacements in templates.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 2012/06/03
  */
 public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH extends QueryJCommandHandler<QueryJCommand>>
-    extends AbstractQueryJChain<CH, QueryJCommand>
+    extends AbstractQueryJChain<CH>
     implements FillTemplateChain<C>
 {
     /**
@@ -115,18 +110,6 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH ex
     }
 
     /**
-     * Builds the command.
-     * @param command the command to be initialized.
-     * @return the initialized command.
-     */
-    @NotNull
-    @Override
-    protected QueryJCommand buildCommand(@NotNull final QueryJCommand command)
-    {
-        return command;
-    }
-
-    /**
      * Performs any clean up whenever an error occurs.
      * @param buildException the error that triggers this clean-up.
      * @param command the command.
@@ -137,27 +120,6 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH ex
     {
         // nothing required.
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    @SuppressWarnings("unchecked")
-    public Map<String, ?> providePlaceholders(final boolean relevantOnly)
-        throws QueryJBuildException
-    {
-        final Map<String, ?> result;
-
-        @NotNull final QueryJCommand t_Command = buildCommand();
-
-        super.process(buildChain(getChain(), relevantOnly), t_Command);
-
-        result = t_Command.getAttributeMap();
-
-        return result;
-    }
-
 
     /**
      * Adds additional per-table handlers.
@@ -225,8 +187,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH ex
     public String toString()
     {
         return
-              "AbstractFillTemplateChain{"
-            + " templateContext=" + templateContext
-            + " }";
+              "{ 'class': 'AbstractFillTemplateChain', 'templateContext': '" + templateContext
+            + "' }";
     }
 }

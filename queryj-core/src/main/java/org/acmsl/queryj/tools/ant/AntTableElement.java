@@ -157,9 +157,9 @@ public class AntTableElement
     @Nullable
     public Object createDynamicElement(@NotNull final String name)
     {
-        @Nullable AntFieldElement result = null;
+        @Nullable final AntFieldElement result;
 
-        if  ("field".equals(name)) 
+        if  (AntExternallyManagedFieldsElement.FIELD_LITERAL.equals(name))
         {
             result = new AntFieldElement();
 
@@ -175,9 +175,17 @@ public class AntTableElement
         }
         else 
         {
-            throw new BuildException(name + " elements are not supported");
+            throw new BuildException(name + QueryJTask.ELEMENTS_ARE_NOT_SUPPORTED);
         }
 
         return result;
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'AntTableElement', 'fields': '" + m__lFields +
+               "', 'tableName': '" + m__strTableName + "' }";
     }
 }

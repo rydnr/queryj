@@ -114,7 +114,7 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends PerForeignKeyT
         final String templateName, @NotNull final ForeignKey foreignKey)
     {
         return
-              "Generating " + templateName + " for "
+              GENERATING + templateName + " for "
             + foreignKey.getSourceTableName()
             + "(" + concat(foreignKey.getAttributes(), ",") + ")"
             + "->"

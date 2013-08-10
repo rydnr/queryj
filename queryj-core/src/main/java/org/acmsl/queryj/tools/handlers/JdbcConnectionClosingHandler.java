@@ -35,6 +35,8 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.Template;
 import org.acmsl.queryj.api.exceptions.CannotCloseJdbcConnectionException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -63,7 +65,6 @@ import java.sql.SQLException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.List;
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -82,6 +83,8 @@ public class JdbcConnectionClosingHandler
      * A token used to wait for the threads to complete.
      */
     private static final Object LOCK = new Object();
+    protected static final String INTERRUPTED_WHILE_WAITING_FOR_THE_THREADS_TO_FINISH =
+        "Interrupted while waiting for the threads to finish";
 
     /**
      * Creates a <code>JdbcConnectionClosingHandler</code> instance.
@@ -97,15 +100,14 @@ public class JdbcConnectionClosingHandler
      * @throws QueryJBuildException the build process cannot be performed.
      */
     @Override
-    @SuppressWarnings("unchecked")
-    protected boolean handle(@NotNull final Map<String, ?> parameters)
+    public boolean handle(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
         waitUntilGenerationThreadsFinish(parameters);
 
-        closeConnection((Map <String, Connection>) parameters);
+        closeConnection(parameters);
 
-        removeConnection((Map <String, Connection>) parameters);
+        removeConnection(parameters);
 
         return false;
     }
@@ -115,10 +117,10 @@ public class JdbcConnectionClosingHandler
      * @param parameters the parameters.
      */
     @SuppressWarnings("unchecked")
-    protected void waitUntilGenerationThreadsFinish(@NotNull final Map<String, ?> parameters)
+    protected void waitUntilGenerationThreadsFinish(@NotNull final QueryJCommand parameters)
     {
         waitUntilGenerationThreadsFinish(
-            retrieveGenerationTasks((Map<String, List<Future<Template>>>) parameters),
+            retrieveGenerationTasks(parameters),
             UniqueLogFactory.getLog(JdbcConnectionClosingHandler.class));
     }
 
@@ -146,27 +148,18 @@ public class JdbcConnectionClosingHandler
                     }
                     catch (@NotNull final InterruptedException interrupted)
                     {
-                        if (log != null)
-                        {
-                            log.info(
-                                "Interrupted while waiting for the threads to finish", interrupted);
-                        }
+                        log.info(
+                            INTERRUPTED_WHILE_WAITING_FOR_THE_THREADS_TO_FINISH, interrupted);
                     }
                     catch (@NotNull final ExecutionException interrupted)
                     {
-                        if (log != null)
-                        {
-                            log.info(interrupted.getMessage());
-                        }
+                        log.info(interrupted.getMessage());
 
                         Throwable cause = interrupted.getCause();
 
                         while (cause != null)
                         {
-                            if (log != null)
-                            {
-                                log.error(cause.getMessage(), cause);
-                            }
+                            log.error(cause.getMessage(), cause);
                             cause = cause.getCause();
                         }
                     }
@@ -182,7 +175,7 @@ public class JdbcConnectionClosingHandler
                             if (log != null)
                             {
                                 log.info(
-                                    "Interrupted while waiting for the threads to finish", interrupted);
+                                    INTERRUPTED_WHILE_WAITING_FOR_THE_THREADS_TO_FINISH, interrupted);
                             }
                         }
                     }
@@ -196,10 +189,12 @@ public class JdbcConnectionClosingHandler
      * @param parameters the parameter map.
      * @throws QueryJBuildException if the connection cannot be closed.
      */
-    protected void closeConnection(@NotNull final Map<String, Connection> parameters)
+    protected void closeConnection(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
-        closeConnection(parameters.get(JdbcConnectionOpeningHandler.JDBC_CONNECTION));
+        closeConnection(
+            new QueryJCommandWrapper<Connection>(parameters)
+                .getSetting(JdbcConnectionOpeningHandler.JDBC_CONNECTION));
     }
 
     /**
@@ -230,9 +225,10 @@ public class JdbcConnectionClosingHandler
      * @throws QueryJBuildException if the connection cannot be removed for
      * any reason.
      */
-    protected void removeConnection(@NotNull final Map<String, Connection> parameters)
+    protected void removeConnection(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
-        parameters.remove(JdbcConnectionOpeningHandler.JDBC_CONNECTION);
+        new QueryJCommandWrapper<Connection>(parameters)
+            .setSetting(JdbcConnectionOpeningHandler.JDBC_CONNECTION, null);
     }
 }

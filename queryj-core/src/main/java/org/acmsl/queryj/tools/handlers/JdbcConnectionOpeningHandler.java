@@ -36,13 +36,11 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.CannotEstablishDatabaseConnectionException;
 import org.acmsl.queryj.api.exceptions.JdbcDriverNotFoundException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
 
 /*
  * Importing some Commons-Logging classes.
@@ -56,7 +54,6 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -70,6 +67,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class JdbcConnectionOpeningHandler
     extends  AbstractQueryJCommandHandler
+    implements QueryJSettings
 {
     /**
      * The JDBC connection attribute name.
@@ -79,25 +77,23 @@ public class JdbcConnectionOpeningHandler
     /**
      * Creates a <code>JdbcConnectionOpeningHandler</code> instance.
      */
-    public JdbcConnectionOpeningHandler() {};
+    public JdbcConnectionOpeningHandler() {}
 
     /**
      * Handles given parameters.
-     *
-     *
-     * @param parameters the parameters.
+     * @param command the command.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    @SuppressWarnings("unchecked")
-    protected boolean handle(@NotNull final Map parameters)
+    @Override
+    public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
     {
-        @Nullable final Connection connection = openConnection((Map<String, String>) parameters);
+        @Nullable final Connection connection = openConnection(command);
 
         if (connection != null)
         {
-            storeConnection(connection, (Map <String, Connection>) parameters);
+            storeConnection(connection, command);
         }
 
         return false;
@@ -111,19 +107,35 @@ public class JdbcConnectionOpeningHandler
      * @throws QueryJBuildException if the connection cannot be opened.
      */
     @Nullable
-    protected Connection openConnection(@NotNull final Map<String, String> parameters)
+    protected Connection openConnection(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
-        return
-            openConnection(
-                parameters.get(
-                    ParameterValidationHandler.JDBC_DRIVER),
-                parameters.get(
-                    ParameterValidationHandler.JDBC_URL),
-                parameters.get(
-                    ParameterValidationHandler.JDBC_USERNAME),
-                parameters.get(
-                    ParameterValidationHandler.JDBC_PASSWORD));
+        @Nullable final Connection result;
+
+        @Nullable final String driver = parameters.getSetting(JDBC_DRIVER);
+        @Nullable final String url = parameters.getSetting(JDBC_URL);
+        @Nullable final String userName = parameters.getSetting(JDBC_USERNAME);
+        @Nullable final String password = parameters.getSetting(JDBC_PASSWORD);
+
+        if (driver == null)
+        {
+            // TODO
+            throw new RuntimeException("TODO: Fix me");
+        }
+        else if (url == null)
+        {
+            // TODO
+            throw new RuntimeException("TODO: Fix me");
+        }
+        else if (userName == null)
+        {
+            // TODO
+            throw new RuntimeException("TODO: Fix me");
+        }
+
+        result = openConnection(driver, url, userName, password);
+
+        return result;
     }
 
     /**
@@ -174,8 +186,8 @@ public class JdbcConnectionOpeningHandler
      * @param parameters the parameter map.
      */
     protected void storeConnection(
-        @NotNull final Connection connection, @NotNull final Map<String, Connection> parameters)
+        @NotNull final Connection connection, @NotNull final QueryJCommand parameters)
     {
-        parameters.put(JDBC_CONNECTION, connection);
+        parameters.setSetting(JDBC_CONNECTION, connection);
     }
 }

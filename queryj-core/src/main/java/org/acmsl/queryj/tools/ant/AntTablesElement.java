@@ -66,6 +66,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class AntTablesElement
     implements  DynamicConfigurator
 {
+    public static final String TABLE = "table";
+
     /**
      * The table collection.
      */
@@ -111,11 +113,11 @@ public class AntTablesElement
      * @param name the attribute name.
      * @param value the attribute value.
      */
-    public void setDynamicAttribute(String name, String value)
+    public void setDynamicAttribute(@NotNull final String name, @NotNull final String value)
     {
         throw
             new BuildException(
-                "No dynamic attributes are supported (" + name + "=" + value + ")");
+                QueryJTask.NO_DYNAMIC_ATTRIBUTES_ARE_SUPPORTED + name + "=" + value + ")");
     }
 
     /**
@@ -125,11 +127,11 @@ public class AntTablesElement
      * @throws BuildException if the element is not supported.
      */
     @Nullable
-    public Object createDynamicElement(String name)
+    public Object createDynamicElement(@NotNull final String name)
     {
-        @Nullable AntTableElement result;
+        @Nullable final AntTableElement result;
 
-        if  ("table".equals(name)) 
+        if  (TABLE.equals(name))
         {
             result = new AntTableElement();
 
@@ -145,9 +147,16 @@ public class AntTablesElement
         }
         else 
         {
-            throw new BuildException(name + " elements are not supported");
+            throw new BuildException(name + QueryJTask.ELEMENTS_ARE_NOT_SUPPORTED);
         }
 
         return result;
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'AntTablesElement', 'tables': '" + m__lTables + "' }";
     }
 }

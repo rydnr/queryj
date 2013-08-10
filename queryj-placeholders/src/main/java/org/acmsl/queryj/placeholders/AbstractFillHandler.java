@@ -38,6 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.CannotProcessTemplateException;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -55,6 +56,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Abstract implementation to simplify fill handlers.
@@ -76,39 +78,22 @@ public abstract class AbstractFillHandler<P>
 
         try
         {
-            result = handle(command.getAttributeMap());
+            @SuppressWarnings("unchecked")
+            @NotNull final Map<String, P> t_mLocalMap = new HashMap<String, P>();
+
+            result = handle(t_mLocalMap, getPlaceHolder());
+
+            if (!result)
+            {
+                for (@NotNull final Entry<String, P> entry : t_mLocalMap.entrySet())
+                {
+                    new QueryJCommandWrapper<P>(command).setSetting(entry.getKey(), entry.getValue());
+                }
+            }
         }
         catch (@NotNull final InvalidTemplateException invalidTemplate)
         {
             throw new CannotProcessTemplateException(invalidTemplate);
-        }
-
-        return result;
-    }
-
-    /**
-     * Does some processing based on given command map.
-     * @param commandMap the command map.
-     * @return <code>false</code> if the chain can continue.
-     * @throws InvalidTemplateException if some fatal error occurs.
-     * @throws QueryJBuildException if there inconsistencies in the custom SQL
-     * model.
-     */
-    @SuppressWarnings("unchecked")
-    protected boolean handle(@NotNull final Map<String, ?> commandMap)
-        throws InvalidTemplateException,
-               QueryJBuildException
-    {
-        final boolean result;
-
-        @SuppressWarnings("unchecked")
-        @NotNull final Map<String, P> t_mLocalMap = new HashMap<String, P>();
-
-        result = handle(t_mLocalMap, getPlaceHolder());
-
-        if (!result)
-        {
-            ((Map <String, P>) commandMap).putAll(t_mLocalMap);
         }
 
         return result;

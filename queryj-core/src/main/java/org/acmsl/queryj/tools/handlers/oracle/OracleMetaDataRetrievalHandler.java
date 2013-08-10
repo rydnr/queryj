@@ -35,6 +35,8 @@ package org.acmsl.queryj.tools.handlers.oracle;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.MetadataExtractionLogger;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
@@ -63,7 +65,6 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -119,13 +120,8 @@ public class OracleMetaDataRetrievalHandler
     @NotNull
     @Override
     protected MetadataManager buildMetadataManager(
-        @NotNull final Map parameters,
+        @SuppressWarnings("unused") @NotNull final QueryJCommand parameters,
         @NotNull final List<Table> tables,
-        @NotNull final String[] procedureNames,
-        final boolean disableTableExtraction,
-        final boolean lazyTableExtraction,
-        final boolean disableProcedureExtraction,
-        final boolean lazyProcedureExtraction,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
@@ -133,7 +129,7 @@ public class OracleMetaDataRetrievalHandler
         @NotNull final String engineName,
         @NotNull final String engineVersion,
         @NotNull final String quote)
-        throws  BuildException
+        throws QueryJBuildException
     {
         @Nullable final MetadataManager result;
 
@@ -147,8 +143,8 @@ public class OracleMetaDataRetrievalHandler
                     schema,
                     new ArrayList<String>(0), // TODO: explicit tables
                     tables,
-                    disableTableExtraction,
-                    lazyTableExtraction,
+                    false, // disable table extraction.
+                    false, // lazy table extraction
                     caseSensitive,
                     engineName,
                     engineVersion,

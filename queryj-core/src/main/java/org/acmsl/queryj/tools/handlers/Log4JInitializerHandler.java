@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
@@ -61,13 +62,13 @@ import org.apache.log4j.WriterAppender;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Map;
 
 /*
  * Importing some Log4J classes.
@@ -97,7 +98,7 @@ public class Log4JInitializerHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
-    protected boolean handle(@NotNull final Map parameters)
+    public boolean handle(@NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {
         if (!isLog4JConfigured())
@@ -116,7 +117,7 @@ public class Log4JInitializerHandler
     {
         boolean result = true;
 
-        Logger root = Logger.getRootLogger();
+        @NotNull final Logger root = Logger.getRootLogger();
 
         if (!root.getAllAppenders().hasMoreElements())
         {
@@ -131,7 +132,7 @@ public class Log4JInitializerHandler
      */
     protected void connectLog4JToMaven()
     {
-        Logger root = Logger.getRootLogger();
+        @NotNull final Logger root = Logger.getRootLogger();
 
         root.addAppender(
             new WriterAppender(
@@ -156,7 +157,7 @@ public class Log4JInitializerHandler
         public void write(final char[] cbuf, final int off, final int len)
             throws IOException
         {
-            Log t_Log = UniqueLogFactory.getLog("log4j");
+            @Nullable final Log t_Log = UniqueLogFactory.getLog("log4j");
 
             if (t_Log != null)
             {

@@ -219,7 +219,7 @@ public class PerRepositoryTemplatesTest
 
         for (@NotNull final Map<String, String> entry : entries)
         {
-            @Nullable final String tableName = entry.get("table");
+            @Nullable final String tableName = entry.get(AntTablesElement.TABLE);
             Assert.assertNotNull("Missing table name", tableName);
             tableList.add(tableName);
         }

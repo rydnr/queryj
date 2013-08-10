@@ -132,6 +132,12 @@
       <scope>test</scope>
       <optional>true</optional>
     </dependency>
+
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>

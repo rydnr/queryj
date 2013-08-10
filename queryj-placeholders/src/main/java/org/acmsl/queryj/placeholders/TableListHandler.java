@@ -47,6 +47,7 @@ import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -90,7 +91,7 @@ public class TableListHandler
     @Override
     public String getPlaceHolder()
     {
-        return "tables";
+        return ParameterValidationHandler.TABLES;
     }
 
     /**

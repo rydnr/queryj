@@ -36,18 +36,19 @@ package org.acmsl.queryj.customsql.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,7 +56,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.List;
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -70,7 +70,7 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class CustomSqlProvisioningHandler
-    extends  AbstractQueryJCommandHandler
+    extends AbstractQueryJCommandHandler
 {
     /**
      * Creates a <code>CustomSqlProvisioningHandler</code> instance.
@@ -87,14 +87,13 @@ public class CustomSqlProvisioningHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
-    @SuppressWarnings("unchecked")
-    protected boolean handle(@NotNull final Map<String, ?> parameters)
+    public boolean handle(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
         return
             handle(
-                retrieveCustomSqlProvider((Map<String, CustomSqlProvider>) parameters),
-                retrieveMetadataManager((Map<String, MetadataManager>) parameters));
+                retrieveCustomSqlProvider(parameters),
+                retrieveMetadataManager(parameters));
     }
 
     /**
@@ -105,14 +104,25 @@ public class CustomSqlProvisioningHandler
      */
     protected boolean handle(
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager)
+        @Nullable final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
-        return
-            handle(
-                customSqlProvider.getSqlPropertyDAO(),
-                metadataManager,
-                metadataManager.getMetadataTypeManager());
+        final boolean result;
+
+        if (metadataManager != null)
+        {
+            result =
+                handle(
+                    customSqlProvider.getSqlPropertyDAO(),
+                    metadataManager,
+                    metadataManager.getMetadataTypeManager());
+        }
+        else
+        {
+            result = true;
+        }
+
+        return result;
     }
 
     /**

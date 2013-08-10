@@ -66,6 +66,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class AntExternallyManagedFieldsElement
     implements  DynamicConfigurator
 {
+    public static final String FIELD_LITERAL = "field";
+
     /**
      * The field collection.
      */
@@ -144,7 +146,7 @@ public class AntExternallyManagedFieldsElement
     {
         @Nullable final AntFieldElement result;
 
-        if  ("field".equals(name)) 
+        if  (FIELD_LITERAL.equals(name))
         {
             result = new AntFieldElement();
 
@@ -154,7 +156,7 @@ public class AntExternallyManagedFieldsElement
         }
         else 
         {
-            throw new BuildException(name + " elements are not supported");
+            throw new BuildException(name + QueryJTask.ELEMENTS_ARE_NOT_SUPPORTED);
         }
 
         return result;

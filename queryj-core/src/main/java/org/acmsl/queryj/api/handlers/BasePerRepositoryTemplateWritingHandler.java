@@ -35,6 +35,7 @@ package org.acmsl.queryj.api.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 import org.acmsl.queryj.api.AbstractBasePerRepositoryTemplate;
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
@@ -49,7 +50,6 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.util.Map;
 
 /**
  * Writes <i>per-repository</i> templates.
@@ -72,18 +72,17 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      */
     @Override
     @NotNull
-    @SuppressWarnings("unchecked")
     protected File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
         @NotNull final String engineName,
-        @NotNull final Map<String, ?> parameters)
+        @NotNull final QueryJCommand parameters)
     {
         return
             retrieveOutputDir(
                 rootDir,
-                retrieveProjectPackage((Map<String, String>) parameters),
-                retrieveUseSubfoldersFlag((Map <String, Boolean>) parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters),
                 engineName,
                 parameters,
                 PackageUtils.getInstance());
@@ -106,17 +105,6 @@ public abstract class BasePerRepositoryTemplateWritingHandler
         @NotNull final String projectPackage,
         final boolean useSubfolders,
         @NotNull final String engineName,
-        @NotNull final Map parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final PackageUtils packageUtils);
-
-    /**
-     * Displays useful information about this handler.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String toString()
-    {
-        return "Writer:" + getClass().getSimpleName();
-    }
 }

@@ -65,7 +65,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.List;
-import java.util.Map;
 
 /**
  * Builds a per-repository template using database metadata.
@@ -100,22 +99,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
     {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    protected boolean handle(@NotNull final Map<String, ?> parameters)
-        throws  QueryJBuildException
-    {
         return
-            handle(parameters, retrieveProjectPackage((Map<String, String>) parameters));
+            handle(command, retrieveProjectPackage(command));
     }
 
     /**
@@ -125,14 +110,13 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    @SuppressWarnings("unchecked")
-    protected boolean handle(@NotNull final Map<String, ?> parameters, @NotNull final String projectPackage)
+    protected boolean handle(@NotNull final QueryJCommand parameters, @NotNull final String projectPackage)
         throws  QueryJBuildException
     {
         final boolean result;
 
         @Nullable final MetadataManager t_MetadataManager =
-            retrieveMetadataManager((Map<String, MetadataManager>) parameters);
+            retrieveMetadataManager(parameters);
 
         if (t_MetadataManager != null)
         {
@@ -141,15 +125,15 @@ public abstract class BasePerRepositoryTemplateBuildHandler
             buildTemplate(
                 parameters,
                 t_MetadataManager,
-                retrieveCustomSqlProvider((Map<String, CustomSqlProvider>) parameters),
+                retrieveCustomSqlProvider(parameters),
                 retrieveTemplateFactory(),
                 retrievePackage(t_MetadataManager.getEngineName(), projectPackage, PackageUtils.getInstance()),
                 projectPackage,
-                retrieveTableRepositoryName((Map<String, String>) parameters),
-                retrieveHeader((Map <String, String>) parameters),
-                retrieveImplementMarkerInterfaces((Map <String, Boolean>) parameters),
-                retrieveJmx((Map<String, Boolean>) parameters),
-                retrieveJNDILocation((Map <String, String>) parameters),
+                retrieveTableRepositoryName(parameters),
+                retrieveHeader(parameters),
+                retrieveImplementMarkerInterfaces(parameters),
+                retrieveJmx(parameters),
+                retrieveJNDILocation(parameters),
                 CachingDecoratorFactory.getInstance());
         }
         else
@@ -178,7 +162,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      */
     @SuppressWarnings("unchecked")
     protected void buildTemplate(
-        @NotNull final Map<String, ?>  parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
@@ -209,15 +193,15 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                     implementMarkerInterfaces,
                     jmx,
                     t_lTableNames,
-                    retrieveJNDILocation((Map <String, String>) parameters),
-                    retrieveDisableGenerationTimestamps((Map<String, Boolean>) parameters),
-                    retrieveDisableNotNullAnnotations((Map <String, Boolean>) parameters),
-                    retrieveDisableCheckthreadAnnotations((Map <String, Boolean>) parameters),
+                    jndiLocation,
+                    retrieveDisableGenerationTimestamps(parameters),
+                    retrieveDisableNotNullAnnotations(parameters),
+                    retrieveDisableCheckthreadAnnotations(parameters),
                     parameters);
 
             if (t_Template != null)
             {
-                storeTemplate(t_Template, (Map<String, List<T>>) parameters);
+                storeTemplate(t_Template, parameters);
             }
         }
     }
@@ -228,11 +212,11 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      */
     @SuppressWarnings("unchecked")
     protected boolean isGenerationEnabled(
-        @NotNull final CustomSqlProvider customSqlProvider, @NotNull final Map<String, ?> parameters)
+        @NotNull final CustomSqlProvider customSqlProvider, @NotNull final QueryJCommand parameters)
     {
         return
             definesRepositoryScopedSql(
-                customSqlProvider, getAllowEmptyRepositoryDAOSetting((Map <String, Boolean >) parameters));
+                customSqlProvider, getAllowEmptyRepositoryDAOSetting(parameters));
     }
 
     /**
@@ -272,7 +256,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final Map parameters)
+        @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         return
@@ -294,24 +278,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     }
 
     /**
-     * Retrieves the package name from the attribute map.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @return the package name.
-     */
-    @SuppressWarnings("unchecked")
-    @NotNull
-    protected String retrievePackage(
-        @NotNull final String engineName, @NotNull final Map parameters)
-    {
-        return
-            retrievePackage(
-                engineName,
-                retrieveProjectPackage(parameters),
-                PackageUtils.getInstance());
-    }
-
-    /**
      * Retrieves the package name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
@@ -330,7 +296,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param parameters the parameter map.
      */
     protected abstract void storeTemplate(
-        @NotNull final T template, @NotNull final Map<String, List<T>> parameters);
+        @NotNull final T template, @NotNull final QueryJCommand parameters);
 
     /**
      * Checks whether there's any custom SQL for the whole repository.
@@ -380,26 +346,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param parameters the parameters.
      * @return <code>true</code> in such case.
      */
-    protected boolean getAllowEmptyRepositoryDAOSetting(@NotNull final Map<String, Boolean> parameters)
+    protected boolean getAllowEmptyRepositoryDAOSetting(@NotNull final QueryJCommand parameters)
     {
-        final boolean result;
-
-        @Nullable final Boolean t_Result =
-            parameters.get(ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO);
-
-        result = (t_Result != null) && t_Result;
-
-        return result;
-    }
-
-    /**
-     * Displays useful information about this handler.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String toString()
-    {
-        return PREFIX + getClass().getSimpleName();
+        return parameters.getBooleanSetting(ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO, false);
     }
 }

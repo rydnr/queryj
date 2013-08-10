@@ -35,25 +35,27 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.TemplateMappingManager;
+import org.acmsl.queryj.api.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.templates.dao.DAOTemplate;
 import org.acmsl.queryj.templates.dao.DAOTemplateGenerator;
-import org.acmsl.queryj.api.handlers.BasePerTableTemplateWritingHandler;
-import org.acmsl.queryj.api.TemplateMappingManager;
+import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -66,7 +68,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOTemplateWritingHandler
-    extends  BasePerTableTemplateWritingHandler<DAOTemplate, DAOTemplateGenerator, PerTableTemplateContext>
+    extends BasePerTableTemplateWritingHandler<DAOTemplate, DAOTemplateGenerator, PerTableTemplateContext>
 {
     /**
      * Creates a <code>DAOTemplateWritingHandler</code> instance.
@@ -92,13 +94,24 @@ public class DAOTemplateWritingHandler
      */
     @NotNull
     @Override
-    @SuppressWarnings("unchecked")
-    protected List<DAOTemplate> retrieveTemplates(
-        @NotNull final Map parameters) throws BuildException
+    protected List<DAOTemplate> retrieveTemplates(@NotNull final QueryJCommand parameters)
     {
-        return
-            (List<DAOTemplate>)
-                parameters.get(TemplateMappingManager.DAO_TEMPLATES);
+        @NotNull final List<DAOTemplate> result;
+
+        @Nullable final List<DAOTemplate> aux =
+            new QueryJCommandWrapper<List<DAOTemplate>>(parameters)
+                .getSetting(TemplateMappingManager.DAO_TEMPLATES);
+
+        if (aux == null)
+        {
+            result = new ArrayList<DAOTemplate>(0);
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
     }
 
     /**
@@ -112,10 +125,6 @@ public class DAOTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @precondition projectFolder != null
-     * @precondition projectPackage != null
-     * @precondition engineName != null
-     * @precondition packageUtils != null
      */
     @NotNull
     @Override
@@ -125,7 +134,7 @@ public class DAOTemplateWritingHandler
         final boolean useSubfolders,
         @NotNull final String tableName,
         @NotNull final String engineName,
-        @NotNull final Map parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final PackageUtils packageUtils)
     {
         return

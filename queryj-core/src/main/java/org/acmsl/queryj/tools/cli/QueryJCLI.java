@@ -36,11 +36,11 @@ package org.acmsl.queryj.tools.cli;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.tools.logging.QueryJCLILog;
 import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJChain;
-import org.acmsl.queryj.QueryJCommand;
 
 /*
  * Importing some Apache Commons CLI classes.
@@ -53,15 +53,17 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
 /*
+ * Importing Apache Commons Configuration classes,
+ */
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
+/*
  * Importing JetBrains annotations,
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Properties;
 
 /**
  * Allows executing QueryJ from the command-line.
@@ -209,18 +211,12 @@ public final class QueryJCLI
                         t_CommandLine.getOptionValue(CUSTOM_SQL_LONG_OPTION);
                 }
 
-                @Nullable Properties t_ConfigurationSettings =
-                    helper.readConfigurationSettings(
-                        t_strConfigurationFileName);
+                try
+                {
+                    @NotNull final Configuration t_ConfigurationSettings =
+                        new PropertiesConfiguration(t_strConfigurationFileName);
 
-                if  (t_ConfigurationSettings == null)
-                {
-                    helper.printError(
-                        "Invalid configuration properties", System.err);
-                }
-                // Custom sql file is validated as part of QueryJ chain.
-                else
-                {
+                    // Custom sql file is validated as part of QueryJ chain.
                     try
                     {
                         executeQueryJ(
@@ -236,6 +232,11 @@ public final class QueryJCLI
                             System.err);
                     }
                 }
+                catch (@NotNull final ConfigurationException invalidSettings)
+                {
+                    helper.printError(
+                        "Invalid configuration properties", System.err);
+                }
             }
         }
     }
@@ -248,80 +249,14 @@ public final class QueryJCLI
      */
     @SuppressWarnings("unused")
     protected static void executeQueryJ(
-        final Properties configurationSettings,
+        @NotNull final Configuration configurationSettings,
         final int logThreshold,
-        @NotNull final String customSqlFule)
+        @NotNull final String customSqlFile)
       throws  QueryJBuildException
     {
-        new CLIQueryJChain(configurationSettings, logThreshold).process();
-    }
-
-    /**
-     * Customizes <code>QueryJChain</code> to get parameters from Ant.
-     * @author <a href="mailto:chous@acm-sl.org"
-               >Jose San Leandro</a>
-     */
-    protected static class CLIQueryJChain
-        extends  QueryJChain
-    {
-        /**
-         * The log threshold.
-         */
-        private int m__iLogThreshold;
-
-        /**
-         * Creates an <code>CLIQueryJChain</code> instance.
-         * @param settings the settings.
-         * @param logThreshold the log threshold.
-         */
-        public CLIQueryJChain(
-            final Properties settings, final int logThreshold)
-        {
-            super(settings);
-            immutableSetLogThreshold(logThreshold);
-        }
-
-        /**
-         * Specifies the log threshold.
-         * @param threshold such threshold.
-         */
-        protected final void immutableSetLogThreshold(final int threshold)
-        {
-            m__iLogThreshold = threshold;
-        }
-
-        /**
-         * Specifies the log threshold.
-         * @param threshold such threshold.
-         */
-        @SuppressWarnings("unused")
-        protected void setLogThreshold(final int threshold)
-        {
-            immutableSetLogThreshold(threshold);
-        }
-
-        /**
-         * Retrieves the log threshold.
-         * @return such information.
-         */
-        public int getLogThreshold()
-        {
-            return m__iLogThreshold;
-        }
-
-        /**
-         * Builds the command.
-         * @return the initialized command.
-         */
-        @NotNull
-        protected QueryJCommand buildCommand()
-        {
-            return
-                buildCommand(
-                    new QueryJCommand(
-                        new QueryJCLILog(
-                            getLogThreshold(), System.err)));
-        }
+        new QueryJChain()
+            .process(
+                new ConfigurationQueryJCommandImpl(configurationSettings, new QueryJCLILog(logThreshold, System.err)));
     }
 
     /**

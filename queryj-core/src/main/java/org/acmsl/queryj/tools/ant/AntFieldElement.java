@@ -70,6 +70,10 @@ public class AntFieldElement
 {
 
     private static final long serialVersionUID = 5709131443641728342L;
+    public static final String TABLE_NAME_LITERAL = "table-name";
+    public static final String KEYWORD_LITERAL = "keyword";
+    public static final String RETRIEVAL_QUERY_LITERAL = "retrieval-query";
+    static final String ATTRIBUTE_LITERAL = "Attribute ";
     /**
      * The field pk nature.
      */
@@ -128,22 +132,23 @@ public class AntFieldElement
         {
             setPk(value);
         }
-        else if  ("table-name".equals(name))
+        else if  (TABLE_NAME_LITERAL.equals(name))
         {
             setTableName(value);
         }
-        else if  ("keyword".equals(name))
+        else if  (KEYWORD_LITERAL.equals(name))
         {
             setKeyword(value);
         }
-        else if  ("retrieval-query".equals(name))
+        else if  (RETRIEVAL_QUERY_LITERAL.equals(name))
         {
             setRetrievalQuery(value);
         }
         else 
         {
+            // TODO: Use a custom exception
             throw
-                new BuildException("Attribute " + name + " is not supported");
+                new BuildException(ATTRIBUTE_LITERAL + name + " is not supported");
         }
     }
 
@@ -174,7 +179,7 @@ public class AntFieldElement
         }
         else 
         {
-            throw new BuildException(name + " elements are not supported");
+            throw new BuildException(name + QueryJTask.ELEMENTS_ARE_NOT_SUPPORTED);
         }
 
         return result;

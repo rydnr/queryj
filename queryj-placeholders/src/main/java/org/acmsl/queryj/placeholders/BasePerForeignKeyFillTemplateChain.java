@@ -39,10 +39,12 @@ package org.acmsl.queryj.placeholders;
 /*
  *Importing project classes.
 */
-import org.acmsl.queryj.metadata.ForeignKeyDecorator;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
+import org.acmsl.queryj.metadata.ForeignKeyDecorator;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -54,6 +56,9 @@ import org.acmsl.commons.patterns.Chain;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.List;
 
 /*
@@ -78,6 +83,17 @@ public class BasePerForeignKeyFillTemplateChain
     public BasePerForeignKeyFillTemplateChain(@NotNull final PerForeignKeyTemplateContext context)
     {
         super(context);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public QueryJCommand providePlaceholders(final boolean relevantOnly)
+        throws QueryJBuildException
+    {
+        return new FillTemplateChainWrapper<PerForeignKeyTemplateContext>(this).providePlaceholders(relevantOnly);
     }
 
     /**

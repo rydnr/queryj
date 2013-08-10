@@ -38,13 +38,17 @@ package org.acmsl.queryj;
  */
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
-import org.acmsl.queryj.tools.logging.QueryJLog;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.ArrayListChainAdapter;
 import org.acmsl.commons.patterns.Chain;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JetBrains annotations.
@@ -56,7 +60,7 @@ import org.jetbrains.annotations.Nullable;
  * Manages a sequential chain of actions within QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<C>, C extends QueryJCommand>
+public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
 {
     /**
      * The chain.
@@ -68,7 +72,6 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<C>, C 
      */
     public AbstractQueryJChain()
     {
-        super(); // redundant
         immutableSetChain(new ArrayListChainAdapter<CH>());
     }
 
@@ -103,13 +106,14 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<C>, C 
 
     /**
      * Requests the chained logic to be performed.
+     * @param settings the command.
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
-    public void process()
+    public void process(@NotNull final QueryJCommand settings)
         throws QueryJBuildException
     {
-        process(buildChain(getChain()), buildCommand());
+        process(buildChain(getChain()), settings);
     }
 
     /**
@@ -120,25 +124,6 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<C>, C 
      */
     protected abstract Chain<CH> buildChain(@NotNull final Chain<CH> chain)
         throws QueryJBuildException;
-
-    /**
-     * Builds the command.
-     * @return the initialized command.
-     */
-    @NotNull
-    @SuppressWarnings("unchecked")
-    protected C buildCommand()
-    {
-        return buildCommand(new QueryJCommand());
-    }
-
-    /**
-     * Builds the command.
-     * @param command the command to be initialized.
-     * @return the initialized command.
-     */
-    @NotNull
-    protected abstract C buildCommand(@NotNull final QueryJCommand command);
 
     /**
      * Retrieves the link of the chain just after the one given command
@@ -184,12 +169,12 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<C>, C 
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean process(
-        @NotNull final Chain<CH> chain, @NotNull final C command)
+        @NotNull final Chain<CH> chain, @NotNull final QueryJCommand command)
       throws QueryJBuildException
     {
         boolean result = false;
 
-        @Nullable final QueryJLog t_Log = command.getLog();
+        @Nullable final Log t_Log = command.getLog();
 
         final boolean t_bLoggingEnabled = (t_Log != null);
 
@@ -252,6 +237,6 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<C>, C 
     @Override
     public String toString()
     {
-        return "AbstractQueryJChain{" + "chain=" + getChain() + '}';
+        return "{ 'class': 'AbstractQueryJChain', 'chain':'" + getChain() + "'}";
     }
 }

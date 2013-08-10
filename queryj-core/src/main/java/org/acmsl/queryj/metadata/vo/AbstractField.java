@@ -36,6 +36,7 @@ package org.acmsl.queryj.metadata.vo;
 /*
  * Importing some JDK classes.
  */
+import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 
 import org.jetbrains.annotations.NotNull;
@@ -80,11 +81,11 @@ public abstract class AbstractField
      * @param pk whether it participates in the table's pk.
      */
     public AbstractField(
-        @Nullable final String name,
+        @NotNull final String name,
         final int typeId,
-        @Nullable final String type,
-        @Nullable final String tableName,
-        @Nullable final String comment,
+        @NotNull final String type,
+        @NotNull final String tableName,
+        @NotNull final String comment,
         final int ordinalPosition,
         final int length,
         final int precision,
@@ -191,7 +192,7 @@ public abstract class AbstractField
                 .appendSuper(super.toString())
                 .append("type", getType())
                 .append("pk", isPk())
-                .append("keyword", getKeyword())
+                .append(AntFieldElement.KEYWORD_LITERAL, getKeyword())
                 .append("retrievalQuery", getRetrievalQuery())
                 .append("fieldFks", getFieldFks())
                 .toString();

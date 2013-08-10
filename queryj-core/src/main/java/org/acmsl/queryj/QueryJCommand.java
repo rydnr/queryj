@@ -34,14 +34,14 @@
 package org.acmsl.queryj;
 
 /*
- * Importing project classes.
- */
-import org.acmsl.queryj.tools.logging.QueryJLog;
-
-/*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JetBrains annotations.
@@ -50,199 +50,81 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
- */
-import java.util.HashMap;
-import java.util.Map;
-
-/*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.io.File;
 
 /**
  * Represents QueryJ workflow commands.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class QueryJCommand
-    implements  Command
+public interface QueryJCommand
+    extends  Command,
+             QueryJSettings
 {
-    /**
-     * The attribute collection.
-     */
-    private Map<String,?> m__mAttributes;
-
-    /**
-     * The reference to the log instance.
-     */
-    private transient QueryJLog m__Log;
-
-    /**
-     * Constructs an empty map command.
-     */
-    @SuppressWarnings("unchecked")
-    public QueryJCommand()
-    {
-        immutableSetAttributeMap(new HashMap<String, Object>());
-    }
-
-    /**
-     * Constructs an empty map command.
-     * @param log the log instance.
-     */
-    public QueryJCommand(@NotNull final QueryJLog log)
-    {
-        this();
-        immutableSetLog(log);
-    }
-
-    /**
-     * Specifies the attribute map.
-     * @param map such map.
-     */
-    protected final void immutableSetAttributeMap(@NotNull final Map<String,?> map)
-    {
-        m__mAttributes = map;
-    }
-
-    /**
-     * Specifies the attribute map.
-     * @param map such map.
-     */
-    @SuppressWarnings("unused")
-    public void setAttributeMap(@NotNull final Map<String,?> map)
-    {
-        immutableSetAttributeMap(map);
-    }
-
-    /**
-     * Retrieves the attribute map.
-     * @return the map.
-     */
-    @NotNull
-    public Map<String,?> getAttributeMap()
-    {
-        return m__mAttributes;
-    }
-
-    /**
-     * Adds a new attribute.
-     * @param name the attribute name.
-     * @param value the attribute value.
-     */
-    public void setAttribute(@NotNull final String name, @NotNull final Object value)
-    {
-        setAttribute(name, value, getAttributeMap());
-    }
-    
-    /**
-     * Adds a new attribute.
-     * @param name the attribute name.
-     * @param value the attribute value.
-     * @param map the actual attribute map.
-     */
-    @SuppressWarnings("unchecked")
-    protected <T> void setAttribute(
-        @NotNull final String name, @NotNull final T value, @Nullable final Map<String, ?> map)
-    {
-        if  (map != null) 
-        {
-            ((Map <String, T>) map).put(name, value);
-        }
-    }
-
-    /**
-     * Retrieves the attribute value.
-     * @param name the attribute name.
-     * @return the value or <code>null</code> if it wasn't found.
-     */
-    @SuppressWarnings("unused")
-    @Nullable
-    public Object getAttribute(@NotNull final String name)
-    {
-        return getAttribute(name, getAttributeMap());
-    }
-    
-    /**
-     * Retrieves the attribute value.
-     * @param name the attribute name.
-     * @param map the attribute map.
-     * @return the value or <code>null</code> if it wasn't found.
-     */
-    @Nullable
-    protected <T> T getAttribute(final String name, @Nullable final Map<String, T> map)
-    {
-        @Nullable T result = null;
-
-        if  (map != null) 
-        {
-            result = map.get(name);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves if a concrete attribute exists.
-     * @param name the attribute name.
-     * @return <code>true</code> if the attribute is already defined.
-     */
-    public boolean contains(@NotNull final String name)
-    {
-        return contains(name, getAttributeMap());
-    }
-    
-    /**
-     * Retrieves if a concrete attribute exists.
-     * @param name the attribute name.
-     * @param map the attribute map.
-     * @return <code>true</code> if the attribute is already defined.
-     */
-    protected boolean contains(@NotNull final String name, @Nullable final Map<String,?> map)
-    {
-        boolean result = false;
-
-        if  (map != null) 
-        {
-            result = map.containsKey(name);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the log instance.
-     * @param log the log instance.
-     */
-    protected final void immutableSetLog(@NotNull final QueryJLog log)
-    {
-        m__Log = log;
-    }
-
-    /**
-     * Specifies the log instance.
-     * @param log the log instance.
-     */
-    @SuppressWarnings("unused")
-    protected void setLog(@NotNull final QueryJLog log)
-    {
-        immutableSetLog(log);
-    }
-
     /**
      * Retrieves the log instance.
      * @return such instance.
      */
     @Nullable
-    public QueryJLog getLog()
-    {
-        return m__Log;
-    }
+    public Log getLog();
 
-    @Override
-    public String toString()
-    {
-        return "QueryJCommand{ log=" + m__Log + ", attributes=" + m__mAttributes + " }";
-    }
+    /**
+     * Retrieves the setting for given key.
+     * @param key the key.
+     * @return the value for such key.
+     */
+    @Nullable
+    public String getSetting(@NotNull final String key);
+
+    /**
+     * Specifies the setting for given key.
+     * @param key the key.
+     * @param value the value for such key.
+     */
+    public <T> void setSetting(@NotNull final String key, @Nullable final T value);
+
+    /**
+     * Retrieves the setting for given key.
+     * @param key the key.
+     * @return the value for such key.
+     */
+    @Nullable
+    public File getFileSetting(@NotNull final String key);
+
+    /**
+     * Retrieves the setting for given key.
+     * @param key the key.
+     * @param defaultValue the default value.
+     * @return the value for such key.
+     */
+    public boolean getBooleanSetting(@NotNull final String key, final boolean defaultValue);
+
+    /**
+     * Retrieves the setting for given key.
+     * @param key the key.
+     * @param defaultValue the default value.
+     * @return the value for such key.
+     */
+    public int getIntSetting(@NotNull final String key, final int defaultValue);
+
+
+    /**
+     * Retrieves the setting for given key.
+     * @param key the key.
+     * @return the value for such key.
+     */
+    public <T> T getObjectSetting(@NotNull final String key);
+
+    /**
+     * Retrieves all keys.
+     * @return such keys
+     */
+    public Iterable<String> getKeys();
 }

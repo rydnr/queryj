@@ -58,6 +58,8 @@ import org.acmsl.queryj.metadata.vo.TableValueObject;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.tools.ant.AntFieldElement;
+import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -132,7 +134,7 @@ public class TableTestHelper
     {
         @Nullable Table result = null;
 
-        @Nullable final String table =  tableEntry.get("table");
+        @Nullable final String table =  tableEntry.get(AntTablesElement.TABLE);
 
         if (table != null)
         {
@@ -175,7 +177,7 @@ public class TableTestHelper
 
             for (@NotNull final Map<String, String> columnEntry: columnInfo.asMaps())
             {
-                if (table.getName().equals(columnEntry.get("table")))
+                if (table.getName().equals(columnEntry.get(AntTablesElement.TABLE)))
                 {
                     precision = retrievePrecision(columnEntry);
                     booleanInfo = retrieveBooleanInfo(columnEntry);
@@ -190,7 +192,7 @@ public class TableTestHelper
                             index++,
                             retrieveLength(columnEntry),
                             precision,
-                            columnEntry.get("keyword"),
+                            columnEntry.get(AntFieldElement.KEYWORD_LITERAL),
                             columnEntry.get("query"),
                             Boolean.valueOf(columnEntry.get("allows null")),
                             columnEntry.get("value"),

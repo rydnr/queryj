@@ -39,6 +39,8 @@ package org.acmsl.queryj.placeholders;
 /*
  *Importing project classes.
 */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
@@ -82,6 +84,16 @@ public class BasePerCustomResultFillTemplateChain
     public BasePerCustomResultFillTemplateChain(@NotNull final PerCustomResultTemplateContext context)
     {
         super(context);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public QueryJCommand providePlaceholders(final boolean relevantOnly) throws QueryJBuildException
+    {
+        return new FillTemplateChainWrapper<PerCustomResultTemplateContext>(this).providePlaceholders(relevantOnly);
     }
 
     /**

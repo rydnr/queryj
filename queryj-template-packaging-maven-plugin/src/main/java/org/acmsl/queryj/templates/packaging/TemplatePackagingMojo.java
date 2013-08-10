@@ -33,8 +33,9 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some QueryJ-Core classes.
  */
+import org.acmsl.queryj.tools.maven.QueryJMojo;
 
 /*
  * Importing some Maven classes.
@@ -115,7 +116,7 @@ public class TemplatePackagingMojo
 
         try
         {  
-            InputStream pomProperties =
+            @NotNull final InputStream pomProperties =
                 getClass().getClassLoader().getResourceAsStream(POM_PROPERTIES_LOCATION);
 
             result = new Properties();
@@ -125,7 +126,7 @@ public class TemplatePackagingMojo
         catch (@NotNull final IOException ioException)
         {  
             log.warn(
-                "Strange... Cannot read my own " + POM_PROPERTIES_LOCATION,
+                QueryJMojo.CANNOT_READ_MY_OWN_POM + POM_PROPERTIES_LOCATION,
                 ioException);
         }
 
@@ -139,12 +140,12 @@ public class TemplatePackagingMojo
      */
     protected String retrieveVersion(@Nullable final Properties properties)
     {
-        String result = "(unknown)";
+        String result = QueryJMojo.UNKNOWN_LITERAL;
 
         if (   (properties != null)
-            && (properties.containsKey("version")))
+            && (properties.containsKey(QueryJMojo.VERSION_LITERAL)))
         {
-            result = properties.getProperty("version");
+            result = properties.getProperty(QueryJMojo.VERSION_LITERAL);
         }
 
         return result;

@@ -39,13 +39,15 @@ package org.acmsl.queryj.placeholders;
 /*
  *Importing project classes.
 */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.api.AbstractFillTemplateChain;
+import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.TableDecorator;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.api.AbstractFillTemplateChain;
-import org.acmsl.queryj.api.PerTableTemplateContext;
-import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -84,6 +86,17 @@ public class BasePerTableFillTemplateChain
     public BasePerTableFillTemplateChain(@NotNull final PerTableTemplateContext context)
     {
         super(context);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public QueryJCommand providePlaceholders(final boolean relevantOnly)
+        throws QueryJBuildException
+    {
+        return new FillTemplateChainWrapper<PerTableTemplateContext>(this).providePlaceholders(relevantOnly);
     }
 
     /**

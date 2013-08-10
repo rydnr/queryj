@@ -35,6 +35,7 @@ package org.acmsl.queryj.api.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.PerForeignKeyTemplate;
 import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.api.PerForeignKeyTemplateGenerator;
@@ -49,7 +50,6 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.util.Map;
 
 /**
  * Writes <i>per-fk</i> templates.
@@ -77,11 +77,11 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      */
     @Override
     @NotNull
-    protected File retrieveOutputDir(
+    public File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
         @NotNull final String engineName,
-        @NotNull final Map<String, ?> parameters)
+        @NotNull final QueryJCommand parameters)
     {
         return retrieveOutputDir(engineName, context.getForeignKey().getSourceTableName(), parameters);
     }
@@ -94,17 +94,16 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      * @return such folder.
      */
     @NotNull
-    @SuppressWarnings("unchecked")
     protected File retrieveOutputDir(
-        @NotNull final String engineName, @NotNull final String tableName, @NotNull final Map<String, ?> parameters)
+        @NotNull final String engineName, @NotNull final String tableName, @NotNull final QueryJCommand parameters)
     {
         return
             retrieveOutputDir(
                 engineName,
-                retrieveProjectOutputDir((Map <String, File>) parameters),
-                retrieveProjectPackage((Map <String, String>) parameters),
+                retrieveProjectOutputDir(parameters),
+                retrieveProjectPackage(parameters),
                 tableName,
-                retrieveUseSubfoldersFlag((Map <String, Boolean>) parameters),
+                retrieveUseSubfoldersFlag(parameters),
                 PackageUtils.getInstance());
     }
 
@@ -114,7 +113,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      * @param projectOutputDir the project output dir.
      * @param projectPackage the project package.
      * @param tableName the table name.
-     * @param subFolders whether to use subfolders or not.
+     * @param subFolders whether to use sub folders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      */
@@ -126,15 +125,4 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
         @NotNull final String tableName,
         final boolean subFolders,
         @NotNull final PackageUtils packageUtils);
-
-    /**
-     * Displays useful information about this handler.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String toString()
-    {
-        return "Writer:" + getClass().getSimpleName();
-    }
 }

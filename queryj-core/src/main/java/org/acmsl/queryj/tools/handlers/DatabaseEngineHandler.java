@@ -36,13 +36,13 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing some JDK classes.
+ * Importing JetBrains annotations.
  */
-import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -72,7 +72,7 @@ public class DatabaseEngineHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
-    protected boolean handle(@NotNull final Map<String, ?> parameters)
+    public boolean handle(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
         retrieveDatabaseMetaData(parameters);

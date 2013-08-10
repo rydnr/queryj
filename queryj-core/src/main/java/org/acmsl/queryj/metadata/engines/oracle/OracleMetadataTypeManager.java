@@ -187,7 +187,7 @@ public class OracleMetadataTypeManager
             case Types.DATE:
             case Types.TIMESTAMP:
             case 11:
-                result = "Timestamp";
+                result = TIMESTAMP;
                 break;
 
             default:

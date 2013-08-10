@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CannotWriteCacheException;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -47,9 +48,9 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.sql.DatabaseMetaData;
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -75,9 +76,8 @@ public class DatabaseMetaDataCacheWritingHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
-    @SuppressWarnings("unchecked")
     protected boolean handle(
-        @NotNull final Map<String, ?> parameters,
+        @NotNull final QueryJCommand parameters,
         final boolean alreadyDone,
         @NotNull final DatabaseMetaData metaData)
         throws  QueryJBuildException
@@ -85,11 +85,11 @@ public class DatabaseMetaDataCacheWritingHandler
         if (alreadyDone)
         {
             @Nullable final MetadataManager t_Manager =
-                retrieveMetadataManager((Map<String, MetadataManager >) parameters);
+                retrieveMetadataManager(parameters);
 
             if (t_Manager != null)
             {
-                @NotNull final File outputDir = retrieveProjectOutputDir((Map<String, File>) parameters);
+                @NotNull final File outputDir = retrieveProjectOutputDir(parameters);
                 try
                 {
                     cache(t_Manager, outputDir);

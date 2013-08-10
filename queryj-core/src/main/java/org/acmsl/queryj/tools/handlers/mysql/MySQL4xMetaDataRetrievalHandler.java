@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools.handlers.mysql;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
@@ -56,7 +57,6 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.sql.DatabaseMetaData;
 import java.util.List;
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -109,35 +109,14 @@ public class MySQL4xMetaDataRetrievalHandler
     }
     
     /**
-     * Builds a database metadata manager.
-     * @param tables the table names.
-     * @param procedureNames the procedure names.
-     * @param disableTableExtraction if the table metadata should not
-     * be extracted.
-     * @param lazyTableExtraction if the table metadata should not
-     * be extracted immediately.
-     * @param disableProcedureExtraction if the procedure metadata should not
-     * be extracted.
-     * @param lazyProcedureExtraction if the procedure metadata should not
-     * be extracted immediately.
-     * @param metaData the database metadata.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
-     * @return the metadata manager instance.
-     * @throws QueryJBuildException whenever the required
-     * parameters are not present or valid.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
     protected MetadataManager buildMetadataManager(
-        @NotNull final Map parameters,
-        @NotNull List<Table> tables,
-        @NotNull String[] procedureNames,
-        final boolean disableTableExtraction,
-        final boolean lazyTableExtraction,
-        final boolean disableProcedureExtraction,
-        final boolean lazyProcedureExtraction,
-        @Nullable final DatabaseMetaData metaData,
+        @SuppressWarnings("unused") @NotNull final QueryJCommand parameters,
+        @NotNull final List<Table> tables,
+        @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
         final boolean caseSensitive,
@@ -146,11 +125,13 @@ public class MySQL4xMetaDataRetrievalHandler
         @NotNull final String quote)
         throws  QueryJBuildException
     {
+        // TODO: MySQL
+        throw new RuntimeException("TODO: Not supported yet");
+        /*
         final MetadataManager result;
 
         result = null;
 
-        /*
         try
         {
 
@@ -185,8 +166,8 @@ public class MySQL4xMetaDataRetrievalHandler
                 new QueryJBuildException(
                     "Cannot process MySQL metadata", queryjException);
         }
- */
 
         return result;
+ */
     }
 }

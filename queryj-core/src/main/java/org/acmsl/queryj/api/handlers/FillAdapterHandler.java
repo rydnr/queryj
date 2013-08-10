@@ -37,8 +37,9 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Imporing project classes.
+ * Importing project classes.
  */
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
@@ -49,11 +50,6 @@ import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing JDK classes.
- */
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -71,8 +67,8 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
     implements QueryJCommandHandler<QueryJCommand>,
                FillHandler<P>
 {
-
     private static final long serialVersionUID = 6058212934620381875L;
+
     /**
      * The fill handler.
      */
@@ -129,19 +125,19 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
     public boolean handle(@NotNull final QueryJCommand command)
         throws QueryJBuildException
     {
-        return handle(command.getAttributeMap(), getFillHandler());
+        return handle(command, getFillHandler());
     }
 
     /**
      * Handles given command.
-     * @param attributes the attribute map.
+     * @param settings the settings.
      * @param fillHandler the {@link FillHandler fill handler}.
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
      * @throws QueryJBuildException if the process fails.
      */
     @SuppressWarnings("unchecked")
-    public boolean handle(@NotNull final Map attributes, @NotNull final FillHandler<P> fillHandler)
+    public boolean handle(@NotNull final QueryJCommand settings, @NotNull final FillHandler<P> fillHandler)
         throws QueryJBuildException
     {
         final boolean result = false;
@@ -151,17 +147,10 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
 
         if (t_Value != null)
         {
-            attributes.put(t_strPlaceHolder, t_Value);
+            new QueryJCommandWrapper<P>(settings).setSetting(t_strPlaceHolder, t_Value);
         }
 
         return result;
-    }
-
-    @NotNull
-    @Override
-    public String toString()
-    {
-        return "FillAdapterHandler{ fillHandler=" + fillHandler + '}';
     }
 
     /**
@@ -186,5 +175,12 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
     public P getValue() throws QueryJBuildException
     {
         return getFillHandler().getValue();
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'FillAdapterHandler', 'fillHandler': '" + fillHandler + "' }";
     }
 }

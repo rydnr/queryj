@@ -90,28 +90,6 @@ public interface QueryJSettings
     public static final String HEADER_FILE = PREFIX + "header";
 
     /**
-     * Whether to generate main/ and test/ subfolders or not.
-     */
-    public static final String OUTPUT_DIR_SUBFOLDERS =
-        PREFIX + "outputdirsubfolders";
-
-    /**
-     * Whether to extract the tables or not.
-     */
-    public static final String EXTRACT_TABLES = PREFIX + "extractTables";
-
-    /**
-     * Whether to extract the procedures or not.
-     */
-    public static final String EXTRACT_PROCEDURES =
-        PREFIX + "extractProcedures";
-
-    /**
-     * Whether to extract the functions or not.
-     */
-    public static final String EXTRACT_FUNCTIONS = PREFIX + "extractFunctions";
-
-    /**
      * The JNDI location of the DataSource.
      */
     public static final String JNDI_DATASOURCE = PREFIX + "jndiDataSource";
@@ -145,11 +123,6 @@ public interface QueryJSettings
      */
     public static final String IMPLEMENT_MARKER_INTERFACES =
         PREFIX + "implementMarkerInterfaces";
-
-    /**
-     * The model of the custom SQL.
-     */
-    public static final String CUSTOM_SQL_MODEL = PREFIX + "customSqlModel";
 
     /**
      * The custom SQL XML file.
@@ -206,4 +179,14 @@ public interface QueryJSettings
      * Whether to use checkthread.org annotations.
      */
     public static final String DISABLE_CHECKTHREAD_ANNOTATIONS = PREFIX + "disableCheckthreadAnnotations";
+
+    /**
+     * Whether to generate JMX support or not.
+     */
+    public static final String JMX = "jmx";
+
+    /**
+     * Whether to enable caching.
+     */
+    public static final String CACHING = "caching";
 }

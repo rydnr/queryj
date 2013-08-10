@@ -48,6 +48,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 /*
  * Importing some Apache Commons-Logging classes.
  */
+import org.acmsl.queryj.api.handlers.AbstractTemplateWritingHandler;
 import org.apache.commons.logging.Log;
 
 /*
@@ -455,7 +456,7 @@ public class TemplateGeneratorThread
             {
                 if (log != null)
                 {
-                    log.warn("Broken barrier", brokenBarrier);
+                    log.warn(AbstractTemplateWritingHandler.BROKEN_BARRIER_LITERAL, brokenBarrier);
                 }
             }
         }

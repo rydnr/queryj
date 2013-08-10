@@ -36,6 +36,8 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.MissingExternallyManagedFieldNameException;
 import org.acmsl.queryj.api.exceptions.MissingExternallyManagedFieldTableNameException;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
@@ -54,11 +56,6 @@ import org.acmsl.commons.utils.StringValidator;
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -89,14 +86,13 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
-    @SuppressWarnings("unchecked")
-    protected boolean handle(@NotNull final Map<String, ?> parameters)
+    public boolean handle(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
         return
             handle(
-                retrieveMetadataManager((Map<String, MetadataManager>) parameters),
-                retrieveExternallyManagedFieldsElement((Map<String, AntExternallyManagedFieldsElement>) parameters),
+                retrieveMetadataManager(parameters),
+                retrieveExternallyManagedFieldsElement(parameters),
                 StringValidator.getInstance());
     }
                 
@@ -182,8 +178,24 @@ public class ExternallyManagedFieldsRetrievalHandler
     @NotNull
     protected AntExternallyManagedFieldsElement
         retrieveExternallyManagedFieldsElement(
-        @NotNull final Map<String, AntExternallyManagedFieldsElement> parameters)
+        @NotNull final QueryJCommand parameters)
     {
-        return parameters.get(ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS);
+        @Nullable final AntExternallyManagedFieldsElement result;
+
+        @Nullable final AntExternallyManagedFieldsElement aux =
+            new QueryJCommandWrapper<AntExternallyManagedFieldsElement>(parameters)
+                .getSetting(ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS);
+
+        if (aux == null)
+        {
+            // TODO
+            throw new RuntimeException("TODO: fix me");
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
     }
 }

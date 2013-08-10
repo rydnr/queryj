@@ -47,6 +47,7 @@ import org.acmsl.queryj.api.PerTableTemplateContext;
 /**
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,7 +85,7 @@ public class TableHandler
     @Override
     public String getPlaceHolder()
     {
-        return "table";
+        return AntTablesElement.TABLE;
     }
 
     /**

@@ -38,17 +38,13 @@ package org.acmsl.queryj.api;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing JDK classes.
- */
-import java.util.Map;
 
 /**
  * Chain to provide placeholders.
@@ -73,6 +69,6 @@ public interface FillTemplateChain<C extends TemplateContext>
      * @throws QueryJBuildException if the process fails.
      */
     @NotNull
-    Map<String, ?> providePlaceholders(final boolean relevantOnly)
+    QueryJCommand providePlaceholders(final boolean relevantOnly)
         throws QueryJBuildException;
 }

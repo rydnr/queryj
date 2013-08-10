@@ -44,6 +44,7 @@ import org.acmsl.commons.utils.StringValidator;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -113,7 +114,7 @@ public class PackageUtils
     /**
      * The subpackage for TableRepository.
      */
-    public static final String TABLE_REPOSITORY_SUBPACKAGE = "tables";
+    public static final String TABLE_REPOSITORY_SUBPACKAGE = ParameterValidationHandler.TABLES;
 
     /**
      * The subpackage for Function entities.

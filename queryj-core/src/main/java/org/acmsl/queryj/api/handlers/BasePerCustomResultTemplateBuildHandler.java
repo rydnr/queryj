@@ -36,6 +36,8 @@ package org.acmsl.queryj.api.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.CannotCreateCustomResultTemplateException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.exceptions.QueryJException;
@@ -69,7 +71,6 @@ import org.checkthread.annotations.ThreadSafe;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Builds all templates to generate sources for each custom result.
@@ -103,23 +104,21 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    @ThreadSafe
     @Override
-    @SuppressWarnings("unchecked")
-    protected boolean handle(@NotNull final Map<String, ?> parameters)
+    public boolean handle(@NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {
         final boolean result;
 
         @Nullable final MetadataManager t_MetadataManager =
-            retrieveMetadataManager((Map <String, MetadataManager>) parameters);
+            retrieveMetadataManager(parameters);
 
         if (t_MetadataManager != null)
         {
             buildTemplates(
                 parameters,
                 t_MetadataManager,
-                retrieveCustomSqlProvider((Map <String, CustomSqlProvider>) parameters));
+                retrieveCustomSqlProvider(parameters));
 
             result = false;
         }
@@ -140,7 +139,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     @ThreadSafe
     protected void buildTemplates(
-        @NotNull final Map<String, ?> parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider)
       throws  QueryJBuildException
@@ -151,15 +150,15 @@ public abstract class BasePerCustomResultTemplateBuildHandler
             customSqlProvider,
             retrieveTemplateFactory(),
             CachingDecoratorFactory.getInstance(),
-            retrieveProjectPackage((Map<String, String>) parameters),
-            retrieveTableRepositoryName((Map<String, String>) parameters),
-            retrieveHeader((Map <String, String>) parameters),
-            retrieveImplementMarkerInterfaces((Map<String, Boolean>) parameters),
-            retrieveJmx((Map <String, Boolean>) parameters),
-            retrieveJNDILocation((Map <String, String>) parameters),
-            retrieveDisableGenerationTimestamps((Map<String, Boolean>) parameters),
-            retrieveDisableNotNullAnnotations((Map<String, Boolean>) parameters),
-            retrieveDisableCheckthreadAnnotations((Map<String, Boolean>) parameters),
+            retrieveProjectPackage(parameters),
+            retrieveTableRepositoryName(parameters),
+            retrieveHeader(parameters),
+            retrieveImplementMarkerInterfaces(parameters),
+            retrieveJmx(parameters),
+            retrieveJNDILocation(parameters),
+            retrieveDisableGenerationTimestamps(parameters),
+            retrieveDisableNotNullAnnotations(parameters),
+            retrieveDisableCheckthreadAnnotations(parameters),
             retrieveCustomResults(parameters, customSqlProvider, isDuplicatedResultsAllowed()),
             CustomResultUtils.getInstance());
     }
@@ -203,7 +202,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     @ThreadSafe
     @SuppressWarnings("unchecked")
     protected void buildTemplates(
-        @NotNull final Map<String, ?> parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
@@ -243,7 +242,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                                 customSqlProvider,
                                 metadataManager,
                                 metadataManager.getEngineName(),
-                                (Map<String, String>) parameters),
+                                parameters),
                             projectPackage,
                             repository,
                             header,
@@ -269,7 +268,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
             }
         }
 
-        storeTemplates(t_lTemplates, (Map <String, List<T>>) parameters);
+        storeTemplates(t_lTemplates, parameters);
     }
 
     /**
@@ -322,7 +321,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final String engineName,
-        @NotNull final Map<String, String> parameters)
+        @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         return
@@ -360,7 +359,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param parameters the parameter map.
      */
     protected abstract void storeTemplates(
-        @NotNull final List<T> templates, @NotNull final Map<String, List<T>>  parameters);
+        @NotNull final List<T> templates, @NotNull final QueryJCommand parameters);
 
     /**
      * Retrieves the foreign keys.
@@ -372,9 +371,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * reason.
      */
     @NotNull
-    @SuppressWarnings("unchecked")
     protected List<Result> retrieveCustomResults(
-        @NotNull final Map parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final CustomSqlProvider customSqlProvider,
         final boolean allowDuplicates)
       throws  QueryJBuildException
@@ -385,16 +383,19 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         {
             t_strKey = CUSTOM_RESULTS_NO_DUPLICATES;
         }
-        @Nullable List<Result> result = (List<Result>) parameters.get(t_strKey);
+
+        @Nullable List<Result> result = new QueryJCommandWrapper<List<Result>>(parameters).getSetting(t_strKey);
 
         if  (result == null)
         {
             result = retrieveCustomResultElements(customSqlProvider);
+
             if (!allowDuplicates)
             {
                 result = fixDuplicated(result);
             }
-            parameters.put(t_strKey, result);
+
+            parameters.setSetting(t_strKey, result);
         }
 
         return result;
@@ -446,7 +447,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         return resultDAO.findAll();
     }
 
-
     /**
      * Displays useful information about this handler.
      * @return such information.
@@ -456,6 +456,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     @Override
     public String toString()
     {
-        return PREFIX + getClass().getSimpleName();
+        return TemplateBuildHandler.PREFIX + getClass().getSimpleName();
     }
 }

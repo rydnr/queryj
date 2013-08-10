@@ -35,6 +35,7 @@ package org.acmsl.queryj.api.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.Template;
 import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.TemplateGenerator;
@@ -73,7 +74,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
@@ -95,11 +95,11 @@ public abstract class AbstractTemplateWritingHandler
      * The database product name entry.
      */
     public static final String PRODUCT_NAME = "L.:ProductName::.@";
+    public static final String BROKEN_BARRIER_LITERAL = "Broken barrier";
 
     /**
      * Creates a <code>AbstractTemplateWritingHandler</code> instance.
      */
-    @ThreadSafe
     public AbstractTemplateWritingHandler() {}
 
     /**
@@ -110,17 +110,15 @@ public abstract class AbstractTemplateWritingHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
      */
-    @ThreadSafe
     @Override
-    @SuppressWarnings("unchecked")
-    protected boolean handle(@NotNull final Map<String, ?> parameters)
+    public boolean handle(@NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         writeTemplates(
             parameters,
             retrieveProductName(parameters, retrieveDatabaseMetaData(parameters)),
-            retrieveThreadCount((Map<String, Integer>) parameters),
-            retrieveProjectOutputDir((Map<String, File>) parameters));
+            retrieveThreadCount(parameters),
+            retrieveProjectOutputDir(parameters));
 
         return false;
     }
@@ -136,7 +134,7 @@ public abstract class AbstractTemplateWritingHandler
     @ThreadSafe
     @SuppressWarnings("unchecked")
     protected void writeTemplates(
-        @NotNull final Map<String, ?> parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final String engineName,
         final int threadCount,
         @NotNull final File rootDir)
@@ -146,20 +144,20 @@ public abstract class AbstractTemplateWritingHandler
         {
             @NotNull final List<Future<T>> t_lTasks =
                 writeTemplatesMultithread(
-                    retrieveTemplates((Map<String, List<T>>) parameters),
+                    retrieveTemplates(parameters),
                     engineName,
                     parameters,
                     retrieveCharset(parameters),
                     retrieveTemplateGenerator(
-                        retrieveCaching((Map <String, Boolean >) parameters),
-                        retrieveThreadCount((Map<String, Integer>) parameters)),
+                        retrieveCaching(parameters),
+                        retrieveThreadCount(parameters)),
                     threadCount,
                     rootDir);
 
             synchronized (AbstractTemplateWritingHandler.class)
             {
                 @NotNull final List<Future<T>> t_lTrackedTasks =
-                    retrieveGenerationTasks((Map <String, List<Future<T>>>) parameters);
+                    retrieveGenerationTasks(parameters);
 
                 t_lTrackedTasks.addAll(t_lTasks);
             }
@@ -167,13 +165,13 @@ public abstract class AbstractTemplateWritingHandler
         else
         {
             writeTemplatesSequentially(
-                retrieveTemplates((Map<String, List<T>>) parameters),
+                retrieveTemplates(parameters),
                 engineName,
                 parameters,
                 retrieveCharset(parameters),
                 retrieveTemplateGenerator(
-                    retrieveCaching((Map <String, Boolean >) parameters),
-                    retrieveThreadCount((Map<String, Integer>) parameters)),
+                    retrieveCaching(parameters),
+                    retrieveThreadCount(parameters)),
                 rootDir);
         }
     }
@@ -193,7 +191,7 @@ public abstract class AbstractTemplateWritingHandler
     protected void writeTemplatesSequentially(
         @Nullable final List<T> templates,
         @NotNull final String engineName,
-        @NotNull final Map<String, ?> parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final Charset charset,
         @NotNull final TG templateGenerator,
         @NotNull final File rootDir)
@@ -244,7 +242,7 @@ public abstract class AbstractTemplateWritingHandler
     protected List<Future<T>> writeTemplatesMultithread(
         @Nullable final List<T> templates,
         @NotNull final String engineName,
-        @NotNull final Map<String, ?> parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final Charset charset,
         @NotNull final TG templateGenerator,
         final int threadCount,
@@ -314,7 +312,7 @@ public abstract class AbstractTemplateWritingHandler
     protected List<Future> writeTemplatesMultithread2ndVersion(
         @Nullable final List<T> templates,
         @NotNull final String engineName,
-        @NotNull final Map<String, ?> parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final Charset charset,
         @NotNull final TG templateGenerator,
         final int threadCount,
@@ -390,7 +388,7 @@ public abstract class AbstractTemplateWritingHandler
                         {
                             if (t_Log != null)
                             {
-                                t_Log.info("Broken barrier", brokenBarrier);
+                                t_Log.info(BROKEN_BARRIER_LITERAL, brokenBarrier);
                             }
                         }
 
@@ -429,7 +427,7 @@ public abstract class AbstractTemplateWritingHandler
      * @throws QueryJBuildException if the template retrieval process if faulty.
      */
     @Nullable
-    protected abstract List<T> retrieveTemplates(@NotNull final Map<String, List<T>> parameters)
+    protected abstract List<T> retrieveTemplates(@NotNull final QueryJCommand parameters)
         throws QueryJBuildException;
 
     /**
@@ -438,11 +436,11 @@ public abstract class AbstractTemplateWritingHandler
      * @param metadata the database metadata.
      * @return the product name.
      */
-    @ThreadSafe
-    @SuppressWarnings("unchecked")
-    public String retrieveProductName(@NotNull final Map parameters, @Nullable final DatabaseMetaData metadata)
+    @NotNull
+    public String retrieveProductName(
+        @NotNull final QueryJCommand parameters, @Nullable final DatabaseMetaData metadata)
     {
-        @Nullable String result = (String) parameters.get(PRODUCT_NAME);
+        @Nullable String result = parameters.getSetting(PRODUCT_NAME);
 
         if (   (result == null)
             && (metadata != null))
@@ -470,7 +468,7 @@ public abstract class AbstractTemplateWritingHandler
             result = "";
         }
 
-        parameters.put(PRODUCT_NAME, result);
+        parameters.setSetting(PRODUCT_NAME, result);
 
         return result;
     }
@@ -489,6 +487,6 @@ public abstract class AbstractTemplateWritingHandler
         @NotNull final C context,
         @NotNull final File rootDir,
         @NotNull final String engineName,
-        @NotNull final Map<String, ?> parameters)
+        @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException;
 }

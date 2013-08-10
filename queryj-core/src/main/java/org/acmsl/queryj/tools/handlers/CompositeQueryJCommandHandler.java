@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 
@@ -78,7 +79,7 @@ public class CompositeQueryJCommandHandler<C extends QueryJCommand, CH extends Q
     /**
      * The handler system property prefix.
      */
-    protected static final String HANDLER_SYSTEM_PROPERTY_PREFIX = "queryj.";
+    protected static final String HANDLER_SYSTEM_PROPERTY_PREFIX = QueryJSettings.PREFIX;
 
     /**
      * The handler system property suffix.
@@ -235,7 +236,7 @@ public class CompositeQueryJCommandHandler<C extends QueryJCommand, CH extends Q
 
         @Nullable final String t_strWildcardProperty = System.getProperty(WILDCARD_SYSTEM_PROPERTY);
 
-        if ("false".equalsIgnoreCase(t_strWildcardProperty))
+        if (!Boolean.valueOf(t_strWildcardProperty))
         {
             result = false;
         }

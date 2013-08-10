@@ -78,6 +78,7 @@ public class JdbcMetadataTypeManager
                 Serializable
 {
     private static final long serialVersionUID = 560475071137483642L;
+    public static final String TIMESTAMP = "Timestamp";
 
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -347,7 +348,7 @@ public class JdbcMetadataTypeManager
         result.put("DATE"       , t_TimeStamp);
         result.put("Date"       , t_TimeStamp);
         result.put("TIMESTAMP"  , t_TimeStamp);
-        result.put("Timestamp"  , t_TimeStamp);
+        result.put(TIMESTAMP, t_TimeStamp);
         result.put("CHAR"       , t_Text);
         result.put("VARCHAR"    , t_Text);
         result.put("VARCHAR2"   , t_Text);
@@ -723,7 +724,7 @@ public class JdbcMetadataTypeManager
                     break;
 
                 case Types.TIMESTAMP:
-                    result = "Timestamp";
+                    result = TIMESTAMP;
                     break;
 
                 case Types.CHAR:
@@ -886,7 +887,7 @@ public class JdbcMetadataTypeManager
                 case Types.DATE:
                 case Types.TIMESTAMP:
                 case 11:
-                    result = "Timestamp";
+                    result = TIMESTAMP;
                     break;
 
                 case Types.CHAR:

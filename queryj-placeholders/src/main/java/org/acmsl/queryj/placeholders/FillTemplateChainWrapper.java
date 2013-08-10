@@ -38,11 +38,19 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing QueryJ-core classes.
  */
+import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.FillTemplateChain;
 import org.acmsl.queryj.api.NonRelevantFillHandler;
 import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+
+/*
+ * Importing Apache Commons Configuration.
+ */
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations.
@@ -53,9 +61,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing JDK classes.
  */
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Wraps a given chain to add generic, stateless placeholders.
@@ -129,7 +135,7 @@ public class FillTemplateChainWrapper<C extends TemplateContext>
      */
     @NotNull
     @Override
-    public Map<String, ?> providePlaceholders(final boolean relevantOnly)
+    public QueryJCommand providePlaceholders(final boolean relevantOnly)
         throws QueryJBuildException
     {
         return providePlaceholders(relevantOnly, getTemplateContext());
@@ -145,7 +151,7 @@ public class FillTemplateChainWrapper<C extends TemplateContext>
      * @throws QueryJBuildException if the process fails.
      */
     @NotNull
-    protected Map<String, ?> providePlaceholders(final boolean relevantOnly, @NotNull final C templateContext)
+    protected QueryJCommand providePlaceholders(final boolean relevantOnly, @NotNull final C templateContext)
         throws QueryJBuildException
     {
         return providePlaceholders(relevantOnly, getWrappedChain(), getHandlers(templateContext));
@@ -160,31 +166,35 @@ public class FillTemplateChainWrapper<C extends TemplateContext>
      * @throws QueryJBuildException if the process fails.
      */
     @NotNull
-    @SuppressWarnings("unchecked")
-    protected Map<String, ?> providePlaceholders(
+    protected QueryJCommand providePlaceholders(
         final boolean relevantOnly,
         @NotNull final FillTemplateChain<C> chain,
         @NotNull final List<FillHandler> handlers)
         throws QueryJBuildException
     {
-        @NotNull final Map result = new HashMap();
+        @NotNull final Configuration result = new PropertiesConfiguration();
 
         for (@NotNull final FillHandler handler : handlers)
         {
             if (   (!relevantOnly)
                 || (!(handler instanceof NonRelevantFillHandler)))
             {
-                result.put(handler.getPlaceHolder(), handler.getValue());
+                result.setProperty(handler.getPlaceHolder(), handler.getValue());
             }
             else
             {
-                result.put(handler.getPlaceHolder(), "");
+                result.setProperty(handler.getPlaceHolder(), "");
             }
         }
 
-        result.putAll(chain.providePlaceholders(relevantOnly));
+        @NotNull final QueryJCommand t_Command = chain.providePlaceholders(relevantOnly);
 
-        return result;
+        for (@NotNull final String t_strKey : t_Command.getKeys())
+        {
+            result.setProperty(t_strKey, t_Command.getObjectSetting(t_strKey));
+        }
+
+        return new ConfigurationQueryJCommandImpl(result);
     }
 
     /**
@@ -221,6 +231,7 @@ public class FillTemplateChainWrapper<C extends TemplateContext>
 
         return result;
     }
+
 
     @Override
     public String toString()

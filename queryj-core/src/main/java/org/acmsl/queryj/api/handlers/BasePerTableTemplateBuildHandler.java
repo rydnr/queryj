@@ -35,6 +35,8 @@ package org.acmsl.queryj.api.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.api.PerTableTemplate;
 import org.acmsl.queryj.api.PerTableTemplateFactory;
@@ -61,7 +63,6 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /*
  * Importing some Apache Commons Logging classes.
@@ -97,14 +98,13 @@ public abstract class BasePerTableTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
-    @SuppressWarnings("unchecked")
-    protected boolean handle(@NotNull final Map<String, ?> parameters)
+    public boolean handle(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
         final boolean result;
 
         @Nullable final MetadataManager t_MetadataManager =
-            retrieveMetadataManager((Map <String, MetadataManager>) parameters);
+            retrieveMetadataManager(parameters);
 
         if (t_MetadataManager != null)
         {
@@ -126,9 +126,8 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param tableDAO the {@link TableDAO} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    @SuppressWarnings("unchecked")
     protected void buildTemplate(
-        @NotNull final Map<String, ?> parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final TableDAO tableDAO)
       throws  QueryJBuildException
@@ -136,17 +135,17 @@ public abstract class BasePerTableTemplateBuildHandler
         buildTemplate(
             parameters,
             metadataManager,
-            retrieveCustomSqlProvider((Map <String, CustomSqlProvider >) parameters),
+            retrieveCustomSqlProvider(parameters),
             retrieveTemplateFactory(),
-            retrieveProjectPackage((Map<String, String>) parameters),
-            retrieveTableRepositoryName((Map <String, String>) parameters),
-            retrieveHeader((Map <String, String>) parameters),
-            retrieveImplementMarkerInterfaces((Map <String, Boolean>) parameters),
-            retrieveJmx((Map <String, Boolean>) parameters),
-            retrieveJNDILocation((Map <String, String>) parameters),
-            retrieveDisableGenerationTimestamps((Map<String, Boolean>) parameters),
-            retrieveDisableNotNullAnnotations((Map<String, Boolean>) parameters),
-            retrieveDisableCheckthreadAnnotations((Map<String, Boolean>) parameters),
+            retrieveProjectPackage(parameters),
+            retrieveTableRepositoryName(parameters),
+            retrieveHeader(parameters),
+            retrieveImplementMarkerInterfaces(parameters),
+            retrieveJmx(parameters),
+            retrieveJNDILocation(parameters),
+            retrieveDisableGenerationTimestamps(parameters),
+            retrieveDisableNotNullAnnotations(parameters),
+            retrieveDisableCheckthreadAnnotations(parameters),
             tableDAO.findAllTables(),
             CachingDecoratorFactory.getInstance(),
             DAOTemplateUtils.getInstance());
@@ -182,7 +181,7 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     @SuppressWarnings("unchecked")
     protected void buildTemplate(
-        @NotNull final Map<String, ?> parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
@@ -271,7 +270,7 @@ public abstract class BasePerTableTemplateBuildHandler
             }
         }
 
-        storeTemplates(t_lTemplates, (Map <String, List<T>>) parameters);
+        storeTemplates(t_lTemplates, parameters);
     }
 
     /**
@@ -282,16 +281,15 @@ public abstract class BasePerTableTemplateBuildHandler
      * @return the package name.
      * @throws QueryJBuildException if the package retrieval process if faulty.
      */
-    @SuppressWarnings("unchecked")
     protected String retrievePackage(
-        @NotNull final String tableName, @NotNull final String engineName, @NotNull final Map<String, ?> parameters)
+        @NotNull final String tableName, @NotNull final String engineName, @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         return
             retrievePackage(
                 tableName,
                 engineName,
-                retrieveProjectPackage((Map<String, String>) parameters),
+                retrieveProjectPackage(parameters),
                 PackageUtils.getInstance());
     }
 
@@ -315,7 +313,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param parameters the parameter map.
      */
     protected abstract void storeTemplates(
-        @NotNull final List<T> templates, @NotNull final Map<String, List<T>> parameters);
+        @NotNull final List<T> templates, @NotNull final QueryJCommand parameters);
 
     /**
      * Creates a template with required information.
@@ -354,7 +352,7 @@ public abstract class BasePerTableTemplateBuildHandler
         final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
         @NotNull final List<Row> staticContents,
-        @NotNull final Map parameters)
+        @SuppressWarnings("unused") @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         return
@@ -417,7 +415,7 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     @Nullable
     protected List<Row> retrieveStaticContent(
-        @NotNull final Map parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -489,11 +487,10 @@ public abstract class BasePerTableTemplateBuildHandler
      * @return such content, if present.
      */
     @Nullable
-    @SuppressWarnings("unchecked")
     protected List<Row> retrieveCachedStaticContent(
-        @NotNull final Map parameters, @NotNull final String tableName)
+        @NotNull final QueryJCommand parameters, @NotNull final String tableName)
     {
-        return (List<Row>) parameters.get(buildStaticContentKey(tableName));
+        return new QueryJCommandWrapper<List<Row>>(parameters).getSetting(buildStaticContentKey(tableName));
     }
 
     /**
@@ -505,10 +502,10 @@ public abstract class BasePerTableTemplateBuildHandler
     @SuppressWarnings("unchecked")
     protected void storeCachedStaticContent(
         @NotNull final List<Row> contents,
-        @NotNull final Map parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final String tableName)
     {
-        parameters.put(buildStaticContentKey(tableName), contents);
+        new QueryJCommandWrapper<List<Row>>(parameters).setSetting(buildStaticContentKey(tableName), contents);
     }
 
     /**
@@ -517,19 +514,8 @@ public abstract class BasePerTableTemplateBuildHandler
      * @return such key.
      */
     @NotNull
-    protected Object buildStaticContentKey(@NotNull final String tableName)
+    protected String buildStaticContentKey(@NotNull final String tableName)
     {
         return "..static-contents-for-table-" + tableName + "..";
-    }
-
-    /**
-     * Displays useful information about this handler.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String toString()
-    {
-        return PREFIX + getClass().getSimpleName();
     }
 }

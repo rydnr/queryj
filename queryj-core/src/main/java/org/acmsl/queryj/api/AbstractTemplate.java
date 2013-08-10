@@ -35,6 +35,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CannotFindPlaceholderImplementationException;
 import org.acmsl.queryj.api.exceptions.CannotFindTemplateGroupException;
 import org.acmsl.queryj.api.exceptions.CannotFindTemplateInGroupException;
@@ -150,6 +151,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     }
                 }
             };
+    protected static final String GENERATING = "Generating ";
+    protected static final String CONTEXT_LITERAL = "Context";
+    protected static final String TEMPLATE_LITERAL = "Template";
+    protected static final String FILL_TEMPLATE_CHAIN_FACTORY_LITERAL = "FillTemplateChainFactory";
 
     /**
      * The template context.
@@ -499,7 +504,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @NotNull
     protected String buildHeader()
     {
-        return "Generating " + getClass().getName() + ".";
+        return GENERATING + getClass().getName() + ".";
     }
 
     /**
@@ -760,15 +765,19 @@ public abstract class AbstractTemplate<C extends TemplateContext>
             {
                 try
                 {
-                    @SuppressWarnings("unchecked")
-                    @NotNull final Map placeHolders = new HashMap();
+                    @NotNull final Map<String, Object> placeHolders = new HashMap<String, Object>();
 
                     @NotNull final List<FillTemplateChain<? extends FillHandler>> fillChains =
                         buildFillTemplateChains(context);
 
                     for (@NotNull final FillTemplateChain<? extends FillHandler> chain : fillChains)
                     {
-                        placeHolders.putAll(chain.providePlaceholders(relevantOnly));
+                        @NotNull final QueryJCommand command = chain.providePlaceholders(relevantOnly);
+
+                        for (@NotNull final String key: command.getKeys())
+                        {
+                            placeHolders.put(key, command.getObjectSetting(key));
+                        }
                     }
 
                     t_Template.add(CONTEXT, placeHolders);
@@ -897,19 +906,19 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         @NotNull String baseName = contextName;
 
-        if (baseName.endsWith("Context"))
+        if (baseName.endsWith(CONTEXT_LITERAL))
         {
-            baseName = baseName.substring(0, baseName.lastIndexOf("Context"));
+            baseName = baseName.substring(0, baseName.lastIndexOf(CONTEXT_LITERAL));
         }
 
-        if (baseName.endsWith("Template"))
+        if (baseName.endsWith(TEMPLATE_LITERAL))
         {
-            baseName = baseName.substring(0, baseName.lastIndexOf("Template"));
+            baseName = baseName.substring(0, baseName.lastIndexOf(TEMPLATE_LITERAL));
         }
 
-        if (!baseName.endsWith("FillTemplateChainFactory"))
+        if (!baseName.endsWith(FILL_TEMPLATE_CHAIN_FACTORY_LITERAL))
         {
-            baseName = baseName + "FillTemplateChainFactory";
+            baseName = baseName + FILL_TEMPLATE_CHAIN_FACTORY_LITERAL;
         }
 
         baseName = "org.acmsl.queryj.api.placeholders." + baseName;

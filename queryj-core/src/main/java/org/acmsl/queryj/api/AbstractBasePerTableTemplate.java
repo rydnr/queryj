@@ -97,7 +97,7 @@ public abstract class AbstractBasePerTableTemplate<C extends PerTableTemplateCon
     protected String buildHeader(
         @NotNull final String templateName, @NotNull final String tableName)
     {
-        return "Generating " + templateName + " for " + tableName + ".";
+        return GENERATING + templateName + " for " + tableName + ".";
     }
 
     /**

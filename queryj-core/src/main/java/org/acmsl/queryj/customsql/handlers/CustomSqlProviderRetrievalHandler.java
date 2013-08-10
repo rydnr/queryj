@@ -36,7 +36,8 @@ package org.acmsl.queryj.customsql.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.api.exceptions.UnsupportedCustomSqlFileFormatException;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.xml.SqlXmlParser;
@@ -58,7 +59,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -91,7 +91,8 @@ public class CustomSqlProviderRetrievalHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected boolean handle(@NotNull final Map parameters)
+    @Override
+    public boolean handle(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
         boolean result = true;
@@ -115,27 +116,13 @@ public class CustomSqlProviderRetrievalHandler
      * @throws QueryJBuildException if some problem occurs.
      */
     @Nullable
-    protected CustomSqlProvider buildCustomSqlProvider(@NotNull final Map parameters)
+    protected CustomSqlProvider buildCustomSqlProvider(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
         return
             buildCustomSqlProvider(
-                retrieveCustomSqlModel(parameters),
                 retrieveCustomSqlModelXmlFile(parameters),
                 SqlXmlParserFactory.getInstance());
-    }
-
-    /**
-     * Retrieves the custom sql model from the attribute map.
-     * @param parameters the parameters.
-     * @return such model.
-     */
-    @NotNull
-    protected String retrieveCustomSqlModel(@NotNull final Map parameters)
-    {
-        return 
-            (String)
-                parameters.get(ParameterValidationHandler.CUSTOM_SQL_MODEL);
     }
 
     /**
@@ -144,15 +131,26 @@ public class CustomSqlProviderRetrievalHandler
      * @return such reference.
      */
     @NotNull
-    protected File retrieveCustomSqlModelXmlFile(@NotNull final Map parameters)
+    protected File retrieveCustomSqlModelXmlFile(@NotNull final QueryJCommand parameters)
     {
-        return 
-            (File) parameters.get(ParameterValidationHandler.SQL_XML_FILE);
+        @NotNull final File result;
+
+        @Nullable final File aux = parameters.getFileSetting(ParameterValidationHandler.SQL_XML_FILE);
+
+        if (aux == null)
+        {
+            throw new RuntimeException("TODO: Fix me");
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
     }
 
     /**
      * Builds the custom sql provider from given information.
-     * @param model the model.
      * @param xmlFile the XML file.
      * @param factory the <code>SqlXmlParserFactory</code> instance.
      * @return such provider..
@@ -160,22 +158,11 @@ public class CustomSqlProviderRetrievalHandler
      */
     @Nullable
     protected CustomSqlProvider buildCustomSqlProvider(
-        @Nullable final String model,
         @Nullable final File xmlFile,
         @NotNull final SqlXmlParserFactory factory)
       throws  QueryJBuildException
     {
         @Nullable CustomSqlProvider result = null;
-
-        if  (model != null)
-        {
-            if  (!ParameterValidationHandler.CUSTOM_SQL_MODEL_XML.equals(
-                     model))
-            {
-                throw
-                    new UnsupportedCustomSqlFileFormatException(model);
-            }
-        }
 
         if  (xmlFile != null)
         {
@@ -203,11 +190,10 @@ public class CustomSqlProviderRetrievalHandler
      * @param provider the provider to store.
      * @param parameters the parameter map.
      */
-    @SuppressWarnings("unchecked")
     protected void storeCustomSqlProvider(
         @NotNull final CustomSqlProvider provider,
-        @NotNull final Map parameters)
+        @NotNull final QueryJCommand parameters)
     {
-        parameters.put(CUSTOM_SQL_PROVIDER, provider);
+        new QueryJCommandWrapper<CustomSqlProvider>(parameters).setSetting(CUSTOM_SQL_PROVIDER, provider);
     }
 }

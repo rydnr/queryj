@@ -35,6 +35,7 @@ package org.acmsl.queryj.api.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.PerTableTemplate;
 import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.PerTableTemplateGenerator;
@@ -50,7 +51,6 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.util.Map;
 
 /**
  * Writes <i>per-table</i> templates.
@@ -77,11 +77,11 @@ public abstract class BasePerTableTemplateWritingHandler
      */
     @Override
     @NotNull
-    protected File retrieveOutputDir(
+    public File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
         @NotNull final String engineName,
-        @NotNull final Map<String, ?> parameters)
+        @NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
         return retrieveOutputDir(context.getTableName(), rootDir, engineName, parameters);
@@ -97,19 +97,18 @@ public abstract class BasePerTableTemplateWritingHandler
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      */
     @NotNull
-    @SuppressWarnings("unchecked")
     protected File retrieveOutputDir(
         @NotNull final String tableName,
         @NotNull final File rootDir,
         @NotNull final String engineName,
-        @NotNull final Map<String, ?> parameters)
+        @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         return
             retrieveOutputDir(
                 rootDir,
-                retrieveProjectPackage((Map <String, String>) parameters),
-                retrieveUseSubfoldersFlag((Map <String, Boolean>) parameters),
+                retrieveProjectPackage(parameters),
+                retrieveUseSubfoldersFlag(parameters),
                 tableName,
                 engineName,
                 parameters,
@@ -136,18 +135,7 @@ public abstract class BasePerTableTemplateWritingHandler
         final boolean useSubFolders,
         @NotNull final String tableName,
         @NotNull final String engineName,
-        @NotNull final Map parameters,
+        @NotNull final QueryJCommand parameters,
         @NotNull final PackageUtils packageUtils)
       throws  QueryJBuildException;
-
-    /**
-     * Displays useful information about this handler.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String toString()
-    {
-        return "Writer:" + getClass().getSimpleName();
-    }
 }

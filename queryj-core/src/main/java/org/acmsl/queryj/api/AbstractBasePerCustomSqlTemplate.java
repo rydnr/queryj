@@ -102,7 +102,7 @@ public abstract class AbstractBasePerCustomSqlTemplate<C extends PerCustomSqlTem
     protected String buildHeader(
         final String templateName, @NotNull final Sql sql)
     {
-        return "Generating " + templateName + " for " + sql.getName();
+        return GENERATING + templateName + " for " + sql.getName();
     }
 
     /**

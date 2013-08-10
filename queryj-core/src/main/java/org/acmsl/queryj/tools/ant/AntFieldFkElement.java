@@ -108,17 +108,17 @@ public class AntFieldFkElement
      */
     public void setDynamicAttribute(final String name, final String value)
     {
-        if  ("table".equals(name))
+        if  (AntTablesElement.TABLE.equals(name))
         {
             setTable(value);
         }
-        else if  ("field".equals(name))
+        else if  (AntExternallyManagedFieldsElement.FIELD_LITERAL.equals(name))
         {
             setField(value);
         }
         else 
         {
-            throw new BuildException("Attribute " + name + "is not supported");
+            throw new BuildException(AntFieldElement.ATTRIBUTE_LITERAL + name + "is not supported");
         }
     }
 
@@ -134,5 +134,11 @@ public class AntFieldFkElement
         throw
             new BuildException(
                 "Nested elements inside <fk> are not supported");
+    }
+
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'AntFieldFkElement', 'field': '" + m__strField + "', 'table': '" + m__strTable + "' }";
     }
 }

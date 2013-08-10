@@ -40,13 +40,18 @@ package org.acmsl.queryj.api;
  */
 import org.acmsl.commons.patterns.Chain;
 import org.acmsl.queryj.AbstractQueryJChain;
+import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 
 /*
  * Importing some JetBrains annotations.
  */
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Sets up a chain to resolve template placeholders.
@@ -120,17 +125,16 @@ public abstract class TemplateFillChain<C extends TemplateContext>
 
     /**
      * Builds the command.
-     *
-     * @param command the command to be initialized.
+     * @param configuration the configuration.
+     * @param log the log.
      * @return the initialized command.
      */
     @NotNull
-    @Override
-    protected QueryJCommand buildCommand(@NotNull final QueryJCommand command)
+    protected QueryJCommand process(@NotNull final Configuration configuration, @Nullable final Log log)
     {
-        @NotNull final QueryJCommand result = command;
+        @NotNull final QueryJCommand result = new ConfigurationQueryJCommandImpl(configuration, log);
 
-        command.setAttribute("context", getTemplateContext());
+        new QueryJCommandWrapper<TemplateContext>(result).setSetting("context", getTemplateContext());
 
         return result;
     }
@@ -152,4 +156,11 @@ public abstract class TemplateFillChain<C extends TemplateContext>
      * @param context the {@link TemplateContext context}.
      */
     protected abstract void fillChain(@NotNull final Chain chain, @NotNull final C context);
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'TemplateFillChain', 'templateContext': '" + templateContext + "' }";
+    }
 }

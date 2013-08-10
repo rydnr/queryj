@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Table;
@@ -77,6 +78,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class DatabaseMetaDataCacheReadingHandler
     extends  AbstractDatabaseMetaDataCacheHandler
 {
+    protected static final String CANNOT_EXTRACT_TABLE_METADATA_LITERAL = "Cannot extract table metadata";
+
     /**
      * Handles given parameters.
      * @param parameters the parameters to handle.
@@ -88,7 +91,7 @@ public class DatabaseMetaDataCacheReadingHandler
      */
     @Override
     protected boolean handle(
-        @NotNull final Map<String, ?> parameters,
+        @NotNull final QueryJCommand parameters,
         final boolean alreadyDone,
         @NotNull final DatabaseMetaData metaData)
         throws  QueryJBuildException
@@ -128,7 +131,7 @@ public class DatabaseMetaDataCacheReadingHandler
      */
     @Override
     protected boolean handle(
-        @NotNull final Map<String, ?> parameters, @Nullable final MetadataManager metadataManager)
+        @NotNull final QueryJCommand parameters, @Nullable final MetadataManager metadataManager)
         throws  QueryJBuildException
     {
         boolean result = false;
@@ -152,7 +155,7 @@ public class DatabaseMetaDataCacheReadingHandler
 
                     if (t_Log != null)
                     {
-                        t_Log.warn("Cannot extract table metadata", cannotExtractTableMetadata);
+                        t_Log.warn(CANNOT_EXTRACT_TABLE_METADATA_LITERAL, cannotExtractTableMetadata);
                     }
                 }
                 catch (@NotNull final QueryJException otherError)
@@ -161,7 +164,7 @@ public class DatabaseMetaDataCacheReadingHandler
 
                     if (t_Log != null)
                     {
-                        t_Log.warn("Cannot extract table metadata", otherError);
+                        t_Log.warn(CANNOT_EXTRACT_TABLE_METADATA_LITERAL, otherError);
                     }
 
                     result = true;

@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
@@ -60,7 +61,6 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -88,7 +88,8 @@ public class DatabaseMetaDataLoggingHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected boolean handle(@NotNull final Map<String, ?> parameters)
+    @Override
+    public boolean handle(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
         return handle(retrieveDatabaseMetaData(parameters));
@@ -131,20 +132,17 @@ public class DatabaseMetaDataLoggingHandler
                     + metaData.getTimeDateFunctions());
 
                 t_Log.debug(
-                      "insertsAreDetected("
-                    +     "TYPE_FORWARD_ONLY):"
+                      "insertsAreDetected(TYPE_FORWARD_ONLY):"
                     + metaData.insertsAreDetected(
                           ResultSet.TYPE_FORWARD_ONLY));
 
                 t_Log.debug(
-                     "insertsAreDetected("
-                    +     "TYPE_SCROLL_INSENSITIVE):"
+                     "insertsAreDetected(TYPE_SCROLL_INSENSITIVE):"
                     + metaData.insertsAreDetected(
                         ResultSet.TYPE_SCROLL_INSENSITIVE));
 
                 t_Log.debug(
-                     "insertsAreDetected("
-                    +     "TYPE_SCROLL_SENS):"
+                     "insertsAreDetected(TYPE_SCROLL_SENS):"
                     + metaData.insertsAreDetected(
                         ResultSet.TYPE_SCROLL_SENSITIVE));
 
@@ -185,110 +183,92 @@ public class DatabaseMetaDataLoggingHandler
                     + metaData.nullsAreSortedLow());
                 
                 t_Log.debug(
-                      "othersDeletesAreVisible("
-                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                      "othersDeletesAreVisible(ResultSet.TYPE_FORWARD_ONLY):"
                     + metaData.othersDeletesAreVisible(
                         ResultSet.TYPE_FORWARD_ONLY));
 
                 t_Log.debug(
-                      "othersDeletesAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                      "othersDeletesAreVisible(ResultSet.TYPE_SCROLL_INSENSITIVE):"
                     + metaData.othersDeletesAreVisible(
                         ResultSet.TYPE_SCROLL_INSENSITIVE));
 
                 t_Log.debug(
-                      "othersDeletesAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                      "othersDeletesAreVisible(ResultSet.TYPE_SCROLL_SENS):"
                     + metaData.othersDeletesAreVisible(
                         ResultSet.TYPE_SCROLL_SENSITIVE));
 
                 t_Log.debug(
-                      "othersInsertsAreVisible("
-                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                      "othersInsertsAreVisible(ResultSet.TYPE_FORWARD_ONLY):"
                     + metaData.othersInsertsAreVisible(
                         ResultSet.TYPE_FORWARD_ONLY));
 
                 t_Log.debug(
-                      "othersInsertsAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                      "othersInsertsAreVisible(ResultSet.TYPE_SCROLL_INSENSITIVE):"
                     + metaData.othersInsertsAreVisible(
                         ResultSet.TYPE_SCROLL_INSENSITIVE));
 
                 t_Log.debug(
-                      "othersInsertsAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                      "othersInsertsAreVisible(ResultSet.TYPE_SCROLL_SENS):"
                     + metaData.othersInsertsAreVisible(
                         ResultSet.TYPE_SCROLL_SENSITIVE));
 
                 t_Log.debug(
-                      "othersUpdatesAreVisible("
-                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                      "othersUpdatesAreVisible(ResultSet.TYPE_FORWARD_ONLY):"
                     + metaData.othersUpdatesAreVisible(
                         ResultSet.TYPE_FORWARD_ONLY));
 
                 t_Log.debug(
-                      "othersUpdatesAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                      "othersUpdatesAreVisible(ResultSet.TYPE_SCROLL_INSENSITIVE):"
                     + metaData.othersUpdatesAreVisible(
                         ResultSet.TYPE_SCROLL_INSENSITIVE));
 
                 t_Log.debug(
-                      "othersUpdatesAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                      "othersUpdatesAreVisible(ResultSet.TYPE_SCROLL_SENS):"
                     + metaData.othersUpdatesAreVisible(
                         ResultSet.TYPE_SCROLL_SENSITIVE));
 
                 t_Log.debug(
-                      "ownDeletesAreVisible("
-                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                      "ownDeletesAreVisible(ResultSet.TYPE_FORWARD_ONLY):"
                     + metaData.ownDeletesAreVisible(
                         ResultSet.TYPE_FORWARD_ONLY));
 
                 t_Log.debug(
-                      "ownDeletesAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                      "ownDeletesAreVisible(ResultSet.TYPE_SCROLL_INSENSITIVE):"
                     + metaData.ownDeletesAreVisible(
                         ResultSet.TYPE_SCROLL_INSENSITIVE));
 
                 t_Log.debug(
-                      "ownDeletesAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                      "ownDeletesAreVisible(ResultSet.TYPE_SCROLL_SENS):"
                     + metaData.ownDeletesAreVisible(
                         ResultSet.TYPE_SCROLL_SENSITIVE));
 
                 t_Log.debug(
-                      "ownInsertsAreVisible("
-                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                      "ownInsertsAreVisible(ResultSet.TYPE_FORWARD_ONLY):"
                     + metaData.ownInsertsAreVisible(
                         ResultSet.TYPE_FORWARD_ONLY));
 
                 t_Log.debug(
-                      "ownInsertsAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                      "ownInsertsAreVisible(ResultSet.TYPE_SCROLL_INSENSITIVE):"
                     + metaData.ownInsertsAreVisible(
                         ResultSet.TYPE_SCROLL_INSENSITIVE));
 
                 t_Log.debug(
-                      "ownInsertsAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                      "ownInsertsAreVisible(ResultSet.TYPE_SCROLL_SENS):"
                     + metaData.ownInsertsAreVisible(
                         ResultSet.TYPE_SCROLL_SENSITIVE));
 
                 t_Log.debug(
-                      "ownUpdatesAreVisible("
-                    +     "ResultSet.TYPE_FORWARD_ONLY):"
+                      "ownUpdatesAreVisible(ResultSet.TYPE_FORWARD_ONLY):"
                     + metaData.ownUpdatesAreVisible(
                         ResultSet.TYPE_FORWARD_ONLY));
 
                 t_Log.debug(
-                      "ownUpdatesAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                      "ownUpdatesAreVisible(ResultSet.TYPE_SCROLL_INSENSITIVE):"
                     + metaData.ownUpdatesAreVisible(
                         ResultSet.TYPE_SCROLL_INSENSITIVE));
 
                 t_Log.debug(
-                      "ownUpdatesAreVisible("
-                    +     "ResultSet.TYPE_SCROLL_SENS):"
+                      "ownUpdatesAreVisible(ResultSet.TYPE_SCROLL_SENS):"
                     + metaData.ownUpdatesAreVisible(
                         ResultSet.TYPE_SCROLL_SENSITIVE));
 
@@ -400,7 +380,7 @@ public class DatabaseMetaDataLoggingHandler
                       "supportsFullOuterJoins():"
                     + metaData.supportsFullOuterJoins());
             
-                String t_strSupportsGetGeneratedKeys = "false";
+                String t_strSupportsGetGeneratedKeys = Boolean.FALSE.toString();
 
                 try
                 {
@@ -514,43 +494,37 @@ public class DatabaseMetaDataLoggingHandler
                     + metaData.supportsPositionedUpdate());
             
                 t_Log.debug(
-                      "supportsResultSetConcurrency("
-                    +     "TYPE_FORWARD_ONLY,CONCUR_READ_ONLY):"
+                      "supportsResultSetConcurrency(TYPE_FORWARD_ONLY,CONCUR_READ_ONLY):"
                     + metaData.supportsResultSetConcurrency(
                         ResultSet.TYPE_FORWARD_ONLY,
                         ResultSet.CONCUR_READ_ONLY));
 
                 t_Log.debug(
-                      "supportsResultSetConcurrency("
-                    +     "TYPE_FORWARD_ONLY,CONCUR_UPDATABLE):"
+                      "supportsResultSetConcurrency(TYPE_FORWARD_ONLY,CONCUR_UPDATABLE):"
                     + metaData.supportsResultSetConcurrency(
                         ResultSet.TYPE_FORWARD_ONLY,
                         ResultSet.CONCUR_UPDATABLE));
 
                 t_Log.debug(
-                      "supportsResultSetConcurrency("
-                    +     "TYPE_SCROLL_INSENSITIVE,CONCUR_READ_ONLY):"
+                      "supportsResultSetConcurrency(TYPE_SCROLL_INSENSITIVE,CONCUR_READ_ONLY):"
                     + metaData.supportsResultSetConcurrency(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
                         ResultSet.CONCUR_READ_ONLY));
 
                 t_Log.debug(
-                      "supportsResultSetConcurrency("
-                    +     "TYPE_SCROLL_INSENSITIVE,CONCUR_UPDATABLE):"
+                      "supportsResultSetConcurrency(TYPE_SCROLL_INSENSITIVE,CONCUR_UPDATABLE):"
                     + metaData.supportsResultSetConcurrency(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
                         ResultSet.CONCUR_UPDATABLE));
 
                 t_Log.debug(
-                      "supportsResultSetConcurrency("
-                    +     "TYPE_SCROLL_SENSITIVE,CONCUR_READ_ONLY):"
+                      "supportsResultSetConcurrency(TYPE_SCROLL_SENSITIVE,CONCUR_READ_ONLY):"
                     + metaData.supportsResultSetConcurrency(
                         ResultSet.TYPE_SCROLL_SENSITIVE,
                         ResultSet.CONCUR_READ_ONLY));
 
                 t_Log.debug(
-                      "supportsResultSetConcurrency("
-                    +     "TYPE_SCROLL_SENSITIVE,CONCUR_UPDATABLE):"
+                      "supportsResultSetConcurrency(TYPE_SCROLL_SENSITIVE,CONCUR_UPDATABLE):"
                     + metaData.supportsResultSetConcurrency(
                         ResultSet.TYPE_SCROLL_SENSITIVE,
                         ResultSet.CONCUR_UPDATABLE));
@@ -572,20 +546,17 @@ public class DatabaseMetaDataLoggingHandler
                  */
 
                 t_Log.debug(
-                      "supportsResultSetType("
-                    +     "TYPE_FORWARD_ONLY):"
+                      "supportsResultSetType(TYPE_FORWARD_ONLY):"
                     + metaData.supportsResultSetType(
                         ResultSet.TYPE_FORWARD_ONLY));
 
                 t_Log.debug(
-                      "supportsResultSetType("
-                    +     "ResultSet.TYPE_SCROLL_INSENSITIVE):"
+                      "supportsResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE):"
                     + metaData.supportsResultSetType(
                         ResultSet.TYPE_SCROLL_INSENSITIVE));
 
                 t_Log.debug(
-                      "supportsResultSetType("
-                    +     "TYPE_SCROLL_SENSITIVE):"
+                      "supportsResultSetType(TYPE_SCROLL_SENSITIVE):"
                     + metaData.supportsResultSetType(
                         ResultSet.TYPE_SCROLL_SENSITIVE));
 
@@ -654,32 +625,27 @@ public class DatabaseMetaDataLoggingHandler
                     + metaData.supportsTableCorrelationNames());
             
                 t_Log.debug(
-                      "supportsTransactionIsolationLevel("
-                    +     "TRANSACTION_NONE):"
+                      "supportsTransactionIsolationLevel(TRANSACTION_NONE):"
                     + metaData.supportsTransactionIsolationLevel(
                         Connection.TRANSACTION_NONE));
 
                 t_Log.debug(
-                      "supportsTransactionIsolationLevel("
-                    +     "TRANSACTION_READ_COMMITTED):"
+                      "supportsTransactionIsolationLevel(TRANSACTION_READ_COMMITTED):"
                     + metaData.supportsTransactionIsolationLevel(
                         Connection.TRANSACTION_READ_COMMITTED));
 
                 t_Log.debug(
-                      "supportsTransactionIsolationLevel("
-                    +     "TRANSACTION_READ_UNCOMMITTED):"
+                      "supportsTransactionIsolationLevel(TRANSACTION_READ_UNCOMMITTED):"
                     + metaData.supportsTransactionIsolationLevel(
                         Connection.TRANSACTION_READ_UNCOMMITTED));
 
                 t_Log.debug(
-                      "supportsTransactionIsolationLevel("
-                    +     "TRANSACTION_REPEATABLE_READ):"
+                      "supportsTransactionIsolationLevel(TRANSACTION_REPEATABLE_READ):"
                     + metaData.supportsTransactionIsolationLevel(
                         Connection.TRANSACTION_REPEATABLE_READ));
 
                 t_Log.debug(
-                      "supportsTransactionIsolationLevel("
-                    +     "TRANSACTION_SERIALIZABLE):"
+                      "supportsTransactionIsolationLevel(TRANSACTION_SERIALIZABLE):"
                     + metaData.supportsTransactionIsolationLevel(
                         Connection.TRANSACTION_SERIALIZABLE));
 
@@ -696,14 +662,12 @@ public class DatabaseMetaDataLoggingHandler
                     + metaData.supportsUnionAll());
 
                 t_Log.debug(
-                      "updatesAreDetected("
-                    +     "TYPE_FORWARD_ONLY):"
+                      "updatesAreDetected(TYPE_FORWARD_ONLY):"
                     + metaData.updatesAreDetected(
                         ResultSet.TYPE_FORWARD_ONLY));
 
                 t_Log.debug(
-                      "updatesAreDetected("
-                    +     "TYPE_SCROLL_INSENSITIVE):"
+                      "updatesAreDetected(TYPE_SCROLL_INSENSITIVE):"
                     + metaData.updatesAreDetected(
                         ResultSet.TYPE_SCROLL_INSENSITIVE));
 
