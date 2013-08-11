@@ -61,6 +61,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 import java.io.File;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Apache Commons Configuration-based implementation of {@link QueryJCommand}.
@@ -210,6 +211,30 @@ public class ConfigurationQueryJCommandImpl
         @NotNull final String key, @Nullable final T value, @NotNull final Configuration configuration)
     {
         configuration.setProperty(key, value);
+    }
+
+    /**
+     * Retrieves the setting for given key.
+     * @param key the key.
+     * @return the value for such key.
+     */
+    @Nullable
+    @Override
+    public List<?> getList(@NotNull final String key)
+    {
+        return getList(key, getConfiguration());
+    }
+
+    /**
+     * Retrieves the setting for given key.
+     * @param key the key.
+     * @return the value for such key.
+     * @param configuration the {@link Configuration configuration} settings.
+     */
+    @Nullable
+    protected List<?> getList(@NotNull final String key, @NotNull final Configuration configuration)
+    {
+        return configuration.getList(key);
     }
 
     /**

@@ -47,6 +47,10 @@ import org.jetbrains.annotations.Nullable;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Wraps a {@link QueryJCommand} to provide type-safe access
  * to its settings.
@@ -117,9 +121,56 @@ public class QueryJCommandWrapper<T>
      * @return the setting.
      */
     @Nullable
+    @SuppressWarnings("cast,unchecked")
     protected T getSetting(@NotNull final String key, @NotNull final QueryJCommand command)
     {
         return command.getObjectSetting(key);
+    }
+
+    /**
+     * Retrieves a T setting from the command.
+     * @param key the key.
+     * @return the setting.
+     */
+    @Nullable
+    public List<T> getListSetting(@NotNull final String key)
+    {
+        return getListSetting(key, getCommand());
+    }
+
+    /**
+     * Retrieves a T setting from the command.
+     * @param key the key.
+     * @return the setting.
+     */
+    @Nullable
+    @SuppressWarnings("cast,unchecked")
+    protected List<T> getListSetting(@NotNull final String key, @NotNull final QueryJCommand command)
+    {
+        @Nullable final List<T> result;
+
+        @Nullable final Object single = command.getObjectSetting(key);
+
+        if (single == null)
+        {
+            result = (List<T>) command.getList(key);
+        }
+        else if (single.getClass().isArray())
+        {
+            result = Arrays.asList((T[]) single);
+        }
+        else if (single.getClass().isAssignableFrom(List.class))
+        {
+            result = new ArrayList<T>();
+            result.addAll((List) single);
+        }
+        else
+        {
+            result = new ArrayList<T>(1);
+            result.add((T) single);
+        }
+
+        return result;
     }
 
     /**

@@ -58,6 +58,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.util.List;
 
 /**
  * Represents QueryJ workflow commands.
@@ -82,6 +83,14 @@ public interface QueryJCommand
      */
     @Nullable
     public String getSetting(@NotNull final String key);
+
+    /**
+     * Retrieves the setting for given key.
+     * @param key the key.
+     * @return the value for such key.
+     */
+    @Nullable
+    public List<?> getList(@NotNull final String key);
 
     /**
      * Specifies the setting for given key.

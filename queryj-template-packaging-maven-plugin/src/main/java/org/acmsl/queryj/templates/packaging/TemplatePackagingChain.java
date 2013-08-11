@@ -40,6 +40,7 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CannotFindTemplatesException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.TemplateHandler;
+import org.acmsl.queryj.templates.packaging.handlers.FindTemplateGroupsHandler;
 import org.acmsl.queryj.templates.packaging.handlers.TemplatePackagingParameterValidationHandler;
 import org.acmsl.queryj.tools.QueryJChain;
 import org.acmsl.queryj.tools.TemplateChainProvider;
@@ -97,6 +98,8 @@ public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJComman
         chain.add((CH) new TemplatePackagingParameterValidationHandler());
 
         chain.add((CH) new Log4JInitializerHandler());
+
+        chain.add((CH) new FindTemplateGroupsHandler());
 
 //        fillTemplateHandlers(chain);
 

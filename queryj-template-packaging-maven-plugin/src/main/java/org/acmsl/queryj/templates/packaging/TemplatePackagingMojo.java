@@ -68,6 +68,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.io.InputStream;
 
@@ -86,7 +87,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @SuppressWarnings("unused")
 @ThreadSafe
-@Mojo( name = "add-source", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
+@Mojo( name = "package-templates", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class TemplatePackagingMojo
     extends AbstractMojo
     implements TemplatePackagingSettings
@@ -99,10 +100,9 @@ public class TemplatePackagingMojo
 
     /**
      * Additional source directories.
-     *
-     * @since 1.0
+     * @parameter property="sources" @required
      */
-    @Parameter( required = true )
+    @Parameter( required = true, property = "sources")
     private File[] m__aSources;
 
     /**
@@ -177,7 +177,7 @@ public class TemplatePackagingMojo
     }
 
     /**
-     * Retrieves the sources.
+     * Retrieves the m__aSources.
      * @return such folders.
      */
     @NotNull
@@ -301,7 +301,7 @@ public class TemplatePackagingMojo
      */
     protected void populateCommand(@NotNull final QueryJCommand command, @NotNull final File[] sources)
     {
-        new QueryJCommandWrapper<File[]>(command).setSetting(SOURCES, sources);
+        new QueryJCommandWrapper<List<File>>(command).setSetting(SOURCES, Arrays.asList(sources));
     }
 
     @Override
@@ -309,7 +309,7 @@ public class TemplatePackagingMojo
     {
         return "{ 'class': 'TemplatePackagingMojo' " +
                ", 'queryJCommand': '" + m__QueryJCommand +
-               ", 'sources': '" + Arrays.toString(m__aSources) +
+               ", 'm__aSources': '" + Arrays.toString(m__aSources) +
                "' }";
     }
 }

@@ -23,23 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: TemplatePackagingParameterValidationHandler.java
+ * Filename: FindTemplateGroupsHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Validates the parameters.
+ * Description: 
  *
  * Date: 2013/08/11
- * Time: 08:48
+ * Time: 20:22
  *
  */
 package org.acmsl.queryj.templates.packaging.handlers;
-
-/*
- * Importing QueryJ-Template-Packaging classes.
- */
-import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
-import org.acmsl.queryj.templates.packaging.exceptions.MissingSourcesException;
 
 /*
  * Importing QueryJ-Core classes.
@@ -47,12 +41,8 @@ import org.acmsl.queryj.templates.packaging.exceptions.MissingSourcesException;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-
-/*
- * Importing ACM-SL Commons classes.
- */
-import org.acmsl.commons.logging.UniqueLogFactory;
 
 /**
  * Importing Apache Commons Logging classes.
@@ -74,30 +64,39 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * Validates the parameters.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created 2013/08/11 08:48
+ * Created 2013/08/11 20:22
  */
 @ThreadSafe
-public class TemplatePackagingParameterValidationHandler
+public class FindTemplateGroupsHandler
     extends AbstractQueryJCommandHandler
     implements TemplatePackagingSettings
 {
     /**
-     * Creates a {@link TemplatePackagingParameterValidationHandler} instance.
+     * The STG filename filter.
      */
-    public TemplatePackagingParameterValidationHandler() {}
+    public static final FilenameFilter STG_FILENAME_FILTER =
+        new StgFilenameFilter();
+
+    /**
+     * Creates a {@link FindTemplateGroupsHandler} instance.
+     */
+    public FindTemplateGroupsHandler() {}
 
     /**
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
+     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
      */
+    @Override
     public boolean handle(@NotNull final QueryJCommand command)
         throws QueryJBuildException
     {
@@ -114,28 +113,77 @@ public class TemplatePackagingParameterValidationHandler
     protected boolean handle(@NotNull final QueryJCommand command, @Nullable final Log log)
         throws  QueryJBuildException
     {
-        validateParameters(
-            new QueryJCommandWrapper<File>(command).getListSetting(SOURCES));
+        @NotNull final List<File> t_aBaseFolders = retrieveSourceFolders(command);
+
+        @NotNull final List<File> t_lTotalStgFiles = new ArrayList<File>();
+
+        for (@NotNull final File t_BaseFolder: t_aBaseFolders)
+        {
+            @NotNull final List<File> t_lStgFiles = findStgFiles(t_BaseFolder);
+
+            if (log != null)
+            {
+                log.info("Found " + t_lStgFiles.size() + " in " + t_BaseFolder.getAbsolutePath());
+            }
+
+            t_lTotalStgFiles.addAll(t_lStgFiles);
+        }
 
         return false;
     }
 
     /**
-     * Validates the parameters.
-     * @param sources the source folders.
-     * @throws QueryJBuildException whenever the required
-     * parameters are not present or valid.
+     * Retrieves the source folders from given command.
+     * @param command the command to handle.
+     * @return the source folders.
      */
-    protected void validateParameters(@Nullable final List<File> sources)
-        throws  QueryJBuildException
+    protected List<File> retrieveSourceFolders(@NotNull final QueryJCommand command)
     {
-        @Nullable final Log t_Log =
-            UniqueLogFactory.getLog(TemplatePackagingParameterValidationHandler.class);
+        @NotNull final List<File> result;
 
-        if  (   (sources == null)
-             || (sources.size() == 0))
+        @Nullable final List<File> aux = new QueryJCommandWrapper<File>(command).getListSetting(SOURCES);
+
+        if (aux == null)
         {
-            throw new MissingSourcesException();
+            // TODO
+            throw new RuntimeException("No source folders");
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the list of STGs inside given folder.
+     * @param baseFolder the folder to look for template groups.
+     * @return the list of STG files.
+     */
+    @NotNull
+    public List<File> findStgFiles(@NotNull final File baseFolder)
+    {
+        return Arrays.asList(baseFolder.listFiles(STG_FILENAME_FILTER));
+    }
+
+    /**
+     * Checks whether a concrete filename is a stg.
+     * @author <a href="mailto:queryj@ventura24.es">Jose San Leandro</a>
+     */
+    protected static class StgFilenameFilter
+        implements  FilenameFilter
+    {
+        /**
+         * Checks whether given file is a jsp.
+         * @param dir the directory.
+         * @param name the file name.
+         * @return <code>true</code> in such case.
+         */
+        @Override
+        public boolean accept(@NotNull final File dir, @NotNull final String name)
+        {
+            return name.endsWith(".stg");
         }
     }
 }
