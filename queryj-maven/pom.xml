@@ -28,10 +28,6 @@
     </dependency>
     <dependency>
       <groupId>org.acmsl</groupId>
-      <artifactId>queryj-templates</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.acmsl</groupId>
       <artifactId>queryj-placeholders</artifactId>
       <scope>runtime</scope>
     </dependency>

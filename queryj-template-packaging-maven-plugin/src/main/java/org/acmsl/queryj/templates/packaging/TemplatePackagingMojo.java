@@ -35,15 +35,27 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing some QueryJ-Core classes.
  */
+import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.tools.maven.QueryJMojo;
 
 /*
  * Importing some Maven classes.
  */
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
+/*
+ * Importing some Apache Commons Configuration classes.
+ */
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing some Jetbrains annotations.
@@ -54,8 +66,9 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.io.File;
+import java.util.Arrays;
 import java.util.Properties;
-import java.io.IOException;
 import java.io.InputStream;
 
 /*
@@ -73,18 +86,123 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @SuppressWarnings("unused")
 @ThreadSafe
+@Mojo( name = "add-source", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class TemplatePackagingMojo
     extends AbstractMojo
-    implements Mojo
+    implements TemplatePackagingSettings
 {
     /**
      * The location of pom.properties within the jar file.
      */
     protected static final String POM_PROPERTIES_LOCATION =
-        "META-INF/maven/org.acmsl/queryj/templates/packaging/pom.properties";
+        "META-INF/maven/org.acmsl/queryj-template-packaging-maven-plugin/pom.properties";
 
     /**
-     * Executes QueryJ via Maven2.
+     * Additional source directories.
+     *
+     * @since 1.0
+     */
+    @Parameter( required = true )
+    private File[] m__aSources;
+
+    /**
+     * The <code>QueryJChain</code> delegee.
+     */
+    private QueryJCommand m__QueryJCommand;
+
+    /**
+     * Creates a {@link TemplatePackagingMojo} instance.
+     */
+    public TemplatePackagingMojo()
+    {
+        immutableSetQueryJCommand(new ConfigurationQueryJCommandImpl(new PropertiesConfiguration()));
+    }
+
+    /**
+     * Specifies the {@link org.acmsl.queryj.QueryJCommand} to delegate.
+     * @param delegee such instance.
+     */
+    protected final void immutableSetQueryJCommand(@NotNull final QueryJCommand delegee)
+    {
+        this.m__QueryJCommand = delegee;
+    }
+
+    /**
+     * Specifies the {@link QueryJCommand} to delegate.
+     * @param delegee such instance.
+     */
+    @SuppressWarnings("unused")
+    protected void setQueryJCommand(@NotNull final QueryJCommand delegee)
+    {
+        immutableSetQueryJCommand(delegee);
+    }
+
+    /**
+     * Retrieves the delegating {@link QueryJCommand} instance.
+     * @return such instance.
+     */
+    @NotNull
+    protected QueryJCommand getQueryJCommand()
+    {
+        return m__QueryJCommand;
+    }
+
+    /**
+     * Specifies the sources.
+     * @param sources the sources.
+     */
+    protected final void immutableSetSources(@NotNull final File[] sources)
+    {
+        this.m__aSources = sources;
+    }
+
+    /**
+     * Specifies the sources.
+     * @param sources the sources.
+     */
+    @SuppressWarnings("unused")
+    public void setSources(@NotNull final File[] sources)
+    {
+        immutableSetSources(sources);
+    }
+
+    /**
+     * Retrieves the sources.
+     * @return such folders.
+     */
+    @Nullable
+    protected final File[] immutableGetSources()
+    {
+        return this.m__aSources;
+    }
+
+    /**
+     * Retrieves the sources.
+     * @return such folders.
+     */
+    @NotNull
+    public File[] getSources()
+    {
+        @NotNull final File[] result;
+
+        @Nullable final File[] aux = immutableGetSources();
+
+        if (   (aux == null)
+            || (aux.length == 0))
+        {
+            result = new File[0];
+        }
+        else
+        {
+            result = new File[aux.length];
+            System.arraycopy(aux, 0, result, 0, aux.length);
+        }
+
+        return result;
+    }
+
+    /**
+     * Executes Template Packaging via Maven2.
      * @throws MojoExecutionException if something goes wrong.
      */
     public void execute()
@@ -94,18 +212,18 @@ public class TemplatePackagingMojo
     }
 
     /**
-     * Executes QueryJ via Maven2.
+     * Executes Template Packaging via Maven2.
      * @param log the Maven log.
      * @throws MojoExecutionException if something goes wrong.
      */
     protected void execute(@NotNull final Log log)
         throws MojoExecutionException
     {
-        execute(log, retrieveVersion(retrievePomProperties(log)));
+        execute(getQueryJCommand(), log, retrieveVersion(retrievePomProperties(log)));
     }
 
     /**
-     * Retrieves the pom.properties bundled within the QueryJ jar.
+     * Retrieves the pom.properties bundled within the Template Packaging jar.
      * @param log the Maven log.
      * @return such information.
      */
@@ -123,11 +241,11 @@ public class TemplatePackagingMojo
 
             result.load(pomProperties);
         }
-        catch (@NotNull final IOException ioException)
+        catch (@NotNull final Throwable throwable)
         {  
             log.warn(
                 QueryJMojo.CANNOT_READ_MY_OWN_POM + POM_PROPERTIES_LOCATION,
-                ioException);
+                throwable);
         }
 
         return result;
@@ -152,14 +270,46 @@ public class TemplatePackagingMojo
     }
 
     /**
-     * Executes QueryJ via Maven2.
-     * @param log the Maven log.
-     * @param version the QueryJ version.
-     * @throws MojoExecutionException if something goes wrong.
+     * Requests the chained logic to be performed.
+     * @param command the command.
+     * @param log the log.
+     * @param version the version.
+     * @throws MojoExecutionException whenever the execution fails.
      */
-    protected void execute(@NotNull final Log log, final String version)
+    protected void execute(
+        @NotNull final QueryJCommand command, @NotNull final Log log, final String version)
         throws MojoExecutionException
     {
-        // TODO
+        log.info("Running QueryJ Template Packaging " + version);
+
+        try
+        {
+            populateCommand(command, getSources());
+
+            new TemplatePackagingChain<QueryJCommandHandler<QueryJCommand>>().process(command);
+        }
+        catch  (@NotNull final QueryJBuildException buildException)
+        {
+            throw new MojoExecutionException(buildException.getMessage(), buildException);
+        }
+    }
+
+    /**
+     * Populates any settings in the Mojo to be available in the command.
+     * @param command the command.
+     * @param sources the source folders.
+     */
+    protected void populateCommand(@NotNull final QueryJCommand command, @NotNull final File[] sources)
+    {
+        new QueryJCommandWrapper<File[]>(command).setSetting(SOURCES, sources);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'TemplatePackagingMojo' " +
+               ", 'queryJCommand': '" + m__QueryJCommand +
+               ", 'sources': '" + Arrays.toString(m__aSources) +
+               "' }";
     }
 }

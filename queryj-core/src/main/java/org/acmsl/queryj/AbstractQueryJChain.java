@@ -237,6 +237,6 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<QueryJ
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractQueryJChain', 'chain':'" + getChain() + "'}";
+        return "{ 'class': 'AbstractQueryJChain', 'chain': '" + getChain() + "' }";
     }
 }

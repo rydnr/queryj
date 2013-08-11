@@ -82,6 +82,7 @@ public class QueryJTask
     public static final String ELEMENTS_ARE_NOT_SUPPORTED = " elements are not supported";
     public static final String EXTERNALLY_MANAGED_FIELDS = "externally-managed-fields";
     public static final String NO_DYNAMIC_ATTRIBUTES_ARE_SUPPORTED = "No dynamic attributes are supported (";
+
     /**
      * The <code>QueryJChain</code> delegee.
      */
@@ -107,7 +108,6 @@ public class QueryJTask
      */
     public QueryJTask()
     {
-        // AntQueryJChain is an inner class defined below.
         immutableSetQueryJCommand(new ConfigurationQueryJCommandImpl(new PropertiesConfiguration()));
     }
 

@@ -1643,6 +1643,10 @@ public class QueryJMojo
         return Runtime.getRuntime().availableProcessors();
     }
 
+    /**
+     * Checks whether multi-threading is enabled.
+     * @return {@code true} in such case.
+     */
     @SuppressWarnings("unchecked")
     protected boolean isMultithreadEnabled()
     {
@@ -1656,6 +1660,10 @@ public class QueryJMojo
         return true;
     }
 
+    /**
+     * Retrieves the thread count from system properties (queryj.threadCount).
+     * @return such value.
+     */
     public int getRequestThreadCountFromSystemProperties()
     {
         int result = 0;
@@ -1674,7 +1682,7 @@ public class QueryJMojo
     public String toString()
     {
         return "{ 'class': 'QueryJMojo' " +
-               " 'catalog': '" + catalog + '\'' +
+               ", 'catalog': '" + catalog + '\'' +
                ", 'driver': '" + m__strDriver + '\'' +
                ", 'url': '" + m__strUrl + '\'' +
                ", 'username': '" + m__strUsername + '\'' +
