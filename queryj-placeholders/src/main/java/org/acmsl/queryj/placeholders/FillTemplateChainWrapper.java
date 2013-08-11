@@ -38,6 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing QueryJ-core classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.FillTemplateChain;
@@ -142,59 +143,58 @@ public class FillTemplateChainWrapper<C extends TemplateContext>
     }
 
     /**
-     * Performs the required processing.
+     * Provides the template placeholders within a {@link QueryJCommand}.
      * @param relevantOnly to include only the relevant ones: the ones that are necessary to
      * be able to find out if two template realizations are equivalent. Usually,
-     * generation timestamps,
-     * documentation, etc. can be considered not relevant.
+     * generation timestamps, documentation, etc. can be considered not relevant.
      * @param templateContext the template context.
+     * @return the {@link QueryJCommand}.
      * @throws QueryJBuildException if the process fails.
      */
     @NotNull
     protected QueryJCommand providePlaceholders(final boolean relevantOnly, @NotNull final C templateContext)
         throws QueryJBuildException
     {
-        return providePlaceholders(relevantOnly, getWrappedChain(), getHandlers(templateContext));
+        return providePlaceholders(relevantOnly, getHandlers(templateContext));
     }
 
     /**
-     * Performs the required processing.
+     * Provides the template placeholders within a {@link QueryJCommand}.
      * @param relevantOnly to include only the relevant ones: the ones that are necessary to
      * be able to find out if two template realizations are equivalent. Usually,
      * generation timestamps, documentation, etc. can be considered not relevant.
-     * @param chain the wrapped chain.
+     * @param handlers the {@link FillHandler}s.
+     * @return the {@link QueryJCommand}.
      * @throws QueryJBuildException if the process fails.
      */
     @NotNull
     protected QueryJCommand providePlaceholders(
         final boolean relevantOnly,
-        @NotNull final FillTemplateChain<C> chain,
         @NotNull final List<FillHandler> handlers)
         throws QueryJBuildException
     {
-        @NotNull final Configuration result = new PropertiesConfiguration();
+        @NotNull final QueryJCommand result;
+
+        @NotNull final Configuration t_Configuration = new PropertiesConfiguration();
 
         for (@NotNull final FillHandler handler : handlers)
         {
             if (   (!relevantOnly)
                 || (!(handler instanceof NonRelevantFillHandler)))
             {
-                result.setProperty(handler.getPlaceHolder(), handler.getValue());
+                t_Configuration.setProperty(handler.getPlaceHolder(), handler.getValue());
             }
             else
             {
-                result.setProperty(handler.getPlaceHolder(), "");
+                t_Configuration.setProperty(handler.getPlaceHolder(), "");
             }
         }
 
-        @NotNull final QueryJCommand t_Command = chain.providePlaceholders(relevantOnly);
+        result =
+            new ConfigurationQueryJCommandImpl(
+                t_Configuration, UniqueLogFactory.getLog(FillTemplateChainWrapper.class));
 
-        for (@NotNull final String t_strKey : t_Command.getKeys())
-        {
-            result.setProperty(t_strKey, t_Command.getObjectSetting(t_strKey));
-        }
-
-        return new ConfigurationQueryJCommandImpl(result);
+        return result;
     }
 
     /**
