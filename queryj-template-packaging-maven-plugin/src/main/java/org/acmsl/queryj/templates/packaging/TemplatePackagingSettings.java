@@ -52,4 +52,9 @@ public interface TemplatePackagingSettings
      * The source folders.
      */
     public static final String SOURCES = "sources";
+
+    /**
+     * The def files.
+     */
+    public static final String DEF_FILES = "def_files";
 }

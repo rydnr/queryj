@@ -111,4 +111,12 @@ public class JavaPackageVisitor
 
         return super.visitPackageDeclaration(context);
     }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'JavaPackageVisitor', " +
+               "'packageName': '" + m__strPackageName + "' }";
+    }
 }

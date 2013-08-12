@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: FindTemplateGroupsHandler.java
+ * Filename: FindTemplateDefsHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Finds all template def files in "sources" folders.
  *
  * Date: 2013/08/11
  * Time: 20:22
@@ -73,20 +73,21 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
+ * Finds all template def files in "sources" folders.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created 2013/08/11 20:22
  */
 @ThreadSafe
-public class FindTemplateGroupsHandler
+public class FindTemplateDefsHandler
     extends AbstractQueryJCommandHandler
     implements TemplatePackagingSettings
 {
     /**
-     * The STG filename filter.
+     * The DEF filename filter.
      */
-    public static final FilenameFilter STG_FILENAME_FILTER =
-        new StgFilenameFilter();
+    public static final FilenameFilter DEF_FILENAME_FILTER =
+        new ExtensionFilenameFilter(".def");
 
     /**
      * The folder filter.
@@ -95,9 +96,9 @@ public class FindTemplateGroupsHandler
         new DirectoryFilter();
 
     /**
-     * Creates a {@link FindTemplateGroupsHandler} instance.
+     * Creates a {@link org.acmsl.queryj.templates.packaging.handlers.FindTemplateDefsHandler} instance.
      */
-    public FindTemplateGroupsHandler() {}
+    public FindTemplateDefsHandler() {}
 
     /**
      * Handles given command.
@@ -124,23 +125,25 @@ public class FindTemplateGroupsHandler
     {
         @NotNull final Set<File> t_lBaseFolders = expandFolders(retrieveSourceFolders(command));
 
-        @NotNull final List<File> t_lTotalStgFiles = new ArrayList<File>();
+        @NotNull final List<File> t_lTotalDefFiles = new ArrayList<File>();
 
         for (@NotNull final File t_BaseFolder: t_lBaseFolders)
         {
-            @NotNull final List<File> t_lStgFiles = findStgFiles(t_BaseFolder);
+            @NotNull final List<File> t_lDefFiles = findDefFiles(t_BaseFolder);
 
             if (log != null)
             {
-                if (t_lStgFiles.size() > 0)
+                if (t_lDefFiles.size() > 0)
                 {
                     log.error(
-                        "Found " + t_lStgFiles.size() + " template group files in " + t_BaseFolder.getAbsolutePath());
+                        "Found " + t_lDefFiles.size() + " template def files in " + t_BaseFolder.getAbsolutePath());
                 }
             }
 
-            t_lTotalStgFiles.addAll(t_lStgFiles);
+            t_lTotalDefFiles.addAll(t_lDefFiles);
         }
+
+        new QueryJCommandWrapper<List<File>>(command).setSetting(DEF_FILES, t_lTotalDefFiles);;
 
         return false;
     }
@@ -219,25 +222,68 @@ public class FindTemplateGroupsHandler
     }
 
     /**
-     * Retrieves the list of STGs inside given folder.
+     * Retrieves the list of template def files inside given folder.
      * @param baseFolder the folder to look for template groups.
-     * @return the list of STG files.
+     * @return the list of def files.
      */
     @NotNull
-    public List<File> findStgFiles(@NotNull final File baseFolder)
+    public List<File> findDefFiles(@NotNull final File baseFolder)
     {
-        return Arrays.asList(baseFolder.listFiles(STG_FILENAME_FILTER));
+        return Arrays.asList(baseFolder.listFiles(DEF_FILENAME_FILTER));
     }
 
     /**
      * Checks whether a concrete filename is a stg.
      * @author <a href="mailto:queryj@ventura24.es">Jose San Leandro</a>
      */
-    protected static class StgFilenameFilter
+    protected static class ExtensionFilenameFilter
         implements  FilenameFilter
     {
         /**
-         * Checks whether given file is a jsp.
+         * The extension.
+         */
+        @NotNull private String m__strExtension;
+
+        /**
+         * Creates a new extension filter.
+         * @param extension the extension.
+         */
+        public ExtensionFilenameFilter(@NotNull final String extension)
+        {
+            immutableSetExtension(extension);
+        }
+
+        /**
+         * Specifies the extension.
+         * @param ext the extension.
+         */
+        protected final void immutableSetExtension(@NotNull final String ext)
+        {
+            this.m__strExtension = ext;
+        }
+
+        /**
+         * Specifies the extension.
+         * @param ext the extension.
+         */
+        @SuppressWarnings("unused")
+        protected void setExtension(@NotNull final String ext)
+        {
+            immutableSetExtension(ext);
+        }
+
+        /**
+         * Retrieves the extension.
+         * @return the extension.
+         */
+        @NotNull
+        public String getExtension()
+        {
+            return this.m__strExtension;
+        }
+
+        /**
+         * Checks whether given file ends with a given extension.
          * @param dir the directory.
          * @param name the file name.
          * @return <code>true</code> in such case.
@@ -245,7 +291,26 @@ public class FindTemplateGroupsHandler
         @Override
         public boolean accept(@NotNull final File dir, @NotNull final String name)
         {
-            return name.endsWith(".stg");
+            return accept(name, getExtension());
+        }
+
+        /**
+         * Checks whether given file ends with a given extension.
+         * @param name the file name.
+         * @param extension the extension.
+         * @return <code>true</code> in such case.
+         */
+        protected boolean accept(@NotNull final String name, @NotNull final String extension)
+        {
+            return name.endsWith(extension);
+        }
+
+        @NotNull
+        @Override
+        public String toString()
+        {
+            return "{ 'class': 'ExtensionFilenameFilter', " +
+                   "'extension': '" + m__strExtension + "' }";
         }
     }
 

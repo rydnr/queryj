@@ -1,0 +1,30 @@
+<?xml version="1.0" ?> 
+<!--
+    This ant file runs CheckThread static analysis on the example
+    class files generated from the ant build.xml.
+    
+    You will need to use the -lib flag when calling ant:
+    
+    ant -f analyze.xml -lib ../dist -lib ../lib 
+-->
+    	
+<project name="CheckThread Analyze Example" default="analyze" basedir=".">
+   
+	<!-- DEFINE ANT TASK -->
+	<taskdef name="checkthread" 
+		     classname="org.checkthread.anttask.CheckThreadTask" /> 
+   	    
+   	<!-- DEFINE PROPERTIES -->
+	<target name="init">
+		<property name="rootDir" value="${basedir}"/>		
+		<property name="classDir" value="${rootDir}/target/classes"/>
+    </target>
+
+    <!-- RUN CHECKTHREAD -->
+    <target name="analyze" depends="init">
+        <checkthread 
+        	targetpath="${classDir}" 
+        	classpath="${classDir}"
+            verbose="true"/> 
+    </target>    	
+</project>
