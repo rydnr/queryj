@@ -64,10 +64,13 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
@@ -84,6 +87,12 @@ public class FindTemplateGroupsHandler
      */
     public static final FilenameFilter STG_FILENAME_FILTER =
         new StgFilenameFilter();
+
+    /**
+     * The folder filter.
+     */
+    public static final FileFilter DIRECTORY_FILTER =
+        new DirectoryFilter();
 
     /**
      * Creates a {@link FindTemplateGroupsHandler} instance.
@@ -113,23 +122,76 @@ public class FindTemplateGroupsHandler
     protected boolean handle(@NotNull final QueryJCommand command, @Nullable final Log log)
         throws  QueryJBuildException
     {
-        @NotNull final List<File> t_aBaseFolders = retrieveSourceFolders(command);
+        @NotNull final Set<File> t_lBaseFolders = expandFolders(retrieveSourceFolders(command));
 
         @NotNull final List<File> t_lTotalStgFiles = new ArrayList<File>();
 
-        for (@NotNull final File t_BaseFolder: t_aBaseFolders)
+        for (@NotNull final File t_BaseFolder: t_lBaseFolders)
         {
             @NotNull final List<File> t_lStgFiles = findStgFiles(t_BaseFolder);
 
             if (log != null)
             {
-                log.info("Found " + t_lStgFiles.size() + " in " + t_BaseFolder.getAbsolutePath());
+                if (t_lStgFiles.size() > 0)
+                {
+                    log.error(
+                        "Found " + t_lStgFiles.size() + " template group files in " + t_BaseFolder.getAbsolutePath());
+                }
             }
 
             t_lTotalStgFiles.addAll(t_lStgFiles);
         }
 
         return false;
+    }
+
+    /**
+     * Recursively finds all sub folders contained within given folders.
+     * @param folders the folders.
+     * @return the list of all sub folders.
+     */
+    @NotNull
+    protected Set<File> expandFolders(@NotNull final List<File> folders)
+    {
+        @NotNull final Set<File> result = new TreeSet<File>();
+
+        for (@NotNull final File t_Folder : folders)
+        {
+            result.addAll(expandFolders(t_Folder));
+        }
+
+        return result;
+    }
+
+    /**
+     * Recursively finds all sub folders contained within given folder.
+     * @param folder the folder.
+     * @return the list of all sub folders.
+     */
+    @NotNull
+    protected Set<File> expandFolders(@NotNull final File folder)
+    {
+        @NotNull final Set<File> result = new TreeSet<File>();
+
+        if (folder.isDirectory())
+        {
+            result.add(folder);
+
+            @Nullable final File[] t_aFolders = folder.listFiles(DIRECTORY_FILTER);
+
+            if (t_aFolders != null)
+            {
+                for (@Nullable final File t_Folder : t_aFolders)
+                {
+                    if (t_Folder != null)
+                    {
+                        result.addAll(expandFolders(t_Folder));
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -184,6 +246,25 @@ public class FindTemplateGroupsHandler
         public boolean accept(@NotNull final File dir, @NotNull final String name)
         {
             return name.endsWith(".stg");
+        }
+    }
+
+    /**
+     * Checks whether a concrete filename is a stg.
+     * @author <a href="mailto:queryj@ventura24.es">Jose San Leandro</a>
+     */
+    protected static class DirectoryFilter
+        implements FileFilter
+    {
+        /**
+         * Checks whether given file is a folder itself.
+         * @param file the file.
+         * @return <code>true</code> in such case.
+         */
+        @Override
+        public boolean accept(@NotNull final File file)
+        {
+            return file.isDirectory();
         }
     }
 }
