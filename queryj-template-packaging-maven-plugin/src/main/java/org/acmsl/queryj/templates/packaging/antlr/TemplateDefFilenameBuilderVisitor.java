@@ -23,22 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefNameVisitor.java
+ * Filename: TemplateDefFilenameBuilderVisitor.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: ANTLR4 visitor to retrieve the name definition.
+ * Description: ANTLR4 visitor to retrieve the filename builder definition.
  *
- * Date: 2013/08/12
- * Time: 14:42
+ * Date: 2013/08/13
+ * Time: 17:42
  *
  */
 package org.acmsl.queryj.templates.packaging.antlr;
 
 /*
- * Importing ANTLR-generated classes..
+ * Importing ANTLR4-generated classes.
  */
-import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser.NameRuleContext;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser.FilenameBuilderRuleContext;
 
 /*
  * Importing JetBrains annotations.
@@ -51,66 +51,65 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.NotThreadSafe;
 
 /**
- * ANTLR4 visitor to retrieve the name definition.
+ * ANTLR4 visitor to retrieve the filename builder definition.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/12 14:42
+ * Created: 2013/08/13 17:42
  */
 @NotThreadSafe
-public class TemplateDefNameVisitor
+public class TemplateDefFilenameBuilderVisitor
     extends TemplateDefBaseVisitor<String>
 {
     /**
-     * The name of the template def.
+     * The filename builder.
      */
-    @NotNull
-    private String m__strName;
+    private String m__strFilenameBuilder;
 
     /**
-     * Specifies the name.
-     * @param name the name.
+     * Specifies the filename builder.
+     * @param builder the builder.
      */
-    protected final void immutableSetName(@NotNull final String name)
+    protected final void immutablesetFilenameBuilder(final String builder)
     {
-        this.m__strName = name;
+        this.m__strFilenameBuilder = builder;
     }
 
     /**
-     * Specifies the name.
-     * @param name the name.
+     * Specifies the filename builder.
+     * @param builder the builder.
      */
-    protected void setName(@NotNull final String name)
+    protected void setFilenameBuilder(final String builder)
     {
-        immutableSetName(name);
+        immutablesetFilenameBuilder(builder);
     }
 
     /**
-     * Retrieves the name.
-     * @return such name.
+     * Retrieves the filename builder.
+     * @return such information.
      */
-    public String getName()
+    public String getFilenameBuilder()
     {
-        return this.m__strName;
+        return this.m__strFilenameBuilder;
     }
 
     /**
-     * Visits the name rule.
-     * @param context the context.
-     * @return the defined attribute for 'name'.
+     * {@inheritDoc}
+     * <p/>
+     * The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.
      */
     @Override
-    public String visitNameRule(@NotNull final NameRuleContext context)
+    public String visitFilenameBuilderRule(@NotNull final FilenameBuilderRuleContext ctx)
     {
-        setName(context.getChild(2).getText());
+        setFilenameBuilder(ctx.getChild(3).getText());
 
-        return super.visitNameRule(context);
+        return super.visitFilenameBuilderRule(ctx);
     }
 
-    @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'TemplateDefNameVisitor', " +
-               "'name': '" + m__strName + "' }";
+        return "{ 'class': 'TemplateDefFilenameBuilderVisitor', " +
+               "'filenameBuilder': '" + m__strFilenameBuilder + "' }";
     }
 }

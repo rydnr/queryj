@@ -36,16 +36,24 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefFilenameBuilderVisitor;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefLexer;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefNameVisitor;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefOutputVisitor;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefPackageVisitor;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefTypeVisitor;
+import org.acmsl.queryj.templates.packaging.exceptions.TemplatePackagingCheckedException;
+
+/*
  * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
-import org.acmsl.queryj.templates.packaging.antlr.TemplateDefLexer;
-import org.acmsl.queryj.templates.packaging.antlr.TemplateDefNameVisitor;
-import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser;
-import org.acmsl.queryj.templates.packaging.exceptions.TemplatePackagingCheckedException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 
 /*
@@ -83,7 +91,6 @@ public class ParseTemplateDefsHandler
     extends AbstractQueryJCommandHandler
     implements TemplatePackagingSettings
 {
-
     /**
      * Asks the handler to process the command. The idea is that each
      * command handler decides if such command is suitable of being
@@ -138,7 +145,7 @@ public class ParseTemplateDefsHandler
 
         try
         {
-            tree = t_Parser.def();
+            tree = t_Parser.templateDef();
         }
         catch (@NotNull final Throwable invalidClass)
         {
@@ -163,6 +170,79 @@ public class ParseTemplateDefsHandler
         }
 
         System.out.println("Name found: " + defName);
+
+        @NotNull final TemplateDefTypeVisitor typeVisitor = new TemplateDefTypeVisitor();
+
+        @Nullable final String defType;
+
+        try
+        {
+            typeVisitor.visit(tree);
+
+            defType = typeVisitor.getType();
+        }
+        catch (@NotNull final Throwable invalidClass)
+        {
+            // TODO
+            throw new RuntimeException("Invalid template definition", invalidClass);
+        }
+
+        System.out.println("Type found: " + defType);
+
+        @NotNull final TemplateDefOutputVisitor outputVisitor = new TemplateDefOutputVisitor();
+
+        @Nullable final String defOutput;
+
+        try
+        {
+            outputVisitor.visit(tree);
+
+            defOutput = outputVisitor.getOutput();
+        }
+        catch (@NotNull final Throwable invalidClass)
+        {
+            // TODO
+            throw new RuntimeException("Invalid template definition", invalidClass);
+        }
+
+        System.out.println("Output found: " + defOutput);
+
+        @NotNull final TemplateDefFilenameBuilderVisitor filenameBuilderVisitor =
+            new TemplateDefFilenameBuilderVisitor();
+
+        @Nullable final String defFilenameBuilder;
+
+        try
+        {
+            filenameBuilderVisitor.visit(tree);
+
+            defFilenameBuilder= filenameBuilderVisitor.getFilenameBuilder();
+        }
+        catch (@NotNull final Throwable invalidClass)
+        {
+            // TODO
+            throw new RuntimeException("Invalid template definition", invalidClass);
+        }
+
+        System.out.println("Filename builder found: " + defFilenameBuilder);
+
+        @NotNull final TemplateDefPackageVisitor packageVisitor = new TemplateDefPackageVisitor();
+
+        @Nullable final String defPackage;
+
+        try
+        {
+            packageVisitor.visit(tree);
+
+            defPackage = packageVisitor.getPackageName();
+        }
+        catch (@NotNull final Throwable invalidClass)
+        {
+            // TODO
+            throw new RuntimeException("Invalid template definition", invalidClass);
+        }
+
+        System.out.println("Package found: " + defPackage);
     }
 
     /**

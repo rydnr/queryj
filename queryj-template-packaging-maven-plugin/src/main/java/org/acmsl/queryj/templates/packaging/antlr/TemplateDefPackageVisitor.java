@@ -23,22 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefNameVisitor.java
+ * Filename: TemplateDefPackageVisitor.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: ANTLR4 visitor to retrieve the name definition.
+ * Description: ANTLR4 visitor to retrieve the package definition.
  *
- * Date: 2013/08/12
- * Time: 14:42
+ * Date: 2013/08/13
+ * Time: 17:51
  *
  */
 package org.acmsl.queryj.templates.packaging.antlr;
 
 /*
- * Importing ANTLR-generated classes..
+ * Importing ANTLR-generated classes.
  */
-import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser.NameRuleContext;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser.PackageRuleContext;
 
 /*
  * Importing JetBrains annotations.
@@ -51,66 +51,67 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.NotThreadSafe;
 
 /**
- * ANTLR4 visitor to retrieve the name definition.
+ * ANTLR4 visitor to retrieve the package definition.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/12 14:42
+ * Created: 2013/08/13 17:51
  */
 @NotThreadSafe
-public class TemplateDefNameVisitor
+public class TemplateDefPackageVisitor
     extends TemplateDefBaseVisitor<String>
 {
     /**
-     * The name of the template def.
+     * The package name.
+     */
+    private String m__strPackageName;
+
+    /**
+     * Specifies the package name.
+     * @param packageName the package name.
+     */
+    protected final void immutableSetPackageName(@NotNull final String packageName)
+    {
+        this.m__strPackageName = packageName;
+    }
+
+    /**
+     * Specifies the package name.
+     * @param packageName the package name.
+     */
+    protected void setPackageName(@NotNull final String packageName)
+    {
+        this.m__strPackageName = packageName;
+    }
+
+    /**
+     * Retrieves the package name.
+     * @return such information.
      */
     @NotNull
-    private String m__strName;
-
-    /**
-     * Specifies the name.
-     * @param name the name.
-     */
-    protected final void immutableSetName(@NotNull final String name)
+    public String getPackageName()
     {
-        this.m__strName = name;
+        return this.m__strPackageName;
     }
 
     /**
-     * Specifies the name.
-     * @param name the name.
-     */
-    protected void setName(@NotNull final String name)
-    {
-        immutableSetName(name);
-    }
-
-    /**
-     * Retrieves the name.
-     * @return such name.
-     */
-    public String getName()
-    {
-        return this.m__strName;
-    }
-
-    /**
-     * Visits the name rule.
-     * @param context the context.
-     * @return the defined attribute for 'name'.
+     * {@inheritDoc}
+     * <p/>
+     * The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.
      */
     @Override
-    public String visitNameRule(@NotNull final NameRuleContext context)
+    public String visitPackageRule(@org.antlr.v4.runtime.misc.NotNull final PackageRuleContext ctx)
     {
-        setName(context.getChild(2).getText());
+        setPackageName(ctx.getChild(2).getText());
 
-        return super.visitNameRule(context);
+        return super.visitPackageRule(ctx);
     }
 
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'TemplateDefNameVisitor', " +
-               "'name': '" + m__strName + "' }";
+        return "{ 'class': 'TemplateDefPackageVisitor', " +
+               " 'packageName': '" + m__strPackageName + "' }";
     }
 }

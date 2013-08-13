@@ -15,51 +15,26 @@ package org.acmsl.queryj.templates.packaging.antlr;
 package org.acmsl.queryj.templates.packaging.antlr;
 }
 
-def
-:   name template_type output filename_builder package_name
+templateDef
+:   nameRule typeRule outputRule filenameBuilderRule packageRule
     EOF;
 
-name:
-        'name' ':' Literal ';';
+nameRule:
+        'name' ':' ID ';';
 
-template_type:
-        'type' ':' Literal ';';
+typeRule:
+        'type' ':' ID ';';
 
-output:
-        'output' ':' Literal ';';
+outputRule:
+        'output' ':' ID ';';
 
-filename_builder:
-        'filename' 'builder' ':' Literal ';';
+filenameBuilderRule:
+        'filename' 'builder' ':' ID ';';
 
-package_name:
-           'package' ':' Literal ';';
+packageRule:
+           'package' ':' ID ';';
 
-fragment
-Literal
-    :  ( EscapeSequence | ~('\\'|'"') )+
-    ;
-
-fragment
-EscapeSequence
-    :   '\\' ('b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\')
-    |   UnicodeEscape
-    |   OctalEscape
-    ;
-
-fragment
-OctalEscape
-    :   '\\' ('0'..'3') ('0'..'7') ('0'..'7')
-    |   '\\' ('0'..'7') ('0'..'7')
-    |   '\\' ('0'..'7')
-    ;
-
-fragment
-UnicodeEscape
-    :   '\\' 'u' HexDigit HexDigit HexDigit HexDigit
-    ;
-
-fragment
-HexDigit : ('0'..'9'|'a'..'f'|'A'..'F') ;
+ID : [a-zA-Z0-9\.\-_,<>]+ ;
 
 COMMENT
     :   '/*' .*? '*/'    -> channel(HIDDEN) // match anything between /* and */

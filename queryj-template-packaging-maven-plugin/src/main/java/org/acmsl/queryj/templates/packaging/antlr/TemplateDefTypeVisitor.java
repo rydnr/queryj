@@ -23,22 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefNameVisitor.java
+ * Filename: TemplateDefTypeVisitor.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: ANTLR4 visitor to retrieve the name definition.
+ * Description: ANTLR4 visitor to retrieve the type definition.
  *
- * Date: 2013/08/12
- * Time: 14:42
+ * Date: 2013/08/13
+ * Time: 17:23
  *
  */
 package org.acmsl.queryj.templates.packaging.antlr;
 
 /*
- * Importing ANTLR-generated classes..
+ * Importing ANTLR-generated classes.
  */
-import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser.NameRuleContext;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser.TypeRuleContext;
 
 /*
  * Importing JetBrains annotations.
@@ -51,66 +51,67 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.NotThreadSafe;
 
 /**
- * ANTLR4 visitor to retrieve the name definition.
+ * ANTLR4 visitor to retrieve the type definition.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/12 14:42
+ * Created: 2013/08/13 17:23
  */
 @NotThreadSafe
-public class TemplateDefNameVisitor
+public class TemplateDefTypeVisitor
     extends TemplateDefBaseVisitor<String>
 {
     /**
-     * The name of the template def.
+     * The type of the template def.
      */
     @NotNull
-    private String m__strName;
+    private String m__strType;
 
     /**
-     * Specifies the name.
-     * @param name the name.
+     * Specifies the type.
+     * @param type the type.
      */
-    protected final void immutableSetName(@NotNull final String name)
+    protected final void immutableSetType(@NotNull final String type)
     {
-        this.m__strName = name;
+        this.m__strType = type;
     }
 
     /**
-     * Specifies the name.
-     * @param name the name.
+     * Specifies the type.
+     * @param type the type.
      */
-    protected void setName(@NotNull final String name)
+    protected void setType(@NotNull final String type)
     {
-        immutableSetName(name);
+        immutableSetType(type);
     }
 
     /**
-     * Retrieves the name.
-     * @return such name.
+     * Retrieves the type.
+     * @return such type.
      */
-    public String getName()
+    public String getType()
     {
-        return this.m__strName;
+        return this.m__strType;
     }
 
+
     /**
-     * Visits the name rule.
-     * @param context the context.
-     * @return the defined attribute for 'name'.
+     * {@inheritDoc}
+     * <p/>
+     * The default implementation returns the result of calling
+     * {@link #visitChildren} on {@code ctx}.
      */
     @Override
-    public String visitNameRule(@NotNull final NameRuleContext context)
+    public String visitTypeRule(@org.antlr.v4.runtime.misc.NotNull final TypeRuleContext context)
     {
-        setName(context.getChild(2).getText());
-
-        return super.visitNameRule(context);
+        setType(context.getChild(2).getText());
+        return super.visitTypeRule(context);
     }
 
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'TemplateDefNameVisitor', " +
-               "'name': '" + m__strName + "' }";
+        return "{ 'class': 'TemplateDefTypeVisitor', " +
+               " 'type': '" + m__strType + "' }";
     }
 }
