@@ -36,9 +36,18 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
+ * Importing ACM-SL Commons classes.
+ */
+import org.acmsl.commons.utils.EnumUtils;
+
+/*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing Jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /**
