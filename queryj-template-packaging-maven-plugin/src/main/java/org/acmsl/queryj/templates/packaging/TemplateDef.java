@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,44 +23,83 @@
 
  ******************************************************************************
  *
- * Filename: TemplatePackagingSettings.java
+ * Filename: TemplateDef.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Defines the settings used by template packaging.
+ * Description: Represents template definitions: all additional metadata
+ *              associated to a template, needed to generate sources.
  *
- * Date: 2013/08/11
- * Time: 08:43
+ * Date: 2013/08/14
+ * Time: 09:01
  *
  */
 package org.acmsl.queryj.templates.packaging;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
+import java.io.File;
+
 /**
- * Defines the settings used by template packaging.
+ * Represents template definitions: all additional metadata associated to
+ * a template, needed to generate sources.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/11 08:43
+ * Created: 2013/08/14 09:01
  */
 @ThreadSafe
-public interface TemplatePackagingSettings
+public interface TemplateDef
 {
     /**
-     * The source folders.
+     * Retrieves the name.
+     * @return such name.
      */
-    public static final String SOURCES = "sources";
+    @NotNull
+    String getName();
 
     /**
-     * The def files.
+     * Retrieves the type.
+     * @return such information.
      */
-    public static final String DEF_FILES = "def_files";
+    @NotNull
+    TemplateDefType getType();
 
     /**
-     * The template defs.
+     * Retrieves the output.
+     * @return such information.
      */
-    public static final String TEMPLATE_DEFS = "template_defs";
+    @NotNull
+    TemplateDefOutput getOutput();
+
+    /**
+     * Retrieves the filename builder expression.
+     * @return such expression.
+     */
+    @NotNull
+    String getFilenameBuilder();
+
+    /**
+     * Retrieves the package name.
+     * @return such name.
+     */
+    @NotNull
+    String getPackageName();
+
+    /**
+     * Retrieves the actual template definition file.
+     * @return the file.
+     */
+    @NotNull
+    File getFile();
 }

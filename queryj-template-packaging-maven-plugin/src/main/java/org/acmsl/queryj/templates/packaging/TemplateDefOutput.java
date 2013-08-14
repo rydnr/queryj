@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,17 +23,27 @@
 
  ******************************************************************************
  *
- * Filename: TemplatePackagingSettings.java
+ * Filename: TemplateDefOutput.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Defines the settings used by template packaging.
+ * Description: The supported outputs in template defs.
  *
- * Date: 2013/08/11
- * Time: 08:43
+ * Date: 2013/08/14
+ * Time: 09:16
  *
  */
 package org.acmsl.queryj.templates.packaging;
+
+/*
+ * Importing ACM-SL Commons classes.
+ */
+import org.acmsl.commons.utils.EnumUtils;
+
+/*
+ * Importing Jetbrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -41,26 +51,23 @@ package org.acmsl.queryj.templates.packaging;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Defines the settings used by template packaging.
+ * The supported outputs in template defs.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/11 08:43
  */
 @ThreadSafe
-public interface TemplatePackagingSettings
+public enum TemplateDefOutput
 {
-    /**
-     * The source folders.
-     */
-    public static final String SOURCES = "sources";
+    JAVA;
 
     /**
-     * The def files.
+     * Retrieves the template def output for given value.
+     * @param type the value.
+     * @return the enum.
      */
-    public static final String DEF_FILES = "def_files";
+    public static TemplateDefOutput getEnumFromString(@NotNull final String type)
+    {
+        return EnumUtils.getInstance().getEnumFromString(TemplateDefOutput.class, type);
+    }
 
-    /**
-     * The template defs.
-     */
-    public static final String TEMPLATE_DEFS = "template_defs";
 }

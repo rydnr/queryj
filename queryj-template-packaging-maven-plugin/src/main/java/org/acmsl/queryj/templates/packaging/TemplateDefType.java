@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: TemplatePackagingSettings.java
+ * Filename: TemplateDefType.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Defines the settings used by template packaging.
+ * Description: Allowed values for template def types.
  *
- * Date: 2013/08/11
- * Time: 08:43
+ * Date: 2013/08/14
+ * Time: 09:03
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -39,28 +39,55 @@ package org.acmsl.queryj.templates.packaging;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Defines the settings used by template packaging.
+ * Allowed values for template def types.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/11 08:43
+ * Created: 2013/08/14 09:03
  */
 @ThreadSafe
-public interface TemplatePackagingSettings
+public enum TemplateDefType
 {
-    /**
-     * The source folders.
-     */
-    public static final String SOURCES = "sources";
+    PER_TABLE("per-table"),
+    PER_REPOSITORY("per-repository"),
+    PER_CUSTOM_RESULT("per-custom-result"),
+    PER_FOREIGN_KEY("per-foreign-key"),
+    PER_SQL("per-sql");
 
     /**
-     * The def files.
+     * The type.
      */
-    public static final String DEF_FILES = "def_files";
+    @NotNull
+    private final String m__strType;
 
     /**
-     * The template defs.
+     * Creates a new type.
+     * @param type the name of the type.
      */
-    public static final String TEMPLATE_DEFS = "template_defs";
+    TemplateDefType(@NotNull final String type)
+    {
+        this.m__strType = type;
+    }
+
+    /**
+     * Retrieves the name.
+     * @return such name.
+     */
+    @NotNull
+    public String getType()
+    {
+        return this.m__strType;
+    }
+
+    /**
+     * Retrieves the template def type for given value.
+     * @param type the value.
+     * @return the enum.
+     */
+    public static TemplateDefType getEnumFromString(@NotNull final String type)
+    {
+        return EnumUtils.getInstance().getEnumFromString(TemplateDefType.class, type);
+    }
 }
