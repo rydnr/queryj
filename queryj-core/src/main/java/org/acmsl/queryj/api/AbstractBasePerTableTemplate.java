@@ -49,7 +49,6 @@ import org.jetbrains.annotations.NotNull;
  * associated to each table.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-@SuppressWarnings("unused")
 public abstract class AbstractBasePerTableTemplate<C extends PerTableTemplateContext>
     extends  AbstractTemplate<C>
     implements PerTableTemplate<C>

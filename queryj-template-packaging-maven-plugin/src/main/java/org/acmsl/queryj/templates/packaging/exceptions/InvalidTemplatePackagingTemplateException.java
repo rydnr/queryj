@@ -1,6 +1,5 @@
-//;-*- mode: java -*-
 /*
-                        QueryJ
+                        queryj
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -24,59 +23,53 @@
 
  ******************************************************************************
  *
- * Filename: QueryJException.java
+ * Filename: InvalidTemplateTemplateException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents abnormal situations regarding QueryJ processing.
+ * Description: Identifies errors when trying to generate Template-related
+ *              classes using ST templates.
+ *
+ * Date: 2013/08/15
+ * Time: 07:52
  *
  */
-package org.acmsl.queryj.api.exceptions;
+package org.acmsl.queryj.templates.packaging.exceptions;
 
 /*
- * Importing ACM-SL Commons classes.
+ * Importing QueryJ-Core classes.
  */
-import org.acmsl.commons.CheckedException;
+import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
-/*
+/**
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Represents abnormal situations regarding QueryJ processing.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Identifies errors when trying to generate
+ * {@link org.acmsl.queryj.api.Template}-related classes using ST templates.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 3.0
+ * Created: 2013/08/15 07:52
  */
 @ThreadSafe
-public class QueryJException
-    extends CheckedException
+public class InvalidTemplatePackagingTemplateException
+    extends InvalidTemplateException
 {
-    private static final long serialVersionUID = 6366926345989110549L;
+    private static final long serialVersionUID = -6950491764603246762L;
 
     /**
-     * Builds a QueryJ exception with a certain message.
-     * @param message the message.
-     * @param params the parameters.
+     * Creates an instance.
      */
-    public QueryJException(@NotNull final String message, @NotNull final Object[] params)
+    public InvalidTemplatePackagingTemplateException(@NotNull final String group, @NotNull final Throwable cause)
     {
-        super(message, params);
-    }
-
-    /**
-     * Builds a QueryJ exception to wrap given one.
-     * @param message the message.
-     * @param cause the exception to wrap.
-     */
-    public QueryJException(
-        @NotNull final String message, @NotNull final Object[] params, @NotNull final Throwable cause)
-    {
-        super(message, params, cause);
+        super("invalid.template", new Object[] { group }, cause);
     }
 
     /**
@@ -87,7 +80,7 @@ public class QueryJException
     @Override
     protected String retrieveExceptionsBundleName()
     {
-        return QueryJNonCheckedException.QUERYJ_EXCEPTIONS_BUNDLE_NAME;
+        return TemplatePackagingCheckedException.TEMPLATE_PACKAGING_EXCEPTIONS_BUNDLE_NAME;
     }
 
     /**
@@ -98,6 +91,6 @@ public class QueryJException
     @Override
     protected String retrieveExceptionsBundleProperty()
     {
-        return QueryJNonCheckedException.QUERYJ_EXCEPTIONS_BUNDLE_PROPERTY;
+        return TemplatePackagingCheckedException.TEMPLATE_PACKAGING_EXCEPTIONS_PROPERTY;
     }
 }

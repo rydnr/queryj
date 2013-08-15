@@ -44,6 +44,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Represents the error when no source folders are provided.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
+ * Created: 2013/08/11 08:57
  */
 @ThreadSafe
 public class MissingSourcesException

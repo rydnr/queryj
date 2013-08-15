@@ -54,13 +54,24 @@ import org.checkthread.annotations.ThreadSafe;
  * Checked exceptions for Template Packaging.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created 2013/08/11
+ * Created 2013/08/11 08:53
  */
 @ThreadSafe
 public class TemplatePackagingCheckedException
     extends QueryJBuildException
 {
     private static final long serialVersionUID = -4378305755075677629L;
+
+    /**
+     * The name of the bundle.
+     */
+    public static final String TEMPLATE_PACKAGING_EXCEPTIONS_BUNDLE_NAME = "template-packaging-exceptions";
+
+    /**
+     * The system property of the bundle.
+     */
+    public static final String TEMPLATE_PACKAGING_EXCEPTIONS_PROPERTY =
+        "org.acmsl.queryj.templates.packaging.exceptions";
 
     /**
      * Builds a QueryJ exception with a certain message.
@@ -91,7 +102,7 @@ public class TemplatePackagingCheckedException
     @Override
     protected String retrieveExceptionsBundleName()
     {
-        return "template-packaging-exceptions";
+        return TEMPLATE_PACKAGING_EXCEPTIONS_BUNDLE_NAME;
     }
 
     /**
@@ -102,7 +113,7 @@ public class TemplatePackagingCheckedException
     @Override
     protected String retrieveExceptionsBundleProperty()
     {
-        return "org.acmsl.queryj.templates.packaging.exceptions";
+        return TEMPLATE_PACKAGING_EXCEPTIONS_PROPERTY;
     }
 
 }

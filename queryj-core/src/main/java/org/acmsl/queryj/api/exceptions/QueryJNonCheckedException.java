@@ -54,7 +54,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Non-checked QueryJ exceptions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/08/03
+ * @since 3.0
+ * Created: 2013/08/03 18:25
  */
 @ThreadSafe
 public class QueryJNonCheckedException
@@ -63,11 +64,20 @@ public class QueryJNonCheckedException
     private static final long serialVersionUID = -8100092770309110856L;
 
     /**
+     * The name of the bundle.
+     */
+    public static final String QUERYJ_EXCEPTIONS_BUNDLE_NAME = "queryj-exceptions";
+
+    /**
+     * The system property of the bundle.
+     */
+    public static final String QUERYJ_EXCEPTIONS_BUNDLE_PROPERTY = "org.acmsl.queryj.exceptions";
+
+    /**
      * Creates a QueryJNonCheckedException with given message.
      * @param messageKey the key to build the exception message.
      * @param params the parameters to build the exception message.
      */
-    @SuppressWarnings("unused")
     public QueryJNonCheckedException(
         @NotNull final String messageKey,
         @NotNull final Object[] params)
@@ -96,17 +106,17 @@ public class QueryJNonCheckedException
     @NotNull
     protected String retrieveExceptionsBundleName()
     {
-        return "queryj-exceptions";
+        return QUERYJ_EXCEPTIONS_BUNDLE_NAME;
     }
 
-    /*
+    /**
      * Retrieves the exceptions system property.
      * @return such bundle name.
      */
     @NotNull
     protected String retrieveExceptionsBundleProperty()
     {
-        return "org.acmsl.queryj.exceptions";
+        return QUERYJ_EXCEPTIONS_BUNDLE_PROPERTY;
     }
 
 }
