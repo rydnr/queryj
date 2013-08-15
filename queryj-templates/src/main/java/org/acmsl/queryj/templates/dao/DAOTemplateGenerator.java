@@ -36,6 +36,7 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
 import org.acmsl.queryj.api.PerTableTemplateGenerator;

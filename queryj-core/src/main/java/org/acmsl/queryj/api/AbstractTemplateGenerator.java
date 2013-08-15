@@ -78,7 +78,7 @@ import java.security.NoSuchAlgorithmException;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<QueryJTemplateContext>>
+public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? extends QueryJTemplateContext>>
     implements TemplateGenerator<N>
 {
     protected static final String CANNOT_SERIALIZE_TEMPLATE_LITERAL = "Cannot serialize template ";

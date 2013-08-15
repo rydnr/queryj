@@ -58,12 +58,6 @@ public interface QueryJTemplateContext
     extends TemplateContext
 {
     /**
-     * Retrieves the template name.
-     */
-    @NotNull
-    String getTemplateName();
-
-    /**
      * Retrieves the {@link MetadataManager} instance.
      * @return such instance.
      */

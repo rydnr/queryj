@@ -36,6 +36,11 @@
 package org.acmsl.queryj.api;
 
 /*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
@@ -49,4 +54,9 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public interface TemplateContext
 {
+    /**
+     * Retrieves the template name.
+     */
+    @NotNull
+    String getTemplateName();
 }
