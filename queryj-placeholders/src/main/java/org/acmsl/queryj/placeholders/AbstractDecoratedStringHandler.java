@@ -39,7 +39,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -53,13 +53,13 @@ import org.jetbrains.annotations.NotNull;
  * @since 2012/05/24
  */
 @SuppressWarnings("unused")
-public abstract class AbstractDecoratedStringHandler<C extends TemplateContext>
+public abstract class AbstractDecoratedStringHandler<C extends QueryJTemplateContext>
     extends AbstractTemplateContextFillHandler<C, DecoratedString>
 {
     /**
      * Creates {@link AbstractDecoratedStringHandler} to enhance String
      * placeholders with 'decorated' versions.
-     * @param context the {@link TemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
     @SuppressWarnings("unused")
     public AbstractDecoratedStringHandler(@NotNull final C context)
@@ -80,8 +80,8 @@ public abstract class AbstractDecoratedStringHandler<C extends TemplateContext>
     }
 
     /**
-     * Resolves the actual value using given {@link TemplateContext context}.
-     * @param context the {@link TemplateContext context}.
+     * Resolves the actual value using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @return such value.
      */
     @NotNull

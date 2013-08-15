@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importign some project classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -58,27 +58,27 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 @SuppressWarnings("unused")
 public class JndiLocationFillHandler
-    extends AbstractDecoratedStringHandler<TemplateContext>
+    extends AbstractDecoratedStringHandler<QueryJTemplateContext>
 {
     private static final long serialVersionUID = -4111639313234855152L;
 
     /**
      * Creates a {@link JndiLocationFillHandler} with given context.
-     * @param context the {@link TemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
-    public JndiLocationFillHandler(@NotNull final TemplateContext context)
+    public JndiLocationFillHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Resolves the actual value using given {@link TemplateContext context}.
-     * @param context the {@link TemplateContext context}.
+     * Resolves the actual value using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @return such value.
      */
     @NotNull
     @Override
-    protected String resolveContextValue(@NotNull final TemplateContext context)
+    protected String resolveContextValue(@NotNull final QueryJTemplateContext context)
     {
         return context.getJndiLocation();
     }

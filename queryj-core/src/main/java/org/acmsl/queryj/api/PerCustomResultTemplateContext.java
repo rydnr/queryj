@@ -63,8 +63,9 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Context information required by templates customized for each {@link Result}
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/20
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 2.0
+ * Created: 2012/05/20
  */
 @ThreadSafe
 public class PerCustomResultTemplateContext
@@ -207,5 +208,13 @@ public class PerCustomResultTemplateContext
         }
         final PerCustomResultTemplateContext other = (PerCustomResultTemplateContext) obj;
         return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.m__Result, other.m__Result).isEquals();
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'PerCustomResultTemplateContext', " +
+               ", 'result': " + m__Result + " }";
     }
 }

@@ -36,10 +36,11 @@ package org.acmsl.queryj.api.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.api.Template;
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.QueryJTemplate;
+import org.acmsl.queryj.api.QueryJTemplateGeneratorThread;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.api.TemplateGenerator;
-import org.acmsl.queryj.api.TemplateGeneratorThread;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 
@@ -87,7 +88,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @ThreadSafe
 public abstract class AbstractTemplateWritingHandler
-    <T extends Template<C>, TG extends TemplateGenerator<T>, C extends TemplateContext>
+    <T extends QueryJTemplate<C>, TG extends TemplateGenerator<T>, C extends QueryJTemplateContext>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
@@ -104,11 +105,9 @@ public abstract class AbstractTemplateWritingHandler
 
     /**
      * Handles given information.
-     *
-     *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -131,8 +130,8 @@ public abstract class AbstractTemplateWritingHandler
      * @param rootDir the root dir.
      * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
      */
+    @SuppressWarnings("cast, unchecked")
     @ThreadSafe
-    @SuppressWarnings("unchecked")
     protected void writeTemplates(
         @NotNull final QueryJCommand parameters,
         @NotNull final String engineName,
@@ -265,7 +264,7 @@ public abstract class AbstractTemplateWritingHandler
                 {
                     result.add(
                         threadPool.submit(
-                            new TemplateGeneratorThread<T, TG>(
+                            new QueryJTemplateGeneratorThread<T, TG, C>(
                                 templateGenerator,
                                 t_Template,
                                 retrieveOutputDir(t_Template.getTemplateContext(), rootDir, engineName, parameters),
@@ -352,7 +351,7 @@ public abstract class AbstractTemplateWritingHandler
 
                         result.add(
                             threadPool.submit(
-                                new TemplateGeneratorThread<T, TG>(
+                                new QueryJTemplateGeneratorThread<T, TG, C>(
                                     templateGenerator,
                                     t_Template,
                                     retrieveOutputDir(
@@ -469,6 +468,32 @@ public abstract class AbstractTemplateWritingHandler
         }
 
         parameters.setSetting(PRODUCT_NAME, result);
+
+        return result;
+    }
+
+    /**
+     * Retrieves the generation tasks.
+     * @param parameters the parameter map.
+     * @return such list.
+     */
+    @NotNull
+    protected List<Future<T>> retrieveGenerationTasks(
+        @NotNull final QueryJCommand parameters)
+    {
+        @NotNull final List<Future<T>> result;
+
+        @Nullable final List<Future<T>> aux =
+            new QueryJCommandWrapper<List<Future<T>>>(parameters).getSetting(buildGenerationTasksKey());
+
+        if (aux == null)
+        {
+            result = new ArrayList<Future<T>>(0);
+        }
+        else
+        {
+            result = aux;
+        }
 
         return result;
     }

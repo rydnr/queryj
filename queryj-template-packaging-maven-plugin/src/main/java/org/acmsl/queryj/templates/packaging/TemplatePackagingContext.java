@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        queryj
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -21,38 +21,45 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
 
- *****************************************************************************
+ ******************************************************************************
  *
- * Filename: BasePerCustomSqlTemplate.java
+ * Filename: TemplatePackagingContext.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Base logic for all per-FK templates.
+ * Description: Contains the context information required to build
+ * Template Packaging-specific templates.
+ *
+ * Date: 2013/08/15
+ * Time: 08:17
  *
  */
-package org.acmsl.queryj.api;
+package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing QueryJ-Core classes.
+ */
+import org.acmsl.queryj.api.TemplateContext;
+
+/*
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Base logic for all templates to be processed once per custom SQL.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+/*
+ * Importing checkthread.org annotations.
  */
-public interface PerCustomSqlTemplate<C extends PerCustomSqlTemplateContext>
-    extends QueryJTemplate<C>
+import org.checkthread.annotations.ThreadSafe;
+
+/**
+ * Contains the context information required to build
+ * Template Packaging-specific templates.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 3.0
+ * Created: 2013/08/15 08/17
+*/
+@ThreadSafe
+public interface TemplatePackagingContext
+    extends TemplateContext
 {
-    /**
-     * Builds the correct chain.
-     *
-     * @param context the context.
-     * @param relevantOnly whether to include only relevant placeholders.
-     * @return the specific {@link AbstractFillTemplateChain}.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    public FillTemplateChain<C> buildFillTemplateChain(
-        @NotNull final C context, final boolean relevantOnly);
 }

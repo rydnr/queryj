@@ -46,7 +46,7 @@ import org.jetbrains.annotations.NotNull;
  * template.
  * @since 3.0
  */
-public interface FileNameResolver<C extends TemplateContext>
+public interface FileNameResolver<C extends QueryJTemplateContext>
 {
     /**
      * Retrieves given template's file name.

@@ -209,4 +209,12 @@ public class PerForeignKeyTemplateContext
         return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.m__ForeignKey, other.m__ForeignKey)
             .isEquals();
     }
+
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'PerForeignKeyTemplateContext'" +
+               ", 'foreignKey': " + m__ForeignKey +
+               " }";
+    }
 }

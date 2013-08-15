@@ -36,7 +36,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -56,17 +56,17 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class UseCheckthreadAnnotationsHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, Boolean>
 {
     private static final long serialVersionUID = -3562776675071756624L;
 
     /**
      * Creates a {@link UseCheckthreadAnnotationsHandler} to resolve placeholders
-     * using given {@link TemplateContext context}.
-     * @param context the {@link TemplateContext context}.
+     * using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public UseCheckthreadAnnotationsHandler(@NotNull final TemplateContext context)
+    public UseCheckthreadAnnotationsHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -84,12 +84,12 @@ public class UseCheckthreadAnnotationsHandler
 
     /**
      * Retrieves whether to use Checkthread.org annotations in templates
-     * @param context the {@link TemplateContext}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext}.
      * @return such information.
      */
     @NotNull
     @Override
-    protected Boolean getValue(@NotNull final TemplateContext context)
+    protected Boolean getValue(@NotNull final QueryJTemplateContext context)
     {
         return !context.getDisableCheckthreadAnnotations();
     }

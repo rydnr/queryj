@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
 * Importing some JetBrains annotations.
@@ -58,16 +58,16 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 @SuppressWarnings("unused")
 public class RepositoryNameHandler
-    extends AbstractDecoratedStringHandler<TemplateContext>
+    extends AbstractDecoratedStringHandler<QueryJTemplateContext>
 {
     private static final long serialVersionUID = 7727414526536102572L;
 
     /**
      * Creates a new {@link RepositoryNameHandler} associated to given
-     * {@link TemplateContext}.
+     * {@link org.acmsl.queryj.api.QueryJTemplateContext}.
      * @param context the template.
      */
-    public RepositoryNameHandler(@NotNull final TemplateContext context)
+    public RepositoryNameHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -88,7 +88,7 @@ public class RepositoryNameHandler
      */
     @NotNull
     @Override
-    protected String resolveContextValue(@NotNull final TemplateContext context)
+    protected String resolveContextValue(@NotNull final QueryJTemplateContext context)
     {
         return context.getRepositoryName();
     }

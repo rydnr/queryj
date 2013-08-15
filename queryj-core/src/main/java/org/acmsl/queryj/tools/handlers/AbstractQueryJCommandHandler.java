@@ -39,6 +39,8 @@ package org.acmsl.queryj.tools.handlers;
  */
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
+import org.acmsl.queryj.api.QueryJTemplate;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseMetadataException;
 import org.acmsl.queryj.api.Template;
 import org.acmsl.queryj.api.exceptions.UnsupportedCharsetQueryjException;
@@ -476,31 +478,6 @@ public abstract class AbstractQueryJCommandHandler
         @NotNull final List<Future<T>> tasks, @NotNull final QueryJCommand parameters)
     {
         new QueryJCommandWrapper<List<Future<T>>>(parameters).setSetting(buildGenerationTasksKey(), tasks);
-    }
-
-    /**
-     * Retrieves the generation tasks.
-     * @param parameters the parameter map.
-     * @return such list.
-     */
-    @NotNull
-    protected <T extends Template> List<Future<T>> retrieveGenerationTasks(@NotNull final QueryJCommand parameters)
-    {
-        @NotNull final List<Future<T>> result;
-
-        @Nullable final List<Future<T>> aux =
-            new QueryJCommandWrapper<List<Future<T>>>(parameters).getSetting(buildGenerationTasksKey());
-
-        if (aux == null)
-        {
-            result = new ArrayList<Future<T>>(0);
-        }
-        else
-        {
-            result = aux;
-        }
-
-        return result;
     }
 
     /**

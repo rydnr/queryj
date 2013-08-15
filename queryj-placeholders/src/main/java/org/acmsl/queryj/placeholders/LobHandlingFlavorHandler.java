@@ -38,8 +38,8 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
@@ -60,15 +60,15 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 @SuppressWarnings("unused")
 public class LobHandlingFlavorHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, DecoratedString>
 {
     private static final long serialVersionUID = -5828495921646881041L;
 
     /**
      * Creates a new {@link LobHandlingFlavorHandler} with given context.
-     * @param context the {@link TemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext} instance.
      */
-    public LobHandlingFlavorHandler(@NotNull final TemplateContext context)
+    public LobHandlingFlavorHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -92,7 +92,7 @@ public class LobHandlingFlavorHandler
      *          model.
      */
     @Override
-    protected DecoratedString getValue(@NotNull final TemplateContext context) throws QueryJBuildException
+    protected DecoratedString getValue(@NotNull final QueryJTemplateContext context) throws QueryJBuildException
     {
         return new DecoratedString(getLobFlavor(context.getMetadataManager()));
     }

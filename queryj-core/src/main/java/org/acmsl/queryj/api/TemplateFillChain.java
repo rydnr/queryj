@@ -59,7 +59,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 2012/06/03
  */
 @SuppressWarnings("unused")
-public abstract class TemplateFillChain<C extends TemplateContext>
+public abstract class TemplateFillChain<C extends QueryJTemplateContext>
     extends AbstractQueryJChain
 {
     /**
@@ -69,7 +69,7 @@ public abstract class TemplateFillChain<C extends TemplateContext>
 
     /**
      * Creates a {@link TemplateFillChain} with given context.
-     * @param context the {@link TemplateContext context}.
+     * @param context the {@link QueryJTemplateContext context}.
      */
     @SuppressWarnings("unused")
     public TemplateFillChain(@NotNull final C context)
@@ -79,7 +79,7 @@ public abstract class TemplateFillChain<C extends TemplateContext>
 
     /**
      * Specifies the context.
-     * @param context such {@link TemplateContext context}.
+     * @param context such {@link QueryJTemplateContext context}.
      */
     protected final void immutableSetTemplateContext(@NotNull final C context)
     {
@@ -98,7 +98,7 @@ public abstract class TemplateFillChain<C extends TemplateContext>
 
     /**
      * Retrieves the template context.
-     * @return such {@link TemplateContext context}.
+     * @return such {@link QueryJTemplateContext context}.
      */
     @NotNull
     public C getTemplateContext()
@@ -134,7 +134,7 @@ public abstract class TemplateFillChain<C extends TemplateContext>
     {
         @NotNull final QueryJCommand result = new ConfigurationQueryJCommandImpl(configuration, log);
 
-        new QueryJCommandWrapper<TemplateContext>(result).setSetting("context", getTemplateContext());
+        new QueryJCommandWrapper<QueryJTemplateContext>(result).setSetting("context", getTemplateContext());
 
         return result;
     }
@@ -153,7 +153,7 @@ public abstract class TemplateFillChain<C extends TemplateContext>
     /**
      * Fills up given {@link Chain chain}.
      * @param chain the chain to customize.
-     * @param context the {@link TemplateContext context}.
+     * @param context the {@link QueryJTemplateContext context}.
      */
     protected abstract void fillChain(@NotNull final Chain chain, @NotNull final C context);
 

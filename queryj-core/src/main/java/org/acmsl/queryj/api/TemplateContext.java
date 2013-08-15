@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        queryj
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -25,134 +25,28 @@
  *
  * Filename: TemplateContext.java
  *
- * Author: Jose San Leandro Armendariz (chous)
+ * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Represents the context used by templates to build sources.
  *
- * Date: 5/20/12
- * Time: 5:46 AM
+ * Date: 2013/08/15
+ * Time: 08:19
  *
  */
 package org.acmsl.queryj.api;
 
 /*
- * Importing project classes.
+ * Importing checkthread.org annotations.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Context information required in Template generation.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/20
- */
+ * Represents the context used by templates to build sources.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 3.0
+ * Created: 2013/08/15 08/19
+*/
+@ThreadSafe
 public interface TemplateContext
 {
-    /**
-     * Retrieves the template name.
-     */
-    @NotNull
-    String getTemplateName();
-
-    /**
-     * Retrieves the {@link MetadataManager} instance.
-     * @return such instance.
-     */
-    @NotNull
-    MetadataManager getMetadataManager();
-
-    /**
-     * Retrieves the {@link CustomSqlProvider} instance.
-     * @return such instance.
-     */
-    @NotNull
-    CustomSqlProvider getCustomSqlProvider();
-
-    /**
-     * Retrieves the header.
-     * @return such information.
-     */
-    @Nullable
-    String getHeader();
-
-    /**
-     * Retrieves the {@link DecoratorFactory} instance.
-     * @return such instance.
-     */
-    @NotNull
-    DecoratorFactory getDecoratorFactory();
-
-    /**
-     * Retrieves the package name.
-     * @return such information.
-     */
-    @NotNull
-    String getPackageName();
-
-    /**
-     * Retrieves the base package name.
-     * @return such information.
-     */
-    @NotNull
-    String getBasePackageName();
-
-    /**
-     * Retrieves the repository name.
-     * @return such information.
-     */
-    @NotNull
-    String getRepositoryName();
-
-    /**
-     * Retrieves whether to implement marker interfaces or not.
-     * @return such setting.
-     */
-    @SuppressWarnings("unused")
-    boolean getImplementMarkerInterfaces();
-
-    /**
-     * Retrieves whether to include support for JMX or not.
-     * @return such setting.
-     */
-    @SuppressWarnings("unused")
-    boolean isJmxSupportEnabled();
-
-    /**
-     * Retrieves the JNDI location.
-     * @return such information.
-     */
-    @NotNull
-    String getJndiLocation();
-
-    /**
-     * Retrieves whether to use generation timestamps or not.
-     * @return such setting.
-     */
-    boolean getDisableGenerationTimestamps();
-
-    /**
-     * Retrieves whether to use NotNull annotations or not.
-     * @return such setting.
-     */
-    boolean getDisableNotNullAnnotations();
-
-    /**
-     * Retrieves whether to use checkthread.org annotations or not.
-     * @return such setting.
-     */
-    boolean getDisableCheckthreadAnnotations();
-
-    /**
-     * Retrieves the file name.
-     * @return such instance.
-     */
-    @NotNull
-    String getFileName();
 }

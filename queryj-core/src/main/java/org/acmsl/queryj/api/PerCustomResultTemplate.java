@@ -51,7 +51,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface PerCustomResultTemplate<C extends PerCustomResultTemplateContext>
-    extends  Template<C>
+    extends  QueryJTemplate<C>
 {
     /**
      * Builds a context-specific exception.

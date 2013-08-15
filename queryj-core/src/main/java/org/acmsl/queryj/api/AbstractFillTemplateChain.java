@@ -60,7 +60,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 2012/06/03
  */
-public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH extends QueryJCommandHandler<QueryJCommand>>
+public abstract class AbstractFillTemplateChain<C extends QueryJTemplateContext, CH extends QueryJCommandHandler<QueryJCommand>>
     extends AbstractQueryJChain<CH>
     implements FillTemplateChain<C>
 {
@@ -71,7 +71,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext, CH ex
 
     /**
      * Creates a new {@link AbstractFillTemplateChain} associated to given
-     * {@link TemplateContext}.
+     * {@link QueryJTemplateContext}.
      * @param context the template.
      */
     protected AbstractFillTemplateChain(@NotNull final C context)

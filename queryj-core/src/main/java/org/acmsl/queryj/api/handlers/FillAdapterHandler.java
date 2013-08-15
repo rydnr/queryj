@@ -57,7 +57,7 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Adapts non-{@link org.acmsl.queryj.api.TemplateContext}-specific
+ * Adapts non-{@link org.acmsl.queryj.api.QueryJTemplateContext}-specific
  * fill handlers to be used within QueryJ Chain-of-Responsibility processes.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/03

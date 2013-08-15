@@ -36,7 +36,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -56,17 +56,17 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class UseNotNullAnnotationsHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, Boolean>
 {
     private static final long serialVersionUID = 6263112033366785639L;
 
     /**
      * Creates a {@link UseNotNullAnnotationsHandler} to resolve placeholders
-     * using given {@link TemplateContext context}.
-     * @param context the {@link TemplateContext context}.
+     * using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public UseNotNullAnnotationsHandler(@NotNull final TemplateContext context)
+    public UseNotNullAnnotationsHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -84,12 +84,12 @@ public class UseNotNullAnnotationsHandler
 
     /**
      * Retrieves whether to use NotNull annotations in templates.
-     * @param context the {@link TemplateContext}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext}.
      * @return such information.
      */
     @NotNull
     @Override
-    protected Boolean getValue(@NotNull final TemplateContext context)
+    protected Boolean getValue(@NotNull final QueryJTemplateContext context)
     {
         return !context.getDisableNotNullAnnotations();
     }

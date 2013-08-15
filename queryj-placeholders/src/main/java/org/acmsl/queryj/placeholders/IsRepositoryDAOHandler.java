@@ -40,9 +40,9 @@ package org.acmsl.queryj.placeholders;
  * Importing project classes.
  */
 
+import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.SqlDAO;
-import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -62,17 +62,17 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class IsRepositoryDAOHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, Boolean>
 {
     private static final long serialVersionUID = 5018265597468636823L;
 
     /**
      * Creates a {@link IsRepositoryDAOHandler} to resolve placeholders
-     * using given {@link TemplateContext context}.
-     * @param context the {@link TemplateContext context}.
+     * using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public IsRepositoryDAOHandler(@NotNull final TemplateContext context)
+    public IsRepositoryDAOHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -89,14 +89,14 @@ public class IsRepositoryDAOHandler
     }
 
     /**
-     * Retrieves whether the {@link TemplateContext context} is associated to a
+     * Retrieves whether the {@link org.acmsl.queryj.api.QueryJTemplateContext context} is associated to a
      * repository-wide DAO.
-     * @param context the {@link TemplateContext}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext}.
      * @return such value.
      */
     @NotNull
     @Override
-    protected Boolean getValue(@NotNull final TemplateContext context)
+    protected Boolean getValue(@NotNull final QueryJTemplateContext context)
     {
         return definesRepositoryScopedSql(context.getCustomSqlProvider());
     }

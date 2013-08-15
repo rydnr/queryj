@@ -43,7 +43,7 @@ import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.FillTemplateChain;
 import org.acmsl.queryj.api.NonRelevantFillHandler;
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
@@ -69,7 +69,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2013/06/11
  */
-public class FillTemplateChainWrapper<C extends TemplateContext>
+public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
     implements FillTemplateChain<C>
 {
     /**

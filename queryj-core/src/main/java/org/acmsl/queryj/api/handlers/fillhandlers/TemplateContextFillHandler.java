@@ -38,7 +38,7 @@ package org.acmsl.queryj.api.handlers.fillhandlers;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -46,16 +46,16 @@ import org.acmsl.queryj.api.TemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Allows {@link FillHandler FillHandlers} to access the {@link org.acmsl.queryj.api.TemplateContext}.
- * @param <C> the {@link org.acmsl.queryj.api.TemplateContext}.
+ * Allows {@link FillHandler FillHandlers} to access the {@link org.acmsl.queryj.api.QueryJTemplateContext}.
+ * @param <C> the {@link org.acmsl.queryj.api.QueryJTemplateContext}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/23
  */
-public interface TemplateContextFillHandler<C extends TemplateContext,P>
+public interface TemplateContextFillHandler<C extends QueryJTemplateContext,P>
     extends FillHandler<P>
 {
     /**
-     * Retrieves the {@link TemplateContext context}.
+     * Retrieves the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @return such context.
      */
     @NotNull

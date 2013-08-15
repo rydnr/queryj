@@ -52,7 +52,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface PerTableTemplate<C extends PerTableTemplateContext>
-    extends  Template<C>
+    extends  QueryJTemplate<C>
 {
     /**
      * Builds a context-specific exception.

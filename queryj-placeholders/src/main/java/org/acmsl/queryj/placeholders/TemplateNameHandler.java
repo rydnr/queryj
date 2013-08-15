@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
  * Importing JetBrains annotations.
@@ -58,15 +58,15 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class TemplateNameHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, DecoratedString>
 {
     private static final long serialVersionUID = -6175019064662147096L;
 
     /**
-     * Creates a new handler associated to given {@link TemplateContext}.
+     * Creates a new handler associated to given {@link org.acmsl.queryj.api.QueryJTemplateContext}.
      * @param context the template.
      */
-    protected TemplateNameHandler(@NotNull final TemplateContext context)
+    protected TemplateNameHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -77,7 +77,7 @@ public class TemplateNameHandler
      */
     @Nullable
     @Override
-    protected DecoratedString getValue(@NotNull final TemplateContext context)
+    protected DecoratedString getValue(@NotNull final QueryJTemplateContext context)
     {
         return new DecoratedString(context.getTemplateName());
     }

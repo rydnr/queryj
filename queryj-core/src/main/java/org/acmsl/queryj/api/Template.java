@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,9 +33,13 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,11 +49,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface Template<T extends TemplateContext>
 {
-    String DAO_GROUP = "org/acmsl/queryj/dao/";
-
     /**
      * Retrieves the template context.
-     * @return such {@link TemplateContext} instance.
+     * @return such {@link QueryJTemplateContext} instance.
      */
     @NotNull
     T getTemplateContext();
@@ -62,5 +64,6 @@ public interface Template<T extends TemplateContext>
      */
     @Nullable
     String generate(final boolean relevantOnly)
-      throws InvalidTemplateException;
+        throws InvalidTemplateException;
+
 }

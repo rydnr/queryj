@@ -78,9 +78,10 @@ import java.security.NoSuchAlgorithmException;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public abstract class AbstractTemplateGenerator<N extends Template>
+public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<QueryJTemplateContext>>
     implements TemplateGenerator<N>
 {
+    protected static final String CANNOT_SERIALIZE_TEMPLATE_LITERAL = "Cannot serialize template ";
     /**
      * Whether to enable template caching.
      */
@@ -419,7 +420,7 @@ public abstract class AbstractTemplateGenerator<N extends Template>
             if (t_Log != null)
             {
                 t_Log.warn(
-                    "Cannot serialize template " + outputFilePath + " (" + cannotSerialize + ")",
+                    CANNOT_SERIALIZE_TEMPLATE_LITERAL + outputFilePath + " (" + cannotSerialize + ")",
                     cannotSerialize);
             }
         }
@@ -439,7 +440,7 @@ public abstract class AbstractTemplateGenerator<N extends Template>
                     if (t_Log != null)
                     {
                         t_Log.warn(
-                            "Cannot serialize template " + outputFilePath + " (" + cannotCloseCacheFile + ")",
+                            CANNOT_SERIALIZE_TEMPLATE_LITERAL + outputFilePath + " (" + cannotCloseCacheFile + ")",
                         cannotCloseCacheFile);
                     }
                 }

@@ -43,8 +43,6 @@ import org.acmsl.queryj.templates.packaging.exceptions.InvalidTemplatePackagingT
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.api.AbstractTemplate;
-import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 
 /*
@@ -71,8 +69,8 @@ import org.stringtemplate.v4.STGroup;
  * Created: 2013/08/15 07:49
  */
 @ThreadSafe
-public class TemplateTemplate<C extends TemplateContext>
-    extends AbstractTemplate<C>
+public class TemplateTemplate<C extends TemplatePackagingContext>
+    extends AbstractTemplatePackagingTemplate<C>
 {
     /**
      * The template packaging group.
@@ -82,7 +80,7 @@ public class TemplateTemplate<C extends TemplateContext>
     /**
      * Builds an <code>TemplateTemplate</code> using given
      * information.
-     * @param context the {@link TemplateContext} instance.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext} instance.
      */
     protected TemplateTemplate(@NotNull final C context)
     {
@@ -119,7 +117,7 @@ public class TemplateTemplate<C extends TemplateContext>
     @Override
     public String getTemplateName()
     {
-        return "Template";
+        return TEMPLATE_LITERAL;
     }
 
     /**
@@ -143,7 +141,6 @@ public class TemplateTemplate<C extends TemplateContext>
 
     /**
      * Retrieves the string template group.
-     *
      * @return such instance.
      */
     @Nullable

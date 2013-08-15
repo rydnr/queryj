@@ -48,7 +48,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Chain to provide placeholders.
- * @param <C> the TemplateContext.
+ * @param <C> the QueryJTemplateContext.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2013/05/30
  */

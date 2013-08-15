@@ -54,7 +54,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractBasePerRepositoryTemplate<C extends PerRepositoryTemplateContext>
-    extends AbstractTemplate<C>
+    extends AbstractQueryJTemplate<C>
     implements PerRepositoryTemplate<C>
 {
     /**

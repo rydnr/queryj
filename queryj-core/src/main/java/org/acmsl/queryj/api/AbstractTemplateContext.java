@@ -56,13 +56,13 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Abstract implementation of {@link TemplateContext}.
+ * Abstract implementation of {@link QueryJTemplateContext}.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 2012/05/20
  */
 public abstract class AbstractTemplateContext
-    implements  TemplateContext,
-                Serializable
+    implements QueryJTemplateContext,
+               Serializable
 {
     private static final long serialVersionUID = 3405496681880071590L;
 

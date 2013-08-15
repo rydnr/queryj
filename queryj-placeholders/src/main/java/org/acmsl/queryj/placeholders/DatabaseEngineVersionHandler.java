@@ -40,7 +40,7 @@ package org.acmsl.queryj.placeholders;
  */
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.NonRelevantFillHandler;
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -60,16 +60,16 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class DatabaseEngineVersionHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, DecoratedString>
     implements NonRelevantFillHandler
 {
     private static final long serialVersionUID = 1869772317855898379L;
 
     /**
-     * Creates a {@link DatabaseEngineNameHandler} for given {@link TemplateContext}.
+     * Creates a {@link DatabaseEngineNameHandler} for given {@link org.acmsl.queryj.api.QueryJTemplateContext}.
      * @param context the context.
      */
-    public DatabaseEngineVersionHandler(@NotNull final TemplateContext context)
+    public DatabaseEngineVersionHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -91,7 +91,7 @@ public class DatabaseEngineVersionHandler
      */
     @NotNull
     @Override
-    public DecoratedString getValue(@NotNull final TemplateContext context)
+    public DecoratedString getValue(@NotNull final QueryJTemplateContext context)
     {
         return new DecoratedString(getEngineVersion(context.getMetadataManager()));
     }

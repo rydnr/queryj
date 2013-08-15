@@ -45,6 +45,7 @@ import org.apache.commons.lang.builder.CompareToBuilder;
 /*
  * Importing JDK classes.
  */
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -198,6 +199,7 @@ public abstract class AbstractForeignKey
      * @return such information.
      */
     @NotNull
+    @Override
     public List<Attribute> getAttributes()
     {
         return m__lAttributes;
@@ -227,6 +229,7 @@ public abstract class AbstractForeignKey
      * @return such table name.
      */
     @NotNull
+    @Override
     public String getTargetTableName()
     {
         return m__strTargetTableName;
@@ -255,31 +258,17 @@ public abstract class AbstractForeignKey
      * Retrieves whether the foreign key can take null values.
      * @return such information.
      */
+    @Override
     public boolean isNullable()
     {
         return m__bNullable;
     }
 
     /**
-     * Provides a text representation of the information
-     * contained in this instance.
-     * @return such information.
-     */
-    public String toString()
-    {
-        return
-            new org.apache.commons.lang.builder.ToStringBuilder(this)
-                .append("sourceTableName", getSourceTableName())
-                .append("attributes", getAttributes())
-                .append("targetTableName", getTargetTableName())
-                .append("nullable", isNullable())
-                .toString();
-    }
-
-    /**
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -332,6 +321,7 @@ public abstract class AbstractForeignKey
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
+    @Override
     public int compareTo(@Nullable final ForeignKey object)
     {
         int result = 1;
@@ -353,9 +343,9 @@ public abstract class AbstractForeignKey
      */
     protected int compareThem(@NotNull final ForeignKey first, @NotNull final ForeignKey second)
     {
-        int result;
+        final int result;
 
-        CompareToBuilder comparator = new CompareToBuilder();
+        @NotNull final CompareToBuilder comparator = new CompareToBuilder();
 
         comparator.append(
             first.getSourceTableName(),
@@ -369,12 +359,12 @@ public abstract class AbstractForeignKey
             first.isNullable(),
             second.isNullable());
 
-        List<Attribute> t_lFirstAttributes = first.getAttributes();
-        List<Attribute> t_lSecondAttributes = second.getAttributes();
+        final List<Attribute> t_lFirstAttributes = first.getAttributes();
+        final List<Attribute> t_lSecondAttributes = second.getAttributes();
 
-        Attribute[] t_aFirstAttributes = new Attribute[t_lFirstAttributes.size()];
+        final Attribute[] t_aFirstAttributes = new Attribute[t_lFirstAttributes.size()];
         t_lFirstAttributes.toArray(t_aFirstAttributes);
-        Attribute[] t_aSecondAttributes = new Attribute[t_lSecondAttributes.size()];
+        final Attribute[] t_aSecondAttributes = new Attribute[t_lSecondAttributes.size()];
         t_lSecondAttributes.toArray(t_aSecondAttributes);
 
         for (int t_iIndex = 0; t_iIndex < t_aFirstAttributes.length; t_iIndex++)
@@ -388,5 +378,17 @@ public abstract class AbstractForeignKey
         result = comparator.toComparison();
 
         return result;
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'AbstractForeignKey'" +
+               ", 'nullable': '" + m__bNullable + '\'' +
+               ", 'fkName': '" + m__strFkName + '\'' +
+               ", 'sourceTableName': '" + m__strSourceTableName + '\'' +
+               ", 'attributes': [" + Arrays.toString(m__lAttributes.toArray(new Attribute[m__lAttributes.size()])) + ']' +
+               ", 'targetTableName': '" + m__strTargetTableName + "' }";
     }
 }

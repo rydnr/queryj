@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        queryj
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,41 +27,53 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents generic templates.
+ * Description: 
+ *
+ * Date: 2013/08/15
+ * Time: 08:24
  *
  */
 package org.acmsl.queryj.api;
 
 /*
- * Importing project classes.
+ * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CannotFindPlaceholderImplementationException;
 import org.acmsl.queryj.api.exceptions.CannotFindTemplateGroupException;
 import org.acmsl.queryj.api.exceptions.CannotFindTemplateInGroupException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.api.placeholders.FillTemplateChainFactory;
-import org.acmsl.queryj.tools.PlaceholderChainProvider;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.ClassLoaderUtils;
 
 /*
- * Importing Commons-Logging classes.
+ * Importing ANTLR classes.
  */
 import org.antlr.v4.parse.ANTLRParser;
+
+/*
+ * Importing Apache Commons Logging classes.
+ */
 import org.apache.commons.logging.Log;
 
 /*
- * Importing ANTLR classes.
+ * Importing JetBrains annotations.
  */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /*
  * Importing StringTemplate classes.
@@ -72,13 +84,7 @@ import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.misc.STMessage;
 
 /*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing some JDK classes.
+ * Importing JDK classes.
  */
 import java.io.Serializable;
 import java.nio.charset.Charset;
@@ -89,68 +95,69 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 /**
- * Represents generic templates.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ *
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 3.0
+ * Created: 2013/08/15 08/24
  */
+@ThreadSafe
 public abstract class AbstractTemplate<C extends TemplateContext>
     implements  STTemplate<C>,
                 DefaultThemeConstants,
                 Serializable
 {
-    private static final long serialVersionUID = -3708579868912707138L;
-
     /**
      * The default StringTemplate error listener.
      */
     @NotNull
     protected static final STErrorListener
         DEFAULT_ST_ERROR_LISTENER =
-            new STErrorListener()
+        new STErrorListener()
+        {
+            @Override
+            public void compileTimeError(@NotNull final STMessage stMessage)
             {
-                @Override
-                public void compileTimeError(@NotNull final STMessage stMessage)
+                @Nullable final Log log = UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
+
+                if (log != null)
                 {
-                    @Nullable final Log log = UniqueLogFactory.getLog(AbstractTemplate.class);
-
-                    if (log != null)
-                    {
-                        log.error(stMessage.toString());
-                    }
+                    log.error(stMessage.toString());
                 }
+            }
 
-                @Override
-                public void runTimeError(@NotNull final STMessage stMessage)
+            @Override
+            public void runTimeError(@NotNull final STMessage stMessage)
+            {
+                @Nullable final Log log = UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
+
+                if (log != null)
                 {
-                    @Nullable final Log log = UniqueLogFactory.getLog(AbstractTemplate.class);
-
-                    if (log != null)
-                    {
-                        log.error(stMessage.toString());
-                    }
+                    log.error(stMessage.toString());
                 }
+            }
 
-                @Override
-                public void IOError(@NotNull final STMessage stMessage)
+            @Override
+            public void IOError(@NotNull final STMessage stMessage)
+            {
+                @Nullable final Log log = UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
+
+                if (log != null)
                 {
-                    @Nullable final Log log = UniqueLogFactory.getLog(AbstractTemplate.class);
-
-                    if (log != null)
-                    {
-                        log.error(stMessage.toString());
-                    }
+                    log.error(stMessage.toString());
                 }
+            }
 
-                @Override
-                public void internalError(@NotNull final STMessage stMessage)
+            @Override
+            public void internalError(@NotNull final STMessage stMessage)
+            {
+                @Nullable final Log log = UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
+
+                if (log != null)
                 {
-                    @Nullable final Log log = UniqueLogFactory.getLog(AbstractTemplate.class);
-
-                    if (log != null)
-                    {
-                        log.error(stMessage.toString());
-                    }
+                    log.error(stMessage.toString());
                 }
-            };
+            }
+        };
     protected static final String GENERATING = "Generating ";
     protected static final String CONTEXT_LITERAL = "Context";
     protected static final String TEMPLATE_LITERAL = "Template";
@@ -165,11 +172,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Caches the StringTemplateGroup for each template class.
      */
     private static Map m__mSTCache;
-
-    /**
-     * The cached processed header.
-     */
-    private String m__strCachedProcessedHeader;
 
     /**
      * A singleton container to avoid the double-checking lock idiom.
@@ -204,7 +206,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
 
     /**
-     * Specifies the {@link TemplateContext}.
+     * Specifies the {@link QueryJTemplateContext}.
      * @param context the context.
      */
     private void immutableSetTemplateContext(@NotNull final C context)
@@ -213,7 +215,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
 
     /**
-     * Specifies the {@link TemplateContext}.
+     * Specifies the {@link QueryJTemplateContext}.
      * @param context the context.
      */
     @SuppressWarnings("unused")
@@ -223,7 +225,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
 
     /**
-     * Retrieves the {@link TemplateContext context}.
+     * Retrieves the {@link QueryJTemplateContext context}.
      * @return such context.
      */
     @NotNull
@@ -231,65 +233,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     public C getTemplateContext()
     {
         return m__TemplateContext;
-    }
-
-    /**
-     * Specifies the cached processed header.
-     * @param header such value.
-     */
-    protected final void immutableSetCachedProcessedHeader(@Nullable final String header)
-    {
-        m__strCachedProcessedHeader = header;
-    }
-    
-    /**
-     * Specifies the cached processed header.
-     * @param header such value.
-     */
-    @SuppressWarnings("unused")
-    protected void setCachedProcessedHeader(@Nullable final String header)
-    {
-        immutableSetCachedProcessedHeader(header);
-    }
-    
-    /**
-     * Retrieves the cached processed header.
-     * @return such value.
-     */
-    @Nullable
-    protected String getCachedProcessedHeader()
-    {
-        return m__strCachedProcessedHeader;
-    }
-
-    /**
-     * Retrieves the header.
-     * @param context the template context.
-     * @return such information.
-     */
-    @Nullable
-    protected String getHeader(@NotNull final TemplateContext context)
-    {
-        return context.getHeader();
-    }
-
-    /**
-     * Retrieves the processed header.
-     * @param input the input.
-     * @return such information.
-     */
-    @Nullable
-    @SuppressWarnings("unused")
-    public String getProcessedHeader(@NotNull final Map input)
-    {
-        @Nullable final String result = getCachedProcessedHeader();
-        
-        if  (result == null)
-        {
-//            result = processHeader(input, getHeader(getTemplateContext()));
-        }
-        
-        return result;
     }
 
     /**
@@ -333,7 +276,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 Charset.defaultCharset(),
                 getSTCache());
     }
-    
+
     /**
      * Retrieves the string template group.
      * @param path the path.
@@ -349,7 +292,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @NotNull final Map cache)
     {
         @Nullable STGroup result;
-        
+
         @NotNull final Object t_Key = buildSTGroupKey(path);
 
         result = (STGroup) cache.get(t_Key);
@@ -368,7 +311,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 cache.put(t_Key, result);
             }
         }
-        
+
         return result;
     }
 
@@ -391,7 +334,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @NotNull
     protected final Object buildSTGroupKey(@NotNull final String path)
     {
-        return ".:\\AbstractTemplate//STCACHE//" + path + "//";
+        return ".:\\AbstractQueryJTemplate//STCACHE//" + path + "//";
     }
 
     /**
@@ -414,7 +357,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
 
     /**
-     * Configures given {@link ST} instance.
+     * Configures given {@link org.stringtemplate.v4.ST} instance.
      * @param stringTemplate such template.
      */
     @SuppressWarnings("unused")
@@ -434,51 +377,11 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     protected ST retrieveTemplate(@Nullable final STGroup group)
     {
         @Nullable ST result = null;
-        
+
         if  (group != null)
         {
             result = group.getInstanceOf(TEMPLATE_NAME);
         }
-
-        return result;
-    }
-    
-    /**
-     * Generates the source code.
-     * @return such output.
-     * @throws org.acmsl.queryj.api.exceptions.InvalidTemplateException if the template cannot be generated.
-     */
-    @Override
-    @Nullable
-    public String generate(final boolean relevantOnly)
-      throws InvalidTemplateException
-    {
-        return generate(getTemplateContext(), relevantOnly);
-    }
-
-    /**
-     * Generates the source code.
-     * @param context the {@link TemplateContext} instance.
-     * @param relevantOnly whether to include only relevant placeholders.
-     * @return such output.
-     * @throws InvalidTemplateException if the template cannot be generated.
-     */
-    @Nullable
-    protected String generate(@NotNull final C context, final boolean relevantOnly)
-        throws  InvalidTemplateException
-    {
-        final String result;
-
-        if (!relevantOnly)
-        {
-            logHeader(buildHeader());
-        }
-
-        //traceClassLoaders();
-
-        result = generateOutput(getHeader(context), context, relevantOnly);
-
-        //cleanUpClassLoaderTracing();
 
         return result;
     }
@@ -489,8 +392,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      */
     protected void logHeader(@Nullable final String header)
     {
-        @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
-        
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
+
         if  (t_Log != null)
         {
             t_Log.info(header);
@@ -602,7 +505,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         // can happen if ANTLR gets loaded by a ClassLoader
         // with no reference to StringTemplate classes.
         @Nullable final Log t_Log =
-            UniqueLogFactory.getLog(AbstractTemplate.class);
+            UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
 
         @NotNull final ClassLoaderUtils t_ClassLoaderUtils =
             ClassLoaderUtils.getInstance();
@@ -618,7 +521,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 t_ClassLoaderUtils.findLocation(ST.class);
 
             t_sbMessage.append(
-                  "A fatal error in StringTemplate-based generation "
+                "A fatal error in StringTemplate-based generation "
                 + "has stopped QueryJ build process.\n"
                 + "If you see error messages from StringTemplate, "
                 + "review your templates. Otherwise, if the VM "
@@ -633,18 +536,18 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 + "using. ");
             final boolean t_bAntlrLocationFound =
                 (   (t_strAntlrLocation != null)
-                 && (t_strAntlrLocation.trim().length() > 0));
+                    && (t_strAntlrLocation.trim().length() > 0));
             final boolean t_bStringTemplateLocationFound =
                 (   (t_strStringTemplateLocation != null)
-                 && (t_strStringTemplateLocation.trim().length() > 0));
+                    && (t_strStringTemplateLocation.trim().length() > 0));
 
             if  (   (t_bAntlrLocationFound)
-                 || (t_bStringTemplateLocationFound))
+                    || (t_bStringTemplateLocationFound))
             {
                 t_sbMessage.append("Hint: ");
 
                 if  (   (t_strAntlrLocation != null)
-                     && (t_strAntlrLocation.trim().length() > 0))
+                        && (t_strAntlrLocation.trim().length() > 0))
                 {
                     t_sbMessage.append("ANTLR is loaded from ");
                     t_sbMessage.append(t_strAntlrLocation);
@@ -671,7 +574,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Normalizes given value, in lower-case.
      * @param value the value.
-     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @param decorationUtils the {@link org.acmsl.queryj.metadata.DecorationUtils} instance.
      * @return such output.
      */
     @SuppressWarnings("unused")
@@ -707,6 +610,54 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
 
     /**
+     * Retrieves the header.
+     * @param context the template context.
+     * @return such information.
+     */
+    @Nullable
+    protected abstract String getHeader(@NotNull final C context);
+
+    /**
+     * Generates the source code.
+     * @return such output.
+     * @throws org.acmsl.queryj.api.exceptions.InvalidTemplateException if the template cannot be generated.
+     */
+    @Override
+    @Nullable
+    public String generate(final boolean relevantOnly)
+        throws InvalidTemplateException
+    {
+        return generate(getTemplateContext(), relevantOnly);
+    }
+
+    /**
+     * Generates the source code.
+     * @param context the {@link QueryJTemplateContext} instance.
+     * @param relevantOnly whether to include only relevant placeholders.
+     * @return such output.
+     * @throws InvalidTemplateException if the template cannot be generated.
+     */
+    @Nullable
+    protected String generate(@NotNull final C context, final boolean relevantOnly)
+        throws  InvalidTemplateException
+    {
+        final String result;
+
+        if (!relevantOnly)
+        {
+            logHeader(buildHeader());
+        }
+
+        //traceClassLoaders();
+
+        result = generateOutput(getHeader(context), context, relevantOnly);
+
+        //cleanUpClassLoaderTracing();
+
+        return result;
+    }
+
+    /**
      * Retrieves the source code generated by this template.
      * @param header the header.
      * @param context the context.
@@ -717,32 +668,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @Nullable
     protected String generateOutput(
         @Nullable final String header, @NotNull final C context, final boolean relevantOnly)
-        throws InvalidTemplateException
-    {
-        return
-            generateOutput(
-                header,
-                context,
-                relevantOnly,
-                context.getMetadataManager());
-    }
-
-    /**
-     * Retrieves the source code generated by this template.
-     * @param header the header.
-     * @param context the {@link PerTableTemplateContext} instance.
-     * @param relevantOnly whether to include only relevant placeholders.
-     * @param metadataManager the metadata manager.
-     * @return such code.
-     * @throws InvalidTemplateException if the generation process fails.
-     */
-    @Nullable
-    @SuppressWarnings("unchecked,unused")
-    protected String generateOutput(
-        @Nullable final String header,
-        @NotNull final C context,
-        final boolean relevantOnly,
-        @NotNull final MetadataManager metadataManager)
         throws InvalidTemplateException
     {
         @Nullable String result = null;
@@ -803,7 +728,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     {
                         t_ExceptionToWrap = throwable;
 
-                        @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
+                        @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
 
                         if (t_Log != null)
                         {
@@ -892,7 +817,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      *  Retrieves the placeholder chain provider.
      * @param context the context.
-     * @return the {@link PlaceholderChainProvider} class.
+     * @return the {@link org.acmsl.queryj.tools.PlaceholderChainProvider} class.
      * @throws QueryJBuildException if the template factory class is unavailable.
      */
     @Nullable
@@ -929,7 +854,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         }
         catch (@NotNull final ClassNotFoundException classNotFound)
         {
-            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
+            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
 
             if (t_Log != null)
             {
@@ -939,7 +864,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         return result;
     }
-
 
     /**
      * Builds a context-specific exception.
@@ -953,14 +877,12 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @NotNull final ST template,
         @NotNull final Throwable actualException);
 
-    @Override
     @NotNull
+    @Override
     public String toString()
     {
-        return
-            "AbstractTemplate{"
-            + " cachedProcessedHeader='" + m__strCachedProcessedHeader
-            + "', templateContext=" + m__TemplateContext
-            + '}';
+        return "{ 'class': 'AbstractTemplate' " +
+               ", 'templateContext': '" + m__TemplateContext +
+               "' }";
     }
 }

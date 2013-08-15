@@ -38,8 +38,8 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -58,15 +58,15 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DatabaseEngineNameHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, DecoratedString>
 {
     private static final long serialVersionUID = -3471879288390673346L;
 
     /**
-     * Creates a {@link DatabaseEngineNameHandler} for given {@link TemplateContext}.
+     * Creates a {@link DatabaseEngineNameHandler} for given {@link org.acmsl.queryj.api.QueryJTemplateContext}.
      * @param context the template context.
      */
-    public DatabaseEngineNameHandler(@NotNull final TemplateContext context)
+    public DatabaseEngineNameHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -84,11 +84,11 @@ public class DatabaseEngineNameHandler
 
     /**
      * Retrieves the engine name.
-     * @param context the {@link TemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @return such information.
      */
     @NotNull
-    protected DecoratedString getValue(@NotNull final TemplateContext context)
+    protected DecoratedString getValue(@NotNull final QueryJTemplateContext context)
     {
         return new DecoratedString(getEngineName(context.getMetadataManager()));
     }

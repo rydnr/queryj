@@ -38,8 +38,8 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -59,7 +59,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 @SuppressWarnings("unused")
 public class LobHandlingRepositoryCheckHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, Boolean>
 {
     private static final long serialVersionUID = -5971998558261921698L;
 
@@ -67,7 +67,7 @@ public class LobHandlingRepositoryCheckHandler
      * Creates a {@link LobHandlingRepositoryCheckHandler} instance.
      * @param context the context.
      */
-    public LobHandlingRepositoryCheckHandler(@NotNull final TemplateContext context)
+    public LobHandlingRepositoryCheckHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -89,7 +89,7 @@ public class LobHandlingRepositoryCheckHandler
      */
     @NotNull
     @Override
-    protected Boolean getValue(@NotNull final TemplateContext context)
+    protected Boolean getValue(@NotNull final QueryJTemplateContext context)
     {
         return isLobHandlingRequired(context.getMetadataManager());
     }

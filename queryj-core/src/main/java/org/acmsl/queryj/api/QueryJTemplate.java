@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        queryj
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -21,38 +21,37 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
 
- *****************************************************************************
+ ******************************************************************************
  *
- * Filename: BasePerCustomSqlTemplate.java
+ * Filename: QueryJTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Base logic for all per-FK templates.
+ * Description: QueryJ-specific templates.
+ *
+ * Date: 2013/08/15
+ * Time: 08:45
  *
  */
 package org.acmsl.queryj.api;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing checkthread.org annotations.
  */
-import org.jetbrains.annotations.NotNull;
+import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Base logic for all templates to be processed once per custom SQL.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * QueryJ-specific templates.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 3.0
+ * Created: 2013/08/15 08/45
  */
-public interface PerCustomSqlTemplate<C extends PerCustomSqlTemplateContext>
-    extends QueryJTemplate<C>
+@ThreadSafe
+public interface QueryJTemplate<C extends QueryJTemplateContext>
+    extends Template<C>
 {
     /**
-     * Builds the correct chain.
-     *
-     * @param context the context.
-     * @param relevantOnly whether to include only relevant placeholders.
-     * @return the specific {@link AbstractFillTemplateChain}.
+     * The DAO group.
      */
-    @SuppressWarnings("unused")
-    @NotNull
-    public FillTemplateChain<C> buildFillTemplateChain(
-        @NotNull final C context, final boolean relevantOnly);
+    String DAO_GROUP = "org/acmsl/queryj/dao/";
 }

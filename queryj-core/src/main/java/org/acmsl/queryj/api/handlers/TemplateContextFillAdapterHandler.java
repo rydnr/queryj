@@ -39,7 +39,7 @@ package org.acmsl.queryj.api.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.api.handlers.fillhandlers.TemplateContextFillHandler;
 
 
@@ -60,7 +60,7 @@ import org.checkthread.annotations.ThreadSafe;
  * @since 2012/06/03
  */
 @ThreadSafe
-public class TemplateContextFillAdapterHandler<C extends TemplateContext, F extends TemplateContextFillHandler<C,P>, P>
+public class TemplateContextFillAdapterHandler<C extends QueryJTemplateContext, F extends TemplateContextFillHandler<C,P>, P>
     extends FillAdapterHandler
 {
 

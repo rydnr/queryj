@@ -50,7 +50,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractBasePerTableTemplate<C extends PerTableTemplateContext>
-    extends  AbstractTemplate<C>
+    extends AbstractQueryJTemplate<C>
     implements PerTableTemplate<C>
 {
     /**

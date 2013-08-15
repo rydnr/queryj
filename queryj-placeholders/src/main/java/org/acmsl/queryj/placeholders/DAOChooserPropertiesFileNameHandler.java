@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
 * Importing some JetBrains annotations.
@@ -60,17 +60,17 @@ import java.util.Locale;
 @ThreadSafe
 @SuppressWarnings("unused")
 public class DAOChooserPropertiesFileNameHandler
-    extends AbstractDecoratedStringHandler<TemplateContext>
+    extends AbstractDecoratedStringHandler<QueryJTemplateContext>
 {
 
     private static final long serialVersionUID = 9017942007372222265L;
 
     /**
      * Creates a new {@link DAOChooserPropertiesFileNameHandler} associated to given
-     * {@link TemplateContext}.
+     * {@link org.acmsl.queryj.api.QueryJTemplateContext}.
      * @param context the template.
      */
-    public DAOChooserPropertiesFileNameHandler(@NotNull final TemplateContext context)
+    public DAOChooserPropertiesFileNameHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -91,7 +91,7 @@ public class DAOChooserPropertiesFileNameHandler
      */
     @NotNull
     @Override
-    protected String resolveContextValue(@NotNull final TemplateContext context)
+    protected String resolveContextValue(@NotNull final QueryJTemplateContext context)
     {
         return context.getRepositoryName().toLowerCase(Locale.US) + "-queryj.properties";
     }

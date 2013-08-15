@@ -39,7 +39,7 @@ package org.acmsl.queryj.placeholders;
  * Importing some project classes.
  */
 import org.acmsl.queryj.api.NonRelevantFillHandler;
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -60,17 +60,17 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class HeaderHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, DecoratedString>
     implements NonRelevantFillHandler
 {
     private static final long serialVersionUID = -6297477975848530513L;
 
     /**
      * Creates a handler able to resolve "header" placeholders.
-     * @param context the {@link TemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public HeaderHandler(@NotNull final TemplateContext context)
+    public HeaderHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -88,12 +88,12 @@ public class HeaderHandler
 
     /**
      * Retrieves the template value for this placeholder.
-     * @param context the {@link TemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @return the dynamic value.
      */
     @Override
     @NotNull
-    protected DecoratedString getValue(@NotNull final TemplateContext context)
+    protected DecoratedString getValue(@NotNull final QueryJTemplateContext context)
     {
         @NotNull final String result;
 

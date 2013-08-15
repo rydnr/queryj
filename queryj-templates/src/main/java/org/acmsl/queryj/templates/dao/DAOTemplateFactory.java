@@ -69,7 +69,8 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Is able to create {@link DAOTemplate} instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
- * @since 2012/07/09
+ * @since 2.0
+ * Created: 2012/07/09
  */
 @ThreadSafe
 public class DAOTemplateFactory

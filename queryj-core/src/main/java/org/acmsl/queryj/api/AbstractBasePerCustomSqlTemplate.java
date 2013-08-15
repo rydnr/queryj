@@ -57,7 +57,7 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractBasePerCustomSqlTemplate<C extends PerCustomSqlTemplateContext>
-    extends  AbstractTemplate<C>
+    extends AbstractQueryJTemplate<C>
     implements PerCustomSqlTemplate<C>
 {
     /**

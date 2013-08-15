@@ -36,7 +36,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -56,17 +56,17 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class AreTimestampsAllowedHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, Boolean>
 {
     private static final long serialVersionUID = -3522961683638627590L;
 
     /**
      * Creates a {@link AreTimestampsAllowedHandler} to resolve placeholders
-     * using given {@link org.acmsl.queryj.api.TemplateContext context}.
-     * @param context the {@link org.acmsl.queryj.api.TemplateContext context}.
+     * using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public AreTimestampsAllowedHandler(@NotNull final TemplateContext context)
+    public AreTimestampsAllowedHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -84,12 +84,12 @@ public class AreTimestampsAllowedHandler
 
     /**
      * Retrieves whether to use generation timestamps in templates.
-     * @param context the {@link TemplateContext}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext}.
      * @return such information.
      */
     @NotNull
     @Override
-    protected Boolean getValue(@NotNull final TemplateContext context)
+    protected Boolean getValue(@NotNull final QueryJTemplateContext context)
     {
         return !context.getDisableGenerationTimestamps();
     }

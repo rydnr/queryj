@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -51,12 +51,12 @@ import org.jetbrains.annotations.NotNull;
  * @since 2012/05/24
  */
 @SuppressWarnings("unused")
-public class ClassNameHandler<C extends TemplateContext>
+public class ClassNameHandler<C extends QueryJTemplateContext>
     extends AbstractDecoratedStringHandler<C>
 {
     /**
-     * Creates a {@link ClassNameHandler} using given {@link TemplateContext context}.
-     * @param context the {@link TemplateContext context}.
+     * Creates a {@link ClassNameHandler} using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
     @SuppressWarnings("unused")
     protected ClassNameHandler(@NotNull final C context)
@@ -84,9 +84,9 @@ public class ClassNameHandler<C extends TemplateContext>
 
 
     /**
-     * Resolves the actual value using given {@link org.acmsl.queryj.api.TemplateContext context}.
+     * Resolves the actual value using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      *
-     * @param context the {@link org.acmsl.queryj.api.TemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @return such value.
      */
     @NotNull

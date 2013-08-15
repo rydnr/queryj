@@ -35,7 +35,7 @@
  */
 package org.acmsl.queryj.placeholders;
 
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -51,11 +51,11 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 @SuppressWarnings("unused")
 public class SerialVersionUIDHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext,Long>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext,Long>
 {
     private static final long serialVersionUID = -5163560123997499139L;
 
-    public SerialVersionUIDHandler(@NotNull final TemplateContext context)
+    public SerialVersionUIDHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -73,11 +73,11 @@ public class SerialVersionUIDHandler
 
     /**
      * Retrieves the template value for that placeholder.
-     * @param context the {@link TemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @return the dynamic value.
      */
     @Override
-    public Long getValue(@NotNull final TemplateContext context)
+    public Long getValue(@NotNull final QueryJTemplateContext context)
     {
         return (long) context.getTemplateName().hashCode();
     }

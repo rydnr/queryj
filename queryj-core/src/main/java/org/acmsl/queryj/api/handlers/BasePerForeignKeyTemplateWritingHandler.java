@@ -53,8 +53,9 @@ import java.io.File;
 
 /**
  * Writes <i>per-fk</i> templates.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public abstract class BasePerForeignKeyTemplateWritingHandler
     <T extends PerForeignKeyTemplate<C>,
      C extends PerForeignKeyTemplateContext,

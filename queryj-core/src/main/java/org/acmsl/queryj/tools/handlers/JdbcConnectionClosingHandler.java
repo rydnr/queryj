@@ -37,7 +37,8 @@ package org.acmsl.queryj.tools.handlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.api.Template;
+import org.acmsl.queryj.api.QueryJTemplate;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.api.exceptions.CannotCloseJdbcConnectionException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
@@ -62,6 +63,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.List;
@@ -83,6 +85,7 @@ public class JdbcConnectionClosingHandler
      * A token used to wait for the threads to complete.
      */
     private static final Object LOCK = new Object();
+
     protected static final String INTERRUPTED_WHILE_WAITING_FOR_THE_THREADS_TO_FINISH =
         "Interrupted while waiting for the threads to finish";
 
@@ -113,6 +116,33 @@ public class JdbcConnectionClosingHandler
     }
 
     /**
+     * Retrieves the generation tasks.
+     * @param parameters the parameter map.
+     * @return such list.
+     */
+    @NotNull
+    protected List<Future<? extends QueryJTemplate<QueryJTemplateContext>>> retrieveGenerationTasks(
+        @NotNull final QueryJCommand parameters)
+    {
+        @NotNull final List<Future<? extends QueryJTemplate<QueryJTemplateContext>>> result;
+
+        @Nullable final List<Future<? extends QueryJTemplate<QueryJTemplateContext>>> aux =
+            new QueryJCommandWrapper<List<Future<? extends QueryJTemplate<QueryJTemplateContext>>>>(parameters)
+                .getSetting(buildGenerationTasksKey());
+
+        if (aux == null)
+        {
+            result = new ArrayList<Future<? extends QueryJTemplate<QueryJTemplateContext>>>(0);
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
+    }
+
+    /**
      * Waits until all generation threads have finish.
      * @param parameters the parameters.
      */
@@ -130,9 +160,9 @@ public class JdbcConnectionClosingHandler
      * @param log the {@link Log} instance.
      */
     protected void waitUntilGenerationThreadsFinish(
-        @NotNull final List<Future<Template>> tasks, @Nullable final Log log)
+        @NotNull final List<Future<? extends QueryJTemplate<QueryJTemplateContext>>> tasks, @Nullable final Log log)
     {
-        for (@Nullable final Future<Template> t_Task : tasks)
+        for (@Nullable final Future<? extends QueryJTemplate<QueryJTemplateContext>> t_Task : tasks)
         {
             if (t_Task != null)
             {

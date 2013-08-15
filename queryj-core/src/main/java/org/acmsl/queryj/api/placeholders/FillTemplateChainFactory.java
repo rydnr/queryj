@@ -39,11 +39,12 @@ package org.acmsl.queryj.api.placeholders;
  * Importing project classes.
  */
 import org.acmsl.queryj.api.FillTemplateChain;
-import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.QueryJTemplateContext;
 
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.api.TemplateContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,7 +57,7 @@ public interface FillTemplateChainFactory<C extends TemplateContext>
 {
     /**
      * Creates {@link org.acmsl.queryj.api.FillTemplateChain} instances for given context.
-     * @param context the {@link TemplateContext} needed.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext} needed.
      * @return the FillTemplateChain, or <code>null</code> if the context is invalid.
      */
     @SuppressWarnings("unused")

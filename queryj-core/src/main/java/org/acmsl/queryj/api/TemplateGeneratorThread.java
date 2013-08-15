@@ -77,7 +77,7 @@ import org.checkthread.annotations.ThreadSafe;
  * @since 2012/07/10
  */
 @ThreadSafe
-public class TemplateGeneratorThread
+public abstract class TemplateGeneratorThread
     <T extends Template, TG extends TemplateGenerator<T>>
     extends Thread
 {
@@ -367,6 +367,18 @@ public class TemplateGeneratorThread
         return this.cyclicBarrier;
     }
 
+    /**
+     * Builds the log message when the generation has succeeded.
+     * @param template the template.
+     * @param threadIndex the index.
+     * @return the log message.
+     */
+    protected abstract String buildSuccessLogMessage(@NotNull final T template, final int threadIndex);
+
+    /**
+     * Runs the thread.
+     */
+    @Override
     @ThreadSafe
     public void run()
     {
@@ -432,8 +444,7 @@ public class TemplateGeneratorThread
         {
             if (log != null)
             {
-                log.debug(
-                    "Thread " + template.getTemplateContext().getTemplateName() + ":" + threadIndex + " finished");
+                log.debug(buildSuccessLogMessage(template, threadIndex));
             }
         }
 

@@ -67,7 +67,7 @@ import java.util.Collection;
  */
 @SuppressWarnings("unused")
 public abstract class AbstractBasePerForeignKeyTemplate<C extends PerForeignKeyTemplateContext>
-    extends  AbstractTemplate<C>
+    extends AbstractQueryJTemplate<C>
     implements PerForeignKeyTemplate<C>
 {
     /**

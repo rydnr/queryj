@@ -39,9 +39,9 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -61,16 +61,16 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class DAOSubpackageNameHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, String>
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, String>
 {
     private static final long serialVersionUID = -81347851565126388L;
 
     /**
-     * Creates a {@link DAOSubpackageNameHandler} using given {@link TemplateContext context}.
-     * @param context the {@link TemplateContext context}.
+     * Creates a {@link DAOSubpackageNameHandler} using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public DAOSubpackageNameHandler(@NotNull final TemplateContext context)
+    public DAOSubpackageNameHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
@@ -92,7 +92,7 @@ public class DAOSubpackageNameHandler
      */
     @NotNull
     @Override
-    protected String getValue(@NotNull final TemplateContext context)
+    protected String getValue(@NotNull final QueryJTemplateContext context)
     {
         return
             retrieveDAOSubpackageName(
@@ -101,14 +101,14 @@ public class DAOSubpackageNameHandler
 
     /**
      * Retrieves the subpackage name for the DAO classes.
-     * @param context the {@link TemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param packageUtils the {@link PackageUtils} instance.
      * @return such value.
      */
     @NotNull
     protected String retrieveDAOSubpackageName(
-        @NotNull final TemplateContext context,
+        @NotNull final QueryJTemplateContext context,
         @NotNull final MetadataManager metadataManager,
         @NotNull final PackageUtils packageUtils)
     {
