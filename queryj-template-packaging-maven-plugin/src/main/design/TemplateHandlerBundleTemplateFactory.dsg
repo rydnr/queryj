@@ -1,0 +1,6 @@
+- Create a new Java class TemplateHandlerBundleTemplateFactory in folder src/main/java/org/acmsl/queryj/templates/packaging/;
+- Add comment: Template factory used in the process to build QueryJ's Template HandlerBundle sources.;
+  - Make it implement TemplatePackagingTemplateFactory<TemplateHandlerBundleTemplate<TemplatePackagingContext>, TemplatePackagingContext>;
+- Create the overridden createTemplate(TemplatePackagingContext) method:
+  - Implement it by returning "new TemplateHandlerBundleTemplate(context)";
+- Fix import groups;
