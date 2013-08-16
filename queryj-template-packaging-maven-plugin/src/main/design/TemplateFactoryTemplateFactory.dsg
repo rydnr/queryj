@@ -1,7 +1,6 @@
 - Create a new Java class TemplateFactoryTemplateFactory in folder src/main/java/org/acmsl/queryj/templates/packaging/;
 - Add comment: Template factory used in the process to build QueryJ's TemplateFactory sources.;
-  - Add class parameter C to support any TemplatePackagingContext;
-  - Make it extend AbstractTemplatePackagingTemplate<C>;
+  - Make it extend TemplatePackagingTemplateFactory<TemplateFactoryTemplate<TemplatePackagingContext>, TemplatePackagingContext>;
 - Create the overridden createTemplate(TemplatePackagingContext) method:
   - Implement it by returning "new TemplateFactoryTemplate(context)";
 - Fix import groups;
