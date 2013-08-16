@@ -1,0 +1,11 @@
+- Create a new file TemplateGeneratorTemplate.java in folder src/main/java/org/acmsl/queryj/templates/packaging/;
+- Add comment: Template to build QueryJ's TemplateGenerator sources.;
+  - Add class parameter C to support any TemplatePackagingContext;
+  - Make it extend AbstractTemplatePackagingTemplate<C>;
+  - Create a constructor accepting a C parameter:
+    - Implement it by calling super(c);
+    - Add comment: Creates a TemplateGeneratorTemplate instance.;
+    - Add comment: @param context the {@link TemplatePackagingContext context}.;
+- Create the overridden getTemplateName() method:
+  - Implement it by returning "TemplateGenerator";
+- Fix import groups;

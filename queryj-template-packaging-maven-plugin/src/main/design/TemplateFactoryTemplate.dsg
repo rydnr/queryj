@@ -4,8 +4,8 @@
 - Make it extend AbstractTemplatePackagingTemplate<C>;
 - Create a constructor accepting a C parameter:
   - Implement it by calling super(c);
-  - Add comment: Creates a TemplateFactoryTemplate instance.
-  - Add comment: @param context the {@link TemplatePackagingContext context}.
+  - Add comment: Creates a TemplateFactoryTemplate instance.;
+  - Add comment: @param context the {@link TemplatePackagingContext context}.;
 - Create the overridden buildHeader() method:
   - Implement it by calling a functional version: buildHeader(getTemplateName());
 - Create the buildHeader(String) method:
