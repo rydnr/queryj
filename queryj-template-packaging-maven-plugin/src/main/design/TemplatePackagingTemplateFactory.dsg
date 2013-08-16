@@ -1,8 +1,10 @@
 - Create a new Java interface TemplatePackagingTemplateFactory.java in folder src/main/java/org/acmsl/queryj/templates/packaging/;
 - Add comment: Represents entities able to create Template Packaging-specific templates.;
-- Define a class parameter T extends TemplatePackagingTemplate;
+- Define a class parameter T extends TemplatePackagingTemplate<C>;
+- Define a class parameter C extends TemplatePackagingContext;
 - Make it extend org.acmsl.queryj.api.TemplateFactory;
-- Define an empty method @Nullable T createTemplate():
+- Define an empty method @Nullable T createTemplate(C):
   - Add comment: Generates a template.;
+  - Add comment: @param context the context.;
   - Add comment: @return such template.;
 - Fix import groups;

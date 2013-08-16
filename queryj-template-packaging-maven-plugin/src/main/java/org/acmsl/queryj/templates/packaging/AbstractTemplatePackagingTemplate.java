@@ -70,7 +70,8 @@ import org.stringtemplate.v4.STGroup;
 public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackagingContext>
     extends AbstractTemplate<C>
     implements STTemplate<C>,
-               TemplatePackagingSettings
+               TemplatePackagingSettings,
+               TemplatePackagingTemplate<C>
 {
     /**
      * Creates a new instance.
