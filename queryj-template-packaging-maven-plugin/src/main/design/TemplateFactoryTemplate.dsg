@@ -1,0 +1,32 @@
+- Create a new file: TemplateFactoryTemplate.java, in folder src/main/java/org/acmsl/queryj/templates/packaging/;
+- Add comment: Template to build QueryJ's TemplateFactory sources;
+- Add class parameter C to support any TemplatePackagingContext;
+- Make it extend AbstractTemplatePackagingTemplate<C>;
+- Create a constructor accepting a C parameter:
+  - Implement it by calling super(c);
+  - Add comment: Creates a TemplateFactoryTemplate instance.
+  - Add comment: @param context the {@link TemplatePackagingContext context}.
+- Create the overridden buildHeader() method:
+  - Implement it by calling a functional version: buildHeader(getTemplateName());
+- Create the buildHeader(String) method:
+  - Implement it by returning GENERATING + templateName;
+  - Add comment: Builds the header for logging purposes.;
+  - Add comment: @param templateName the template name.
+  - Add comment: @return such header.
+- Create the overridden getTemplateName() method:
+  - Implement it by returning "TemplateFactory";
+- Create the overridden buildInvalidTemplateException(..) method:
+  - return a new instance of InvalidTemplatePackagingTemplateException(getTemplateName(), cause);
+- Create the overridden retrieveTemplateGroup() method:
+  - return retrieveGroup(TEMPLATE_PACKAGING_GROUP + getTemplateName() + ".stg");
+- Move buildHeader() to AbstractTemplatePackagingTemplate;
+- Move buildHeader(String) to AbstractTemplatePackagingTemplate;
+- Move retrieveTemplateGroup() to AbstractTemplatePackagingTemplate;
+- Move buildInvalidTemplatePackagingTemplateException(..) to AbstractTemplatePackagingTemplate;
+- Remove buildHeader() in TemplateTemplate;
+- Remove buildHeader(String) in TemplateTemplate;
+- Remove retrieveTemplateGroup() in TemplateTemplate;
+- Remove buildTemplatePackagingTemplateException(..) in TemplateTemplate;
+- Fix import groups in TemplateFactoryTemplate;
+- Fix import groups in TemplateTemplate;
+- Fix import groups in AbstractTemplatePackagingTemplate;

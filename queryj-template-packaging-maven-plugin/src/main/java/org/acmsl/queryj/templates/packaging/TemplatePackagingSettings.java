@@ -38,7 +38,6 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing checkthread.org annotations.
  */
-import org.apache.maven.model.License;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
@@ -53,22 +52,22 @@ public interface TemplatePackagingSettings
     /**
      * The source folders.
      */
-    public static final String SOURCES = "sources";
+    String SOURCES = "sources";
 
     /**
      * The def files.
      */
-    public static final String DEF_FILES = "def_files";
+    String DEF_FILES = "def_files";
 
     /**
      * The template defs.
      */
-    public static final String TEMPLATE_DEFS = "template_defs";
+    String TEMPLATE_DEFS = "template_defs";
 
     /**
      * The header.
      */
-    public static final String TEMPLATE_PACKAGING_HEADER =
+    String TEMPLATE_PACKAGING_HEADER =
           "/*\n"
         + "                        QueryJ Template Packaging\n"
         + "\n"
@@ -90,4 +89,9 @@ public interface TemplatePackagingSettings
         + "\n"
         + "    Thanks to ACM S.L. for distributing this library under the GPL license.\n"
         + "    Contact info: jose.sanleandro@acm-sl.com\n";
+
+    /**
+     * The template packaging group.
+     */
+    String TEMPLATE_PACKAGING_GROUP = "org/acmsl/queryj/templates/packaging/";
 }

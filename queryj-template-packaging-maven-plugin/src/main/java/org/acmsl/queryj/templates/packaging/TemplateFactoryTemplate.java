@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: TemplateTemplate.java
+ * Filename: TemplateFactoryTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: A template used to generate QueryJ template classes.
+ * Description: Template to build QueryJ's TemplateFactory sources.
  *
- * Date: 2013/08/15
- * Time: 07:49
+ * Date: 2013/08/16
+ * Time: 08:59
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -46,33 +46,32 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * A template used to generate QueryJ {@link org.acmsl.queryj.api.Template} classes.
+ * Template to build QueryJ's TemplateFactory sources.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/15 07:49
+ * Created: 2013/08/16 08/59
  */
 @ThreadSafe
-public class TemplateTemplate<C extends TemplatePackagingContext>
+public class TemplateFactoryTemplate<C extends TemplatePackagingContext>
     extends AbstractTemplatePackagingTemplate<C>
 {
     /**
-     * Builds an <code>TemplateTemplate</code> using given
-     * information.
-     * @param context the {@link TemplatePackagingContext} instance.
+     * Creates a TemplateFactoryTemplate instance.
+     * @param context the {@link TemplatePackagingContext context}.
      */
-    protected TemplateTemplate(@NotNull final C context)
+    public TemplateFactoryTemplate(@NotNull final C context)
     {
         super(context);
     }
 
     /**
      * Retrieves the template name.
-     * @return such information.
+     * @return such name.
      */
     @NotNull
     @Override
     public String getTemplateName()
     {
-        return TEMPLATE_LITERAL;
+        return "TemplateFactory";
     }
 }
