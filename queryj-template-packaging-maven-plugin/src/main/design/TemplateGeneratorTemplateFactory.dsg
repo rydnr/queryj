@@ -1,6 +1,6 @@
 - Create a new Java class TemplateGeneratorTemplateFactory in folder src/main/java/org/acmsl/queryj/templates/packaging/;
 - Add comment: Template factory used in the process to build QueryJ's TemplateGenerator sources.;
-  - Make it extend TemplatePackagingTemplateFactory<TemplateGeneratorTemplate<TemplatePackagingContext>, TemplatePackagingContext>;
+  - Make it implement TemplatePackagingTemplateFactory<TemplateGeneratorTemplate<TemplatePackagingContext>, TemplatePackagingContext>;
 - Create the overridden createTemplate(TemplatePackagingContext) method:
   - Implement it by returning "new TemplateGeneratorTemplate(context)";
 - Fix import groups;
