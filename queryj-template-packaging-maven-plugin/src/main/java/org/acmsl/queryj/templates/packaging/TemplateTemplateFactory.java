@@ -23,15 +23,15 @@
 
  ******************************************************************************
  *
- * Filename: TemplateFactoryTemplateFactory.java
+ * Filename: TemplateTemplateFactory.java
  *
  * Author: Jose San Leandro Armendariz
  *
  * Description: Template factory used in the process to build QueryJ's
- *              TemplateFactory sources.
+ *              Template sources.
  *
  * Date: 2013/08/16
- * Time: 10:11
+ * Time: 11:04
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -40,7 +40,6 @@ package org.acmsl.queryj.templates.packaging;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -48,15 +47,14 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Template factory used in the process to build QueryJ's
- * TemplateFactory sources.
+ * Template factory used in the process to build QueryJ's Template sources.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/16 10/11
+ * Created: 2013/08/16 11/04
  */
 @ThreadSafe
-public class TemplateFactoryTemplateFactory
-    implements TemplatePackagingTemplateFactory<TemplateFactoryTemplate<TemplatePackagingContext>, TemplatePackagingContext>
+public class TemplateTemplateFactory
+    implements TemplatePackagingTemplateFactory<TemplateTemplate<TemplatePackagingContext>, TemplatePackagingContext>
 {
     /**
      * Generates a template.
@@ -64,9 +62,9 @@ public class TemplateFactoryTemplateFactory
      */
     @NotNull
     @Override
-    public TemplateFactoryTemplate<TemplatePackagingContext> createTemplate(
+    public TemplateTemplate<TemplatePackagingContext> createTemplate(
         @NotNull final TemplatePackagingContext context)
     {
-        return new TemplateFactoryTemplate<TemplatePackagingContext>(context);
+        return new TemplateTemplate<TemplatePackagingContext>(context);
     }
 }
