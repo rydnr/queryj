@@ -1,0 +1,5 @@
+- Create a new Java interface TemplatePackagingTemplate.java in folder src/main/java/org/acmsl/queryj/templates/packaging/;
+- Add comment: Identifies Template Packaging-specific templates.;
+- Define a class parameter C extends TemplatePackagingContext;
+- Make it extend Template<C>;
+- Fix import groups;

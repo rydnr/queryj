@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Base logic for all per-table templates.
+ * Description: Identifies all per-table templates.
  *
  */
 package org.acmsl.queryj.api;
@@ -48,7 +48,7 @@ import org.stringtemplate.v4.ST;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Base logic for all per-table templates.
+ * Identifies all per-table templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface PerTableTemplate<C extends PerTableTemplateContext>
