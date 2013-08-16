@@ -1,0 +1,6 @@
+- Create a new Java class TemplateWritingHandlerTemplateFactory in folder src/main/java/org/acmsl/queryj/templates/packaging/;
+- Add comment: Template factory used in the process to build QueryJ's Template WritingHandler sources.;
+  - Make it implement TemplatePackagingTemplateFactory<TemplateWritingHandlerTemplate<TemplatePackagingContext>, TemplatePackagingContext>;
+- Create the overridden createTemplate(TemplatePackagingContext) method:
+  - Implement it by returning "new TemplateWritingHandlerTemplate(context)";
+- Fix import groups;
