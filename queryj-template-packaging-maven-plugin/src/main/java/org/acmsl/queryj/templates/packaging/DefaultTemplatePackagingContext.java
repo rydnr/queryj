@@ -73,6 +73,16 @@ public class DefaultTemplatePackagingContext
     @NotNull
     private String m__strPackageName;
 
+    public DefaultTemplatePackagingContext(
+        @NotNull final String templateName,
+        @NotNull final String fileName,
+        @NotNull final String packageName)
+    {
+        immutableSetTemplateName(templateName);
+        immutableSetFileName(fileName);
+        immutableSetPackageName(packageName);
+    }
+
     /**
      * Specifies the name of the template.
      * @param templateName such name.
