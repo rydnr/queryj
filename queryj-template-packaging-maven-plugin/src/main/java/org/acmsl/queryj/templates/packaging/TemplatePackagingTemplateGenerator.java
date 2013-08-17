@@ -40,11 +40,18 @@ package org.acmsl.queryj.templates.packaging;
  * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
+import org.acmsl.queryj.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Base class for all Template Packaging-specific template generators.
@@ -53,7 +60,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Created: 2013/08/17 10/09
  */
 @ThreadSafe
-public abstract class TemplatePackagingTemplateGenerator
+public class TemplatePackagingTemplateGenerator
     <T extends TemplatePackagingTemplate<C>, C extends TemplatePackagingContext>
     extends AbstractTemplateGenerator<T>
 {
@@ -65,5 +72,16 @@ public abstract class TemplatePackagingTemplateGenerator
     protected TemplatePackagingTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
+    }
+
+    /**
+     * Retrieves the {@link DecoratorFactory} instance.
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
     }
 }

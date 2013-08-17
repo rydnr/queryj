@@ -144,11 +144,4 @@ public interface QueryJTemplateContext
      * @return such setting.
      */
     boolean getDisableCheckthreadAnnotations();
-
-    /**
-     * Retrieves the file name.
-     * @return such instance.
-     */
-    @NotNull
-    String getFileName();
 }

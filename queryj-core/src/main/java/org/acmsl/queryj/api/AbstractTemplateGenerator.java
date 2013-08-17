@@ -163,6 +163,36 @@ public abstract class AbstractTemplateGenerator<N extends Template<? extends Tem
         return m__iThreadCount;
     }
 
+
+    /**
+     * Writes a table template to disk.
+     * @param template the table template to write.
+     * @param outputDir the output folder.
+     * @param rootFolder the root folder.
+     * @param charset the file encoding.
+     * @throws IOException if the file cannot be created.
+     * @throws QueryJBuildException if the generation process fails.
+     */
+    @Override
+    public boolean write(
+        @NotNull final N template,
+        @NotNull final File outputDir,
+        @NotNull final File rootFolder,
+        @NotNull final Charset charset)
+        throws  IOException,
+        QueryJBuildException
+    {
+        return
+            write(
+                isCaching(),
+                template,
+                template.getTemplateContext().getFileName(),
+                outputDir,
+                rootFolder,
+                charset,
+                FileUtils.getInstance());
+    }
+
     /**
      * Writes a table template to disk.
      * @param caching whether to use caching or not.

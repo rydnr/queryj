@@ -59,4 +59,11 @@ public interface TemplateContext
      */
     @NotNull
     String getTemplateName();
+
+    /**
+     * Retrieves the file name.
+     * @return such instance.
+     */
+    @NotNull
+    String getFileName();
 }

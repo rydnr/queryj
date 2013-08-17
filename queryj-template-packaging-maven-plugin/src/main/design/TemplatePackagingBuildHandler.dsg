@@ -1,0 +1,23 @@
+- Create a new Java abstract class TemplatePackagingBuildHandler in folder src/main/java/org/acmsl/queryj/templates/packaging/handlers;
+- Add comment: Base build handler for Template Packaging templates.;
+  - Make it implement QueryJCommandHandler<QueryJCommand>;
+  - Make it implement TemplatePackagingSettings;
+- Create the method retrieveHeader(QueryJCommand):
+  - Add comment: Retrieves the header.;
+  - Add comment: @param command the command.;
+  - Add comment: @return the header.;
+  - Add @SuppressWarnings("unused") to the command parameter.;
+  - Implement it by returning TEMPLATE_PACKAGING_HEADER;
+- Create the method retrieveCaching(QueryJCommand):
+  - Add comment: Returns whether the generated content will be cached.
+  - Add comment: @param command the command.
+  - Add comment: @return always {@code false}.
+  - Add @SuppressWarnings("unused") to the command parameter.;
+  - Implement it by returning false;;
+- Create the method retrieveThreadCount(QueryJCommand);
+  - Add comment: Retrieves the number of threads to use in the generation process.
+  - Add comment: @param command the command.
+  - Add comment: @return the number of available processors.
+  - Add @SuppressWarnings("unused") to the command parameter.;
+  - Implement it by returning Runtime.getRuntime().availableProcessors();;
+- Fix import groups;

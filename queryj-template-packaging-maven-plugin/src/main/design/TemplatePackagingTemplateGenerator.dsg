@@ -7,4 +7,6 @@
  - Add comment: @param caching whether the generated content is being cached or not.;
  - Add comment: @param threadCount the number of threads to use.;
  - Implement the constructor by calling super(caching, threadCount);;
+- Implement the getDecoratorFactory() method:
+ - Make it return CachingDecoratorFactory.getInstance();
 - Fix import groups;
