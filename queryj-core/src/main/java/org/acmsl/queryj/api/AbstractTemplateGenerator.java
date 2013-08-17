@@ -29,6 +29,8 @@
  *
  * Description: Common logic for template generators.
  *
+ * Date: 2013/08/17
+ * Time: 10:26
  */
 package org.acmsl.queryj.api;
 
@@ -36,8 +38,6 @@ package org.acmsl.queryj.api;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.api.exceptions.Sha256NotSupportedException;
-import org.acmsl.queryj.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
@@ -76,12 +76,15 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Common logic for template generators.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @since 3.0
+ * Created: 2013/08/17 10:26
  */
 @ThreadSafe
-public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? extends QueryJTemplateContext>>
+public abstract class AbstractTemplateGenerator<N extends Template<? extends TemplateContext>>
     implements TemplateGenerator<N>
 {
     protected static final String CANNOT_SERIALIZE_TEMPLATE_LITERAL = "Cannot serialize template ";
+
     /**
      * Whether to enable template caching.
      */
@@ -161,46 +164,6 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    @Override
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
-    }
-
-    /**
-     * Writes a table template to disk.
-     * @param template the table template to write.
-     * @param outputDir the output folder.
-     * @param rootFolder the root folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @throws QueryJBuildException if the generation process fails.
-     */
-    @Override
-    public boolean write(
-        @NotNull final N template,
-        @NotNull final File outputDir,
-        @NotNull final File rootFolder,
-        @NotNull final Charset charset)
-        throws  IOException,
-                QueryJBuildException
-    {
-        return
-            write(
-                isCaching(),
-                template,
-                template.getTemplateContext().getFileName(),
-                outputDir,
-                rootFolder,
-                charset,
-                FileUtils.getInstance());
-    }
-
-    /**
      * Writes a table template to disk.
      * @param caching whether to use caching or not.
      * @param template the table template to write.
@@ -208,7 +171,7 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
      * @param outputDir the output folder.
      * @param rootFolder the root folder.
      * @param charset the file encoding.
-     * @param fileUtils the {@link FileUtils} instance.
+     * @param fileUtils the {@link org.acmsl.commons.utils.io.FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @throws QueryJBuildException if the generation process fails.
      */
@@ -220,8 +183,7 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
         @NotNull final File rootFolder,
         @NotNull final Charset charset,
         @NotNull final FileUtils fileUtils)
-        throws  IOException,
-                QueryJBuildException
+        throws IOException, QueryJBuildException
     {
         return
             generate(
@@ -232,7 +194,7 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
                 rootFolder,
                 charset,
                 fileUtils,
-                UniqueLogFactory.getLog(AbstractTemplateGenerator.class));
+                UniqueLogFactory.getLog(AbstractQueryJTemplateGenerator.class));
     }
 
     /**
@@ -255,8 +217,7 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
         @NotNull final Charset charset,
         @NotNull final FileUtils fileUtils,
         @Nullable final Log log)
-        throws IOException,
-        QueryJBuildException
+        throws IOException, QueryJBuildException
     {
         boolean result = false;
 
@@ -277,7 +238,7 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
             if (result)
             {
                 @NotNull final String t_strOutputFile =
-                      outputDir.getAbsolutePath()
+                    outputDir.getAbsolutePath()
                     + File.separator
                     + fileName;
 
@@ -285,12 +246,13 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
                 {
                     serializeTemplate(
                         template,
-                        getOutputDir(outputDir, rootFolder).getAbsolutePath() + File.separator + "." + fileName + ".ser");
+                        getOutputDir(outputDir, rootFolder)
+                            .getAbsolutePath() + File.separator + "." + fileName + ".ser");
                 }
 
                 @Nullable final String t_strFileContents = template.generate(false);
 
-                if  (!"".equals(t_strFileContents))
+                if (!"".equals(t_strFileContents))
                 {
                     final boolean folderCreated = outputDir.mkdirs();
 
@@ -306,7 +268,7 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
                             && (log.isDebugEnabled()))
                         {
                             log.debug(
-                                  "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
+                                "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
                                 + t_strOutputFile);
                         }
                     }
@@ -324,7 +286,7 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
                 else
                 {
                     if (   (log != null)
-                           && (log.isDebugEnabled()))
+                        && (log.isDebugEnabled()))
                     {
                         log.debug(
                             "Not writing " + t_strOutputFile + " since the generated content is empty");
@@ -338,9 +300,9 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
 
     /**
      * Tries to read the hash from disk.
-     * @param fileName the file name.
+     * @param fileName  the file name.
      * @param outputDir the output folder.
-     * @param fileUtils the {@link FileUtils} instance.
+     * @param fileUtils the {@link org.acmsl.commons.utils.io.FileUtils} instance.
      * @return the hash, if found.
      */
     @Nullable
@@ -415,7 +377,7 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
         catch (@NotNull IOException cannotSerialize)
         {
             @Nullable final Log t_Log =
-                UniqueLogFactory.getLog(AbstractTemplateGenerator.class);
+                UniqueLogFactory.getLog(AbstractQueryJTemplateGenerator.class);
 
             if (t_Log != null)
             {
@@ -435,13 +397,13 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
                 catch (@NotNull final IOException cannotCloseCacheFile)
                 {
                     @Nullable final Log t_Log =
-                        UniqueLogFactory.getLog(AbstractTemplateGenerator.class);
+                        UniqueLogFactory.getLog(AbstractQueryJTemplateGenerator.class);
 
                     if (t_Log != null)
                     {
                         t_Log.warn(
                             CANNOT_SERIALIZE_TEMPLATE_LITERAL + outputFilePath + " (" + cannotCloseCacheFile + ")",
-                        cannotCloseCacheFile);
+                            cannotCloseCacheFile);
                     }
                 }
             }
@@ -546,12 +508,13 @@ public abstract class AbstractTemplateGenerator<N extends QueryJTemplate<? exten
         return result.toString();
     }
 
+    @NotNull
     @Override
     public String toString()
     {
         return "{ 'class': 'AbstractTemplateGenerator', " +
-               " 'caching': " + m__bCaching +
-               ", 'threadCount':" + m__iThreadCount +
-               '}';
+               ", 'caching': '" + m__bCaching + '\'' +
+               ", 'threadCount': " + m__iThreadCount +
+               " }";
     }
 }
