@@ -1,7 +1,20 @@
 - Create a new Java abstract class TemplatePackagingBuildHandler in folder src/main/java/org/acmsl/queryj/templates/packaging/handlers;
 - Add comment: Base build handler for Template Packaging templates.;
+  - Add class parameters:
+    - T extends TemplatePackagingTemplate<C>;
+    - TF extends TemplatePackagingTemplateFactory<T, C>;
+    - C extends TemplatePackagingContext;
   - Make it implement QueryJCommandHandler<QueryJCommand>;
   - Make it implement TemplatePackagingSettings;
+- Implement a default constructor.
+- Override the handle(QueryJCommand) method:
+  - Call buildTemplates(parameters);
+  - return false;
+- Create a method buildTemplate(QueryJCommand):
+  - call buildTemplate(parameters, retrieneTemplateFactory());;
+- Create a method buildTemplate(QueryJCommand, TF):
+  - Build a context;
+  - call TF.createTemplate(context);
 - Create the method retrieveHeader(QueryJCommand):
   - Add comment: Retrieves the header.;
   - Add comment: @param command the command.;

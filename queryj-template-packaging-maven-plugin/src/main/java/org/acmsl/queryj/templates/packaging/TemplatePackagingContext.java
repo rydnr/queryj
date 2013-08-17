@@ -62,4 +62,10 @@ import org.checkthread.annotations.ThreadSafe;
 public interface TemplatePackagingContext
     extends TemplateContext
 {
+    /**
+     * Retrieves the package name.
+     * @return such information.
+     */
+    @NotNull
+    public String getPackageName();
 }

@@ -94,4 +94,9 @@ public interface TemplatePackagingSettings
      * The template packaging group.
      */
     String TEMPLATE_PACKAGING_GROUP = "org/acmsl/queryj/templates/packaging/";
+
+    /**
+     * The project package key.
+     */
+    String PROJECT_PACKAGE = "project.package";
 }
