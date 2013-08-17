@@ -1,0 +1,10 @@
+- Create a new abstract Java class TemplatePackagingTemplateGenerator, in folder src/main/java/org/acmsl/queryj/templates/packaging/;
+- Add comment: Base class for all Template Packaging-specific template generators.;
+- Add a class parameter: <T extends TemplatePackagingTemplate<C>, C extends TemplatePackagingContext>;
+- Make it extend AbstractTemplateGenerator<T>;
+- Implement the constructor TemplatePackagingTemplateGenerator(boolean, int):
+ - Add comment: Creates a new TemplatePackagingTemplateGenerator instance.
+ - Add comment: @param caching whether the generated content is being cached or not.;
+ - Add comment: @param threadCount the number of threads to use.;
+ - Implement the constructor by calling super(caching, threadCount);;
+- Fix import groups;

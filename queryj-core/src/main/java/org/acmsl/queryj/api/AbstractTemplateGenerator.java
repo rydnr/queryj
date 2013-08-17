@@ -421,14 +421,13 @@ public abstract class AbstractTemplateGenerator<N extends Template<? extends Tem
     {
         @NotNull File result = outputDir;
 
-        final String rootPath = rootFolder.getAbsolutePath();
-        String outputPath = outputDir.getAbsolutePath();
+        @NotNull final String rootPath = rootFolder.getAbsolutePath();
+        @NotNull final String outputPath = outputDir.getAbsolutePath();
 
         if (outputPath.startsWith(rootPath))
         {
-            outputPath = rootPath + File.separator + ".queryj" + outputPath.substring(rootPath.length());
-
-            result = new File(outputPath);
+            result =
+                new File(rootPath + File.separator + ".queryj" + outputPath.substring(rootPath.length()));
 
             if (   (!result.exists())
                 && (!result.mkdirs()))
@@ -470,24 +469,24 @@ public abstract class AbstractTemplateGenerator<N extends Template<? extends Tem
         @NotNull final String relevantContent, @NotNull final Charset charset)
         throws QueryJBuildException
     {
-        @NotNull final byte[] content = relevantContent.getBytes(charset);
+        @NotNull final byte[] result;
 
-        byte[] buffer = new byte[content.length];
+        @NotNull final byte[] content = relevantContent.getBytes(charset);
 
         try
         {
             @NotNull final MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-            md.update(content, 0, buffer.length);
+            md.update(content, 0, content.length);
 
-            buffer = md.digest();
+            result = md.digest();
         }
         catch (@NotNull final NoSuchAlgorithmException e)
         {
             throw new Sha256NotSupportedException(e);
         }
 
-        return toHex(buffer);
+        return toHex(result);
     }
 
     /**
@@ -512,7 +511,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<? extends Tem
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractTemplateGenerator', " +
+        return "{ 'class': 'AbstractTemplateGenerator' " +
                ", 'caching': '" + m__bCaching + '\'' +
                ", 'threadCount': " + m__iThreadCount +
                " }";
