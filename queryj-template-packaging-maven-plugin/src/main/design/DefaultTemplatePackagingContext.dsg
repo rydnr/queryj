@@ -1,6 +1,10 @@
 - Create a new Java class DefaultTemplatePackagingContext, in folder src/main/java/org/acmsl/queryj/templates/packaging/;
 - Add comment: Default implementation for TemplatePackagingContext.;
 - Make it implement TemplatePackagingContext.;
+- Create a class member: String templateDef;
+- Create immutable setter for templateDef;
+- Create setter for templateDef;
+- Create getter for templateDef;
 - Create a class member: String templateName;
 - Create immutable setter for templateName;
 - Create setter for templateName;
@@ -9,9 +13,5 @@
 - Create immutable setter for fileName;
 - Create setter for fileName;
 - Create getter for fileName;
-- Create a class member: String packageName;
-- Create immutable setter for packageName;
-- Create setter for packageName;
-- Create getter for packageName;
-- Create a constructor expecting templateName, fileName and packageName.;
+- Create a constructor expecting templateDef, templateName and fileName.;
 - Override toString();

@@ -56,6 +56,12 @@ public class DefaultTemplatePackagingContext
     implements TemplatePackagingContext
 {
     /**
+     * The template def.
+     */
+    @NotNull
+    private TemplateDef m__TemplateDef;
+
+    /**
      * The template name.
      */
     @NotNull
@@ -68,19 +74,48 @@ public class DefaultTemplatePackagingContext
     private String m__strFileName;
 
     /**
-     * The package name.
+     * Creates a new instance.
+     * @param templateDef the template def.
+     * @param templateName the template name.
+     * @param fileName the file name.
      */
-    @NotNull
-    private String m__strPackageName;
-
     public DefaultTemplatePackagingContext(
+        @NotNull final TemplateDef templateDef,
         @NotNull final String templateName,
-        @NotNull final String fileName,
-        @NotNull final String packageName)
+        @NotNull final String fileName)
     {
+        immutableSetTemplateDef(templateDef);
         immutableSetTemplateName(templateName);
         immutableSetFileName(fileName);
-        immutableSetPackageName(packageName);
+    }
+
+    /**
+     * Specifies the template def.
+     * @param templateDef the template def.
+     */
+    protected final void immutableSetTemplateDef(@NotNull final TemplateDef templateDef)
+    {
+        this.m__TemplateDef = templateDef;
+    }
+
+    /**
+     * Specifies the template def.
+     * @param templateDef the template def.
+     */
+    @SuppressWarnings("unused")
+    protected void setTemplateDef(@NotNull final TemplateDef templateDef)
+    {
+        immutableSetTemplateDef(templateDef);
+    }
+
+    /**
+     * Retrieves the template def.
+     * @return such instance.
+     */
+    @NotNull
+    public TemplateDef getTemplateDef()
+    {
+        return this.m__TemplateDef;
     }
 
     /**
@@ -144,25 +179,6 @@ public class DefaultTemplatePackagingContext
     }
 
     /**
-     * Specifies the package name.
-     * @param packageName such value.
-     */
-    protected final void immutableSetPackageName(@NotNull final String packageName)
-    {
-        this.m__strPackageName = packageName;
-    }
-
-    /**
-     * Specifies the package name.
-     * @param packageName such value.
-     */
-    @SuppressWarnings("unused")
-    protected void setPackageName(@NotNull final String packageName)
-    {
-        immutableSetPackageName(packageName);
-    }
-
-    /**
      * Retrieves the package name.
      * @return such information.
      */
@@ -170,7 +186,17 @@ public class DefaultTemplatePackagingContext
     @NotNull
     public String getPackageName()
     {
-        return this.m__strPackageName;
+        return getPackageName(getTemplateDef());
+    }
+
+    /**
+     * Retrieves the package name.
+     * @return such information.
+     */
+    @NotNull
+    protected String getPackageName(@NotNull final TemplateDef templateDef)
+    {
+        return templateDef.getPackageName();
     }
 
     @NotNull
@@ -180,6 +206,6 @@ public class DefaultTemplatePackagingContext
         return "{ 'class': 'DefaultTemplatePackagingContext' " +
                ", 'fileName': '" + m__strFileName + '\'' +
                ", 'templateName': '" + m__strTemplateName + '\'' +
-               ", 'packageName': '" + m__strPackageName + "' }";
+               ", 'templateDef': " + m__TemplateDef + " }";
     }
 }
