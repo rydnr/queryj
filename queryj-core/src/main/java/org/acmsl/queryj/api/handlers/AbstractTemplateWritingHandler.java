@@ -96,6 +96,10 @@ public abstract class AbstractTemplateWritingHandler
      * The database product name entry.
      */
     public static final String PRODUCT_NAME = "L.:ProductName::.@";
+
+    /**
+     * A literal.
+     */
     public static final String BROKEN_BARRIER_LITERAL = "Broken barrier";
 
     /**
@@ -307,7 +311,7 @@ public abstract class AbstractTemplateWritingHandler
      * @return the thread.
      */
     @NotNull
-    protected abstract TemplateGeneratorThread<T, TG> buildGeneratorThread(
+    protected abstract TemplateGeneratorThread<T, TG, C> buildGeneratorThread(
         @NotNull final T template,
         @NotNull final TG generator,
         @NotNull final File outputDir,

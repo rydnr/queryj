@@ -36,24 +36,28 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.QueryJTemplate;
 import org.acmsl.queryj.api.QueryJTemplateContext;
-import org.acmsl.queryj.api.QueryJTemplateGeneratorThread;
-import org.acmsl.queryj.api.Template;
-import org.acmsl.queryj.api.TemplateContext;
-import org.acmsl.queryj.api.TemplateGenerator;
 import org.acmsl.queryj.api.TemplateGeneratorThread;
+import org.acmsl.queryj.api.TemplateGenerator;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.concurrent.CyclicBarrier;
@@ -83,7 +87,7 @@ public abstract class AbstractQueryJTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected TemplateGeneratorThread<T, TG> buildGeneratorThread(
+    protected TemplateGeneratorThread<T, TG, C> buildGeneratorThread(
         @NotNull final T template,
         @NotNull final TG generator,
         @NotNull final File outputDir,
@@ -94,7 +98,7 @@ public abstract class AbstractQueryJTemplateWritingHandler
         @NotNull final QueryJCommand parameters)
     {
         return
-            new QueryJTemplateGeneratorThread<T, TG, C>(
+            new TemplateGeneratorThread<T, TG, C>(
                 generator, template, outputDir, rootDir, charset, threadIndex + 1, barrier);
     }
 }
