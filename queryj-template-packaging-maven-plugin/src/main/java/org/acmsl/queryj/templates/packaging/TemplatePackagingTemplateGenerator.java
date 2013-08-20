@@ -69,7 +69,7 @@ public class TemplatePackagingTemplateGenerator
      * @param caching whether the generated content is being cached or not.
      * @param threadCount the number of threads to use.
      */
-    protected TemplatePackagingTemplateGenerator(final boolean caching, final int threadCount)
+    public TemplatePackagingTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
     }
