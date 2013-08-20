@@ -91,7 +91,7 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
     @Override
     protected String getHeader(@NotNull final C context)
     {
-        return TEMPLATE_PACKAGING_HEADER;
+        return "";
     }
 
     /**

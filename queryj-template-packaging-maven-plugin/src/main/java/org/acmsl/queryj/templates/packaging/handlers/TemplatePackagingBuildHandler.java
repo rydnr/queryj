@@ -186,7 +186,7 @@ public abstract class TemplatePackagingBuildHandler
             new DefaultTemplatePackagingContext(
                 templateDef,
                 retrieveTemplateName(parameters),
-                retrieveFileName(parameters));
+                templateDef.getFile().getAbsolutePath());
     }
 
     /**
@@ -213,6 +213,7 @@ public abstract class TemplatePackagingBuildHandler
 
         return result;
     }
+
     /**
      * Retrieves the template name, using the parameters if necessary.
      * @param parameters the parameters.
@@ -220,14 +221,6 @@ public abstract class TemplatePackagingBuildHandler
      */
     @NotNull
     protected abstract String retrieveTemplateName(@NotNull final QueryJCommand parameters);
-
-    /**
-     * Retrieves the file name, using the parameters if necessary.
-     * @param parameters the parameters.
-     * @return the file name.
-     */
-    @NotNull
-    protected abstract String retrieveFileName(@NotNull final QueryJCommand parameters);
 
     /**
      * Stores the templates in given attribute map.

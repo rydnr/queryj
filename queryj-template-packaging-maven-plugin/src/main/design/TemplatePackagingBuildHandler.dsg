@@ -20,14 +20,13 @@
     - Otherwise, add the template to the list of templates to return;
 - Create a method retrieveTemplateDefs(QueryJCommand);
 - Create a method buildTemplate(QueryJCommand):
-  - call buildTemplate(retrieneTemplateFactory(), buildContext(templateDef, parameters));;
+  - call buildTemplate(retrieveTemplateFactory(), buildContext(templateDef, parameters));;
 - Create a method buildTemplate(TF, C):
   - call factory.createTemplate(context);
 - Declare a new abstract method TF retrieveTemplateFactory();
 - Declare a new abstract method C buildContext(TemplateDef, QueryJCommand);
 - Declare a new abstract method storeTemplates(List<T>, QueryJCommand),
 - Declare a new abstract method retrieveTemplateName(QueryJCommand);
-- Declare a new abstract method retrieveFileName(QueryJCommand);
 - Implement a new method DefaultTemplatePackagingContext buildDefaultContext(TemplateDef, QueryJCommand):
-  - Return a new DefaultTemplatePackagingContext passing templateDef, retrieveTemplateFileName(parameters), and retrieveFileName(parameters);
+  - Return a new DefaultTemplatePackagingContext passing templateDef, retrieveTemplateFileName(parameters), and templateDef.getFile().getAbsolutePath();
 - Fix import groups;

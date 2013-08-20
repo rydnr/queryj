@@ -68,4 +68,9 @@ public interface TemplatePackagingSettings
      * The template packaging group.
      */
     String TEMPLATE_PACKAGING_GROUP = "org/acmsl/queryj/templates/packaging/";
+
+    /*
+     * The key to access the template build handler templates.
+     */
+    String TEMPLATE_BUILD_HANDLER_TEMPLATES = "template_build_handler_templates";
 }
