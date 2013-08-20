@@ -63,6 +63,7 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -186,7 +187,8 @@ public abstract class TemplatePackagingBuildHandler
             new DefaultTemplatePackagingContext(
                 templateDef,
                 retrieveTemplateName(parameters),
-                templateDef.getFile().getAbsolutePath());
+                templateDef.getFile().getAbsolutePath(),
+                retrieveOutputDir(parameters));
     }
 
     /**
@@ -229,4 +231,23 @@ public abstract class TemplatePackagingBuildHandler
      */
     protected abstract void storeTemplates(
         @NotNull final List<T> templates, @NotNull final QueryJCommand parameters);
+
+    /**
+     * Retrieves the output dir.
+     * @param parameters the parameters.
+     * @return the output dir.
+     */
+    @NotNull
+    public File retrieveOutputDir(@NotNull final QueryJCommand parameters)
+    {
+        @Nullable final File result = new QueryJCommandWrapper<File>(parameters).getSetting(OUTPUT_DIR);
+
+        if (result == null)
+        {
+            // TODO
+            throw new RuntimeException("Output dir missing");
+        }
+
+        return result;
+    }
 }

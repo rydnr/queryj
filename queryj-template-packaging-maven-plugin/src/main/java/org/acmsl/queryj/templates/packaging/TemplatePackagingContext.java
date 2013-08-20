@@ -51,6 +51,8 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+import java.io.File;
+
 /**
  * Contains the context information required to build
  * Template Packaging-specific templates.
@@ -68,4 +70,18 @@ public interface TemplatePackagingContext
      */
     @NotNull
     public String getPackageName();
+
+    /**
+     * Retrieves the template def.
+     * @return such instance.
+     */
+    @NotNull
+    public TemplateDef getTemplateDef();
+
+    /**
+     * Retrieves the output dir.
+     * @return such folder.
+     */
+    @NotNull
+    public File getOutputDir();
 }

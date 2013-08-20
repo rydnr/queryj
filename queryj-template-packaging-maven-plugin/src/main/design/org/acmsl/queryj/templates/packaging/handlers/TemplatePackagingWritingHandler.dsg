@@ -1,0 +1,13 @@
+- Create a new Java abstract class TemplatePackagingWritingHandler in package org.acmsl.queryj.templates.packaging;
+- Add comment: Base writing handler for Template Packaging templates.;
+- Add class parameters:
+  - T extends TemplatePackagingTemplate<C>;
+  - TF extends TemplatePackagingTemplateGenerator<T, C>;
+  - C extends TemplatePackagingContext;
+- Make it extend AbstractTemplateWritingHandler<C, TG, C>;
+- Make it implement TemplatePackagingSettings;
+- Implement a default constructor;
+- Override the buildGeneratorThread(..) method:
+  - return new TemplatePackagingGeneratorThread instance;
+- Override retrieveOutputDir(..) method:
+  - return context.getOutputDir();;

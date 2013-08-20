@@ -85,14 +85,4 @@ public class TemplateGeneratorThread
     {
         super(templateGenerator, template, outputFolder, rootFolder, charset, threadIndex, barrier);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    protected String buildSuccessLogMessage(@NotNull final T template, final int threadIndex)
-    {
-        return "Thread " + template.getTemplateContext().getTemplateName() + ":" + threadIndex + " finished";
-    }
 }

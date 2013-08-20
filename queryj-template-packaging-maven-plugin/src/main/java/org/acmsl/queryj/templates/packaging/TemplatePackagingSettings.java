@@ -73,4 +73,9 @@ public interface TemplatePackagingSettings
      * The key to access the template build handler templates.
      */
     String TEMPLATE_BUILD_HANDLER_TEMPLATES = "template_build_handler_templates";
+
+    /**
+     * The key to access the output dir.
+     */
+    String OUTPUT_DIR = "output-dir";
 }

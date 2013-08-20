@@ -37,6 +37,7 @@ package org.acmsl.queryj.api.handlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.AbstractTemplateGeneratorThread;
 import org.acmsl.queryj.api.Template;
 import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.TemplateGenerator;

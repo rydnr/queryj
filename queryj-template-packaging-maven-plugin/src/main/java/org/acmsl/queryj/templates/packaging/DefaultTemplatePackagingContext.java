@@ -45,6 +45,11 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
+import java.io.File;
+
 /**
  * Default implementation for TemplatePackagingContext.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
@@ -74,19 +79,28 @@ public class DefaultTemplatePackagingContext
     private String m__strFileName;
 
     /**
+     * The output dir.
+     */
+    @NotNull
+    private File m__OutputDir;
+
+    /**
      * Creates a new instance.
      * @param templateDef the template def.
      * @param templateName the template name.
      * @param fileName the file name.
+     * @param outputDir the output dir.
      */
     public DefaultTemplatePackagingContext(
         @NotNull final TemplateDef templateDef,
         @NotNull final String templateName,
-        @NotNull final String fileName)
+        @NotNull final String fileName,
+        @NotNull final File outputDir)
     {
         immutableSetTemplateDef(templateDef);
         immutableSetTemplateName(templateName);
         immutableSetFileName(fileName);
+        immutableSetOutputDir(outputDir);
     }
 
     /**
@@ -112,6 +126,7 @@ public class DefaultTemplatePackagingContext
      * Retrieves the template def.
      * @return such instance.
      */
+    @Override
     @NotNull
     public TemplateDef getTemplateDef()
     {
@@ -199,6 +214,36 @@ public class DefaultTemplatePackagingContext
         return templateDef.getPackageName();
     }
 
+    /**
+     * Specifies the output dir.
+     * @param dir such dir.
+     */
+    protected final void immutableSetOutputDir(@NotNull final File dir)
+    {
+        this.m__OutputDir = dir;
+    }
+
+    /**
+     * Specifies the output dir.
+     * @param dir such dir.
+     */
+    @SuppressWarnings("unused")
+    protected void setOutputDir(@NotNull final File dir)
+    {
+        immutableSetOutputDir(dir);
+    }
+
+    /**
+     * Retrieves the output dir.
+     * @return such folder.
+     */
+    @Override
+    @NotNull
+    public File getOutputDir()
+    {
+        return this.m__OutputDir;
+    }
+
     @NotNull
     @Override
     public String toString()
@@ -206,6 +251,7 @@ public class DefaultTemplatePackagingContext
         return "{ 'class': 'DefaultTemplatePackagingContext' " +
                ", 'fileName': '" + m__strFileName + '\'' +
                ", 'templateName': '" + m__strTemplateName + '\'' +
-               ", 'templateDef': " + m__TemplateDef + " }";
+               ", 'templateDef': " + m__TemplateDef + '\'' +
+               ", 'outputDir': '" + m__OutputDir.getAbsolutePath() + "' }";
     }
 }

@@ -373,7 +373,11 @@ public abstract class AbstractTemplateGeneratorThread
      * @param threadIndex the index.
      * @return the log message.
      */
-    protected abstract String buildSuccessLogMessage(@NotNull final T template, final int threadIndex);
+    @NotNull
+    protected String buildSuccessLogMessage(@NotNull final T template, final int threadIndex)
+    {
+        return "Thread " + template.getTemplateContext().getTemplateName() + ":" + threadIndex + " finished";
+    }
 
     /**
      * Runs the thread.
