@@ -58,7 +58,7 @@ import java.io.File;
  */
 public abstract class BasePerTableTemplateWritingHandler
     <T extends PerTableTemplate<C>, TG extends PerTableTemplateGenerator<T>, C extends PerTableTemplateContext>
-    extends    AbstractTemplateWritingHandler<T, TG, C>
+    extends    AbstractQueryJTemplateWritingHandler<T, TG, C>
     implements TemplateWritingHandler
 {
     /**
@@ -73,7 +73,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the output-dir retrieval process if faulty.
+     * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      */
     @Override
     @NotNull

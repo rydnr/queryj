@@ -60,7 +60,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
     <T extends PerForeignKeyTemplate<C>,
      C extends PerForeignKeyTemplateContext,
      TG extends PerForeignKeyTemplateGenerator<T>>
-    extends    AbstractTemplateWritingHandler<T, TG, C>
+    extends    AbstractQueryJTemplateWritingHandler<T, TG, C>
     implements TemplateWritingHandler
 {
     /**

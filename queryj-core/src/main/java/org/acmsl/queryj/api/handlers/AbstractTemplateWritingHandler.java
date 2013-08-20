@@ -37,10 +37,10 @@ package org.acmsl.queryj.api.handlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.api.QueryJTemplate;
-import org.acmsl.queryj.api.QueryJTemplateGeneratorThread;
-import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.api.Template;
+import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.TemplateGenerator;
+import org.acmsl.queryj.api.TemplateGeneratorThread;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 
@@ -88,7 +88,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @ThreadSafe
 public abstract class AbstractTemplateWritingHandler
-    <T extends QueryJTemplate<C>, TG extends TemplateGenerator<T>, C extends QueryJTemplateContext>
+    <T extends Template<C>, TG extends TemplateGenerator<T>, C extends TemplateContext>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
@@ -130,7 +130,6 @@ public abstract class AbstractTemplateWritingHandler
      * @param rootDir the root dir.
      * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
      */
-    @SuppressWarnings("cast, unchecked")
     @ThreadSafe
     protected void writeTemplates(
         @NotNull final QueryJCommand parameters,
@@ -183,7 +182,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param charset the file encoding.
      * @param templateGenerator the template generator.
      * @param rootDir the root dir.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @ThreadSafe
     @SuppressWarnings("unused")
@@ -264,14 +263,15 @@ public abstract class AbstractTemplateWritingHandler
                 {
                     result.add(
                         threadPool.submit(
-                            new QueryJTemplateGeneratorThread<T, TG, C>(
-                                templateGenerator,
+                            buildGeneratorThread(
                                 t_Template,
+                                templateGenerator,
                                 retrieveOutputDir(t_Template.getTemplateContext(), rootDir, engineName, parameters),
                                 rootDir,
                                 charset,
                                 t_iIndex + 1,
-                                null),
+                                null,
+                                parameters),
                             t_Template));
                 }
             }
@@ -293,6 +293,29 @@ public abstract class AbstractTemplateWritingHandler
 
         return result;
     }
+
+    /**
+     * Creates a new generator thread.
+     * @param template the template.
+     * @param generator the template generator.
+     * @param outputDir the output dir.
+     * @param rootDir the root folder.
+     * @param charset the charset.
+     * @param threadIndex the thread index.
+     * @param barrier the cyclic barrier.
+     * @param parameters the parameters.
+     * @return the thread.
+     */
+    @NotNull
+    protected abstract TemplateGeneratorThread<T, TG> buildGeneratorThread(
+        @NotNull final T template,
+        @NotNull final TG generator,
+        @NotNull final File outputDir,
+        @NotNull final File rootDir,
+        @NotNull final Charset charset,
+        final int threadIndex,
+        @Nullable final CyclicBarrier barrier,
+        @NotNull final QueryJCommand parameters);
 
     /**
      * Writes the templates.
@@ -351,15 +374,16 @@ public abstract class AbstractTemplateWritingHandler
 
                         result.add(
                             threadPool.submit(
-                                new QueryJTemplateGeneratorThread<T, TG, C>(
-                                    templateGenerator,
+                                buildGeneratorThread(
                                     t_Template,
+                                    templateGenerator,
                                     retrieveOutputDir(
                                         t_Template.getTemplateContext(), rootDir, engineName, parameters),
                                     rootDir,
                                     charset,
                                     intIndex,
-                                    round)));
+                                    round,
+                                    parameters)));
                     }
                     else
                     {

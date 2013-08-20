@@ -49,7 +49,7 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
        <T extends PerCustomSqlTemplate<C>,
         C extends PerCustomSqlTemplateContext,
         TG extends PerCustomSqlTemplateGenerator<T>>
-extends    AbstractTemplateWritingHandler<T, TG, C>
+extends    AbstractQueryJTemplateWritingHandler<T, TG, C>
     implements TemplateWritingHandler
 {
     /**

@@ -59,7 +59,7 @@ public abstract class BasePerRepositoryTemplateWritingHandler
     <T extends AbstractBasePerRepositoryTemplate<C>,
      G extends PerRepositoryTemplateGenerator<T>,
      C extends PerRepositoryTemplateContext>
-    extends    AbstractTemplateWritingHandler<T, G, C>
+    extends    AbstractQueryJTemplateWritingHandler<T, G, C>
     implements TemplateWritingHandler
 {
     /**
