@@ -69,13 +69,19 @@ public interface TemplatePackagingSettings
      */
     String TEMPLATE_PACKAGING_GROUP = "org/acmsl/queryj/templates/packaging/";
 
-    /*
+    /**
+     * The key to access the output dir.
+     */
+    String OUTPUT_DIR = "output-dir";
+
+    /**
      * The key to access the template build handler templates.
      */
     String TEMPLATE_BUILD_HANDLER_TEMPLATES = "template_build_handler_templates";
 
     /**
-     * The key to access the output dir.
+     * The key to access the template templates.
      */
-    String OUTPUT_DIR = "output-dir";
+    String TEMPLATE_TEMPLATES = "template_templates";
+
 }

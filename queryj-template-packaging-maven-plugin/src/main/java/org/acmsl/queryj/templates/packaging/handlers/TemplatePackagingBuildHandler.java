@@ -107,6 +107,7 @@ public abstract class TemplatePackagingBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @NotNull
     protected abstract TF retrieveTemplateFactory();
 
     /**
