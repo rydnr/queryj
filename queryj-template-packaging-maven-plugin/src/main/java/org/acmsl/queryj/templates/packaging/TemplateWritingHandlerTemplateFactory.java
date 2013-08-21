@@ -56,8 +56,30 @@ import org.jetbrains.annotations.Nullable;
  */
 @ThreadSafe
 public class TemplateWritingHandlerTemplateFactory
-    implements TemplatePackagingTemplateFactory<TemplateWritingHandlerTemplate<TemplatePackagingContext>, TemplatePackagingContext>
+    implements TemplatePackagingTemplateFactory<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>
 {
+    /**
+     * Singleton implementation to avoid double-locking check.
+     */
+    protected static final class TemplateWritingHandlerTemplateFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final TemplateWritingHandlerTemplateFactory SINGLETON =
+            new TemplateWritingHandlerTemplateFactory();
+    }
+
+    /**
+     * Retrieves the singleton instance.
+     * @return such instance.
+     */
+    @NotNull
+    public static TemplateWritingHandlerTemplateFactory getInstance()
+    {
+        return TemplateWritingHandlerTemplateFactorySingletonContainer.SINGLETON;
+    }
+
     /**
      * Generates a template.
      * @param context the context.
@@ -65,9 +87,9 @@ public class TemplateWritingHandlerTemplateFactory
      */
     @Nullable
     @Override
-    public TemplateWritingHandlerTemplate<TemplatePackagingContext> createTemplate(
-        @NotNull final TemplatePackagingContext context)
+    public TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext> createTemplate(
+        @NotNull final DefaultTemplatePackagingContext context)
     {
-        return new TemplateWritingHandlerTemplate<TemplatePackagingContext>(context);
+        return new TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>(context);
     }
 }

@@ -75,11 +75,6 @@ public interface TemplatePackagingSettings
     String OUTPUT_DIR = "output-dir";
 
     /**
-     * The key to access the template build handler templates.
-     */
-    String TEMPLATE_BUILD_HANDLER_TEMPLATES = "template_build_handler_templates";
-
-    /**
      * The key to access the template templates.
      */
     String TEMPLATE_TEMPLATES = "template_templates";
@@ -93,4 +88,15 @@ public interface TemplatePackagingSettings
      * The key to access the template generator templates.
      */
     String TEMPLATE_GENERATOR_TEMPLATES = "template_generator_templates";
+
+    /**
+     * The key to access the template build handler templates.
+     */
+    String TEMPLATE_BUILD_HANDLER_TEMPLATES = "template_build_handler_templates";
+
+    /**
+     * The key to access the template writing handler templates.
+     */
+    String TEMPLATE_WRITING_HANDLER_TEMPLATES = "template_writing_handler_templates";
+
 }
