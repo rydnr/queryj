@@ -84,4 +84,8 @@ public interface TemplatePackagingSettings
      */
     String TEMPLATE_TEMPLATES = "template_templates";
 
+    /**
+     * The key to access the template factory templates.
+     */
+    String TEMPLATE_FACTORY_TEMPLATES = "template_factory_templates";
 }

@@ -40,7 +40,6 @@ package org.acmsl.queryj.templates.packaging;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -56,17 +55,39 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class TemplateFactoryTemplateFactory
-    implements TemplatePackagingTemplateFactory<TemplateFactoryTemplate<TemplatePackagingContext>, TemplatePackagingContext>
+    implements TemplatePackagingTemplateFactory<TemplateFactoryTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>
 {
+    /**
+     * Singleton implementation to avoid double-locking check.
+     */
+    protected static final class TemplateFactoryTemplateFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final TemplateFactoryTemplateFactory SINGLETON = new TemplateFactoryTemplateFactory();
+    }
+
+    /**
+     * Retrieves the singleton instance.
+     *
+     * @return such instance.
+     */
+    @NotNull
+    public static TemplateFactoryTemplateFactory getInstance()
+    {
+        return TemplateFactoryTemplateFactorySingletonContainer.SINGLETON;
+    }
+
     /**
      * Generates a template.
      * @return such template.
      */
     @NotNull
     @Override
-    public TemplateFactoryTemplate<TemplatePackagingContext> createTemplate(
-        @NotNull final TemplatePackagingContext context)
+    public TemplateFactoryTemplate<DefaultTemplatePackagingContext> createTemplate(
+        @NotNull final DefaultTemplatePackagingContext context)
     {
-        return new TemplateFactoryTemplate<TemplatePackagingContext>(context);
+        return new TemplateFactoryTemplate<DefaultTemplatePackagingContext>(context);
     }
 }
