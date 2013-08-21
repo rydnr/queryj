@@ -6,7 +6,7 @@
 - Implement the method DefaultTemplatePackagingContext buildContext(TemplateDef, QueryJCommand):
   - return buildDefaultContext(templateDef, parameters);;
 - Implement the method storeTemplates(TemplateWritingHandlerTemplate, QueryJCommand):
-  - Call new QueryJCommandWrapper<List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>>(parameters).setSetting(TEMPLATE_WRITING_HANDLER_TEMPLATES, templates);;
+  - Call new QueryJCommandWrapper<List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>>>(parameters).setSetting(TEMPLATE_WRITING_HANDLER_TEMPLATES, templates);;
 - Modify TemplatePackagingSettings:
   - Add a new constant TEMPLATE_WRITING_HANDLER_TEMPLATES = "template_writing_handler_templates";;
 - Implement the method retrieveTemplateName(QueryJCommand):
