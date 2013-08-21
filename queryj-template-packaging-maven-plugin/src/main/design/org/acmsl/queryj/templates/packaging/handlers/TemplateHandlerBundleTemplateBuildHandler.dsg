@@ -1,0 +1,14 @@
+- Create a new Java class TemplateHandlerBundleTemplateBuildHandler in folder src/main/java/org/acmsl/queryj/templates/packaging/handlers;
+- Add comment: Build handler to build template handler bundle templates.;
+- Make it extend TemplatePackagingBuildHandler<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>, TemplateHandlerBundleTemplateFactory, DefaultTemplatePackagingContext>;
+- Implement the method retrieveTemplateFactory():
+  - return TemplateHandlerBundleTemplateFactory.getInstance();;
+- Implement the method DefaultTemplatePackagingContext buildContext(TemplateDef, QueryJCommand):
+  - return buildDefaultContext(templateDef, parameters);;
+- Implement the method storeTemplates(TemplateHandlerBundleTemplate, QueryJCommand):
+  - Call new QueryJCommandWrapper<List<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>>>(parameters).setSetting(TEMPLATE_HANDLER_BUNDLE_TEMPLATES, templates);;
+- Modify TemplatePackagingSettings:
+  - Add a new constant TEMPLATE_HANDLER_BUNDLE_TEMPLATES = "template_handler_bundle_templates";;
+- Implement the method retrieveTemplateName(QueryJCommand):
+  - return "HandlerBundle";
+- Fix import groups;

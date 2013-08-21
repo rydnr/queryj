@@ -99,4 +99,8 @@ public interface TemplatePackagingSettings
      */
     String TEMPLATE_WRITING_HANDLER_TEMPLATES = "template_writing_handler_templates";
 
+    /**
+     * The key to access the template handler bundle templates.
+     */
+    String TEMPLATE_HANDLER_BUNDLE_TEMPLATES = "template_handler_bundle_templates";
 }
