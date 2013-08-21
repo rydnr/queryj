@@ -449,10 +449,10 @@ public abstract class AbstractTemplateWritingHandler
     protected abstract TG retrieveTemplateGenerator(final boolean caching, final int threadCount);
 
     /**
-     * Retrieves the templates from the attribute map.
-     * @param parameters the parameter map.
+     * Retrieves the templates from the command.
+     * @param parameters the parameters.
      * @return the template.
-     * @throws QueryJBuildException if the template retrieval process if faulty.
+     * @throws QueryJBuildException if the template retrieval process fails.
      */
     @Nullable
     protected abstract List<T> retrieveTemplates(@NotNull final QueryJCommand parameters)
