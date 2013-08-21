@@ -1,6 +1,6 @@
 - Create a new Java class TemplateTemplateBuildHandler in package org.acmsl.queryj.templates.packaging.handlers;
-- Add comment: Is responsible of building {@link TemplateTemplate}s.
-- Make it extend TemplatePackagingHandler<TemplateTemplate<DefaultTemplatePackagingContext>, TemplateTemplateFactory, DefaultTemplatePackagingContext>;
+- Add comment: Is responsible of building {@link TemplateTemplate}s.;
+- Make it extend TemplatePackagingBuildHandler<TemplateTemplate<DefaultTemplatePackagingContext>, TemplateTemplateFactory, DefaultTemplatePackagingContext>;
 - Implement buildContext(TemplateDef, QueryJCommand):
   - return buildDefaultContext(templateDef, parameters);;
 - Implement retrieveTemplateFactory():
@@ -8,5 +8,5 @@
 - Implement retrieveTemplateName(QueryJCommand):
   - return "TemplateTemplate";;
 - Implement storeTemplates(List<TemplateTemplate<DefaultTemplatePackagingContext>>, QueryJCommand):
-  - return new QueryJCommandWrapperList<TemplateTemplate<DefaultTemplatePackagingContext>>(parameters).setSetting(TEMPLATE_TEMPLATES, templates);;
+  - call new QueryJCommandWrapper<List<TemplateTemplate<DefaultTemplatePackagingContext>>>(parameters).setSetting(TEMPLATE_TEMPLATES, templates);;
 - Fix import groups;

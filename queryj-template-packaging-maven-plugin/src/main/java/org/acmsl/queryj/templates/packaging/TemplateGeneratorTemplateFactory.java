@@ -54,19 +54,40 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class TemplateGeneratorTemplateFactory
-    implements TemplatePackagingTemplateFactory<TemplateGeneratorTemplate<TemplatePackagingContext>, TemplatePackagingContext>
+    implements TemplatePackagingTemplateFactory
+                    <TemplateGeneratorTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>
 {
     /**
+     * Singleton implementation to avoid double-locking check.
+     */
+    protected static final class TemplateGeneratorTemplateFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final TemplateGeneratorTemplateFactory SINGLETON = new TemplateGeneratorTemplateFactory();
+    }
+
+    /**
+     * Retrieves the singleton instance.
+     * @return such instance.
+     */
+    @NotNull
+    public static TemplateGeneratorTemplateFactory getInstance()
+    {
+        return TemplateGeneratorTemplateFactorySingletonContainer.SINGLETON;
+    }
+
+    /**
      * Generates a template.
-     *
      * @param context the context.
      * @return such template.
      */
     @NotNull
     @Override
-    public TemplateGeneratorTemplate<TemplatePackagingContext> createTemplate(
-        @NotNull final TemplatePackagingContext context)
+    public TemplateGeneratorTemplate<DefaultTemplatePackagingContext> createTemplate(
+        @NotNull final DefaultTemplatePackagingContext context)
     {
-        return new TemplateGeneratorTemplate<TemplatePackagingContext>(context);
+        return new TemplateGeneratorTemplate<DefaultTemplatePackagingContext>(context);
     }
 }
