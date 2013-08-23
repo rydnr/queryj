@@ -1,0 +1,6 @@
+- Create a new Java class TemplateGeneratorTemplateHandlerBundle, in package org.acmsl.queryj.templates.packaging.handlers;
+- Add comment: Bundles handlers that take care of the generation process of {@link org.acmsl.queryj.templates.packaging.TemplateGeneratorTemplate}s.;
+- Make it extend TemplateHandlerBundle<TemplateGeneratorTemplateBuildHandler, TemplateGeneratorTemplateWritingHandler>;
+- Create the default constructor:
+  - Call super(new TemplateGeneratorTemplateBuildHandler(), new TemplateGeneratorTemplateWritingHandler());;
+- Fix import groups;
