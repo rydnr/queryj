@@ -23,21 +23,21 @@
 
  ******************************************************************************
  *
- * Filename: TemplateBuildHandlerTemplateHandlerBundle.java
+ * Filename: TemplateFactoryTemplateHandlerBundle.java
  *
  * Author: Jose San Leandro Armendariz
  *
  * Description: Bundles handlers that take care of the generation process of
- *              TemplateBuildHandlerTemplates.
+ *              TemplateFactoryTemplates.
  *
  * Date: 2013/08/23
- * Time: 07:13
+ * Time: 07:22
  *
  */
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-Core annotations.
  */
 import org.acmsl.queryj.api.handlers.TemplateHandlerBundle;
 
@@ -48,24 +48,22 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Bundles handlers that take care of the generation process of
- * {@link org.acmsl.queryj.templates.packaging.TemplateBuildHandlerTemplate}s.
+ * {@link org.acmsl.queryj.templates.packaging.TemplateFactoryTemplate}s.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/23 07:13
+ * Created: 2013/08/23 07:22
  */
 @ThreadSafe
-public class TemplateBuildHandlerTemplateHandlerBundle
+public class TemplateFactoryTemplateHandlerBundle
     extends TemplateHandlerBundle
-                <TemplateBuildHandlerTemplateBuildHandler,
-                 TemplateBuildHandlerTemplateWritingHandler>
+                <TemplateFactoryTemplateBuildHandler,
+                 TemplateFactoryTemplateWritingHandler>
 {
     /**
-     * Creates a new bundle.
+     * Builds a bundle.
      */
-    public TemplateBuildHandlerTemplateHandlerBundle()
+    public TemplateFactoryTemplateHandlerBundle()
     {
-        super(
-            new TemplateBuildHandlerTemplateBuildHandler(),
-            new TemplateBuildHandlerTemplateWritingHandler());
+        super(new TemplateFactoryTemplateBuildHandler(), new TemplateFactoryTemplateWritingHandler());
     }
 }
