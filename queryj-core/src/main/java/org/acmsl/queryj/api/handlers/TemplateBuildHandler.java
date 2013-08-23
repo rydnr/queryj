@@ -32,6 +32,9 @@
  */
 package org.acmsl.queryj.api.handlers;
 
+/*
+ * Importing QueryJ-Core classes.
+ */
 import org.acmsl.queryj.QueryJCommand;
 
 /**

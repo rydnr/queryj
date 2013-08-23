@@ -77,6 +77,7 @@ public class TemplateBuildHandlerTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @NotNull
     @Override
     protected TemplateBuildHandlerTemplateFactory retrieveTemplateFactory()
     {

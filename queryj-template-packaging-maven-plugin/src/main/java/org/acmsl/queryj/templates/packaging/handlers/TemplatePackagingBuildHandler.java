@@ -41,6 +41,11 @@ package org.acmsl.queryj.templates.packaging.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.handlers.TemplateBuildHandler;
+
+/*
+ * Importing Template-Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingContext;
@@ -78,7 +83,8 @@ public abstract class TemplatePackagingBuildHandler
     <T extends TemplatePackagingTemplate<C>,
      TF extends TemplatePackagingTemplateFactory<T, C>,
      C extends TemplatePackagingContext>
-    implements QueryJCommandHandler<QueryJCommand>,
+    implements TemplateBuildHandler,
+               QueryJCommandHandler<QueryJCommand>,
                TemplatePackagingSettings
 {
     /**
