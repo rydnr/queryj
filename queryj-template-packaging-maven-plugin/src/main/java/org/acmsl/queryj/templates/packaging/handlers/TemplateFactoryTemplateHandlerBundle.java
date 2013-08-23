@@ -60,10 +60,12 @@ public class TemplateFactoryTemplateHandlerBundle
                  TemplateFactoryTemplateWritingHandler>
 {
     /**
-     * Builds a bundle.
+     * Creates a new bundle.
      */
     public TemplateFactoryTemplateHandlerBundle()
     {
-        super(new TemplateFactoryTemplateBuildHandler(), new TemplateFactoryTemplateWritingHandler());
+        super(
+            new TemplateFactoryTemplateBuildHandler(),
+            new TemplateFactoryTemplateWritingHandler());
     }
 }

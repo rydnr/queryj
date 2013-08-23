@@ -2,5 +2,6 @@
 - Add comment: Bundles handlers that take care of the generation process of {@link org.acmsl.queryj.templates.packaging.TemplateHandlerBundleTemplate}s.;
 - Make it extend TemplateHandlerBundle<TemplateHandlerBundleTemplateBuildHandler, TemplateHandlerBundleTemplateWritingHandler>;
 - Create the default constructor:
+  - Add comment: Creates a new bundle.;
   - Call super(new TemplateHandlerBundleTemplateBuildHandler(), new TemplateHandlerBundleTemplateWritingHandler());;
 - Fix import groups;

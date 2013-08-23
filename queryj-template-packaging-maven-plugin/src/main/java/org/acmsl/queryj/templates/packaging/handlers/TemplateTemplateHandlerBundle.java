@@ -55,13 +55,17 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class TemplateTemplateHandlerBundle
-    extends TemplateHandlerBundle<TemplateTemplateBuildHandler, TemplateTemplateWritingHandler>
+    extends TemplateHandlerBundle
+                <TemplateTemplateBuildHandler,
+                 TemplateTemplateWritingHandler>
 {
     /**
      * Creates a new bundle.
      */
     public TemplateTemplateHandlerBundle()
     {
-        super(new TemplateTemplateBuildHandler(), new TemplateTemplateWritingHandler());
+        super(
+            new TemplateTemplateBuildHandler(),
+            new TemplateTemplateWritingHandler());
     }
 }

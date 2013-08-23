@@ -23,15 +23,15 @@
 
  ******************************************************************************
  *
- * Filename: TemplateGeneratorTemplateHandlerBundle.java
+ * Filename: TemplateWritingHandlerTemplateHandlerBundle.java
  *
  * Author: Jose San Leandro Armendariz
  *
  * Description: Bundles handlers that take care of the generation process of
- *             TemplateGeneratorTemplates.
+ *              TemplateWritingHandlerTemplates.
  *
  * Date: 2013/08/23
- * Time: 07:25
+ * Time: 07:36
  *
  */
 package org.acmsl.queryj.templates.packaging.handlers;
@@ -48,24 +48,24 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Bundles handlers that take care of the generation process of
- * {@link org.acmsl.queryj.templates.packaging.TemplateGeneratorTemplate}s.
+ * {@link org.acmsl.queryj.templates.packaging.TemplateWritingHandlerTemplate}s.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/23 07:25
+ * Created: 2013/08/23 07:36
  */
 @ThreadSafe
-public class TemplateGeneratorTemplateHandlerBundle
+public class TemplateWritingHandlerTemplateHandlerBundle
     extends TemplateHandlerBundle
-                <TemplateGeneratorTemplateBuildHandler,
-                 TemplateGeneratorTemplateWritingHandler>
+                <TemplateWritingHandlerTemplateBuildHandler,
+                 TemplateWritingHandlerTemplateWritingHandler>
 {
     /**
      * Creates a new bundle.
      */
-    public TemplateGeneratorTemplateHandlerBundle()
+    public TemplateWritingHandlerTemplateHandlerBundle()
     {
         super(
-            new TemplateGeneratorTemplateBuildHandler(),
-            new TemplateGeneratorTemplateWritingHandler());
+            new TemplateWritingHandlerTemplateBuildHandler(),
+            new TemplateWritingHandlerTemplateWritingHandler());
     }
 }

@@ -60,7 +60,7 @@ public class TemplateHandlerBundleTemplateHandlerBundle
                  TemplateHandlerBundleTemplateWritingHandler>
 {
     /**
-     * Builds a bundle.
+     * Creates a new bundle.
      */
     public TemplateHandlerBundleTemplateHandlerBundle()
     {
