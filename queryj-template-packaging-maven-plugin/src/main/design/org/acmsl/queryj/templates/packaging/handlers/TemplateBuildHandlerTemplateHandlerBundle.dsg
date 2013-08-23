@@ -1,5 +1,5 @@
 - Create a new Java class TemplateBuildHandlerTemplateHandlerBundle, in package org.acmsl.queryj.templates.packaging.handlers;
-- Add comment: Bundles handlers that take care of the generation process of {@link TemplateBuildHandlerTemplate}s.;
+- Add comment: Bundles handlers that take care of the generation process of {@link org.acmsl.queryj.templates.packaging.TemplateBuildHandlerTemplate}s.;
 - Make it extend TemplateHandlerBundle<TemplateBuildHandlerTemplateBuildHandler, TemplateBuildHandlerTemplateWritingHandler>;
 - Create the default constructor:
   - Call super(new TemplateBuildHandlerTemplateBuildHandler(), new TemplateBuildHandlerTemplateWritingHandler());;
