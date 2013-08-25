@@ -1,0 +1,4 @@
+- Create a new Java interface DefaultTemplatePackagingFillTemplateChainFactory in package org.acmsl.queryj.templates.packaging.placeholders;
+- Add comment: Chain factory for placeholders specific to QueryJ's Template Packaging.;
+- Make it extend FillTemplateChainFactory<DefaultTemplatePackagingContext>;
+- Fix import groups;

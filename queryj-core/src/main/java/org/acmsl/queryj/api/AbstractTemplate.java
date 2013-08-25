@@ -162,6 +162,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     protected static final String CONTEXT_LITERAL = "Context";
     protected static final String TEMPLATE_LITERAL = "Template";
     protected static final String FILL_TEMPLATE_CHAIN_FACTORY_LITERAL = "FillTemplateChainFactory";
+    protected static final String DEFAULT_PLACEHOLDER_PACKAGE = "org.acmsl.queryj.api.placeholders";
 
     /**
      * The template context.
@@ -172,6 +173,12 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Caches the StringTemplateGroup for each template class.
      */
     private static Map m__mSTCache;
+
+    /**
+     * The placeholder package.
+     */
+    @NotNull
+    private String m__strPlaceholderPackage;
 
     /**
      * A singleton container to avoid the double-checking lock idiom.
@@ -201,7 +208,18 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      */
     protected AbstractTemplate(@NotNull final C context)
     {
+        this(context, DEFAULT_PLACEHOLDER_PACKAGE);
+    }
+
+    /**
+     * Builds a {@link AbstractTemplate} with given context.
+     * @param context the context.
+     * @param placeholderPackage the package of the placeholder classes.
+     */
+    protected AbstractTemplate(@NotNull final C context, @NotNull final String placeholderPackage)
+    {
         immutableSetTemplateContext(context);
+        immutableSetPlaceholderPackage(placeholderPackage);
         setSTCache(new HashMap());
     }
 
@@ -233,6 +251,35 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     public C getTemplateContext()
     {
         return m__TemplateContext;
+    }
+
+    /**
+     * Specifies the placeholder package.
+     * @param pkg such package.
+     */
+    protected final void immutableSetPlaceholderPackage(@NotNull final String pkg)
+    {
+        this.m__strPlaceholderPackage = pkg;
+    }
+
+    /**
+     * Specifies the placeholder package.
+     * @param pkg such package.
+     */
+    @SuppressWarnings("unused")
+    protected void setPlaceholderPackage(@NotNull final String pkg)
+    {
+        immutableSetPlaceholderPackage(pkg);
+    }
+
+    /**
+     * Retrieves the placeholder package.
+     * @return such package.
+     */
+    @NotNull
+    protected String getPlaceholderPackage()
+    {
+        return this.m__strPlaceholderPackage;
     }
 
     /**
@@ -783,7 +830,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
             new ArrayList<FillTemplateChain<? extends FillHandler>>();
 
         @Nullable final Class<FillTemplateChainFactory<C>> factoryClass =
-            retrieveFillTemplateChainFactoryClass(context);
+            retrieveFillTemplateChainFactoryClass(context, getPlaceholderPackage());
 
         if (factoryClass != null)
         {
@@ -815,14 +862,16 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
 
     /**
-     *  Retrieves the placeholder chain provider.
+     * Retrieves the placeholder chain provider.
      * @param context the context.
+     * @param placeholderPackage the placeholder package.
      * @return the {@link org.acmsl.queryj.tools.PlaceholderChainProvider} class.
      * @throws QueryJBuildException if the template factory class is unavailable.
      */
     @Nullable
     @SuppressWarnings("unchecked")
-    protected Class<FillTemplateChainFactory<C>> retrieveFillTemplateChainFactoryClass(@NotNull final C context)
+    protected Class<FillTemplateChainFactory<C>> retrieveFillTemplateChainFactoryClass(
+        @NotNull final C context, @NotNull final String placeholderPackage)
         throws QueryJBuildException
     {
         @Nullable Class<FillTemplateChainFactory<C>> result = null;
@@ -846,7 +895,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
             baseName = baseName + FILL_TEMPLATE_CHAIN_FACTORY_LITERAL;
         }
 
-        baseName = "org.acmsl.queryj.api.placeholders." + baseName;
+        baseName = placeholderPackage + "." + baseName;
 
         try
         {

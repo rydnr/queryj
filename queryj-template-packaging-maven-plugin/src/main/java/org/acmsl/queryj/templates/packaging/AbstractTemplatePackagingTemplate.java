@@ -79,7 +79,7 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
      */
     protected AbstractTemplatePackagingTemplate(@NotNull final C context)
     {
-        super(context);
+        super(context, "org.acmsl.queryj.templates.packaging.placeholders");
     }
 
     /**
