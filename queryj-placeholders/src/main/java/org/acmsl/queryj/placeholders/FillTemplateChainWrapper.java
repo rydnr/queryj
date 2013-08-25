@@ -38,25 +38,20 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing QueryJ-core classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
-import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.FillTemplateChain;
-import org.acmsl.queryj.api.NonRelevantFillHandler;
 import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-
-/*
- * Importing Apache Commons Configuration.
- */
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.acmsl.queryj.api.placeholders.AbstractFillTemplateChainWrapper;
 
 /*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.NotThreadSafe;
 
 /*
  * Importing JDK classes.
@@ -67,16 +62,13 @@ import java.util.List;
 /**
  * Wraps a given chain to add generic, stateless placeholders.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/11
+ * @since 3.0
+ * Created: 2013/06/11
  */
+@NotThreadSafe
 public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
-    implements FillTemplateChain<C>
+    extends AbstractFillTemplateChainWrapper<C>
 {
-    /**
-     * The wrapped chain.
-     */
-    private FillTemplateChain<C> chain;
-
     /**
      * Creates a new wrapper for given chain.
      * @param chain the chain to wrap, in order to provide stateless placeholder
@@ -84,123 +76,14 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
      */
     public FillTemplateChainWrapper(@NotNull final FillTemplateChain<C> chain)
     {
-        immutableSetWrappedChain(chain);
-    }
-
-    /**
-     * Specifies the wrapped chain.
-     * @param chain the chain to wrap.
-     */
-    protected final void immutableSetWrappedChain(@NotNull final FillTemplateChain<C> chain)
-    {
-        this.chain = chain;
-    }
-
-    /**
-     * Specifies the wrapped chain.
-     * @param chain the chain to wrap.
-     */
-    @SuppressWarnings("unused")
-    protected void setWrappedChain(@NotNull final FillTemplateChain<C> chain)
-    {
-        immutableSetWrappedChain(chain);
-    }
-
-    /**
-     * Retrieves the wrapped chain.
-     * @return such chain.
-     */
-    public FillTemplateChain<C> getWrappedChain()
-    {
-        return this.chain;
-    }
-
-    /**
-     * Retrieves the template context.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public C getTemplateContext()
-    {
-        return getWrappedChain().getTemplateContext();
-    }
-
-    /**
-     * Performs the required processing.
-     * @param relevantOnly to include only the relevant ones: the ones that are necessary to
-     * be able to find out if two template realizations are equivalent. Usually,
-     * generation timestamps,
-     * documentation, etc. can be considered not relevant.
-     * @throws QueryJBuildException if the process fails.
-     */
-    @NotNull
-    @Override
-    public QueryJCommand providePlaceholders(final boolean relevantOnly)
-        throws QueryJBuildException
-    {
-        return providePlaceholders(relevantOnly, getTemplateContext());
-    }
-
-    /**
-     * Provides the template placeholders within a {@link QueryJCommand}.
-     * @param relevantOnly to include only the relevant ones: the ones that are necessary to
-     * be able to find out if two template realizations are equivalent. Usually,
-     * generation timestamps, documentation, etc. can be considered not relevant.
-     * @param templateContext the template context.
-     * @return the {@link QueryJCommand}.
-     * @throws QueryJBuildException if the process fails.
-     */
-    @NotNull
-    protected QueryJCommand providePlaceholders(final boolean relevantOnly, @NotNull final C templateContext)
-        throws QueryJBuildException
-    {
-        return providePlaceholders(relevantOnly, getHandlers(templateContext));
-    }
-
-    /**
-     * Provides the template placeholders within a {@link QueryJCommand}.
-     * @param relevantOnly to include only the relevant ones: the ones that are necessary to
-     * be able to find out if two template realizations are equivalent. Usually,
-     * generation timestamps, documentation, etc. can be considered not relevant.
-     * @param handlers the {@link FillHandler}s.
-     * @return the {@link QueryJCommand}.
-     * @throws QueryJBuildException if the process fails.
-     */
-    @NotNull
-    protected QueryJCommand providePlaceholders(
-        final boolean relevantOnly,
-        @NotNull final List<FillHandler> handlers)
-        throws QueryJBuildException
-    {
-        @NotNull final QueryJCommand result;
-
-        @NotNull final Configuration t_Configuration = new PropertiesConfiguration();
-
-        for (@NotNull final FillHandler handler : handlers)
-        {
-            if (   (!relevantOnly)
-                || (!(handler instanceof NonRelevantFillHandler)))
-            {
-                t_Configuration.setProperty(handler.getPlaceHolder(), handler.getValue());
-            }
-            else
-            {
-                t_Configuration.setProperty(handler.getPlaceHolder(), "");
-            }
-        }
-
-        result =
-            new ConfigurationQueryJCommandImpl(
-                t_Configuration, UniqueLogFactory.getLog(FillTemplateChainWrapper.class));
-
-        return result;
+        super(chain);
     }
 
     /**
      * Retrieves the list of generic placeholder handlers.
      * @return such list.
      */
+    @NotNull
     @SuppressWarnings("unchecked")
     protected List<FillHandler> getHandlers(@NotNull final C context)
     {
@@ -232,12 +115,11 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
         return result;
     }
 
-
+    @NotNull
     @Override
     public String toString()
     {
-        return "FillTemplateChainWrapper{" +
-               "chain=" + chain +
-               '}';
+        return "{ 'class': 'FillTemplateChainWrapper', " +
+               " 'parent: " + super.toString() +  " }";
     }
 }
