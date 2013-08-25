@@ -75,7 +75,6 @@ public abstract class BasePerRepositoryTemplateWritingHandler
     protected File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
-        @NotNull final String engineName,
         @NotNull final QueryJCommand parameters)
     {
         return
@@ -83,7 +82,7 @@ public abstract class BasePerRepositoryTemplateWritingHandler
                 rootDir,
                 retrieveProjectPackage(parameters),
                 retrieveUseSubfoldersFlag(parameters),
-                engineName,
+                retrieveProductName(parameters),
                 parameters,
                 PackageUtils.getInstance());
     }

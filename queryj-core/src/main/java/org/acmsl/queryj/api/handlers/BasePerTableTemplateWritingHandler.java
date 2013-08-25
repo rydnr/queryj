@@ -70,7 +70,6 @@ public abstract class BasePerTableTemplateWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param context the context.
      * @param rootDir the root dir.
-     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
@@ -80,11 +79,10 @@ public abstract class BasePerTableTemplateWritingHandler
     public File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
-        @NotNull final String engineName,
         @NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
-        return retrieveOutputDir(context.getTableName(), rootDir, engineName, parameters);
+        return retrieveOutputDir(context.getTableName(), rootDir, retrieveProductName(parameters), parameters);
     }
 
     /**

@@ -124,7 +124,6 @@ public class ParseTemplateDefsHandler
             if (templateDefs == null)
             {
                 templateDefs = new ArrayList<TemplateDef>(templateDefFiles.size());
-                new QueryJCommandWrapper<List<TemplateDef>>(command).setSetting(TEMPLATE_DEFS, templateDefs);
             }
 
             for (@Nullable final File defFile : templateDefFiles)
@@ -134,6 +133,11 @@ public class ParseTemplateDefsHandler
                     @NotNull final TemplateDef templateDef = parseDefFile(defFile);
 
                     templateDefs.add(templateDef);
+
+                    if (templateDefs.size() == 1)
+                    {
+                        new QueryJCommandWrapper<List<TemplateDef>>(command).setSetting(TEMPLATE_DEFS, templateDefs);
+                    }
                 }
             }
         }

@@ -82,7 +82,6 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     protected File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
-        @NotNull final String engineName,
         @NotNull final QueryJCommand parameters)
       throws QueryJBuildException
     {
@@ -98,7 +97,6 @@ public abstract class BasePerCustomResultTemplateWritingHandler
                     context.getResult(),
                     retrieveCustomSqlProvider(parameters),
                     t_MetadataManager,
-                    engineName,
                     parameters);
         }
         else
@@ -114,7 +112,6 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @param resultElement the result element.
      * @param customSqlProvider the custom sql provider.
      * @param metadataManager the metadata manager.
-     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
@@ -125,7 +122,6 @@ public abstract class BasePerCustomResultTemplateWritingHandler
         @NotNull final Result resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final String engineName,
         @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
@@ -137,7 +133,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
                 retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveUseSubfoldersFlag(parameters),
-                engineName,
+                retrieveProductName(parameters),
                 parameters,
                 PackageUtils.getInstance());
     }

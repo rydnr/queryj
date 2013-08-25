@@ -106,6 +106,13 @@ public class TemplatePackagingMojo
     private File[] m__aSources;
 
     /**
+     * The output folder.
+     * @parameter property="outputDir" expression="${project.build.directory}/generated-sources" default-value="${project.build.directory}/generated-sources"
+     */
+    @Parameter( property = OUTPUT_DIR, defaultValue = "${project.build.directory}/generated-sources")
+    private File m__OutputDir;
+
+    /**
      * The <code>QueryJChain</code> delegee.
      */
     private QueryJCommand m__QueryJCommand;
@@ -177,7 +184,7 @@ public class TemplatePackagingMojo
     }
 
     /**
-     * Retrieves the m__aSources.
+     * Retrieves the sources.
      * @return such folders.
      */
     @NotNull
@@ -202,9 +209,39 @@ public class TemplatePackagingMojo
     }
 
     /**
+     * Specifies the output dir.
+     * @param dir such folder.
+     */
+    protected final void immutableSetOutputDir(@NotNull final File dir)
+    {
+        this.m__OutputDir = dir;
+    }
+
+    /**
+     * Specifies the output dir.
+     * @param dir such folder.
+     */
+    @SuppressWarnings("unused")
+    public void setOutputDir(@NotNull final File dir)
+    {
+        immutableSetOutputDir(dir);
+    }
+
+    /**
+     * Retrieves the output dir.
+     * @return such folder.
+     */
+    @NotNull
+    public File getOutputDir()
+    {
+        return this.m__OutputDir;
+    }
+
+    /**
      * Executes Template Packaging via Maven2.
      * @throws MojoExecutionException if something goes wrong.
      */
+    @Override
     public void execute()
         throws MojoExecutionException
     {
@@ -285,6 +322,7 @@ public class TemplatePackagingMojo
         try
         {
             populateCommand(command, getSources());
+            populateCommand(command, getOutputDir());
 
             new TemplatePackagingChain<QueryJCommandHandler<QueryJCommand>>().process(command);
         }
@@ -295,7 +333,7 @@ public class TemplatePackagingMojo
     }
 
     /**
-     * Populates any settings in the Mojo to be available in the command.
+     * Populates the source folders in the Mojo to be available in the command.
      * @param command the command.
      * @param sources the source folders.
      */
@@ -304,12 +342,24 @@ public class TemplatePackagingMojo
         new QueryJCommandWrapper<List<File>>(command).setSetting(SOURCES, Arrays.asList(sources));
     }
 
+    /**
+     * Populates the output dir in the Mojo to be available in the command.
+     * @param command the command.
+     * @param outputDir the output dir.
+     */
+    protected void populateCommand(@NotNull final QueryJCommand command, @NotNull final File outputDir)
+    {
+        new QueryJCommandWrapper<File>(command).setSetting(OUTPUT_DIR, outputDir);
+    }
+
+    @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'TemplatePackagingMojo' " +
-               ", 'queryJCommand': '" + m__QueryJCommand +
-               ", 'm__aSources': '" + Arrays.toString(m__aSources) +
+        return "{ 'class': 'TemplatePackagingMojo " +
+               "', 'queryJCommand': '" + this.m__QueryJCommand +
+               "', 'sources': '" + Arrays.toString(this.m__aSources) +
+               "', 'outputDir': '" + this.m__OutputDir.getAbsolutePath() +
                "' }";
     }
 }

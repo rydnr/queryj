@@ -39,6 +39,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
  * Importing JetBrains annotations.
  */
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.TemplateGeneratorThread;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.AbstractTemplateWritingHandler;
@@ -76,6 +77,32 @@ public abstract class TemplatePackagingWritingHandler
      * Default constructor.
      */
     public TemplatePackagingWritingHandler() {}
+
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param parameters the parameter map.
+     * @return such folder.
+     */
+    @NotNull
+    @Override
+    protected File retrieveProjectOutputDir(@NotNull final QueryJCommand parameters)
+    {
+        @NotNull final File result;
+
+        @Nullable final File aux = new QueryJCommandWrapper<File>(parameters).getSetting(OUTPUT_DIR);
+
+        if (aux == null)
+        {
+            // TODO
+            throw new RuntimeException("Missing output dir");
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
+    }
 
     /**
      * Creates a new generator thread.
@@ -116,18 +143,15 @@ public abstract class TemplatePackagingWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param context the context.
      * @param rootDir the root dir.
-     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException
-     *          if the output-dir retrieval process if faulty.
+     * @throws QueryJBuildException if the output-dir retrieval process fails.
      */
     @NotNull
     @Override
     protected File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
-        @NotNull final String engineName,
         @NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {

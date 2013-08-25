@@ -37,7 +37,6 @@ package org.acmsl.queryj.api.handlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.api.AbstractTemplateGeneratorThread;
 import org.acmsl.queryj.api.Template;
 import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.TemplateGenerator;
@@ -51,7 +50,7 @@ import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
- * Importing some Apache Commons Logging classes.
+ * Importing some Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
 
@@ -72,8 +71,6 @@ import org.checkthread.annotations.ThreadSafe;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
@@ -120,7 +117,6 @@ public abstract class AbstractTemplateWritingHandler
     {
         writeTemplates(
             parameters,
-            retrieveProductName(parameters, retrieveDatabaseMetaData(parameters)),
             retrieveThreadCount(parameters),
             retrieveProjectOutputDir(parameters));
 
@@ -130,15 +126,13 @@ public abstract class AbstractTemplateWritingHandler
     /**
      * Writes the templates.
      * @param parameters the parameters.
-     * @param engineName the engine name.
      * @param threadCount the thread count.
      * @param rootDir the root dir.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @ThreadSafe
     protected void writeTemplates(
         @NotNull final QueryJCommand parameters,
-        @NotNull final String engineName,
         final int threadCount,
         @NotNull final File rootDir)
       throws  QueryJBuildException
@@ -148,7 +142,6 @@ public abstract class AbstractTemplateWritingHandler
             @NotNull final List<Future<T>> t_lTasks =
                 writeTemplatesMultithread(
                     retrieveTemplates(parameters),
-                    engineName,
                     parameters,
                     retrieveCharset(parameters),
                     retrieveTemplateGenerator(
@@ -169,7 +162,6 @@ public abstract class AbstractTemplateWritingHandler
         {
             writeTemplatesSequentially(
                 retrieveTemplates(parameters),
-                engineName,
                 parameters,
                 retrieveCharset(parameters),
                 retrieveTemplateGenerator(
@@ -182,7 +174,6 @@ public abstract class AbstractTemplateWritingHandler
     /**
      * Writes the templates.
      * @param templates the templates.
-     * @param engineName the engine name.
      * @param parameters the parameters.
      * @param charset the file encoding.
      * @param templateGenerator the template generator.
@@ -193,7 +184,6 @@ public abstract class AbstractTemplateWritingHandler
     @SuppressWarnings("unused")
     protected void writeTemplatesSequentially(
         @Nullable final List<T> templates,
-        @NotNull final String engineName,
         @NotNull final QueryJCommand parameters,
         @NotNull final Charset charset,
         @NotNull final TG templateGenerator,
@@ -210,7 +200,7 @@ public abstract class AbstractTemplateWritingHandler
                     {
                         templateGenerator.write(
                             t_Template,
-                            retrieveOutputDir(t_Template.getTemplateContext(), rootDir, engineName, parameters),
+                            retrieveOutputDir(t_Template.getTemplateContext(), rootDir, parameters),
                             rootDir,
                             charset);
                     }
@@ -231,7 +221,6 @@ public abstract class AbstractTemplateWritingHandler
     /**
      * Writes the templates.
      * @param templates the templates.
-     * @param engineName the engine name.
      * @param parameters the parameters.
      * @param charset the file encoding.
      * @param templateGenerator the template generator.
@@ -244,7 +233,6 @@ public abstract class AbstractTemplateWritingHandler
     @NotNull
     protected List<Future<T>> writeTemplatesMultithread(
         @Nullable final List<T> templates,
-        @NotNull final String engineName,
         @NotNull final QueryJCommand parameters,
         @NotNull final Charset charset,
         @NotNull final TG templateGenerator,
@@ -271,7 +259,7 @@ public abstract class AbstractTemplateWritingHandler
                             buildGeneratorThread(
                                 t_Template,
                                 templateGenerator,
-                                retrieveOutputDir(t_Template.getTemplateContext(), rootDir, engineName, parameters),
+                                retrieveOutputDir(t_Template.getTemplateContext(), rootDir, parameters),
                                 rootDir,
                                 charset,
                                 t_iIndex + 1,
@@ -383,7 +371,7 @@ public abstract class AbstractTemplateWritingHandler
                                     t_Template,
                                     templateGenerator,
                                     retrieveOutputDir(
-                                        t_Template.getTemplateContext(), rootDir, engineName, parameters),
+                                        t_Template.getTemplateContext(), rootDir, parameters),
                                     rootDir,
                                     charset,
                                     intIndex,
@@ -459,49 +447,6 @@ public abstract class AbstractTemplateWritingHandler
         throws QueryJBuildException;
 
     /**
-     * Retrieves the database product name.
-     * @param parameters the parameter map.
-     * @param metadata the database metadata.
-     * @return the product name.
-     */
-    @NotNull
-    public String retrieveProductName(
-        @NotNull final QueryJCommand parameters, @Nullable final DatabaseMetaData metadata)
-    {
-        @Nullable String result = parameters.getSetting(PRODUCT_NAME);
-
-        if (   (result == null)
-            && (metadata != null))
-        {
-            try
-            {
-                result = metadata.getDatabaseProductName();
-            }
-            catch  (@NotNull final SQLException sqlException)
-            {
-                @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class);
-
-                if (t_Log != null)
-                {
-                    t_Log.warn(
-                        "Cannot retrieve database product name, "
-                        + "version or quote string",
-                        sqlException);
-                }
-            }
-        }
-
-        if (result == null)
-        {
-            result = "";
-        }
-
-        parameters.setSetting(PRODUCT_NAME, result);
-
-        return result;
-    }
-
-    /**
      * Retrieves the generation tasks.
      * @param parameters the parameter map.
      * @return such list.
@@ -531,7 +476,6 @@ public abstract class AbstractTemplateWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param context the context.
      * @param rootDir the root dir.
-     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
@@ -540,7 +484,6 @@ public abstract class AbstractTemplateWritingHandler
     protected abstract File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
-        @NotNull final String engineName,
         @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException;
 }
