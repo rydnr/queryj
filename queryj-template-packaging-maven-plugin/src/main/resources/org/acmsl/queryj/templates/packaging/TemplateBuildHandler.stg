@@ -1,6 +1,6 @@
 /;-*- mode: stringtemplate -*-
 //
-//                      QueryJ
+//                   QueryJ's Template Packaging
 //
 //  Copyright (C) 2002-today  ACM-SL
 //                           chous@acm-sl.org
@@ -53,7 +53,7 @@ sourceImpl(def, C) ::= <<
   @param def the template def.
   @param C the context.
 !>
-<java_header()>
+<java_header(description="Build handler for <def.name.capitalized>Templates.", C=C)>
 <package_declaration(packageName=def.packageName)>
 
 /*

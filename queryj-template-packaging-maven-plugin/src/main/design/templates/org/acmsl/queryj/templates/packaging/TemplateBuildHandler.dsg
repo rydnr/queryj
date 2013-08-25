@@ -11,7 +11,7 @@
   - Add comment: Generates a TemplateBuildHandler source file.;
   - Add comment: @param def the template definition.;
   - Add comment: @param C the context.;
-  - Call <java_header()>;
+  - Call <java_header(description="Build handler for <def.name.capitalized>Templates.", C=C)>;
   - Call <package_declaration(packageName=def.packageName)>;
   - Write the QueryJ-Core import group;
   - Write the JetBrains import group;
