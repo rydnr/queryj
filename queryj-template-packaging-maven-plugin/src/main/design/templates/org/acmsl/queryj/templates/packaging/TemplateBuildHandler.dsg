@@ -1,0 +1,81 @@
+- Create a new StringTemplate template TemplateBuildHandler.stg in folder src/main/resources/org/acmsl/queryj/templates/packaging;
+- Add QueryJ header;
+- Add comment: Defines the rules to generate QueryJ's TemplateBuildHandlers.
+- Declare the group TemplateBuildHandler;
+- Import "common.stg";
+- Define a rule source(C):
+  - Add comment: Generates a TemplateBuildHandler source file.;
+  - Add comment: @param C the context.;
+  - Call <sourceImpl(def=C.templateDef, C=C)>;
+- Define a rule sourceImpl(def, C):
+  - Add comment: Generates a TemplateBuildHandler source file.;
+  - Add comment: @param def the template definition.;
+  - Add comment: @param C the context.;
+  - Call <java_header()>;
+  - Call <package_declaration(packageName=def.packageName)>;
+  - Write the QueryJ-Core import group;
+  - Write the JetBrains import group;
+  - Write the checkthread.org import group;
+  - Write the JDK import group;
+  - Call <class(def=def, C=C> template;
+- Define a rule class(def, C):
+--
+/**
+ * Build handler for {@link <def.name.capitalized>Template}s.
+<class_common_javadoc(
+  template="org/acmsl/templates/packaging/TemplateBuildHandler.stg",
+  timestamp=C.timestamp)>
+ */
+@ThreadSafe
+public class <def.name.capitalized>TemplateBuildHandler
+    extends Base<def.type.capitalized>TemplateBuildHandler\<<def.name.capitalized>Template, <def.name.capitalized>TemplateFactory\>
+{
+    /**
+     * The key to access the templates in the command.
+     */
+    @NotNull static final String TEMPLATES_KEY = "<def.name>_templates";
+
+    /**
+     * Creates a {@code <def.name.capitalized>TemplateBuildHandler}.
+     */
+    public <def.name.capitalized>TemplateBuildHandler() {}
+
+    /**
+     * Retrieves the template factory.
+     * @return the {@link <def.name.capitalized>TemplateFactory} instance.
+     */
+    @Override
+    @NotNull
+    protected <def.name.capitalized>TemplateFactory retrieveTemplateFactory()
+    {
+        return <def.name.capitalized>TemplateFactory.getInstance();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+     @Override
+     @NotNull
+     protected String retrievePackage(
+         @NotNull final String tableName,
+         @NotNull final String engineName,
+         @NotNull final String projectPackage,
+         @NotNull final PackageUtils packageUtils)
+       throws QueryJBuildException
+     {
+         return "<def.packageName>";
+     }
+
+     /**
+      * {@inheritDoc}
+      */
+      @Override
+      protected void storeTemplates(
+          @NotNull final List\<<def.name.capitalized>Template\> templates,
+          @NotNull final QueryJCommand parameters)
+      {
+          new QueryJCommandWrapper\<List\<<def.name.capitalized>\>\>(parameters)
+              .setSetting(TEMPLATES_KEY, templates);
+      }
+}
+--
