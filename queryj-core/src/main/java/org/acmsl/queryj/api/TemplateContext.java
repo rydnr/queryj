@@ -66,4 +66,11 @@ public interface TemplateContext
      */
     @NotNull
     String getFileName();
+
+    /**
+     * Retrieves the package name.
+     * @return such instance.
+     */
+    @NotNull
+    String getPackageName();
 }

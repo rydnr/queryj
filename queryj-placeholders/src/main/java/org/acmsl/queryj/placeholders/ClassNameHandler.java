@@ -38,28 +38,33 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "class_name" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/24
+ * @since 3.0
+ * Created: 2012/05/24
  */
-@SuppressWarnings("unused")
-public class ClassNameHandler<C extends QueryJTemplateContext>
+@ThreadSafe
+public class ClassNameHandler<C extends TemplateContext>
     extends AbstractDecoratedStringHandler<C>
 {
     /**
      * Creates a {@link ClassNameHandler} using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
-    @SuppressWarnings("unused")
-    protected ClassNameHandler(@NotNull final C context)
+    public ClassNameHandler(@NotNull final C context)
     {
         super(context);
     }

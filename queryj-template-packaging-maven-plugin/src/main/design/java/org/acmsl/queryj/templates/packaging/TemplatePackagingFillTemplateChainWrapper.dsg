@@ -1,0 +1,24 @@
+- Create a new Java class TemplatePackagingFillTemplateChainWrapper in package org.acmsl.queryj.templates.packaging;
+- Add comment: Wraps a chain to provide Template Packaging's placeholders.;
+- Add a class parameter <C extends TemplatePackagingContext>;
+- Make it extend AbstractFillTemplateChainWrapper<C>;
+- Implement the constructor TemplatePackagingFillTemplateChainWrapper(C):
+  - Call super(context);
+- Implement getHandlers(C):
+--
+        @NotNull final List result = new ArrayList();
+
+        result.add(new ClassNameHandler<C>(context));
+        result.add(new CopyrightYearsHandler());
+        result.add(new CurrentYearHandler());
+        result.add(new FileNameHandler(context));
+        result.add(new PackageNameHandler(context));
+        result.add(new ProjectPackageHandler(context));
+        result.add(new SerialVersionUIDHandler(context));
+        result.add(new TimestampHandler());
+        result.add(new TemplateNameHandler(context));
+
+        return result;
+--
+- Implement toString();
+- Fix import groups;

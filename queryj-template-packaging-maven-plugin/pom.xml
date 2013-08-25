@@ -39,6 +39,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.acmsl</groupId>
+      <artifactId>queryj-placeholders</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.checkthread</groupId>
       <artifactId>checkthread-annotations</artifactId>
       <optional>true</optional>

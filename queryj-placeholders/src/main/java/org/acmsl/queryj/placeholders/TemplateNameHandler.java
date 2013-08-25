@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing JetBrains annotations.
@@ -54,19 +54,20 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Handler to resolve "templateName" placeholder in templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/08/06
+ * @since 3.0
+ * Created: 2013/08/06
  */
 @ThreadSafe
-public class TemplateNameHandler
-    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, DecoratedString>
+public class TemplateNameHandler<C extends TemplateContext>
+    extends AbstractTemplateContextFillHandler<C, DecoratedString>
 {
-    private static final long serialVersionUID = -6175019064662147096L;
+    private static final long serialVersionUID = -3672095960568134812L;
 
     /**
-     * Creates a new handler associated to given {@link org.acmsl.queryj.api.QueryJTemplateContext}.
+     * Creates a new handler associated to given {@link org.acmsl.queryj.api.TemplateContext}.
      * @param context the template.
      */
-    protected TemplateNameHandler(@NotNull final QueryJTemplateContext context)
+    public TemplateNameHandler(@NotNull final C context)
     {
         super(context);
     }
@@ -77,7 +78,7 @@ public class TemplateNameHandler
      */
     @Nullable
     @Override
-    protected DecoratedString getValue(@NotNull final QueryJTemplateContext context)
+    protected DecoratedString getValue(@NotNull final C context)
     {
         return new DecoratedString(context.getTemplateName());
     }

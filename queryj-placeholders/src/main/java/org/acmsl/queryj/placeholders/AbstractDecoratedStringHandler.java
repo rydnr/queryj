@@ -39,21 +39,27 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Generic class to decorate simple String placeholders with "normalized",
  * "capitalized", etc. versions.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/24
+ * @since 3.0
+ * Created: 2012/05/24
  */
-@SuppressWarnings("unused")
-public abstract class AbstractDecoratedStringHandler<C extends QueryJTemplateContext>
+@ThreadSafe
+public abstract class AbstractDecoratedStringHandler<C extends TemplateContext>
     extends AbstractTemplateContextFillHandler<C, DecoratedString>
 {
     /**

@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing JetBrains annotations.
@@ -53,12 +53,12 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Is able to resolve "package" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2013/05/05
+ * @since 3.0
+ * Created: 2013/05/05
  */
-@SuppressWarnings("unused")
 @ThreadSafe
-public class PackageNameHandler
-    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, DecoratedString>
+public class PackageNameHandler<C extends TemplateContext>
+    extends AbstractTemplateContextFillHandler<C, DecoratedString>
 {
     private static final long serialVersionUID = 6902259512128669602L;
 
@@ -66,8 +66,7 @@ public class PackageNameHandler
      * Creates a handler to resolve "project_package" placeholders.
      * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
-    @SuppressWarnings("unused")
-    public PackageNameHandler(@NotNull final QueryJTemplateContext context)
+    public PackageNameHandler(@NotNull final C context)
     {
         super(context);
     }
@@ -89,7 +88,7 @@ public class PackageNameHandler
      */
     @NotNull
     @Override
-    protected DecoratedString getValue(@NotNull final QueryJTemplateContext context)
+    protected DecoratedString getValue(@NotNull final C context)
     {
         return new DecoratedString(context.getPackageName());
     }

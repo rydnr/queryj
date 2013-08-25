@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.handlers.fillhandlers.TemplateContextFillHandler;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -61,7 +61,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 2012/05/19
  */
 @ThreadSafe
-public abstract class AbstractTemplateContextFillHandler<C extends QueryJTemplateContext,P>
+public abstract class AbstractTemplateContextFillHandler<C extends TemplateContext,P>
     extends AbstractFillHandler<P>
     implements TemplateContextFillHandler<C,P>
 {

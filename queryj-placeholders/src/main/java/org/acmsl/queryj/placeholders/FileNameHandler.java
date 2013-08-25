@@ -38,7 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing JetBrains annotations.
@@ -54,17 +54,18 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Handler to resolve "fileName" placeholder in templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/08/06
+ * @since 3.0
+ * Created: 2013/08/06
  */
 @ThreadSafe
-public class FileNameHandler
-    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, DecoratedString>
+public class FileNameHandler<C extends TemplateContext>
+    extends AbstractTemplateContextFillHandler<C, DecoratedString>
 {
     /**
      * Creates a new handler associated to given {@link org.acmsl.queryj.api.QueryJTemplateContext}.
      * @param context the template.
      */
-    protected FileNameHandler(@NotNull final QueryJTemplateContext context)
+    public FileNameHandler(@NotNull final C context)
     {
         super(context);
     }
@@ -75,7 +76,7 @@ public class FileNameHandler
      */
     @Nullable
     @Override
-    protected DecoratedString getValue(@NotNull final QueryJTemplateContext context)
+    protected DecoratedString getValue(@NotNull final C context)
     {
         return new DecoratedString(context.getFileName());
     }
