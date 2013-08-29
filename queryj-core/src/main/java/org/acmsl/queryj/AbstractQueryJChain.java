@@ -134,7 +134,8 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<QueryJ
      */
     @Nullable
     public CH getNextChainLink(
-        @Nullable final Chain<CH> chain, @Nullable final CH commandHandler)
+        @Nullable final Chain<CH> chain,
+        @Nullable final CH commandHandler)
     {
         @Nullable CH result = null;
 

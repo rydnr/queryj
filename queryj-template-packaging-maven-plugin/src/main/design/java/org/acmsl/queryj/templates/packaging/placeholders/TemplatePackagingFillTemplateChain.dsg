@@ -1,0 +1,14 @@
+- Create a new class TemplatePackagingFillTemplateChain in package org.acmsl.queryj.templates.packaging.placeholders;
+- Add comment: Sets up the chain required to provide placeholder replacements for Template-Packaging templates.;
+- Make it extend AbstractFillTemplateChain<DefaultTemplatePackagingContext>;
+- Implement constructor TemplatePackagingFillTemplateChain(DefaultTemplatePackagingContext);
+  - Add comment: Creates an instance using given context.;
+  - Add comment: @param context the {@link DefaultTemplatePackagingContext context}.
+  - Call super(context);
+- Implement providePlaceholders(boolean) method:
+  - Inherit comment;
+  - return new TemplatePackagingFillTemplateChainWrapper<DefaultTemplatePackagingContext>(this).providePlaceholders(relevantOnly);
+- Implement addHandlers(Chain<FillHandler<?>>, DefaultTemplatePackagingContext, boolean) method:
+  - Add comment: Adds additional placeholders.;
+  - Leave the method empty for now;
+- Fix import groups;

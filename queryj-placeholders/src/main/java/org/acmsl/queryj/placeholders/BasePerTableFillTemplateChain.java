@@ -43,7 +43,9 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.handlers.FillAdapterHandler;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
+import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.TableDecorator;
 import org.acmsl.queryj.metadata.vo.Attribute;
@@ -73,11 +75,12 @@ import org.checkthread.annotations.ThreadSafe;
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.api.PerTableTemplate per-table templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/03
+ * @since 3.0
+ * Created: 2012/06/03
  */
 @ThreadSafe
 public class BasePerTableFillTemplateChain
-    extends AbstractFillTemplateChain<PerTableTemplateContext, CustomResultsHandler>
+    extends AbstractFillTemplateChain<PerTableTemplateContext>
 {
     /**
      * Creates a {@link BasePerTableFillTemplateChain} using given context.
@@ -102,82 +105,85 @@ public class BasePerTableFillTemplateChain
     /**
      * Adds additional per-table handlers.
      * @param chain the chain to be configured.
+     * @param context the template context.
+     * @param relevantOnly whether to use only relevant placeholders or not.
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected void addHandlers(
-        @NotNull final Chain chain,
+        @NotNull final Chain<FillHandler<?>>  chain,
         @NotNull final PerTableTemplateContext context,
         final boolean relevantOnly)
     {
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, CustomResultsHandler, List<Result>>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, CustomResultsHandler, List<Result>>(
                 new CustomResultsHandler(context)),
                 relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, DAOClassNameHandler, DecoratedString>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, DAOClassNameHandler, DecoratedString>(
                 new DAOClassNameHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, DAOImplementationClassNameHandler, DecoratedString>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, DAOImplementationClassNameHandler, DecoratedString>(
                 new DAOImplementationClassNameHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, DAOFactoryClassNameHandler, DecoratedString>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, DAOFactoryClassNameHandler, DecoratedString>(
                 new DAOFactoryClassNameHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, ForeignKeyListHandler,List<ForeignKey>>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, ForeignKeyListHandler,List<ForeignKey>>(
                 new ForeignKeyListHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, LobHandlingTableCheckHandler,Boolean>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, LobHandlingTableCheckHandler,Boolean>(
                 new LobHandlingTableCheckHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, NonPrimaryKeyAttributesHandler,List<Attribute>>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, NonPrimaryKeyAttributesHandler,List<Attribute>>(
                 new NonPrimaryKeyAttributesHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, PrimaryKeyHandler,List<Attribute>>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, PrimaryKeyHandler,List<Attribute>>(
                 new PrimaryKeyHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, TableHandler,TableDecorator>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, TableHandler,TableDecorator>(
                 new TableHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, TableNameHandler, DecoratedString>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, TableNameHandler, DecoratedString>(
                 new TableNameHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, ValueObjectNameHandler, DecoratedString>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, ValueObjectNameHandler, DecoratedString>(
                 new ValueObjectNameHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerTableTemplateContext, TableAttributeTypeImportsHandler,List<String>>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, TableAttributeTypeImportsHandler,List<String>>(
                 new TableAttributeTypeImportsHandler(context)),
             relevantOnly);
     }

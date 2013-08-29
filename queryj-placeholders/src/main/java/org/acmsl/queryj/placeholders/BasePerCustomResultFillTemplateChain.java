@@ -41,6 +41,8 @@ package org.acmsl.queryj.placeholders;
 */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.handlers.FillAdapterHandler;
+import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
@@ -70,12 +72,13 @@ import java.util.List;
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.api.PerCustomResultTemplate per-custom-result templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/17
+ * @since 3.0
+ * Created: 2012/06/17
  */
 @ThreadSafe
 @SuppressWarnings("unused")
 public class BasePerCustomResultFillTemplateChain
-    extends AbstractFillTemplateChain<PerCustomResultTemplateContext, CustomResultHandler>
+    extends AbstractFillTemplateChain<PerCustomResultTemplateContext>
 {
     /**
      * Creates a {@link BasePerCustomResultFillTemplateChain} using given context.
@@ -91,7 +94,8 @@ public class BasePerCustomResultFillTemplateChain
      */
     @NotNull
     @Override
-    public QueryJCommand providePlaceholders(final boolean relevantOnly) throws QueryJBuildException
+    public QueryJCommand providePlaceholders(final boolean relevantOnly)
+        throws QueryJBuildException
     {
         return new FillTemplateChainWrapper<PerCustomResultTemplateContext>(this).providePlaceholders(relevantOnly);
     }
@@ -105,24 +109,24 @@ public class BasePerCustomResultFillTemplateChain
     @Override
     @SuppressWarnings("unchecked")
     protected void addHandlers(
-        @NotNull final Chain<CustomResultHandler> chain,
+        @NotNull final Chain<FillHandler<?>> chain,
         @NotNull final PerCustomResultTemplateContext context,
         final boolean relevantOnly)
     {
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, CustomResultHandler, ResultDecorator>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, CustomResultHandler, ResultDecorator>(
                 new CustomResultHandler(context)),
             relevantOnly);
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, CustomResultTypeImportsHandler, List<String>>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, CustomResultTypeImportsHandler, List<String>>(
                 new CustomResultTypeImportsHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, ResultIdHandler, DecoratedString>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, ResultIdHandler, DecoratedString>(
                 new ResultIdHandler(context)),
             relevantOnly);
     }

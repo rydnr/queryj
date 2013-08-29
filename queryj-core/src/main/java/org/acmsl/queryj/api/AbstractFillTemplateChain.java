@@ -43,7 +43,6 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.FillAdapterHandler;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -58,10 +57,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Sets up the chain to provide all placeholder replacements in templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
- * @since 2012/06/03
+ * @since 3.0
+ * Created: 2012/06/03
  */
-public abstract class AbstractFillTemplateChain<C extends QueryJTemplateContext, CH extends QueryJCommandHandler<QueryJCommand>>
-    extends AbstractQueryJChain<CH>
+public abstract class AbstractFillTemplateChain<C extends TemplateContext>
+    extends AbstractQueryJChain<FillHandler<?>>
     implements FillTemplateChain<C>
 {
     /**
@@ -127,7 +127,7 @@ public abstract class AbstractFillTemplateChain<C extends QueryJTemplateContext,
      * documentation, etc. can be considered not relevant.
      */
     @Override
-    protected Chain<CH> buildChain(@NotNull final Chain<CH> chain)
+    protected Chain<FillHandler<?>> buildChain(@NotNull final Chain<FillHandler<?>> chain)
     {
         return buildChain(chain, false);
     }
@@ -139,7 +139,8 @@ public abstract class AbstractFillTemplateChain<C extends QueryJTemplateContext,
      * be able to find out if two template realizations are equivalent. Usually, generation timestamps,
      * documentation, etc. can be considered not relevant.
      */
-    protected Chain<CH> buildChain(@NotNull final Chain<CH> chain, final boolean relevantOnly)
+    protected Chain<FillHandler<?>> buildChain(
+        @NotNull final Chain<FillHandler<?>> chain, final boolean relevantOnly)
     {
         addHandlers(chain, getTemplateContext(), relevantOnly);
 
@@ -149,9 +150,11 @@ public abstract class AbstractFillTemplateChain<C extends QueryJTemplateContext,
     /**
      * Adds additional per-table handlers.
      * @param chain the chain to be configured.
+     * @param context the context.
+     * @param relevantOnly whether to use relevant-only placeholders.
      */
     protected abstract void addHandlers(
-        @NotNull final Chain<CH> chain,
+        @NotNull final Chain<FillHandler<?>> chain,
         @NotNull final C context,
         final boolean relevantOnly);
 

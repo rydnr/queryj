@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        queryj
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,36 +23,37 @@
 
  ******************************************************************************
  *
- * Filename: BasePerTableFillTemplateChain.java
+ * Filename: TemplatePackagingFillTemplateChain.java
  *
- * Author: Jose San Leandro Armendariz (chous)
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Sets up the chain required to provide placeholder replacements
- *              for per-custom-sql templates.
+ *              for Template-Packaging templates.
  *
- * Date: 6/3/12
- * Time: 12:38 PM
+ * Date: 2013/08/29
+ * Time: 07:00
  *
  */
-package org.acmsl.queryj.placeholders;
+package org.acmsl.queryj.templates.packaging.placeholders;
 
 /*
- *Importing project classes.
-*/
-import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.api.AbstractFillTemplateChain;
-import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-
-/*
- * Importing some ACM-SL Commons classes.
+ * Importing ACM-SL Java Commons classes.
  */
 import org.acmsl.commons.patterns.Chain;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing QueryJ-Core classes.
  */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.api.AbstractFillTemplateChain;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
+import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.TemplatePackagingFillTemplateChainWrapper;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -61,21 +62,20 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Sets up the chain required to provide placeholder replacements for
- * {@link org.acmsl.queryj.api.PerCustomSqlTemplate per-custom-sql templates}.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * Sets up the chain required to provide placeholder replacements for Template-Packaging templates.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2012/07/07
+ * Created: 2013/08/29 07:00
  */
 @ThreadSafe
-public class BasePerCustomSqlFillTemplateChain
-    extends AbstractFillTemplateChain<PerCustomSqlTemplateContext>
+public class TemplatePackagingFillTemplateChain
+    extends AbstractFillTemplateChain<DefaultTemplatePackagingContext>
 {
     /**
-     * Creates a {@link BasePerCustomSqlFillTemplateChain} using given context.
-     * @param context the {@link org.acmsl.queryj.api.PerCustomSqlTemplateContext context}.
+     * Creates an instance using given context.
+     * @param context the {@link DefaultTemplatePackagingContext context}.
      */
-    public BasePerCustomSqlFillTemplateChain(@NotNull final PerCustomSqlTemplateContext context)
+    public TemplatePackagingFillTemplateChain(@NotNull final DefaultTemplatePackagingContext context)
     {
         super(context);
     }
@@ -85,23 +85,23 @@ public class BasePerCustomSqlFillTemplateChain
      */
     @NotNull
     @Override
-    public QueryJCommand providePlaceholders(final boolean relevantOnly)
-        throws QueryJBuildException
+    public QueryJCommand providePlaceholders(final boolean relevantOnly) throws QueryJBuildException
     {
-        return new FillTemplateChainWrapper<PerCustomSqlTemplateContext>(this).providePlaceholders(relevantOnly);
+        return
+            new TemplatePackagingFillTemplateChainWrapper<DefaultTemplatePackagingContext>(this)
+                .providePlaceholders(relevantOnly);
     }
 
     /**
-     * Adds additional per-custom-sql handlers.
+     * Adds additional per-table handlers.
      * @param chain the chain to be configured.
-     * @param context the {@link org.acmsl.queryj.api.PerCustomSqlTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
+     * @param context the {@link DefaultTemplatePackagingContext context}.
+     * @param relevantOnly whether to use only relevant placeholders.
      */
-    @SuppressWarnings("unused")
     @Override
     protected void addHandlers(
         @NotNull final Chain<FillHandler<?>> chain,
-        @NotNull final PerCustomSqlTemplateContext context,
+        @NotNull final DefaultTemplatePackagingContext context,
         final boolean relevantOnly)
     {
         // TODO

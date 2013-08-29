@@ -43,7 +43,9 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
+import org.acmsl.queryj.api.handlers.FillAdapterHandler;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
+import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.metadata.ForeignKeyDecorator;
 
 /*
@@ -70,11 +72,12 @@ import org.checkthread.annotations.ThreadSafe;
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.api.PerForeignKeyTemplate per-foreign-key templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/18
+ * @since 3.0
+ * Created: 2012/06/18
  */
 @ThreadSafe
 public class BasePerForeignKeyFillTemplateChain
-    extends AbstractFillTemplateChain<PerForeignKeyTemplateContext, ForeignKeyHandler>
+    extends AbstractFillTemplateChain<PerForeignKeyTemplateContext>
 {
     /**
      * Creates a {@link BasePerForeignKeyFillTemplateChain} using given context.
@@ -103,19 +106,20 @@ public class BasePerForeignKeyFillTemplateChain
      * @param relevantOnly whether to include only relevant placeholders.
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected void addHandlers(
-        @NotNull final Chain chain,
+        @NotNull final Chain<FillHandler<?>> chain,
         @NotNull final PerForeignKeyTemplateContext context,
         final boolean relevantOnly)
     {
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerForeignKeyTemplateContext, ForeignKeyHandler,ForeignKeyDecorator>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler <PerForeignKeyTemplateContext, ForeignKeyHandler,ForeignKeyDecorator>(
                 new ForeignKeyHandler(context)),
             relevantOnly);
         add(
             chain,
-            new TemplateContextFillAdapterHandler<PerForeignKeyTemplateContext, ForeignKeyAttributeTypeImportsHandler,List<String>>(
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerForeignKeyTemplateContext, ForeignKeyAttributeTypeImportsHandler,List<String>>(
                 new ForeignKeyAttributeTypeImportsHandler(context)),
             relevantOnly);
     }

@@ -43,7 +43,9 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.handlers.FillAdapterHandler;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
+import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.metadata.TableDecorator;
 
 /*
@@ -70,11 +72,12 @@ import org.checkthread.annotations.ThreadSafe;
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.api.PerTableTemplate per-table templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/18
+ * @since 3.0
+ * Created: 2012/06/18
  */
 @ThreadSafe
 public class BasePerRepositoryFillTemplateChain
-    extends AbstractFillTemplateChain<PerRepositoryTemplateContext, TableListHandler>
+    extends AbstractFillTemplateChain<PerRepositoryTemplateContext>
 {
     /**
      * Creates a {@link BasePerRepositoryFillTemplateChain} using given context.
@@ -103,14 +106,15 @@ public class BasePerRepositoryFillTemplateChain
      * @param relevantOnly whether to include only relevant placeholders.
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected void addHandlers(
-        @NotNull final Chain chain,
+        @NotNull final Chain<FillHandler<?>>  chain,
         @NotNull final PerRepositoryTemplateContext context,
         final boolean relevantOnly)
     {
         add(
             chain,
-            new TemplateContextFillAdapterHandler
+            (FillAdapterHandler) new TemplateContextFillAdapterHandler
                 <PerRepositoryTemplateContext, TableListHandler,List<TableDecorator>>(
                 new TableListHandler(context)),
             relevantOnly);

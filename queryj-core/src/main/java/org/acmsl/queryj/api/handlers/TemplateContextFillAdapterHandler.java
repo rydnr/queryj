@@ -60,10 +60,10 @@ import org.checkthread.annotations.ThreadSafe;
  * @since 2012/06/03
  */
 @ThreadSafe
-public class TemplateContextFillAdapterHandler<C extends QueryJTemplateContext, F extends TemplateContextFillHandler<C,P>, P>
-    extends FillAdapterHandler
+public class TemplateContextFillAdapterHandler
+    <C extends QueryJTemplateContext, F extends TemplateContextFillHandler<C,P>, P>
+    extends FillAdapterHandler<F, P>
 {
-
     private static final long serialVersionUID = 7171024612422933270L;
 
     /**
@@ -71,7 +71,6 @@ public class TemplateContextFillAdapterHandler<C extends QueryJTemplateContext, 
      * {@link TemplateContextFillHandler fill handler}.
      * @param fillHandler the fill handler to adapt.
      */
-    @SuppressWarnings("unchecked")
     public TemplateContextFillAdapterHandler(@NotNull final F fillHandler)
     {
         super(fillHandler);
