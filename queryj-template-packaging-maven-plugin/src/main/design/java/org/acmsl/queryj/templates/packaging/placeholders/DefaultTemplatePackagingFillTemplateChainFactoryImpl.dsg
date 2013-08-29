@@ -1,0 +1,6 @@
+- Create a new class DefaultTemplatePackagingFillTemplateChainFactoryImpl in package org.acmsl.queryj.templates.packaging.placeholders;
+- Add comment: Creates the chain to provide all placeholders used in QueryJ's Template Packaging templates.;
+- Make it implement DefaultTemplatePackagingFillTemplateChainFactory;
+- Implement method createFillChain(DefaultTemplatePackagingContext context):
+  - return new FillTemplateChainWrapper<DefaultTemplatePackagingContext>(new TemplatePackagingFillTemplateChain(context));
+- Fix import groups;
