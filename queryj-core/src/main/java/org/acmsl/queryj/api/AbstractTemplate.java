@@ -312,14 +312,16 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Retrieves the string template group.
      * @param path the path.
+     * @param lookupPaths the lookup paths.
      * @return such instance.
      */
     @Nullable
-    protected STGroup retrieveGroup(@NotNull final String path)
+    protected STGroup retrieveGroup(@NotNull final String path, @NotNull final List<String> lookupPaths)
     {
         return
             retrieveGroup(
                 path,
+                lookupPaths,
                 Charset.defaultCharset(),
                 getSTCache());
     }
@@ -327,6 +329,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Retrieves the string template group.
      * @param path the path.
+     * @param lookupPaths the lookup paths.
      * @param charset the charset.
      * @param cache the ST cache.
      * @return such instance.
@@ -335,6 +338,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @Nullable
     protected STGroup retrieveGroup(
         @NotNull final String path,
+        @NotNull final List<String> lookupPaths,
         @NotNull final Charset charset,
         @NotNull final Map cache)
     {
@@ -349,6 +353,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
             result =
                 retrieveGroup(
                     path,
+                    lookupPaths,
                     retrieveStErrorListener(),
                     charset,
                     STUtils.getInstance());
@@ -387,8 +392,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Retrieves the string template group.
      * @param path the path.
-     * @param errorListener the {@link STErrorListener}
-     * instance.
+     * @param lookupPaths the lookup paths.
+     * @param errorListener the {@link STErrorListener} instance.
      * @param charset the charset.
      * @param stUtils the {@link STUtils} instance.
      * @return such instance.
@@ -396,11 +401,12 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @Nullable
     protected STGroup retrieveGroup(
         @NotNull final String path,
+        @NotNull final List<String> lookupPaths,
         @NotNull final STErrorListener errorListener,
         @NotNull final Charset charset,
         @NotNull final STUtils stUtils)
     {
-        return stUtils.retrieveGroup(path, errorListener, charset);
+        return stUtils.retrieveGroup(path, lookupPaths, errorListener, charset);
     }
 
     /**
@@ -714,8 +720,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      */
     @Nullable
     protected String generateOutput(
-        @Nullable final String header, @NotNull final C context, final boolean relevantOnly)
-        throws InvalidTemplateException
+        @SuppressWarnings("unused") @Nullable final String header,
+        @NotNull final C context,
+        final boolean relevantOnly)
+      throws InvalidTemplateException
     {
         @Nullable String result = null;
 
@@ -930,8 +938,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractTemplate' " +
-               ", 'templateContext': '" + m__TemplateContext +
-               "' }";
+        return "{ 'class': 'AbstractTemplate" +
+               "', 'templateContext': '" + this.m__TemplateContext +
+               "', 'placeholderPackage': '" + this.m__strPlaceholderPackage + "' }";
     }
 }

@@ -55,6 +55,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.WeakHashMap;
 import java.util.Map;
 
@@ -108,6 +109,7 @@ public class STUtils
     /**
      * Retrieves the string template group.
      * @param path the path.
+     * @param lookupPaths the lookup paths.
      * @param errorListener the {@link STErrorListener} instance.
      * @param charset the charset.
      * @return such instance.
@@ -115,6 +117,7 @@ public class STUtils
     @Nullable
     protected STGroup retrieveGroup(
         @NotNull final String path,
+        @NotNull final List<String> lookupPaths,
         @NotNull final STErrorListener errorListener,
         @NotNull final Charset charset)
     {
@@ -122,7 +125,7 @@ public class STUtils
         
         if  (result == null)
         {
-            result = retrieveUncachedGroup(path, errorListener, charset);
+            result = retrieveUncachedGroup(path, lookupPaths, errorListener, charset);
             ST_GROUPS.put(path, result);
         }
         
@@ -132,14 +135,15 @@ public class STUtils
     /**
      * Retrieves the string template group.
      * @param path the path.
-     * @param errorListener the {@link STErrorListener}
-     * instance.
+     * @param lookupPaths the lookup paths.
+     * @param errorListener the {@link STErrorListener} instance.
      * @param charset the charset.
      * @return such instance.
      */
     @NotNull
     protected STGroup retrieveUncachedGroup(
         @NotNull final String path,
+        @NotNull final List<String> lookupPaths,
         @NotNull final STErrorListener errorListener,
         @NotNull final Charset charset)
     {
@@ -148,7 +152,13 @@ public class STUtils
 
 //        result.importTemplates(new STGroupDir("org/acmsl/queryj/dao", charset.displayName()));
 //        result.importTemplates(new STGroupDir("org/acmsl/queryj/vo", charset.displayName()));
-        result.importTemplates(new STGroupDir("org/acmsl/queryj/", charset.displayName()));
+        for (@Nullable final String lookupPath : lookupPaths)
+        {
+            if (lookupPath != null)
+            {
+                result.importTemplates(new STGroupDir(lookupPath, charset.displayName()));
+            }
+        }
         result.isDefined("source");
         result.setListener(errorListener);
 

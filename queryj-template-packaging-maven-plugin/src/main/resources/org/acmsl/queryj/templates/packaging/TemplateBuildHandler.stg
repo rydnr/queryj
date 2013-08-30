@@ -98,7 +98,7 @@ class(def, C) ::= <<
  */
 @ThreadSafe
 public class <def.name.capitalized>TemplateBuildHandler
-    extends Base<def.type.capitalized>TemplateBuildHandler\<<def.name.capitalized>Template, <def.name.capitalized>TemplateFactory\>
+    extends Base<def.type.capitalized>TemplateBuildHandler\<<def.name.capitalized>Template, <def.name.capitalized>TemplateFactory>
 {
     /**
      * The key to access the templates in the command.
@@ -141,10 +141,10 @@ public class <def.name.capitalized>TemplateBuildHandler
       */
       @Override
       protected void storeTemplates(
-          @NotNull final List\<<def.name.capitalized>Template\> templates,
+          @NotNull final List\<<def.name.capitalized>Template> templates,
           @NotNull final QueryJCommand parameters)
       {
-          new QueryJCommandWrapper\<List\<<def.name.capitalized>\>\>(parameters)
+          new QueryJCommandWrapper\<List\<<def.name.capitalized>\>>(parameters)
               .setSetting(TEMPLATES_KEY, templates);
       }
 }

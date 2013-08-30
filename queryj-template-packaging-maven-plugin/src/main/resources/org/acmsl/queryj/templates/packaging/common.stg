@@ -1,4 +1,4 @@
-/;-*- mode: stringtemplate -*-
+//;-*- mode: stringtemplate -*-
 //
 //                  QueryJ's Template Packaging
 //
@@ -90,6 +90,6 @@ package <packageName>;
 >>
 
 class_common_javadoc(template, timestamp) ::= <<
- * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ's Template Packaging\</a\> (<template>)
+ * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ's Template Packaging\</a> (<template>)
  * Created: <timestamp>
 >>

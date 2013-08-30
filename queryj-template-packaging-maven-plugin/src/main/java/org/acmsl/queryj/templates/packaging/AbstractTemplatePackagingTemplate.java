@@ -60,6 +60,8 @@ import org.checkthread.annotations.ThreadSafe;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 
+import java.util.Arrays;
+
 /**
  * Abstract template for Template Packaging.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
@@ -102,7 +104,10 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup(TEMPLATE_PACKAGING_GROUP + getTemplateName() + ".stg");
+        return
+            retrieveGroup(
+                TEMPLATE_PACKAGING_GROUP + getTemplateName() + ".stg",
+                Arrays.asList("org/acmsl/queryj/templates/packaging/"));
     }
 
     /**
@@ -155,7 +160,9 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
      * @throws InvalidTemplateException if the template cannot be processed.
      */
     @Nullable
-    protected String generateOutput1(@Nullable final String header, @NotNull final C context, final boolean relevantOnly)
+    @SuppressWarnings("unused")
+    protected String generateOutput1(
+        @Nullable final String header, @NotNull final C context, final boolean relevantOnly)
         throws InvalidTemplateException
     {
         // TODO
