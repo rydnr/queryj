@@ -79,6 +79,13 @@ public interface TemplatePackagingContext
     public TemplateDef getTemplateDef();
 
     /**
+     * Retrieves the root dir.
+     * @return such folder.
+     */
+    @NotNull
+    public File getRootDir();
+
+    /**
      * Retrieves the output dir.
      * @return such folder.
      */

@@ -183,6 +183,7 @@ public abstract class TemplatePackagingBuildHandler
 
     /**
      * Builds the default context.
+     * @param templateDef the template def.
      * @param parameters the parameters.
      * @return the default context.
      */
@@ -190,13 +191,29 @@ public abstract class TemplatePackagingBuildHandler
     protected DefaultTemplatePackagingContext buildDefaultContext(
         @NotNull final TemplateDef templateDef, @NotNull final QueryJCommand parameters)
     {
+        @NotNull final String templateName = retrieveTemplateName(parameters);
+        @NotNull final String outputPackage = retrieveOutputPackage(parameters);
+
+        @NotNull final File rootDir = retrieveRootDir(parameters);
+
         return
             new DefaultTemplatePackagingContext(
                 templateDef,
-                retrieveTemplateName(parameters),
-                templateDef.getFile().getAbsolutePath(),
-                retrieveOutputDir(parameters));
+                templateName,
+                templateName + ".java",
+                outputPackage,
+                rootDir,
+                new File(rootDir.getAbsolutePath()
+                    + File.separator + outputPackage.replaceAll("\\.", File.separator)));
     }
+
+    /**
+     * Retrieves the output package for the generated file.
+     * @param parameters the parameters.
+     * @return such package.
+     */
+    @NotNull
+    protected abstract String retrieveOutputPackage(@NotNull final QueryJCommand parameters);
 
     /**
      * Retrieves the template defs.
@@ -245,7 +262,7 @@ public abstract class TemplatePackagingBuildHandler
      * @return the output dir.
      */
     @NotNull
-    public File retrieveOutputDir(@NotNull final QueryJCommand parameters)
+    public File retrieveRootDir(@NotNull final QueryJCommand parameters)
     {
         @Nullable final File result = new QueryJCommandWrapper<File>(parameters).getSetting(OUTPUT_DIR);
 

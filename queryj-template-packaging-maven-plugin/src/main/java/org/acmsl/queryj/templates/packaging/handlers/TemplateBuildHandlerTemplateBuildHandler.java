@@ -105,7 +105,8 @@ public class TemplateBuildHandlerTemplateBuildHandler
      */
     @Override
     protected void storeTemplates(
-        @NotNull final List<TemplateBuildHandlerTemplate<DefaultTemplatePackagingContext>> templates, @NotNull final QueryJCommand parameters)
+        @NotNull final List<TemplateBuildHandlerTemplate<DefaultTemplatePackagingContext>> templates,
+        @NotNull final QueryJCommand parameters)
     {
         new QueryJCommandWrapper<List<TemplateBuildHandlerTemplate<DefaultTemplatePackagingContext>>>(parameters)
             .setSetting(TEMPLATE_BUILD_HANDLER_TEMPLATES, templates);
@@ -121,5 +122,17 @@ public class TemplateBuildHandlerTemplateBuildHandler
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
         return "BuildHandler";
+    }
+
+    /**
+     * Retrieves the output package for the generated file.
+     * @param parameters the parameters.
+     * @return such package.
+     */
+    @NotNull
+    @Override
+    protected String retrieveOutputPackage(@NotNull final QueryJCommand parameters)
+    {
+        return OUTPUT_PACKAGE + ".handlers";
     }
 }

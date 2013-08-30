@@ -50,6 +50,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Represents template definitions: all additional metadata associated to
@@ -60,6 +61,7 @@ import java.io.File;
  */
 @ThreadSafe
 public interface TemplateDef
+    extends Serializable
 {
     /**
      * Retrieves the name.

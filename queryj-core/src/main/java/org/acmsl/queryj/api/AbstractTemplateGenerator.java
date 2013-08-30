@@ -284,13 +284,15 @@ public abstract class AbstractTemplateGenerator<N extends Template<? extends Tem
 
                 if (!"".equals(t_strFileContents))
                 {
-                    final boolean folderCreated = outputDir.mkdirs();
+                    @NotNull final File t_FinalDir = new File(t_strOutputFile).getParentFile();
+
+                    final boolean folderCreated = t_FinalDir.mkdirs();
 
                     if (   (!folderCreated)
                         && (!outputDir.exists()))
                     {
                         throw
-                            new IOException("Cannot create output dir: " + outputDir);
+                            new IOException("Cannot create output dir: " + t_FinalDir);
                     }
                     else if (t_strFileContents != null)
                     {

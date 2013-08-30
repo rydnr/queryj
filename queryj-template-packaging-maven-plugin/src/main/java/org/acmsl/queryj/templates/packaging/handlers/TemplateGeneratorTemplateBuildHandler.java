@@ -123,4 +123,16 @@ public class TemplateGeneratorTemplateBuildHandler
         new QueryJCommandWrapper<List<TemplateGeneratorTemplate<DefaultTemplatePackagingContext>>>(parameters)
             .setSetting(TEMPLATE_GENERATOR_TEMPLATES, templates);
     }
+
+    /**
+     * Retrieves the output package for the generated file.
+     * @param parameters the parameters.
+     * @return such package.
+     */
+    @NotNull
+    @Override
+    protected String retrieveOutputPackage(@NotNull final QueryJCommand parameters)
+    {
+        return OUTPUT_PACKAGE;
+    }
 }

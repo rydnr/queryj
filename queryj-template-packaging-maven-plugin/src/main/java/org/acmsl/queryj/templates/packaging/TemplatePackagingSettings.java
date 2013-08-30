@@ -103,4 +103,9 @@ public interface TemplatePackagingSettings
      * The key to access the template handler bundle templates.
      */
     String TEMPLATE_HANDLER_BUNDLE_TEMPLATES = "template_handler_bundle_templates";
+
+    /*
+     * The base package for the QueryJ-specific output files.
+     */
+    String OUTPUT_PACKAGE = "org.acmsl.queryj.templates";
 }

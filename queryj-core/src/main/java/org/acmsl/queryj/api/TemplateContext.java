@@ -45,14 +45,20 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
+import java.io.Serializable;
+
 /**
  * Represents the context used by templates to build sources.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/08/15 08/19
-*/
+ */
 @ThreadSafe
 public interface TemplateContext
+    extends Serializable
 {
     /**
      * Retrieves the template name.

@@ -79,6 +79,18 @@ public class DefaultTemplatePackagingContext
     private String m__strFileName;
 
     /**
+     * The package name.
+     */
+    @NotNull
+    private String m__strPackageName;
+
+    /**
+     * The root dir.
+     */
+    @NotNull
+    private File m__RootDir;
+
+    /**
      * The output dir.
      */
     @NotNull
@@ -95,11 +107,15 @@ public class DefaultTemplatePackagingContext
         @NotNull final TemplateDef templateDef,
         @NotNull final String templateName,
         @NotNull final String fileName,
+        @NotNull final String packageName,
+        @NotNull final File rootDir,
         @NotNull final File outputDir)
     {
         immutableSetTemplateDef(templateDef);
         immutableSetTemplateName(templateName);
         immutableSetFileName(fileName);
+        immutableSetPackageName(packageName);
+        immutableSetRootDir(rootDir);
         immutableSetOutputDir(outputDir);
     }
 
@@ -194,6 +210,25 @@ public class DefaultTemplatePackagingContext
     }
 
     /**
+     * Specifies the package name.
+     * @param packageName such information.
+     */
+    protected void immutableSetPackageName(@NotNull final String packageName)
+    {
+        this.m__strPackageName = packageName;
+    }
+
+    /**
+     * Specifies the package name.
+     * @param packageName such information.
+     */
+    @SuppressWarnings("unused")
+    protected void setPackageName(@NotNull final String packageName)
+    {
+        immutableSetPackageName(packageName);
+    }
+
+    /**
      * Retrieves the package name.
      * @return such information.
      */
@@ -201,17 +236,37 @@ public class DefaultTemplatePackagingContext
     @NotNull
     public String getPackageName()
     {
-        return getPackageName(getTemplateDef());
+        return m__strPackageName;
     }
 
     /**
-     * Retrieves the package name.
-     * @return such information.
+     * Specifies the root dir.
+     * @param dir such dir.
      */
-    @NotNull
-    protected String getPackageName(@NotNull final TemplateDef templateDef)
+    protected final void immutableSetRootDir(@NotNull final File dir)
     {
-        return templateDef.getPackageName();
+        this.m__RootDir = dir;
+    }
+
+    /**
+     * Specifies the root dir.
+     * @param dir such dir.
+     */
+    @SuppressWarnings("unused")
+    protected void setRootDir(@NotNull final File dir)
+    {
+        immutableSetRootDir(dir);
+    }
+
+    /**
+     * Retrieves the root dir.
+     * @return such folder.
+     */
+    @Override
+    @NotNull
+    public File getRootDir()
+    {
+        return this.m__RootDir;
     }
 
     /**
@@ -251,7 +306,9 @@ public class DefaultTemplatePackagingContext
         return "{ 'class': 'DefaultTemplatePackagingContext' " +
                ", 'fileName': '" + m__strFileName + '\'' +
                ", 'templateName': '" + m__strTemplateName + '\'' +
-               ", 'templateDef': " + m__TemplateDef + '\'' +
+               ", 'packageName': '" + m__strPackageName + '\'' +
+               ", 'templateDef': " + m__TemplateDef +
+               ", 'rootDir': '" + m__RootDir.getAbsolutePath() + '\'' +
                ", 'outputDir': '" + m__OutputDir.getAbsolutePath() + "' }";
     }
 }
