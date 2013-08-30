@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Templates Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,9 +37,7 @@ package org.acmsl.queryj.templates.packaging;
  */
 import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.api.exceptions.CannotFindTemplatesException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.api.handlers.TemplateHandler;
 import org.acmsl.queryj.templates.packaging.handlers.FindTemplateDefsHandler;
 import org.acmsl.queryj.templates.packaging.handlers.ParseTemplateDefsHandler;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateBuildHandlerTemplateHandlerBundle;
@@ -49,7 +47,6 @@ import org.acmsl.queryj.templates.packaging.handlers.TemplateHandlerBundleTempla
 import org.acmsl.queryj.templates.packaging.handlers.TemplatePackagingParameterValidationHandler;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateWritingHandlerTemplateHandlerBundle;
 import org.acmsl.queryj.tools.QueryJChain;
-import org.acmsl.queryj.tools.TemplateChainProvider;
 import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
@@ -59,15 +56,9 @@ import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.commons.patterns.Chain;
 
 /*
- * Importing some JDK classes.
- */
-import java.util.ServiceLoader;
-
-/*
  * Importing jetbrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -77,6 +68,7 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Defines the steps performed by QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @since 3.0
  */
 @ThreadSafe
 public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJCommand>>
@@ -121,39 +113,7 @@ public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJComman
 
         chain.add((CH) new TemplateWritingHandlerTemplateHandlerBundle());
 
-//        fillTemplateHandlers(chain);
-
         return chain;
-    }
-
-    /**
-     * Fills given chain with external template bundles.
-     * @param chain the chain.
-     * @throws QueryJBuildException if the chain cannot be built successfully.
-     */
-    @SuppressWarnings("unchecked")
-    protected void fillTemplateHandlers(@NotNull final Chain<CH> chain)
-        throws QueryJBuildException
-    {
-        @NotNull final ServiceLoader<TemplateChainProvider> loader =
-            ServiceLoader.load(TemplateChainProvider.class);
-
-        if (loader.iterator().hasNext())
-        {
-            @NotNull final TemplateChainProvider<TemplateHandler> provider = loader.iterator().next();
-
-            for (@Nullable final TemplateHandler handler : provider.getHandlers())
-            {
-                if (handler != null)
-                {
-                    chain.add((CH) handler);
-                }
-            }
-        }
-        else
-        {
-            throw new CannotFindTemplatesException(TemplateChainProvider.class);
-        }
     }
 
     /**
