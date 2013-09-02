@@ -1,0 +1,16 @@
+- Create a new Java class TemplateDefHandler, in package org.acmsl.queryj.templates.packaging.placeholders;
+- Add comment: Handler to resolve "templateDef" placeholder in templates.;
+- Make it extend AbstractTemplateContextFillHandler<DefaultTemplatePackagingContext, TemplateDef>;
+- Implement constructor TemplateDefHandler(DefaultTemplatePackagingContext):
+  - Add comment: Creates a new instance.;
+  - Add comment: @param context the context.;
+  - Call super(context);;
+- Implement method getPlaceHolder():
+  - return "templateDef";;
+- Implement method getValue(DefaultTemplatePackagingContext):
+  - Remove the throw clause;
+  - Add comment: Retrieves the {@link TemplateDef}, to be available in templates.;
+  - Add comment: @return such instance.;
+  - return context.getTemplateDef();;
+- Define serialVersionUID;
+- Fix import groups;

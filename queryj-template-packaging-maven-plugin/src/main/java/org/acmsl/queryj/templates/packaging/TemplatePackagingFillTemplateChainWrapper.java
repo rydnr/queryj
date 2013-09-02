@@ -36,20 +36,32 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.placeholders.TemplateDefHandler;
+
+/*
+ * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.api.FillTemplateChain;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.api.placeholders.AbstractFillTemplateChainWrapper;
+
+/*
+ * Importing QueryJ-Placeholders classes.
+ */
 import org.acmsl.queryj.placeholders.ClassNameHandler;
 import org.acmsl.queryj.placeholders.CopyrightYearsHandler;
 import org.acmsl.queryj.placeholders.CurrentYearHandler;
 import org.acmsl.queryj.placeholders.FileNameHandler;
 import org.acmsl.queryj.placeholders.PackageNameHandler;
-import org.acmsl.queryj.placeholders.ProjectPackageHandler;
 import org.acmsl.queryj.placeholders.SerialVersionUIDHandler;
 import org.acmsl.queryj.placeholders.TemplateNameHandler;
 import org.acmsl.queryj.placeholders.TimestampHandler;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -57,6 +69,9 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,14 +82,14 @@ import java.util.List;
  * Created: 2013/08/25 16:34
  */
 @ThreadSafe
-public class TemplatePackagingFillTemplateChainWrapper<C extends TemplatePackagingContext>
-    extends AbstractFillTemplateChainWrapper<C>
+public class TemplatePackagingFillTemplateChainWrapper
+    extends AbstractFillTemplateChainWrapper<DefaultTemplatePackagingContext>
 {
     /**
      * Creates a new chain wrapper.
      * @param chain the chain to wrap.
      */
-    public TemplatePackagingFillTemplateChainWrapper(@NotNull final FillTemplateChain<C> chain)
+    public TemplatePackagingFillTemplateChainWrapper(@NotNull final FillTemplateChain<DefaultTemplatePackagingContext> chain)
     {
         super(chain);
     }
@@ -86,18 +101,19 @@ public class TemplatePackagingFillTemplateChainWrapper<C extends TemplatePackagi
     @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    protected List<FillHandler> getHandlers(@NotNull final C context)
+    protected List<FillHandler> getHandlers(@NotNull final DefaultTemplatePackagingContext context)
     {
-        @NotNull final List result = new ArrayList();
+        @NotNull final List<FillHandler> result = new ArrayList<FillHandler>();
 
-        result.add(new ClassNameHandler<C>(context));
+        result.add(new ClassNameHandler<DefaultTemplatePackagingContext>(context));
         result.add(new CopyrightYearsHandler());
         result.add(new CurrentYearHandler());
-        result.add(new FileNameHandler<C>(context));
-        result.add(new PackageNameHandler<C>(context));
-        result.add(new SerialVersionUIDHandler<C>(context));
+        result.add(new FileNameHandler<DefaultTemplatePackagingContext>(context));
+        result.add(new PackageNameHandler<DefaultTemplatePackagingContext>(context));
+        result.add(new SerialVersionUIDHandler<DefaultTemplatePackagingContext>(context));
         result.add(new TimestampHandler());
-        result.add(new TemplateNameHandler<C>(context));
+        result.add(new TemplateNameHandler<DefaultTemplatePackagingContext>(context));
+        result.add(new TemplateDefHandler(context));
 
         return result;
     }

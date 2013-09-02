@@ -85,7 +85,8 @@ public class TemplatePackagingFillTemplateChain
      */
     @NotNull
     @Override
-    public QueryJCommand providePlaceholders(final boolean relevantOnly) throws QueryJBuildException
+    public QueryJCommand providePlaceholders(final boolean relevantOnly)
+        throws QueryJBuildException
     {
         return
             new TemplatePackagingFillTemplateChainWrapper<DefaultTemplatePackagingContext>(this)
@@ -104,6 +105,5 @@ public class TemplatePackagingFillTemplateChain
         @NotNull final DefaultTemplatePackagingContext context,
         final boolean relevantOnly)
     {
-        // TODO
     }
 }

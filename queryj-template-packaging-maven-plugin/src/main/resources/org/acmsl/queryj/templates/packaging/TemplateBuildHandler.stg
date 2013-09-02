@@ -44,7 +44,7 @@ source(C) ::= <<
   Generates a TemplateBuildHandler source file.
   @param C the context.
 !>
-<sourceImpl(def=C.def, C=C)>
+<sourceImpl(def=C.templateDef, C=C)>
 >>
 
 sourceImpl(def, C) ::= <<
@@ -97,7 +97,7 @@ class(def, C) ::= <<
   timestamp=C.timestamp)>
  */
 @ThreadSafe
-public class <def.name.capitalized>TemplateBuildHandler
+public class <C.class_name>
     extends Base<def.type.capitalized>TemplateBuildHandler\<<def.name.capitalized>Template, <def.name.capitalized>TemplateFactory>
 {
     /**
