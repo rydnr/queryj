@@ -60,7 +60,7 @@ import java.io.Serializable;
  * Created: 2013/08/14 09:01
  */
 @ThreadSafe
-public interface TemplateDef
+public interface TemplateDef<S>
     extends Serializable
 {
     /**
@@ -68,7 +68,7 @@ public interface TemplateDef
      * @return such name.
      */
     @NotNull
-    String getName();
+    S getName();
 
     /**
      * Retrieves the type.
@@ -89,14 +89,14 @@ public interface TemplateDef
      * @return such expression.
      */
     @NotNull
-    String getFilenameBuilder();
+    S getFilenameBuilder();
 
     /**
      * Retrieves the package name.
      * @return such name.
      */
     @NotNull
-    String getPackageName();
+    S getPackageName();
 
     /**
      * Retrieves the actual template definition file.

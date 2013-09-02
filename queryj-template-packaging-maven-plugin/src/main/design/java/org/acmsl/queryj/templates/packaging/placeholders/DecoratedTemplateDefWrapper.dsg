@@ -1,0 +1,22 @@
+- Create a new Java class DecoratedTemplateDefWrapper, in package org.acmsl.queryj.templates.packaging.placeholders;
+- Add comment: Wraps a {@link TemplateDef} to provide decorated versions of its information, to be used in templates.;
+- Create a TemplateDef attribute;
+- Create a constructor accepting a TemplateDef instance:
+  - Initialize the attribute with the instance provided;
+- Create immutable setter;
+- Create setter;
+- Create getter;
+- Implement method getName():
+  - Wrap attribute's getName() using a DecoratedString;
+- Implement method getType():
+  - Return attribute's getType();
+- Implement method getOutput():
+  - Return attribute's getOutput();
+- Implement method getFilenameBuilder():
+  - Wrap attribute's getFilenameBuilder() using a DecoratedString;
+- Implement method getPackageName():
+  - Wrap attribute's getPackageName() using a DecoratedString;
+- Implement toString();
+- Fix import groups;
+
+

@@ -64,7 +64,7 @@ public class DefaultTemplatePackagingContext
      * The template def.
      */
     @NotNull
-    private TemplateDef m__TemplateDef;
+    private TemplateDef<String> m__TemplateDef;
 
     /**
      * The template name.
@@ -104,7 +104,7 @@ public class DefaultTemplatePackagingContext
      * @param outputDir the output dir.
      */
     public DefaultTemplatePackagingContext(
-        @NotNull final TemplateDef templateDef,
+        @NotNull final TemplateDef<String> templateDef,
         @NotNull final String templateName,
         @NotNull final String fileName,
         @NotNull final String packageName,
@@ -123,7 +123,7 @@ public class DefaultTemplatePackagingContext
      * Specifies the template def.
      * @param templateDef the template def.
      */
-    protected final void immutableSetTemplateDef(@NotNull final TemplateDef templateDef)
+    protected final void immutableSetTemplateDef(@NotNull final TemplateDef<String> templateDef)
     {
         this.m__TemplateDef = templateDef;
     }
@@ -133,7 +133,7 @@ public class DefaultTemplatePackagingContext
      * @param templateDef the template def.
      */
     @SuppressWarnings("unused")
-    protected void setTemplateDef(@NotNull final TemplateDef templateDef)
+    protected void setTemplateDef(@NotNull final TemplateDef<String> templateDef)
     {
         immutableSetTemplateDef(templateDef);
     }
@@ -144,7 +144,7 @@ public class DefaultTemplatePackagingContext
      */
     @Override
     @NotNull
-    public TemplateDef getTemplateDef()
+    public TemplateDef<String> getTemplateDef()
     {
         return this.m__TemplateDef;
     }

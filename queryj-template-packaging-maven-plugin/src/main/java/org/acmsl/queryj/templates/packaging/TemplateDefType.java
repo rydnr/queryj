@@ -95,8 +95,16 @@ public enum TemplateDefType
      * @param type the value.
      * @return the enum.
      */
+    @NotNull
     public static TemplateDefType getEnumFromString(@NotNull final String type)
     {
         return EnumUtils.getInstance().getEnumFromString(TemplateDefType.class, type);
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "{ 'class': 'TemplateDefType', 'type': '" + this.m__strType + "' }";
     }
 }

@@ -89,7 +89,7 @@ public class TemplatePackagingFillTemplateChain
         throws QueryJBuildException
     {
         return
-            new TemplatePackagingFillTemplateChainWrapper<DefaultTemplatePackagingContext>(this)
+            new TemplatePackagingFillTemplateChainWrapper(this)
                 .providePlaceholders(relevantOnly);
     }
 

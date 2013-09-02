@@ -37,19 +37,26 @@
 package org.acmsl.queryj.templates.packaging.placeholders;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Templates Packaging classes.
  */
-import org.acmsl.queryj.api.FillTemplateChain;
-import org.acmsl.queryj.placeholders.FillTemplateChainWrapper;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingFillTemplateChainWrapper;
+
+/*
+ * Importing QueryJ-Core classes.
+ */
+import org.acmsl.queryj.api.FillTemplateChain;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Creates the chain to provide all placeholders used in
@@ -72,7 +79,7 @@ public class DefaultTemplatePackagingFillTemplateChainFactoryImpl
     public FillTemplateChain<DefaultTemplatePackagingContext> createFillChain(
         @NotNull final DefaultTemplatePackagingContext context)
     {
-        return new TemplatePackagingFillTemplateChainWrapper<DefaultTemplatePackagingContext>(
+        return new TemplatePackagingFillTemplateChainWrapper(
             new TemplatePackagingFillTemplateChain(context));
     }
 }
