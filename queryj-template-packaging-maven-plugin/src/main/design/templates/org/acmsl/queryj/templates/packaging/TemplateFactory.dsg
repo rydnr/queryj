@@ -1,0 +1,120 @@
+- Create a new StringTemplate template TemplateFactory.stg in folder src/main/resources/org/acmsl/queryj/templates/packaging;
+- Add QueryJ header;
+- Add comment: Defines the rules to generate QueryJ's TemplateFactories.;
+- Declare the group TemplateFactory;
+- Import "common.stg";
+- Define a rule source(C):
+  - Add comment: Generates a TemplateFactory source file.;
+  - Add comment: @param C the context.;
+  - Call <sourceImpl(def=C.templateDef, C=C)>;
+- Define a rule sourceImpl(def, C):
+  - Add comment: Generates a TemplateFactory source file according to a TemplateDef.;
+  - Add comment: @param def the template definition.;
+  - Add comment: @param C the context.;
+  - Call
+--
+<java_header(
+    description=[ "Factory for", def.name.capitalized, "Templates" ],
+    description_oneline=true,
+    filename=C.class_name,
+    template="org/acmsl/queryj/templates/packaging/TemplateFactory.stg",
+    C=C)>
+--
+  - Call <package_declaration(packageName=def.packageName)>;
+  - Write QueryJ-Core import group;
+  - Write ACM-SL Commons import group;
+  - Write JetBrains import group;
+  - Write checkthread.org import group;
+  - Write JDK import group;
+  - Call <class(def=def, C=C)>;
+- Define a rule class(def, C):
+--
+/**
+ * Factory for {@link <def.name.capitalized>Template}s.
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/packaging/TemplateFactory.stg",
+  timestamp=C.timestamp)>
+ */
+@ThreadSafe
+public class <C.class_name>
+    implements <def.type.name.capitalized>Template\<<def.name.capitalized>Template>,
+               Singleton
+{
+    /**
+     * Singleton instance to avoid double-locking check.
+     */
+    protected static final class <C.class_name>SingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final <C.class_name> SINGLETON = new <C.class_name>();
+    }
+
+    /**
+     * Retrieves the singleton instance.
+     * @return such instance.
+     */
+    @NotNull
+    public static <C.class_name>getInstance()
+    {
+        return <C.class_name>SingletonContainer.SINGLETON;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    public <def.name.capitalized>Template createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final String packageName,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @Nullable final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
+        @NotNull final String tableName,
+        @NotNull final List\<Row> staticContents)
+    {
+        return
+            new <def.name.capitalized>Template(
+                new <def.type.name.capitalized>TemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    decoratorFactory,
+                    packageName,
+                    basePackageName,
+                    repositoryName,
+                    implementMarkerInterfaces,
+                    jmx,
+                    jndiLocation,
+                    disableGenerationTimestamps,
+                    disableNotNullAnnotations,
+                    disableCheckthreadAnnotations,
+                    retrieveTemplateFileName(tableName, metadataManager),
+                    tableName,
+                    staticContents));
+    }
+
+    /**
+     * Retrieves the file name of the template.
+     * @param tableName the table name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return the file name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(
+        @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
+    {
+        return "<def.filename>";
+    }
+}
+--

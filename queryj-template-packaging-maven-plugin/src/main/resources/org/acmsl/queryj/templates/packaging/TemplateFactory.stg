@@ -1,0 +1,184 @@
+//;-*- mode: stringtemplate -*-
+//
+//                   QueryJ's Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: TemplateFactory.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate QueryJ's TemplateFactories.
+//
+group TemplateFactory;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+ Generates a TemplateFactory source file.
+ @param C the context.
+ !>
+<sourceImpl(def=C.templateDef, C=C)>
+>>
+
+sourceImpl(def, C) ::= <<
+<!
+  Generates a TemplateFactory source file.
+  @param def the template def.
+  @param C the context.
+!>
+<java_header(
+  description=[ "Factory for", def.name.capitalized, "Templates." ],
+  description_oneline=true,
+  filename=C.class_name,
+  template="org/acmsl/templates/packaging/TemplateFactory.stg",
+   C=C)>
+<package_declaration(packageName=def.packageName)>
+
+/*
+ * Importing QueryJ-Core classes.
+ */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateBuildHandler;
+import org.acmsl.queryj.tools.PackageUtils;
+
+/*
+ * Importing custom templates.
+ */
+import <def.packageName>.<def.name.capitalized>Template;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.List;
+
+<class(def=def, C=C)>
+>>
+
+class(def, C) ::= <<
+/**
+ * Factory for {@link <def.name.capitalized>Template}s.
+<class_common_javadoc(
+  template="org/acmsl/templates/packaging/TemplateFactory.stg",
+  timestamp=C.timestamp)>
+ */
+@ThreadSafe
+public class <C.class_name>
+    implements <def.type.name.capitalized>TemplateFactory\<<def.name.capitalized>Template>,
+               Singleton
+{
+    /**
+     * Singleton instance to avoid double-locking check.
+     */
+    protected static final class <C.class_name>SingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final <C.class_name> SINGLETON = new <C.class_name>();
+    }
+
+    /**
+     * Retrieves the singleton instance.
+     * @return such instance.
+     */
+    @NotNull
+    public static <C.class_name>getInstance()
+    {
+        return <C.class_name>SingletonContainer.SINGLETON;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    public <def.name.capitalized>Template createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final String packageName,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @Nullable final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
+        @NotNull final String tableName,
+        @NotNull final List\<Row> staticContents)
+    {
+        return
+            new <def.name.capitalized>Template(
+                new <def.type.name.capitalized>TemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    decoratorFactory,
+                    packageName,
+                    basePackageName,
+                    repositoryName,
+                    implementMarkerInterfaces,
+                    jmx,
+                    jndiLocation,
+                    disableGenerationTimestamps,
+                    disableNotNullAnnotations,
+                    disableCheckthreadAnnotations,
+                    retrieveTemplateFileName(tableName, metadataManager),
+                    tableName,
+                    staticContents));
+    }
+
+    /**
+     * Retrieves the file name of the template.
+     * @param tableName the table name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return the file name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(
+        @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
+    {
+        return "<def.filename>";
+    }
+}
+>>

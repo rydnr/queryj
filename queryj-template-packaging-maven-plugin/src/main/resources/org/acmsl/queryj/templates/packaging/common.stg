@@ -94,6 +94,6 @@ package <packageName>;
 
 class_common_javadoc(template, timestamp) ::= <<
  * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ's Template Packaging\</a>
- * Generation template: (<template>)
+ * Generation template: <template>
  * Created: <timestamp>
 >>
