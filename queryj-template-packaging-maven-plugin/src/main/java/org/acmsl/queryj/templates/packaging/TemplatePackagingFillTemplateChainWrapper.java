@@ -96,11 +96,11 @@ public class TemplatePackagingFillTemplateChainWrapper
 
     /**
      * Retrieves the list of generic placeholder handlers.
+     * @param context the context.
      * @return such list.
      */
     @NotNull
     @Override
-    @SuppressWarnings("unchecked")
     protected List<FillHandler> getHandlers(@NotNull final DefaultTemplatePackagingContext context)
     {
         @NotNull final List<FillHandler> result = new ArrayList<FillHandler>();

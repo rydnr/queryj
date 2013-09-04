@@ -82,7 +82,7 @@ public class TemplateFactoryTemplateBuildHandler
     @NotNull
     @Override
     protected DefaultTemplatePackagingContext buildContext(
-        @NotNull final TemplateDef templateDef, @NotNull final QueryJCommand parameters)
+        @NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand parameters)
     {
         return buildDefaultContext(templateDef, parameters);
     }

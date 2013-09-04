@@ -44,7 +44,12 @@ import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.TemplateBuildHandler;
 
 /*
- * Importing Template-Packaging classes.
+ * Importing QueryJ Placeholders classes.
+ */
+import org.acmsl.queryj.placeholders.DecoratedString;
+
+/*
+ * Importing QueryJ Template-Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
@@ -53,6 +58,11 @@ import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplate;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateFactory;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
+
+/*
+ * Importing ACM-SL Commons classes.
+ */
+import org.acmsl.commons.regexpplugin.RegexpManager;
 
 /*
  * Importing JetBrains annotations.
@@ -128,9 +138,9 @@ public abstract class TemplatePackagingBuildHandler
     {
         @NotNull final List<T> result = new ArrayList<T>();
 
-        @NotNull final List<TemplateDef> templateDefs = retrieveTemplateDefs(parameters);
+        @NotNull final List<TemplateDef<String>> templateDefs = retrieveTemplateDefs(parameters);
 
-        for (@Nullable final TemplateDef templateDef : templateDefs)
+        for (@Nullable final TemplateDef<String> templateDef : templateDefs)
         {
             if (templateDef == null)
             {
@@ -179,7 +189,7 @@ public abstract class TemplatePackagingBuildHandler
      */
     @NotNull
     protected abstract C buildContext(
-        @NotNull final TemplateDef templateDef, @NotNull final QueryJCommand parameters);
+        @NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand parameters);
 
     /**
      * Builds the default context.
@@ -189,7 +199,7 @@ public abstract class TemplatePackagingBuildHandler
      */
     @NotNull
     protected DefaultTemplatePackagingContext buildDefaultContext(
-        @NotNull final TemplateDef templateDef, @NotNull final QueryJCommand parameters)
+        @NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand parameters)
     {
         @NotNull final String templateName = retrieveTemplateName(parameters);
         @NotNull final String outputPackage = retrieveOutputPackage(parameters);
@@ -200,11 +210,27 @@ public abstract class TemplatePackagingBuildHandler
             new DefaultTemplatePackagingContext(
                 templateDef,
                 templateName,
-                templateName + ".java",
+                buildFilename(templateDef, templateName),
                 outputPackage,
                 rootDir,
                 new File(rootDir.getAbsolutePath()
                     + File.separator + outputPackage.replaceAll("\\.", File.separator)));
+    }
+
+    /**
+     * Builds the final file name.
+     * @param templateDef the {@link TemplateDef} instance.
+     * @param templateName the template name.
+     * @return such file name.
+     */
+    @NotNull
+    protected String buildFilename(@NotNull final TemplateDef<String> templateDef, @NotNull final String templateName)
+    {
+        return
+            RegexpManager.getInstance().getEngine().createHelper().replaceAll(
+                new DecoratedString(templateDef.getName()).getCapitalized(), "\\.stg$", "")
+            + templateName
+            + ".java";
     }
 
     /**
@@ -221,16 +247,16 @@ public abstract class TemplatePackagingBuildHandler
      * @return the list of {@link TemplateDef}s.
      */
     @NotNull
-    public List<TemplateDef> retrieveTemplateDefs(@NotNull final QueryJCommand parameters)
+    public List<TemplateDef<String>> retrieveTemplateDefs(@NotNull final QueryJCommand parameters)
     {
-        @NotNull final List<TemplateDef> result;
+        @NotNull final List<TemplateDef<String>> result;
 
-        @Nullable final List<TemplateDef> aux =
-            new QueryJCommandWrapper<TemplateDef>(parameters).getListSetting(TEMPLATE_DEFS);
+        @Nullable final List<TemplateDef<String>> aux =
+            new QueryJCommandWrapper<TemplateDef<String>>(parameters).getListSetting(TEMPLATE_DEFS);
 
         if (aux == null)
         {
-            result = new ArrayList<TemplateDef>(0);
+            result = new ArrayList<TemplateDef<String>>(0);
         }
         else
         {
