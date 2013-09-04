@@ -39,6 +39,7 @@ package org.acmsl.queryj.templates.packaging;
  * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.placeholders.TemplateDefHandler;
+import org.acmsl.queryj.templates.packaging.placeholders.TemplatePackagingClassNameHandler;
 
 /*
  * Importing QueryJ-Core classes.
@@ -50,7 +51,6 @@ import org.acmsl.queryj.api.placeholders.AbstractFillTemplateChainWrapper;
 /*
  * Importing QueryJ-Placeholders classes.
  */
-import org.acmsl.queryj.placeholders.ClassNameHandler;
 import org.acmsl.queryj.placeholders.CopyrightYearsHandler;
 import org.acmsl.queryj.placeholders.CurrentYearHandler;
 import org.acmsl.queryj.placeholders.FileNameHandler;
@@ -105,7 +105,7 @@ public class TemplatePackagingFillTemplateChainWrapper
     {
         @NotNull final List<FillHandler> result = new ArrayList<FillHandler>();
 
-        result.add(new ClassNameHandler<DefaultTemplatePackagingContext>(context));
+        result.add(new TemplatePackagingClassNameHandler(context));
         result.add(new CopyrightYearsHandler());
         result.add(new CurrentYearHandler());
         result.add(new FileNameHandler<DefaultTemplatePackagingContext>(context));

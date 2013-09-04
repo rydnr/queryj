@@ -89,9 +89,9 @@ public class ClassNameHandler<C extends TemplateContext>
 
 
     /**
-     * Resolves the actual value using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * Resolves the actual value using given {@link TemplateContext context}.
      *
-     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @param context the {@link TemplateContext context}.
      * @return such value.
      */
     @NotNull

@@ -81,6 +81,7 @@ import org.checkthread.annotations.ThreadSafe;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Base build handler for Template Packaging templates.
@@ -97,6 +98,9 @@ public abstract class TemplatePackagingBuildHandler
                QueryJCommandHandler<QueryJCommand>,
                TemplatePackagingSettings
 {
+    @NotNull
+    private final Pattern STG_EXT = Pattern.compile("\\.stg$");
+
     /**
      * Creates a {@link TemplatePackagingBuildHandler} instance.
      */
@@ -224,11 +228,11 @@ public abstract class TemplatePackagingBuildHandler
      * @return such file name.
      */
     @NotNull
-    protected String buildFilename(@NotNull final TemplateDef<String> templateDef, @NotNull final String templateName)
+    protected String buildFilename(
+        @NotNull final TemplateDef<String> templateDef, @NotNull final String templateName)
     {
         return
-            RegexpManager.getInstance().getEngine().createHelper().replaceAll(
-                new DecoratedString(templateDef.getName()).getCapitalized(), "\\.stg$", "")
+              new DecoratedString(STG_EXT.matcher(templateDef.getName()).replaceAll("")).getCapitalized()
             + templateName
             + ".java";
     }
