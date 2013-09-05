@@ -1,0 +1,40 @@
+- Create a new StringTemplate template TemplateHandlerBundle.stg in folder src/main/resources/org/acmsl/queryj/templates/packaging;
+- Add QueryJ header;
+- Add comment: Defines the rules to generate QueryJ's TemplateHandlerBundles.;
+- Declare the group TemplateHandlerBundle;
+- Import "common.stg";
+- Define a rule source(C):
+  - Add comment: Generates a TemplateHandlerBundle source file.;
+  - Add comment: @param C the context.;
+  - Call <sourceImpl(def=C.templateDef, C=C)>;
+- Define a rule sourceImpl(def, C):
+  - Add comment: Generates a TemplateHandlerBundle source file according to a TemplateDef.;
+  - Add comment: @param def the template definition.;
+  - Add comment: @param C the context.;
+  - Call java_header template:
+    - Pass description as [ "Handler bundle for", def.name.capitalized, "Templates" ],
+    - Pass description_oneline as true;
+    - Pass filename as C.class_name;
+    - Pass template as "org/acmsl/queryj/templates/packaging/TemplateHandlerBundle.stg";
+    - Pass C as C;
+  - Call package_declaration template:
+    - Pass packageName as def.packageName;
+  - Write QueryJ-API import group;
+  - Write ACM-SL Commons import group;
+  - Write JetBrains import group;
+  - Write checkthread.org import group;
+  - Call class template:
+    - Pass def as def;
+    - Pass C as C;
+  - Define a rule class(def, C):
+    - Add comment: Handler bundle for {@link <def.name.capitalized>Template}s.;
+    - Call class_common_javadoc template:
+      - Pass template as "org/acmsl/queryj/templates/packaging";
+      - Pass timestamp as C.timestamp;
+    - Add @ThreadSafe annotation;
+    - Define the class with <C.class_name> as name;
+    - Make it extend TemplateHandlerBundle, bound to <def.name.capitalized>BuildHandler and <def.name.capitalized>WritingHandler;
+    - Define the default constructor:
+      - Add comment: Builds a bundle consisting of {@link <def.name.capitalized>BuildHandler} and {@link <def.name.capitalized>WritingHandler}.
+      - Call super(new <def.name.capitalized>BuildHandler(), new <def.name.capitalized>WritingHandler());
+    - Fix import groups;

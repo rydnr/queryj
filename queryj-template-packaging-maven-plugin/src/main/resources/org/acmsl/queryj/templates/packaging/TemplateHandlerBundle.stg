@@ -1,0 +1,105 @@
+//;-*- mode: stringtemplate -*-
+//
+//                   QueryJ's Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: TemplateHandlerBundle.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate QueryJ's TemplateHandlerBundles.
+//
+group TemplateHandlerBundle;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+ Generates a TemplateGenerator source file.
+ @param C the context.
+ !>
+<sourceImpl(def=C.templateDef, C=C)>
+>>
+
+sourceImpl(def, C) ::= <<
+<!
+  Generates a TemplateHandlerBundle source file.
+  @param def the template def.
+  @param C the context.
+!>
+<java_header(
+  description=[ "Handler bundle for", def.name.capitalized, "Templates." ],
+  description_oneline=true,
+  filename=C.class_name,
+  template="org/acmsl/templates/packaging/TemplateHandlerBundle.stg",
+   C=C)>
+<package_declaration(packageName=def.packageName)>
+
+/*
+ * Importing QueryJ-API classes.
+ */
+import org.acmsl.queryj.api.handlers.TemplateHandlerBundle;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+<class(def=def, C=C)>
+>>
+
+class(def, C) ::= <<
+/**
+ * Handler bundle for {@link <def.name.capitalized>Template}s.
+<class_common_javadoc(
+  template="org/acmsl/templates/packaging/TemplateHandlerBundle.stg",
+  timestamp=C.timestamp)>
+ */
+@ThreadSafe
+public class <C.class_name>
+    extends TemplateHandlerBundle\<<def.name.capitalized>BuildHandler, <def.name.capitalized>WritingHandler>
+{
+    /**
+     * Builds a bundle consisting of
+     * {@link <def.name.capitalized>BuildHandler}
+     * and {@link <def.name.capitalized>WritingHandler}.
+     */
+    public <C.class_name>()
+    {
+        super(
+            new <def.name.capitalized>BuildHandler(),
+            new <def.name.capitalized>WritingHandler());
+    }
+}
+>>
