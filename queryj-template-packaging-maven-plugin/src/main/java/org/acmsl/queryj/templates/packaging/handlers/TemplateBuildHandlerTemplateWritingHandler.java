@@ -112,7 +112,7 @@ public class TemplateBuildHandlerTemplateWritingHandler
         if (result == null)
         {
             // TODO
-            throw new RuntimeException("Missing template build handlen templates");
+            throw new RuntimeException("Missing template build handler templates");
         }
 
         return result;

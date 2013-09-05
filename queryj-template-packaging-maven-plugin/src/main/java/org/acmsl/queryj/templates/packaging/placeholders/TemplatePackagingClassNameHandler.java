@@ -104,8 +104,9 @@ public class TemplatePackagingClassNameHandler
     protected String resolveContextValue(
         @NotNull final DefaultTemplatePackagingContext context)
     {
-        return
-              new DecoratedString(STG_EXT.matcher(context.getTemplateDef().getName()).replaceAll("")).getCapitalized()
-            + context.getTemplateName();
+        @NotNull final String result =
+              new DecoratedString(STG_EXT.matcher(context.getTemplateDef().getName()).replaceAll("")).getCapitalized();
+
+        return result + context.getTemplateName();
     }
 }

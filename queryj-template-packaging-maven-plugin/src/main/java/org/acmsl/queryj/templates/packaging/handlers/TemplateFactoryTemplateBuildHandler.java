@@ -107,7 +107,7 @@ public class TemplateFactoryTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return "TemplateFactoryTemplate";
+        return "TemplateFactory";
     }
 
     /**

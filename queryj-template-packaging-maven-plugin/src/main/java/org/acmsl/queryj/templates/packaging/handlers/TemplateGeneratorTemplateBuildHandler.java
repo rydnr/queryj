@@ -107,7 +107,7 @@ public class TemplateGeneratorTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return "TemplateGeneratorTemplate";
+        return "TemplateGenerator";
     }
 
     /**

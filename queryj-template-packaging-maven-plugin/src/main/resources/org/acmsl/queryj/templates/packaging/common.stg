@@ -38,7 +38,7 @@
 group common;
 
 java_header(description, description_oneline, filename, template, C) ::= <<
-<java_header_impl(description=description, description_oneline=description_oneline, year=C.year, filename=filename, timestamp=C.timestamp, template=template)>
+<java_header_impl(description=description, description_oneline=description_oneline, year=C.current_year, filename=filename, timestamp=C.timestamp, template=template)>
 >>
 
 java_header_impl(description, year, filename, timestamp, template) ::= <<
