@@ -29,7 +29,7 @@
   - Define a rule class(def, C):
     - Add comment: Handler bundle for {@link <def.name.capitalized>Template}s.;
     - Call class_common_javadoc template:
-      - Pass template as "org/acmsl/queryj/templates/packaging";
+      - Pass template as "org/acmsl/queryj/templates/packaging/TemplateHandlerBundle.stg";
       - Pass timestamp as C.timestamp;
     - Add @ThreadSafe annotation;
     - Define the class with <C.class_name> as name;
