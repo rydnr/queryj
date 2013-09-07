@@ -33,11 +33,18 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing some project classes.
+ * Importing some QueryJ-Core classes.
  */
 import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.tools.QueryJChain;
+import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
+
+/*
+ * Importing some QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.handlers.FindTemplateDefsHandler;
 import org.acmsl.queryj.templates.packaging.handlers.ParseTemplateDefsHandler;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateBuildHandlerTemplateHandlerBundle;
@@ -45,10 +52,8 @@ import org.acmsl.queryj.templates.packaging.handlers.TemplateFactoryTemplateHand
 import org.acmsl.queryj.templates.packaging.handlers.TemplateGeneratorTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateHandlerBundleTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplatePackagingParameterValidationHandler;
+import org.acmsl.queryj.templates.packaging.handlers.TemplateTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateWritingHandlerTemplateHandlerBundle;
-import org.acmsl.queryj.tools.QueryJChain;
-import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
  * Importing some ACM-SL classes.
@@ -109,7 +114,7 @@ public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJComman
 
         chain.add((CH) new TemplateHandlerBundleTemplateHandlerBundle());
 
-        chain.add((CH) new TemplateFactoryTemplateHandlerBundle());
+        chain.add((CH) new TemplateTemplateHandlerBundle());
 
         chain.add((CH) new TemplateWritingHandlerTemplateHandlerBundle());
 
