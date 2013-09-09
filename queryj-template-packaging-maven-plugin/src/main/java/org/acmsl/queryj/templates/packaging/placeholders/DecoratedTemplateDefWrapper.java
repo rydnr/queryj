@@ -133,9 +133,31 @@ public class DecoratedTemplateDefWrapper
      * @return such information.
      */
     @NotNull
-    protected DecoratedString getName(final TemplateDef<String> def)
+    protected DecoratedString getName(@NotNull final TemplateDef<String> def)
     {
         return new DecoratedString(def.getName().replaceAll("\\.stg$", ""));
+    }
+
+    /**
+     * Retrieves a decorated version of the template def name.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public DecoratedString getRawName()
+    {
+        return getRawName(getTemplateDef());
+    }
+
+    /**
+     * Retrieves a decorated version of the template def name.
+     * @param def the {@link TemplateDef}.
+     * @return such information.
+     */
+    @NotNull
+    protected DecoratedString getRawName(@NotNull final TemplateDef<String> def)
+    {
+        return new DecoratedString(def.getName());
     }
 
     /**
@@ -252,6 +274,6 @@ public class DecoratedTemplateDefWrapper
     @Override
     public String toString()
     {
-        return "{ 'class': 'DecoratedTemplateDefWrapper', 'templateDef': {" + this.m__TemplateDef + "' }";
+        return "{ 'class': 'DecoratedTemplateDefWrapper', 'templateDef': " + this.m__TemplateDef + " }";
     }
 }

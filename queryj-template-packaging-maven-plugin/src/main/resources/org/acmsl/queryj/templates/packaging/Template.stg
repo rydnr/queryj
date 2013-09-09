@@ -54,7 +54,7 @@ sourceImpl(def, C) ::= <<
   @param C the context.
 !>
 <java_header(
-  description=[ "Used to generate sources using ", def.name ],
+  description=[ "Used to generate sources using ", def.rawName ],
   description_oneline=true,
   filename=C.class_name,
   template="org/acmsl/templates/packaging/Template.stg",
@@ -89,7 +89,7 @@ import org.checkthread.annotations.ThreadSafe;
 
 class(def, C) ::= <<
 /**
- * Used to generate sources using <def.name>.stg.
+ * Used to generate sources using <def.rawName>.
 <class_common_javadoc(
   template="org/acmsl/templates/packaging/Template.stg",
   timestamp=C.timestamp)>
@@ -113,14 +113,14 @@ public class <C.class_name>
     }
 
     /**
-     * Retrieves the StringTemplate group for "<def.name>".
+     * Retrieves the StringTemplate group for "<def.rawName>".
      * @return such {@link STGroup group}.
      */
     @Nullable
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup("<def.name>");
+        return retrieveGroup("<def.packageName>.<def.rawName>");
     }
 
     /**

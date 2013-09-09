@@ -43,6 +43,7 @@ import org.acmsl.commons.utils.EnumUtils;
 /*
  * Importing checkthread.org annotations.
  */
+import org.acmsl.queryj.placeholders.DecoratedString;
 import org.checkthread.annotations.ThreadSafe;
 
 /*
@@ -99,6 +100,16 @@ public enum TemplateDefType
     public static TemplateDefType getEnumFromString(@NotNull final String type)
     {
         return EnumUtils.getInstance().getEnumFromString(TemplateDefType.class, type);
+    }
+
+    /**
+     * Retrieves a capitalized version.
+     * @return the type, capitalized.
+     */
+    @NotNull
+    public String getCapitalized()
+    {
+        return new DecoratedString(getType()).getCapitalized();
     }
 
     @NotNull

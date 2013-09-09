@@ -54,7 +54,7 @@ sourceImpl(def, C) ::= <<
   @param C the context.
 !>
 <java_header(
-  description=[ "Build handler for", def.name.capitalized, "Templates." ],
+  description=[ "Build handler for ", def.name.capitalized, "Templates." ],
   description_oneline=true,
   filename=C.class_name,
   template="org/acmsl/templates/packaging/TemplateBuildHandler.stg",
