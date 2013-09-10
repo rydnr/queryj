@@ -121,7 +121,7 @@ public class TemplateBuildHandlerTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return "BuildHandler";
+        return "TemplateBuildHandler";
     }
 
     /**

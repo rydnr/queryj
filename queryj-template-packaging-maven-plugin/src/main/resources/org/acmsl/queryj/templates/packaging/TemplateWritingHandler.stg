@@ -60,26 +60,28 @@ sourceImpl(def, C) ::= <<
   filename=C.class_name,
   template="org/acmsl/templates/packaging/TemplateWritingHandler.stg",
    C=C)>
-<package_declaration(packageName=def.packageName)>
+<package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
 
 /*
  * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateWritingHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing custom templates.
  */
-import <def.packageName>.<def.name.capitalized>Template;
-import <def.packageName>.<def.name.capitalized>TemplateGenerator;
+import org.acmsl.queryj.templates.<def.name.capitalized>Template;
+import org.acmsl.queryj.templates.<def.name.capitalized>TemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -89,6 +91,7 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
+import java.io.File;
 import java.util.List;
 
 <class(def=def, C=C)>
@@ -109,7 +112,7 @@ public class <C.class_name>
     /**
      * Creates a new writing handler for {@link <def.name.capitalized>Template templates}.
      */
-    public DAOTemplateWritingHandler() {}
+    public <C.class_name>() {}
 
     /**
      * {@inheritDoc}
@@ -160,7 +163,20 @@ public class <C.class_name>
         @NotNull final QueryJCommand parameters,
         @NotNull final PackageUtils packageUtils)
     {
-        return "<def.packageName>";
+        @NotNull final File result;
+
+        @NotNull final String[] pieces = "<def.packageName>".split("\\\.");
+
+        @NotNull final StringBuilder aux = new StringBuilder();
+
+        for (@NotNull final String piece : pieces)
+        {
+            aux.append(piece);
+        }
+
+        result = new File(projectFolder.getAbsolutePath() + aux.toString());
+
+        return result;
     }
 }
 >>

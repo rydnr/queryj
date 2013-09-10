@@ -59,7 +59,7 @@ sourceImpl(def, C) ::= <<
   filename=C.class_name,
   template="org/acmsl/templates/packaging/TemplateHandlerBundle.stg",
    C=C)>
-<package_declaration(packageName=def.packageName)>
+<package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
 
 /*
  * Importing QueryJ-API classes.
@@ -88,18 +88,18 @@ class(def, C) ::= <<
  */
 @ThreadSafe
 public class <C.class_name>
-    extends TemplateHandlerBundle\<<def.name.capitalized>BuildHandler, <def.name.capitalized>WritingHandler>
+    extends TemplateHandlerBundle\<<def.name.capitalized>TemplateBuildHandler, <def.name.capitalized>TemplateWritingHandler>
 {
     /**
      * Builds a bundle consisting of
-     * {@link <def.name.capitalized>BuildHandler}
-     * and {@link <def.name.capitalized>WritingHandler}.
+     * {@link <def.name.capitalized>TemplateBuildHandler}
+     * and {@link <def.name.capitalized>TemplateWritingHandler}.
      */
     public <C.class_name>()
     {
         super(
-            new <def.name.capitalized>BuildHandler(),
-            new <def.name.capitalized>WritingHandler());
+            new <def.name.capitalized>TemplateBuildHandler(),
+            new <def.name.capitalized>TemplateWritingHandler());
     }
 }
 >>

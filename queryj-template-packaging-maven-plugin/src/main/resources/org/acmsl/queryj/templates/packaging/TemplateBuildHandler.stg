@@ -59,7 +59,7 @@ sourceImpl(def, C) ::= <<
   filename=C.class_name,
   template="org/acmsl/templates/packaging/TemplateBuildHandler.stg",
    C=C)>
-<package_declaration(packageName=def.packageName)>
+<package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
 
 /*
  * Importing QueryJ-Core classes.
@@ -72,13 +72,8 @@ import org.acmsl.queryj.tools.PackageUtils;
 /*
  * Importing custom templates.
  */
-import <def.packageName>.<def.name.capitalized>Template;
-import <def.packageName>.<def.name.capitalized>TemplateFactory;
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
+import org.acmsl.queryj.templates.<def.name.capitalized>Template;
+import org.acmsl.queryj.templates.<def.name.capitalized>TemplateFactory;
 
 /*
  * Importing checkthread.org annotations.
@@ -95,7 +90,7 @@ import java.util.List;
 
 class(def, C) ::= <<
 /**
- * Build handler for {@link <def.name.capitalized>Template}s.
+ * Build handler for {@link org.acmsl.queryj.templates.<def.name.capitalized>Template}s.
 <class_common_javadoc(
   template="org/acmsl/templates/packaging/TemplateBuildHandler.stg",
   timestamp=C.timestamp)>

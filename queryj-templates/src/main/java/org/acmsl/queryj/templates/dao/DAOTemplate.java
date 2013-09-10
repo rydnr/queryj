@@ -55,6 +55,8 @@ import org.jetbrains.annotations.Nullable;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+import java.util.Arrays;
+
 /**
  * Is able to create engine-specific DAO interfaces for each
  * table in the persistence model.
@@ -84,7 +86,10 @@ public class DAOTemplate
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup(DAO_GROUP + getTemplateName() + ".stg");
+        return
+            retrieveGroup(
+                DAO_GROUP + getTemplateName() + ".stg",
+                Arrays.asList("org/acmsl/queryj/templates/packaging/"));
     }
 
     /**

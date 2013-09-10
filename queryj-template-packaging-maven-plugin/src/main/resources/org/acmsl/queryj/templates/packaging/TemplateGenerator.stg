@@ -59,18 +59,15 @@ sourceImpl(def, C) ::= <<
   filename=C.class_name,
   template="org/acmsl/templates/packaging/TemplateGenerator.stg",
    C=C)>
-<package_declaration(packageName=def.packageName)>
+<package_declaration(packageName="org.acmsl.queryj.templates")>
 
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.AbstractQueryJTemplateGenerator;
-import org.acmsl.queryj.TemplateGenerator;
-
-/*
- * Importing custom templates.
- */
-import <def.packageName>.<def.name.capitalized>Template;
+import org.acmsl.queryj.api.AbstractQueryJTemplateGenerator;
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateGenerator;
+import org.acmsl.queryj.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 
 /*
  * Importing some JetBrains annotations.
@@ -95,7 +92,7 @@ class(def, C) ::= <<
 @ThreadSafe
 public class <C.class_name>
     extends AbstractQueryJTemplateGenerator\<<def.name.capitalized>Template>
-    implements <def.type.name.capitalized>TemplateGenerator\<<def.name.capitalized>Template>
+    implements <def.type.capitalized>TemplateGenerator\<<def.name.capitalized>Template>
 {
     /**
      * Creates a new generator instance with given settings.

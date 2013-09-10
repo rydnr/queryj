@@ -59,30 +59,34 @@ sourceImpl(def, C) ::= <<
   filename=C.class_name,
   template="org/acmsl/templates/packaging/Template.stg",
    C=C)>
-<package_declaration(packageName=def.packageName)>
+<package_declaration(packageName="org.acmsl.queryj.templates")>
 
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateBuildHandler;
-import org.acmsl.queryj.tools.PackageUtils;
-
-/*
- * Importing custom templates.
- */
-import <def.packageName>.<def.name.capitalized>Template;
+import org.acmsl.queryj.api.AbstractBase<def.type.capitalized>Template;
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.STGroup;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.Arrays;
 
 <class(def=def, C=C)>
 >>
@@ -96,12 +100,12 @@ class(def, C) ::= <<
  */
 @ThreadSafe
 public class <C.class_name>
-    extends Abstract<def.type.capitalized>Template\<<def.type.capitalized>TemplateContext>
+    extends AbstractBase<def.type.capitalized>Template\<<def.type.capitalized>TemplateContext>
 {
     /**
      * The serial version UID for serialization.
      */
-    private static final long serialVersionUId = <C.serialVersionUID>;
+    private static final long serialVersionUID = <C.serialVersionUID>;
 
     /**
      * Builds a <def.name.capitalized> using given context.
@@ -120,7 +124,10 @@ public class <C.class_name>
     @Override
     public STGroup retrieveGroup()
     {
-        return retrieveGroup("<def.packageName>.<def.rawName>");
+        return
+            retrieveGroup(
+                "<def.packageName>.<def.rawName>",
+                Arrays.asList("<def.packageName>".replaceAll("\\\.", "/")));
     }
 
     /**

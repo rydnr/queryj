@@ -59,25 +59,28 @@ sourceImpl(def, C) ::= <<
   filename=C.class_name,
   template="org/acmsl/templates/packaging/TemplateFactory.stg",
    C=C)>
-<package_declaration(packageName=def.packageName)>
+<package_declaration(packageName="org.acmsl.queryj.templates")>
 
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateBuildHandler;
-import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateFactory;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Row;
 
 /*
- * Importing custom templates.
+ * Importing some ACM-SL Java Commons classes.
  */
-import <def.packageName>.<def.name.capitalized>Template;
+import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -101,7 +104,7 @@ class(def, C) ::= <<
  */
 @ThreadSafe
 public class <C.class_name>
-    implements <def.type.name.capitalized>TemplateFactory\<<def.name.capitalized>Template>,
+    implements <def.type.capitalized>TemplateFactory\<<def.name.capitalized>Template>,
                Singleton
 {
     /**
@@ -120,7 +123,7 @@ public class <C.class_name>
      * @return such instance.
      */
     @NotNull
-    public static <C.class_name>getInstance()
+    public static <C.class_name> getInstance()
     {
         return <C.class_name>SingletonContainer.SINGLETON;
     }
@@ -149,7 +152,7 @@ public class <C.class_name>
     {
         return
             new <def.name.capitalized>Template(
-                new <def.type.name.capitalized>TemplateContext(
+                new <def.type.capitalized>TemplateContext(
                     metadataManager,
                     customSqlProvider,
                     header,
@@ -178,7 +181,7 @@ public class <C.class_name>
     public String retrieveTemplateFileName(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        return "<def.filename>";
+        return "<def.filenameBuilder>";
     }
 }
 >>
