@@ -1,4 +1,8 @@
 *~
 *~*
-.idea/*
-target/*
+.idea/**/*
+target/**/*
+*.class
+*.swp
+*.iml
+.*

@@ -76,6 +76,11 @@ import org.acmsl.queryj.templates.<def.name.capitalized>Template;
 import org.acmsl.queryj.templates.<def.name.capitalized>TemplateFactory;
 
 /*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
