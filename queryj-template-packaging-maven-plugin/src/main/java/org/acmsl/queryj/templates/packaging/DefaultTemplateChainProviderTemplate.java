@@ -23,23 +23,23 @@
 
  ******************************************************************************
  *
- * Filename: DefaultTemplateChainProviderTemplateHandlerBundle.java
+ * Filename: DefaultTemplateChainProviderTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles handlers that take care of the generation process of
- *              DefaultTemplateChainProviderTemplates.
+ * Description: Template to build QueryJ's DefaultTemplateChainProvider
+ *              sources.
  *
  * Date: 2013/09/14
- * Time: 11:47
+ * Time: 12:14
  *
  */
-package org.acmsl.queryj.templates.packaging.handlers;
+package org.acmsl.queryj.templates.packaging;
 
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.api.handlers.TemplateHandlerBundle;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -47,23 +47,32 @@ import org.acmsl.queryj.api.handlers.TemplateHandlerBundle;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Bundles handlers that take care of the generation process of
- * {@link org.acmsl.queryj.templates.packaging.DefaultTemplateChainProviderTemplate}s.
+ * Template to build QueryJ's DefaultTemplateChainProvider sources.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/09/14 11:47
+ * Created: 2013/09/14 12:14
  */
 @ThreadSafe
-public class DefaultTemplateChainProviderTemplateHandlerBundle
-    extends TemplateHandlerBundle<TemplateBuildHandlerTemplateBuildHandler, TemplateBuildHandlerTemplateWritingHandler>
+public class DefaultTemplateChainProviderTemplate<C extends TemplatePackagingContext>
+    extends AbstractTemplatePackagingTemplate<C>
 {
     /**
-     * Creates a new bundle.
+     * Creates a new template.
+     * @param context the context.
      */
-    public DefaultTemplateChainProviderTemplateHandlerBundle()
+    public DefaultTemplateChainProviderTemplate(@NotNull final C context)
     {
-        super(
-            new DefaultTemplateChainProviderTemplateBuildHandler(),
-            new DefaultTemplateChainProviderTemplateWritingHandler());
+        super(context);
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    @Override
+    public String getTemplateName()
+    {
+        return "DefaultTemplateChainProvider";
     }
 }

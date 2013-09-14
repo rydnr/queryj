@@ -108,4 +108,9 @@ public interface TemplatePackagingSettings
      * The base package for the QueryJ-specific output files.
      */
     String OUTPUT_PACKAGE = "org.acmsl.queryj.templates";
+
+    /**
+     * The key to access the DefaultTemplateChainProvider template.
+     */
+    String DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE = "default_template_chain_provider_template";
 }

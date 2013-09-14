@@ -1,0 +1,6 @@
+- Create a new Java class DefaultTemplateChainProviderTemplateFactory in package org.acmsl.queryj.templates.packaging;
+- Add comment: Template factory used in the process to build QueryJ's DefaultTemplateChainProvider sources.;
+  - Make it extend TemplatePackagingTemplateFactory<DefaultTemplateChainProviderTemplate<TemplatePackagingContext>, TemplatePackagingContext>;
+- Create the overridden createTemplate(TemplatePackagingContext) method:
+  - Implement it by returning "new DefaultTemplateChainProviderTemplate(context)";
+- Fix import groups;

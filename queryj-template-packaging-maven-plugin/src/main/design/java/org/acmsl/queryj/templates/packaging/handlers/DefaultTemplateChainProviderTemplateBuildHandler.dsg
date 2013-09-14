@@ -1,0 +1,14 @@
+- Create a new Java class DefaultTemplateChainProviderTemplateBuildHandler in package org.acmsl.queryj.templates.packaging.handlers;
+- Make it extend TemplatePackagingBuildHandler<DefaultTemplateChainProviderTemplate<DefaultTemplatePackagingContext>, DefaultTemplateChainProviderTemplateFactory, DefaultTemplatePackagingContext>;
+- Add comment: Build handler to build DefaultTemplateChainProvider templates.
+- Implement the method retrieveTemplateFactory():
+  - return DefaultTemplateChainProviderTemplateFactory.getInstance();;
+- Implement the method DefaultTemplatePackagingContext buildContext(TemplateDef, QueryJCommand):
+  - return buildDefaultContext(templateDef, parameters);;
+- Implement the method storeTemplate(DefaultTemplateChainProviderTemplate, QueryJCommand):
+  - new QueryJCommandWrapper<DefaultTemplateChainProviderTemplate<DefaultTemplatePackagingContext>>(parameters).setSetting(DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE, template);;
+- Modify TemplatePackagingSettings:
+  - Add a new constant DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE = "default_template_chain_provider_template";;
+- Implement the method retrieveTemplateName(QueryJCommand):
+  - return "DefaultTemplateChainProvider";
+- Fix import groups;
