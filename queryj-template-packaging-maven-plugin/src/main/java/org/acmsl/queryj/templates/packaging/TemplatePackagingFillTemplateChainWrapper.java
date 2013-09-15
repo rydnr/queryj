@@ -89,7 +89,8 @@ public class TemplatePackagingFillTemplateChainWrapper
      * Creates a new chain wrapper.
      * @param chain the chain to wrap.
      */
-    public TemplatePackagingFillTemplateChainWrapper(@NotNull final FillTemplateChain<DefaultTemplatePackagingContext> chain)
+    public TemplatePackagingFillTemplateChainWrapper(
+        @NotNull final FillTemplateChain<DefaultTemplatePackagingContext> chain)
     {
         super(chain);
     }
