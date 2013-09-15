@@ -68,7 +68,7 @@ import java.util.List;
  */
 @ThreadSafe
 public class TemplateFactoryTemplateBuildHandler
-    extends TemplatePackagingBuildHandler
+    extends PerTemplateDefBuildHandler
                 <TemplateFactoryTemplate<DefaultTemplatePackagingContext>,
                  TemplateFactoryTemplateFactory,
                  DefaultTemplatePackagingContext>
@@ -117,9 +117,11 @@ public class TemplateFactoryTemplateBuildHandler
      */
     @Override
     protected void storeTemplates(
-        @NotNull final List<TemplateFactoryTemplate<DefaultTemplatePackagingContext>> templates, @NotNull final QueryJCommand parameters)
+        @NotNull final List<TemplateFactoryTemplate<DefaultTemplatePackagingContext>> templates,
+        @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper<List<TemplateFactoryTemplate<DefaultTemplatePackagingContext>>>(parameters)
+        new QueryJCommandWrapper
+            <List<TemplateFactoryTemplate<DefaultTemplatePackagingContext>>>(parameters)
             .setSetting(TEMPLATE_FACTORY_TEMPLATES, templates);
     }
 

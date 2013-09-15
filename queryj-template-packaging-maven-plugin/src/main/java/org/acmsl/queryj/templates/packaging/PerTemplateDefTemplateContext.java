@@ -23,15 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: DefaultTemplateChainProviderTemplate.java
+ * Filename: PerTemplateDefTemplateContext.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Template to build QueryJ's DefaultTemplateChainProvider
- *              sources.
+ * Description: Context for per-TemplateDef templates
  *
- * Date: 2013/09/14
- * Time: 12:14
+ * Date: 2013/09/15
+ * Time: 05:54
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -47,32 +46,19 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Template to build QueryJ's DefaultTemplateChainProvider sources.
+ * Context for per-{@link TemplateDef} templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/09/14 12:14
+ * Created: 2013/09/15 05:54
  */
 @ThreadSafe
-public class DefaultTemplateChainProviderTemplate<C extends GlobalTemplateContext>
-    extends AbstractTemplatePackagingTemplate<C>
+public interface PerTemplateDefTemplateContext
+    extends TemplatePackagingContext
 {
     /**
-     * Creates a new template.
-     * @param context the context.
-     */
-    public DefaultTemplateChainProviderTemplate(@NotNull final C context)
-    {
-        super(context);
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return such name.
+     * Retrieves the template def.
+     * @return such instance.
      */
     @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return "DefaultTemplateChainProvider";
-    }
+    public TemplateDef getTemplateDef();
 }

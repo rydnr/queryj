@@ -68,7 +68,7 @@ import java.util.List;
  */
 @ThreadSafe
 public class TemplateGeneratorTemplateBuildHandler
-    extends TemplatePackagingBuildHandler
+    extends PerTemplateDefBuildHandler
                 <TemplateGeneratorTemplate<DefaultTemplatePackagingContext>,
                  TemplateGeneratorTemplateFactory,
                  DefaultTemplatePackagingContext>
@@ -120,7 +120,8 @@ public class TemplateGeneratorTemplateBuildHandler
         @NotNull final List<TemplateGeneratorTemplate<DefaultTemplatePackagingContext>> templates,
         @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper<List<TemplateGeneratorTemplate<DefaultTemplatePackagingContext>>>(parameters)
+        new QueryJCommandWrapper
+            <List<TemplateGeneratorTemplate<DefaultTemplatePackagingContext>>>(parameters)
             .setSetting(TEMPLATE_GENERATOR_TEMPLATES, templates);
     }
 

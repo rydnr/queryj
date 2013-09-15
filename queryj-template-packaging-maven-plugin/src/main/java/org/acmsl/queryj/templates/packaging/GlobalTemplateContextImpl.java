@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: DefaultTemplatePackagingContext.java
+ * Filename: GlobalTemplateContextImpl.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Default implementation for TemplatePackagingContext.
+ * Description: Straightforward implementation of GlobalTemplateContext.
  *
- * Date: 2013/08/17
- * Time: 19:05
+ * Date: 2013/09/15
+ * Time: 06:49
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -49,78 +49,81 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.util.List;
 
 /**
- * Default implementation for TemplatePackagingContext.
+ * Straightforward implementation of {@link GlobalTemplateContext}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/17 19:05
+ * Created: 2013/09/15 06:49
  */
 @ThreadSafe
-public class DefaultTemplatePackagingContext
+public class GlobalTemplateContextImpl
     extends AbstractTemplatePackagingContext
-    implements PerTemplateDefTemplateContext
+    implements GlobalTemplateContext
 {
     /**
-     * The template def.
+     * The list of {@link TemplateDef}s.
      */
     @NotNull
-    private TemplateDef<String> m__TemplateDef;
+    private List<TemplateDef<String>> m__lTemplateDefs;
 
     /**
-     * Creates a new instance.
-     * @param templateDef the template def.
+     * Creates a new global context.
      * @param templateName the template name.
      * @param fileName the file name.
+     * @param packageName the package name.
+     * @param rootDir the root dir.
      * @param outputDir the output dir.
      */
-    public DefaultTemplatePackagingContext(
-        @NotNull final TemplateDef<String> templateDef,
+    public GlobalTemplateContextImpl(
         @NotNull final String templateName,
         @NotNull final String fileName,
         @NotNull final String packageName,
         @NotNull final File rootDir,
-        @NotNull final File outputDir)
+        @NotNull final File outputDir,
+        @NotNull final List<TemplateDef<String>> templateDefs)
     {
         super(templateName, fileName, packageName, rootDir, outputDir);
-        immutableSetTemplateDef(templateDef);
+        immutableSetTemplateDefs(templateDefs);
     }
 
     /**
-     * Specifies the template def.
-     * @param templateDef the template def.
+     * Specifies the template defs.
+     * @param templateDefs the list of {@link TemplateDef}s.
      */
-    protected final void immutableSetTemplateDef(@NotNull final TemplateDef<String> templateDef)
+    protected final void immutableSetTemplateDefs(@NotNull final List<TemplateDef<String>> templateDefs)
     {
-        this.m__TemplateDef = templateDef;
+        this.m__lTemplateDefs = templateDefs;
     }
 
     /**
-     * Specifies the template def.
-     * @param templateDef the template def.
+     * Specifies the template defs.
+     * @param templateDefs the list of {@link TemplateDef}s.
      */
     @SuppressWarnings("unused")
-    protected void setTemplateDef(@NotNull final TemplateDef<String> templateDef)
+    protected void setTemplateDefs(@NotNull final List<TemplateDef<String>> templateDefs)
     {
-        immutableSetTemplateDef(templateDef);
+        immutableSetTemplateDefs(templateDefs);
     }
 
     /**
-     * Retrieves the template def.
-     * @return such instance.
+     * Retrieves the list of {@link TemplateDef}s.
+     * @return such list.
      */
-    @Override
     @NotNull
-    public TemplateDef<String> getTemplateDef()
+    @Override
+    public List<TemplateDef<String>> getTemplateDefs()
     {
-        return this.m__TemplateDef;
+        return m__lTemplateDefs;
     }
 
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'DefaultTemplatePackagingContext', " +
-               "'templateDef': " + m__TemplateDef + " }";
+        return "{ 'class': 'GlobalTemplateContextImpl', " +
+               "'templateDefs': [ " + m__lTemplateDefs + "], " +
+               "'parent': " + super.toString() + " }";
     }
 }

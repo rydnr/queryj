@@ -55,7 +55,9 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DefaultTemplateChainProviderTemplateHandlerBundle
-    extends TemplateHandlerBundle<TemplateBuildHandlerTemplateBuildHandler, TemplateBuildHandlerTemplateWritingHandler>
+    extends TemplateHandlerBundle
+                <DefaultTemplateChainProviderTemplateBuildHandler,
+                 DefaultTemplateChainProviderTemplateWritingHandler>
 {
     /**
      * Creates a new bundle.

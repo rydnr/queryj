@@ -68,7 +68,7 @@ import java.util.List;
  */
 @ThreadSafe
 public class TemplateBuildHandlerTemplateBuildHandler
-    extends TemplatePackagingBuildHandler
+    extends PerTemplateDefBuildHandler
                 <TemplateBuildHandlerTemplate<DefaultTemplatePackagingContext>,
                  TemplateBuildHandlerTemplateFactory,
                  DefaultTemplatePackagingContext>

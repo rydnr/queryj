@@ -55,8 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class DefaultTemplateChainProviderTemplateFactory
     implements TemplatePackagingTemplateFactory
-                   <DefaultTemplateChainProviderTemplate<TemplatePackagingContext>,
-                    TemplatePackagingContext>
+                   <DefaultTemplateChainProviderTemplate<GlobalTemplateContext>,
+                    GlobalTemplateContext>
 {
     /**
      * Singleton implementation to avoid double-locking check.
@@ -87,9 +87,9 @@ public class DefaultTemplateChainProviderTemplateFactory
      */
     @NotNull
     @Override
-    public DefaultTemplateChainProviderTemplate<TemplatePackagingContext> createTemplate(
-        @NotNull final TemplatePackagingContext context)
+    public DefaultTemplateChainProviderTemplate<GlobalTemplateContext> createTemplate(
+        @NotNull final GlobalTemplateContext context)
     {
-        return new DefaultTemplateChainProviderTemplate<TemplatePackagingContext>(context);
+        return new DefaultTemplateChainProviderTemplate<GlobalTemplateContext>(context);
     }
 }

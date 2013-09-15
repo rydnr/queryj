@@ -61,7 +61,7 @@ import java.util.List;
  */
 @ThreadSafe
 public class TemplateWritingHandlerTemplateBuildHandler
-    extends TemplatePackagingBuildHandler
+    extends PerTemplateDefBuildHandler
                 <TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>,
                  TemplateWritingHandlerTemplateFactory,
                  DefaultTemplatePackagingContext>
@@ -113,7 +113,8 @@ public class TemplateWritingHandlerTemplateBuildHandler
         @NotNull final List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>> templates,
         @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper<List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>>>(parameters)
+        new QueryJCommandWrapper
+            <List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>>>(parameters)
             .setSetting(TEMPLATE_WRITING_HANDLER_TEMPLATES, templates);
     }
 

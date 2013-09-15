@@ -1,0 +1,8 @@
+- Create Java class GlobalTemplateContextImpl, in package org.acmsl.queryj.templates.packaging;
+- Add comment: Straightforward implementation of {@link GlobalTemplateContext}.;
+- Make it implement GlobalTemplateContext;
+- Refactor DefaultTemplatePackagingContext:
+  - Extract all attributes and accessor methods to a new class AbstractTemplatePackagingContext;
+- Make it extend AbstractTemplatePackagingContext;
+- Define attribute and accessors for m__lTemplateDefs, a list of TemplateDef instances;
+- Fix import groups;

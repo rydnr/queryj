@@ -1,0 +1,13 @@
+- Create a Java class PerTemplateDefBuildHandler, in package org.acmsl.queryj.templates.packaging.handlers;
+- Add comment: Build handlers for per-{@link TemplateDef} templates.;
+- Declare a T extends TemplatePackagingTemplate<C> parameter;
+- Declare a TF extends TemplatePackagingFactory<T, C> parameter;
+- Declare a C extends PerTemplateDefTemplateContext parameter;
+- Make it extend TemplatePackagingBuildHandler<T, TF, C>;
+- Move some methods from TemplatePackagingBuildHandler:
+  - handle(QueryJCommand);
+  - buildTemplates(QueryJCommand, TF);
+  - buildTemplate(TF, C);
+  - buildContext(TemplateDef<String>, QueryJCommand);
+- Fix import groups;
+- Change all current build handlers (but DefaultTemplateChainProvider's) to extend from PerTemplateDefBuildHandler;

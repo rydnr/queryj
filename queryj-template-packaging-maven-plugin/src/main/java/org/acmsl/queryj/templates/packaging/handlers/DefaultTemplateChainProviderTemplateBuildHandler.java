@@ -36,14 +36,22 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.DefaultTemplateChainProviderTemplate;
 import org.acmsl.queryj.templates.packaging.DefaultTemplateChainProviderTemplateFactory;
-import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -51,6 +59,9 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.List;
 
 /**
@@ -61,19 +72,23 @@ import java.util.List;
  */
 @ThreadSafe
 public class DefaultTemplateChainProviderTemplateBuildHandler
-    extends TemplatePackagingBuildHandler<DefaultTemplateChainProviderTemplate<DefaultTemplatePackagingContext>, DefaultTemplateChainProviderTemplateFactory, DefaultTemplatePackagingContext>
+    extends GlobalBuildHandler
+                <DefaultTemplateChainProviderTemplate<GlobalTemplateContext>,
+                 DefaultTemplateChainProviderTemplateFactory,
+                 GlobalTemplateContext>
 {
     /**
      * Builds the context from given parameters.
-     * @param templateDef the template def.
+     * @param templateDefs the template defs.
      * @param parameters  the command with the parameters.
      * @return the template context.
      */
     @NotNull
     @Override
-    protected DefaultTemplatePackagingContext buildContext(@NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand parameters)
+    protected GlobalTemplateContext buildContext(
+        @NotNull final List<TemplateDef<String>> templateDefs, @NotNull final QueryJCommand parameters)
     {
-        return buildDefaultContext(templateDef, parameters);
+        return buildGlobalContext(templateDefs, parameters);
     }
 
     /**
@@ -113,13 +128,16 @@ public class DefaultTemplateChainProviderTemplateBuildHandler
 
     /**
      * Stores the template in given attribute map.
-     * @param template the templates.
+     * @param template the template.
      * @param parameters the parameter map.
      */
     @Override
     protected void storeTemplate(
-        @NotNull final DefaultTemplateChainProviderTemplate<DefaultTemplatePackagingContext> template, @NotNull final QueryJCommand parameters)
+        @NotNull final DefaultTemplateChainProviderTemplate<GlobalTemplateContext> template,
+        @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper<DefaultTemplateChainProviderTemplate<DefaultTemplatePackagingContext>>(parameters).setSetting(DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE, template);
+        new QueryJCommandWrapper<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>>(parameters)
+            .setSetting(DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE, template);
+
     }
 }

@@ -1,0 +1,7 @@
+- Create interface PerTemplateDefTemplateContext, in package org.acmsl.queryj.templates.packaging;
+- Add comment: Context for per-TemplateDef templates.
+- Make it implement TemplatePackagingContext;
+- Define TemplateDef getTemplateDef();
+- Make current DefaultTemplatePackagingContext implement PerTemplateDefTemplateContext;
+- Remove getTemplateDef() method from TemplatePackagingContext;
+- Fix import groups;

@@ -68,7 +68,10 @@ import java.util.List;
  */
 @ThreadSafe
 public class TemplateHandlerBundleTemplateBuildHandler
-    extends TemplatePackagingBuildHandler<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>, TemplateHandlerBundleTemplateFactory, DefaultTemplatePackagingContext>
+    extends PerTemplateDefBuildHandler
+                <TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>,
+                 TemplateHandlerBundleTemplateFactory,
+                 DefaultTemplatePackagingContext>
 {
     /**
      * Builds the context from given parameters.
@@ -117,7 +120,8 @@ public class TemplateHandlerBundleTemplateBuildHandler
         @NotNull final List<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>> templates,
         @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper<List<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>>>(parameters)
+        new QueryJCommandWrapper
+            <List<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>>>(parameters)
             .setSetting(TEMPLATE_HANDLER_BUNDLE_TEMPLATES, templates);
     }
 

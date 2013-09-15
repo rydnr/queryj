@@ -23,15 +23,15 @@
 
  ******************************************************************************
  *
- * Filename: DefaultTemplateChainProviderTemplate.java
+ * Filename: GlobalTemplateContext.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Template to build QueryJ's DefaultTemplateChainProvider
- *              sources.
+ * Description: Context for templates requiring global access to all information
+ *              available.
  *
- * Date: 2013/09/14
- * Time: 12:14
+ * Date: 2013/09/15
+ * Time: 06:01
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -46,33 +46,25 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
+import java.util.List;
+
 /**
- * Template to build QueryJ's DefaultTemplateChainProvider sources.
+ * Context for templates requiring global access to all information available.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/09/14 12:14
+ * Created: 2013/09/15 06:01
  */
 @ThreadSafe
-public class DefaultTemplateChainProviderTemplate<C extends GlobalTemplateContext>
-    extends AbstractTemplatePackagingTemplate<C>
+public interface GlobalTemplateContext
+    extends TemplatePackagingContext
 {
     /**
-     * Creates a new template.
-     * @param context the context.
-     */
-    public DefaultTemplateChainProviderTemplate(@NotNull final C context)
-    {
-        super(context);
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return such name.
+     * Retrieves all {@link TemplateDef}s.
+     * @return such information.
      */
     @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return "DefaultTemplateChainProvider";
-    }
+    List<TemplateDef<String>> getTemplateDefs();
 }
