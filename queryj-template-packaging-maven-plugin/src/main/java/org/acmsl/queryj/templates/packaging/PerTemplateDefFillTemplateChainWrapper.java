@@ -27,7 +27,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Wraps a chain to provide Template Packaging's placeholders.
+ * Description: Wraps a chain to provide Template Packaging's per-TemplateDef
+ *              placeholders.
  *
  * Date: 2013/08/25
  * Time: 16:34
@@ -38,8 +39,8 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing QueryJ Template Packaging classes.
  */
+import org.acmsl.queryj.templates.packaging.placeholders.PerTemplateDefClassNameHandler;
 import org.acmsl.queryj.templates.packaging.placeholders.TemplateDefHandler;
-import org.acmsl.queryj.templates.packaging.placeholders.TemplatePackagingClassNameHandler;
 
 /*
  * Importing QueryJ-Core classes.
@@ -76,20 +77,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Wraps a chain to provide Template Packaging's placeholders.
+ * Wraps a chain to provide Template Packaging's per-{@link TemplateDef} placeholders.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/08/25 16:34
  */
 @ThreadSafe
-public class TemplatePackagingFillTemplateChainWrapper
+public class PerTemplateDefFillTemplateChainWrapper
     extends AbstractFillTemplateChainWrapper<DefaultTemplatePackagingContext>
 {
     /**
      * Creates a new chain wrapper.
      * @param chain the chain to wrap.
      */
-    public TemplatePackagingFillTemplateChainWrapper(
+    public PerTemplateDefFillTemplateChainWrapper(
         @NotNull final FillTemplateChain<DefaultTemplatePackagingContext> chain)
     {
         super(chain);
@@ -106,7 +107,7 @@ public class TemplatePackagingFillTemplateChainWrapper
     {
         @NotNull final List<FillHandler> result = new ArrayList<FillHandler>();
 
-        result.add(new TemplatePackagingClassNameHandler(context));
+        result.add(new PerTemplateDefClassNameHandler(context));
         result.add(new CopyrightYearsHandler());
         result.add(new CurrentYearHandler());
         result.add(new FileNameHandler<DefaultTemplatePackagingContext>(context));

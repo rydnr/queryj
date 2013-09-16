@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,28 +23,27 @@
 
  ******************************************************************************
  *
- * Filename: TemplatePackagingClassNameHandler.java
+ * Filename: GlobalClassNameHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Resolves "class_name" placeholders, for Template Packaging.
+ * Description: Resolves "class_name" placeholders, for global templates.
  *
- * Date: 2013/09/04
- * Time: 20:05
+ * Date: 2013/09/16
+ * Time: 17:01
  *
  */
 package org.acmsl.queryj.templates.packaging.placeholders;
 
 /*
- * Importing QueryJ-Placeholders classes.
+ * Importing QueryJ Placeholders classes.
  */
 import org.acmsl.queryj.placeholders.AbstractDecoratedStringHandler;
-import org.acmsl.queryj.placeholders.DecoratedString;
 
 /*
- * Importing QueryJ-Template-Packaging classes.
+ * Importing QueryJ Template Packaging classes.
  */
-import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 
 /*
  * Importing JetBrains annotations.
@@ -56,57 +55,45 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
-/*
- * Importing JDK classes.
- */
-import java.util.regex.Pattern;
-
 /**
- * Resolves "class_name" placeholders, for Template Packaging.
+ * Resolves "class_name" placeholders, for global templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/09/04 20:05
+ * Created: 2013/09/16 17:01
  */
 @ThreadSafe
-public class TemplatePackagingClassNameHandler
-    extends AbstractDecoratedStringHandler<DefaultTemplatePackagingContext>
+public class GlobalClassNameHandler
+    extends AbstractDecoratedStringHandler<GlobalTemplateContext>
 {
-    @NotNull
-    private static final Pattern STG_EXT = Pattern.compile("\\.stg$");
-
     /**
-     * Creates a new instance to resolve "class_name" placeholders in Template Packaging templates.
-     * @param context the {@link DefaultTemplatePackagingContext context}.
+     * Creates a new instance to resolve "class_name" placeholders in global templates.
+     * @param context the {@link GlobalTemplateContext context}.
      */
-    public TemplatePackagingClassNameHandler(@NotNull final DefaultTemplatePackagingContext context)
+    public GlobalClassNameHandler(@NotNull final GlobalTemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Returns "class_name".
-     * @return such variable name.
+     * Resolves the actual value using given {@link GlobalTemplateContext context}.
+     * @param context the {@link GlobalTemplateContext context}.
+     * @return such value.
+     */
+    @NotNull
+    @Override
+    protected String resolveContextValue(@NotNull final GlobalTemplateContext context)
+    {
+        return context.getTemplateName();
+    }
+
+    /**
+     * Retrieves "class_name".
+     * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return "class_name";
-    }
-
-    /**
-     * Resolves "class_name" values.
-     * @param context the {@link DefaultTemplatePackagingContext context}.
-     * @return such value.
-     */
-    @NotNull
-    @Override
-    protected String resolveContextValue(
-        @NotNull final DefaultTemplatePackagingContext context)
-    {
-        @NotNull final String result =
-              new DecoratedString(STG_EXT.matcher(context.getTemplateDef().getName()).replaceAll("")).getCapitalized();
-
-        return result + context.getTemplateName();
+        return "class_value";
     }
 }

@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,37 +23,34 @@
 
  ******************************************************************************
  *
- * Filename: TemplatePackagingFillTemplateChain.java
+ * Filename: PerTemplateDefClassNameHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Sets up the chain required to provide placeholder replacements
- *              for Template-Packaging templates.
+ * Description: Resolves "class_name" placeholders, for per-TemplateDef
+ *              templates.
  *
- * Date: 2013/08/29
- * Time: 07:00
+ * Date: 2013/09/04
+ * Time: 20:05
  *
  */
 package org.acmsl.queryj.templates.packaging.placeholders;
 
 /*
- * Importing ACM-SL Java Commons classes.
+ * Importing QueryJ-Placeholders classes.
  */
-import org.acmsl.commons.patterns.Chain;
+import org.acmsl.queryj.placeholders.AbstractDecoratedStringHandler;
+import org.acmsl.queryj.placeholders.DecoratedString;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-Template-Packaging classes.
  */
-import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.api.AbstractFillTemplateChain;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
-import org.acmsl.queryj.templates.packaging.TemplatePackagingFillTemplateChainWrapper;
 
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -61,49 +58,58 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
+import java.util.regex.Pattern;
+
 /**
- * Sets up the chain required to provide placeholder replacements for Template-Packaging templates.
+ * Resolves "class_name" placeholders, for
+ * per-{@link org.acmsl.queryj.templates.packaging.TemplateDef} templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/29 07:00
+ * Created: 2013/09/04 20:05
  */
 @ThreadSafe
-public class TemplatePackagingFillTemplateChain
-    extends AbstractFillTemplateChain<DefaultTemplatePackagingContext>
+public class PerTemplateDefClassNameHandler
+    extends AbstractDecoratedStringHandler<DefaultTemplatePackagingContext>
 {
+    @NotNull
+    public static final Pattern STG_EXT = Pattern.compile("\\.stg$");
+
     /**
-     * Creates an instance using given context.
+     * Creates a new instance to resolve "class_name" placeholders in
+     * per-{@link org.acmsl.queryj.templates.packaging.TemplateDef} templates.
      * @param context the {@link DefaultTemplatePackagingContext context}.
      */
-    public TemplatePackagingFillTemplateChain(@NotNull final DefaultTemplatePackagingContext context)
+    public PerTemplateDefClassNameHandler(@NotNull final DefaultTemplatePackagingContext context)
     {
         super(context);
     }
 
     /**
-     * {@inheritDoc}
+     * Returns "class_name".
+     * @return such variable name.
      */
     @NotNull
     @Override
-    public QueryJCommand providePlaceholders(final boolean relevantOnly)
-        throws QueryJBuildException
+    public String getPlaceHolder()
     {
-        return
-            new TemplatePackagingFillTemplateChainWrapper(this)
-                .providePlaceholders(relevantOnly);
+        return "class_name";
     }
 
     /**
-     * Adds additional per-table handlers.
-     * @param chain the chain to be configured.
+     * Resolves "class_name" values.
      * @param context the {@link DefaultTemplatePackagingContext context}.
-     * @param relevantOnly whether to use only relevant placeholders.
+     * @return such value.
      */
+    @NotNull
     @Override
-    protected void addHandlers(
-        @NotNull final Chain<FillHandler<?>> chain,
-        @NotNull final DefaultTemplatePackagingContext context,
-        final boolean relevantOnly)
+    protected String resolveContextValue(@NotNull final DefaultTemplatePackagingContext context)
     {
+        @NotNull final String result =
+              new DecoratedString(STG_EXT.matcher(context.getTemplateDef().getName()).replaceAll("")).getCapitalized();
+
+        return result + context.getTemplateName();
     }
 }

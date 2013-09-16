@@ -1,5 +1,5 @@
 /*
-                        QueryJ's Template Packaging
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,63 +23,54 @@
 
  ******************************************************************************
  *
- * Filename: DefaultTemplatePackagingFillTemplateChainFactoryImpl.java
+ * Filename: GlobalTemplatePackagingFillTemplateChainFactoryImpl.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Creates the chain to provide all placeholders used in
- *              QueryJ's Template Packaging templates.
+ * Description: Default implementation for
+ *              GlobalTemplatePackagingFillTemplateChainFactory.
  *
- * Date: 2013/08/25
- * Time: 16:14
+ * Date: 2013/09/15
+ * Time: 09:02
  *
  */
 package org.acmsl.queryj.templates.packaging.placeholders;
 
 /*
- * Importing QueryJ Templates Packaging classes.
- */
-import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
-import org.acmsl.queryj.templates.packaging.PerTemplateDefFillTemplateChainWrapper;
-
-/*
- * Importing QueryJ-Core classes.
- */
-import org.acmsl.queryj.api.FillTemplateChain;
-
-/*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.api.FillTemplateChain;
+import org.acmsl.queryj.templates.packaging.GlobalFillTemplateChainWrapper;
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Creates the chain to provide all placeholders used in
- * QueryJ's Template Packaging templates.
+ * Default implementation for {@link GlobalTemplatePackagingFillTemplateChainFactory}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/25 16:14
+ * Created: 2013/09/15 09:02
  */
 @ThreadSafe
-public class DefaultTemplatePackagingFillTemplateChainFactoryImpl
-    implements DefaultTemplatePackagingFillTemplateChainFactory
+public class GlobalTemplatePackagingFillTemplateChainFactoryImpl
+    implements GlobalTemplatePackagingFillTemplateChainFactory
 {
     /**
      * Creates {@link org.acmsl.queryj.api.FillTemplateChain} instances for given context.
+     *
      * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext} needed.
      * @return the FillTemplateChain, or <code>null</code> if the context is invalid.
      */
     @Nullable
     @Override
-    public FillTemplateChain<DefaultTemplatePackagingContext> createFillChain(
-        @NotNull final DefaultTemplatePackagingContext context)
+    public FillTemplateChain<GlobalTemplateContext> createFillChain(
+        @NotNull final GlobalTemplateContext context)
     {
-        return new PerTemplateDefFillTemplateChainWrapper(
-            new PerTemplateDefFillTemplateChain(context));
+        return new GlobalFillTemplateChainWrapper(new GlobalFillTemplateChain(this));
     }
 }
