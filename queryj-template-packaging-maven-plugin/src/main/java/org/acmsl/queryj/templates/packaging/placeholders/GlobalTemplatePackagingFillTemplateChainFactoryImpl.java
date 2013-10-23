@@ -61,16 +61,15 @@ public class GlobalTemplatePackagingFillTemplateChainFactoryImpl
     implements GlobalTemplatePackagingFillTemplateChainFactory
 {
     /**
-     * Creates {@link org.acmsl.queryj.api.FillTemplateChain} instances for given context.
-     *
-     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext} needed.
-     * @return the FillTemplateChain, or <code>null</code> if the context is invalid.
+     * Creates {@link FillTemplateChain} instances for given context.
+     * @param context the {@link GlobalTemplateContext} needed.
+     * @return the {@link FillTemplateChain}.
      */
     @Nullable
     @Override
     public FillTemplateChain<GlobalTemplateContext> createFillChain(
         @NotNull final GlobalTemplateContext context)
     {
-        return new GlobalFillTemplateChainWrapper(new GlobalFillTemplateChain(this));
+        return new GlobalFillTemplateChainWrapper(new GlobalFillTemplateChain(context));
     }
 }

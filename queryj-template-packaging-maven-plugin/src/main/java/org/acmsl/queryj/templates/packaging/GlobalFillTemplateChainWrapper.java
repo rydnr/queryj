@@ -53,12 +53,15 @@ import org.acmsl.queryj.placeholders.PackageNameHandler;
 import org.acmsl.queryj.placeholders.SerialVersionUIDHandler;
 import org.acmsl.queryj.placeholders.TemplateNameHandler;
 import org.acmsl.queryj.placeholders.TimestampHandler;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.placeholders.GlobalClassNameHandler;
 
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.templates.packaging.placeholders.TemplateDefHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*

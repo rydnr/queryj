@@ -47,7 +47,7 @@ import org.acmsl.queryj.api.exceptions.QueryJBuildException;
  * Importing QueryJ-Template-Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.DefaultTemplateChainProviderTemplate;
-import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
 
 /*
@@ -74,7 +74,13 @@ import java.util.List;
  */
 @ThreadSafe
 public class DefaultTemplateChainProviderTemplateWritingHandler
-    extends TemplatePackagingWritingHandler<DefaultTemplateChainProviderTemplate<DefaultTemplatePackagingContext>, TemplatePackagingTemplateGenerator<DefaultTemplateChainProviderTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>
+    extends TemplatePackagingWritingHandler
+                <DefaultTemplateChainProviderTemplate
+                    <GlobalTemplateContext>,
+                    TemplatePackagingTemplateGenerator
+                        <DefaultTemplateChainProviderTemplate<GlobalTemplateContext>,
+                         GlobalTemplateContext>,
+                    GlobalTemplateContext>
 {
     /**
      * Retrieves the template generator.
@@ -84,12 +90,13 @@ public class DefaultTemplateChainProviderTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected TemplatePackagingTemplateGenerator<DefaultTemplateChainProviderTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext> retrieveTemplateGenerator(final boolean caching, final int threadCount)
+    protected TemplatePackagingTemplateGenerator<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>, GlobalTemplateContext> retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
         return
             new TemplatePackagingTemplateGenerator
-                <DefaultTemplateChainProviderTemplate<DefaultTemplatePackagingContext>,
-                 DefaultTemplatePackagingContext>(caching, threadCount);
+                <DefaultTemplateChainProviderTemplate<GlobalTemplateContext>,
+                 GlobalTemplateContext>(caching, threadCount);
     }
 
     /**
@@ -101,13 +108,13 @@ public class DefaultTemplateChainProviderTemplateWritingHandler
      */
     @Nullable
     @Override
-    protected List<DefaultTemplateChainProviderTemplate<DefaultTemplatePackagingContext>> retrieveTemplates(
+    protected List<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>> retrieveTemplates(
         @NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {
         return
             new QueryJCommandWrapper
-                <DefaultTemplateChainProviderTemplate<DefaultTemplatePackagingContext>>(parameters)
+                <DefaultTemplateChainProviderTemplate<GlobalTemplateContext>>(parameters)
                 .getListSetting(DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE);
     }
 }

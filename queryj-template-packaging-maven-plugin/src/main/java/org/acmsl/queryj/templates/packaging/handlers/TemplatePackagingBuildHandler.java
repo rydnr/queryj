@@ -117,7 +117,8 @@ public abstract class TemplatePackagingBuildHandler
      */
     @NotNull
     protected DefaultTemplatePackagingContext buildDefaultContext(
-        @NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand parameters)
+        @NotNull final TemplateDef<String> templateDef,
+        @NotNull final QueryJCommand parameters)
     {
         @NotNull final String templateName = retrieveTemplateName(parameters);
         @NotNull final String outputPackage = retrieveOutputPackage(parameters);
@@ -170,7 +171,8 @@ public abstract class TemplatePackagingBuildHandler
      */
     @NotNull
     protected String buildFilename(
-        @NotNull final TemplateDef<String> templateDef, @NotNull final String templateName)
+        @NotNull final TemplateDef<String> templateDef,
+        @NotNull final String templateName)
     {
         return
               new DecoratedString(STG_EXT.matcher(templateDef.getName()).replaceAll("")).getCapitalized()
@@ -200,7 +202,8 @@ public abstract class TemplatePackagingBuildHandler
      * @return such package.
      */
     @NotNull
-    protected abstract String retrieveOutputPackage(@NotNull final QueryJCommand parameters);
+    protected abstract String retrieveOutputPackage(
+        @NotNull final QueryJCommand parameters);
 
     /**
      * Retrieves the template defs.
@@ -208,12 +211,14 @@ public abstract class TemplatePackagingBuildHandler
      * @return the list of {@link TemplateDef}s.
      */
     @NotNull
-    public List<TemplateDef<String>> retrieveTemplateDefs(@NotNull final QueryJCommand parameters)
+    public List<TemplateDef<String>> retrieveTemplateDefs(
+        @NotNull final QueryJCommand parameters)
     {
         @NotNull final List<TemplateDef<String>> result;
 
         @Nullable final List<TemplateDef<String>> aux =
-            new QueryJCommandWrapper<TemplateDef<String>>(parameters).getListSetting(TEMPLATE_DEFS);
+            new QueryJCommandWrapper<TemplateDef<String>>(parameters)
+                .getListSetting(TEMPLATE_DEFS);
 
         if (aux == null)
         {
@@ -233,7 +238,8 @@ public abstract class TemplatePackagingBuildHandler
      * @return the template name.
      */
     @NotNull
-    protected abstract String retrieveTemplateName(@NotNull final QueryJCommand parameters);
+    protected abstract String retrieveTemplateName(
+        @NotNull final QueryJCommand parameters);
 
     /**
      * Retrieves the output dir.
@@ -243,7 +249,8 @@ public abstract class TemplatePackagingBuildHandler
     @NotNull
     public File retrieveRootDir(@NotNull final QueryJCommand parameters)
     {
-        @Nullable final File result = new QueryJCommandWrapper<File>(parameters).getSetting(OUTPUT_DIR);
+        @Nullable final File result =
+            new QueryJCommandWrapper<File>(parameters).getSetting(OUTPUT_DIR);
 
         if (result == null)
         {
@@ -261,7 +268,8 @@ public abstract class TemplatePackagingBuildHandler
      * @return the template.
      */
     @Nullable
-    protected T buildTemplate(@NotNull final TF templateFactory, @NotNull final C context)
+    protected T buildTemplate(
+        @NotNull final TF templateFactory, @NotNull final C context)
     {
         return templateFactory.createTemplate(context);
     }
