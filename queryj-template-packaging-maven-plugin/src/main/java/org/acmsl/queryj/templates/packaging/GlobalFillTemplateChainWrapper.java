@@ -48,11 +48,17 @@ import org.acmsl.queryj.api.placeholders.AbstractFillTemplateChainWrapper;
  */
 import org.acmsl.queryj.placeholders.CopyrightYearsHandler;
 import org.acmsl.queryj.placeholders.CurrentYearHandler;
+import org.acmsl.queryj.placeholders.FileNameHandler;
+import org.acmsl.queryj.placeholders.PackageNameHandler;
+import org.acmsl.queryj.placeholders.SerialVersionUIDHandler;
+import org.acmsl.queryj.placeholders.TemplateNameHandler;
+import org.acmsl.queryj.placeholders.TimestampHandler;
 import org.acmsl.queryj.templates.packaging.placeholders.GlobalClassNameHandler;
 
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.templates.packaging.placeholders.TemplateDefHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -98,11 +104,11 @@ public class GlobalFillTemplateChainWrapper
         result.add(new GlobalClassNameHandler(context));
         result.add(new CopyrightYearsHandler());
         result.add(new CurrentYearHandler());
-//        result.add(new FileNameHandler<DefaultTemplatePackagingContext>(context));
-//        result.add(new PackageNameHandler<DefaultTemplatePackagingContext>(context));
-//        result.add(new SerialVersionUIDHandler<DefaultTemplatePackagingContext>(context));
-//        result.add(new TimestampHandler());
-//        result.add(new TemplateNameHandler<DefaultTemplatePackagingContext>(context));
+        result.add(new FileNameHandler<GlobalTemplateContext>(context));
+        result.add(new PackageNameHandler<GlobalTemplateContext>(context));
+        result.add(new SerialVersionUIDHandler<GlobalTemplateContext>(context));
+        result.add(new TimestampHandler());
+        result.add(new TemplateNameHandler<GlobalTemplateContext>(context));
 //        result.add(new TemplateDefHandler(context));
 
         return result;
