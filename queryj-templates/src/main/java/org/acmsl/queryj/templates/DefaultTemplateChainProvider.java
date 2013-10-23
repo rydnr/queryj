@@ -27,7 +27,8 @@
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Implements {@link TemplateChainProvider} to generate
+ * the default templates.
  *
  * Date: 6/4/13
  * Time: 4:40 PM
@@ -47,10 +48,6 @@ import org.acmsl.queryj.templates.dao.handlers.DAOTemplateHandlerBundle;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.handlers.TemplateHandler;
 import org.acmsl.queryj.tools.TemplateChainProvider;
-
-/*
- * Importing queryj-placeholders classes.
- */
 
 /*
  * Importing JetBrains annotations.
