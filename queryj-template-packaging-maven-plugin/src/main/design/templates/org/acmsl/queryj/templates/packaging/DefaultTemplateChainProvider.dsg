@@ -29,7 +29,7 @@
   - Write JDK import group;
   - Call <class(def=defs, C=C)>;
 - Define a rule class(defs, C):
-  - Add comment: Generator for {@link DefaultTemplateChainProviders.;
+  - Add comment: Generator for {@link DefaultTemplateChainProviders}.;
   - Call class_common_javadoc template:
     - Pass the template name;
     - Pass the timestamp from the context;

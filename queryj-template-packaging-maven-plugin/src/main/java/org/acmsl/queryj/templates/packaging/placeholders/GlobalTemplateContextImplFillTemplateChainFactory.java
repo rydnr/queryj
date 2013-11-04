@@ -23,53 +23,42 @@
 
  ******************************************************************************
  *
- * Filename: GlobalTemplatePackagingFillTemplateChainFactoryImpl.java
+ * Filename: GlobalTemplatePackagingFillTemplateChainFactory.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Default implementation for
- *              GlobalTemplatePackagingFillTemplateChainFactory.
+ * Description: Chain factory for placeholders specific to QueryJ's Template
+ *              Packaging, global templates.
  *
  * Date: 2013/09/15
- * Time: 09:02
+ * Time: 08:39
  *
  */
 package org.acmsl.queryj.templates.packaging.placeholders;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.api.FillTemplateChain;
-import org.acmsl.queryj.templates.packaging.GlobalFillTemplateChainWrapper;
+import org.acmsl.queryj.api.placeholders.FillTemplateChainFactory;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * Default implementation for {@link GlobalTemplatePackagingFillTemplateChainFactory}.
+ * Chain factory for placeholders specific to QueryJ's Template Packaging, global templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/09/15 09:02
+ * Created: 2013/09/15 08:39
  */
 @ThreadSafe
-public class GlobalTemplatePackagingFillTemplateChainFactoryImpl
-    implements GlobalTemplatePackagingFillTemplateChainFactory
+public interface GlobalTemplateContextImplFillTemplateChainFactory
+    extends FillTemplateChainFactory<GlobalTemplateContext>
 {
-    /**
-     * Creates {@link FillTemplateChain} instances for given context.
-     * @param context the {@link GlobalTemplateContext} needed.
-     * @return the {@link FillTemplateChain}.
-     */
-    @Nullable
-    @Override
-    public FillTemplateChain<GlobalTemplateContext> createFillChain(
-        @NotNull final GlobalTemplateContext context)
-    {
-        return new GlobalFillTemplateChainWrapper(new GlobalFillTemplateChain(context));
-    }
 }

@@ -886,24 +886,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         @NotNull final String contextName = context.getClass().getSimpleName();
 
-        @NotNull String baseName = contextName;
-
-        if (baseName.endsWith(CONTEXT_LITERAL))
-        {
-            baseName = baseName.substring(0, baseName.lastIndexOf(CONTEXT_LITERAL));
-        }
-
-        if (baseName.endsWith(TEMPLATE_LITERAL))
-        {
-            baseName = baseName.substring(0, baseName.lastIndexOf(TEMPLATE_LITERAL));
-        }
-
-        if (!baseName.endsWith(FILL_TEMPLATE_CHAIN_FACTORY_LITERAL))
-        {
-            baseName = baseName + FILL_TEMPLATE_CHAIN_FACTORY_LITERAL;
-        }
-
-        baseName = placeholderPackage + "." + baseName;
+        @NotNull final String baseName =
+            buildFillTemplateChainFactoryClass(contextName, placeholderPackage);
 
         try
         {
@@ -911,13 +895,47 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         }
         catch (@NotNull final ClassNotFoundException classNotFound)
         {
-            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
+            @Nullable final Log t_Log =
+                UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
 
             if (t_Log != null)
             {
                 t_Log.info("Template context " + contextName + " not supported", classNotFound);
             }
         }
+
+        return result;
+    }
+
+    /**
+     * Builds the {@link FillTemplateChainFactory} class name.
+     * @param contextName the context name.
+     * @param placeholderPackage the placeholder package.
+     * @return the class name.
+     */
+    @NotNull String buildFillTemplateChainFactoryClass(
+        @NotNull final String contextName, @NotNull final String placeholderPackage)
+    {
+        @NotNull final String result;
+
+        @NotNull String aux = contextName;
+
+        if (aux.endsWith(CONTEXT_LITERAL))
+        {
+            aux = aux.substring(0, aux.lastIndexOf(CONTEXT_LITERAL));
+        }
+
+        if (aux.endsWith(TEMPLATE_LITERAL))
+        {
+            aux = aux.substring(0, aux.lastIndexOf(TEMPLATE_LITERAL));
+        }
+
+        if (!aux.endsWith(FILL_TEMPLATE_CHAIN_FACTORY_LITERAL))
+        {
+            aux = aux + FILL_TEMPLATE_CHAIN_FACTORY_LITERAL;
+        }
+
+        result = placeholderPackage + "." + aux;
 
         return result;
     }
@@ -938,8 +956,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractTemplate" +
-               "', 'templateContext': '" + this.m__TemplateContext +
-               "', 'placeholderPackage': '" + this.m__strPlaceholderPackage + "' }";
+        return "{ \"class\": \"AbstractTemplate" +
+               "\", \"templateContext\": \"" + this.m__TemplateContext +
+               "\", \"placeholderPackage\": \"" + this.m__strPlaceholderPackage + "\" }";
     }
 }
