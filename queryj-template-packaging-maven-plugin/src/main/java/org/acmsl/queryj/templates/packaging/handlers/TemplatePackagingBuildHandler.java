@@ -155,8 +155,8 @@ public abstract class TemplatePackagingBuildHandler
         return
             new GlobalTemplateContextImpl(
                 templateName,
-                outputPackage,
                 buildFilename(templateDefs, templateName),
+                outputPackage,
                 rootDir,
                 new File(rootDir.getAbsolutePath()
                          + File.separator + outputPackage.replaceAll("\\.", File.separator)),
