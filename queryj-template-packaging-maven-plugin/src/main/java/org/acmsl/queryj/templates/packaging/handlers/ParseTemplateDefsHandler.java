@@ -51,6 +51,7 @@ import org.acmsl.queryj.templates.packaging.antlr.TemplateDefOutputVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefPackageVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefTypeVisitor;
+import org.acmsl.queryj.templates.packaging.exceptions.TemplateAssociatedToTemplateDefDoesNotExist;
 import org.acmsl.queryj.templates.packaging.exceptions.TemplatePackagingCheckedException;
 
 /*
@@ -132,7 +133,14 @@ public class ParseTemplateDefsHandler
                 {
                     @NotNull final TemplateDef templateDef = parseDefFile(defFile);
 
-                    templateDefs.add(templateDef);
+                    if (isValid(templateDef))
+                    {
+                        templateDefs.add(templateDef);
+                    }
+                    else
+                    {
+                        throw new TemplateAssociatedToTemplateDefDoesNotExist(templateDef);
+                    }
 
                     if (templateDefs.size() == 1)
                     {
@@ -143,6 +151,25 @@ public class ParseTemplateDefsHandler
         }
 
         return false;
+    }
+
+    /**
+     * Checks whether the template def is valid.
+     * @param templateDef the {@link TemplateDef} to check.
+     * @return {@code true} in such case.
+     */
+    protected boolean isValid(@NotNull final TemplateDef templateDef)
+    {
+        final boolean result;
+
+        @NotNull final File templateDefFile = templateDef.getFile();
+
+        @NotNull final File templateFile =
+            new File(templateDefFile.getAbsolutePath().replaceAll("\\.def", ""));
+
+        result = templateFile.exists();
+
+        return result;
     }
 
     /**
