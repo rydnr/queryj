@@ -71,17 +71,14 @@ sourceImpl(defs, C) ::= <<
  * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
+import org.acmsl.queryj.api.handlers.TemplateHandler;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.tools.TemplateChainProvider;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing StringTemplate classes.
- */
-import org.stringtemplate.v4.STGroup;
 
 /*
  * Importing checkthread.org annotations.
@@ -91,13 +88,14 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 <class(defs=defs, C=C)>
 >>
 
 import_bundle(def) ::= <<
-import <def.packageName>.<def.name>HandlerBundle;
+import org.acmsl.queryj.templates.handlers.<def.name.capitalized>TemplateHandlerBundle;
 >>
 
 class(defs, C) ::= <<
@@ -126,23 +124,9 @@ public class <C.class_name>
 
         return result;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    public List\<FillHandler> getFillHandlers()
-    {
-        @NotNull
-        final List\<FillHandler> result = new ArrayList\<FillHandler>();
-
-//        result.add(new CopyrightYearsHandler());
-
-        return result;
-    }
 }
 >>
 
 add_handler_bundle(def) ::= <<
-result.add(new <def.name>HandlerBundle());
+result.add(new <def.name.capitalized>TemplateHandlerBundle());
 >>

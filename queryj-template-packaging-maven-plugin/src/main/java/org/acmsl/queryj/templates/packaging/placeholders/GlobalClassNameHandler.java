@@ -94,6 +94,6 @@ public class GlobalClassNameHandler
     @Override
     public String getPlaceHolder()
     {
-        return "class_value";
+        return "class_name";
     }
 }
