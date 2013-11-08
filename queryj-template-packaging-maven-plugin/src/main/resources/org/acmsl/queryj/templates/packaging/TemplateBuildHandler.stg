@@ -76,6 +76,16 @@ import org.acmsl.queryj.templates.<def.name.capitalized>Template;
 import org.acmsl.queryj.templates.<def.name.capitalized>TemplateFactory;
 
 /*
+ * Importing QueryJ-Placeholder classes.
+ */
+import org.acmsl.queryj.placeholders.DecoratedString;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
+
+/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -136,7 +146,33 @@ public class <C.class_name>
         @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
-        return "<def.packageName>";
+        return buildPackageName(tableName, engineName, projectPackage);
+    }
+
+    /**
+     * Builds the actual package name.
+     * @param tableName the table name.
+     * @param engineName the engine name.
+     * @param projectPackage the project package.
+     * @return the package name.
+     */
+    @NotNull
+    static String buildPackageName(
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage)
+    {
+        @NotNull final String result;
+
+        @NotNull final ST packageTemplate = new ST("<def.packageName>");
+
+        packageTemplate.add("packageName", new DecoratedString(projectPackage));
+        packageTemplate.add("tableName", new DecoratedString(tableName));
+        packageTemplate.add("engineName", new DecoratedString(engineName));
+
+        result = packageTemplate.render();
+
+        return result;
     }
 
     /**

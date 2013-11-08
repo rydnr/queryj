@@ -72,9 +72,19 @@ import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Row;
 
 /*
+ * Importing QueryJ-Placeholder classes.
+ */
+import org.acmsl.queryj.placeholders.DecoratedString;
+
+/*
  * Importing some ACM-SL Java Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
 
 /*
  * Importing some JetBrains annotations.
@@ -181,7 +191,16 @@ public class <C.class_name>
     public String retrieveTemplateFileName(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        return "<def.filenameBuilder>";
+        @NotNull final String result;
+
+        @NotNull final ST template =
+            new ST("<def.filenameBuilder>");
+
+        template.add("tableName", new DecoratedString(tableName));
+
+        result = template.render();
+
+        return result;
     }
 }
 >>

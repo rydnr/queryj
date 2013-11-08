@@ -126,8 +126,8 @@ public class <C.class_name>
     {
         return
             retrieveGroup(
-                "<def.packageName>.<def.rawName>",
-                Arrays.asList("<def.packageName>".replaceAll("\\\.", "/")));
+                "org.acmsl.queryj.templates.<def.rawName>",
+                Arrays.asList("org.acmsl.queryj.templates".replaceAll("\\\.", "/")));
     }
 
     /**

@@ -166,7 +166,11 @@ public class <C.class_name>
     {
         @NotNull final File result;
 
-        @NotNull final String[] pieces = "<def.packageName>".split("\\\.");
+        @NotNull final String packageName =
+            <def.name.capitalized>TemplateBuildHandler.buildPackageName(
+                tableName, engineName, projectPackage);
+
+        @NotNull final String[] pieces = packageName.split("\\\.");
 
         @NotNull final StringBuilder aux = new StringBuilder();
 

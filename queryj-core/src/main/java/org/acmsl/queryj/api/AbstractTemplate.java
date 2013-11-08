@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Common logic for all templates.
  *
  * Date: 2013/08/15
  * Time: 08:24
@@ -95,7 +95,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 /**
- *
+ * Common logic for all templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/08/15 08/24
@@ -574,7 +574,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 t_ClassLoaderUtils.findLocation(ST.class);
 
             t_sbMessage.append(
-                "A fatal error in StringTemplate-based generation "
+                  "A fatal error in StringTemplate-based generation "
                 + "has stopped QueryJ build process.\n"
                 + "If you see error messages from StringTemplate, "
                 + "review your templates. Otherwise, if the VM "

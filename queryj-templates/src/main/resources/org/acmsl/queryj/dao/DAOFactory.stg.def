@@ -1,8 +1,8 @@
 /*
- * Example comment.
+ * DAOFactory template metadata.
  */
 // The template name (the filename).
-name : example.stg;
+name : DAOFactory.stg;
 
 // The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-sql.
 type : per-table;
@@ -11,7 +11,7 @@ type : per-table;
 output: Java;
 
 // The filename builder.
-filename  builder : <table.name>Example.java;
+filename  builder : <tableName>DAOFactory.java;
 
 // The package.
-package: com.foo.bar.dao;
+package: <packageName>.dao;
