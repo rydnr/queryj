@@ -59,7 +59,7 @@ sourceImpl(defs, C) ::= <<
   description_oneline=false,
   filename=C.class_name,
   template="org/acmsl/templates/packaging/DefaultTemplateChainProvider.stg",
-   C=C)>
+  C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates")>
 
 /*

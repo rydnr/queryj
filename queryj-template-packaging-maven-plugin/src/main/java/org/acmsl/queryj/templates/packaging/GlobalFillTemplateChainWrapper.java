@@ -62,6 +62,7 @@ import org.acmsl.queryj.templates.packaging.placeholders.GlobalClassNameHandler;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.templates.packaging.placeholders.GlobalTemplateDefsHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -112,6 +113,7 @@ public class GlobalFillTemplateChainWrapper
         result.add(new SerialVersionUIDHandler<GlobalTemplateContext>(context));
         result.add(new TimestampHandler());
         result.add(new TemplateNameHandler<GlobalTemplateContext>(context));
+        result.add(new GlobalTemplateDefsHandler<GlobalTemplateContext>(context));
 //        result.add(new TemplateDefHandler(context));
 
         return result;
