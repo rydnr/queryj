@@ -121,7 +121,7 @@ public class OracleMetaDataRetrievalHandler
     @Override
     protected MetadataManager buildMetadataManager(
         @SuppressWarnings("unused") @NotNull final QueryJCommand parameters,
-        @NotNull final List<Table> tables,
+        @NotNull final List<Table<String>> tables,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,

@@ -159,11 +159,11 @@ public class MetadataManagerColumnDAO
     {
         Attribute result = null;
 
-        @Nullable final Table t_Table = tableDAO.findByName(table);
+        @Nullable final Table<String> t_Table = tableDAO.findByName(table);
 
         if (t_Table != null)
         {
-            for (@Nullable Attribute t_Attribute : t_Table.getAttributes())
+            for (@Nullable final Attribute t_Attribute : t_Table.getAttributes())
             {
                 if (   (t_Attribute != null)
                     && (columnName.equalsIgnoreCase(t_Attribute.getName())))
@@ -210,9 +210,9 @@ public class MetadataManagerColumnDAO
     @NotNull
     protected List<Attribute> findColumns(@NotNull final String table, @NotNull final TableDAO tableDAO)
     {
-        List<Attribute> result;
+        @NotNull final List<Attribute> result;
 
-        @Nullable final Table t_Table = tableDAO.findByName(table);
+        @Nullable final Table<String> t_Table = tableDAO.findByName(table);
 
         if (t_Table != null)
         {
@@ -260,13 +260,13 @@ public class MetadataManagerColumnDAO
     @NotNull
     protected List<Attribute> findAllColumns(@NotNull final String table, @NotNull final TableDAO tableDAO)
     {
-        List<Attribute> result = new ArrayList<Attribute>(0);
+        @NotNull final List<Attribute> result = new ArrayList<Attribute>(0);
 
-        Table t_Table = tableDAO.findByName(table);
+        @Nullable final Table<String> t_Table = tableDAO.findByName(table);
 
         if (t_Table != null)
         {
-            @Nullable Table t_Parent = t_Table.getParentTable();
+            @Nullable Table<String> t_Parent = t_Table.getParentTable();
 
             while (t_Parent != null)
             {
@@ -322,4 +322,12 @@ public class MetadataManagerColumnDAO
         // TODO
     }
 
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"class\": \"" + MetadataManagerColumnDAO.class.getName() + "\""
+            + ", \"metadataManager:\" " + m__MetadataManager + "\" }";
+    }
 }

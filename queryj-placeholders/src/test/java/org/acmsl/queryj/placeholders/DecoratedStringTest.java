@@ -36,6 +36,7 @@
 package org.acmsl.queryj.placeholders;
 
 import junit.framework.TestCase;
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +53,7 @@ public class DecoratedStringTest
     extends TestCase
 {
     /**
-     * Tests {@link DecoratedString#getCapitalized()}
+     * Tests {@link org.acmsl.queryj.metadata.DecoratedString#getCapitalized()}
      */
     @Test
     public void testCapitalized()

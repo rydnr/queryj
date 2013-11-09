@@ -48,7 +48,7 @@ import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 /*
  * Importing QueryJ Placeholders classes.
  */
-import org.acmsl.queryj.placeholders.DecoratedString;
+import org.acmsl.queryj.metadata.DecoratedString;
 
 /*
  * Importing QueryJ Template-Packaging classes.

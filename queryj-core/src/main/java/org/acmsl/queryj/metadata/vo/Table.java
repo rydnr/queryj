@@ -54,23 +54,23 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface Table
+public interface Table<V>
     extends Serializable,
-            Comparable<Table>
+            Comparable<Table<V>>
 {
     /**
      * Retrieves the table name.
      * @return such name.
      */
     @NotNull
-    String getName();
+    V getName();
 
     /**
      * Retrieves the table comment.
      * @return such comment.
      */
     @Nullable
-    String getComment();
+    V getComment();
 
     /**
      * Retrieves the primary key attributes.
@@ -98,7 +98,7 @@ public interface Table
      * @return such table.
      */
     @Nullable
-    Table getParentTable();
+    Table<V> getParentTable();
 
     /**
      * Retrieves whether the table contains static values or not.

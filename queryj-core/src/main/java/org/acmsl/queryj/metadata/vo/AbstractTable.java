@@ -52,22 +52,22 @@ import java.util.ArrayList;
 import java.util.List;
  
 /**
- * Abstract logicless implementation of <code>Table</code> interface.
+ * Abstract logic-less implementation of <code>Table</code> interface.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class AbstractTable
-    implements Table
+public abstract class AbstractTable<V>
+    implements Table<V>
 {
     /**
      * The name.
      */
-    private String m__strName;
+    private V m__Name;
 
     /**
      * The comment.
      */
-    private String m__strComment;
+    private V m__Comment;
 
     /**
      * The primary key attributes.
@@ -82,7 +82,7 @@ public abstract class AbstractTable
     /**
      * The parent table, if any.
      */
-    private Table m__ParentTable;
+    private Table<V> m__ParentTable;
 
     /**
      * The foreign keys.
@@ -107,7 +107,7 @@ public abstract class AbstractTable
      * is decorated.
      */
     protected AbstractTable(
-        @NotNull final String name, @Nullable final String comment)
+        @NotNull final V name, @Nullable final V comment)
     {
         immutableSetName(name);
         immutableSetComment(comment);
@@ -126,12 +126,12 @@ public abstract class AbstractTable
      * is decorated.
      */
     protected AbstractTable(
-        @NotNull final String name,
-        @Nullable final String comment,
+        @NotNull final V name,
+        @Nullable final V comment,
         @NotNull final List<Attribute> primaryKey,
         @NotNull final List<Attribute> attributes,
         @NotNull final List<ForeignKey> foreignKeys,
-        @Nullable final Table parentTable,
+        @Nullable final Table<V> parentTable,
         final boolean isStatic,
         final boolean voDecorated)
     {
@@ -149,16 +149,16 @@ public abstract class AbstractTable
      * Specifies the name.
      * @param name such name.
      */
-    protected final void immutableSetName(@NotNull final String name)
+    protected final void immutableSetName(@NotNull final V name)
     {
-        m__strName = name;
+        m__Name = name;
     }
     
     /**
      * Specifies the name.
      * @param name such name.
      */
-    protected void setName(@NotNull final String name)
+    protected void setName(@NotNull final V name)
     {
         immutableSetName(name);
     }
@@ -168,18 +168,19 @@ public abstract class AbstractTable
      * @return such name.
      */
     @NotNull
-    public String getName()
+    @Override
+    public V getName()
     {
-        return m__strName;
+        return m__Name;
     }
 
     /**
      * Specifies the table comment.
      * @param comment the comment.
      */
-    protected final void immutableSetComment(@Nullable final String comment)
+    protected final void immutableSetComment(@Nullable final V comment)
     {
-        m__strComment = comment;
+        m__Comment = comment;
     }
 
     /**
@@ -187,7 +188,7 @@ public abstract class AbstractTable
      * @param comment the comment.
      */
     @SuppressWarnings("unused")
-    protected void setComment(@Nullable final String comment)
+    protected void setComment(@Nullable final V comment)
     {
         immutableSetComment(comment);
     }
@@ -197,9 +198,10 @@ public abstract class AbstractTable
      * @return such information.
      */
     @Nullable
-    public String getComment()
+    @Override
+    public V getComment()
     {
-        return m__strComment;
+        return m__Comment;
     }
 
     /**
@@ -237,6 +239,7 @@ public abstract class AbstractTable
      * @return such list.
      */
     @NotNull
+    @Override
     public List<Attribute> getPrimaryKey()
     {
         List<Attribute> result = immutableGetPrimaryKey();
@@ -283,6 +286,7 @@ public abstract class AbstractTable
      * @return such list.
      */
     @NotNull
+    @Override
     public List<Attribute> getAttributes()
     {
         @Nullable List<Attribute> result = immutableGetAttributes();
@@ -330,6 +334,7 @@ public abstract class AbstractTable
      */
     @NotNull
     @SuppressWarnings("unused")
+    @Override
     public List<ForeignKey> getForeignKeys()
     {
         List<ForeignKey> result = immutableGetForeignKeys();
@@ -347,7 +352,7 @@ public abstract class AbstractTable
      * Specifies the parent table.
      * @param parentTable the parent table.
      */
-    protected final void immutableSetParentTable(@Nullable final Table parentTable)
+    protected final void immutableSetParentTable(@Nullable final Table<V> parentTable)
     {
         m__ParentTable = parentTable;
     }
@@ -357,7 +362,7 @@ public abstract class AbstractTable
      * @param parentTable the parent table.
      */
     @SuppressWarnings("unused")
-    protected void setParentTable(@NotNull final Table parentTable)
+    protected void setParentTable(@NotNull final Table<V> parentTable)
     {
         immutableSetParentTable(parentTable);
     }
@@ -367,7 +372,8 @@ public abstract class AbstractTable
      * @return such table.
      */
     @Nullable
-    public Table getParentTable()
+    @Override
+    public Table<V> getParentTable()
     {
         return m__ParentTable;
     }
@@ -396,6 +402,7 @@ public abstract class AbstractTable
      * @return <tt>true</tt> in such case.
      */
     @SuppressWarnings("unused")
+    @Override
     public boolean isStatic()
     {
         return m__bStatic;
@@ -427,6 +434,7 @@ public abstract class AbstractTable
      * @return such information.
      */
     @SuppressWarnings("unused")
+    @Override
     public boolean isVoDecorated()
     {
         return m__bVoDecorated;
@@ -435,7 +443,7 @@ public abstract class AbstractTable
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.m__strName).toHashCode();
+        return new HashCodeBuilder().append(this.m__Name).toHashCode();
     }
 
     @Override
@@ -450,22 +458,22 @@ public abstract class AbstractTable
             return false;
         }
         final AbstractTable other = (AbstractTable) obj;
-        return new EqualsBuilder().append(this.m__strName, other.m__strName).isEquals();
+        return new EqualsBuilder().append(this.m__Name, other.m__Name).isEquals();
     }
 
     @Override
     public String toString()
     {
-        return "AbstractTable{" +
-               "m__strName='" + m__strName + '\'' +
-               ", m__strComment='" + m__strComment + '\'' +
-               ", m__lPrimaryKey=" + m__lPrimaryKey +
-               ", m__lAttributes=" + m__lAttributes +
-               ", m__ParentTable=" + m__ParentTable +
-               ", m__lForeignKeys=" + m__lForeignKeys +
-               ", m__bStatic=" + m__bStatic +
-               ", m__bVoDecorated=" + m__bVoDecorated +
-               '}';
+        return
+              "{ \"class\": \"" + AbstractTable.class.getName() + "\""
+            + ", \"name\": \"" + m__Name + "\""
+            + ", \"comment\": \"" + m__Comment + "\""
+            + ", \"primaryKey\": \"" + m__lPrimaryKey + "\""
+            + ", \"attributes\": \"" + m__lAttributes + "\""
+            + ", \"parentTable\": \"" + m__ParentTable + "\""
+            + ", \"foreignKeys\": \"" + m__lForeignKeys + "\""
+            + ", \"static\": \"" + m__bStatic + "\""
+            + ", \"voDecorated\": \"" + m__bVoDecorated + "\" }";
     }
 
     /**
@@ -506,7 +514,7 @@ public abstract class AbstractTable
      *                            from being compared to this object.
      */
     @Override
-    public int compareTo(final Table o)
+    public int compareTo(final Table<V> o)
     {
         return compareThem(this, o);
     }
@@ -519,9 +527,9 @@ public abstract class AbstractTable
      * 'greater' than the second's; 0 if they are equal; a negative number
      * otherwise.
      */
-    protected int compareThem(@NotNull final Table first, @NotNull final Table second)
+    protected int compareThem(@NotNull final Table<V> first, @NotNull final Table<V> second)
     {
-        return first.getName().compareToIgnoreCase(second.getName());
+        return ("" + first.getName()).compareToIgnoreCase("" + second.getName());
     }
 
 }

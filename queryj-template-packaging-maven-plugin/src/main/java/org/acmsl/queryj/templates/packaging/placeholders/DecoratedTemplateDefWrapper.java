@@ -46,7 +46,7 @@ import org.acmsl.queryj.templates.packaging.TemplateDefType;
 /*
  * Importing QueryJ-Placeholders classes.
  */
-import org.acmsl.queryj.placeholders.DecoratedString;
+import org.acmsl.queryj.metadata.DecoratedString;
 
 /*
  * Importing JetBrains annotations.

@@ -400,11 +400,11 @@ public class MetadataUtils
     {
         boolean result = false;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
-            for (Attribute t_Attribute : t_Table.getAttributes())
+            for (@Nullable final Attribute t_Attribute : t_Table.getAttributes())
             {
                 if (   (t_Attribute != null)
                     && (columnNames.contains(t_Attribute.getName())))
@@ -465,11 +465,11 @@ public class MetadataUtils
     {
         @Nullable List<ForeignKey> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(sourceTableName);
+        @Nullable final Table<String> t_Table = metadataManager.getTableDAO().findByName(sourceTableName);
 
         if (t_Table != null)
         {
-            for (@Nullable ForeignKey t_ForeignKey : t_Table.getForeignKeys())
+            for (@Nullable final ForeignKey t_ForeignKey : t_Table.getForeignKeys())
             {
                 if (   (t_ForeignKey != null)
                     && (t_ForeignKey.getTargetTableName().equals(targetTableName)))
@@ -552,13 +552,13 @@ public class MetadataUtils
     {
         @Nullable List<Attribute> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
             boolean t_bIsClob;
 
-            for (Attribute t_Attribute : t_Table.getAttributes())
+            for (@Nullable final Attribute t_Attribute : t_Table.getAttributes())
             {
                 t_bIsClob = false;
 

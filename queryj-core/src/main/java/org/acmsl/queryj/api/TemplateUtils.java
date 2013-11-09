@@ -561,14 +561,14 @@ public class TemplateUtils
     {
         @NotNull final List<Result> result = new ArrayList<Result>(2);
 
-        @Nullable final Table table = tableDAO.findByName(tableName);
+        @Nullable final Table<String> table = tableDAO.findByName(tableName);
 
         if (table != null)
         {
             @Nullable final TableDecorator tableDecorator =
                 decoratorFactory.createTableDecorator(table.getName(), metadataManager, customSqlProvider);
 
-            @Nullable final String classValue = (tableDecorator != null) ? tableDecorator.getVoName() : null;
+            @Nullable final String classValue = (tableDecorator != null) ? tableDecorator.getName().getVoName() : null;
 
             @NotNull final Result singleResult =
                 new ResultElement(

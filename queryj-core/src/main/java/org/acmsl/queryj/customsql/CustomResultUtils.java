@@ -325,7 +325,7 @@ public class CustomResultUtils
 
             String t_strDao;
 
-            for (@Nullable Sql t_Sql : retrieveSqlElementsByResultId(customSqlProvider, resultId))
+            for (@Nullable final Sql t_Sql : retrieveSqlElementsByResultId(customSqlProvider, resultId))
             {
                 if (t_Sql != null)
                 {
@@ -333,7 +333,8 @@ public class CustomResultUtils
 
                     if (t_strDao != null)
                     {
-                        Table t_Table = metadataManager.getTableDAO().findByDAO(t_strDao);
+                        @Nullable final Table<String> t_Table =
+                            metadataManager.getTableDAO().findByDAO(t_strDao);
 
                         if  (t_Table != null)
                         {

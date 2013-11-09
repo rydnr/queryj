@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Templates
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -38,8 +38,8 @@ package cucumber.templates;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.dao.DAOTemplateFactory;
-import org.acmsl.queryj.templates.dao.DAOTemplateGenerator;
+import org.acmsl.queryj.templates.DAOFactoryTemplateFactory;
+import org.acmsl.queryj.templates.DAOFactoryTemplateGenerator;
 
 /*
  * Importing QueryJ-Core classes.
@@ -112,8 +112,8 @@ public class PerTableTemplatesTest
         super();
 
         // dao
-        GENERATOR_MAPPINGS.put("DAO", new DAOTemplateGenerator(false, 1));
-        FACTORY_MAPPINGS.put("DAO", DAOTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("DAOFactory", new DAOFactoryTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("DAOFactory", DAOFactoryTemplateFactory.getInstance());
     }
 
     /**
@@ -135,7 +135,7 @@ public class PerTableTemplatesTest
      */
     protected void defineInputTables(
         @NotNull final DataTable tableInfo,
-        @NotNull final Map<String, Table> tables,
+        @NotNull final Map<String, Table<String>> tables,
         @NotNull final TableTestHelper helper)
     {
         helper.defineInputTables(tableInfo, tables);
@@ -157,9 +157,9 @@ public class PerTableTemplatesTest
      * @param columnInfo the column information.
      * @param tables the tables.
      */
-    protected List<Table> defineInputColumns(
+    protected List<Table<String>> defineInputColumns(
         @NotNull final DataTable columnInfo,
-        @NotNull final Map<String, Table> tables,
+        @NotNull final Map<String, Table<String>> tables,
         @NotNull final TableTestHelper helper)
     {
         return helper.defineInputColumns(columnInfo, tables);
@@ -185,7 +185,7 @@ public class PerTableTemplatesTest
      */
     protected void defineForeignKeys(
         @NotNull final DataTable fkInfo,
-        @NotNull final Map<String, Table> tables,
+        @NotNull final Map<String, Table<String>> tables,
         @NotNull final List<ForeignKey> foreignKeys,
         @NotNull final TableTestHelper helper)
     {
@@ -211,7 +211,7 @@ public class PerTableTemplatesTest
      */
     protected void defineValues(
         @NotNull final DataTable values,
-        @NotNull final Map<String, Table> tables,
+        @NotNull final Map<String, Table<String>> tables,
         @NotNull final TableTestHelper helper)
     {
         helper.defineValues(values, tables);
@@ -316,7 +316,7 @@ public class PerTableTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
-        @NotNull final Map<String, Table> tables,
+        @NotNull final Map<String, Table<String>> tables,
         @NotNull final Map<String, File> outputFiles,
         @NotNull final CustomSqlProvider sqlProvider)
     {
@@ -325,7 +325,7 @@ public class PerTableTemplatesTest
 
         Assert.assertNotNull("No template generator found for " + templateName, generator);
 
-        for (@NotNull final Table table : tables.values())
+        for (@NotNull final Table<String> table : tables.values())
         {
             @Nullable final PerTableTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
 

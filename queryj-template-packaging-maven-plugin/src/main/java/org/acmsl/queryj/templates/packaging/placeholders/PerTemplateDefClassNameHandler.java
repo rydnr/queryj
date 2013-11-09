@@ -40,7 +40,7 @@ package org.acmsl.queryj.templates.packaging.placeholders;
  * Importing QueryJ-Placeholders classes.
  */
 import org.acmsl.queryj.placeholders.AbstractDecoratedStringHandler;
-import org.acmsl.queryj.placeholders.DecoratedString;
+import org.acmsl.queryj.metadata.DecoratedString;
 
 /*
  * Importing QueryJ-Template-Packaging classes.
@@ -50,7 +50,6 @@ import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /*

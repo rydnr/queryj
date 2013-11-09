@@ -141,7 +141,7 @@ public class CustomSqlProvisioningHandler
     {
         final boolean result = false;
 
-        @NotNull final List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
+        @NotNull final List<Table<String>> t_lTables = metadataManager.getTableDAO().findAllTables();
 
         String t_strTableName;
         String t_strResultName;
@@ -150,7 +150,7 @@ public class CustomSqlProvisioningHandler
         String t_strPropertyName;
         int t_iAttributeCount;
 
-        for  (@Nullable final Table t_Table : t_lTables)
+        for  (@Nullable final Table<String> t_Table : t_lTables)
         {
             if (t_Table != null)
             {

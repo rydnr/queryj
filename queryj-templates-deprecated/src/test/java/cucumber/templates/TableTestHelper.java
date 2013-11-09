@@ -139,7 +139,7 @@ public class TableTestHelper
             result =
                 convertToTable(
                     table,
-                    tableEntry.get("comment"),
+                    tableEntry.get(TableTestHelper.COMMENT),
                     tableEntry.get("parent table"),
                     tableEntry.get("static") != null,
                     tableEntry.get("decorated") != null);

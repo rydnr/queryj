@@ -194,7 +194,7 @@ public interface MetadataManager
      * @return the list of {@link Table tables}.
      */
     @NotNull
-    List<Table> getTables();
+    List<Table<String>> getTables();
 
     /**
      * Retrieves the table names.

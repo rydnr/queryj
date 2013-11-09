@@ -34,15 +34,21 @@
 package org.acmsl.queryj.metadata.vo;
 
 /*
- * Importing some JDK classes.
+ * Importing some QueryJ classes.
  */
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+/*
+ * Importing some JDK classes.
+ */
+import java.util.List;
 
 /**
  * Models the definition of table fields declared by the user.
@@ -60,7 +66,7 @@ public abstract class AbstractField
     /**
      * The field fk collection.
      */
-    private Collection<AntFieldFkElement> m__cFieldFks;
+    private List<AntFieldFkElement> m__lFieldFks;
 
     /**
      * Creates an {@link AbstractField} with given information.
@@ -154,16 +160,16 @@ public abstract class AbstractField
      * Specifies the field fk collection.
      * @param fieldFks the collection
      */
-    private void immutableSetFieldFks(@NotNull final Collection<AntFieldFkElement> fieldFks)
+    private void immutableSetFieldFks(@NotNull final List<AntFieldFkElement> fieldFks)
     {
-        m__cFieldFks = fieldFks;
+        m__lFieldFks = fieldFks;
     }
 
     /**
      * Specifies the field fk collection.
      * @param fieldFks the collection
      */
-    protected void setFieldFks(@NotNull final Collection<AntFieldFkElement> fieldFks)
+    protected void setFieldFks(@NotNull final List<AntFieldFkElement> fieldFks)
     {
         immutableSetFieldFks(fieldFks);
     }
@@ -173,9 +179,10 @@ public abstract class AbstractField
      * @return such collection.
      */
     @Nullable
-    public Collection<AntFieldFkElement> getFieldFks()
+    @Override
+    public List<AntFieldFkElement> getFieldFks()
     {
-        return m__cFieldFks;
+        return m__lFieldFks;
     }
 
     /**

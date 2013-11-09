@@ -194,7 +194,7 @@ public abstract class BasePerTableTemplateBuildHandler
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final List<Table> tables,
+        @NotNull final List<Table<String>> tables,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
       throws  QueryJBuildException
@@ -203,7 +203,7 @@ public abstract class BasePerTableTemplateBuildHandler
 
         @Nullable T t_Template;
 
-        for  (@Nullable final Table t_Table : tables)
+        for  (@Nullable final Table<String> t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -380,6 +380,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param metadataManager the {@link MetadataManager} instance.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     protected boolean isStaticTable(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
@@ -413,6 +414,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param decoratorFactory the decorator factory.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     @Nullable
     protected List<Row> retrieveStaticContent(
         @NotNull final QueryJCommand parameters,

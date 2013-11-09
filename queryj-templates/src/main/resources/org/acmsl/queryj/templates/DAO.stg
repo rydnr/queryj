@@ -38,7 +38,7 @@
 //
 group DAO;
 
-import "../queryj.stg"
+import "queryj.stg"
 
 source(C) ::= <<
 <!

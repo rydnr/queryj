@@ -78,6 +78,11 @@ import java.util.Map;
  */
 public class TableTestHelper
 {
+    private static final String COMMENT = "comment";
+    private static final String PARENT_TABLE = "parent table";
+    private static final String STATIC = "static";
+    private static final String DECORATED = "decorated";
+
     /**
      * Singleton implementation to avoid double-locking check.
      */
@@ -107,11 +112,11 @@ public class TableTestHelper
      * @param tables the table collection.
      */
     public void defineInputTables(
-        @NotNull final DataTable tableInfo, @NotNull final Map<String, Table> tables)
+        @NotNull final DataTable tableInfo, @NotNull final Map<String, Table<String>> tables)
     {
         @NotNull final List<Map<String, String>> tableEntries = tableInfo.asMaps();
 
-        Table table;
+        @Nullable Table<String> table;
 
         for (@NotNull final Map<String, String> tableEntry: tableEntries)
         {
@@ -130,9 +135,9 @@ public class TableTestHelper
      * @return the {@link Table} instance.
      */
     @Nullable
-    protected Table convertToTable(@NotNull final Map<String, String> tableEntry)
+    protected Table<String> convertToTable(@NotNull final Map<String, String> tableEntry)
     {
-        @Nullable Table result = null;
+        @Nullable Table<String> result = null;
 
         @Nullable final String table =  tableEntry.get(AntTablesElement.TABLE);
 
@@ -141,10 +146,10 @@ public class TableTestHelper
             result =
                 convertToTable(
                     table,
-                    tableEntry.get("comment"),
-                    tableEntry.get("parent table"),
-                    tableEntry.get("static") != null,
-                    tableEntry.get("decorated") != null);
+                    tableEntry.get(COMMENT),
+                    tableEntry.get(PARENT_TABLE),
+                    tableEntry.get(STATIC) != null,
+                    tableEntry.get(DECORATED) != null);
         }
 
         return result;
@@ -155,12 +160,12 @@ public class TableTestHelper
      * @param columnInfo the column information.
      * @param tables the tables.
      */
-    public List<Table> defineInputColumns(
-        @NotNull final DataTable columnInfo, @NotNull final Map<String, Table> tables)
+    public List<Table<String>> defineInputColumns(
+        @NotNull final DataTable columnInfo, @NotNull final Map<String, Table<String>> tables)
     {
-        @NotNull final List<Table> result = new ArrayList<Table>(tables.size());
+        @NotNull final List<Table<String>> result = new ArrayList<Table<String>>(tables.size());
 
-        for (@NotNull final Table table : tables.values())
+        for (@NotNull final Table<String> table : tables.values())
         {
             result.add(table);
 
@@ -225,7 +230,7 @@ public class TableTestHelper
      * @return the {@link Table} instance.
      */
     @Nullable
-    public Table convertToTable(
+    public Table<String> convertToTable(
         @NotNull final String tableName,
         @Nullable final String comment,
         @SuppressWarnings("unused") @Nullable final String parentTable,
@@ -328,7 +333,7 @@ public class TableTestHelper
      * @return the list of attributes matching given column names.
      */
     @NotNull
-    public List<Attribute> filterAttributes(final Table table, final String[] columns)
+    public List<Attribute> filterAttributes(final Table<String> table, final String[] columns)
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
@@ -366,7 +371,7 @@ public class TableTestHelper
      */
     public void defineForeignKeys(
         @NotNull final DataTable fkInfo,
-        @NotNull final Map<String, Table> tables,
+        @NotNull final Map<String, Table<String>> tables,
         @NotNull final List<ForeignKey> foreignKeys)
     {
         String sourceTable;
@@ -376,7 +381,7 @@ public class TableTestHelper
 
         ForeignKey foreignKey;
 
-        for (@NotNull final Table table : tables.values())
+        for (@NotNull final Table<String> table : tables.values())
         {
             for (@NotNull final Map<String, String> fkEntry: fkInfo.asMaps())
             {
@@ -412,9 +417,9 @@ public class TableTestHelper
      * @param tables the tables.
      */
     @SuppressWarnings("unused")
-    public void defineValues(@NotNull final DataTable values, @NotNull final Map<String, Table> tables)
+    public void defineValues(@NotNull final DataTable values, @NotNull final Map<String, Table<String>> tables)
     {
-        for (@NotNull final Table table : tables.values())
+        for (@NotNull final Table<String> table : tables.values())
         {
             @NotNull final List<Attribute> attributes = table.getAttributes();
 

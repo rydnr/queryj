@@ -64,93 +64,8 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public interface TableDecorator
-    extends  Table
+    extends  Table<DecoratedString>
 {
-    /**
-     * Retrieves the name, in upper case.
-     * @return such value.
-     */
-    @NotNull
-    String getNameUppercased();
-    
-    /**
-     * Retrieves the capitalized name.
-     * @return such name.
-     */
-    @NotNull
-    String getNameCapitalized();
-
-    /**
-     * Retrieves the name, in lower case.
-     * @return such value.
-     */
-    @NotNull
-    String getNameLowercased();
-
-    /**
-     * Retrieves the table name, uncapitalized.
-     * @return such value.
-     */
-    @NotNull
-    String getUncapitalizedName();
-
-    /**
-     * Retrieves the value-object name associated to the table name.
-     * @return such name.
-     */
-    @NotNull
-    String getVoName();
-
-    /**
-     * Retrieves the value-object name associated to the table name, uncapitalized.
-     * @return such name.
-     */
-    @NotNull
-    String getVoNameUncapitalized();
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    String getNameNormalizedLowercased();
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    String getSingularNameNormalizedLowercased();
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    String getNameNormalized();
-
-    /**
-     * Retrieves the table's name once normalized.
-     * @return such information.
-     */
-    @NotNull
-    String getSingularNameCapitalized();
-
-    /**
-     * Retrieves the singular table's name, upper-cased.
-     * @return such information.
-     */
-    @NotNull
-    String getSingularNameUppercased();
-
-    /**
-     * Retrieves the singular table's name, lower-cased.
-     * @return such information.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    String getSingularNameLowercased();
-
     /**
      * Retrieves all attributes, including the parent's.
      * @return such attributes.
@@ -163,7 +78,7 @@ public interface TableDecorator
      * @return such tables.
      */
     @NotNull
-    List<Table> getAllParentTables();
+    List<Table<DecoratedString>> getAllParentTables();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed.

@@ -33,13 +33,14 @@
  * Time: 4:36 AM
  *
  */
-package org.acmsl.queryj.placeholders;
+package org.acmsl.queryj.metadata;
 
 /*
  * Importing some Apache Commons-Lang classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
-import org.acmsl.queryj.metadata.DecorationUtils;
+import org.acmsl.queryj.SingularPluralFormConverter;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -275,6 +276,44 @@ public class DecoratedString
         return Arrays.asList(decorationUtils.split(value));
     }
 
+    /**
+     * Retrieves the VOName format.
+     * @return such value.
+     */
+    @NotNull
+    public String getVoName()
+    {
+        return capitalize(getSingular(), StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the singular.
+     * @return the value, in singular.
+     */
+    @NotNull
+    public String getSingular()
+    {
+        return getSingular(getValue(), SingularPluralFormConverter.getInstance());
+    }
+
+    /**
+     * Converts given value to singular.
+     * @param value the value to convert.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @return the converted value.
+     */
+    @NotNull
+    protected String getSingular(
+        @NotNull final String value, @NotNull final EnglishGrammarUtils englishGrammarUtils)
+    {
+        return englishGrammarUtils.getSingular(value);
+    }
+
+    /**
+     * Retrieves the value.
+     * @return such value.
+     */
+    @NotNull
     @Override
     public String toString()
     {

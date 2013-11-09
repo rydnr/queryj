@@ -43,6 +43,7 @@ import org.acmsl.queryj.api.TemplateContext;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.jetbrains.annotations.NotNull;
 
 /*

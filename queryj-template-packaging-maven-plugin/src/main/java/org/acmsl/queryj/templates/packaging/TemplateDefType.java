@@ -43,7 +43,7 @@ import org.acmsl.commons.utils.EnumUtils;
 /*
  * Importing checkthread.org annotations.
  */
-import org.acmsl.queryj.placeholders.DecoratedString;
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.checkthread.annotations.ThreadSafe;
 
 /*

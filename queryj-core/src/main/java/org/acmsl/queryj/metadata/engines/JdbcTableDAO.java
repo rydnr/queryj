@@ -89,7 +89,7 @@ public class JdbcTableDAO
      */
     @NotNull
     @Override
-    public List<Table> findAllTables()
+    public List<Table<String>> findAllTables()
     {
         return getMetadataManager().getTables();
     }
@@ -102,14 +102,16 @@ public class JdbcTableDAO
      * @return the associated {@link Table} instance, if the table is found.
      */
     @Nullable
-    public Table findByName(
-        @NotNull final String name, @Nullable final String catalog, @Nullable final String schema)
+    public Table<String> findByName(
+        @NotNull final String name,
+        @SuppressWarnings("unused") @Nullable final String catalog,
+        @SuppressWarnings("unused") @Nullable final String schema)
     {
-        @Nullable Table result = null;
+        @Nullable Table<String> result = null;
 
         final boolean t_bCaseSensitive = getMetadataManager().isCaseSensitive();
 
-        for (@Nullable final Table t_Table : getMetadataManager().getTables())
+        for (@Nullable final Table<String> t_Table : getMetadataManager().getTables())
         {
             if (t_Table != null)
             {
@@ -138,17 +140,17 @@ public class JdbcTableDAO
      */
     @Override
     @NotNull
-    public List<Table> findReferringTables(@NotNull final String target)
+    public List<Table<String>> findReferringTables(@NotNull final String target)
     {
-        @NotNull final List<Table> result = new ArrayList<Table>(1);
+        @NotNull final List<Table<String>> result = new ArrayList<Table<String>>(1);
 
         final boolean t_bCaseSensitive = getMetadataManager().isCaseSensitive();
 
-        for (@Nullable Table t_Table : getMetadataManager().getTables())
+        for (@Nullable final Table<String> t_Table : getMetadataManager().getTables())
         {
             if (t_Table != null)
             {
-                for (@Nullable ForeignKey t_ForeignKey : t_Table.getForeignKeys())
+                for (@Nullable final ForeignKey t_ForeignKey : t_Table.getForeignKeys())
                 {
                     if (t_ForeignKey != null)
                     {

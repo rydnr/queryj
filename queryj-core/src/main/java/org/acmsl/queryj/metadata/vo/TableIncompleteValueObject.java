@@ -55,7 +55,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @ThreadSafe
 public class TableIncompleteValueObject
-    extends AbstractTable
+    extends AbstractTable<String>
 {
 
     private static final long serialVersionUID = -9077871583769430337L;
@@ -75,7 +75,7 @@ public class TableIncompleteValueObject
      * {@inheritDoc}
      */
     @Override
-    public void setParentTable(@NotNull final Table parent)
+    public void setParentTable(@NotNull final Table<String> parent)
     {
         super.setParentTable(parent);
     }

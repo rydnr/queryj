@@ -53,14 +53,12 @@ import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.LazyAttribute;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.api.dao.DAOTemplateUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
  * Importing some Apache Commons Logging classes.
@@ -88,13 +86,13 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public abstract class AbstractTableDecorator
-    extends     AbstractTable
+    extends     AbstractTable<DecoratedString>
     implements  TableDecorator
 {
     /**
      * The decorated table.
      */
-    private Table m__Table;
+    private Table<String> m__Table;
 
     /**
      * The metadata type manager.
@@ -142,7 +140,7 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     public AbstractTableDecorator(
-        @NotNull final Table table,
+        @NotNull final Table<String> table,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -176,12 +174,12 @@ public abstract class AbstractTableDecorator
      * @param customSqlProvider the {@link CustomSqlProvider custom-sql provider}.
      */
     public AbstractTableDecorator(
-        @NotNull final Table table,
+        @NotNull final Table<String> table,
         @NotNull final String name,
         @NotNull final List<Attribute> primaryKey,
         @NotNull final List<Attribute> attributes,
         @NotNull final List<ForeignKey> foreignKeys,
-        @Nullable final Table parentTable,
+        @Nullable final Table<String> parentTable,
         final boolean isStatic,
         final boolean voDecorated,
         @NotNull final MetadataManager metadataManager,
@@ -189,7 +187,16 @@ public abstract class AbstractTableDecorator
         @NotNull final CustomSqlProvider customSqlProvider)
     {
         super(
-            name, table.getComment(), primaryKey, attributes, foreignKeys, parentTable, isStatic, voDecorated);
+            new DecoratedString(name),
+            new DecoratedString((table.getComment() != null) ? table.getComment() : ""),
+            primaryKey,
+            attributes,
+            foreignKeys,
+            (parentTable != null)
+            ? new CachingTableDecorator(parentTable, metadataManager, decoratorFactory, customSqlProvider)
+            : null,
+            isStatic,
+            voDecorated);
 
         immutableSetTable(table);
         immutableSetMetadataManager(metadataManager);
@@ -201,7 +208,7 @@ public abstract class AbstractTableDecorator
      * Specifies the table to decorate.
      * @param table such table.
      */
-    protected final void immutableSetTable(@NotNull final Table table)
+    protected final void immutableSetTable(@NotNull final Table<String> table)
     {
         this.m__Table = table;
     }
@@ -211,7 +218,7 @@ public abstract class AbstractTableDecorator
      * @param table such table.
      */
     @SuppressWarnings("unused")
-    protected void setTable(@NotNull final Table table)
+    protected void setTable(@NotNull final Table<String> table)
     {
         immutableSetTable(table);
     }
@@ -221,7 +228,7 @@ public abstract class AbstractTableDecorator
      * @return such table.
      */
     @NotNull
-    protected final Table immutableGetTable()
+    protected final Table<String> immutableGetTable()
     {
         return this.m__Table;
     }
@@ -231,7 +238,7 @@ public abstract class AbstractTableDecorator
      * @return such table.
      */
     @NotNull
-    public Table getTable()
+    public Table<String> getTable()
     {
         return immutableGetTable();
     }
@@ -423,7 +430,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<ForeignKey> getForeignKeys(
-        @NotNull final String name,
+        @NotNull final DecoratedString name,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -491,12 +498,12 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<ForeignKey> retrieveForeignKeys(
-        @NotNull final String name,
+        @NotNull final DecoratedString name,
         @NotNull final MetadataManager metadataManager)
     {
         @Nullable final List<ForeignKey> result;
 
-        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(name);
+        @Nullable final Table<String> t_Table = metadataManager.getTableDAO().findByName(name.getValue());
 
         if (t_Table != null)
         {
@@ -611,7 +618,7 @@ public abstract class AbstractTableDecorator
 
         if  (result == null)
         {
-            @Nullable final Table t_Parent = getParentTable();
+            @Nullable final Table<DecoratedString> t_Parent = getParentTable();
 
             if  (t_Parent != null)
             {
@@ -636,14 +643,14 @@ public abstract class AbstractTableDecorator
      */
     @Nullable
     protected ForeignKey retrieveParentForeignKey(
-        @NotNull final Table parent, @NotNull final List<ForeignKey> foreignKeys)
+        @NotNull final Table<DecoratedString> parent, @NotNull final List<ForeignKey> foreignKeys)
     {
         @Nullable ForeignKey result = null;
 
         for (@Nullable final ForeignKey t_ForeignKey : foreignKeys)
         {
             if (   (t_ForeignKey != null)
-                 && (parent.getName().equalsIgnoreCase(
+                 && (parent.getName().getValue().equalsIgnoreCase(
                          t_ForeignKey.getTargetTableName()))
                  && (attributeListMatch(
                 getPrimaryKey(), t_ForeignKey.getAttributes())))
@@ -719,299 +726,6 @@ public abstract class AbstractTableDecorator
     }
 
     /**
-     * Retrieves the name, in upper case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameUppercased()
-    {
-        return uppercase(getName());
-    }
-    
-    /**
-     * Retrieves the capitalized name.
-     * @return such name.
-     */
-    @NotNull
-    public String getNameCapitalized()
-    {
-        return capitalize(getName());
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String capitalize(@NotNull final String value)
-    {
-        return
-            capitalize(value, DecorationUtils.getInstance());
-    }
-    
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String capitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(lowercase(value));
-    }
-    
-    /**
-     * Converts given value to upper-case.
-     * @param value the value.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String uppercase(@NotNull final String value)
-    {
-        return uppercase(value, DecorationUtils.getInstance());
-    }
-    
-    /**
-     * Converts given value to upper-case.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String uppercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.upperCase(value);
-    }
-    
-    /**
-     * Normalizes given value to lower-case.
-     * @param value the value.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String normalizeLowercase(@NotNull final String value)
-    {
-        return normalizeLowercase(value, DecorationUtils.getInstance());
-    }
-    
-    /**
-     * Normalizes given value to lower-case.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String normalizeLowercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalizeLowercase(value);
-    }
-    
-    /**
-     * Normalizes given value.
-     * @param value the value.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String normalize(@NotNull final String value)
-    {
-        return normalize(value, DecorationUtils.getInstance());
-    }
-    
-    /**
-     * Normalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String normalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalize(value);
-    }
-    
-    /**
-     * Retrieves the name, in lower case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameLowercased()
-    {
-        return lowercase(getName());
-    }
-    
-    /**
-     * Converts given value to lower-case.
-     * @param value the value.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String lowercase(@NotNull final String value)
-    {
-        return lowercase(value, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Converts given value to lower-case.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String lowercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.lowerCase(value);
-    }
-
-    /**
-     * Retrieves the table name, uncapitalized.
-     * @return such value.
-     */
-    @NotNull
-    public String getUncapitalizedName()
-    {
-        return uncapitalize(getName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Uncapitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the modified version of the value.
-     */
-    @NotNull
-    protected String uncapitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.uncapitalize(value);
-    }
-
-    /**
-     * Retrieves the value-object name associated to the table name.
-     * @return such name.
-     */
-    @NotNull
-    public String getVoName()
-    {
-        return getSingularNameCapitalized();
-    }
-
-    /**
-     * Retrieves the value-object name associated to the table name, uncapitalized.
-     * @return such name.
-     */
-    @NotNull
-    public String getVoNameUncapitalized()
-    {
-        return uncapitalize(getVoName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getNameNormalizedLowercased()
-    {
-        return normalizeLowercase(getName());
-    }
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getSingularNameNormalizedLowercased()
-    {
-        return normalizeLowercase(getSingular(getName()));
-    }
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getNameNormalized()
-    {
-        return normalize(getName());
-    }
-
-    /**
-     * Retrieves the table's name once normalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getSingularNameCapitalized()
-    {
-        return getSingularNameCapitalized(getName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the table's name once normalized.
-     * @param name the table name.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such information.
-     */
-    @NotNull
-    protected String getSingularNameCapitalized(
-        @NotNull final String name, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(decorationUtils.getSingular(name));
-    }
-
-    /**
-     * Retrieves the singular of given word.
-     * @param word the word.
-     * @return the singular.
-     */
-    @NotNull
-    protected String getSingular(@NotNull final String word)
-    {
-        return getSingular(word, SingularPluralFormConverter.getInstance());
-    }
-
-    /**
-     * Retrieves the singular of given word.
-     * @param word the word.
-     * @param singularPluralFormConverter the
-     * <code>SingularPluralFormConverter</code> instance.
-     * @return the singular.
-     */
-    @NotNull
-    protected String getSingular(
-        @NotNull final String word,
-        @NotNull final EnglishGrammarUtils singularPluralFormConverter)
-    {
-        return singularPluralFormConverter.getSingular(word);
-    }
-
-    /**
-     * Retrieves the singular table's name, upper-cased.
-     * @return such information.
-     */
-    @NotNull
-    public String getSingularNameUppercased()
-    {
-        return uppercase(getSingular(lowercase(getName())));
-    }
-
-    /**
-     * Retrieves the singular table's name, lower-cased.
-     * @return such information.
-     */
-    @NotNull
-    public String getSingularNameLowercased()
-    {
-        return lowercase(getSingularNameUppercased());
-    }
-
-    /**
      * Retrieves the non-read-only attributes.
      * @return such attributes.
      */
@@ -1062,7 +776,7 @@ public abstract class AbstractTableDecorator
     {
         return
             getAllNonReadOnlyAttributes(
-                getName(),
+                getName().getValue(),
                 getAttributes(),
                 getParentTable(),
                 getMetadataManager(),
@@ -1086,7 +800,7 @@ public abstract class AbstractTableDecorator
     protected List<Attribute> getAllNonReadOnlyAttributes(
         @NotNull final String name,
         @NotNull final List<Attribute> attributes,
-        @Nullable final Table parentTable,
+        @Nullable final Table<DecoratedString> parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
@@ -1098,7 +812,7 @@ public abstract class AbstractTableDecorator
             result =
                 tableDecoratorHelper.removeReadOnly(
                     tableDecoratorHelper.sumUpParentAndChildAttributes(
-                        parentTable.getName(),
+                        parentTable.getName().getValue(),
                         decorateAttributes(),
                         metadataManager,
                         decoratorFactory));
@@ -1199,7 +913,7 @@ public abstract class AbstractTableDecorator
     {
         return
             getNonParentAttributes(
-                getName(),
+                getName().getValue(),
                 getAttributes(),
                 getParentTable(),
                 getMetadataManager(),
@@ -1222,7 +936,7 @@ public abstract class AbstractTableDecorator
     protected List<Attribute> getNonParentAttributes(
         @NotNull final String name,
         @NotNull final List<Attribute> attributes,
-        @Nullable final Table parentTable,
+        @Nullable final Table<DecoratedString> parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
@@ -1234,7 +948,7 @@ public abstract class AbstractTableDecorator
             result =
                 tableDecoratorHelper.removeOverridden(
                     decorateAttributes(
-                        parentTable.getName(),
+                        parentTable.getName().getValue(),
                         metadataManager,
                         decoratorFactory),
                     attributes,
@@ -1256,7 +970,7 @@ public abstract class AbstractTableDecorator
     {
         return
             getNonParentPlusPkAttributes(
-                getName(),
+                getName().getValue(),
                 getAllAttributes(),
                 getParentTable(),
                 getMetadataManager(),
@@ -1279,7 +993,7 @@ public abstract class AbstractTableDecorator
     protected List<Attribute> getNonParentPlusPkAttributes(
         @NotNull final String name,
         @NotNull final List<Attribute> attributes,
-        @Nullable final Table parentTable,
+        @Nullable final Table<DecoratedString> parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
@@ -1291,7 +1005,7 @@ public abstract class AbstractTableDecorator
             result =
                 tableDecoratorHelper.removeOverriddenPlusPk(
                     decorateAttributes(
-                        parentTable.getName(),
+                        parentTable.getName().getValue(),
                         metadataManager,
                         decoratorFactory),
                     attributes,
@@ -1314,7 +1028,7 @@ public abstract class AbstractTableDecorator
     {
         return
             decorateAttributes(
-                getName(), getMetadataManager(), getDecoratorFactory());
+                getName().getValue(), getMetadataManager(), getDecoratorFactory());
     }
     
     /**
@@ -1358,7 +1072,10 @@ public abstract class AbstractTableDecorator
     {
         return
             getAllAttributes(
-                getName(), getMetadataManager(), getDecoratorFactory(), getCustomSqlProvider());
+                getName().getValue(),
+                getMetadataManager(),
+                getDecoratorFactory(),
+                getCustomSqlProvider());
     }
 
     /**
@@ -1378,7 +1095,7 @@ public abstract class AbstractTableDecorator
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
-        @Nullable final Table t_ParentTable = getParentTable();
+        @Nullable final Table<DecoratedString> t_ParentTable = getParentTable();
 
         if  (t_ParentTable != null)
         {
@@ -1392,7 +1109,10 @@ public abstract class AbstractTableDecorator
             {
                 t_ParentDecorator =
                     createTableDecorator(
-                        t_ParentTable, metadataManager, decoratorFactory, customSqlProvider);
+                        t_ParentTable.getName().getValue(),
+                        metadataManager,
+                        decoratorFactory,
+                        customSqlProvider);
             }
 
             if (t_ParentDecorator != null)
@@ -1438,7 +1158,7 @@ public abstract class AbstractTableDecorator
     {
         return
             getAttributes(
-                getName(),
+                getName().getValue(),
                 retrieveChildAttributes(),
                 getMetadataManager(),
                 getDecoratorFactory(),
@@ -1516,30 +1236,54 @@ public abstract class AbstractTableDecorator
      * @return such information.
      */
     @Nullable
-    public Table getParentTable()
+    public Table<DecoratedString> getParentTable()
     {
-        return getParentTable(getName(), getMetadataManager());
+        return getParentTable(getTable().getParentTable(), getMetadataManager());
     }
     
     /**
      * Retrieves the parent table.
-     * @param name the table name.
+     * @param parent the parent table.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such information.
      */
     @Nullable
-    protected Table getParentTable(@NotNull final String name, @NotNull final MetadataManager metadataManager)
+    protected Table<DecoratedString> getParentTable(
+        @Nullable final Table<String> parent, @NotNull final MetadataManager metadataManager)
     {
-        Table result = super.getParentTable();
+        @Nullable final Table<DecoratedString> result;
 
-        if  (result == null)
+        if (parent != null)
         {
-            @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(name);
+            @Nullable final Table<DecoratedString> cached = super.getParentTable();
 
-            if (t_Table != null)
+            if  (cached == null)
             {
-                result = t_Table.getParentTable();
+                @Nullable final Table<String> t_Table =
+                    metadataManager.getTableDAO().findByName(parent.getName());
+
+                if (t_Table != null)
+                {
+                    result =
+                        new CachingTableDecorator(
+                            t_Table,
+                            metadataManager,
+                            getDecoratorFactory(),
+                            getCustomSqlProvider());
+                }
+                else
+                {
+                    result = null;
+                }
             }
+            else
+            {
+                result = cached;
+            }
+        }
+        else
+        {
+            result = null;
         }
 
         return result;
@@ -1550,7 +1294,7 @@ public abstract class AbstractTableDecorator
      * Removes the duplicated attributes from <code>secondAttributes</code>.
      * @param firstAttributes the child attributes.
      * @param secondAttributes the parent attributes.
-     * @param parentTableName the parent table nameq.
+     * @param parentTableName the parent table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the cleaned-up attributes.
      */
@@ -1667,10 +1411,44 @@ public abstract class AbstractTableDecorator
      */
     @Nullable
     protected abstract TableDecorator createTableDecorator(
-        @NotNull final Table parentTable,
+        @NotNull final Table<String> parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider);
+
+    /**
+     * Creates a table decorator.
+     * @param table the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @return such decorator.
+     */
+    @Nullable
+    protected TableDecorator createTableDecorator(
+        @NotNull final String table,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
+    {
+        @Nullable final TableDecorator result;
+
+        @Nullable final Table<String> t_Table =
+            metadataManager.getTableDAO().findByName(table);
+
+        if (t_Table != null)
+        {
+            result =
+                createTableDecorator(
+                    t_Table, metadataManager, decoratorFactory, customSqlProvider);
+        }
+        else
+        {
+            result = null;
+        }
+
+        return result;
+    }
 
     /**
      * Retrieves the list of non-parent, non-externally-managed
@@ -1781,7 +1559,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<Attribute> getAllParentAndNonParentAttributes(
-        @Nullable final Table parent,
+        @Nullable final Table<DecoratedString> parent,
         @NotNull final List<Attribute> nonParentAttributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -1801,7 +1579,10 @@ public abstract class AbstractTableDecorator
             {
                 t_ParentDecorator =
                     createTableDecorator(
-                        parent, metadataManager, decoratorFactory, customSqlProvider);
+                        parent.getName().getValue(),
+                        metadataManager,
+                        decoratorFactory,
+                        customSqlProvider);
             }
 
             if (t_ParentDecorator != null)
@@ -1847,7 +1628,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<Attribute> getAllParentAndNonParentNonExternallyManagedAttributes(
-        @Nullable final Table parent,
+        @Nullable final Table<DecoratedString> parent,
         @NotNull final List<Attribute> nonParentNonExternallyManagedAttributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -1857,18 +1638,12 @@ public abstract class AbstractTableDecorator
 
         if  (parent != null)
         {
-            @Nullable final TableDecorator t_ParentDecorator;
-
-            if  (parent instanceof TableDecorator)
-            {
-                t_ParentDecorator = (TableDecorator) parent;
-            }
-            else
-            {
-                t_ParentDecorator =
-                    createTableDecorator(
-                        parent, metadataManager, decoratorFactory, customSqlProvider);
-            }
+            @Nullable final TableDecorator t_ParentDecorator =
+                createTableDecorator(
+                    parent.getName().getValue(),
+                    metadataManager,
+                    decoratorFactory,
+                    customSqlProvider);
 
             if (t_ParentDecorator != null)
             {
@@ -2129,7 +1904,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
-        @Nullable final Table parent,
+        @Nullable final Table<DecoratedString> parent,
         @NotNull final List<Attribute> nonParentNonExternallyManagedPlusPkAttributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -2140,18 +1915,12 @@ public abstract class AbstractTableDecorator
 
         if  (parent != null)
         {
-            final TableDecorator t_ParentDecorator;
-
-            if  (parent instanceof TableDecorator)
-            {
-                t_ParentDecorator = (TableDecorator) parent;
-            }
-            else
-            {
-                t_ParentDecorator =
-                    createTableDecorator(
-                        parent, metadataManager, decoratorFactory, customSqlProvider);
-            }
+            final TableDecorator t_ParentDecorator =
+                createTableDecorator(
+                    parent.getName().getValue(),
+                    metadataManager,
+                    decoratorFactory,
+                    customSqlProvider);
 
             if (t_ParentDecorator != null)
             {
@@ -2174,9 +1943,10 @@ public abstract class AbstractTableDecorator
      * @return such tables.
      */
     @NotNull
-    public List<Table> getAllParentTables()
+    @Override
+    public List<Table<DecoratedString>> getAllParentTables()
     {
-        return getAllParentTables(getName(), getMetadataManager());
+        return getAllParentTables(getName().getValue(), getMetadataManager());
     }
 
     /**
@@ -2186,16 +1956,17 @@ public abstract class AbstractTableDecorator
      * @return such tables.
      */
     @NotNull
-    protected List<Table> getAllParentTables(
+    protected List<Table<DecoratedString>> getAllParentTables(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final List<Table> result = new ArrayList<Table>(0);
+        @NotNull final List<Table<DecoratedString>> result = new ArrayList<Table<DecoratedString>>(0);
 
-        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String> t_Table =
+            metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
-            @Nullable Table t_Parent;
+            @Nullable Table<String> t_Parent;
 
             do
             {
@@ -2203,7 +1974,12 @@ public abstract class AbstractTableDecorator
 
                 if (t_Parent != null)
                 {
-                    result.add(t_Parent);
+                    result.add(
+                        new CachingTableDecorator(
+                            t_Parent,
+                            metadataManager,
+                            getDecoratorFactory(),
+                            getCustomSqlProvider()));
 
                     t_Parent = t_Parent.getParentTable();
                 }
@@ -2315,7 +2091,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<Sql> getDynamicQueries(
-        @NotNull final Table table, @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final Table<String> table, @NotNull final CustomSqlProvider customSqlProvider)
     {
         return getDynamicQueries(table.getName(), customSqlProvider.getSqlDAO());
     }
@@ -2429,7 +2205,7 @@ public abstract class AbstractTableDecorator
      * @return such list of {@link Sql} elements.
      */
     @NotNull
-    protected List<Sql> getCustomSelects(@NotNull final Table table, @NotNull final CustomSqlProvider customSqlProvider)
+    protected List<Sql> getCustomSelects(@NotNull final Table<String> table, @NotNull final CustomSqlProvider customSqlProvider)
     {
         return getCustomSelects(table, customSqlProvider.getSqlDAO());
     }
@@ -2441,7 +2217,7 @@ public abstract class AbstractTableDecorator
      * @return such list of {@link Sql} elements.
      */
     @NotNull
-    protected List<Sql> getCustomSelects(@NotNull final Table table, @NotNull final SqlDAO sqlDAO)
+    protected List<Sql> getCustomSelects(@NotNull final Table<String> table, @NotNull final SqlDAO sqlDAO)
     {
         @NotNull final List<Sql> result = sqlDAO.findSelects(table.getName());
 
@@ -2469,7 +2245,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<Sql> getCustomSelectsForUpdate(
-        @NotNull final Table table, @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final Table<String> table, @NotNull final CustomSqlProvider customSqlProvider)
     {
         return getCustomSelectsForUpdate(table, customSqlProvider.getSqlDAO());
     }
@@ -2481,7 +2257,7 @@ public abstract class AbstractTableDecorator
      * @return such list of {@link Sql} elements.
      */
     @NotNull
-    protected List<Sql> getCustomSelectsForUpdate(@NotNull final Table table, @NotNull final SqlDAO sqlDAO)
+    protected List<Sql> getCustomSelectsForUpdate(@NotNull final Table<String> table, @NotNull final SqlDAO sqlDAO)
     {
         @NotNull final List<Sql> result = sqlDAO.findSelectsForUpdate(table.getName());
 
@@ -2559,7 +2335,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<Sql> getCustomUpdatesOrInserts(
-        @NotNull final Table table, @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final Table<String> table, @NotNull final CustomSqlProvider customSqlProvider)
     {
         return getCustomUpdatesOrInserts(table.getName(), customSqlProvider.getSqlDAO());
     }
@@ -2605,7 +2381,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<ResultDecorator> getCustomResults(
-        @NotNull final Table table,
+        @NotNull final Table<String> table,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -2853,12 +2629,12 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<Result> getDifferentCustomResults(
-        @NotNull final Table table, @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final Table<String> table, @NotNull final CustomSqlProvider customSqlProvider)
     {
         return
             getDifferentCustomResults(
                 table.getName(),
-                getVoName(),
+                getName().getVoName(),
                 customSqlProvider.getSqlDAO(),
                 customSqlProvider.getSqlResultDAO(),
                 getMetadataManager(),

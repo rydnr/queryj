@@ -78,51 +78,6 @@ public class CachingTableDecorator
 
     private static final long serialVersionUID = 7125795956047030470L;
     /**
-     * The cached uppercased name.
-     */
-    private String m__strCachedNameUppercased;
-
-    /**
-     * The cached capitalized name.
-     */
-    private String m__strCachedNameCapitalized;
-
-    /**
-     * The cached lowercased name.
-     */
-    private String m__strCachedNameLowercased;
-
-    /**
-     * The cached uncapitalized name.
-     */
-    private String m__strCachedUncapitalizedName;
-
-    /**
-     * The cached VO name.
-     */
-    private String m__strCachedVoName;
-
-    /**
-     * The cached normalized lowercased name.
-     */
-    private String m__strCachedNameNormalizedLowercased;
-
-    /**
-     * The cached normalized lowercased singular name.
-     */
-    private String m__strCachedSingularNameNormalizedLowercased;
-
-    /**
-     * The cached normalized name.
-     */
-    private String m__strCachedNameNormalized;
-
-    /**
-     * The cached capitalized singular name.
-     */
-    private String m__strCachedSingularNameCapitalized;
-
-    /**
      * The cached primary key.
      */
     private List<Attribute> m__lCachedPrimaryKey;
@@ -145,7 +100,7 @@ public class CachingTableDecorator
     /**
      * The cached parent table.
      */
-    private Table m__CachedParentTable;
+    private Table<DecoratedString> m__CachedParentTable;
 
     /**
      * The cached all attributes.
@@ -231,7 +186,7 @@ public class CachingTableDecorator
     /**
      * The cached all parent tables.
      */
-    private List<Table> m__lCachedAllParentTables;
+    private List<Table<DecoratedString>> m__lCachedAllParentTables;
 
     /**
      * The cached static rows.
@@ -247,11 +202,6 @@ public class CachingTableDecorator
      * The cached non-primary-key attributes.
      */
     private List<Attribute> m__lCachedNonPrimaryKeyAttributes;
-
-    /**
-     * The cached value-object name, uncapitalized;
-     */
-    private String m__strCachedVoNameUncapitalized;
 
     /**
      * The cached custom selects.
@@ -327,7 +277,7 @@ public class CachingTableDecorator
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
     public CachingTableDecorator(
-        @NotNull final Table table,
+        @NotNull final Table<String> table,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -485,7 +435,7 @@ public class CachingTableDecorator
      * Specifies the cached parent table.
      * @param parent such table.
      */
-    protected final void immutableSetCachedParentTable(@NotNull final Table parent)
+    protected final void immutableSetCachedParentTable(@NotNull final Table<DecoratedString> parent)
     {
         m__CachedParentTable = parent;
     }
@@ -494,7 +444,7 @@ public class CachingTableDecorator
      * Specifies the cached parent table.
      * @param parent such table.
      */
-    protected void setCachedParentTable(@NotNull final Table parent)
+    protected void setCachedParentTable(@NotNull final Table<DecoratedString> parent)
     {
         immutableSetCachedParentTable(parent);
     }
@@ -504,7 +454,7 @@ public class CachingTableDecorator
      * @return such table.
      */
     @Nullable
-    public Table getCachedParentTable()
+    public Table<DecoratedString> getCachedParentTable()
     {
         return m__CachedParentTable;
     }
@@ -514,9 +464,9 @@ public class CachingTableDecorator
      * @return such information.
      */
     @Nullable
-    public Table getParentTable()
+    public Table<DecoratedString> getParentTable()
     {
-        @Nullable Table result = getCachedParentTable();
+        @Nullable Table<DecoratedString> result = getCachedParentTable();
 
         if  (result == null)
         {
@@ -674,477 +624,6 @@ public class CachingTableDecorator
     }
 
     /**
-     * Specifies the cached uppercased name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameUppercased(
-        @NotNull final String value)
-    {
-        m__strCachedNameUppercased = value;
-    }
-    
-    /**
-     * Specifies the cached uppercased name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameUppercased(@NotNull final String value)
-    {
-        immutableSetCachedNameUppercased(value);
-    }
-
-    /**
-     * Retrieves the cached uppercased name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameUppercased()
-    {
-        return m__strCachedNameUppercased;
-    }
-
-    /**
-     * Retrieves the name, in upper case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameUppercased()
-    {
-        @Nullable String result = getCachedNameUppercased();
-        
-        if  (result == null)
-        {
-            result = super.getNameUppercased();
-            setCachedNameUppercased(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached capitalized name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameCapitalized(
-        @NotNull final String value)
-    {
-        m__strCachedNameCapitalized = value;
-    }
-    
-    /**
-     * Specifies the cached capitalized name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameCapitalized(@NotNull final String value)
-    {
-        immutableSetCachedNameCapitalized(value);
-    }
-
-    /**
-     * Retrieves the cached capitalized name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameCapitalized()
-    {
-        return m__strCachedNameCapitalized;
-    }
-
-    /**
-     * Retrieves the name, in upper case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameCapitalized()
-    {
-        @Nullable String result = getCachedNameCapitalized();
-        
-        if  (result == null)
-        {
-            result = super.getNameCapitalized();
-            setCachedNameCapitalized(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached lowercased name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameLowercased(
-        @NotNull final String value)
-    {
-        m__strCachedNameLowercased = value;
-    }
-    
-    /**
-     * Specifies the cached lowercased name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameLowercased(@NotNull final String value)
-    {
-        immutableSetCachedNameLowercased(value);
-    }
-
-    /**
-     * Retrieves the cached lowercased name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameLowercased()
-    {
-        return m__strCachedNameLowercased;
-    }
-
-    /**
-     * Retrieves the name, in lower case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameLowercased()
-    {
-        @Nullable String result = getCachedNameLowercased();
-        
-        if  (result == null)
-        {
-            result = super.getNameLowercased();
-            setCachedNameLowercased(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached uncapitalized name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedUncapitalizedName(
-        @NotNull final String value)
-    {
-        m__strCachedUncapitalizedName = value;
-    }
-    
-    /**
-     * Specifies the cached uncapitalized name.
-     * @param value the value to cache.
-     */
-    protected void setCachedUncapitalizedName(@NotNull final String value)
-    {
-        immutableSetCachedUncapitalizedName(value);
-    }
-
-    /**
-     * Retrieves the cached uncapitalized name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedUncapitalizedName()
-    {
-        return m__strCachedUncapitalizedName;
-    }
-    
-    /**
-     * Retrieves the table name, uncapitalized.
-     * @return such value.
-     */
-    @NotNull
-    public String getUncapitalizedName()
-    {
-        @Nullable String result = getCachedUncapitalizedName();
-        
-        if  (result == null)
-        {
-            result = super.getUncapitalizedName();
-            setCachedUncapitalizedName(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached VO name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedVoName(
-        @NotNull final String value)
-    {
-        m__strCachedVoName = value;
-    }
-    
-    /**
-     * Specifies the cached VO name.
-     * @param value the value to cache.
-     */
-    protected void setCachedVoName(@NotNull final String value)
-    {
-        immutableSetCachedVoName(value);
-    }
-
-    /**
-     * Retrieves the cached VO name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedVoName()
-    {
-        return m__strCachedVoName;
-    }
-
-    /**
-     * Retrieves the value-object name associated to the table name.
-     * @return such name.
-     */
-    @Override
-    @NotNull
-    public String getVoName()
-    {
-        @Nullable String result = getCachedVoName();
-        
-        if  (result == null)
-        {
-            result = super.getVoName();
-            setCachedVoName(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Caches the value-object name, uncapitalized.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedVoNameUncapitalized(@NotNull final String value)
-    {
-        m__strCachedVoNameUncapitalized = value;
-    }
-
-    /**
-     * Caches the value-object name, uncapitalized.
-     * @param value the value to cache.
-     */
-    protected void setCachedVoNameUncapitalized(@NotNull final String value)
-    {
-        immutableSetCachedVoNameUncapitalized(value);
-    }
-
-    /**
-     * Retrieves the cached value-object name, uncapitalized.
-     * @return the cached value.
-     */
-    @Nullable
-    protected String getCachedVoNameUncapitalized()
-    {
-        return m__strCachedVoNameUncapitalized;
-    }
-
-    /**
-     * Retrieves the value-object name associated to the table name, uncapitalized.
-     * @return such name.
-     */
-    @Override
-    @NotNull
-    public String getVoNameUncapitalized()
-    {
-        String result = getCachedVoNameUncapitalized();
-
-        if (result == null)
-        {
-            result = super.getVoNameUncapitalized();
-            setCachedVoNameUncapitalized(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the cached normalized lowercased name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameNormalizedLowercased(
-        @NotNull final String value)
-    {
-        m__strCachedNameNormalizedLowercased = value;
-    }
-    
-    /**
-     * Specifies the cached normalized lowercased name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameNormalizedLowercased(@NotNull final String value)
-    {
-        immutableSetCachedNameNormalizedLowercased(value);
-    }
-
-    /**
-     * Retrieves the cached normalized lowercased name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameNormalizedLowercased()
-    {
-        return m__strCachedNameNormalizedLowercased;
-    }
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getNameNormalizedLowercased()
-    {
-        @Nullable String result = getCachedNameNormalizedLowercased();
-        
-        if  (result == null)
-        {
-            result = super.getNameNormalizedLowercased();
-            setCachedNameNormalizedLowercased(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached normalized lowercased singular name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedSingularNameNormalizedLowercased(
-        @NotNull final String value)
-    {
-        m__strCachedSingularNameNormalizedLowercased = value;
-    }
-    
-    /**
-     * Specifies the cached normalized lowercased singular name.
-     * @param value the value to cache.
-     */
-    protected void setCachedSingularNameNormalizedLowercased(@NotNull final String value)
-    {
-        immutableSetCachedSingularNameNormalizedLowercased(value);
-    }
-
-    /**
-     * Retrieves the cached normalized lowercased singular name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedSingularNameNormalizedLowercased()
-    {
-        return m__strCachedSingularNameNormalizedLowercased;
-    }
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getSingularNameNormalizedLowercased()
-    {
-        @Nullable String result = getCachedSingularNameNormalizedLowercased();
-        
-        if  (result == null)
-        {
-            result = super.getSingularNameNormalizedLowercased();
-            setCachedSingularNameNormalizedLowercased(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached normalized name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameNormalized(
-        @NotNull final String value)
-    {
-        m__strCachedNameNormalized = value;
-    }
-    
-    /**
-     * Specifies the cached normalized name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameNormalized(@NotNull final String value)
-    {
-        immutableSetCachedNameNormalized(value);
-    }
-
-    /**
-     * Retrieves the cached normalized name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameNormalized()
-    {
-        return m__strCachedNameNormalized;
-    }
-
-    /**
-     * Retrieves the name, in lower case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameNormalized()
-    {
-        @Nullable String result = getCachedNameNormalized();
-        
-        if  (result == null)
-        {
-            result = super.getNameNormalized();
-            setCachedNameNormalized(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached capitalized singular name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedSingularNameCapitalized(
-        @NotNull final String value)
-    {
-        m__strCachedSingularNameCapitalized = value;
-    }
-    
-    /**
-     * Specifies the cached capitalized singular name.
-     * @param value the value to cache.
-     */
-    protected void setCachedSingularNameCapitalized(@NotNull final String value)
-    {
-        immutableSetCachedSingularNameCapitalized(value);
-    }
-
-    /**
-     * Retrieves the cached capitalized singular name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedSingularNameCapitalized()
-    {
-        return m__strCachedSingularNameCapitalized;
-    }
-
-    /**
-     * Retrieves the capitalized table name in singular form.
-     * @return such information.
-     */
-    @NotNull
-    public String getSingularNameCapitalized()
-    {
-        @Nullable String result = getCachedSingularNameCapitalized();
-        
-        if  (result == null)
-        {
-            result = super.getSingularNameCapitalized();
-            setCachedSingularNameCapitalized(result);
-        }
-        
-        return result;
-    }
-
-    /**
      * Creates a table decorator.
      * @param parentTable the table name.
      * @param primaryKey the primary key.
@@ -1169,7 +648,7 @@ public class CachingTableDecorator
     {
         @Nullable TableDecorator result = null;
 
-        @Nullable Table t_ParentTable = null;
+        @Nullable Table<String> t_ParentTable = null;
 
         if (parentTable != null)
         {
@@ -1198,7 +677,7 @@ public class CachingTableDecorator
      * @return such decorator.
      */
     protected TableDecorator createTableDecorator(
-        @NotNull final Table parentTable,
+        @NotNull final Table<String> parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -1921,7 +1400,7 @@ public class CachingTableDecorator
      * Specifies the cached all parent tables.
      * @param list such list.
      */
-    protected final void immutableSetCachedAllParentTables(@NotNull final List<Table> list)
+    protected final void immutableSetCachedAllParentTables(@NotNull final List<Table<DecoratedString>> list)
     {
         m__lCachedAllParentTables = list;
     }
@@ -1930,7 +1409,7 @@ public class CachingTableDecorator
      * Specifies the cached all parent tables.
      * @param list such list.
      */
-    protected void setCachedAllParentTables(@NotNull final List<Table> list)
+    protected void setCachedAllParentTables(@NotNull final List<Table<DecoratedString>> list)
     {
         immutableSetCachedAllParentTables(list);
     }
@@ -1940,7 +1419,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Table> getCachedAllParentTables()
+    protected List<Table<DecoratedString>> getCachedAllParentTables()
     {
         return m__lCachedAllParentTables;
     }
@@ -1950,9 +1429,9 @@ public class CachingTableDecorator
      * @return such information.
      */
     @NotNull
-    public List<Table> getAllParentTables()
+    public List<Table<DecoratedString>> getAllParentTables()
     {
-        @Nullable List<Table> result = getCachedAllParentTables();
+        @Nullable List<Table<DecoratedString>> result = getCachedAllParentTables();
 
         if  (result == null)
         {
@@ -2420,103 +1899,6 @@ public class CachingTableDecorator
 
             setParentForeignKeyAlreadyRetrieved(true);
 
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the cached singular name, in upper case.
-     * @param value such value.
-     */
-    protected final void immutableSetCachedSingularNameUppercased(@NotNull final String value)
-    {
-        this.m__strCachedSingularNameUppercased = value;
-    }
-
-    /**
-     * Specifies the cached singular name, in upper case.
-     * @param value such value.
-     */
-    protected void setCachedSingularNameUppercased(@NotNull final String value)
-    {
-        immutableSetCachedSingularNameUppercased(value);
-    }
-
-    /**
-     * Retrieves the cached singular name, in upper case.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedSingularNameUppercased()
-    {
-        return m__strCachedSingularNameUppercased;
-    }
-
-    /**
-     * Retrieves the singular table's name, upper-cased.
-     *
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String getSingularNameUppercased()
-    {
-        String result = getCachedSingularNameUppercased();
-
-        if (result == null)
-        {
-            result = super.getSingularNameUppercased();
-            setCachedSingularNameUppercased(result);
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Specifies the cached singular name, in lower case.
-     * @param value such value.
-     */
-    protected final void immutableSetCachedSingularNameLowercased(@NotNull final String value)
-    {
-        this.m__strCachedSingularNameLowercased = value;
-    }
-
-    /**
-     * Specifies the cached singular name, in lower case.
-     * @param value such value.
-     */
-    protected void setCachedSingularNameLowercased(@NotNull final String value)
-    {
-        immutableSetCachedSingularNameLowercased(value);
-    }
-
-    /**
-     * Retrieves the cached singular name, in lower case.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedSingularNameLowercased()
-    {
-        return m__strCachedSingularNameLowercased;
-    }
-
-    /**
-     * Retrieves the singular table's name, lower-cased.
-     *
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String getSingularNameLowercased()
-    {
-        String result = getCachedSingularNameLowercased();
-
-        if (result == null)
-        {
-            result = super.getSingularNameLowercased();
-            setCachedSingularNameLowercased(result);
         }
 
         return result;

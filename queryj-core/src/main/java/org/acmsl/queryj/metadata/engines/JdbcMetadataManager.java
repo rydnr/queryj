@@ -120,7 +120,7 @@ public class JdbcMetadataManager
         @Nullable final String catalog,
         @Nullable final String schema,
         @NotNull final List<String> tableNames,
-        @NotNull final List<Table> tables,
+        @NotNull final List<Table<String>> tables,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean caseSensitive,

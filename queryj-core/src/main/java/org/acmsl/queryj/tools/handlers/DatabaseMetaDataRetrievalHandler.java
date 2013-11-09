@@ -250,9 +250,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected List<Table> retrieveExplicitTableNames(@NotNull final QueryJCommand parameters)
+    protected List<Table<String>> retrieveExplicitTableNames(@NotNull final QueryJCommand parameters)
     {
-        List<Table> result = null;
+        List<Table<String>> result = null;
 
         @Nullable final AntTablesElement t_TablesElement =
             retrieveTablesElement(parameters);
@@ -268,7 +268,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             if  (   (t_cTableElements != null)
                  && (t_cTableElements.size() > 0))
             {
-                result = new ArrayList<Table>(t_cTableElements.size());
+                result = new ArrayList<Table<String>>(t_cTableElements.size());
 
                 t_itTableElements = t_cTableElements.iterator();
 
@@ -286,7 +286,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         if (result == null)
         {
-            result = new ArrayList<Table>(0);
+            result = new ArrayList<Table<String>>(0);
         }
 
         return result;
@@ -298,7 +298,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the converted table.
      */
     @NotNull
-    protected Table convertToTable(@NotNull final AntTableElement table)
+    protected Table<String> convertToTable(@NotNull final AntTableElement table)
     {
         @NotNull final TableIncompleteValueObject result = new TableIncompleteValueObject(table.getName(), null);
 
@@ -329,6 +329,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param explicitTables the explicitly-defined table information.
      * @return <code>true</code> in such case.
      */
+    @SuppressWarnings("unused")
     protected boolean areExplicitTableFieldsEmpty(@Nullable final AntTablesElement explicitTables)
     {
         boolean result = true;
@@ -375,14 +376,14 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @Nullable final AntTablesElement explicitTables,
-        @SuppressWarnings("unused") @NotNull final Map<String, Collection<AntTableElement>> tableMap,
-        @NotNull final Map<String, Collection<String>> tableNameMap,
-        @SuppressWarnings("unused") @NotNull final Map<String, Collection<AntFieldElement>> fieldMap,
-        @NotNull final Map<String, Collection<AntFieldFkElement>> fieldFkMap,
+        @SuppressWarnings("unused") @NotNull final Map<String, List<AntTableElement>> tableMap,
+        @NotNull final Map<String, List<String>> tableNameMap,
+        @SuppressWarnings("unused") @NotNull final Map<String, List<AntFieldElement>> fieldMap,
+        @NotNull final Map<String, List<AntFieldFkElement>> fieldFkMap,
         @NotNull final Map<String, String> fieldNameMap,
         @NotNull final Map<String, List<Attribute>> attributeMap)
     {
-        @Nullable Collection<AntTableElement> t_cTableElements = null;
+        @Nullable List<AntTableElement> t_cTableElements = null;
 
         if (explicitTables != null)
         {
@@ -391,9 +392,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         @Nullable Iterator<AntTableElement> t_itTableElements = null;
 
-        @Nullable Collection<AntFieldElement> t_cFieldElements;
+        @Nullable List<AntFieldElement> t_cFieldElements;
 
-        Collection<String> t_cTables;
+        List<String> t_lTables;
 
         if  (t_cTableElements != null)
         {
@@ -407,15 +408,15 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 @NotNull final AntTableElement t_Table =
                     t_itTableElements.next();
 
-                t_cTables = tableNameMap.get(buildTableKey());
+                t_lTables = tableNameMap.get(buildTableKey());
 
-                if  (t_cTables == null)
+                if  (t_lTables == null)
                 {
-                    t_cTables = new ArrayList<String>();
-                    tableNameMap.put(buildTableKey(), t_cTables);
+                    t_lTables = new ArrayList<String>();
+                    tableNameMap.put(buildTableKey(), t_lTables);
                 }
 
-                t_cTables.add(t_Table.getName());
+                t_lTables.add(t_Table.getName());
 
                 t_cFieldElements = t_Table.getFields();
 
@@ -460,16 +461,16 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                 t_Field.getName());
                         }
 
-                        @Nullable Collection<AntFieldFkElement> t_cFieldFks =
+                        @Nullable List<AntFieldFkElement> t_lFieldFks =
                             t_Field.getFieldFks();
 
-                        if (t_cFieldFks == null)
+                        if (t_lFieldFks == null)
                         {
-                            t_cFieldFks = new ArrayList<AntFieldFkElement>(0);
+                            t_lFieldFks = new ArrayList<AntFieldFkElement>(0);
                         }
                         fieldFkMap.put(
                             buildFkKey(t_Table.getName(), t_Field.getName()),
-                            t_cFieldFks);
+                            t_lFieldFks);
 
                         metadataManager.getColumnDAO().insert(
                             t_Table.getName(),
@@ -499,6 +500,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
+    @SuppressWarnings("unchecked")
     protected boolean handle(
         @NotNull final QueryJCommand parameters, @Nullable final MetadataManager metadataManager)
         throws  QueryJBuildException
@@ -532,15 +534,15 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 t_mKeys,
                 t_mKeys);
 
-            @Nullable final List<Table> t_lTables = (List<Table>) t_mKeys.get(buildTableKey());
+            @Nullable final List<Table<String>> t_lTables = (List<Table<String>>) t_mKeys.get(buildTableKey());
 
             if  (t_lTables != null)
             {
-                final Iterator<Table> t_itTables = t_lTables.iterator();
+                final Iterator<Table<String>> t_itTables = t_lTables.iterator();
 
                 while  (t_itTables.hasNext())
                 {
-                    @Nullable final Table t_Table = t_itTables.next();
+                    @Nullable final Table<String> t_Table = t_itTables.next();
 
                     if  (t_Table != null)
                     {
@@ -618,7 +620,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         t_TablesElement = retrieveTablesElement(parameters);
 
-        @NotNull final List<Table> t_lTables =
+        @NotNull final List<Table<String>> t_lTables =
             extractTables(parameters, t_TablesElement);
 
         storeTables(t_lTables, parameters);
@@ -642,10 +644,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     @NotNull
     @SuppressWarnings("unused")
-    protected List<Table> extractTables(
+    protected List<Table<String>> extractTables(
         @NotNull final QueryJCommand parameters, @Nullable final AntTablesElement tablesElement)
     {
-        List<Table> result = null;
+        List<Table<String>> result = null;
 
         if (tablesElement != null)
         {
@@ -654,7 +656,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         if (result == null)
         {
-            result = new ArrayList<Table>(0);
+            result = new ArrayList<Table<String>>(0);
         }
 
         return result;
@@ -666,13 +668,13 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return such fields.
      */
     @NotNull
-    protected List<Table> extractTables(@Nullable final List<AntTableElement> tables)
+    protected List<Table<String>> extractTables(@Nullable final List<AntTableElement> tables)
     {
-        @Nullable final List<Table> result;
+        @Nullable final List<Table<String>> result;
 
         final int t_iLength = (tables != null) ? tables.size() : 0;
 
-        result = new ArrayList<Table>(t_iLength);
+        result = new ArrayList<Table<String>>(t_iLength);
 
         if (tables != null)
         {
@@ -693,6 +695,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param tablesElement the tables element.
      * @return the result of such analysis..
      */
+    @SuppressWarnings("unused")
     protected boolean lazyTableExtraction(@Nullable final AntTablesElement tablesElement)
     {
         boolean result = false;
@@ -915,11 +918,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @Nullable MetadataManager result =
             retrieveCachedMetadataManager(parameters);
 
-        @Nullable List<Table> t_lTables = retrieveTables(parameters);
+        @Nullable List<Table<String>> t_lTables = retrieveTables(parameters);
 
         if (t_lTables == null)
         {
-            t_lTables = new ArrayList<Table>(0);
+            t_lTables = new ArrayList<Table<String>>(0);
         }
 
         if  (result == null)
@@ -1012,7 +1015,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     @NotNull
     protected MetadataManager buildMetadataManager(
         @SuppressWarnings("unused") @NotNull final QueryJCommand parameters,
-        @NotNull final List<Table> tables,
+        @NotNull final List<Table<String>> tables,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
@@ -1102,9 +1105,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameter map.
      */
     protected void storeTables(
-        @NotNull final List<Table> tables, @NotNull final QueryJCommand parameters)
+        @NotNull final List<Table<String>> tables, @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper<List<Table>>(parameters).setSetting(TABLES, tables);
+        new QueryJCommandWrapper<List<Table<String>>>(parameters).setSetting(TABLES, tables);
     }
 
     /**
@@ -1113,9 +1116,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the table names.
      */
     @Nullable
-    protected List<Table> retrieveTables(@NotNull final QueryJCommand parameters)
+    protected List<Table<String>> retrieveTables(@NotNull final QueryJCommand parameters)
     {
-        return new QueryJCommandWrapper<List<Table>>(parameters).getSetting(TABLES);
+        return new QueryJCommandWrapper<List<Table<String>>>(parameters).getSetting(TABLES);
     }
 
     /**

@@ -39,7 +39,7 @@ package org.acmsl.queryj.templates.packaging.placeholders;
  * Importing QueryJ Template Packaging classes..
  */
 import org.acmsl.queryj.placeholders.AbstractTemplateContextFillHandler;
-import org.acmsl.queryj.placeholders.DecoratedString;
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 

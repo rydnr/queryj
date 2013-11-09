@@ -63,7 +63,6 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 /*
  * Importing checkthread.org annotations.
@@ -139,7 +138,7 @@ public class DatabaseMetaDataCacheReadingHandler
         // We only need the table names, if they're not extracted already.
         if (metadataManager != null)
         {
-            @NotNull final List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
+            @NotNull final List<Table<String>> t_lTables = metadataManager.getTableDAO().findAllTables();
 
             if (   (t_lTables.size() == 0))
             {
