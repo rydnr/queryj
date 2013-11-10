@@ -142,10 +142,10 @@ public class ParseTemplateDefsHandler
                         throw new TemplateAssociatedToTemplateDefDoesNotExist(templateDef);
                     }
 
-                    if (templateDefs.size() == 1)
-                    {
+//                    if (templateDefs.size() == 1)
+//                    {
                         new QueryJCommandWrapper<List<TemplateDef>>(command).setSetting(TEMPLATE_DEFS, templateDefs);
-                    }
+//                    }
                 }
             }
         }

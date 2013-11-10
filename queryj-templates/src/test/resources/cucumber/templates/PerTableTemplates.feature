@@ -36,9 +36,9 @@ Feature: Per-table templates
     Examples:
       | template           | output                            |
       | DAOFactory         | UserDAOFactory.java               |
+      | BaseDAOFactory     | AbstractUserDAOFactory.java       |
 #      | DAO                | OracleUserDAO.java                |
 #      | BaseDAO            | UserDAO.java                      |
-#      | DAOFactory         | UserDAOFactory.java               |
 #      | PkStatementSetter  | OracleUserPkStatementSetter.java  |
 #      | ResultSetExtractor | OracleUserResultSetExtractor.java |
 #      | BaseValueObject    | AbstractUserValueObject.java      |
@@ -71,6 +71,7 @@ Feature: Per-table templates
     Examples:
       | template           | output                            |
       | DAOFactory         | UserDAOFactory.java               |
+      | BaseDAOFactory     | AbstractUserDAOFactory.java       |
 #      | DAO                | OracleUserDAO.java                |
 #      | BaseDAO            | UserDAO.java                      |
 #      | PkStatementSetter  | OracleUserPkStatementSetter.java  |

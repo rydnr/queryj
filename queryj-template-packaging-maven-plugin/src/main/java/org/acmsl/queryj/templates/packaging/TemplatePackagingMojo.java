@@ -356,10 +356,11 @@ public class TemplatePackagingMojo
     @Override
     public String toString()
     {
-        return "{ 'class': 'TemplatePackagingMojo " +
-               "', 'queryJCommand': '" + this.m__QueryJCommand +
-               "', 'sources': '" + Arrays.toString(this.m__aSources) +
-               "', 'outputDir': '" + this.m__OutputDir.getAbsolutePath() +
-               "' }";
+        return
+              "{ \"class\": \"" + TemplatePackagingMojo.class.getName() + "\""
+            + ", \"queryJCommand\": \"" + this.m__QueryJCommand + "\""
+            + ", \"sources\": \"" + Arrays.toString(this.m__aSources) + "\""
+            + ", \"outputDir\": \"" + this.m__OutputDir.getAbsolutePath() + "\""
+            + " }";
     }
 }

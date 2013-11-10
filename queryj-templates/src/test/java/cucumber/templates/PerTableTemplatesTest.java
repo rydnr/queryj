@@ -38,6 +38,8 @@ package cucumber.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.templates.BaseDAOFactoryTemplateFactory;
+import org.acmsl.queryj.templates.BaseDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.templates.DAOFactoryTemplateFactory;
 import org.acmsl.queryj.templates.DAOFactoryTemplateGenerator;
 
@@ -114,6 +116,8 @@ public class PerTableTemplatesTest
         // dao
         GENERATOR_MAPPINGS.put("DAOFactory", new DAOFactoryTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("DAOFactory", DAOFactoryTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("BaseDAOFactory", new BaseDAOFactoryTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("BaseDAOFactory", BaseDAOFactoryTemplateFactory.getInstance());
     }
 
     /**
