@@ -105,7 +105,7 @@ public class PerTemplateDefFillTemplateChainWrapper
     @Override
     protected List<FillHandler> getHandlers(@NotNull final DefaultTemplatePackagingContext context)
     {
-        @NotNull final List<FillHandler> result = new ArrayList<FillHandler>();
+        @NotNull final List<FillHandler> result = new ArrayList<FillHandler>(9);
 
         result.add(new PerTemplateDefClassNameHandler(context));
         result.add(new CopyrightYearsHandler());

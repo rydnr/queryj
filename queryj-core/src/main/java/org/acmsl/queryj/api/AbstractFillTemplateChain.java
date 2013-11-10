@@ -54,6 +54,8 @@ import org.acmsl.commons.patterns.Chain;
  */
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Sets up the chain to provide all placeholder replacements in templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
@@ -127,6 +129,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
      * documentation, etc. can be considered not relevant.
      */
     @Override
+    @NotNull
     protected Chain<FillHandler<?>> buildChain(@NotNull final Chain<FillHandler<?>> chain)
     {
         return buildChain(chain, false);
@@ -139,24 +142,41 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
      * be able to find out if two template realizations are equivalent. Usually, generation timestamps,
      * documentation, etc. can be considered not relevant.
      */
+    @NotNull
+    @SuppressWarnings("unchecked")
     protected Chain<FillHandler<?>> buildChain(
         @NotNull final Chain<FillHandler<?>> chain, final boolean relevantOnly)
     {
-        addHandlers(chain, getTemplateContext(), relevantOnly);
+        @NotNull final List<FillAdapterHandler<?, ?>>
+            t_lHandlers = (List< FillAdapterHandler<?, ?>>) getHandlers();
+
+        for (@NotNull final FillAdapterHandler t_Handler : t_lHandlers)
+        {
+            add(chain, t_Handler, relevantOnly);
+        }
 
         return chain;
     }
 
     /**
-     * Adds additional per-table handlers.
-     * @param chain the chain to be configured.
-     * @param context the context.
-     * @param relevantOnly whether to use relevant-only placeholders.
+     * Retrieves the handlers.
+     *
+     * @return such handlers.
      */
-    protected abstract void addHandlers(
-        @NotNull final Chain<FillHandler<?>> chain,
-        @NotNull final C context,
-        final boolean relevantOnly);
+    @NotNull
+    @Override
+    public List<?> getHandlers()
+    {
+        return getHandlers(getTemplateContext());
+    }
+
+    /**
+     * Retrieves the handlers.
+     * @param context the context.
+     * @return such handlers.
+     */
+    @NotNull
+    protected abstract List<?> getHandlers(@NotNull final C context);
 
     /**
      * Adds given handler depending on whether it's relevant or not.
@@ -190,7 +210,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
     public String toString()
     {
         return
-              "{ 'class': 'AbstractFillTemplateChain', 'templateContext': '" + templateContext
-            + "' }";
+              "{ \"class\": \"" + AbstractFillTemplateChain.class.getName() + "\""
+            + ", \"templateContext\": \"" + templateContext + "\" }";
     }
 }

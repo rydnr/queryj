@@ -120,7 +120,8 @@ public class DefaultTemplatePackagingContext
     @Override
     public String toString()
     {
-        return "{ 'class': 'DefaultTemplatePackagingContext', " +
-               "'templateDef': " + m__TemplateDef + " }";
+        return
+              "{ \"class\": \"" + DefaultTemplatePackagingContext.class.getName() + "\""
+            + "', \"templateDef\": \"" + m__TemplateDef + "\" }";
     }
 }

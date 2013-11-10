@@ -103,7 +103,7 @@ public class GlobalFillTemplateChainWrapper
     @Override
     protected List<FillHandler> getHandlers(@NotNull final GlobalTemplateContext context)
     {
-        @NotNull final List<FillHandler> result = new ArrayList<FillHandler>();
+        @NotNull final List<FillHandler> result = new ArrayList<FillHandler>(9);
 
         result.add(new GlobalClassNameHandler(context));
         result.add(new CopyrightYearsHandler());
@@ -114,7 +114,6 @@ public class GlobalFillTemplateChainWrapper
         result.add(new TimestampHandler());
         result.add(new TemplateNameHandler<GlobalTemplateContext>(context));
         result.add(new GlobalTemplateDefsHandler<GlobalTemplateContext>(context));
-//        result.add(new TemplateDefHandler(context));
 
         return result;
     }

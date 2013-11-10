@@ -106,6 +106,12 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 DefaultThemeConstants,
                 Serializable
 {
+    protected static final String GENERATING = "Generating ";
+    protected static final String CONTEXT_LITERAL = "Context";
+    protected static final String TEMPLATE_LITERAL = "Template";
+    protected static final String FILL_TEMPLATE_CHAIN_FACTORY_LITERAL = "FillTemplateChainFactory";
+    protected static final String DEFAULT_PLACEHOLDER_PACKAGE = "org.acmsl.queryj.api.placeholders";
+
     /**
      * The default StringTemplate error listener.
      */
@@ -158,11 +164,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 }
             }
         };
-    protected static final String GENERATING = "Generating ";
-    protected static final String CONTEXT_LITERAL = "Context";
-    protected static final String TEMPLATE_LITERAL = "Template";
-    protected static final String FILL_TEMPLATE_CHAIN_FACTORY_LITERAL = "FillTemplateChainFactory";
-    protected static final String DEFAULT_PLACEHOLDER_PACKAGE = "org.acmsl.queryj.api.placeholders";
 
     /**
      * The template context.
@@ -543,7 +544,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @Override
         public String toString()
         {
-            return "FinalizingThread{ new=" + m__bNew + '}';
+            return
+                  "{ \"class\": \"" + FinalizingThread.class.getName() + "\""
+                + ", \"new\": \"" + m__bNew + "\" }";
         }
     }
 

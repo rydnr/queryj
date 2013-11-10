@@ -37,11 +37,6 @@
 package org.acmsl.queryj.templates.packaging.placeholders;
 
 /*
- * Importing ACM-SL Java Commons classes.
- */
-import org.acmsl.commons.patterns.Chain;
-
-/*
  * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
@@ -64,6 +59,12 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sets up the chain required to provide placeholder replacements for Template-Packaging
@@ -99,16 +100,19 @@ public class PerTemplateDefFillTemplateChain
     }
 
     /**
-     * Adds additional per-table handlers.
-     * @param chain the chain to be configured.
+     * Retrieves the additional per-table handlers.
      * @param context the {@link DefaultTemplatePackagingContext context}.
-     * @param relevantOnly whether to use only relevant placeholders.
+     * @return such handlers.
      */
+    @NotNull
     @Override
-    protected void addHandlers(
-        @NotNull final Chain<FillHandler<?>> chain,
-        @NotNull final DefaultTemplatePackagingContext context,
-        final boolean relevantOnly)
+    @SuppressWarnings("unchecked")
+    protected List<FillHandler<?>> getHandlers(@NotNull final DefaultTemplatePackagingContext context)
     {
+        @NotNull final List result = new ArrayList<FillHandler>(0);
+
+        // TODO
+
+        return result;
     }
 }

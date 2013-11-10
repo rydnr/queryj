@@ -76,7 +76,7 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
     private F fillHandler;
 
     /**
-     * Creates a {@link FillAdapterHandler instance} to adapt given
+     * Creates a {@code FillAdapterHandler instance} to adapt given
      * fill handler.
      * @param fillHandler the fill handler to adapt.
      */
@@ -117,7 +117,7 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
     /**
      * Handles given command.
      * @param command the command.
-     * @return <code>true</code> to avoid further processing of such command
+     * @return {@code true} to avoid further processing of such command
      * by different handlers.
      * @throws QueryJBuildException if the process fails.
      */
@@ -132,7 +132,7 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
      * Handles given command.
      * @param settings the settings.
      * @param fillHandler the {@link FillHandler fill handler}.
-     * @return <code>true</code> to avoid further processing of such command
+     * @return {@code true} to avoid further processing of such command
      * by different handlers.
      * @throws QueryJBuildException if the process fails.
      */
@@ -181,6 +181,8 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
     @Override
     public String toString()
     {
-        return "{ 'class': 'FillAdapterHandler', 'fillHandler': '" + fillHandler + "' }";
+        return
+              "{ \"class\": \"" + FillAdapterHandler.class.getName() + "\""
+            + ", \"fillHandler\": \"" + fillHandler + "\" }";
     }
 }

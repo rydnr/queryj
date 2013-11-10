@@ -40,6 +40,7 @@ package org.acmsl.queryj.api.placeholders;
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.FillTemplateChain;
 import org.acmsl.queryj.api.NonRelevantFillHandler;
 import org.acmsl.queryj.api.TemplateContext;
@@ -80,7 +81,7 @@ import java.util.List;
  */
 @ThreadSafe
 public abstract class AbstractFillTemplateChainWrapper<C extends TemplateContext>
-    implements FillTemplateChain<C>
+    extends AbstractFillTemplateChain<C>
 {
     /**
      * The wrapped chain.
@@ -94,6 +95,7 @@ public abstract class AbstractFillTemplateChainWrapper<C extends TemplateContext
      */
     public AbstractFillTemplateChainWrapper(@NotNull final FillTemplateChain<C> chain)
     {
+        super(chain.getTemplateContext());
         immutableSetWrappedChain(chain);
     }
 
@@ -146,26 +148,15 @@ public abstract class AbstractFillTemplateChainWrapper<C extends TemplateContext
      */
     @NotNull
     @Override
+    @SuppressWarnings("unchecked")
     public QueryJCommand providePlaceholders(final boolean relevantOnly)
         throws QueryJBuildException
     {
-        return providePlaceholders(relevantOnly, getTemplateContext());
-    }
+        @NotNull final List t_lHandlers = getWrappedChain().getHandlers();
 
-    /**
-     * Provides the template placeholders within a {@link QueryJCommand}.
-     * @param relevantOnly to include only the relevant ones: the ones that are necessary to
-     * be able to find out if two template realizations are equivalent. Usually,
-     * generation timestamps, documentation, etc. can be considered not relevant.
-     * @param templateContext the template context.
-     * @return the {@link QueryJCommand}.
-     * @throws QueryJBuildException if the process fails.
-     */
-    @NotNull
-    protected QueryJCommand providePlaceholders(final boolean relevantOnly, @NotNull final C templateContext)
-        throws QueryJBuildException
-    {
-        return providePlaceholders(relevantOnly, getHandlers(templateContext));
+        t_lHandlers.addAll(getHandlers());
+
+        return providePlaceholders(relevantOnly, t_lHandlers);
     }
 
     /**
@@ -190,7 +181,7 @@ public abstract class AbstractFillTemplateChainWrapper<C extends TemplateContext
         for (@NotNull final FillHandler handler : handlers)
         {
             if (   (!relevantOnly)
-                   || (!(handler instanceof NonRelevantFillHandler)))
+                || (!(handler instanceof NonRelevantFillHandler)))
             {
                 t_Configuration.setProperty(handler.getPlaceHolder(), handler.getValue());
             }
@@ -207,19 +198,12 @@ public abstract class AbstractFillTemplateChainWrapper<C extends TemplateContext
         return result;
     }
 
-    /**
-     * Retrieves the list of generic placeholder handlers.
-     * @return such list.
-     */
-    @NotNull
-    protected abstract List<FillHandler> getHandlers(@NotNull final C context);
-
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractFillTemplateChainWrapper" +
-               "', 'chain: " + this.m__Chain +
-               " }";
+        return
+              "{ \"class\": \"" + AbstractFillTemplateChainWrapper.class.getName() + "\""
+            + ", \"chain\": \"" + m__Chain + "\" }";
     }
 }

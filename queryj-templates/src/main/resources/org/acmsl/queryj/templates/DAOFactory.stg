@@ -75,6 +75,7 @@ sourceImpl(table, C) ::= <<
 /*
  * Importing some JDK classes.
  */
+import java.io.PrintStream;
 import java.util.Map;
 
 /*
@@ -87,6 +88,17 @@ import javax.sql.DataSource;
  */
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 <class(table=table, C=C)>
 >>
@@ -122,8 +134,43 @@ classImpl(table, repository, C) ::= <<
   generation_timestamps_allowed=C.generation_timestamps_allowed,
   timestamp=C.timestamp)>
  */
+// TODO: Make it @ThreadSafe
 public abstract class <table.name.capitalized>DAOFactory
 {
+    /**
+     * The cached instance of the most recent implementation.
+     */
+    @Nullable
+    private <table.name.capitalized>DAOFactory m__LastUsed;
+
+    /**
+     * Specifies the last used instance.
+     * @param factory the last used {@code <table.name.capitalized>DAOFactory}.
+     */
+    protected final void immutableSetLastUsed(@NotNull final <table.name.capitalized>DAOFactory factory)
+    {
+        this.m__LastUsed = factory;
+    }
+
+    /**
+     * Specifies the last used instance.
+     * @param factory the last used {@code <table.name.capitalized>DAOFactory}.
+     */
+    protected void setLastUsed(@NotNull final <table.name.capitalized>DAOFactory factory)
+    {
+        immutableSetLastUsed(factory);
+    }
+
+    /**
+     * Specifies the last used instance.
+     * @param factory the last used {@code <table.name.capitalized>DAOFactory}.
+     */
+    @Nullable
+    protected <table.name.capitalized>DAOFactory getLastUsed()
+    {
+        return this.m__LastUsed;
+    }
+
     /**
      * Retrieves a {@code <table.name.capitalized>DAOFactory} instance.
      * @return such instance.
@@ -142,34 +189,43 @@ public abstract class <table.name.capitalized>DAOFactory
     @Nullable
     protected static <table.name.capitalized>DAOFactory getInstance(@NotNull final <repository.capitalized>DAOChooser daoChooser)
     {
-        @Nullable final <table.name.capitalized>DAOFactory result;
+        @Nullable final <table.name.capitalized>DAOFactory result = getLastUsed();
 
-        @Nullable final String factoryClassName = daoChooser.get<table.name.capitalized>DAOFactoryClassName();
+        @Nullable final String factoryClassName =
+            daoChooser.get<table.name.capitalized>DAOFactoryClassName();
 
-        if (factoryClassName != null)
+        if (   (result == null)
+            || (   (factoryClassName != null)
+                && (!factoryClassName.equals(result.getClass().getName()))))
         {
-            try
+            if (factoryClassName != null)
             {
-                @NotNull final Class\<<table.name.capitalized>\>DAOFactory>> factoryClass = Class.forName(factoryClassName);
+                try
+                {
+                    @NotNull final Class\<<table.name.capitalized>\>DAOFactory factoryClass =
+                        Class.forName(factoryClassName);
 
-                result = t_FactoryClass.newInstance();
+                    result = factoryClass.newInstance();
+
+                    setLastUsed(result);
+                }
+                catch (@NotNull final ClassNotFoundException factoryImplementationMissing)
+                {
+                    logError(
+                        "Cannot find " + factoryClassName + " implementation",
+                        factoryImplementationMissing);
+                }
+                catch (@NotNull final InstantiationException invalidClassName)
+                {
+                    logError(
+                        "Cannot instantiate " + factoryClassName + " implementation",
+                        invalidClassName);
+                }
             }
-            catch (@NotNull final ClassNotFoundException factoryImplementationMissing)
+            else
             {
-                logError(
-                    "Cannot find <table.name.capitalized>DAOFactory implementation",
-                    factoryImplementationMissing);
+                logError("<C.package>.<table.name.capitalized>DAOFactory not specified");
             }
-            catch (@NotNull final InstantiationException invalidClassName)
-            {
-                logError(
-                    "Cannot instantiate <table.name.capitalized>DAOFactory implementation",
-                    invalidClassName);
-            }
-        }
-        else
-        {
-            logError("<table.name.capitalized>DAOFactory not specified");
         }
 
         return result;
@@ -184,35 +240,99 @@ public abstract class <table.name.capitalized>DAOFactory
     {
         try
         {
-            if (error != null)
+            @Nullable final Log log = LogFactory.getLog(<table.name.capitalized>DAOFactory.class);
+
+            if (log != null)
             {
-                LogFactory.getLog(<table.name.capitalized>DAOFactory.class).fatal(
-                    message, error);
+                if (error != null)
+                {
+                    log.fatal(message, error);
+                }
+                else
+                {
+                    log.fatal(message);
+                }
             }
             else
             {
-                LogFactory.getLog(<table.name.capitalized>DAOFactory.class).fatal(
-                    message, error);
+                @Nullable final PrintStream printer = retrieveFallbackLog();
+
+                if (printer != null)
+                {
+                    logError(printer, message, error);
+                }
             }
         }
         catch (@NotNull final Throwable throwable)
         {
-            if (System.err != null)
+            @Nullable final PrintStream printer = retrieveFallbackLog();
+
+            if (printer != null)
             {
-                System.err.println("Cannot log using Apache Commons Logging.");
-                System.err.println("The original error was: ");
-                if (error != null)
-                {
-                    System.err.println(message + " (" + error.getMessage() + ")");
-                }
-                else
-                {
-                    System.err.println(message);
-                }
-                error.printStackTrace(System.err);
-                System.err.println("The logging error is: " + throwable.getMessage);
-                throwable.printStacktrace(System.err);
+                logError(printer, "Cannot log using Apache Commons Logging.");
+                logError(printer, "The original error was: ");
+                logError(printer, message, error);
+                logError(printer, "The logging error is: ", throwable);
             }
+        }
+    }
+
+    /**
+     * Retrieves the fallback {@link PrintStream}.
+     * @return either {@code System.err} or {@code System.out}, or {@code null} if none of them
+     * are available.
+     */
+    @Nullable
+    protected static PrintStream retrieveFallbackLog()
+    {
+        @Nullable final PrintStream result;
+
+        if (System.err != null)
+        {
+            result = System.err;
+        }
+        else if (System.out != null)
+        {
+            result = System.out;
+        }
+        else
+        {
+            result = null;
+        }
+
+        return result;
+    }
+
+    /**
+     * Logs an error if Commons-Logging is not available, using given {@code PrintStream}.
+     * @param printStream the {@link PrintStream}.
+     * @param message the message.
+     */
+    protected static void logError(
+        @NotNull final PrintStream printStream, @NotNull final String message)
+    {
+        logError(printStream, message, null);
+    }
+
+    /**
+     * Logs an error if Commons-Logging is not available, using given {@code PrintStream}.
+     * @param printStream the {@link PrintStream}.
+     * @param message the message.
+     * @param error the cause (optional).
+     */
+    protected static void logError(
+        @NotNull final PrintStream printStream,
+        @NotNull final String message,
+        @Nullable final Throwable error)
+    {
+        if (error != null)
+        {
+            printStream.println(message + " (" + error.getMessage() + ")");
+            error.printStacktrace(printStream);
+        }
+        else
+        {
+            printStream.println(message);
         }
     }
 
@@ -222,4 +342,5 @@ public abstract class <table.name.capitalized>DAOFactory
      */
     @Nullable
     public abstract <table.name.capitalized>DAO createDAO();
+}
 >>

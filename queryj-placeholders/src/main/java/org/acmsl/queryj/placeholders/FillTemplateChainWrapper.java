@@ -83,11 +83,12 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
      * Retrieves the list of generic placeholder handlers.
      * @return such list.
      */
+    @Override
     @NotNull
     @SuppressWarnings("unchecked")
     protected List<FillHandler> getHandlers(@NotNull final C context)
     {
-        @NotNull final List result = new ArrayList();
+        @NotNull final List result = new ArrayList(22);
 
         result.add(new AreTimestampsAllowedHandler(context));
         result.add(new ClassNameHandler<C>(context));
@@ -119,7 +120,8 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
     @Override
     public String toString()
     {
-        return "{ 'class': 'FillTemplateChainWrapper', " +
-               " 'parent: " + super.toString() +  " }";
+        return
+              "{ \"class\": \"" + FillTemplateChainWrapper.class.getName() + "\""
+            + ", \"parent\": \"" + super.toString() +  "\" }";
     }
 }

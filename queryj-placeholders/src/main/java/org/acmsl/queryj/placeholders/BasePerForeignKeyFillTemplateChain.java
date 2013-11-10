@@ -49,11 +49,6 @@ import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.metadata.ForeignKeyDecorator;
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Chain;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -61,6 +56,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -100,27 +96,29 @@ public class BasePerForeignKeyFillTemplateChain
     }
 
     /**
-     * Adds additional per-foreign-key handlers.
-     * @param chain the chain to be configured.
+     * Retrieves the additional per-custom-foreignkey handlers.
      * @param context the {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
+     * @return such handlers.
      */
+    @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    protected void addHandlers(
-        @NotNull final Chain<FillHandler<?>> chain,
-        @NotNull final PerForeignKeyTemplateContext context,
-        final boolean relevantOnly)
+    protected List<FillHandler<?>> getHandlers(@NotNull final PerForeignKeyTemplateContext context)
     {
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler <PerForeignKeyTemplateContext, ForeignKeyHandler,ForeignKeyDecorator>(
-                new ForeignKeyHandler(context)),
-            relevantOnly);
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerForeignKeyTemplateContext, ForeignKeyAttributeTypeImportsHandler,List<String>>(
-                new ForeignKeyAttributeTypeImportsHandler(context)),
-            relevantOnly);
+        @NotNull final List result = new ArrayList<FillHandler>(2);
+
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerForeignKeyTemplateContext, ForeignKeyHandler,ForeignKeyDecorator>(
+                        new ForeignKeyHandler(context)));
+
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerForeignKeyTemplateContext, ForeignKeyAttributeTypeImportsHandler,List<String>>(
+                        new ForeignKeyAttributeTypeImportsHandler(context)));
+
+        return result;
     }
 }

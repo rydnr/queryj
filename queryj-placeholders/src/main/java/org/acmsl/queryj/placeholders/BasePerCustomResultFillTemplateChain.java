@@ -50,11 +50,6 @@ import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Chain;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -67,6 +62,7 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,33 +98,35 @@ public class BasePerCustomResultFillTemplateChain
     }
 
     /**
-     * Adds additional per-custom-result handlers.
-     * @param chain the chain to be configured.
+     * Retrieves the additional per-custom-result handlers.
      * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
+     * @return such handlers.
      */
+    @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    protected void addHandlers(
-        @NotNull final Chain<FillHandler<?>> chain,
-        @NotNull final PerCustomResultTemplateContext context,
-        final boolean relevantOnly)
+    protected List<FillHandler<?>> getHandlers(@NotNull final PerCustomResultTemplateContext context)
     {
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, CustomResultHandler, ResultDecorator>(
-                new CustomResultHandler(context)),
-            relevantOnly);
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, CustomResultTypeImportsHandler, List<String>>(
-                new CustomResultTypeImportsHandler(context)),
-            relevantOnly);
+        @NotNull final List result = new ArrayList<FillHandler>(3);
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, ResultIdHandler, DecoratedString>(
-                new ResultIdHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerCustomResultTemplateContext, CustomResultHandler, ResultDecorator>(
+                        new CustomResultHandler(context)));
+
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerCustomResultTemplateContext, CustomResultTypeImportsHandler, List<String>>(
+                        new CustomResultTypeImportsHandler(context)));
+
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerCustomResultTemplateContext, ResultIdHandler, DecoratedString>(
+                        new ResultIdHandler(context)));
+
+        return result;
     }
 }

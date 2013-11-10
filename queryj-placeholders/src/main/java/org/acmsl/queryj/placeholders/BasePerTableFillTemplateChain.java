@@ -53,11 +53,6 @@ import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Chain;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -65,6 +60,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -104,88 +100,89 @@ public class BasePerTableFillTemplateChain
     }
 
     /**
-     * Adds additional per-table handlers.
-     * @param chain the chain to be configured.
-     * @param context the template context.
-     * @param relevantOnly whether to use only relevant placeholders or not.
+     * Retrieves the additional per-table handlers.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
+     * @return such handlers.
      */
+    @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    protected void addHandlers(
-        @NotNull final Chain<FillHandler<?>>  chain,
-        @NotNull final PerTableTemplateContext context,
-        final boolean relevantOnly)
+    protected List<FillHandler<?>> getHandlers(@NotNull final PerTableTemplateContext context)
     {
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, CustomResultsHandler, List<Result>>(
-                new CustomResultsHandler(context)),
-                relevantOnly);
+        @NotNull final List result = new ArrayList<FillHandler>(12);
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, DAOClassNameHandler, DecoratedString>(
-                new DAOClassNameHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, CustomResultsHandler, List<Result>>(
+                        new CustomResultsHandler(context)));
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, DAOImplementationClassNameHandler, DecoratedString>(
-                new DAOImplementationClassNameHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, DAOClassNameHandler, DecoratedString>(
+                        new DAOClassNameHandler(context)));
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, DAOFactoryClassNameHandler, DecoratedString>(
-                new DAOFactoryClassNameHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, DAOImplementationClassNameHandler, DecoratedString>(
+                        new DAOImplementationClassNameHandler(context)));
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, ForeignKeyListHandler,List<ForeignKey>>(
-                new ForeignKeyListHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, DAOFactoryClassNameHandler, DecoratedString>(
+                        new DAOFactoryClassNameHandler(context)));
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, LobHandlingTableCheckHandler,Boolean>(
-                new LobHandlingTableCheckHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, ForeignKeyListHandler,List<ForeignKey>>(
+                        new ForeignKeyListHandler(context)));
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, NonPrimaryKeyAttributesHandler,List<Attribute>>(
-                new NonPrimaryKeyAttributesHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, LobHandlingTableCheckHandler,Boolean>(
+                        new LobHandlingTableCheckHandler(context)));
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, PrimaryKeyHandler,List<Attribute>>(
-                new PrimaryKeyHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, NonPrimaryKeyAttributesHandler,List<Attribute>>(
+                        new NonPrimaryKeyAttributesHandler(context)));
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, TableHandler,TableDecorator>(
-                new TableHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, PrimaryKeyHandler,List<Attribute>>(
+                        new PrimaryKeyHandler(context)));
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, TableNameHandler, DecoratedString>(
-                new TableNameHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, TableHandler,TableDecorator>(
+                        new TableHandler(context)));
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, ValueObjectNameHandler, DecoratedString>(
-                new ValueObjectNameHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, TableNameHandler, DecoratedString>(
+                        new TableNameHandler(context)));
 
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerTableTemplateContext, TableAttributeTypeImportsHandler,List<String>>(
-                new TableAttributeTypeImportsHandler(context)),
-            relevantOnly);
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, ValueObjectNameHandler, DecoratedString>(
+                        new ValueObjectNameHandler(context)));
+
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerTableTemplateContext, TableAttributeTypeImportsHandler,List<String>>(
+                        new TableAttributeTypeImportsHandler(context)));
+
+        return result;
     }
 }
