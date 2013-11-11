@@ -442,7 +442,7 @@ public abstract class AbstractTemplateWritingHandler
      * @return the template.
      * @throws QueryJBuildException if the template retrieval process fails.
      */
-    @Nullable
+    @NotNull
     protected abstract List<T> retrieveTemplates(@NotNull final QueryJCommand parameters)
         throws QueryJBuildException;
 

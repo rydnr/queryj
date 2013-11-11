@@ -117,8 +117,8 @@ public class PerTableTemplatesTestTemplateWritingHandler
         @NotNull final List<PerTableTemplatesTestTemplate> result;
 
         @Nullable final List<PerTableTemplatesTestTemplate> aux =
-            new QueryJCommandWrapper<List<PerTableTemplatesTestTemplate>>(parameters)
-                .getSetting(PerTableTemplatesTestTemplateBuildHandler.TEMPLATES_KEY);
+            new QueryJCommandWrapper<PerTableTemplatesTestTemplate>(parameters)
+                .getListSetting(PerTableTemplatesTestTemplateBuildHandler.TEMPLATES_KEY);
 
         if (aux == null)
         {

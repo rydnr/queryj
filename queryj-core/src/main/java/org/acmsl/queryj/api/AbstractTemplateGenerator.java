@@ -543,9 +543,10 @@ public abstract class AbstractTemplateGenerator<N extends Template<? extends Tem
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractTemplateGenerator' " +
-               ", 'caching': '" + m__bCaching + '\'' +
-               ", 'threadCount': " + m__iThreadCount +
-               " }";
+        return
+              "{ \"class\': \"" + AbstractTemplateGenerator.class.getName() + "\""
+            + "\", \"caching\": " + m__bCaching
+            + ", \"threadCount\": " + m__iThreadCount
+            + " }";
     }
 }

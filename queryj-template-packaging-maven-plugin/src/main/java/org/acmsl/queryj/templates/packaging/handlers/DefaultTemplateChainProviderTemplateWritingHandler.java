@@ -64,6 +64,7 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -106,15 +107,27 @@ public class DefaultTemplateChainProviderTemplateWritingHandler
      * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException
      *          if the template retrieval process fails.
      */
-    @Nullable
+    @NotNull
     @Override
     protected List<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>> retrieveTemplates(
         @NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {
-        return
-            new QueryJCommandWrapper
-                <DefaultTemplateChainProviderTemplate<GlobalTemplateContext>>(parameters)
-                    .getListSetting(DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE);
+        @NotNull final List<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>> result;
+
+        @Nullable final List<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>> aux =
+            new QueryJCommandWrapper<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>>(parameters)
+                .getListSetting(DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE);
+
+        if (aux == null)
+        {
+            result = new ArrayList<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>>(0);
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
     }
 }

@@ -123,14 +123,14 @@ public abstract class AbstractTemplatesTest<G, F>
     @NotNull protected final Map<String, F> FACTORY_MAPPINGS = new HashMap<String, F>();
 
     /**
+     * A simple mapping between template names and packages.
+     */
+    @NotNull protected final Map<String, String> PACKAGE_MAPPINGS = new HashMap<String, String>();
+
+    /**
      * The package name.
      */
     public static final String PACKAGE_NAME = "com.foo.bar";
-
-    /**
-     * The DAO package name.
-     */
-    public static final String DAO_PACKAGE_NAME = "com.foo.bar.dao";
 
     /**
      * A temporary folder for generated files.
@@ -596,6 +596,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param engineName the name of the engine.
      * @return such instance.
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected MetadataManager retrieveMetadataManager(@NotNull final String engineName)
     {
@@ -638,6 +639,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param outputName the name of the output file.
      * @param outputFiles the output files.
      */
+    @SuppressWarnings("unused")
     protected void checkPropertiesFiles(
         @NotNull final String outputName, @NotNull final Map<String, File> outputFiles)
     {
@@ -684,6 +686,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param fileName the file name.
      * @return the output file.
      */
+    @SuppressWarnings("unused")
     @Nullable
     protected File retrieveOutputFile(@NotNull final String fileName)
     {
@@ -706,6 +709,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param file the name of the properties file.
      * @return the properties.
      */
+    @SuppressWarnings("unused")
     @Nullable
     protected Properties readPropertiesFile(@NotNull final File file)
     {

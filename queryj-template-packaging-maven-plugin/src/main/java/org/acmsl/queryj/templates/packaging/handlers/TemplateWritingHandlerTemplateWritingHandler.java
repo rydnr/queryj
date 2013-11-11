@@ -60,6 +60,7 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -98,14 +99,27 @@ public class TemplateWritingHandlerTemplateWritingHandler
      * @return the template.
      * @throws QueryJBuildException if the template retrieval process fails.
      */
-    @Nullable
+    @NotNull
     @Override
     protected List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>> retrieveTemplates(
         @NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {
-        return
+        @NotNull final List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>> result;
+
+        @Nullable final List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>> aux =
             new QueryJCommandWrapper<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>>(parameters)
                 .getListSetting(TEMPLATE_WRITING_HANDLER_TEMPLATES);
+
+        if (aux == null)
+        {
+            result = new ArrayList<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>>(0);
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
     }
 }

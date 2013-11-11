@@ -143,7 +143,7 @@ public class PerTableTemplatesTestTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return "PerTableTemplatesTest.java";
+        return "PerTableTemplatesTest";
     }
 
     /**

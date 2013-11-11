@@ -45,22 +45,11 @@ package org.acmsl.queryj.templates.packaging;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing StringTemplate classes.
- */
-import org.stringtemplate.v4.STGroup;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-
-/*
- * Importing JDK classes.
- */
-import java.util.Arrays;
 
 /**
  * Used to generate sources using PerTableTemplatesTest.stg.
@@ -88,20 +77,6 @@ public class PerTableTemplatesTestTemplate
     }
 
     /**
-     * Retrieves the StringTemplate group for "PerTablesTemplatesTest.stg".
-     * @return such {@link STGroup group}.
-     */
-    @Nullable
-    @Override
-    public STGroup retrieveGroup()
-    {
-        return
-            retrieveGroup(
-                "org/acmsl/queryj/templates/PerTablesTemplatesTest.stg",
-                Arrays.asList("org/acmsl/queryj/templates"));
-    }
-
-    /**
      * Retrieves the template name.
      * @return "PerTablesTemplatesTest";
      */
@@ -109,6 +84,6 @@ public class PerTableTemplatesTestTemplate
     @Override
     public String getTemplateName()
     {
-        return "PerTablesTemplatesTest";
+        return "PerTableTemplatesTest";
     }
 }

@@ -69,9 +69,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class PerTableTemplatesTestTemplateFactory
-    implements TemplatePackagingTemplateFactory
-                   <PerTableTemplatesTestTemplate,
-                       GlobalTemplateContext>,
+    implements TemplatePackagingTemplateFactory<PerTableTemplatesTestTemplate, GlobalTemplateContext>,
                Singleton
 {
     /**
@@ -106,15 +104,5 @@ public class PerTableTemplatesTestTemplateFactory
     public PerTableTemplatesTestTemplate createTemplate(@NotNull final GlobalTemplateContext context)
     {
         return new PerTableTemplatesTestTemplate(context);
-    }
-
-    /**
-     * Retrieves the file name of the template.
-     * @return the file name.
-     */
-    @NotNull
-    public String retrieveTemplateFileName()
-    {
-        return "PerTableTemplatesTest.java";
     }
 }
