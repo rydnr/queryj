@@ -51,10 +51,14 @@ import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing Apache Commons Lang classes.
  */
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
