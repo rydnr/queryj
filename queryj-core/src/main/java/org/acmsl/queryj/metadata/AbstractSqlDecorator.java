@@ -406,11 +406,11 @@ public abstract class AbstractSqlDecorator
         @NotNull final SqlParameterDAO sqlParameterDAO,
         final MetadataTypeManager metadataTypeManager)
     {
-        @NotNull List<Parameter> result = new ArrayList<Parameter>();
+        @NotNull final List<Parameter> result = new ArrayList<Parameter>();
 
-        for (@NotNull ParameterRef t_ParameterRef : parameterRefs)
+        for (@Nullable final ParameterRef t_ParameterRef : parameterRefs)
         {
-            @Nullable Parameter t_Parameter;
+            @Nullable final Parameter t_Parameter;
 
             if  (t_ParameterRef != null)
             {
@@ -425,7 +425,7 @@ public abstract class AbstractSqlDecorator
                 {
                     try
                     {
-                        Log t_Log = UniqueLogFactory.getLog(SqlDecorator.class);
+                        final Log t_Log = UniqueLogFactory.getLog(SqlDecorator.class);
 
                         if (t_Log != null)
                         {
@@ -484,7 +484,7 @@ public abstract class AbstractSqlDecorator
 
         if  (resultRef != null)
         {
-            @Nullable Result t_Result = resultDAO.findByPrimaryKey(resultRef.getId());
+            @Nullable final Result t_Result = resultDAO.findByPrimaryKey(resultRef.getId());
 
             if  (t_Result != null)
             {
@@ -502,7 +502,7 @@ public abstract class AbstractSqlDecorator
             {
                 try
                 {
-                    Log t_Log = UniqueLogFactory.getLog("custom-sql");
+                    final Log t_Log = UniqueLogFactory.getLog("custom-sql");
 
                     if (t_Log != null)
                     {
@@ -572,7 +572,7 @@ public abstract class AbstractSqlDecorator
 
         if  (resultRef != null)
         {
-            @Nullable Result t_Result = sqlResultDAO.findByPrimaryKey(resultRef.getId());
+            @Nullable final Result t_Result = sqlResultDAO.findByPrimaryKey(resultRef.getId());
 
             if  (t_Result != null)
             {
@@ -582,7 +582,7 @@ public abstract class AbstractSqlDecorator
             {
                 try
                 {
-                    Log t_Log = UniqueLogFactory.getLog("custom-sql");
+                    final Log t_Log = UniqueLogFactory.getLog("custom-sql");
 
                     if (t_Log != null)
                     {
@@ -755,7 +755,7 @@ public abstract class AbstractSqlDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(@NotNull final Object object)
+    public boolean equals(@Nullable final Object object)
     {
         boolean result;
 
