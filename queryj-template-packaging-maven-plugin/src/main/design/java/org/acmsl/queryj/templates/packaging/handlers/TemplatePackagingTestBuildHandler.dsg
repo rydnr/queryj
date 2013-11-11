@@ -1,0 +1,6 @@
+- Create an abstract class TewplatePackagingTestBuildHandler, in package org.acms.queryj.templates.packaging.handlers;
+- Add comment: Customizes default GlobalTemplateContextBuildHandler to support test-only generated files.
+- Make it extend GlobalTemplatePackagingBuildHandler<T, TG, C>;
+- Override method retrieveProjectOutputDir(QueryJCommand): java.io.File:
+  - return the content associated to the key OUTPUT_DIR_FOR_TESTS in the command;
+- Fix import groups;

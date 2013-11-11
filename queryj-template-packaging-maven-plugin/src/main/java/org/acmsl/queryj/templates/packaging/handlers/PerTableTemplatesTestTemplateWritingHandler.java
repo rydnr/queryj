@@ -80,7 +80,7 @@ import java.util.List;
  */
 @ThreadSafe
 public class PerTableTemplatesTestTemplateWritingHandler
-    extends TemplatePackagingWritingHandler
+    extends TemplatePackagingTestWritingHandler
                 <PerTableTemplatesTestTemplate,
                     TemplatePackagingTemplateGenerator<PerTableTemplatesTestTemplate,
                         GlobalTemplateContext>,

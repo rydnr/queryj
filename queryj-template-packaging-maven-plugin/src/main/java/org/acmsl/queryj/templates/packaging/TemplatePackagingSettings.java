@@ -75,6 +75,11 @@ public interface TemplatePackagingSettings
     String OUTPUT_DIR = "output-dir";
 
     /**
+     * The key to access the output dir for tests.
+     */
+    String OUTPUT_DIR_FOR_TESTS = "output-dir-for-tests";
+
+    /**
      * The key to access the template templates.
      */
     String TEMPLATE_TEMPLATES = "template_templates";

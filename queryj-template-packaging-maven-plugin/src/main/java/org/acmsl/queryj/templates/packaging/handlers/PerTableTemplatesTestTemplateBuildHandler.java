@@ -79,7 +79,7 @@ import java.util.List;
  */
 @ThreadSafe
 public class PerTableTemplatesTestTemplateBuildHandler
-    extends GlobalBuildHandler
+    extends TemplatePackagingTestBuildHandler
                 <PerTableTemplatesTestTemplate,
                     PerTableTemplatesTestTemplateFactory,
                     GlobalTemplateContext>
