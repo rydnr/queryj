@@ -388,7 +388,7 @@ public class PerTableTemplatesTest
                     sqlProvider,
                     retrieveDecoratorFactory(generator),
                     PACKAGE_MAPPINGS.get(templateName),
-                    "com.foo.bar",
+                    PACKAGE_NAME,
                     "acme", // repository
                     "", // header
                     false, // marker
