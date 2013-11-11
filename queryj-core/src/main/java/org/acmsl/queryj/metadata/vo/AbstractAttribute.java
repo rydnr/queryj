@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Abstract logicless implementation of Attribute interface.
+ * Description: Abstract logic-less implementation of Attribute interface.
  *
  */
 package org.acmsl.queryj.metadata.vo;
@@ -227,7 +227,7 @@ public abstract class AbstractAttribute
         final int typeId,
         @NotNull final String type,
         @NotNull final String tableName,
-        @NotNull final String comment,
+        @Nullable final String comment,
         final int ordinalPosition,
         final int length,
         final int precision,
@@ -803,13 +803,63 @@ public abstract class AbstractAttribute
     }
 
     /**
+     * Prints given stack trace in JSON format.
+     * @param stackTrace the stack trace.
+     * @return the JSON format.
+     */
+    @NotNull
+    protected String toJSON(@NotNull final StackTraceElement[] stackTrace)
+    {
+        @NotNull final StringBuilder result = new StringBuilder("[ ");
+
+        boolean firstTime = true;
+        for (@NotNull final StackTraceElement entry : stackTrace)
+        {
+            if (firstTime)
+            {
+                firstTime = false;
+            }
+            else
+            {
+                result.append(", ");
+            }
+
+            result.append("\"");
+            result.append(entry);
+            result.append("\"");
+        }
+
+        return result.toString();
+    }
+
+    /**
      * Retrieves the attribute name.
+     *
      * @return such information.
      */
     @Override
     public String toString()
     {
-        return getName();
+        return
+              "{ \"class\": \"" + AbstractAttribute.class.getName() + "\""
+            + ", \"stackTrace\": " + toJSON(m__aStackTrace)
+            + ", \"name\": \"" + m__strName + "\""
+            + ", \"typeId\": " + m__iTypeId
+            + ", \"type\": \"" + m__strType + "\""
+            + ", \"tableName\": \"" + m__strTableName + "\""
+            + ", \"comment\": \"" + m__strComment + "\""
+            + ", \"keyword\": \"" + m__strKeyword +  "\""
+            + ", \"retrievalQuery\": \"" + m__strRetrievalQuery + "\""
+            + ", \"nullable\": \"" + m__bNullable + "\""
+            + ", \"value\": " + m__strValue
+            + ", \"readOnly\": " + m__bReadOnly
+            + ", \"boolean\": " + m__bBoolean
+            + ", \"booleanTrue\": \"" + m__strBooleanTrue + "\""
+            + ", \"booleanFalse\": \"" + m__strBooleanFalse + "\""
+            + ", \"booleanNull\":" + m__strBooleanNull + "\""
+            + ", \"ordinalPosition\":" + m__iOrdinalPosition
+            + ", \"columnLength\": " + m__iColumnLength
+            + ", \"columnPrecision\": " + m__iColumnPrecision + " }";
     }
 
     @Override
