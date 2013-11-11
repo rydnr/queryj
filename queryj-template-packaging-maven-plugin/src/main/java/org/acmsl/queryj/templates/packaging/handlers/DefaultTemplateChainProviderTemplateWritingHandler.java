@@ -115,6 +115,6 @@ public class DefaultTemplateChainProviderTemplateWritingHandler
         return
             new QueryJCommandWrapper
                 <DefaultTemplateChainProviderTemplate<GlobalTemplateContext>>(parameters)
-                .getListSetting(DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE);
+                    .getListSetting(DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE);
     }
 }

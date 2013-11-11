@@ -39,6 +39,7 @@ import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.templates.packaging.handlers.DefaultTemplateChainProviderTemplateHandlerBundle;
+import org.acmsl.queryj.templates.packaging.handlers.PerTableTemplatesTestTemplateHandlerBundle;
 import org.acmsl.queryj.tools.QueryJChain;
 import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
@@ -118,6 +119,8 @@ public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJComman
         chain.add((CH) new TemplateTemplateHandlerBundle());
 
         chain.add((CH) new TemplateWritingHandlerTemplateHandlerBundle());
+
+        chain.add((CH) new PerTableTemplatesTestTemplateHandlerBundle());
 
         chain.add((CH) new DefaultTemplateChainProviderTemplateHandlerBundle());
 
