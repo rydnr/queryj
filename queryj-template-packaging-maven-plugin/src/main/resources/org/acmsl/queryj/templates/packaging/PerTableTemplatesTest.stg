@@ -63,13 +63,11 @@ source(C) ::= <<
 <package_declaration(packageName="cucumber.templates")>
 
 <checkers_import()>
+
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.templates.BaseDAOFactoryTemplateFactory;
-import org.acmsl.queryj.templates.BaseDAOFactoryTemplateGenerator;
-import org.acmsl.queryj.templates.DAOFactoryTemplateFactory;
-import org.acmsl.queryj.templates.DAOFactoryTemplateGenerator;
+<C.templateDefs:{ d | <def_import(d=d)>}; separator="\n">
 
 /*
  * Importing QueryJ-Core classes.
@@ -142,9 +140,19 @@ description() ::= <<
 Cucumber tests for per-table templates.
 >>
 
+def_import(d) ::= <<
+<!
+  Generates the imports for a given TemplateDef.
+  @param d the template def.
+!>
+import org.acmsl.queryj.templates.<d.name>TemplateFactory;
+import org.acmsl.queryj.templates.<d.name>TemplateGenerator;
+>>
+
 class(defs, C) ::= <<
 <!
  Generates the class body.
+ @param defs the template defs.
  @param C the context.
 !>
 /**
