@@ -1,0 +1,10 @@
+- Create template DAO.stg in under org/acmsl/queryj/templates;
+- Copy the contents of DAO.stg in QueryJ-2.0.6 into the template;
+- Fix header;
+- Fix package declaration;
+- Remove "input" parameter in all rules;
+- Replace input.vo_name with table.voName;
+- Replace input.all_but_externally_managed_attributes with table.allButExternallyManagedAttributes;
+- Replace input.primary_key_attributes with table.primaryKey;
+- Replace input with C;
+- Remove unused parameters in rules;
