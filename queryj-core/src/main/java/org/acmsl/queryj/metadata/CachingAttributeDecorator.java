@@ -205,6 +205,7 @@ public class CachingAttributeDecorator
      * Retrieves the name, in upper case.
      * @return such value.
      */
+    @Override
     @NotNull
     public String getNameUppercased()
     {
@@ -252,6 +253,7 @@ public class CachingAttributeDecorator
      * Retrieves the capitalized name.
      * @return such name.
      */
+    @Override
     @NotNull
     public String getNameCapitalized()
     {
@@ -299,6 +301,7 @@ public class CachingAttributeDecorator
      * Retrieves the uncapitalized name.
      * @return such name.
      */
+    @Override
     @NotNull
     public String getNameUncapitalized()
     {
@@ -345,6 +348,7 @@ public class CachingAttributeDecorator
      * Retrieves the name, in lower case.
      * @return such value.
      */
+    @Override
     @NotNull
     public String getNameLowercased()
     {
@@ -391,6 +395,7 @@ public class CachingAttributeDecorator
      * Retrieves the table name, uncapitalized.
      * @return such value.
      */
+    @Override
     @NotNull
     public String getUncapitalizedTableName()
     {
@@ -437,6 +442,7 @@ public class CachingAttributeDecorator
      * Retrieves the value-object name associated to the table name.
      * @return such name.
      */
+    @Override
     @NotNull
     public String getVoName()
     {
@@ -483,6 +489,7 @@ public class CachingAttributeDecorator
      * Retrieves the attribute's Java name.
      * @return such information.
      */
+    @Override
     @NotNull
     public String getJavaName()
     {
@@ -529,6 +536,7 @@ public class CachingAttributeDecorator
      * Retrieves the attribute's associated getter method.
      * @return such information.
      */
+    @Override
     @NotNull
     public String getGetterMethod()
     {
@@ -575,6 +583,7 @@ public class CachingAttributeDecorator
      * Retrieves whether this attribute can be modelled as a primitive or not.
      * @return <code>false</code> if no primitive matches.
      */
+    @Override
     public Boolean isPrimitive()
     {
         Boolean result = getCachedIsPrimitive();
@@ -620,6 +629,7 @@ public class CachingAttributeDecorator
      * Retrieves the object type.
      * @return such information.
      */
+    @Override
     @NotNull
     public String getObjectType()
     {
@@ -665,6 +675,7 @@ public class CachingAttributeDecorator
      * Retrieves whether the attribute is a clob or not.
      * return such information.
      */
+    @Override
     public boolean isClob()
     {
         Boolean result = getCachedIsClob();
@@ -710,6 +721,7 @@ public class CachingAttributeDecorator
      * Retrieves whether the attribute is a string or not.
      * return such information.
      */
+    @Override
     public boolean isString()
     {
         Boolean result = getCachedIsString();
@@ -755,6 +767,7 @@ public class CachingAttributeDecorator
      * Retrieves whether the attribute is a date or not.
      * return such information.
      */
+    @Override
     public boolean isDate()
     {
         Boolean result = getCachedIsDate();
@@ -799,6 +812,7 @@ public class CachingAttributeDecorator
      * Retrieves the query to retrieve the externally-managed value.
      * @return such information.
      */
+    @Override
     public String getQuery()
     {
         String result = getCachedQuery();
@@ -844,6 +858,7 @@ public class CachingAttributeDecorator
      * Retrieves the QueryJ type.
      * @return the QueryJ type.
      */
+    @Override
     @NotNull
     public String getQueryJFieldType()
     {
@@ -889,6 +904,7 @@ public class CachingAttributeDecorator
      * Retrieves the QueryJ type for statement setters.
      * @return the QueryJ type.
      */
+    @Override
     @NotNull
     public String getStatementSetterFieldType()
     {
@@ -935,6 +951,7 @@ public class CachingAttributeDecorator
      * Retrieves the attribute's table in upper-case.
      * @return such information.
      */
+    @Override
     @NotNull
     public String getTableNameUppercased()
     {
@@ -981,6 +998,7 @@ public class CachingAttributeDecorator
      * Retrieves the attribute's table in upper-case.
      * @return such information.
      */
+    @Override
     @NotNull
     public String getTableNameNormalizedLowercased()
     {
@@ -1081,6 +1099,7 @@ public class CachingAttributeDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
+    @Override
     @NotNull
     public String getType()
     {

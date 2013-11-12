@@ -214,6 +214,7 @@ public abstract class AbstractAttributeDecorator
      * Retrieves the decorated attribute.
      * @return such attribute.
      */
+    @Override
     @NotNull
     public Attribute getAttribute()
     {
@@ -544,6 +545,7 @@ public abstract class AbstractAttributeDecorator
      * Retrieves whether the attribute is a clob or not.
      * return such information.
      */
+    @Override
     public boolean isClob()
     {
         return isClob(getTypeId(), getMetadataTypeManager());
@@ -566,6 +568,7 @@ public abstract class AbstractAttributeDecorator
      * Retrieves whether the attribute is a string or not.
      * return such information.
      */
+    @Override
     public boolean isString()
     {
         return isString(getTypeId(), getMetadataTypeManager());
@@ -588,6 +591,7 @@ public abstract class AbstractAttributeDecorator
      * Retrieves whether the attribute is a date or not.
      * return such information.
      */
+    @Override
     public boolean isDate()
     {
         return isDate(getType(), getMetadataTypeManager());
@@ -752,6 +756,7 @@ public abstract class AbstractAttributeDecorator
      * number smaller than an int.
      * @return such condition.
      */
+    @Override
     public boolean isNumberSmallerThanInt()
     {
         return isNumberSmallerThanInt(getTypeId(), getMetadataManager());
@@ -965,6 +970,7 @@ public abstract class AbstractAttributeDecorator
      * Retrieves the attribute name.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {
