@@ -117,7 +117,7 @@ public class DAOTemplateFactory
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
-        @NotNull final List<Row> staticContents)
+        @NotNull final List<Row<String>> staticContents)
     {
         return
             new DAOTemplate(

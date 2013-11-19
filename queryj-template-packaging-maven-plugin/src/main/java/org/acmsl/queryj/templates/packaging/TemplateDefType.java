@@ -109,7 +109,7 @@ public enum TemplateDefType
     @NotNull
     public String getCapitalized()
     {
-        return new DecoratedString(getType()).getCapitalized();
+        return new DecoratedString(getType()).getCapitalized().getValue();
     }
 
     @NotNull

@@ -39,6 +39,7 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.MetadataExtractionLogger;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
@@ -121,7 +122,7 @@ public class OracleMetaDataRetrievalHandler
     @Override
     protected MetadataManager buildMetadataManager(
         @SuppressWarnings("unused") @NotNull final QueryJCommand parameters,
-        @NotNull final List<Table<String>> tables,
+        @NotNull final List<Table<String, Attribute<String>>> tables,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,

@@ -616,7 +616,7 @@ public abstract class AbstractTemplateContext
      * @return the CSV version of given list.
      */
     @NotNull
-    protected String toCsv(@NotNull final List<Attribute> attributes)
+    protected String toCsv(@NotNull final List<Attribute<String>> attributes)
     {
         @NotNull final StringBuilder result = new StringBuilder();
 

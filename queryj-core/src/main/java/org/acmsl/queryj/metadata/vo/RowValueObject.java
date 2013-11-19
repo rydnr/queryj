@@ -54,7 +54,7 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class RowValueObject
-    extends  AbstractRow
+    extends  AbstractRow<String>
 {
     private static final long serialVersionUID = -1296713765073878556L;
 
@@ -64,14 +64,11 @@ public class RowValueObject
      * @param name the name.
      * @param tableName the table name.
      * @param attributes the attributes.
-     * @precondition name != null
-     * @precondition tableName != null
-     * @precondition attributes != null
      */
     public RowValueObject(
         final String name,
         final String tableName,
-        final List<Attribute> attributes)
+        final List<Attribute<String>> attributes)
     {
         super(name, tableName, attributes);
     }

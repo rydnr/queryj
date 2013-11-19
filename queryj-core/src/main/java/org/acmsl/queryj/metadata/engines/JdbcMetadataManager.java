@@ -120,7 +120,7 @@ public class JdbcMetadataManager
         @Nullable final String catalog,
         @Nullable final String schema,
         @NotNull final List<String> tableNames,
-        @NotNull final List<Table<String>> tables,
+        @NotNull final List<Table<String, Attribute<String>>> tables,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean caseSensitive,
@@ -356,7 +356,8 @@ public class JdbcMetadataManager
         throws  SQLException,
                 QueryJException
     {
-        @NotNull final Map<String,List<Attribute>> t_mAux = new HashMap<String,List<Attribute>>(tables.size());
+        @NotNull final Map<String, List<Attribute<String>>> t_mAux =
+            new HashMap<String,List<Attribute<String>>>(tables.size());
 
         final ResultSet t_rsPrimaryKeys;
         String t_strTableName;
@@ -372,14 +373,15 @@ public class JdbcMetadataManager
                     schema,
                     null);
 
-            List<Attribute> t_lPrimaryKeys;
-            Attribute t_Attribute;
+            List<Attribute<String>> t_lPrimaryKeys;
+            Attribute<String> t_Attribute;
 
             while (t_rsPrimaryKeys.next())
             {
                 t_strTableName = t_rsPrimaryKeys.getString("TABLE_NAME");
 
-                @Nullable final Table t_Table = findTable(t_strTableName, tables, caseSensitiveness);
+                @Nullable final Table<String, Attribute<String>> t_Table =
+                    findTable(t_strTableName, tables, caseSensitiveness);
 
                 if (   (t_Table != null)
                     && (passesFilter(t_Table, tables, caseSensitiveness)))
@@ -388,7 +390,7 @@ public class JdbcMetadataManager
 
                     if (t_lPrimaryKeys == null)
                     {
-                        t_lPrimaryKeys = new ArrayList<Attribute>(9);
+                        t_lPrimaryKeys = new ArrayList<Attribute<String>>(9);
                         t_mAux.put(t_strTableName, t_lPrimaryKeys);
                     }
 
@@ -421,10 +423,10 @@ public class JdbcMetadataManager
             throw sqlException;
         }
 
-        Table t_ParentTable;
-        List<Attribute> t_lParentTablePrimaryKey;
-        List<Attribute> t_lChildTablePrimaryKey;
-        List<Attribute> t_lCompletePrimaryKey;
+        Table<String, Attribute<String>> t_ParentTable;
+        List<Attribute<String>> t_lParentTablePrimaryKey;
+        List<Attribute<String>> t_lChildTablePrimaryKey;
+        List<Attribute<String>> t_lCompletePrimaryKey;
 
         for (@NotNull final TableIncompleteValueObject t_Table : tables)
         {
@@ -437,7 +439,7 @@ public class JdbcMetadataManager
                 t_lParentTablePrimaryKey = t_ParentTable.getAttributes();
 
                 t_lCompletePrimaryKey =
-                    new ArrayList<Attribute>(t_lParentTablePrimaryKey.size() + t_lChildTablePrimaryKey.size());
+                    new ArrayList<Attribute<String>>(t_lParentTablePrimaryKey.size() + t_lChildTablePrimaryKey.size());
 
                 t_lCompletePrimaryKey.addAll(t_lParentTablePrimaryKey);
                 t_lCompletePrimaryKey.addAll(t_lChildTablePrimaryKey);
@@ -471,13 +473,14 @@ public class JdbcMetadataManager
         throws  SQLException,
                 QueryJException
     {
-        @NotNull final Map<String,List<ForeignKey>> t_mAux = new HashMap<String,List<ForeignKey>>(tables.size());
+        @NotNull final Map<String,List<ForeignKey<String>>> t_mAux =
+            new HashMap<String,List<ForeignKey<String>>>(tables.size());
 
         final ResultSet t_rsForeignKeys;
         String t_strSourceTableName;
-        Table t_SourceTable;
+        Table<String, Attribute<String>> t_SourceTable;
         String t_strTargetTableName;
-        Table t_TargetTable;
+        Table<String, Attribute<String>> t_TargetTable;
         String t_strSourceColumnName;
         int t_iOrdinalPosition;
 
@@ -490,10 +493,10 @@ public class JdbcMetadataManager
                     schema,
                     null);
 
-            List<ForeignKey> t_lForeignKeys;
-            ForeignKey t_ForeignKey;
-            List<Attribute> t_lFkAttributes = null;
-            Attribute t_Attribute;
+            List<ForeignKey<String>> t_lForeignKeys;
+            ForeignKey<String> t_ForeignKey;
+            List<Attribute<String>> t_lFkAttributes = null;
+            Attribute<String> t_Attribute;
 
             while (t_rsForeignKeys.next())
             {
@@ -512,7 +515,7 @@ public class JdbcMetadataManager
 
                     if (t_lForeignKeys == null)
                     {
-                        t_lForeignKeys = new ArrayList<ForeignKey>(1);
+                        t_lForeignKeys = new ArrayList<ForeignKey<String>>(1);
                         t_mAux.put(t_strSourceTableName, t_lForeignKeys);
                     }
 
@@ -526,7 +529,7 @@ public class JdbcMetadataManager
                     {
                         if (t_lFkAttributes == null)
                         {
-                            t_lFkAttributes = new ArrayList<Attribute>(1);
+                            t_lFkAttributes = new ArrayList<Attribute<String>>(1);
                             t_ForeignKey =
                                 new ForeignKeyValueObject(
                                     t_strSourceTableName,
@@ -556,10 +559,10 @@ public class JdbcMetadataManager
             throw sqlException;
         }
 
-        Table t_ParentTable;
-        List<ForeignKey> t_lParentForeignKeys;
-        List<ForeignKey> t_lChildForeignKeys;
-        List<ForeignKey> t_lCompleteForeignKey;
+        Table<String, Attribute<String>> t_ParentTable;
+        List<ForeignKey<String>> t_lParentForeignKeys;
+        List<ForeignKey<String>> t_lChildForeignKeys;
+        List<ForeignKey<String>> t_lCompleteForeignKey;
 
         for (@NotNull final TableIncompleteValueObject t_Table : tables)
         {
@@ -572,7 +575,7 @@ public class JdbcMetadataManager
                 t_lParentForeignKeys = t_ParentTable.getForeignKeys();
 
                 t_lCompleteForeignKey =
-                    new ArrayList<ForeignKey>(t_lParentForeignKeys.size() + t_lChildForeignKeys.size());
+                    new ArrayList<ForeignKey<String>>(t_lParentForeignKeys.size() + t_lChildForeignKeys.size());
 
                 t_lCompleteForeignKey.addAll(t_lParentForeignKeys);
                 t_lCompleteForeignKey.addAll(t_lChildForeignKeys);

@@ -47,7 +47,7 @@ import org.acmsl.commons.patterns.Decorator;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface AttributeDecorator
-    extends  Attribute,
+    extends  Attribute<DecoratedString>,
              Decorator
 {
     /**

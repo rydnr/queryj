@@ -47,7 +47,7 @@ import java.util.Collection;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface Field
-    extends  Attribute
+    extends  Attribute<String>
 {
     /**
      * Retrieves if the field is part of the primary key.

@@ -37,7 +37,6 @@ package org.acmsl.queryj.api;
  * Importing some project classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.queryj.api.exceptions.MissingResultException;
 import org.acmsl.queryj.api.exceptions.ReferencedResultNotFoundException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
@@ -45,7 +44,6 @@ import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
-import org.acmsl.queryj.metadata.CachingTableDecorator;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlDAO;
@@ -64,8 +62,8 @@ import org.acmsl.commons.patterns.Utils;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.metadata.TableDecorator;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.tools.PackageUtils;
 import org.apache.commons.logging.Log;
 
 /*
@@ -561,14 +559,15 @@ public class TemplateUtils
     {
         @NotNull final List<Result> result = new ArrayList<Result>(2);
 
-        @Nullable final Table<String> table = tableDAO.findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> table = tableDAO.findByName(tableName);
 
         if (table != null)
         {
             @Nullable final TableDecorator tableDecorator =
                 decoratorFactory.createTableDecorator(table.getName(), metadataManager, customSqlProvider);
 
-            @Nullable final String classValue = (tableDecorator != null) ? tableDecorator.getName().getVoName() : null;
+            @Nullable final String classValue =
+                (tableDecorator != null) ? tableDecorator.getName().getVoName().getValue() : null;
 
             @NotNull final Result singleResult =
                 new ResultElement(

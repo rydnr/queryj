@@ -118,12 +118,12 @@ public class MetadataUtils
      * @return the collection of attributes participating in the primary key.
      */
     @NotNull
-    public List<Attribute> retrievePrimaryKeyAttributes(
+    public List<Attribute<String>> retrievePrimaryKeyAttributes(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        List<Attribute> result;
+        @NotNull final List<Attribute<String>> result;
 
-        Table t_Table =
+        final Table<String, Attribute<String>> t_Table =
             metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
@@ -132,7 +132,7 @@ public class MetadataUtils
         }
         else
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<Attribute<String>>(0);
         }
 
         return result;
@@ -146,20 +146,20 @@ public class MetadataUtils
      * key.
      */
     @NotNull
-    public List<Attribute> retrieveNonPrimaryKeyAttributes(
+    public List<Attribute<String>> retrieveNonPrimaryKeyAttributes(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<Attribute> result = null;
+        @Nullable List<Attribute<String>> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
-            List<Attribute> t_lAttributes = t_Table.getAttributes();
+            @NotNull final List<Attribute<String>> t_lAttributes = t_Table.getAttributes();
 
-            List<Attribute> t_lPrimaryKey = t_Table.getPrimaryKey();
+            @NotNull final List<Attribute<String>> t_lPrimaryKey = t_Table.getPrimaryKey();
 
-            result = new ArrayList<Attribute>(Math.max(t_lAttributes.size() - t_lPrimaryKey.size(), 0));
+            result = new ArrayList<Attribute<String>>(Math.max(t_lAttributes.size() - t_lPrimaryKey.size(), 0));
 
             result.addAll(t_lAttributes);
             result.removeAll(t_lPrimaryKey);
@@ -167,7 +167,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<Attribute<String>>(0);
         }
 
         return result;
@@ -180,12 +180,12 @@ public class MetadataUtils
      * @return the foreign key attributes.
      */
     @NotNull
-    public List<ForeignKey> retrieveForeignKeyAttributes(
+    public List<ForeignKey<String>> retrieveForeignKeyAttributes(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<ForeignKey> result = null;
+        @Nullable List<ForeignKey<String>> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -194,7 +194,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<ForeignKey>(0);
+            result = new ArrayList<ForeignKey<String>>(0);
         }
 
         return result;
@@ -207,12 +207,12 @@ public class MetadataUtils
      * @return the attributes.
      */
     @NotNull
-    public List<Attribute> retrieveAttributes(
+    public List<Attribute<String>> retrieveAttributes(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<Attribute> result = null;
+        @Nullable List<Attribute<String>> result = null;
 
-        Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -221,7 +221,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<Attribute<String>>(0);
         }
 
         return result;
@@ -235,24 +235,25 @@ public class MetadataUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Attribute> retrieveExternallyManagedAttributes(
+    public List<Attribute<String>> retrieveExternallyManagedAttributes(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<Attribute> result = null;
+        @Nullable List<Attribute<String>> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
-            List<Attribute> t_lAttributes = t_Table.getAttributes();
+            @NotNull final List<Attribute<String>> t_lAttributes = t_Table.getAttributes();
 
-            for (Attribute t_Attribute : t_lAttributes)
+            for (@Nullable final Attribute<String> t_Attribute : t_lAttributes)
             {
-                if (t_Attribute.isExternallyManaged())
+                if (   (t_Attribute != null)
+                    && (t_Attribute.isExternallyManaged()))
                 {
                     if (result == null)
                     {
-                        result = new ArrayList<Attribute>(t_lAttributes.size());
+                        result = new ArrayList<Attribute<String>>(t_lAttributes.size());
                     }
                     result.add(t_Attribute);
                 }
@@ -261,7 +262,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<Attribute<String>>(0);
         }
 
         return result;
@@ -275,26 +276,26 @@ public class MetadataUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Attribute> retrieveAllButExternallyManagedAttributes(
-        final String tableName,
+    public List<Attribute<String>> retrieveAllButExternallyManagedAttributes(
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<Attribute> result = null;
+        @Nullable List<Attribute<String>> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
-            @NotNull List<Attribute> t_lAttributes = t_Table.getAttributes();
+            @NotNull final List<Attribute<String>> t_lAttributes = t_Table.getAttributes();
 
-            for (Attribute t_Attribute : t_lAttributes)
+            for (@Nullable final Attribute<String> t_Attribute : t_lAttributes)
             {
                 if (   (t_Attribute != null)
                     && (!t_Attribute.isExternallyManaged()))
                 {
                     if (result == null)
                     {
-                        result = new ArrayList<Attribute>(t_lAttributes.size());
+                        result = new ArrayList<Attribute<String>>(t_lAttributes.size());
                     }
                     result.add(t_Attribute);
                 }
@@ -303,7 +304,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<Attribute<String>>(0);
         }
 
         return result;
@@ -319,28 +320,28 @@ public class MetadataUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public Map<String,List<ForeignKey>> retrieveReferringKeys(
+    public Map<String,List<ForeignKey<String>>> retrieveReferringKeys(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        @NotNull Map<String,List<ForeignKey>> result = new HashMap<String,List<ForeignKey>>(2);
+        @NotNull final Map<String,List<ForeignKey<String>>> result = new HashMap<String,List<ForeignKey<String>>>(2);
 
-        for (Table t_Table : metadataManager.getTableDAO().findAllTables())
+        for (@Nullable final Table<String, Attribute<String>> t_Table : metadataManager.getTableDAO().findAllTables())
         {
             if (t_Table != null)
             {
-                @NotNull List<ForeignKey> t_lForeignKeys = t_Table.getForeignKeys();
+                @NotNull final List<ForeignKey<String>> t_lForeignKeys = t_Table.getForeignKeys();
 
-                for (ForeignKey t_ForeignKey : t_lForeignKeys)
+                for (@Nullable final ForeignKey<String> t_ForeignKey : t_lForeignKeys)
                 {
                     if (   (t_ForeignKey != null)
                         && (t_ForeignKey.getTargetTableName().equals(tableName)))
                     {
-                        @Nullable List<ForeignKey> t_lReferringForeignKeys =
+                        @Nullable List<ForeignKey<String>> t_lReferringForeignKeys =
                             result.get(t_ForeignKey.getSourceTableName());
 
                         if (t_lReferringForeignKeys == null)
                         {
-                            t_lReferringForeignKeys = new ArrayList<ForeignKey>(1);
+                            t_lReferringForeignKeys = new ArrayList<ForeignKey<String>>(1);
                         }
                         t_lReferringForeignKeys.add(t_ForeignKey);
 
@@ -359,13 +360,13 @@ public class MetadataUtils
      * @return such information.
      */
     @SuppressWarnings("unused")
-    public boolean allowsNullAsAWhole(@Nullable final Collection<Attribute> attributes)
+    public boolean allowsNullAsAWhole(@Nullable final Collection<Attribute<String>> attributes)
     {
         boolean result = false;
 
         if  (attributes != null)
         {
-            Iterator<Attribute> t_itAttributes = attributes.iterator();
+            @NotNull final Iterator<Attribute<String>> t_itAttributes = attributes.iterator();
 
             @Nullable Attribute t_CurrentAttribute;
 
@@ -400,11 +401,11 @@ public class MetadataUtils
     {
         boolean result = false;
 
-        @Nullable final Table<String> t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
-            for (@Nullable final Attribute t_Attribute : t_Table.getAttributes())
+            for (@Nullable final Attribute<String> t_Attribute : t_Table.getAttributes())
             {
                 if (   (t_Attribute != null)
                     && (columnNames.contains(t_Attribute.getName())))
@@ -430,12 +431,12 @@ public class MetadataUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<ForeignKey> retrieveForeignKeys(
+    public List<ForeignKey<String>> retrieveForeignKeys(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<ForeignKey> result = null;
+        @Nullable List<ForeignKey<String>> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -444,7 +445,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<ForeignKey>(0);
+            result = new ArrayList<ForeignKey<String>>(0);
         }
 
         return result;
@@ -458,25 +459,25 @@ public class MetadataUtils
      */
     @NotNull
     @SuppressWarnings("unused")
-    protected List<ForeignKey> retrieveForeignKeys(
+    protected List<ForeignKey<String>> retrieveForeignKeys(
         @NotNull final String sourceTableName,
         @NotNull final String targetTableName,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<ForeignKey> result = null;
+        @Nullable List<ForeignKey<String>> result = null;
 
-        @Nullable final Table<String> t_Table = metadataManager.getTableDAO().findByName(sourceTableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(sourceTableName);
 
         if (t_Table != null)
         {
-            for (@Nullable final ForeignKey t_ForeignKey : t_Table.getForeignKeys())
+            for (@Nullable final ForeignKey<String> t_ForeignKey : t_Table.getForeignKeys())
             {
                 if (   (t_ForeignKey != null)
                     && (t_ForeignKey.getTargetTableName().equals(targetTableName)))
                 {
                     if (result == null)
                     {
-                        result = new ArrayList<ForeignKey>(1);
+                        result = new ArrayList<ForeignKey<String>>(1);
                     }
                     result.add(t_ForeignKey);
                 }
@@ -485,7 +486,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<ForeignKey>(0);
+            result = new ArrayList<ForeignKey<String>>(0);
         }
 
         return result;
@@ -552,13 +553,13 @@ public class MetadataUtils
     {
         @Nullable List<Attribute> result = null;
 
-        @Nullable final Table<String> t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
             boolean t_bIsClob;
 
-            for (@Nullable final Attribute t_Attribute : t_Table.getAttributes())
+            for (@Nullable final Attribute<String> t_Attribute : t_Table.getAttributes())
             {
                 t_bIsClob = false;
 
@@ -601,9 +602,9 @@ public class MetadataUtils
         @Nullable final Collection<Property> properties,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
-        @NotNull List<Property> result = new ArrayList<Property>();
+        @NotNull final List<Property> result = new ArrayList<Property>();
 
-        Iterator<Property> t_itPropertyIterator =
+        @NotNull final Iterator<Property> t_itPropertyIterator =
             (properties != null)
             ? properties.iterator() : new ArrayList<Property>().iterator();
 
@@ -640,17 +641,17 @@ public class MetadataUtils
      */
     @SuppressWarnings("unused")
     public boolean contain(
-        @Nullable final Collection<Attribute> attributes,
+        @Nullable final Collection<Attribute<String>> attributes,
         @NotNull final String attributeName,
         @NotNull final String tableName)
     {
         boolean result = false;
 
-        Iterator<Attribute> t_Iterator =
+        @NotNull final Iterator<Attribute<String>> t_Iterator =
             (attributes != null)
-            ? attributes.iterator() : new ArrayList<Attribute>().iterator();
+            ? attributes.iterator() : new ArrayList<Attribute<String>>().iterator();
 
-        @Nullable Attribute t_CurrentItem;
+        @Nullable Attribute<String> t_CurrentItem;
 
         while  (t_Iterator.hasNext())
         {
@@ -678,7 +679,7 @@ public class MetadataUtils
      * @return <code>true</code> in such case.
      */
     public boolean match(
-        @Nullable final Attribute attribute,
+        @Nullable final Attribute<String> attribute,
         @NotNull final String name,
         @NotNull final String tableName)
     {
@@ -849,7 +850,7 @@ public class MetadataUtils
     {
         boolean result;
 
-        String t_strTableInLowerCase = tableName.trim().toLowerCase(Locale.US);
+        final String t_strTableInLowerCase = tableName.trim().toLowerCase(Locale.US);
 
         result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
 

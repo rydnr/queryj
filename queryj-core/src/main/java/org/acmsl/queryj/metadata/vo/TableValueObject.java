@@ -48,7 +48,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public final class TableValueObject
-    extends AbstractTable<String>
+    extends AbstractTable<String, Attribute<String>>
 {
 
     private static final long serialVersionUID = -1699360842530765122L;
@@ -68,10 +68,10 @@ public final class TableValueObject
     public TableValueObject(
         @NotNull final String name,
         @Nullable final String comment,
-        @NotNull final List<Attribute> primaryKey,
-        @NotNull final List<Attribute> attributes,
-        @NotNull final List<ForeignKey> foreignKeys,
-        @Nullable final Table<String> parentTable,
+        @NotNull final List<Attribute<String>> primaryKey,
+        @NotNull final List<Attribute<String>> attributes,
+        @NotNull final List<ForeignKey<String>> foreignKeys,
+        @Nullable final Table<String, Attribute<String>> parentTable,
         final boolean isStatic,
         final boolean voDecorated)
     {

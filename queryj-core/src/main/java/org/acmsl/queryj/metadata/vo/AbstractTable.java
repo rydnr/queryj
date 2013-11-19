@@ -56,8 +56,8 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class AbstractTable<V>
-    implements Table<V>
+public abstract class AbstractTable<V, A extends Attribute<V>>
+    implements Table<V, A>
 {
     /**
      * The name.
@@ -72,22 +72,22 @@ public abstract class AbstractTable<V>
     /**
      * The primary key attributes.
      */
-    private List<Attribute> m__lPrimaryKey;
+    private List<A> m__lPrimaryKey;
 
     /**
      * The attribute list.
      */
-    private List<Attribute> m__lAttributes;
+    private List<A> m__lAttributes;
 
     /**
      * The parent table, if any.
      */
-    private Table<V> m__ParentTable;
+    private Table<V, A> m__ParentTable;
 
     /**
      * The foreign keys.
      */
-    private List<ForeignKey> m__lForeignKeys;
+    private List<ForeignKey<V>> m__lForeignKeys;
 
     /**
      * Flag indicating whether the table is static.
@@ -128,10 +128,10 @@ public abstract class AbstractTable<V>
     protected AbstractTable(
         @NotNull final V name,
         @Nullable final V comment,
-        @NotNull final List<Attribute> primaryKey,
-        @NotNull final List<Attribute> attributes,
-        @NotNull final List<ForeignKey> foreignKeys,
-        @Nullable final Table<V> parentTable,
+        @NotNull final List<A> primaryKey,
+        @NotNull final List<A> attributes,
+        @NotNull final List<ForeignKey<V>> foreignKeys,
+        @Nullable final Table<V, A> parentTable,
         final boolean isStatic,
         final boolean voDecorated)
     {
@@ -208,7 +208,7 @@ public abstract class AbstractTable<V>
      * Specifies the primary key attributes.
      * @param attrs the primary key attributes.
      */
-    protected final void immutableSetPrimaryKey(@NotNull final List<Attribute> attrs)
+    protected final void immutableSetPrimaryKey(@NotNull final List<A> attrs)
     {
         m__lPrimaryKey = attrs;
     }
@@ -218,7 +218,7 @@ public abstract class AbstractTable<V>
      * @param attrs the primary key attributes.
      */
     @SuppressWarnings("unused")
-    protected void setPrimaryKey(@NotNull final List<Attribute> attrs)
+    protected void setPrimaryKey(@NotNull final List<A> attrs)
     {
         immutableSetPrimaryKey(attrs);
     }
@@ -229,7 +229,7 @@ public abstract class AbstractTable<V>
      */
     @Nullable
     @SuppressWarnings("unused")
-    protected final List<Attribute> immutableGetPrimaryKey()
+    protected final List<A> immutableGetPrimaryKey()
     {
         return m__lPrimaryKey;
     }
@@ -240,13 +240,13 @@ public abstract class AbstractTable<V>
      */
     @NotNull
     @Override
-    public List<Attribute> getPrimaryKey()
+    public List<A> getPrimaryKey()
     {
-        List<Attribute> result = immutableGetPrimaryKey();
+        @Nullable List<A> result = immutableGetPrimaryKey();
 
         if (result == null)
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<A>(0);
             setPrimaryKey(result);
         }
 
@@ -257,7 +257,7 @@ public abstract class AbstractTable<V>
      * Specifies the attributes.
      * @param attrs the attributes.
      */
-    protected final void immutableSetAttributes(final List<Attribute> attrs)
+    protected final void immutableSetAttributes(final List<A> attrs)
     {
         m__lAttributes = attrs;
     }
@@ -266,7 +266,7 @@ public abstract class AbstractTable<V>
      * Specifies the attributes.
      * @param attrs the attributes.
      */
-    protected void setAttributes(final List<Attribute> attrs)
+    protected void setAttributes(final List<A> attrs)
     {
         immutableSetAttributes(attrs);
     }
@@ -276,7 +276,7 @@ public abstract class AbstractTable<V>
      * @return such list.
      */
     @Nullable
-    protected final List<Attribute> immutableGetAttributes()
+    protected final List<A> immutableGetAttributes()
     {
         return m__lAttributes;
     }
@@ -287,13 +287,13 @@ public abstract class AbstractTable<V>
      */
     @NotNull
     @Override
-    public List<Attribute> getAttributes()
+    public List<A> getAttributes()
     {
-        @Nullable List<Attribute> result = immutableGetAttributes();
+        @Nullable List<A> result = immutableGetAttributes();
 
         if (result == null)
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<A>(0);
             setAttributes(result);
         }
 
@@ -304,7 +304,7 @@ public abstract class AbstractTable<V>
      * Specifies the foreign keys.
      * @param fks the List of {@link ForeignKey}s.
      */
-    protected final void immutableSetForeignKeys(@NotNull final List<ForeignKey> fks)
+    protected final void immutableSetForeignKeys(@NotNull final List<ForeignKey<V>> fks)
     {
         m__lForeignKeys = fks;
     }
@@ -313,7 +313,7 @@ public abstract class AbstractTable<V>
      * Specifies the foreign keys.
      * @param fks the List of {@link ForeignKey foreign keys}.
      */
-    protected void setForeignKeys(@NotNull final List<ForeignKey> fks)
+    protected void setForeignKeys(@NotNull final List<ForeignKey<V>> fks)
     {
         immutableSetForeignKeys(fks);
     }
@@ -323,7 +323,7 @@ public abstract class AbstractTable<V>
      * @return such information.
      */
     @Nullable
-    protected final List<ForeignKey> immutableGetForeignKeys()
+    protected final List<ForeignKey<V>> immutableGetForeignKeys()
     {
         return m__lForeignKeys;
     }
@@ -335,13 +335,13 @@ public abstract class AbstractTable<V>
     @NotNull
     @SuppressWarnings("unused")
     @Override
-    public List<ForeignKey> getForeignKeys()
+    public List<ForeignKey<V>> getForeignKeys()
     {
-        List<ForeignKey> result = immutableGetForeignKeys();
+        List<ForeignKey<V>> result = immutableGetForeignKeys();
 
         if (result == null)
         {
-            result = new ArrayList<ForeignKey>(0);
+            result = new ArrayList<ForeignKey<V>>(0);
             setForeignKeys(result);
         }
 
@@ -352,7 +352,7 @@ public abstract class AbstractTable<V>
      * Specifies the parent table.
      * @param parentTable the parent table.
      */
-    protected final void immutableSetParentTable(@Nullable final Table<V> parentTable)
+    protected final void immutableSetParentTable(@Nullable final Table<V, A> parentTable)
     {
         m__ParentTable = parentTable;
     }
@@ -362,7 +362,7 @@ public abstract class AbstractTable<V>
      * @param parentTable the parent table.
      */
     @SuppressWarnings("unused")
-    protected void setParentTable(@NotNull final Table<V> parentTable)
+    protected void setParentTable(@NotNull final Table<V, A> parentTable)
     {
         immutableSetParentTable(parentTable);
     }
@@ -373,7 +373,7 @@ public abstract class AbstractTable<V>
      */
     @Nullable
     @Override
-    public Table<V> getParentTable()
+    public Table<V, A> getParentTable()
     {
         return m__ParentTable;
     }
@@ -514,7 +514,7 @@ public abstract class AbstractTable<V>
      *                            from being compared to this object.
      */
     @Override
-    public int compareTo(final Table<V> o)
+    public int compareTo(final Table<V, A> o)
     {
         return compareThem(this, o);
     }
@@ -527,7 +527,7 @@ public abstract class AbstractTable<V>
      * 'greater' than the second's; 0 if they are equal; a negative number
      * otherwise.
      */
-    protected int compareThem(@NotNull final Table<V> first, @NotNull final Table<V> second)
+    protected int compareThem(@NotNull final Table<V, A> first, @NotNull final Table<V, A> second)
     {
         return ("" + first.getName()).compareToIgnoreCase("" + second.getName());
     }

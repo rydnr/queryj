@@ -43,6 +43,7 @@ import org.acmsl.queryj.metadata.MetadataUtils;
 import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.tools.DebugUtils;
 
@@ -186,9 +187,9 @@ public class CustomResultUtils
     @NotNull
     protected String[] retrieveExplicitlyEnabledResults()
     {
-        String[] result;
+        @NotNull final String[] result;
 
-        String property = System.getProperty(RESULTS_ENABLED);
+        @Nullable final String property = System.getProperty(RESULTS_ENABLED);
 
         if (property != null)
         {
@@ -209,9 +210,9 @@ public class CustomResultUtils
     @NotNull
     protected String[] retrieveExplicitlyDisabledResults()
     {
-        String[] result;
+        @NotNull final String[] result;
 
-        String property = System.getProperty(RESULTS_DISABLED);
+        @Nullable final String property = System.getProperty(RESULTS_DISABLED);
 
         if (property != null)
         {
@@ -251,14 +252,14 @@ public class CustomResultUtils
     {
         boolean result;
 
-        boolean t_bExplicitlyEnabled = Arrays.asList(resultsEnabled).contains(resultId);
+        final boolean t_bExplicitlyEnabled = Arrays.asList(resultsEnabled).contains(resultId);
 
         result = t_bExplicitlyEnabled;
         boolean t_bCheckDisabled = false;
 
         if (!t_bExplicitlyEnabled)
         {
-            List<String> t_lResultsDisabled = Arrays.asList(resultsDisabled);
+            final List<String> t_lResultsDisabled = Arrays.asList(resultsDisabled);
 
             if (   (resultsEnabled.length > 0)
                 || (t_lResultsDisabled.contains("*"))) // explicitly-enabled results imply
@@ -293,7 +294,7 @@ public class CustomResultUtils
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
-        String result;
+        @Nullable final String result;
 
         result = retrieveTable(resultElement.getId(), customSqlProvider, metadataManager);
 
@@ -319,8 +320,7 @@ public class CustomResultUtils
         {
             if (DebugUtils.getInstance().debugEnabledForResultId(resultId))
             {
-                @SuppressWarnings("unused")
-                int a = 1;
+                @SuppressWarnings("unused") final int a = 1;
             }
 
             String t_strDao;
@@ -333,7 +333,7 @@ public class CustomResultUtils
 
                     if (t_strDao != null)
                     {
-                        @Nullable final Table<String> t_Table =
+                        @Nullable final Table<String, Attribute<String>> t_Table =
                             metadataManager.getTableDAO().findByDAO(t_strDao);
 
                         if  (t_Table != null)
@@ -391,7 +391,7 @@ public class CustomResultUtils
 
         String t_strDao = null;
 
-        for (@Nullable Sql t_Sql : findSqlElementsByResultId(resultElement.getId(), customSqlProvider))
+        for (@Nullable final Sql t_Sql : findSqlElementsByResultId(resultElement.getId(), customSqlProvider))
         {
             if (t_Sql != null)
             {
@@ -608,11 +608,11 @@ public class CustomResultUtils
     @Nullable
     protected String extractVoName(@NotNull final Result customResult)
     {
-        String result = customResult.getClassValue();
+        @Nullable String result = customResult.getClassValue();
 
         if (result != null)
         {
-            String[] t_astrParts = result.split("\\.");
+            @NotNull final String[] t_astrParts = result.split("\\.");
 
             if (t_astrParts.length > 0)
             {

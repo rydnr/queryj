@@ -89,7 +89,7 @@ public class CachingForeignKeyDecorator
      */
     @SuppressWarnings("unused")
     public CachingForeignKeyDecorator(
-        @NotNull final ForeignKey foreignKey,
+        @NotNull final ForeignKey<String> foreignKey,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -108,10 +108,9 @@ public class CachingForeignKeyDecorator
      * @param decoratorFactory the {@link DecoratorFactory} implementation.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
-    @SuppressWarnings("unused")
-     protected CachingForeignKeyDecorator(
+    protected CachingForeignKeyDecorator(
         @NotNull final String sourceTableName,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final String targetTableName,
         final boolean allowsNull,
         @NotNull final MetadataManager metadataManager,

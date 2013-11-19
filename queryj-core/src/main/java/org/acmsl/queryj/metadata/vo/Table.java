@@ -54,9 +54,9 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface Table<V>
+public interface Table<V, A extends Attribute<V>>
     extends Serializable,
-            Comparable<Table<V>>
+            Comparable<Table<V, A>>
 {
     /**
      * Retrieves the table name.
@@ -77,28 +77,28 @@ public interface Table<V>
      * @return such list.
      */
     @NotNull
-    List<Attribute> getPrimaryKey();
+    List<A> getPrimaryKey();
 
     /**
      * Retrieves the attributes.
      * @return such list.
      */
     @NotNull
-    List<Attribute> getAttributes();
+    List<A> getAttributes();
 
     /**
      * Retrieves the {@link org.acmsl.queryj.metadata.vo.ForeignKey foreign keys}.
      * @return such list.
      */
     @NotNull
-    List<ForeignKey> getForeignKeys();
+    List<ForeignKey<V>> getForeignKeys();
 
     /**
      * Retrieves the parent table.
      * @return such table.
      */
     @Nullable
-    Table<V> getParentTable();
+    Table<V, A> getParentTable();
 
     /**
      * Retrieves whether the table contains static values or not.

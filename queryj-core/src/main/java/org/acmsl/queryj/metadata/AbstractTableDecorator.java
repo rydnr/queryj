@@ -86,13 +86,13 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public abstract class AbstractTableDecorator
-    extends     AbstractTable<DecoratedString>
+    extends     AbstractTable<DecoratedString, Attribute<DecoratedString>>
     implements  TableDecorator
 {
     /**
      * The decorated table.
      */
-    private Table<String> m__Table;
+    private Table<String, Attribute<String>> m__Table;
 
     /**
      * The metadata type manager.
@@ -113,17 +113,17 @@ public abstract class AbstractTableDecorator
      * The foreign keys.
      */
     @SuppressWarnings("unused")
-    private List<ForeignKey> m__lForeignKeys;
+    private List<ForeignKey<DecoratedString>> m__lForeignKeys;
 
     /**
      * The parent foreign key.
      */
-    private ForeignKey m__ParentForeignKey;
+    private ForeignKey<DecoratedString> m__ParentForeignKey;
 
     /**
      * The child's attributes.
      */
-    private List<Attribute> m__lChildAttributes;
+    private List<Attribute<DecoratedString>> m__lChildAttributes;
 
     /**
      * A flag indicating whether the attributes should be cleaned up.
@@ -140,7 +140,7 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     public AbstractTableDecorator(
-        @NotNull final Table<String> table,
+        @NotNull final Table<String, Attribute<String>> table,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -174,12 +174,12 @@ public abstract class AbstractTableDecorator
      * @param customSqlProvider the {@link CustomSqlProvider custom-sql provider}.
      */
     public AbstractTableDecorator(
-        @NotNull final Table<String> table,
+        @NotNull final Table<String, Attribute<String>> table,
         @NotNull final String name,
-        @NotNull final List<Attribute> primaryKey,
-        @NotNull final List<Attribute> attributes,
-        @NotNull final List<ForeignKey> foreignKeys,
-        @Nullable final Table<String> parentTable,
+        @NotNull final List<Attribute<String>> primaryKey,
+        @NotNull final List<Attribute<String>> attributes,
+        @NotNull final List<ForeignKey<String>> foreignKeys,
+        @Nullable final Table<String, Attribute<String>> parentTable,
         final boolean isStatic,
         final boolean voDecorated,
         @NotNull final MetadataManager metadataManager,
@@ -189,9 +189,9 @@ public abstract class AbstractTableDecorator
         super(
             new DecoratedString(name),
             new DecoratedString((table.getComment() != null) ? table.getComment() : ""),
-            primaryKey,
-            attributes,
-            foreignKeys,
+            new ArrayList<Attribute<DecoratedString>>(0),
+            new ArrayList<Attribute<DecoratedString>>(0),
+            new ArrayList<ForeignKey<DecoratedString>>(0),
             (parentTable != null)
             ? new CachingTableDecorator(parentTable, metadataManager, decoratorFactory, customSqlProvider)
             : null,
@@ -199,6 +199,9 @@ public abstract class AbstractTableDecorator
             voDecorated);
 
         immutableSetTable(table);
+        immutableSetPrimaryKey(decorateAttributes(primaryKey, metadataManager, decoratorFactory));
+        immutableSetAttributes(decorateAttributes(attributes, metadataManager, decoratorFactory));
+        immutableSetForeignKeys(decorate(foreignKeys, metadataManager, decoratorFactory, customSqlProvider));
         immutableSetMetadataManager(metadataManager);
         immutableSetDecoratorFactory(decoratorFactory);
         immutableSetCustomSqlProvider(customSqlProvider);
@@ -208,7 +211,7 @@ public abstract class AbstractTableDecorator
      * Specifies the table to decorate.
      * @param table such table.
      */
-    protected final void immutableSetTable(@NotNull final Table<String> table)
+    protected final void immutableSetTable(@NotNull final Table<String, Attribute<String>> table)
     {
         this.m__Table = table;
     }
@@ -218,7 +221,7 @@ public abstract class AbstractTableDecorator
      * @param table such table.
      */
     @SuppressWarnings("unused")
-    protected void setTable(@NotNull final Table<String> table)
+    protected void setTable(@NotNull final Table<String, Attribute<String>> table)
     {
         immutableSetTable(table);
     }
@@ -228,7 +231,7 @@ public abstract class AbstractTableDecorator
      * @return such table.
      */
     @NotNull
-    protected final Table<String> immutableGetTable()
+    protected final Table<String, Attribute<String>> immutableGetTable()
     {
         return this.m__Table;
     }
@@ -238,7 +241,7 @@ public abstract class AbstractTableDecorator
      * @return such table.
      */
     @NotNull
-    public Table<String> getTable()
+    public Table<String, Attribute<String>> getTable()
     {
         return immutableGetTable();
     }
@@ -382,7 +385,7 @@ public abstract class AbstractTableDecorator
      * @param childAttributes the child attributes.
      */
     protected final void immutableSetChildAttributes(
-        final List<Attribute> childAttributes)
+        final List<Attribute<DecoratedString>> childAttributes)
     {
         m__lChildAttributes = childAttributes;
     }
@@ -393,7 +396,7 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     protected void setChildAttributes(
-        @NotNull final List<Attribute> childAttributes)
+        @NotNull final List<Attribute<DecoratedString>> childAttributes)
     {
         immutableSetChildAttributes(childAttributes);
     }
@@ -403,7 +406,7 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @Nullable
-    public List<Attribute> getChildAttributes()
+    public List<Attribute<DecoratedString>> getChildAttributes()
     {
         return m__lChildAttributes;
     }
@@ -415,7 +418,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     @Override
-    public List<ForeignKey> getForeignKeys()
+    public List<ForeignKey<DecoratedString>> getForeignKeys()
     {
         return getForeignKeys(getName(), getMetadataManager(), getDecoratorFactory(), getCustomSqlProvider());
     }
@@ -429,22 +432,20 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<ForeignKey> getForeignKeys(
+    protected List<ForeignKey<DecoratedString>> getForeignKeys(
         @NotNull final DecoratedString name,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        List<ForeignKey> result = immutableGetForeignKeys();
+        List<ForeignKey<DecoratedString>> result = immutableGetForeignKeys();
 
         if  (   (result == null)
              || (!areDecorated(result)))
         {
             result =
                 decorate(
-                    retrieveForeignKeys(
-                        name,
-                        metadataManager),
+                    retrieveForeignKeys(name, metadataManager),
                     metadataManager,
                     decoratorFactory,
                     customSqlProvider);
@@ -474,11 +475,11 @@ public abstract class AbstractTableDecorator
      * @param foreignKeys the {@link ForeignKey} list.
      * @return <code>true</code> in such case.
      */
-    protected boolean areDecorated(@NotNull final List<ForeignKey> foreignKeys)
+    protected <V> boolean areDecorated(@NotNull final List<ForeignKey<V>> foreignKeys)
     {
         boolean result = false;
 
-        for (@Nullable final ForeignKey t_ForeignKey : foreignKeys)
+        for (@Nullable final ForeignKey<V> t_ForeignKey : foreignKeys)
         {
             if (t_ForeignKey instanceof ForeignKeyDecorator)
             {
@@ -497,13 +498,12 @@ public abstract class AbstractTableDecorator
      * @return such foreign keys.
      */
     @NotNull
-    protected List<ForeignKey> retrieveForeignKeys(
-        @NotNull final DecoratedString name,
-        @NotNull final MetadataManager metadataManager)
+    protected List<ForeignKey<String>> retrieveForeignKeys(
+        @NotNull final DecoratedString name, @NotNull final MetadataManager metadataManager)
     {
-        @Nullable final List<ForeignKey> result;
+        @Nullable final List<ForeignKey<String>> result;
 
-        @Nullable final Table<String> t_Table = metadataManager.getTableDAO().findByName(name.getValue());
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(name.getValue());
 
         if (t_Table != null)
         {
@@ -511,7 +511,7 @@ public abstract class AbstractTableDecorator
         }
         else
         {
-            result = new ArrayList<ForeignKey>(0);
+            result = new ArrayList<ForeignKey<String>>(0);
         }
 
         return result;
@@ -527,7 +527,7 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected AttributeDecorator buildAttributeDecorator(
+    protected Attribute<DecoratedString> buildAttribute(
         @NotNull final String table,
         @NotNull final String name,
         @NotNull final MetadataManager metadataManager,
@@ -556,9 +556,9 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected ForeignKeyDecorator buildForeignKeyDecorator(
+    protected ForeignKey<DecoratedString> buildForeignKeyDecorator(
         @NotNull final String sourceTable,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final String targetTable,
         final boolean allowNull,
         @NotNull final MetadataManager metadataManager,
@@ -581,7 +581,7 @@ public abstract class AbstractTableDecorator
      * @param foreignKey such fk.
      */
     protected final void immutableSetParentForeignKey(
-        @NotNull final ForeignKey foreignKey)
+        @NotNull final ForeignKey<DecoratedString> foreignKey)
     {
         m__ParentForeignKey = foreignKey;
     }
@@ -591,7 +591,7 @@ public abstract class AbstractTableDecorator
      * @param foreignKey such fk.
      */
     protected void setParentForeignKey(
-        @NotNull final ForeignKey foreignKey)
+        @NotNull final ForeignKey<DecoratedString> foreignKey)
     {
         immutableSetParentForeignKey(foreignKey);
     }
@@ -601,7 +601,7 @@ public abstract class AbstractTableDecorator
      * @return such foreign key.
      */
     @Nullable
-    protected final ForeignKey immutableGetParentForeignKey()
+    protected final ForeignKey<DecoratedString> immutableGetParentForeignKey()
     {
         return m__ParentForeignKey;
     }
@@ -612,13 +612,13 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @Nullable
-    public ForeignKey getParentForeignKey()
+    public ForeignKey<DecoratedString> getParentForeignKey()
     {
-        @Nullable ForeignKey result = immutableGetParentForeignKey();
+        @Nullable ForeignKey<DecoratedString> result = immutableGetParentForeignKey();
 
         if  (result == null)
         {
-            @Nullable final Table<DecoratedString> t_Parent = getParentTable();
+            @Nullable final Table<DecoratedString, Attribute<DecoratedString>> t_Parent = getParentTable();
 
             if  (t_Parent != null)
             {
@@ -642,18 +642,19 @@ public abstract class AbstractTableDecorator
      * @return such foreign key.
      */
     @Nullable
-    protected ForeignKey retrieveParentForeignKey(
-        @NotNull final Table<DecoratedString> parent, @NotNull final List<ForeignKey> foreignKeys)
+    protected ForeignKey<DecoratedString> retrieveParentForeignKey(
+        @NotNull final Table<DecoratedString, Attribute<DecoratedString>> parent,
+        @NotNull final List<ForeignKey<DecoratedString>> foreignKeys)
     {
-        @Nullable ForeignKey result = null;
+        @Nullable ForeignKey<DecoratedString> result = null;
 
-        for (@Nullable final ForeignKey t_ForeignKey : foreignKeys)
+        for (@Nullable final ForeignKey<DecoratedString> t_ForeignKey : foreignKeys)
         {
             if (   (t_ForeignKey != null)
                  && (parent.getName().getValue().equalsIgnoreCase(
-                         t_ForeignKey.getTargetTableName()))
+                        t_ForeignKey.getTargetTableName().getValue()))
                  && (attributeListMatch(
-                getPrimaryKey(), t_ForeignKey.getAttributes())))
+                        getPrimaryKey(), t_ForeignKey.getAttributes())))
             {
                 result = t_ForeignKey;
                 break;
@@ -669,7 +670,8 @@ public abstract class AbstractTableDecorator
      * @param second the second attribute list.
      * @return <code>true</code> in such case.
      */
-    protected boolean attributeListMatch(final List first, final List second)
+    protected boolean attributeListMatch(
+        final List<Attribute<DecoratedString>> first, final List<Attribute<DecoratedString>> second)
     {
         boolean result =
             (   (first != null)
@@ -686,8 +688,8 @@ public abstract class AbstractTableDecorator
                 {
                     result =
                         attributesMatch(
-                            (Attribute) first.get(t_iIndex),
-                            (Attribute) second.get(t_iIndex));
+                            first.get(t_iIndex),
+                            second.get(t_iIndex));
 
                     if  (!result)
                     {
@@ -707,7 +709,7 @@ public abstract class AbstractTableDecorator
      * @return <code>true</code> in such case.
      */
     protected boolean attributesMatch(
-        @Nullable final Attribute first, @Nullable final Attribute second)
+        @Nullable final Attribute<DecoratedString> first, @Nullable final Attribute<DecoratedString> second)
     {
         boolean result =
             (   (first != null)
@@ -715,11 +717,11 @@ public abstract class AbstractTableDecorator
 
         if  (result)
         {
-            @NotNull final String t_strFirstName = first.getName();
+            @NotNull final String t_strFirstName = first.getName().getValue();
 
             result =
                 (   (first.getType().equals(second.getType()))
-                 && (t_strFirstName.equalsIgnoreCase(second.getName())));
+                 && (t_strFirstName.equalsIgnoreCase(second.getName().getValue())));
         }
 
         return result;
@@ -730,36 +732,27 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getNonReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getNonReadOnlyAttributes()
     {
         return
             getNonReadOnlyAttributes(
                 getAttributes(),
-                getMetadataManager(),
-                getDecoratorFactory(),
                 TableDecoratorHelper.getInstance());
     }
 
     /**
      * Retrieves the non-read-only attributes.
      * @param attributes the attributes.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getNonReadOnlyAttributes(
-        @NotNull final List<Attribute> attributes,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
+    protected List<Attribute<DecoratedString>> getNonReadOnlyAttributes(
+        @NotNull final List<Attribute<DecoratedString>> attributes,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull final List<Attribute> result =
-            decorateAttributes(
-                tableDecoratorHelper.removeReadOnly(attributes),
-                metadataManager,
-                decoratorFactory);
+        @NotNull final List<Attribute<DecoratedString>> result =
+            tableDecoratorHelper.removeReadOnly(attributes);
 
         Collections.sort(result);
 
@@ -772,7 +765,7 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Attribute> getAllNonReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getAllNonReadOnlyAttributes()
     {
         return
             getAllNonReadOnlyAttributes(
@@ -797,15 +790,15 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected List<Attribute> getAllNonReadOnlyAttributes(
+    protected List<Attribute<DecoratedString>> getAllNonReadOnlyAttributes(
         @NotNull final String name,
-        @NotNull final List<Attribute> attributes,
-        @Nullable final Table<DecoratedString> parentTable,
+        @NotNull final List<Attribute<DecoratedString>> attributes,
+        @Nullable final Table<DecoratedString, Attribute<DecoratedString>> parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull List<Attribute> result = attributes;
+        @NotNull List<Attribute<DecoratedString>> result = attributes;
 
         if  (parentTable != null)
         {
@@ -829,34 +822,28 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Attribute> getNonPrimaryKeyReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getNonPrimaryKeyReadOnlyAttributes()
     {
         return
             getNonPrimaryKeyReadOnlyAttributes(
                 getNonPrimaryKeyAttributes(),
-                getMetadataManager(),
-                getDecoratorFactory(),
                 TableDecoratorHelper.getInstance());
     }
 
     /**
      * Retrieves the non-read-only attributes.
      * @param nonPrimaryKeyAttributes the non-primary key attributes.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getNonPrimaryKeyReadOnlyAttributes(
-        @NotNull final List<Attribute> nonPrimaryKeyAttributes,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
+    protected List<Attribute<DecoratedString>> getNonPrimaryKeyReadOnlyAttributes(
+        @NotNull final List<Attribute<DecoratedString>> nonPrimaryKeyAttributes,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull final List<Attribute> result =
+        @NotNull final List<Attribute<DecoratedString>> result =
                 tableDecoratorHelper.removeReadOnly(
-                    decorateAttributes(nonPrimaryKeyAttributes, metadataManager, decoratorFactory));
+                    nonPrimaryKeyAttributes);
 
         Collections.sort(result);
 
@@ -868,34 +855,26 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonReadOnlyButExternallyManagedAttributes()
+    public List<Attribute<DecoratedString>> getAllNonReadOnlyButExternallyManagedAttributes()
     {
         return
             getAllNonReadOnlyButExternallyManagedAttributes(
-                getAttributes(),
-                getMetadataManager(),
-                getDecoratorFactory(),
-                TableDecoratorHelper.getInstance());
+                getAttributes(), TableDecoratorHelper.getInstance());
     }
 
     /**
      * Retrieves the non-read-only attributes.
      * @param attributes the attributes.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getAllNonReadOnlyButExternallyManagedAttributes(
-        @NotNull final List<Attribute> attributes,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
+    protected List<Attribute<DecoratedString>> getAllNonReadOnlyButExternallyManagedAttributes(
+        @NotNull final List<Attribute<DecoratedString>> attributes,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        List<Attribute> result =
-            getNonReadOnlyAttributes(
-                attributes, metadataManager, decoratorFactory, tableDecoratorHelper);
+        @NotNull List<Attribute<DecoratedString>> result =
+            getNonReadOnlyAttributes(attributes, tableDecoratorHelper);
 
         result = tableDecoratorHelper.removeExternallyManaged(result);
 
@@ -909,7 +888,7 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getNonParentAttributes()
+    public List<Attribute<DecoratedString>> getNonParentAttributes()
     {
         return
             getNonParentAttributes(
@@ -933,15 +912,15 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getNonParentAttributes(
+    protected List<Attribute<DecoratedString>> getNonParentAttributes(
         @NotNull final String name,
-        @NotNull final List<Attribute> attributes,
-        @Nullable final Table<DecoratedString> parentTable,
+        @NotNull final List<Attribute<DecoratedString>> attributes,
+        @Nullable final Table<DecoratedString, Attribute<DecoratedString>> parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull List<Attribute> result = attributes;
+        @NotNull List<Attribute<DecoratedString>> result = attributes;
 
         if  (parentTable != null)
         {
@@ -966,7 +945,7 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getNonParentPlusPkAttributes()
+    public List<Attribute<DecoratedString>> getNonParentPlusPkAttributes()
     {
         return
             getNonParentPlusPkAttributes(
@@ -990,15 +969,15 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getNonParentPlusPkAttributes(
+    protected List<Attribute<DecoratedString>> getNonParentPlusPkAttributes(
         @NotNull final String name,
-        @NotNull final List<Attribute> attributes,
-        @Nullable final Table<DecoratedString> parentTable,
+        @NotNull final List<Attribute<DecoratedString>> attributes,
+        @Nullable final Table<DecoratedString, Attribute<DecoratedString>> parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull List<Attribute> result = attributes;
+        @NotNull List<Attribute<DecoratedString>> result = attributes;
 
         if  (parentTable != null)
         {
@@ -1024,7 +1003,7 @@ public abstract class AbstractTableDecorator
      * @return the decorated attributes.
      */
     @NotNull
-    protected List<Attribute> decorateAttributes()
+    protected List<Attribute<DecoratedString>> decorateAttributes()
     {
         return
             decorateAttributes(
@@ -1039,8 +1018,8 @@ public abstract class AbstractTableDecorator
      * @return the decorated attributes.
      */
     @NotNull
-    protected List<Attribute> decorateAttributes(
-        @NotNull final List<Attribute> attributes,
+    protected List<Attribute<DecoratedString>> decorateAttributes(
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
@@ -1055,7 +1034,7 @@ public abstract class AbstractTableDecorator
      * @return the decorated attributes.
      */
     @NotNull
-    protected List<Attribute> decorateAttributes(
+    protected List<Attribute<DecoratedString>> decorateAttributes(
         @NotNull final String name,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -1068,7 +1047,7 @@ public abstract class AbstractTableDecorator
      * @return such information.
      */
     @NotNull
-    public List<Attribute> getAllAttributes()
+    public List<Attribute<DecoratedString>> getAllAttributes()
     {
         return
             getAllAttributes(
@@ -1087,15 +1066,15 @@ public abstract class AbstractTableDecorator
      * @return such information.
      */
     @NotNull
-    protected List<Attribute> getAllAttributes(
+    protected List<Attribute<DecoratedString>> getAllAttributes(
         @NotNull final String table,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        @Nullable final Table<DecoratedString> t_ParentTable = getParentTable();
+        @Nullable final Table<DecoratedString, Attribute<DecoratedString>> t_ParentTable = getParentTable();
 
         if  (t_ParentTable != null)
         {
@@ -1108,11 +1087,12 @@ public abstract class AbstractTableDecorator
             else
             {
                 t_ParentDecorator =
-                    createTableDecorator(
-                        t_ParentTable.getName().getValue(),
-                        metadataManager,
-                        decoratorFactory,
-                        customSqlProvider);
+                    (TableDecorator)
+                        createTableDecorator(
+                            t_ParentTable.getName().getValue(),
+                            metadataManager,
+                            decoratorFactory,
+                            customSqlProvider);
             }
 
             if (t_ParentDecorator != null)
@@ -1137,13 +1117,13 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Attribute> retrieveChildAttributes()
+    protected List<Attribute<DecoratedString>> retrieveChildAttributes()
     {
-        @Nullable List<Attribute> result = getChildAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getChildAttributes();
 
         if (result == null)
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<Attribute<DecoratedString>>(0);
         }
 
         return result;
@@ -1154,14 +1134,13 @@ public abstract class AbstractTableDecorator
      * @return such information.
      */
     @NotNull
-    public List<Attribute> getAttributes()
+    public List<Attribute<DecoratedString>> getAttributes()
     {
         return
             getAttributes(
                 getName().getValue(),
                 retrieveChildAttributes(),
                 getMetadataManager(),
-                getDecoratorFactory(),
                 getAttributesShouldBeCleanedUp());
     }
 
@@ -1170,27 +1149,21 @@ public abstract class AbstractTableDecorator
      * @param table the table name.
      * @param childAttributes the child's attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param attributesShouldBeCleanedUp whether the child attributes should be removed
      * from the attribute list.
      * @return such information.
      */
     @NotNull
-    protected List<Attribute> getAttributes(
+    protected List<Attribute<DecoratedString>> getAttributes(
         @NotNull final String table,
-        @NotNull final List<Attribute> childAttributes,
+        @NotNull final List<Attribute<DecoratedString>> childAttributes,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
         final boolean attributesShouldBeCleanedUp)
     {
-        @NotNull List<Attribute> result = super.getAttributes();
+        @NotNull List<Attribute<DecoratedString>> result = super.getAttributes();
 
         if (!alreadyDecorated(result))
         {
-            result =
-                decorateAttributes(
-                    result, metadataManager, decoratorFactory);
-        
             if  (attributesShouldBeCleanedUp)
             {
                 result =
@@ -1215,13 +1188,14 @@ public abstract class AbstractTableDecorator
      * @param attributes the {@link Attribute} list.
      * @return <code>true</code> in such case.
      */
-    protected boolean alreadyDecorated(@NotNull final List<Attribute> attributes)
+    protected <K> boolean alreadyDecorated(@NotNull final List<Attribute<K>> attributes)
     {
         boolean result = false;
 
-        for (@Nullable final Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<K> t_Attribute : attributes)
         {
-            if (t_Attribute instanceof AttributeDecorator)
+            if (   (t_Attribute != null)
+                && (t_Attribute.getName() instanceof DecoratedString))
             {
                 result = true;
                 break;
@@ -1236,7 +1210,7 @@ public abstract class AbstractTableDecorator
      * @return such information.
      */
     @Nullable
-    public Table<DecoratedString> getParentTable()
+    public Table<DecoratedString, Attribute<DecoratedString>> getParentTable()
     {
         return getParentTable(getTable().getParentTable(), getMetadataManager());
     }
@@ -1248,18 +1222,18 @@ public abstract class AbstractTableDecorator
      * @return such information.
      */
     @Nullable
-    protected Table<DecoratedString> getParentTable(
-        @Nullable final Table<String> parent, @NotNull final MetadataManager metadataManager)
+    protected Table<DecoratedString, Attribute<DecoratedString>> getParentTable(
+        @Nullable final Table<String, Attribute<String>> parent, @NotNull final MetadataManager metadataManager)
     {
-        @Nullable final Table<DecoratedString> result;
+        @Nullable final Table<DecoratedString, Attribute<DecoratedString>> result;
 
         if (parent != null)
         {
-            @Nullable final Table<DecoratedString> cached = super.getParentTable();
+            @Nullable final Table<DecoratedString, Attribute<DecoratedString>> cached = super.getParentTable();
 
             if  (cached == null)
             {
-                @Nullable final Table<String> t_Table =
+                @Nullable final Table<String, Attribute<String>> t_Table =
                     metadataManager.getTableDAO().findByName(parent.getName());
 
                 if (t_Table != null)
@@ -1299,14 +1273,14 @@ public abstract class AbstractTableDecorator
      * @return the cleaned-up attributes.
      */
     @NotNull
-    public List<Attribute> removeOverridden(
-        @NotNull final List<Attribute> firstAttributes,
-        @NotNull final List<Attribute> secondAttributes,
+    public List<Attribute<DecoratedString>> removeOverridden(
+        @NotNull final List<Attribute<DecoratedString>> firstAttributes,
+        @NotNull final List<Attribute<DecoratedString>> secondAttributes,
         @Nullable final String parentTableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull final List<Attribute> result =
+        @NotNull final List<Attribute<DecoratedString>> result =
             tableDecoratorHelper.removeOverridden(
                 firstAttributes,
                 secondAttributes,
@@ -1324,7 +1298,7 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected List<Attribute> sumUpParentAndChildAttributes()
+    protected List<Attribute<DecoratedString>> sumUpParentAndChildAttributes()
     {
         return
             sumUpParentAndChildAttributes(
@@ -1344,9 +1318,9 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected List<Attribute> sumUpParentAndChildAttributes(
+    protected List<Attribute<DecoratedString>> sumUpParentAndChildAttributes(
         @NotNull final String parentTable,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
@@ -1367,9 +1341,9 @@ public abstract class AbstractTableDecorator
      * @return such collection.
      */
     @NotNull
-    protected List<Attribute> sumUpParentAndChildAttributes(
-        @NotNull final List<Attribute> attributes,
-        @NotNull final List<Attribute> childAttributes,
+    protected List<Attribute<DecoratedString>> sumUpParentAndChildAttributes(
+        @NotNull final List<Attribute<DecoratedString>> attributes,
+        @NotNull final List<Attribute<DecoratedString>> childAttributes,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
         return
@@ -1391,10 +1365,10 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @Nullable
-    protected abstract TableDecorator createTableDecorator(
+    protected abstract Table<DecoratedString, Attribute<DecoratedString>> createTableDecorator(
         @Nullable final String parentTable,
-        @NotNull final List<Attribute> primaryKey,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> primaryKey,
+        @NotNull final List<Attribute<String>> attributes,
         final boolean isStatic,
         final boolean voDecorated,
         @NotNull final MetadataManager metadataManager,
@@ -1410,8 +1384,8 @@ public abstract class AbstractTableDecorator
      * @return such decorator.
      */
     @Nullable
-    protected abstract TableDecorator createTableDecorator(
-        @NotNull final Table<String> parentTable,
+    protected abstract Table<DecoratedString, Attribute<DecoratedString>> createTableDecorator(
+        @NotNull final Table<String, Attribute<String>> parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider);
@@ -1425,15 +1399,15 @@ public abstract class AbstractTableDecorator
      * @return such decorator.
      */
     @Nullable
-    protected TableDecorator createTableDecorator(
+    protected Table<DecoratedString, Attribute<DecoratedString>> createTableDecorator(
         @NotNull final String table,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @Nullable final TableDecorator result;
+        @Nullable final Table<DecoratedString, Attribute<DecoratedString>> result;
 
-        @Nullable final Table<String> t_Table =
+        @Nullable final Table<String, Attribute<String>> t_Table =
             metadataManager.getTableDAO().findByName(table);
 
         if (t_Table != null)
@@ -1456,7 +1430,8 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getNonParentNonExternallyManagedAttributes()
+    @Override
+    public List<Attribute<DecoratedString>> getNonParentNonExternallyManagedAttributes()
     {
         return
             getNonParentNonExternallyManagedAttributes(
@@ -1470,12 +1445,12 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Attribute> getNonParentNonExternallyManagedAttributes(
-        @NotNull final List<Attribute> nonParentAttributes)
+    protected List<Attribute<DecoratedString>> getNonParentNonExternallyManagedAttributes(
+        @NotNull final List<Attribute<DecoratedString>> nonParentAttributes)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        for (@Nullable final Attribute t_Attribute : nonParentAttributes)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : nonParentAttributes)
         {
             if  (   (t_Attribute != null)
                  && (!t_Attribute.isExternallyManaged()))
@@ -1495,7 +1470,7 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getNonParentNonExternallyManagedPlusPkAttributes()
+    public List<Attribute<DecoratedString>> getNonParentNonExternallyManagedPlusPkAttributes()
     {
         return
             getNonParentNonExternallyManagedPlusPkAttributes(
@@ -1511,13 +1486,13 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Attribute> getNonParentNonExternallyManagedPlusPkAttributes(
-        @NotNull final List<Attribute> nonParentAttributes,
-        @NotNull final List<Attribute> primaryKey)
+    protected List<Attribute<DecoratedString>> getNonParentNonExternallyManagedPlusPkAttributes(
+        @NotNull final List<Attribute<DecoratedString>> nonParentAttributes,
+        @NotNull final List<Attribute<DecoratedString>> primaryKey)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        for (@Nullable final Attribute t_Attribute : nonParentAttributes)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : nonParentAttributes)
         {
             if  (   (t_Attribute != null)
                  && (   (!t_Attribute.isExternallyManaged())
@@ -1537,7 +1512,7 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentAttributes()
     {
         return
             getAllParentAndNonParentAttributes(
@@ -1558,14 +1533,14 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Attribute> getAllParentAndNonParentAttributes(
-        @Nullable final Table<DecoratedString> parent,
-        @NotNull final List<Attribute> nonParentAttributes,
+    protected List<Attribute<DecoratedString>> getAllParentAndNonParentAttributes(
+        @Nullable final Table<DecoratedString, Attribute<DecoratedString>> parent,
+        @NotNull final List<Attribute<DecoratedString>> nonParentAttributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
         if  (parent != null)
         {
@@ -1578,11 +1553,12 @@ public abstract class AbstractTableDecorator
             else
             {
                 t_ParentDecorator =
-                    createTableDecorator(
-                        parent.getName().getValue(),
-                        metadataManager,
-                        decoratorFactory,
-                        customSqlProvider);
+                    (TableDecorator)
+                        createTableDecorator(
+                            parent.getName().getValue(),
+                            metadataManager,
+                            decoratorFactory,
+                            customSqlProvider);
             }
 
             if (t_ParentDecorator != null)
@@ -1604,7 +1580,7 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonExternallyManagedAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedAttributes()
     {
         return
             getAllParentAndNonParentNonExternallyManagedAttributes(
@@ -1627,23 +1603,24 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Attribute> getAllParentAndNonParentNonExternallyManagedAttributes(
-        @Nullable final Table<DecoratedString> parent,
-        @NotNull final List<Attribute> nonParentNonExternallyManagedAttributes,
+    protected List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedAttributes(
+        @Nullable final Table<DecoratedString, Attribute<DecoratedString>> parent,
+        @NotNull final List<Attribute<DecoratedString>> nonParentNonExternallyManagedAttributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
         if  (parent != null)
         {
             @Nullable final TableDecorator t_ParentDecorator =
-                createTableDecorator(
-                    parent.getName().getValue(),
-                    metadataManager,
-                    decoratorFactory,
-                    customSqlProvider);
+                (TableDecorator)
+                    createTableDecorator(
+                        parent.getName().getValue(),
+                        metadataManager,
+                        decoratorFactory,
+                        customSqlProvider);
 
             if (t_ParentDecorator != null)
             {
@@ -1663,7 +1640,7 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonExternallyManagedAttributes()
+    public List<Attribute<DecoratedString>> getAllNonExternallyManagedAttributes()
     {
         return getAllNonExternallyManagedAttributes(getAllAttributes());
     }
@@ -1674,11 +1651,12 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getAllNonExternallyManagedAttributes(@NotNull final List<Attribute> allAttributes)
+    protected List<Attribute<DecoratedString>> getAllNonExternallyManagedAttributes(
+        @NotNull final List<Attribute<DecoratedString>> allAttributes)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        for (@Nullable final Attribute t_Attribute : allAttributes)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : allAttributes)
         {
             if  (   (t_Attribute != null)
                  && (!t_Attribute.isExternallyManaged()))
@@ -1697,8 +1675,9 @@ public abstract class AbstractTableDecorator
      * plus the primary key.
      * @return such attributes.
      */
+    @Override
     @NotNull
-    public List<Attribute> getAllNonExternallyManagedPlusPkAttributes()
+    public List<Attribute<DecoratedString>> getAllNonExternallyManagedPlusPkAttributes()
     {
         return getAllNonExternallyManagedPlusPkAttributes(getAllAttributes(), getPrimaryKey());
     }
@@ -1711,12 +1690,12 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getAllNonExternallyManagedPlusPkAttributes(
-        @NotNull final List<Attribute> allAttributes, @NotNull final List<Attribute> primaryKey)
+    protected List<Attribute<DecoratedString>> getAllNonExternallyManagedPlusPkAttributes(
+        @NotNull final List<Attribute<DecoratedString>> allAttributes, @NotNull final List<Attribute<DecoratedString>> primaryKey)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        for (@Nullable final Attribute t_Attribute : allAttributes)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : allAttributes)
         {
             if  (   (t_Attribute != null)
                  && (   (!t_Attribute.isExternallyManaged())
@@ -1737,7 +1716,7 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes()
+    public List<Attribute<DecoratedString>> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
         return getAllNonExternallyManagedNonReadOnlyPlusPkAttributes(getAllAttributes(), getPrimaryKey());
     }
@@ -1750,12 +1729,12 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes(
-        @NotNull final List<Attribute> allAttributes, @NotNull final List<Attribute> primaryKey)
+    protected List<Attribute<DecoratedString>> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes(
+        @NotNull final List<Attribute<DecoratedString>> allAttributes, @NotNull final List<Attribute<DecoratedString>> primaryKey)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        for (@Nullable final Attribute t_Attribute : allAttributes)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : allAttributes)
         {
             if  (   (t_Attribute != null)
                  && (   (   (!t_Attribute.isExternallyManaged())
@@ -1777,11 +1756,11 @@ public abstract class AbstractTableDecorator
      * @param attribute the attribute.
      * @return <tt>true</tt> in such case.
      */
-    protected boolean isPartOf(@NotNull final List<Attribute> list, @NotNull final Attribute attribute)
+    protected boolean isPartOf(@NotNull final List<Attribute<DecoratedString>> list, @NotNull final Attribute<DecoratedString> attribute)
     {
         boolean result = false;
 
-        for (@Nullable final Attribute t_Attribute : list)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : list)
         {
             if  (attributesMatch(t_Attribute, attribute))
             {
@@ -1799,9 +1778,9 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes()
     {
-        @NotNull List<Attribute> result =
+        @NotNull List<Attribute<DecoratedString>> result =
             getAllParentAndNonParentNonExternallyManagedAttributes();
 
         result = removeReadOnly(result, TableDecoratorHelper.getInstance());
@@ -1818,8 +1797,8 @@ public abstract class AbstractTableDecorator
      * @return the list without the read-only attributes.
      */
     @NotNull
-    protected List<Attribute> removeReadOnly(
-        @NotNull final List<Attribute> attributes,
+    protected List<Attribute<DecoratedString>> removeReadOnly(
+        @NotNull final List<Attribute<DecoratedString>> attributes,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
         return tableDecoratorHelper.removeReadOnly(attributes);
@@ -1831,9 +1810,9 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentNonReadOnlyAttributes()
     {
-        @NotNull List<Attribute> result = getAllParentAndNonParentAttributes();
+        @NotNull List<Attribute<DecoratedString>> result = getAllParentAndNonParentAttributes();
 
         result = removeReadOnly(result, TableDecoratorHelper.getInstance());
 
@@ -1847,7 +1826,7 @@ public abstract class AbstractTableDecorator
      * @return such information.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentReadOnlyAttributes()
     {
         return
             getAllParentAndNonParentReadOnlyAttributes(
@@ -1860,10 +1839,10 @@ public abstract class AbstractTableDecorator
      * @return such information.
      */
     @NotNull
-    protected List<Attribute> getAllParentAndNonParentReadOnlyAttributes(
+    protected List<Attribute<DecoratedString>> getAllParentAndNonParentReadOnlyAttributes(
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull final List<Attribute> result =
+        @NotNull final List<Attribute<DecoratedString>> result =
             tableDecoratorHelper.removeNonReadOnlyAttributes(
                 getAllParentAndNonParentAttributes());
 
@@ -1878,7 +1857,7 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
         return
             getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
@@ -1903,24 +1882,25 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
-        @Nullable final Table<DecoratedString> parent,
-        @NotNull final List<Attribute> nonParentNonExternallyManagedPlusPkAttributes,
+    protected List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
+        @Nullable final Table<DecoratedString, Attribute<DecoratedString>> parent,
+        @NotNull final List<Attribute<DecoratedString>> nonParentNonExternallyManagedPlusPkAttributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
         if  (parent != null)
         {
             final TableDecorator t_ParentDecorator =
-                createTableDecorator(
-                    parent.getName().getValue(),
-                    metadataManager,
-                    decoratorFactory,
-                    customSqlProvider);
+                (TableDecorator)
+                    createTableDecorator(
+                        parent.getName().getValue(),
+                        metadataManager,
+                        decoratorFactory,
+                        customSqlProvider);
 
             if (t_ParentDecorator != null)
             {
@@ -1944,7 +1924,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     @Override
-    public List<Table<DecoratedString>> getAllParentTables()
+    public List<Table<DecoratedString, Attribute<DecoratedString>>> getAllParentTables()
     {
         return getAllParentTables(getName().getValue(), getMetadataManager());
     }
@@ -1956,17 +1936,17 @@ public abstract class AbstractTableDecorator
      * @return such tables.
      */
     @NotNull
-    protected List<Table<DecoratedString>> getAllParentTables(
+    protected List<Table<DecoratedString, Attribute<DecoratedString>>> getAllParentTables(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final List<Table<DecoratedString>> result = new ArrayList<Table<DecoratedString>>(0);
+        @NotNull final List<Table<DecoratedString, Attribute<DecoratedString>>> result = new ArrayList<Table<DecoratedString, Attribute<DecoratedString>>>(0);
 
-        @Nullable final Table<String> t_Table =
+        @Nullable final Table<String, Attribute<String>> t_Table =
             metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
-            @Nullable Table<String> t_Parent;
+            @Nullable Table<String, Attribute<String>> t_Parent;
 
             do
             {
@@ -1996,9 +1976,9 @@ public abstract class AbstractTableDecorator
      */
     @Override
     @NotNull
-    public List<Row> getStaticContent()
+    public List<Row<DecoratedString>> getStaticContent()
     {
-        List<Row> result = null;
+        List<Row<DecoratedString>> result = null;
 
         try
         {
@@ -2023,7 +2003,7 @@ public abstract class AbstractTableDecorator
 
         if (result == null)
         {
-            result = new ArrayList<Row>(0);
+            result = new ArrayList<Row<DecoratedString>>(0);
         }
         else
         {
@@ -2054,20 +2034,26 @@ public abstract class AbstractTableDecorator
      * @throws SQLException if the operation fails.
      */
     @NotNull
-    protected List<Row> retrieveStaticContent(
+    protected List<Row<DecoratedString>> retrieveStaticContent(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
         throws SQLException
     {
-        List<Row> result =
+        @NotNull final List<Row<DecoratedString>> result;
+
+        @Nullable final List<Row<String>> aux =
             daoTemplateUtils.queryContents(
                 tableName, metadataManager, decoratorFactory);
 
-        if (result == null)
+        if (aux == null)
         {
-            result = new ArrayList<Row>(0);
+            result = new ArrayList<Row<DecoratedString>>(0);
+        }
+        else
+        {
+            result = decorate(aux, metadataManager, decoratorFactory);
         }
 
         return result;
@@ -2091,7 +2077,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<Sql> getDynamicQueries(
-        @NotNull final Table<String> table, @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final Table<String, Attribute<String>> table, @NotNull final CustomSqlProvider customSqlProvider)
     {
         return getDynamicQueries(table.getName(), customSqlProvider.getSqlDAO());
     }
@@ -2118,7 +2104,7 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getNonPrimaryKeyAttributes()
+    public List<Attribute<DecoratedString>> getNonPrimaryKeyAttributes()
     {
         return filterAttributes(getAttributes(), getPrimaryKey());
     }
@@ -2128,7 +2114,7 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getReadOnlyAttributes()
     {
         return filterReadOnlyAttributes(getAttributes());
     }
@@ -2139,11 +2125,12 @@ public abstract class AbstractTableDecorator
      * @return the read-only subset.
      */
     @NotNull
-    protected List<Attribute> filterReadOnlyAttributes(@NotNull final List<Attribute> attributes)
+    protected List<Attribute<DecoratedString>> filterReadOnlyAttributes(
+        @NotNull final List<Attribute<DecoratedString>> attributes)
     {
-        @NotNull final List<Attribute> result =  new ArrayList<Attribute>(0);
+        @NotNull final List<Attribute<DecoratedString>> result =  new ArrayList<Attribute<DecoratedString>>(0);
 
-        for (@Nullable final Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
         {
             if (   (t_Attribute != null)
                 && (t_Attribute.isReadOnly()))
@@ -2163,7 +2150,7 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Attribute> getNonPrimaryKeyNonReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getNonPrimaryKeyNonReadOnlyAttributes()
     {
         return filterAttributes(filterAttributes(getAttributes(), getPrimaryKey()), getReadOnlyAttributes());
     }
@@ -2175,10 +2162,11 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Attribute> filterAttributes(
-        @NotNull final List<Attribute> attributes, @NotNull final List<Attribute> toExclude)
+    protected <K> List<Attribute<K>> filterAttributes(
+        @NotNull final List<Attribute<K>> attributes,
+        @NotNull final List<Attribute<K>> toExclude)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>(attributes);
+        @NotNull final List<Attribute<K>> result = new ArrayList<Attribute<K>>(attributes);
 
         result.removeAll(toExclude);
 
@@ -2205,7 +2193,8 @@ public abstract class AbstractTableDecorator
      * @return such list of {@link Sql} elements.
      */
     @NotNull
-    protected List<Sql> getCustomSelects(@NotNull final Table<String> table, @NotNull final CustomSqlProvider customSqlProvider)
+    protected List<Sql> getCustomSelects(
+        @NotNull final Table<String, Attribute<String>> table, @NotNull final CustomSqlProvider customSqlProvider)
     {
         return getCustomSelects(table, customSqlProvider.getSqlDAO());
     }
@@ -2217,7 +2206,7 @@ public abstract class AbstractTableDecorator
      * @return such list of {@link Sql} elements.
      */
     @NotNull
-    protected List<Sql> getCustomSelects(@NotNull final Table<String> table, @NotNull final SqlDAO sqlDAO)
+    protected List<Sql> getCustomSelects(@NotNull final Table<String, Attribute<String>> table, @NotNull final SqlDAO sqlDAO)
     {
         @NotNull final List<Sql> result = sqlDAO.findSelects(table.getName());
 
@@ -2245,7 +2234,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<Sql> getCustomSelectsForUpdate(
-        @NotNull final Table<String> table, @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final Table<String, Attribute<String>> table, @NotNull final CustomSqlProvider customSqlProvider)
     {
         return getCustomSelectsForUpdate(table, customSqlProvider.getSqlDAO());
     }
@@ -2257,7 +2246,7 @@ public abstract class AbstractTableDecorator
      * @return such list of {@link Sql} elements.
      */
     @NotNull
-    protected List<Sql> getCustomSelectsForUpdate(@NotNull final Table<String> table, @NotNull final SqlDAO sqlDAO)
+    protected List<Sql> getCustomSelectsForUpdate(@NotNull final Table<String, Attribute<String>> table, @NotNull final SqlDAO sqlDAO)
     {
         @NotNull final List<Sql> result = sqlDAO.findSelectsForUpdate(table.getName());
 
@@ -2335,7 +2324,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<Sql> getCustomUpdatesOrInserts(
-        @NotNull final Table<String> table, @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final Table<String, Attribute<String>> table, @NotNull final CustomSqlProvider customSqlProvider)
     {
         return getCustomUpdatesOrInserts(table.getName(), customSqlProvider.getSqlDAO());
     }
@@ -2381,7 +2370,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<ResultDecorator> getCustomResults(
-        @NotNull final Table<String> table,
+        @NotNull final Table<String, Attribute<String>> table,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -2524,15 +2513,16 @@ public abstract class AbstractTableDecorator
      * @return the decorated version.
      */
     @NotNull
-    protected List<ForeignKey> decorate(
-        @NotNull final List<ForeignKey> foreignKeys,
+    protected List<ForeignKey<DecoratedString>> decorate(
+        @NotNull final List<ForeignKey<String>> foreignKeys,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @NotNull final List<ForeignKey> result = new ArrayList<ForeignKey>(foreignKeys.size());
+        @NotNull final List<ForeignKey<DecoratedString>> result =
+            new ArrayList<ForeignKey<DecoratedString>>(foreignKeys.size());
 
-        for (@Nullable final ForeignKey t_ForeignKey : foreignKeys)
+        for (@Nullable final ForeignKey<String> t_ForeignKey : foreignKeys)
         {
             if (t_ForeignKey != null)
             {
@@ -2552,8 +2542,8 @@ public abstract class AbstractTableDecorator
      * @return the decorated version.
      */
     @NotNull
-    protected ForeignKeyDecorator decorate(
-        @NotNull final ForeignKey foreignKey,
+    protected ForeignKey<DecoratedString> decorate(
+        @NotNull final ForeignKey<String> foreignKey,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -2567,30 +2557,29 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<AttributeDecorator> getAllExternallyManagedAttributes()
+    public List<Attribute<DecoratedString>> getAllExternallyManagedAttributes()
     {
-        return getAllExternallyManagedAttributes(getAllParentAndNonParentAttributes(), getMetadataManager());
+        return getAllExternallyManagedAttributes(getAllParentAndNonParentAttributes());
     }
 
 
     /**
      * Retrieves the externally-managed attributes.
      * @param attributes the attributes (including parent's).
-     * @param metadataManager the {@link MetadataManager} instance.
      * @return such information.
      */
     @NotNull
-    protected List<AttributeDecorator> getAllExternallyManagedAttributes(
-        @NotNull final List<Attribute> attributes, @NotNull final MetadataManager metadataManager)
+    protected List<Attribute<DecoratedString>> getAllExternallyManagedAttributes(
+        @NotNull final List<Attribute<DecoratedString>> attributes)
     {
-        @NotNull final List<AttributeDecorator> result = new ArrayList<AttributeDecorator>();
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        for (@Nullable final Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
         {
             if (   (t_Attribute != null)
                 && (t_Attribute.isExternallyManaged()))
             {
-                result.add(decorate(t_Attribute, metadataManager));
+                result.add(t_Attribute);
             }
         }
 
@@ -2606,8 +2595,8 @@ public abstract class AbstractTableDecorator
      * @return the decorated attribute.
      */
     @NotNull
-    protected AttributeDecorator decorate(
-        @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager)
+    protected Attribute<DecoratedString> decorate(
+        @NotNull final Attribute<String> attribute, @NotNull final MetadataManager metadataManager)
     {
         return new CachingAttributeDecorator(attribute, metadataManager);
     }
@@ -2629,12 +2618,12 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected List<Result> getDifferentCustomResults(
-        @NotNull final Table<String> table, @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final Table<String, Attribute<String>> table, @NotNull final CustomSqlProvider customSqlProvider)
     {
         return
             getDifferentCustomResults(
                 table.getName(),
-                getName().getVoName(),
+                getName().getVoName().getValue(),
                 customSqlProvider.getSqlDAO(),
                 customSqlProvider.getSqlResultDAO(),
                 getMetadataManager(),
@@ -2720,6 +2709,34 @@ public abstract class AbstractTableDecorator
         return result;
     }
 
+    /**
+     * Decorates given rows.
+     * @param rows the rows to decorate.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return the list of decorated rows.
+     */
+    @NotNull protected List<Row<DecoratedString>> decorate(
+        @NotNull final List<Row<String>> rows,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        @NotNull final List<Row<DecoratedString>> result = new ArrayList<Row<DecoratedString>>(rows.size());
+
+        for (@Nullable final Row<String> row : rows)
+        {
+            if (row != null)
+            {
+                result.add(new CachingRowDecorator(row, metadataManager, decoratorFactory));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Retrieves the string representation.
+     * @return such text.
+     */
     @Override
     @NotNull
     public String toString()

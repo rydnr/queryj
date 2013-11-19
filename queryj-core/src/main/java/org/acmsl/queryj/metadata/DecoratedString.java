@@ -52,6 +52,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -141,9 +142,9 @@ public class DecoratedString
      * @return the value associated to "[placeholder].capitalized".
      */
     @NotNull
-    public String getCapitalized()
+    public DecoratedString getCapitalized()
     {
-        return capitalize(getValue(), StringUtils.getInstance());
+        return new DecoratedString(capitalize(getValue(), StringUtils.getInstance()));
     }
 
     /**
@@ -163,9 +164,9 @@ public class DecoratedString
      * @return the value associated to "[placeholder].lowercased".
      */
     @NotNull
-    public String getLowercased()
+    public DecoratedString getLowercased()
     {
-        return lowercase(getValue());
+        return new DecoratedString(lowercase(getValue()));
     }
 
     /**
@@ -180,23 +181,13 @@ public class DecoratedString
     }
 
     /**
-     * Retrieves the "uppercased" and "normalized" version.
-     * @return the value associated to "[placeholder].normalizedUppercased".
-     */
-    @NotNull
-    public String getNormalizedUppercased()
-    {
-        return uppercase(getNormalized());
-    }
-
-    /**
      * Retrieves the "uppercased" version.
      * @return the value associated to "[placeholder].uppercased".
      */
     @NotNull
-    public String getUppercased()
+    public DecoratedString getUppercased()
     {
-        return uppercase(getValue());
+        return new DecoratedString(uppercase(getValue()));
     }
 
     /**
@@ -215,9 +206,9 @@ public class DecoratedString
      * @return the value associated to "[placeholder].normalized".
      */
     @NotNull
-    public String getNormalized()
+    public DecoratedString getNormalized()
     {
-        return normalize(getValue(), DecorationUtils.getInstance());
+        return new DecoratedString(normalize(getValue(), DecorationUtils.getInstance()));
     }
 
     /**
@@ -237,9 +228,9 @@ public class DecoratedString
      * @return the value associated to "[placeholder].uncapitalized".
      */
     @NotNull
-    public String getUncapitalized()
+    public DecoratedString getUncapitalized()
     {
-        return uncapitalize(getValue(), DecorationUtils.getInstance());
+        return new DecoratedString(uncapitalize(getValue(), DecorationUtils.getInstance()));
     }
 
     /**
@@ -259,7 +250,7 @@ public class DecoratedString
      * @return such lines.
      */
     @NotNull
-    public List<String> getLines()
+    public List<DecoratedString> getLines()
     {
         return getLines(getValue(), DecorationUtils.getInstance());
     }
@@ -271,9 +262,20 @@ public class DecoratedString
      * @return such lines.
      */
     @NotNull
-    protected List<String> getLines(@NotNull final String value, @NotNull final DecorationUtils decorationUtils)
+    protected List<DecoratedString> getLines(@NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
-        return Arrays.asList(decorationUtils.split(value));
+        @NotNull final List<DecoratedString> result;
+
+        @NotNull final List<String> lines = Arrays.asList(decorationUtils.split(value));
+
+        result = new ArrayList<DecoratedString>(lines.size());
+
+        for (@NotNull final String line : lines)
+        {
+            result.add(new DecoratedString(line));
+        }
+
+        return result;
     }
 
     /**
@@ -281,9 +283,9 @@ public class DecoratedString
      * @return such value.
      */
     @NotNull
-    public String getVoName()
+    public DecoratedString getVoName()
     {
-        return capitalize(getSingular(), StringUtils.getInstance());
+        return new DecoratedString(capitalize(getSingular().getValue(), StringUtils.getInstance()));
     }
 
     /**
@@ -291,9 +293,9 @@ public class DecoratedString
      * @return the value, in singular.
      */
     @NotNull
-    public String getSingular()
+    public DecoratedString getSingular()
     {
-        return getSingular(getValue(), SingularPluralFormConverter.getInstance());
+        return new DecoratedString(getSingular(getValue(), SingularPluralFormConverter.getInstance()));
     }
 
     /**

@@ -36,13 +36,16 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.vo.AbstractForeignKey;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
+
+/*
+ * Importing some Apache Commons-Lang.
+ */
+import org.apache.commons.lang.builder.CompareToBuilder;
 
 /*
  * Importing some JetBrains annotations.
@@ -62,13 +65,13 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractForeignKeyDecorator
-    extends AbstractForeignKey
+    extends AbstractForeignKey<DecoratedString>
     implements ForeignKeyDecorator
 {
     /**
      * The decorated instance.
      */
-    private ForeignKey m__ForeignKey;
+    private ForeignKey<String> m__ForeignKey;
 
     /**
      * The {@link MetadataManager} instance.
@@ -93,21 +96,23 @@ public abstract class AbstractForeignKeyDecorator
      * @param decoratorFactory the {@link DecoratorFactory} implementation.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
-    @SuppressWarnings("unused")
     public AbstractForeignKeyDecorator(
-        @NotNull final ForeignKey foreignKey,
+        @NotNull final ForeignKey<String> foreignKey,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        this(
-            foreignKey.getSourceTableName(),
-            foreignKey.getAttributes(),
-            foreignKey.getTargetTableName(),
-            foreignKey.isNullable(),
-            metadataManager,
-            decoratorFactory,
-            customSqlProvider);
+        super(
+            new DecoratedString(foreignKey.getSourceTableName()),
+            new ArrayList<Attribute<DecoratedString>>(0),
+            new DecoratedString(foreignKey.getTargetTableName()),
+            foreignKey.isNullable());
+        immutableSetAttributes(
+            AbstractForeignKeyDecorator.<String, DecoratedString>decorateAttributes(
+                foreignKey.getAttributes(), metadataManager, decoratorFactory));
+        immutableSetMetadataManager(metadataManager);
+        immutableSetDecoratorFactory(decoratorFactory);
+        immutableSetCustomSqlProvider(customSqlProvider);
 
         immutableSetForeignKey(foreignKey);
 
@@ -124,16 +129,21 @@ public abstract class AbstractForeignKeyDecorator
      * @param decoratorFactory the {@link DecoratorFactory} implementation.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
+    @SuppressWarnings("unused")
     protected AbstractForeignKeyDecorator(
         @NotNull final String sourceTableName,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final String targetTableName,
         final boolean allowsNull,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        super(sourceTableName, attributes, targetTableName, allowsNull);
+        super(
+            new DecoratedString(sourceTableName),
+            decoratorFactory.decorateAttributes(attributes, metadataManager),
+            new DecoratedString(targetTableName),
+            allowsNull);
         immutableSetMetadataManager(metadataManager);
         immutableSetDecoratorFactory(decoratorFactory);
         immutableSetCustomSqlProvider(customSqlProvider);
@@ -230,7 +240,7 @@ public abstract class AbstractForeignKeyDecorator
      * Specifies the foreign key to decorate.
      * @param foreignKey the foreign key.
      */
-    protected final void immutableSetForeignKey(@NotNull final ForeignKey foreignKey)
+    protected final void immutableSetForeignKey(@NotNull final ForeignKey<String> foreignKey)
     {
         m__ForeignKey = foreignKey;
     }
@@ -240,7 +250,7 @@ public abstract class AbstractForeignKeyDecorator
      * @param foreignKey the foreign key.
      */
     @SuppressWarnings("unused")
-    protected void setForeignKey(@NotNull final ForeignKey foreignKey)
+    protected void setForeignKey(@NotNull final ForeignKey<String> foreignKey)
     {
         immutableSetForeignKey(foreignKey);
     }
@@ -250,7 +260,7 @@ public abstract class AbstractForeignKeyDecorator
      * @return such foreign key.
      */
     @NotNull
-    public ForeignKey getForeignKey()
+    public ForeignKey<String> getForeignKey()
     {
         return m__ForeignKey;
     }
@@ -261,7 +271,7 @@ public abstract class AbstractForeignKeyDecorator
      */
     @NotNull
     @Override
-    public List<Attribute> getAttributes()
+    public List<Attribute<DecoratedString>> getAttributes()
     {
         return decorateAttributes(super.getAttributes(), getMetadataManager(), getDecoratorFactory());
     }
@@ -274,21 +284,18 @@ public abstract class AbstractForeignKeyDecorator
      * @return such information.
      */
     @NotNull
-    protected List<Attribute> decorateAttributes(
-        @NotNull final List<Attribute> attributes,
+    protected static <V, K> List<Attribute<K>> decorateAttributes(
+        @NotNull final List<Attribute<V>> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @NotNull List<Attribute> result = new ArrayList<Attribute>(attributes.size());
+        @NotNull final List<Attribute<K>> result = new ArrayList<Attribute<K>>(attributes.size());
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<V> t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {
-                result.add(
-                    decoratorFactory.createDecorator(
-                        t_Attribute,
-                        metadataManager));
+                result.add(decoratorFactory.<V, K>createDecorator(t_Attribute, metadataManager));
             }
         }
 
@@ -301,9 +308,9 @@ public abstract class AbstractForeignKeyDecorator
      */
     @SuppressWarnings("unused")
     @Nullable
-    public Table getSource()
+    public Table<DecoratedString, Attribute<DecoratedString>> getSource()
     {
-        return getTable(getSourceTableName(), getMetadataManager());
+        return getTable(getSourceTableName().getValue(), getMetadataManager());
     }
 
     /**
@@ -312,7 +319,7 @@ public abstract class AbstractForeignKeyDecorator
      */
     @SuppressWarnings("unused")
     @Nullable
-    public Table getTarget()
+    public Table<DecoratedString, Attribute<DecoratedString>> getTarget()
     {
         return getTable(getTargetTableName(), getMetadataManager());
     }
@@ -324,9 +331,23 @@ public abstract class AbstractForeignKeyDecorator
      * @return such information.
      */
     @Nullable
-    public Table getTable(@NotNull final String sourceTableName, @NotNull final MetadataManager metadataManager)
+    public Table<DecoratedString, Attribute<DecoratedString>> getTable(
+        @NotNull final String sourceTableName, @NotNull final MetadataManager metadataManager)
     {
         return getTable(sourceTableName, metadataManager.getTableDAO());
+    }
+
+    /**
+     * Retrieves the source table.
+     * @param sourceTableName the name of the source table.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return such information.
+     */
+    @Nullable
+    public Table<DecoratedString, Attribute<DecoratedString>> getTable(
+        @NotNull final DecoratedString sourceTableName, @NotNull final MetadataManager metadataManager)
+    {
+        return getTable(sourceTableName.getValue(), metadataManager.getTableDAO());
     }
 
     /**
@@ -336,88 +357,23 @@ public abstract class AbstractForeignKeyDecorator
      * @return such information.
      */
     @Nullable
-    public Table getTable(@NotNull final String sourceTableName, @NotNull final TableDAO tableDAO)
+    public Table<DecoratedString, Attribute<DecoratedString>> getTable(
+        @NotNull final String sourceTableName, @NotNull final TableDAO tableDAO)
     {
-        Table result = tableDAO.findByName(sourceTableName);
+        final Table<DecoratedString, Attribute<DecoratedString>> result;
 
-        if (result != null)
+        final Table<String, Attribute<String>> aux = tableDAO.findByName(sourceTableName);
+
+        if (aux != null)
         {
-            result = decorate(result);
+            result = decorate(aux);
+        }
+        else
+        {
+            result = null;
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the Value-Object-formatted name of the source table.
-     * @return such information.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    public String getSourceVoName()
-    {
-        return toVoName(getSourceTableName());
-    }
-
-    /**
-     * Retrieves the Value-Object-formatted name of the target table.
-     * @return such information.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    public String getTargetVoName()
-    {
-        return toVoName(getTargetTableName());
-    }
-
-    /**
-     * Converts given name into a ValueObject-formatted one.
-     * @param tableName the table name.
-     * @return the formatted name.
-     */
-    @NotNull
-    protected String toVoName(@NotNull final String tableName)
-    {
-        return toVoName(tableName, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the table's name once normalized.
-     * @param name the table name.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such information.
-     */
-    @NotNull
-    protected String toVoName(
-        @NotNull final String name, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(decorationUtils.getSingular(name));
-    }
-
-    /**
-     * Retrieves the singular of given word.
-     * @param word the word.
-     * @return the singular.
-     */
-    @NotNull
-    protected String getSingular(@NotNull final String word)
-    {
-        return getSingular(word, SingularPluralFormConverter.getInstance());
-    }
-
-    /**
-     * Retrieves the singular of given word.
-     * @param word the word.
-     * @param singularPluralFormConverter the
-     * <code>SingularPluralFormConverter</code> instance.
-     * @return the singular.
-     */
-    @NotNull
-    protected String getSingular(
-        @NotNull final String word,
-        @NotNull final EnglishGrammarUtils singularPluralFormConverter)
-    {
-        return singularPluralFormConverter.getSingular(word);
     }
 
     /**
@@ -433,11 +389,11 @@ public abstract class AbstractForeignKeyDecorator
      * Checks whether this foreign key allows null or not.
      * @return such condition.
      */
-    protected boolean isNullable(@NotNull final List<Attribute> attributes)
+    protected <V> boolean isNullable(@NotNull final List<Attribute<V>> attributes)
     {
         boolean result = true;
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<V> t_Attribute : attributes)
         {
             if (   (t_Attribute != null)
                 && (!t_Attribute.isNullable()))
@@ -456,33 +412,10 @@ public abstract class AbstractForeignKeyDecorator
      * @return the decorated table.
      */
     @NotNull
-    protected Table decorate(@NotNull final Table table)
+    protected Table<DecoratedString, Attribute<DecoratedString>> decorate(
+        @NotNull final Table<String, Attribute<String>> table)
     {
         return new CachingTableDecorator(table, getMetadataManager(), getDecoratorFactory(), getCustomSqlProvider());
-    }
-
-    /**
-     * Retrieves the name of the foreign key, in upper case.
-     * @return such information.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    public String getNameUppercased()
-    {
-        return getNameUppercased(buildName(getForeignKey()), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the name of the foreign key, in upper case.
-     * @param name the {@link ForeignKey}'s name.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such information.
-     */
-    @NotNull
-    protected String getNameUppercased(
-        @NotNull final String name, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.upperCase(name);
     }
 
     /**
@@ -490,18 +423,19 @@ public abstract class AbstractForeignKeyDecorator
      * @param foreignKey the {@link ForeignKey} instance.
      * @return the artificial name.
      */
+    @SuppressWarnings("unused")
     @NotNull
-    protected String buildName(@NotNull final ForeignKey foreignKey)
+    protected String buildName(@NotNull final ForeignKey<String> foreignKey)
     {
         @Nullable String result = foreignKey.getFkName();
 
         if (result == null)
         {
-            StringBuilder t_sbName = new StringBuilder(foreignKey.getSourceTableName());
+            final StringBuilder t_sbName = new StringBuilder(foreignKey.getSourceTableName());
 
             t_sbName.append("_");
 
-            for (@Nullable Attribute t_Attribute : foreignKey.getAttributes())
+            for (@Nullable final Attribute<String> t_Attribute : foreignKey.getAttributes())
             {
                 if (t_Attribute == null)
                 {
@@ -524,60 +458,12 @@ public abstract class AbstractForeignKeyDecorator
     }
 
     /**
-     * Retrieves the name of the foreign key, capitalized.
-     * @return such information.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    public String getNameCapitalized()
-    {
-        return getNameCapitalized(buildName(getForeignKey()), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the name of the foreign key, capitalized.
-     * @param name the {@link ForeignKey}'s name.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such information.
-     */
-    @NotNull
-    protected String getNameCapitalized(
-        @NotNull final String name, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(name);
-    }
-
-    /**
-     * Retrieves the name of the foreign key, in lower case.
-     * @return such information.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    public String getNameLowercased()
-    {
-        return getNameLowercased(buildName(getForeignKey()), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the name of the foreign key, in lower case.
-     * @param name the {@link ForeignKey}'s name.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such information.
-     */
-    @NotNull
-    protected String getNameLowercased(
-        @NotNull final String name, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.lowerCase(name);
-    }
-
-    /**
      * Retrieves the name of the foreign key.
      * @return such information.
      */
     @Override
     @NotNull
-    public String getFkName()
+    public DecoratedString getFkName()
     {
         return getFkName(getForeignKey());
     }
@@ -588,18 +474,20 @@ public abstract class AbstractForeignKeyDecorator
      * @return such information.
      */
     @NotNull
-    protected String getFkName(@NotNull final ForeignKey foreignKey)
+    protected DecoratedString getFkName(@NotNull final ForeignKey<String> foreignKey)
     {
-        String result = foreignKey.getFkName();
+        @NotNull final DecoratedString result;
 
-        if (result == null)
+        @Nullable final String aux = foreignKey.getFkName();
+
+        if (aux == null)
         {
-            StringBuilder t_sbAux = new StringBuilder(getSourceVoName());
+            final StringBuilder t_sbAux = new StringBuilder(getSourceTableName().getVoName().getValue());
 
             t_sbAux.append("_");
-            t_sbAux.append(getTargetVoName());
+            t_sbAux.append(getTargetTableName().getVoName().getValue());
 
-            for (@Nullable Attribute t_Attribute : getAttributes())
+            for (@Nullable final Attribute<DecoratedString> t_Attribute : getAttributes())
             {
                 if (t_Attribute != null)
                 {
@@ -608,7 +496,11 @@ public abstract class AbstractForeignKeyDecorator
                 }
             }
 
-            result = t_sbAux.toString();
+            result = new DecoratedString(t_sbAux.toString());
+        }
+        else
+        {
+            result = new DecoratedString(aux);
         }
 
         return result;
@@ -616,32 +508,27 @@ public abstract class AbstractForeignKeyDecorator
 
     /**
      * Provides a text representation of the information
-     * contained in this instance.
+     * contained in given instance.
      * @return such information.
      */
-    @Override
     @NotNull
+    @Override
     public String toString()
     {
-        return "" + getForeignKey();
-    }
-
-    /**
-     * Provides a text representation of the information
-     * contained in given instance.
-     * @param foreignKey the decorated foreign key.
-     * @return such information.
-     */
-    @NotNull
-    protected String toString(@NotNull final ForeignKey foreignKey)
-    {
-        return "" + foreignKey;
+        return
+              "{ \"class\": \"" + AbstractForeignKeyDecorator .class.getName() + '"'
+            + ", \"customSqlProvider\": " + m__CustomSqlProvider
+            + ", \"foreignKey\": " + m__ForeignKey
+            + ", \"metadataManager\": " + m__MetadataManager
+            + ", \"decoratorFactory\": " + m__DecoratorFactory
+            + "\" }";
     }
 
     /**
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return hashCode(getForeignKey());
@@ -662,7 +549,8 @@ public abstract class AbstractForeignKeyDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    @Override
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 
@@ -692,7 +580,8 @@ public abstract class AbstractForeignKeyDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(@Nullable final ForeignKey object)
+    @Override
+    public int compareTo(@Nullable final ForeignKey<DecoratedString> object)
         throws  ClassCastException
     {
         return compareTo(getForeignKey(), object);
@@ -706,9 +595,67 @@ public abstract class AbstractForeignKeyDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    protected int compareTo(@NotNull final ForeignKey foreignKey, @Nullable final ForeignKey object)
+    protected int compareTo(
+        @NotNull final ForeignKey<String> foreignKey, @Nullable final ForeignKey<DecoratedString> object)
         throws  ClassCastException
     {
-        return foreignKey.compareTo(object);
+        final int result;
+
+        if (object != null)
+        {
+            result = compareFks(foreignKey, object);
+        }
+        else
+        {
+            result = 1;
+        }
+
+        return result;
+    }
+    /**
+     * Compares given {@link ForeignKey foreign keys}.
+     * @param first the first.
+     * @param second the second.
+     * @return a positive number if the first is considered 'greater' than the second;
+     * 0 if they are equal; a negative number otherwise.
+     */
+    @SuppressWarnings("unchecked")
+    protected int compareFks(@NotNull final ForeignKey<String> first, @NotNull final ForeignKey<DecoratedString> second)
+    {
+        final int result;
+
+        @NotNull final CompareToBuilder comparator = new CompareToBuilder();
+
+        comparator.append(
+            first.getSourceTableName(),
+            second.getSourceTableName());
+
+        comparator.append(
+            first.getTargetTableName(),
+            second.getTargetTableName());
+
+        comparator.append(
+            first.isNullable(),
+            second.isNullable());
+
+        final List<Attribute<String>> t_lFirstAttributes = first.getAttributes();
+        final List<Attribute<DecoratedString>> t_lSecondAttributes = second.getAttributes();
+
+        final Attribute<String>[] t_aFirstAttributes = (Attribute<String>[]) new Attribute[t_lFirstAttributes.size()];
+        t_lFirstAttributes.toArray(t_aFirstAttributes);
+        final Attribute<DecoratedString>[] t_aSecondAttributes = (Attribute<DecoratedString>[]) new Attribute[t_lSecondAttributes.size()];
+        t_lSecondAttributes.toArray(t_aSecondAttributes);
+
+        for (int t_iIndex = 0; t_iIndex < t_aFirstAttributes.length; t_iIndex++)
+        {
+            if (t_iIndex < t_aSecondAttributes.length)
+            {
+                comparator.append(t_aFirstAttributes[t_iIndex], t_aSecondAttributes[t_iIndex]);
+            }
+        }
+
+        result = comparator.toComparison();
+
+        return result;
     }
 }

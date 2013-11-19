@@ -38,6 +38,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
 
 /*
@@ -69,7 +70,7 @@ public interface TableDAO
      * @return such information.
      */
     @NotNull
-    List<Table<String>> findAllTables();
+    List<Table<String, Attribute<String>>> findAllTables();
 
     /**
      * Retrieves all tables.
@@ -84,7 +85,7 @@ public interface TableDAO
      * @return the associated {@link Table} instance, if the table is found.
      */
     @Nullable
-    Table<String> findByName(@NotNull final String name);
+    Table<String, Attribute<String>> findByName(@NotNull final String name);
 
     /**
      * Retrieves the list of tables with foreign keys to given table.
@@ -93,7 +94,7 @@ public interface TableDAO
      */
     @SuppressWarnings("unused")
     @NotNull
-    List<Table<String>> findReferringTables(@NotNull final String target);
+    List<Table<String, Attribute<String>>> findReferringTables(@NotNull final String target);
 
     /**
      * Retrieves the table associated to given DAO.
@@ -101,5 +102,5 @@ public interface TableDAO
      * @return the table.
      */
     @Nullable
-    Table<String> findByDAO(@NotNull final String dao);
+    Table<String, Attribute<String>> findByDAO(@NotNull final String dao);
 }

@@ -37,9 +37,6 @@ package org.acmsl.queryj.templates.dao;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.AttributeDecorator;
-import org.acmsl.queryj.metadata.vo.Attribute;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -86,19 +83,5 @@ public class DAODecoratorFactory
     public static CachingDecoratorFactory getInstance()
     {
         return DAODecoratorFactorySingletonContainer.SINGLETON;
-    }
-
-    /**
-     * Creates an <code>AttributeDecorator</code> for given
-     * attribute instance.
-     * @param attribute the attribute.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return the decorated attribute for the concrete template.
-     */
-    @NotNull
-    public AttributeDecorator createDecorator(
-        @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager)
-    {
-        return new DAOAttributeDecorator(attribute, metadataManager);
     }
 }

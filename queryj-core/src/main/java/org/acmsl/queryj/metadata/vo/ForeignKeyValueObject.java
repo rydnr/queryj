@@ -53,7 +53,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ForeignKeyValueObject
-    extends AbstractForeignKey
+    extends AbstractForeignKey<String>
 {
 
     private static final long serialVersionUID = 3292464819930780148L;
@@ -67,7 +67,7 @@ public class ForeignKeyValueObject
      */
     public ForeignKeyValueObject(
         @NotNull final String sourceTableName,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final String targetTableName,
         final boolean allowsNull)
     {

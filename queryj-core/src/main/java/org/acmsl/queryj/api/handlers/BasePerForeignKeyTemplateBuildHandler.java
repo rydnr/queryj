@@ -46,6 +46,7 @@ import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -67,6 +68,7 @@ import java.util.List;
  * Builds all templates to generate sources for each foreign key.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public abstract class BasePerForeignKeyTemplateBuildHandler
     <T extends PerForeignKeyTemplate<C>,
         TF extends PerForeignKeyTemplateFactory<T>, C extends PerForeignKeyTemplateContext>
@@ -187,13 +189,13 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final List<ForeignKey> foreignKeys,
+        @NotNull final List<ForeignKey<String>> foreignKeys,
         @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
     {
         @NotNull final List<T> t_lTemplates = new ArrayList<T>();
 
-        for  (@Nullable final ForeignKey t_ForeignKey : foreignKeys)
+        for  (@Nullable final ForeignKey<String> t_ForeignKey : foreignKeys)
         {
             if (   (t_ForeignKey != null)
                 && (metadataManager.isGenerationAllowedForForeignKey(t_ForeignKey)))
@@ -274,14 +276,14 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @return such templates.
      */
     @NotNull
-    protected List<ForeignKey> retrieveForeignKeys(
+    protected List<ForeignKey<String>> retrieveForeignKeys(
         @NotNull final QueryJCommand parameters,
         @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final List<ForeignKey> result;
+        @NotNull final List<ForeignKey<String>> result;
 
-        @Nullable final List<ForeignKey> aux =
-            new QueryJCommandWrapper<List<ForeignKey>>(parameters).getSetting(FOREIGN_KEYS);
+        @Nullable final List<ForeignKey<String>> aux =
+            new QueryJCommandWrapper<List<ForeignKey<String>>>(parameters).getSetting(FOREIGN_KEYS);
 
         if  (aux == null)
         {
@@ -301,20 +303,20 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @return such foreign keys.
      */
     @NotNull
-    protected List<ForeignKey> retrieveForeignKeys(
+    protected List<ForeignKey<String>> retrieveForeignKeys(
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<ForeignKey> result = null;
+        @Nullable List<ForeignKey<String>> result = null;
 
-        @NotNull final List<Table<String>> t_lTables = metadataManager.getTableDAO().findAllTables();
+        @NotNull final List<Table<String, Attribute<String>>> t_lTables = metadataManager.getTableDAO().findAllTables();
 
-        for (@Nullable final Table<String> t_Table : t_lTables)
+        for (@Nullable final Table<String, Attribute<String>> t_Table : t_lTables)
         {
             if (t_Table != null)
             {
                 if (result == null)
                 {
-                    result = new ArrayList<ForeignKey>();
+                    result = new ArrayList<ForeignKey<String>>();
                 }
 
                 result.addAll(t_Table.getForeignKeys());
@@ -323,7 +325,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
         if (result == null)
         {
-            result = new ArrayList<ForeignKey>(0);
+            result = new ArrayList<ForeignKey<String>>(0);
         }
 
         return result;

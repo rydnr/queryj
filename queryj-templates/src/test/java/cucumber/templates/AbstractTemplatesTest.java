@@ -40,6 +40,7 @@ package cucumber.templates;
  */
 import cucumber.templates.sql.CucumberSqlDAO;
 import cucumber.templates.sql.CucumberSqlParameterDAO;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.templates.antlr.JavaLexer;
 import org.acmsl.queryj.templates.antlr.JavaPackageVisitor;
 import org.acmsl.queryj.templates.antlr.JavaParser;
@@ -146,12 +147,12 @@ public abstract class AbstractTemplatesTest<G, F>
     /**
      * The tables.
      */
-    private Map<String, Table<String>> m__mTables;
+    private Map<String, Table<String, Attribute<String>>> m__mTables;
 
     /**
      * The foreign keys.
      */
-    private List<ForeignKey> m__lForeignKeys;
+    private List<ForeignKey<String>> m__lForeignKeys;
 
     /**
      * The list of SQL queries.
@@ -169,8 +170,8 @@ public abstract class AbstractTemplatesTest<G, F>
     protected AbstractTemplatesTest()
     {
         immutableSetOutputFiles(new HashMap<String, File>());
-        immutableSetTables(new HashMap<String, Table<String>>());
-        immutableSetForeignKeys(new ArrayList<ForeignKey>());
+        immutableSetTables(new HashMap<String, Table<String, Attribute<String>>>());
+        immutableSetForeignKeys(new ArrayList<ForeignKey<String>>());
         immutableSetSqlList(new ArrayList<Sql>());
     }
 
@@ -207,7 +208,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * Specifies the tables.
      * @param tables the tables.
      */
-    protected final void immutableSetTables(@NotNull final Map<String, Table<String>> tables)
+    protected final void immutableSetTables(@NotNull final Map<String, Table<String, Attribute<String>>> tables)
     {
         m__mTables = tables;
     }
@@ -217,7 +218,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param tables the tables.
      */
     @SuppressWarnings("unused")
-    protected void setTables(@NotNull final Map<String, Table<String>> tables)
+    protected void setTables(@NotNull final Map<String, Table<String, Attribute<String>>> tables)
     {
         immutableSetTables(tables);
     }
@@ -227,7 +228,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @return such information.
      */
     @NotNull
-    protected Map<String, Table<String>> getTables()
+    protected Map<String, Table<String, Attribute<String>>> getTables()
     {
         return m__mTables;
     }
@@ -236,7 +237,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * Specifies the foreign keys.
      * @param foreignKeys the foreign keys.
      */
-    protected final void immutableSetForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
+    protected final void immutableSetForeignKeys(@NotNull final List<ForeignKey<String>> foreignKeys)
     {
         m__lForeignKeys = foreignKeys;
     }
@@ -246,13 +247,13 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param foreignKeys the foreign keys.
      */
     @SuppressWarnings("unused")
-    protected void setForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
+    protected void setForeignKeys(@NotNull final List<ForeignKey<String>> foreignKeys)
     {
         immutableSetForeignKeys(foreignKeys);
     }
 
     @NotNull
-    protected List<ForeignKey> getForeignKeys()
+    protected List<ForeignKey<String>> getForeignKeys()
     {
         return m__lForeignKeys;
     }
@@ -564,11 +565,11 @@ public abstract class AbstractTemplatesTest<G, F>
      * @return such instance.
      */
     @NotNull
-    protected MetadataManager retrieveMetadataManager(@NotNull final String engineName, @NotNull final Table<String> table)
+    protected MetadataManager retrieveMetadataManager(@NotNull final String engineName, @NotNull final Table<String, Attribute<String>> table)
     {
         @NotNull final List<String> tableNames = new ArrayList<String>(1);
         tableNames.add(table.getName());
-        @NotNull final List<Table<String>> tables = new ArrayList<Table<String>>(1);
+        @NotNull final List<Table<String, Attribute<String>>> tables = new ArrayList<Table<String, Attribute<String>>>(1);
         tables.add(table);
 
         return retrieveMetadataManager(engineName, tableNames, tables);
@@ -586,7 +587,7 @@ public abstract class AbstractTemplatesTest<G, F>
     {
         @NotNull final List<String> tableNames = new ArrayList<String>(1);
         tableNames.add(table);
-        @NotNull final List<Table<String>> tables = new ArrayList<Table<String>>(0);
+        @NotNull final List<Table<String, Attribute<String>>> tables = new ArrayList<Table<String, Attribute<String>>>(0);
 
         return retrieveMetadataManager(engineName, tableNames, tables);
     }
@@ -601,7 +602,7 @@ public abstract class AbstractTemplatesTest<G, F>
     protected MetadataManager retrieveMetadataManager(@NotNull final String engineName)
     {
         @NotNull final List<String> tableNames = new ArrayList<String>(0);
-        @NotNull final List<Table<String>> tables = new ArrayList<Table<String>>(0);
+        @NotNull final List<Table<String, Attribute<String>>> tables = new ArrayList<Table<String, Attribute<String>>>(0);
 
         return retrieveMetadataManager(engineName, tableNames, tables);
     }
@@ -615,7 +616,7 @@ public abstract class AbstractTemplatesTest<G, F>
      */
     @NotNull
     protected MetadataManager retrieveMetadataManager(
-        @NotNull final String engineName, @NotNull final List<String> tableNames, @NotNull final List<Table<String>> tables)
+        @NotNull final String engineName, @NotNull final List<String> tableNames, @NotNull final List<Table<String, Attribute<String>>> tables)
     {
         return
             new JdbcMetadataManager(

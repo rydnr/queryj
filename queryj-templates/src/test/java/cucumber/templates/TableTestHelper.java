@@ -112,11 +112,11 @@ public class TableTestHelper
      * @param tables the table collection.
      */
     public void defineInputTables(
-        @NotNull final DataTable tableInfo, @NotNull final Map<String, Table<String>> tables)
+        @NotNull final DataTable tableInfo, @NotNull final Map<String, Table<String, Attribute<String>>> tables)
     {
         @NotNull final List<Map<String, String>> tableEntries = tableInfo.asMaps();
 
-        @Nullable Table<String> table;
+        @Nullable Table<String, Attribute<String>> table;
 
         for (@NotNull final Map<String, String> tableEntry: tableEntries)
         {
@@ -135,9 +135,9 @@ public class TableTestHelper
      * @return the {@link Table} instance.
      */
     @Nullable
-    protected Table<String> convertToTable(@NotNull final Map<String, String> tableEntry)
+    protected Table<String, Attribute<String>> convertToTable(@NotNull final Map<String, String> tableEntry)
     {
-        @Nullable Table<String> result = null;
+        @Nullable Table<String, Attribute<String>> result = null;
 
         @Nullable final String table =  tableEntry.get(AntTablesElement.TABLE);
 
@@ -160,20 +160,20 @@ public class TableTestHelper
      * @param columnInfo the column information.
      * @param tables the tables.
      */
-    public List<Table<String>> defineInputColumns(
-        @NotNull final DataTable columnInfo, @NotNull final Map<String, Table<String>> tables)
+    public List<Table<String, Attribute<String>>> defineInputColumns(
+        @NotNull final DataTable columnInfo, @NotNull final Map<String, Table<String, Attribute<String>>> tables)
     {
-        @NotNull final List<Table<String>> result = new ArrayList<Table<String>>(tables.size());
+        @NotNull final List<Table<String, Attribute<String>>> result = new ArrayList<Table<String, Attribute<String>>>(tables.size());
 
-        for (@NotNull final Table<String> table : tables.values())
+        for (@NotNull final Table<String, Attribute<String>> table : tables.values())
         {
             result.add(table);
 
-            @NotNull final List<Attribute> attributes = table.getAttributes();
+            @NotNull final List<Attribute<String>> attributes = table.getAttributes();
 
-            @NotNull final List<Attribute> primaryKey = table.getPrimaryKey();
+            @NotNull final List<Attribute<String>> primaryKey = table.getPrimaryKey();
 
-            Attribute attribute;
+            Attribute<String> attribute;
 
             int index = 1;
 
@@ -230,7 +230,7 @@ public class TableTestHelper
      * @return the {@link Table} instance.
      */
     @Nullable
-    public Table<String> convertToTable(
+    public Table<String, Attribute<String>> convertToTable(
         @NotNull final String tableName,
         @Nullable final String comment,
         @SuppressWarnings("unused") @Nullable final String parentTable,
@@ -241,9 +241,9 @@ public class TableTestHelper
             new TableValueObject(
                 tableName,
                 comment,
-                new ArrayList<Attribute>(),
-                new ArrayList<Attribute>(),
-                new ArrayList<ForeignKey>(),
+                new ArrayList<Attribute<String>>(),
+                new ArrayList<Attribute<String>>(),
+                new ArrayList<ForeignKey<String>>(),
                 // TODO: Decorate TableValueObject to retrieve the parent table via its name
                 // and the table collection.
                 null, //parentTable,
@@ -333,11 +333,11 @@ public class TableTestHelper
      * @return the list of attributes matching given column names.
      */
     @NotNull
-    public List<Attribute> filterAttributes(final Table<String> table, final String[] columns)
+    public List<Attribute<String>> filterAttributes(final Table<String, Attribute<String>> table, final String[] columns)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>();
 
-        for (@NotNull final Attribute attribute : table.getAttributes())
+        for (@NotNull final Attribute<String> attribute : table.getAttributes())
         {
             for (@Nullable final String column : columns)
             {
@@ -371,17 +371,17 @@ public class TableTestHelper
      */
     public void defineForeignKeys(
         @NotNull final DataTable fkInfo,
-        @NotNull final Map<String, Table<String>> tables,
-        @NotNull final List<ForeignKey> foreignKeys)
+        @NotNull final Map<String, Table<String, Attribute<String>>> tables,
+        @NotNull final List<ForeignKey<String>> foreignKeys)
     {
         String sourceTable;
         String sourceColumnsField;
         String[] sourceColumns;
         String targetTable;
 
-        ForeignKey foreignKey;
+        ForeignKey<String> foreignKey;
 
-        for (@NotNull final Table<String> table : tables.values())
+        for (@NotNull final Table<String, Attribute<String>> table : tables.values())
         {
             for (@NotNull final Map<String, String> fkEntry: fkInfo.asMaps())
             {
@@ -417,13 +417,13 @@ public class TableTestHelper
      * @param tables the tables.
      */
     @SuppressWarnings("unused")
-    public void defineValues(@NotNull final DataTable values, @NotNull final Map<String, Table<String>> tables)
+    public void defineValues(@NotNull final DataTable values, @NotNull final Map<String, Table<String, Attribute<String>>> tables)
     {
-        for (@NotNull final Table<String> table : tables.values())
+        for (@NotNull final Table<String, Attribute<String>> table : tables.values())
         {
-            @NotNull final List<Attribute> attributes = table.getAttributes();
+            @NotNull final List<Attribute<String>> attributes = table.getAttributes();
 
-            @NotNull final List<Attribute> primaryKey = table.getPrimaryKey();
+            @NotNull final List<Attribute<String>> primaryKey = table.getPrimaryKey();
 
             // TODO override MetadataManager#TableDAO#findAll with the contents of "values"
         }

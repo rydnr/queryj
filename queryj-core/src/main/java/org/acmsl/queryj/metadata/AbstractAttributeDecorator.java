@@ -41,14 +41,8 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.metadata.vo.AbstractAttribute;
 import org.acmsl.queryj.metadata.vo.Attribute;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
  * Importing Apache Commons Lang classes.
@@ -62,11 +56,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/*
- * Importing some JDK classes.
- */
-import java.util.Locale;
-
 /**
  * Decorates <code>Attribute</code> instances to provide required alternate
  * representations of the information stored therein.
@@ -74,13 +63,13 @@ import java.util.Locale;
  *         >Jose San Leandro</a>
  */
 public abstract class AbstractAttributeDecorator
-    extends  AbstractAttribute
+    extends  AbstractAttribute<DecoratedString>
     implements  AttributeDecorator
 {
     /**
      * The decorated attribute.
      */
-    private Attribute m__Attribute;
+    private Attribute<String> m__Attribute;
 
     /**
      * The metadata type manager.
@@ -99,7 +88,7 @@ public abstract class AbstractAttributeDecorator
      * @param metadataManager the metadata manager.
      */
     public AbstractAttributeDecorator(
-        @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager)
+        @NotNull final Attribute<String> attribute, @NotNull final MetadataManager metadataManager)
     {
         this(
             attribute.getName(),
@@ -163,28 +152,28 @@ public abstract class AbstractAttributeDecorator
         @Nullable final String booleanTrue,
         @Nullable final String booleanFalse,
         @Nullable final String booleanNull,
-        @NotNull final Attribute attribute,
+        @NotNull final Attribute<String> attribute,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
         super(
-            name,
+            new DecoratedString(name),
             typeId,
-            type,
-            tableName,
-            comment,
+            new DecoratedString(type),
+            new DecoratedString(tableName),
+            comment != null ? new DecoratedString(comment) : null,
             ordinalPosition,
             length,
             precision,
-            keyword,
-            retrievalQuery,
+            keyword != null ? new DecoratedString(keyword) : null,
+            retrievalQuery != null ? new DecoratedString(retrievalQuery) : null,
             allowsNull,
-            value,
+            value != null ? new DecoratedString(value) : null,
             readOnly,
             isBool,
-            booleanTrue,
-            booleanFalse,
-            booleanNull);
+            booleanTrue != null ? new DecoratedString(booleanTrue) : null,
+            booleanFalse != null ? new DecoratedString(booleanFalse) : null,
+            booleanNull != null ? new DecoratedString(booleanNull) : null);
 
         immutableSetAttribute(attribute);
         immutableSetMetadataManager(metadataManager);
@@ -195,7 +184,7 @@ public abstract class AbstractAttributeDecorator
      * Specifies the attribute to decorate.
      * @param attribute such attribute.
      */
-    protected final void immutableSetAttribute(@NotNull final Attribute attribute)
+    protected final void immutableSetAttribute(@NotNull final Attribute<String> attribute)
     {
         m__Attribute = attribute;
     }
@@ -205,7 +194,7 @@ public abstract class AbstractAttributeDecorator
      * @param attribute such attribute.
      */
     @SuppressWarnings("unused")
-    protected void setAttribute(@NotNull final Attribute attribute)
+    protected void setAttribute(@NotNull final Attribute<String> attribute)
     {
         immutableSetAttribute(attribute);
     }
@@ -216,7 +205,7 @@ public abstract class AbstractAttributeDecorator
      */
     @Override
     @NotNull
-    public Attribute getAttribute()
+    public Attribute<String> getAttribute()
     {
         return m__Attribute;
     }
@@ -284,173 +273,10 @@ public abstract class AbstractAttributeDecorator
     }
 
     /**
-     * Retrieves the name, in upper case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameUppercased()
-    {
-        return uppercase(getName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the capitalized name.
-     * @return such name.
-     */
-    @NotNull
-    public String getNameCapitalized()
-    {
-        return capitalize(getName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String capitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        @NotNull final Locale t_Locale = Locale.US;
-
-        return decorationUtils.capitalize(value.toLowerCase(t_Locale));
-    }
-
-    /**
-     * Retrieves the uncapitalized name.
-     * @return such name.
-     */
-    @NotNull
-    public String getNameUncapitalized()
-    {
-        return uncapitalize(getName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Uncapitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String uncapitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        @NotNull final Locale t_Locale = Locale.US;
-
-        return decorationUtils.uncapitalize(value.toLowerCase(t_Locale));
-    }
-
-    /**
-     * Converts given value to upper-case.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */@NotNull
-    protected String uppercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.upperCase(value);
-    }
-
-    /**
-     * Normalizes given value to lower-case.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String normalizeLowercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalizeLowercase(value);
-    }
-
-    /**
-     * Retrieves the name, in lower case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameLowercased()
-    {
-        return lowercase(getName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Converts given value to lower-case.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String lowercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.lowerCase(value);
-    }
-
-    /**
-     * Retrieves the table name, uncapitalized.
-     * @return such value.
-     */
-    @NotNull
-    public String getUncapitalizedTableName()
-    {
-        return uncapitalize(getTableName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the value-object name associated to the table name.
-     * @return such name.
-     */
-    @NotNull
-    public String getVoName()
-    {
-        return capitalize(getSingular(getTableName()), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the singular of given word.
-     * @param word the word.
-     * @return the singular.
-     */
-    @NotNull
-    protected String getSingular(@NotNull final String word)
-    {
-        return getSingular(word, SingularPluralFormConverter.getInstance());
-    }
-
-    /**
-     * Retrieves the singular of given word.
-     * @param word the word.
-     * @param singularPluralFormConverter the
-     * <code>SingularPluralFormConverter</code> instance.
-     * @return the singular.
-     */
-    @NotNull
-    protected String getSingular(
-        @NotNull final String word,
-        @NotNull final EnglishGrammarUtils singularPluralFormConverter)
-    {
-        return singularPluralFormConverter.getSingular(word);
-    }
-
-    /**
-     * Retrieves the attribute's Java name.
-     * @return such information.
-     */
-    @NotNull
-    public String getJavaName()
-    {
-        return uppercase(getName(), DecorationUtils.getInstance());
-    }
-
-    /**
      * Retrieves the attribute's associated getter method.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String getGetterMethod()
     {
@@ -594,7 +420,7 @@ public abstract class AbstractAttributeDecorator
     @Override
     public boolean isDate()
     {
-        return isDate(getType(), getMetadataTypeManager());
+        return isDate(getAttribute().getType(), getMetadataTypeManager());
     }
 
     /**
@@ -640,7 +466,7 @@ public abstract class AbstractAttributeDecorator
     @Nullable
     public String getQuery()
     {
-        return getQuery(isExternallyManaged());
+        return getQuery(getAttribute(), isExternallyManaged());
     }
 
     /**
@@ -649,14 +475,14 @@ public abstract class AbstractAttributeDecorator
      * @return such information.
      */
     @Nullable
-    protected String getQuery(final boolean managedExternally)
+    protected String getQuery(final Attribute<String> attribute, final boolean managedExternally)
     {
         String result = "";
 
         if  (managedExternally)
         {
             result =
-                getQuery(getName(), getTableName(), getMetadataManager());
+                getQuery(attribute.getName(), attribute.getTableName(), getMetadataManager());
         }
 
         return result;
@@ -728,27 +554,6 @@ public abstract class AbstractAttributeDecorator
         final int type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.getStatementSetterFieldType(type);
-    }
-
-    /**
-     * Retrieves the attribute's table in upper-case.
-     * @return such information.
-     */
-    @NotNull
-    public String getTableNameUppercased()
-    {
-        return uppercase(getTableName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the attribute's table in upper-case.
-     * @return such information.
-     */
-    @NotNull
-    public String getTableNameNormalizedLowercased()
-    {
-        return
-            normalizeLowercase(getTableName(), DecorationUtils.getInstance());
     }
 
     /**
@@ -932,18 +737,18 @@ public abstract class AbstractAttributeDecorator
     @Override
     public int getJavaSqlType()
     {
-        return getJavaSqlType(getType(), getMetadataTypeManager());
+        return getJavaSqlType(getAttribute(), getMetadataTypeManager());
     }
 
     /**
      * Retrieves the attribute type, as a {@link java.sql.Types}'s constant.
-     * @param type the attribute type.
+     * @param attribute the {@link Attribute attribute}.
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @return the {@link java.sql.Types}'s constant value.
      */
-    protected int getJavaSqlType(@NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+    protected int getJavaSqlType(@NotNull final Attribute<String> attribute, @NotNull final MetadataTypeManager metadataTypeManager)
     {
-        return metadataTypeManager.getJavaType(type);
+        return metadataTypeManager.getJavaType(attribute.getType());
     }
 
     /**
@@ -953,7 +758,7 @@ public abstract class AbstractAttributeDecorator
     @SuppressWarnings("unused")
     public boolean isValueNull()
     {
-        return isNull(getValue());
+        return isNull(getAttribute().getValue());
     }
 
     /**
@@ -966,26 +771,15 @@ public abstract class AbstractAttributeDecorator
         return value == null;
     }
 
-    /**
-     * Retrieves the attribute name.
-     * @return such information.
-     */
     @Override
-    @NotNull
     public String toString()
     {
-        return toString(getAttribute());
-    }
-
-    /**
-     * Retrieves the attribute name.
-     * @param attribute the attribute.
-     * @return such information.
-     */
-    @NotNull
-    protected String toString(@NotNull final Attribute attribute)
-    {
-        return attribute.toString();
+        return
+              "{ \"class\": \"" + AbstractAttributeDecorator.class.getName() + "\""
+            + ", \"attribute\": " + this.m__Attribute
+            + ", \"metadataManager\": " + this.m__MetadataManager
+            + ", \"metadataTypeManager\": " + this.m__MetadataTypeManager
+            + " }";
     }
 
     @Override

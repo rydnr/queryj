@@ -49,9 +49,9 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing JDK classes.
  */
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Decorates <code>Row</code> instances to provide required alternate
@@ -59,12 +59,12 @@ import java.util.Locale;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractRowDecorator
-    extends AbstractRow
+    extends AbstractRow<DecoratedString>
 {
     /**
      * The decorated row.
      */
-    private Row m__Row;
+    private Row<String> m__Row;
 
     /**
      * The metadata manager.
@@ -89,7 +89,7 @@ public abstract class AbstractRowDecorator
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     public AbstractRowDecorator(
-        @NotNull final Row row,
+        @NotNull final Row<String> row,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
@@ -115,11 +115,16 @@ public abstract class AbstractRowDecorator
     protected AbstractRowDecorator(
         @NotNull final String name,
         @NotNull final String tableName,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        super(name, tableName, attributes);
+        super(
+            new DecoratedString(name),
+            new DecoratedString(tableName),
+            new ArrayList<Attribute<DecoratedString>>(attributes.size()));
+
+        immutableSetAttributes(decoratorFactory.decorateAttributes(attributes, metadataManager));
 
         immutableSetMetadataManager(metadataManager);
         immutableSetMetadataTypeManager(metadataManager.getMetadataTypeManager());
@@ -130,7 +135,7 @@ public abstract class AbstractRowDecorator
      * Specifies the row to decorate.
      * @param row the row.
      */
-    protected final void immutableSetRow(@NotNull final Row row)
+    protected final void immutableSetRow(@NotNull final Row<String> row)
     {
         m__Row = row;
     }
@@ -140,7 +145,7 @@ public abstract class AbstractRowDecorator
      * @param row the row.
      */
     @SuppressWarnings("unused")
-    protected void setRow(@NotNull final Row row)
+    protected void setRow(@NotNull final Row<String> row)
     {
         immutableSetRow(row);
     }
@@ -151,7 +156,7 @@ public abstract class AbstractRowDecorator
      */
     @SuppressWarnings("unused")
     @Nullable
-    public Row getRow()
+    public Row<String> getRow()
     {
         return m__Row;
     }
@@ -253,7 +258,7 @@ public abstract class AbstractRowDecorator
      */
     @Override
     @NotNull
-    public List<Attribute> getAttributes()
+    public List<Attribute<DecoratedString>> getAttributes()
     {
         return getAttributes(getMetadataManager(), getDecoratorFactory());
     }
@@ -265,10 +270,10 @@ public abstract class AbstractRowDecorator
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getAttributes(
+    protected List<Attribute<DecoratedString>> getAttributes(
         @NotNull final MetadataManager metadataManager, @NotNull final DecoratorFactory decoratorFactory)
     {
-        List<Attribute> result =
+        @NotNull final List<Attribute<DecoratedString>> result =
             decoratorFactory.decorateAttributes(super.getAttributes(), metadataManager);
 
         Collections.sort(result);
@@ -276,69 +281,15 @@ public abstract class AbstractRowDecorator
         return result;
     }
 
-    /**
-     * Retrieves the id, normalized and upper-cased.
-     * @return such information.
-     */
     @NotNull
-    public String getNameNormalizedUppercased()
+    @Override
+    public String toString()
     {
-        return normalizeUppercase(getName(), DecorationUtils.getInstance());
-    }
-    
-    /**
-     * Normalizes given value, in upper-case.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return such information.
-     */
-    @NotNull
-    protected String normalizeUppercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.softNormalizeUppercase(value);
-    }
-
-    /**
-     * Retrieves the lowercased version of the name.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameLowercased()
-    {
-        return lowercase(getName());
-    }
-
-    /**
-     * Lowers the case of given value.
-     * @param value the value.
-     * @return the value in lower case.
-     */
-    @NotNull
-    protected String lowercase(@NotNull final String value)
-    {
-        return value.toLowerCase(Locale.US);
-    }
-
-    /**
-     * Retrieves the capitalized version of the name.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameCapitalized()
-    {
-        return capitalize(getName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the {@link DecoratorFactory} instance.
-     * @return the capitalized version.
-     */
-    @NotNull
-    protected String capitalize(@NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(value);
+        return
+              "{ \"class\": \"" + AbstractRowDecorator.class.getName() + '"'
+            + ", \"decoratorFactory\": " + m__DecoratorFactory
+            + ", \"row\": " + m__Row
+            + ", \"metadataManager\": " + m__MetadataManager
+            + ", \"metadataTypeManager\": " + m__MetadataTypeManager + " }";
     }
 }

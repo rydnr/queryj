@@ -121,7 +121,7 @@ public class MetadataManagerColumnDAO
      */
     @Nullable
     @Override
-    public Attribute findColumn(
+    public Attribute<String> findColumn(
         @NotNull final String table,
         @NotNull final String columnName)
     {
@@ -136,7 +136,7 @@ public class MetadataManagerColumnDAO
      * @return the {@link Attribute column}.
      */
     @Nullable
-    protected Attribute findColumn(
+    protected Attribute<String> findColumn(
         @NotNull final String table,
         @NotNull final String columnName,
         @NotNull final MetadataManager metadataManager)
@@ -152,18 +152,18 @@ public class MetadataManagerColumnDAO
      * @return the {@link Attribute column}.
      */
     @Nullable
-    protected Attribute findColumn(
+    protected Attribute<String> findColumn(
         @NotNull final String table,
         @NotNull final String columnName,
         @NotNull final TableDAO tableDAO)
     {
-        Attribute result = null;
+        Attribute<String> result = null;
 
-        @Nullable final Table<String> t_Table = tableDAO.findByName(table);
+        @Nullable final Table<String, Attribute<String>> t_Table = tableDAO.findByName(table);
 
         if (t_Table != null)
         {
-            for (@Nullable final Attribute t_Attribute : t_Table.getAttributes())
+            for (@Nullable final Attribute<String> t_Attribute : t_Table.getAttributes())
             {
                 if (   (t_Attribute != null)
                     && (columnName.equalsIgnoreCase(t_Attribute.getName())))
@@ -184,7 +184,7 @@ public class MetadataManagerColumnDAO
      */
     @NotNull
     @Override
-    public List<Attribute> findColumns(@NotNull final String table)
+    public List<Attribute<String>> findColumns(@NotNull final String table)
     {
         return findColumns(table, getMetadataManager());
     }
@@ -196,7 +196,7 @@ public class MetadataManagerColumnDAO
      * @return the list of {@link Attribute columns}.
      */
     @NotNull
-    protected List<Attribute> findColumns(@NotNull final String table, @NotNull final MetadataManager metadataManager)
+    protected List<Attribute<String>> findColumns(@NotNull final String table, @NotNull final MetadataManager metadataManager)
     {
         return findColumns(table, metadataManager.getTableDAO());
     }
@@ -208,11 +208,11 @@ public class MetadataManagerColumnDAO
      * @return the list of {@link Attribute columns}.
      */
     @NotNull
-    protected List<Attribute> findColumns(@NotNull final String table, @NotNull final TableDAO tableDAO)
+    protected List<Attribute<String>> findColumns(@NotNull final String table, @NotNull final TableDAO tableDAO)
     {
-        @NotNull final List<Attribute> result;
+        @NotNull final List<Attribute<String>> result;
 
-        @Nullable final Table<String> t_Table = tableDAO.findByName(table);
+        @Nullable final Table<String, Attribute<String>> t_Table = tableDAO.findByName(table);
 
         if (t_Table != null)
         {
@@ -220,7 +220,7 @@ public class MetadataManagerColumnDAO
         }
         else
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<Attribute<String>>(0);
         }
 
         return result;
@@ -233,7 +233,7 @@ public class MetadataManagerColumnDAO
      */
     @NotNull
     @Override
-    public List<Attribute> findAllColumns(@NotNull final String table)
+    public List<Attribute<String>> findAllColumns(@NotNull final String table)
     {
         return findAllColumns(table, getMetadataManager());
     }
@@ -245,7 +245,7 @@ public class MetadataManagerColumnDAO
      * @return the list of {@link Attribute columns}.
      */
     @NotNull
-    protected List<Attribute> findAllColumns(
+    protected List<Attribute<String>> findAllColumns(
         @NotNull final String table, @NotNull final MetadataManager metadataManager)
     {
         return findAllColumns(table, metadataManager.getTableDAO());
@@ -258,15 +258,15 @@ public class MetadataManagerColumnDAO
      * @return the list of {@link Attribute columns}.
      */
     @NotNull
-    protected List<Attribute> findAllColumns(@NotNull final String table, @NotNull final TableDAO tableDAO)
+    protected List<Attribute<String>> findAllColumns(@NotNull final String table, @NotNull final TableDAO tableDAO)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>(0);
+        @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>(0);
 
-        @Nullable final Table<String> t_Table = tableDAO.findByName(table);
+        @Nullable final Table<String, Attribute<String>> t_Table = tableDAO.findByName(table);
 
         if (t_Table != null)
         {
-            @Nullable Table<String> t_Parent = t_Table.getParentTable();
+            @Nullable Table<String, Attribute<String>> t_Parent = t_Table.getParentTable();
 
             while (t_Parent != null)
             {

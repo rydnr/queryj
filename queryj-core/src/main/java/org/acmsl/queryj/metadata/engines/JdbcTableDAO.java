@@ -38,6 +38,7 @@ package org.acmsl.queryj.metadata.engines;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
@@ -89,7 +90,7 @@ public class JdbcTableDAO
      */
     @NotNull
     @Override
-    public List<Table<String>> findAllTables()
+    public List<Table<String, Attribute<String>>> findAllTables()
     {
         return getMetadataManager().getTables();
     }
@@ -102,16 +103,16 @@ public class JdbcTableDAO
      * @return the associated {@link Table} instance, if the table is found.
      */
     @Nullable
-    public Table<String> findByName(
+    public Table<String, Attribute<String>> findByName(
         @NotNull final String name,
         @SuppressWarnings("unused") @Nullable final String catalog,
         @SuppressWarnings("unused") @Nullable final String schema)
     {
-        @Nullable Table<String> result = null;
+        @Nullable Table<String, Attribute<String>> result = null;
 
         final boolean t_bCaseSensitive = getMetadataManager().isCaseSensitive();
 
-        for (@Nullable final Table<String> t_Table : getMetadataManager().getTables())
+        for (@Nullable final Table<String, Attribute<String>> t_Table : getMetadataManager().getTables())
         {
             if (t_Table != null)
             {
@@ -140,17 +141,18 @@ public class JdbcTableDAO
      */
     @Override
     @NotNull
-    public List<Table<String>> findReferringTables(@NotNull final String target)
+    public List<Table<String, Attribute<String>>> findReferringTables(@NotNull final String target)
     {
-        @NotNull final List<Table<String>> result = new ArrayList<Table<String>>(1);
+        @NotNull final List<Table<String, Attribute<String>>> result =
+            new ArrayList<Table<String, Attribute<String>>>(1);
 
         final boolean t_bCaseSensitive = getMetadataManager().isCaseSensitive();
 
-        for (@Nullable final Table<String> t_Table : getMetadataManager().getTables())
+        for (@Nullable final Table<String, Attribute<String>> t_Table : getMetadataManager().getTables())
         {
             if (t_Table != null)
             {
-                for (@Nullable final ForeignKey t_ForeignKey : t_Table.getForeignKeys())
+                for (@Nullable final ForeignKey<String> t_ForeignKey : t_Table.getForeignKeys())
                 {
                     if (t_ForeignKey != null)
                     {

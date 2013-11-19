@@ -55,7 +55,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractField
-    extends  AbstractAttribute
+    extends  AbstractAttribute<String>
     implements  Field
 {
     /**

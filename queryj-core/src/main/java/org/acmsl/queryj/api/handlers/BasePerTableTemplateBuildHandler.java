@@ -45,6 +45,7 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.metadata.vo.Row;
@@ -194,7 +195,7 @@ public abstract class BasePerTableTemplateBuildHandler
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final List<Table<String>> tables,
+        @NotNull final List<Table<String, Attribute<String>>> tables,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
       throws  QueryJBuildException
@@ -203,13 +204,13 @@ public abstract class BasePerTableTemplateBuildHandler
 
         @Nullable T t_Template;
 
-        for  (@Nullable final Table<String> t_Table : tables)
+        for  (@Nullable final Table<String, Attribute<String>> t_Table : tables)
         {
             if (t_Table != null)
             {
                 if (metadataManager.isGenerationAllowedForTable(t_Table.getName()))
                 {
-                    List<Row> t_lStaticContent = retrieveCachedStaticContent(parameters, t_Table.getName());
+                    List<Row<String>> t_lStaticContent = retrieveCachedStaticContent(parameters, t_Table.getName());
 
                     if (t_lStaticContent == null)
                     {
@@ -236,7 +237,7 @@ public abstract class BasePerTableTemplateBuildHandler
                         }
                         if (t_lStaticContent == null)
                         {
-                            t_lStaticContent = new ArrayList<Row>(0);
+                            t_lStaticContent = new ArrayList<Row<String>>(0);
                         }
                         storeCachedStaticContent(t_lStaticContent, parameters, t_Table.getName());
                     }
@@ -351,7 +352,7 @@ public abstract class BasePerTableTemplateBuildHandler
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
-        @NotNull final List<Row> staticContents,
+        @NotNull final List<Row<String>> staticContents,
         @SuppressWarnings("unused") @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
@@ -416,13 +417,13 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     @SuppressWarnings("unused")
     @Nullable
-    protected List<Row> retrieveStaticContent(
+    protected List<Row<String>> retrieveStaticContent(
         @NotNull final QueryJCommand parameters,
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @Nullable List<Row> result =
+        @Nullable List<Row<String>> result =
             retrieveCachedStaticContent(parameters, tableName);
 
         if  (result == null)
@@ -438,7 +439,7 @@ public abstract class BasePerTableTemplateBuildHandler
 
                 if (result == null)
                 {
-                    result = new ArrayList<Row>(0);
+                    result = new ArrayList<Row<String>>(0);
                 }
                 storeCachedStaticContent(result, parameters, tableName);
             }
@@ -470,7 +471,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @throws SQLException if the operation fails.
      */
     @Nullable
-    protected List<Row> retrieveStaticContent(
+    protected List<Row<String>> retrieveStaticContent(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -489,10 +490,10 @@ public abstract class BasePerTableTemplateBuildHandler
      * @return such content, if present.
      */
     @Nullable
-    protected List<Row> retrieveCachedStaticContent(
+    protected List<Row<String>> retrieveCachedStaticContent(
         @NotNull final QueryJCommand parameters, @NotNull final String tableName)
     {
-        return new QueryJCommandWrapper<List<Row>>(parameters).getSetting(buildStaticContentKey(tableName));
+        return new QueryJCommandWrapper<List<Row<String>>>(parameters).getSetting(buildStaticContentKey(tableName));
     }
 
     /**
@@ -503,11 +504,11 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     @SuppressWarnings("unchecked")
     protected void storeCachedStaticContent(
-        @NotNull final List<Row> contents,
+        @NotNull final List<Row<String>> contents,
         @NotNull final QueryJCommand parameters,
         @NotNull final String tableName)
     {
-        new QueryJCommandWrapper<List<Row>>(parameters).setSetting(buildStaticContentKey(tableName), contents);
+        new QueryJCommandWrapper<List<Row<String>>>(parameters).setSetting(buildStaticContentKey(tableName), contents);
     }
 
     /**

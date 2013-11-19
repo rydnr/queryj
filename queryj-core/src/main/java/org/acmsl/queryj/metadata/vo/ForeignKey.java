@@ -51,8 +51,8 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface ForeignKey
-    extends Comparable<ForeignKey>,
+public interface ForeignKey<V>
+    extends Comparable<ForeignKey<V>>,
             Serializable
 {
     /**
@@ -60,28 +60,28 @@ public interface ForeignKey
      * @return such name.
      */
     @Nullable
-    public String getFkName();
+    public V getFkName();
 
     /**
      * Retrieves the source table name.
      * @return such table name.
      */
     @NotNull
-    public String getSourceTableName();
+    public V getSourceTableName();
     
     /**
      * Retrieves the attributes.
      * @return such information.
      */
     @NotNull
-    public List<Attribute> getAttributes();
+    public List<Attribute<V>> getAttributes();
     
     /**
      * Retrieves the target table name.
      * @return such table name.
      */
     @NotNull
-    public String getTargetTableName();
+    public V getTargetTableName();
 
     /**
      * Retrieves whether the foreign key can take null values.

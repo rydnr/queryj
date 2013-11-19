@@ -55,7 +55,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @ThreadSafe
 public class TableIncompleteValueObject
-    extends AbstractTable<String>
+    extends AbstractTable<String, Attribute<String>>
 {
 
     private static final long serialVersionUID = -9077871583769430337L;
@@ -75,7 +75,7 @@ public class TableIncompleteValueObject
      * {@inheritDoc}
      */
     @Override
-    public void setParentTable(@NotNull final Table<String> parent)
+    public void setParentTable(@NotNull final Table<String, Attribute<String>> parent)
     {
         super.setParentTable(parent);
     }
@@ -85,7 +85,7 @@ public class TableIncompleteValueObject
      * @param attrs the attributes.
      */
     @Override
-    public void setAttributes(@NotNull final List<Attribute> attrs)
+    public void setAttributes(@NotNull final List<Attribute<String>> attrs)
     {
         super.setAttributes(attrs);
     }
@@ -96,7 +96,7 @@ public class TableIncompleteValueObject
      * @param attrs the primary key attributes.
      */
     @Override
-    public void setPrimaryKey(@NotNull final List<Attribute> attrs)
+    public void setPrimaryKey(@NotNull final List<Attribute<String>> attrs)
     {
         super.setPrimaryKey(attrs);
     }
@@ -105,7 +105,7 @@ public class TableIncompleteValueObject
      * {@inheritDoc}
      */
     @Override
-    public void setForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
+    public void setForeignKeys(@NotNull final List<ForeignKey<String>> foreignKeys)
     {
         super.setForeignKeys(foreignKeys);
     }

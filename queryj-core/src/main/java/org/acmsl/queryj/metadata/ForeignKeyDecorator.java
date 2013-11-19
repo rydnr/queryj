@@ -50,6 +50,6 @@ import org.acmsl.queryj.metadata.vo.ForeignKey;
  *         >Jose San Leandro</a>
  */
 public interface ForeignKeyDecorator
-    extends ForeignKey
+    extends ForeignKey<DecoratedString>
 {
 }

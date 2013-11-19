@@ -133,7 +133,7 @@ public class ExternallyManagedFieldsRetrievalHandler
                         }
                         else
                         {
-                            @Nullable final Attribute t_Attribute =
+                            @Nullable final Attribute<String> t_Attribute =
                                 metadataManager.getColumnDAO().findColumn(
                                     t_Field.getTableName(),
                                     t_Field.getName());

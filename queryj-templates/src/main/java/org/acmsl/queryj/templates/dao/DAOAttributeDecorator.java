@@ -37,6 +37,7 @@ package org.acmsl.queryj.templates.dao;
  * Importing project classes.
  */
 import org.acmsl.queryj.metadata.CachingAttributeDecorator;
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 
@@ -82,13 +83,13 @@ public class DAOAttributeDecorator
      * @return such information.
      */
     @NotNull
-    public String getType()
+    public DecoratedString getType()
     {
-        @Nullable String result = getCachedType();
+        @Nullable DecoratedString result = getCachedType();
 
         if  (result == null)
         {
-            result = retrieveType();
+            result = new DecoratedString(retrieveType());
             setCachedType(result);
         }
 

@@ -66,7 +66,7 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class PrimaryKeyHandler
-    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Attribute>>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Attribute<String>>>
 {
 
     private static final long serialVersionUID = -8692058693572483344L;
@@ -88,7 +88,7 @@ public class PrimaryKeyHandler
      */
     @NotNull
     @Override
-    protected List<Attribute> getValue(@NotNull final PerTableTemplateContext context)
+    protected List<Attribute<String>> getValue(@NotNull final PerTableTemplateContext context)
     {
         return
             retrievePrimaryKeyAttributes(
@@ -113,7 +113,7 @@ public class PrimaryKeyHandler
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> retrievePrimaryKeyAttributes(
+    protected List<Attribute<String>> retrievePrimaryKeyAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataUtils metadataUtils)

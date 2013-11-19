@@ -250,9 +250,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected List<Table<String>> retrieveExplicitTableNames(@NotNull final QueryJCommand parameters)
+    protected List<Table<String, Attribute<String>>> retrieveExplicitTableNames(@NotNull final QueryJCommand parameters)
     {
-        List<Table<String>> result = null;
+        List<Table<String, Attribute<String>>> result = null;
 
         @Nullable final AntTablesElement t_TablesElement =
             retrieveTablesElement(parameters);
@@ -268,7 +268,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             if  (   (t_cTableElements != null)
                  && (t_cTableElements.size() > 0))
             {
-                result = new ArrayList<Table<String>>(t_cTableElements.size());
+                result = new ArrayList<Table<String, Attribute<String>>>(t_cTableElements.size());
 
                 t_itTableElements = t_cTableElements.iterator();
 
@@ -286,7 +286,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         if (result == null)
         {
-            result = new ArrayList<Table<String>>(0);
+            result = new ArrayList<Table<String, Attribute<String>>>(0);
         }
 
         return result;
@@ -298,7 +298,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the converted table.
      */
     @NotNull
-    protected Table<String> convertToTable(@NotNull final AntTableElement table)
+    protected Table<String, Attribute<String>> convertToTable(@NotNull final AntTableElement table)
     {
         @NotNull final TableIncompleteValueObject result = new TableIncompleteValueObject(table.getName(), null);
 
@@ -306,7 +306,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         if (t_lFields != null)
         {
-            @NotNull final List<Attribute> t_lAttributes = new ArrayList<Attribute>(t_lFields.size());
+            @NotNull final List<Attribute<String>> t_lAttributes = new ArrayList<Attribute<String>>(t_lFields.size());
 
             for (@Nullable final AntFieldElement t_Field : t_lFields)
             {
@@ -534,29 +534,30 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 t_mKeys,
                 t_mKeys);
 
-            @Nullable final List<Table<String>> t_lTables = (List<Table<String>>) t_mKeys.get(buildTableKey());
+            @Nullable final List<Table<String, Attribute<String>>> t_lTables =
+                (List<Table<String, Attribute<String>>>) t_mKeys.get(buildTableKey());
 
             if  (t_lTables != null)
             {
-                final Iterator<Table<String>> t_itTables = t_lTables.iterator();
+                final Iterator<Table<String, Attribute<String>>> t_itTables = t_lTables.iterator();
 
                 while  (t_itTables.hasNext())
                 {
-                    @Nullable final Table<String> t_Table = t_itTables.next();
+                    @Nullable final Table<String, Attribute<String>> t_Table = t_itTables.next();
 
                     if  (t_Table != null)
                     {
-                        @NotNull final List<Attribute> t_lFields =
-                            (List<Attribute>)
+                        @NotNull final List<Attribute<String>> t_lFields =
+                            (List<Attribute<String>>)
                                 t_mKeys.get(
                                     buildTableFieldsKey(
                                         t_Table.getName()));
 
-                        final Iterator<Attribute> t_itFields = t_lFields.iterator();
+                        final Iterator<Attribute<String>> t_itFields = t_lFields.iterator();
 
                         while  (t_itFields.hasNext())
                         {
-                            @Nullable final Attribute t_Field = t_itFields.next();
+                            @Nullable final Attribute<String> t_Field = t_itFields.next();
 
                             @NotNull final List<AntFieldFkElement> t_lFieldFks =
                                 (List<AntFieldFkElement>)
@@ -620,7 +621,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         t_TablesElement = retrieveTablesElement(parameters);
 
-        @NotNull final List<Table<String>> t_lTables =
+        @NotNull final List<Table<String, Attribute<String>>> t_lTables =
             extractTables(parameters, t_TablesElement);
 
         storeTables(t_lTables, parameters);
@@ -644,10 +645,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     @NotNull
     @SuppressWarnings("unused")
-    protected List<Table<String>> extractTables(
+    protected List<Table<String, Attribute<String>>> extractTables(
         @NotNull final QueryJCommand parameters, @Nullable final AntTablesElement tablesElement)
     {
-        List<Table<String>> result = null;
+        List<Table<String, Attribute<String>>> result = null;
 
         if (tablesElement != null)
         {
@@ -656,7 +657,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         if (result == null)
         {
-            result = new ArrayList<Table<String>>(0);
+            result = new ArrayList<Table<String, Attribute<String>>>(0);
         }
 
         return result;
@@ -668,13 +669,13 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return such fields.
      */
     @NotNull
-    protected List<Table<String>> extractTables(@Nullable final List<AntTableElement> tables)
+    protected List<Table<String, Attribute<String>>> extractTables(@Nullable final List<AntTableElement> tables)
     {
-        @Nullable final List<Table<String>> result;
+        @Nullable final List<Table<String, Attribute<String>>> result;
 
         final int t_iLength = (tables != null) ? tables.size() : 0;
 
-        result = new ArrayList<Table<String>>(t_iLength);
+        result = new ArrayList<Table<String, Attribute<String>>>(t_iLength);
 
         if (tables != null)
         {
@@ -918,11 +919,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @Nullable MetadataManager result =
             retrieveCachedMetadataManager(parameters);
 
-        @Nullable List<Table<String>> t_lTables = retrieveTables(parameters);
+        @Nullable List<Table<String, Attribute<String>>> t_lTables = retrieveTables(parameters);
 
         if (t_lTables == null)
         {
-            t_lTables = new ArrayList<Table<String>>(0);
+            t_lTables = new ArrayList<Table<String, Attribute<String>>>(0);
         }
 
         if  (result == null)
@@ -1015,7 +1016,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     @NotNull
     protected MetadataManager buildMetadataManager(
         @SuppressWarnings("unused") @NotNull final QueryJCommand parameters,
-        @NotNull final List<Table<String>> tables,
+        @NotNull final List<Table<String, Attribute<String>>> tables,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
@@ -1105,9 +1106,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameter map.
      */
     protected void storeTables(
-        @NotNull final List<Table<String>> tables, @NotNull final QueryJCommand parameters)
+        @NotNull final List<Table<String, Attribute<String>>> tables, @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper<List<Table<String>>>(parameters).setSetting(TABLES, tables);
+        new QueryJCommandWrapper<List<Table<String, Attribute<String>>>>(parameters).setSetting(TABLES, tables);
     }
 
     /**
@@ -1116,9 +1117,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the table names.
      */
     @Nullable
-    protected List<Table<String>> retrieveTables(@NotNull final QueryJCommand parameters)
+    protected List<Table<String, Attribute<String>>> retrieveTables(@NotNull final QueryJCommand parameters)
     {
-        return new QueryJCommandWrapper<List<Table<String>>>(parameters).getSetting(TABLES);
+        return new QueryJCommandWrapper<List<Table<String, Attribute<String>>>>(parameters).getSetting(TABLES);
     }
 
     /**

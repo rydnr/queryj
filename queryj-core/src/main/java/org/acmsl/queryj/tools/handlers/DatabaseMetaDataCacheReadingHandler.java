@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
@@ -138,7 +139,8 @@ public class DatabaseMetaDataCacheReadingHandler
         // We only need the table names, if they're not extracted already.
         if (metadataManager != null)
         {
-            @NotNull final List<Table<String>> t_lTables = metadataManager.getTableDAO().findAllTables();
+            @NotNull final List<Table<String, Attribute<String>>> t_lTables =
+                metadataManager.getTableDAO().findAllTables();
 
             if (   (t_lTables.size() == 0))
             {

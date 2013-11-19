@@ -971,13 +971,13 @@ public class CustomSqlValidationHandler
 
         if  (t_strTable != null)
         {
-            @Nullable final List<Attribute> t_lColumns =
+            @Nullable final List<Attribute<String>> t_lColumns =
                 metadataManager.getColumnDAO().findAllColumns(t_strTable);
 
             final int t_iCount = t_lColumns.size();
 
             String t_strId;
-            Attribute t_Column;
+            Attribute<String> t_Column;
             @Nullable String t_strType;
 
             for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)

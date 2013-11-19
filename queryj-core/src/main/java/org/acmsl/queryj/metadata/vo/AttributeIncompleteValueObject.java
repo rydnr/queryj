@@ -53,7 +53,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class AttributeIncompleteValueObject
-    extends AbstractAttribute
+    extends AbstractAttribute<String>
 {
 
     private static final long serialVersionUID = -8585509128283241379L;

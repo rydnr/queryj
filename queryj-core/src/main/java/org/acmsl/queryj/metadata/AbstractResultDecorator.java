@@ -473,7 +473,7 @@ public abstract class AbstractResultDecorator
 
                 if  (t_strTable != null)
                 {
-                    for (@Nullable final Attribute t_Attribute :
+                    for (@Nullable final Attribute<String> t_Attribute :
                              metadataManager.getColumnDAO().findAllColumns(t_strTable))
                     {
                         if (t_Attribute != null)
@@ -541,8 +541,7 @@ public abstract class AbstractResultDecorator
 
         if (DebugUtils.getInstance().debugEnabledForResultId(getId()))
         {
-            @SuppressWarnings("unused")
-            int a = 1;
+            @SuppressWarnings("unused") final int a = 1;
         }
 
         @NotNull final List<PropertyRef> t_lExplicitProperties =
@@ -597,7 +596,8 @@ public abstract class AbstractResultDecorator
 
         if (t_strTable != null)
         {
-            @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(t_strTable);
+            @Nullable final Table<String, Attribute<String>> t_Table =
+                metadataManager.getTableDAO().findByName(t_strTable);
 
             if (t_Table != null)
             {
@@ -630,7 +630,7 @@ public abstract class AbstractResultDecorator
      */
     @NotNull
     protected List<Property> convert(
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final Result sqlResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -638,7 +638,7 @@ public abstract class AbstractResultDecorator
     {
         @NotNull final List<Property> result = new ArrayList<Property>(attributes.size());
 
-        for (@Nullable final Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<String> t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {

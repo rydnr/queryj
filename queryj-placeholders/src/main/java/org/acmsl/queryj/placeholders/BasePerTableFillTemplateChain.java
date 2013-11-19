@@ -138,7 +138,7 @@ public class BasePerTableFillTemplateChain
         result.add(
             (FillAdapterHandler)
                 new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, ForeignKeyListHandler,List<ForeignKey>>(
+                    <PerTableTemplateContext, ForeignKeyListHandler,List<ForeignKey<String>>>(
                         new ForeignKeyListHandler(context)));
 
         result.add(
@@ -150,13 +150,13 @@ public class BasePerTableFillTemplateChain
         result.add(
             (FillAdapterHandler)
                 new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, NonPrimaryKeyAttributesHandler,List<Attribute>>(
+                    <PerTableTemplateContext, NonPrimaryKeyAttributesHandler,List<Attribute<String>>>(
                         new NonPrimaryKeyAttributesHandler(context)));
 
         result.add(
             (FillAdapterHandler)
                 new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, PrimaryKeyHandler,List<Attribute>>(
+                    <PerTableTemplateContext, PrimaryKeyHandler,List<Attribute<String>>>(
                         new PrimaryKeyHandler(context)));
 
         result.add(
