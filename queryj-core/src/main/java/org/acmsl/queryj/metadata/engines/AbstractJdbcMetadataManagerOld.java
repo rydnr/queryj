@@ -1504,7 +1504,7 @@ public abstract class AbstractJdbcMetadataManagerOld
     {
         boolean result = false;
 
-        final int t_iLength = (columnNames != null) ? columnNames.length : 0;
+        final int t_iLength = columnNames.length;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
@@ -2105,26 +2105,26 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Retrieves the foreign keys of given table.
      * @param tableName the table name.
      * @return its foreign keys.
-     * @precondition tableName != null
      */
+    @NotNull
+    @Override
     public String[][] getForeignKeys(final String tableName)
     {
-        String[][] result;
+        @NotNull final String[][] result;
         
-        Collection t_cResult = new ArrayList();
+        @NotNull final Collection<String[]> t_cResult = new ArrayList<String[]>();
 
-        String[] t_astrReferredTables = getReferredTables(tableName);
+        @NotNull final String[] t_astrReferredTables = getReferredTables(tableName);
 
-        int t_iLength =
-            (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
+        @NotNull final int t_iLength = t_astrReferredTables.length;
         
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            String[][] t_aastrFks =
+            @NotNull final String[][] t_aastrFks =
                 getForeignKeys(
                     tableName, t_astrReferredTables[t_iIndex]);
 
-            int t_iFkLength = (t_aastrFks != null) ? t_aastrFks.length : 0;
+            final int t_iFkLength = t_aastrFks.length;
             
             for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkLength; t_iFkIndex++)
             {
@@ -2132,7 +2132,7 @@ public abstract class AbstractJdbcMetadataManagerOld
             }
         }
 
-        Iterator t_Iterator = t_cResult.iterator();
+        @NotNull final Iterator<String[]> t_Iterator = t_cResult.iterator();
         
         result = new String[t_cResult.size()][];
         
@@ -2140,7 +2140,7 @@ public abstract class AbstractJdbcMetadataManagerOld
         
         while  (t_Iterator.hasNext())
         {
-            result[t_iActualIndex++] = (String[]) t_Iterator.next();
+            result[t_iActualIndex++] = t_Iterator.next();
         }
 
         return result;
@@ -2151,7 +2151,6 @@ public abstract class AbstractJdbcMetadataManagerOld
      * Checks whether given table contains foreign keys.
      * @param tableName the table name.
      * @return <code>true</code> in such case.
-     * @precondition tableName != null
      */
     public boolean containsForeignKeys(final String tableName)
     {
@@ -4670,12 +4669,11 @@ public abstract class AbstractJdbcMetadataManagerOld
     {
         try 
         {
-            String[] t_astrTableNames = getTableNames();
+            @NotNull final String[] t_astrTableNames = getTableNames();
 
             String t_strTableName;
 
-            int t_iLength =
-                (t_astrTableNames != null) ? t_astrTableNames.length : 0;
+            int t_iLength = t_astrTableNames.length;
             
             for  (int t_iTableIndex = 0;
                       t_iTableIndex < t_iLength;

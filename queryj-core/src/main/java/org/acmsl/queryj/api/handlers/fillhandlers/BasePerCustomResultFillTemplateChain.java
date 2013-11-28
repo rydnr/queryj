@@ -46,8 +46,10 @@ import org.acmsl.queryj.api.PerCustomResultTemplateContext;
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.api.PerCustomResultTemplate per-custom-result templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/17
+ * @since 3.0
+ * Created: 2012/06/17
  */
+@SuppressWarnings("unused")
 public interface BasePerCustomResultFillTemplateChain<BC extends PerCustomResultTemplateContext>
     extends FillTemplateChain<BC>
 {

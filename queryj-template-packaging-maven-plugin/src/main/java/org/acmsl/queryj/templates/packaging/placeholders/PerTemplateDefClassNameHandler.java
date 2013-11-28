@@ -45,6 +45,7 @@ import org.acmsl.queryj.metadata.DecoratedString;
 /*
  * Importing QueryJ-Template-Packaging classes.
  */
+import org.acmsl.queryj.placeholders.Literals;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
 
 /*
@@ -94,7 +95,7 @@ public class PerTemplateDefClassNameHandler
     @Override
     public String getPlaceHolder()
     {
-        return "class_name";
+        return Literals.CLASS_NAME;
     }
 
     /**

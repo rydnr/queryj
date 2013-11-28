@@ -78,6 +78,7 @@ import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 //import org.acmsl.queryj.metadata.vo.Row;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.api.PerTableTemplate;
 import org.acmsl.queryj.api.PerTableTemplateFactory;
@@ -194,7 +195,7 @@ public class PerTableTemplatesTest
      */
     protected void defineInputTables(
         @NotNull final DataTable tableInfo,
-        @NotNull final Map\<String, Table\<String>\> tables,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>\>> tables,
         @NotNull final TableTestHelper helper)
     {
         helper.defineInputTables(tableInfo, tables);
@@ -216,9 +217,9 @@ public class PerTableTemplatesTest
      * @param columnInfo the column information.
      * @param tables the tables.
      */
-    protected List\<Table\<String>\> defineInputColumns(
+    protected List\<Table\<String, Attribute\<String>\>> defineInputColumns(
         @NotNull final DataTable columnInfo,
-        @NotNull final Map\<String, Table\<String>\> tables,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>\>> tables,
         @NotNull final TableTestHelper helper)
     {
         return helper.defineInputColumns(columnInfo, tables);
@@ -244,8 +245,8 @@ public class PerTableTemplatesTest
      */
     protected void defineForeignKeys(
         @NotNull final DataTable fkInfo,
-        @NotNull final Map\<String, Table\<String>\> tables,
-        @NotNull final List\<ForeignKey> foreignKeys,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>\>> tables,
+        @NotNull final List\<ForeignKey\<String\>> foreignKeys,
         @NotNull final TableTestHelper helper)
     {
         helper.defineForeignKeys(fkInfo, tables, foreignKeys);
@@ -270,7 +271,7 @@ public class PerTableTemplatesTest
      */
     protected void defineValues(
         @NotNull final DataTable values,
-        @NotNull final Map\<String, Table\<String>\> tables,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>\>> tables,
         @NotNull final TableTestHelper helper)
     {
         helper.defineValues(values, tables);
@@ -375,7 +376,7 @@ public class PerTableTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
-        @NotNull final Map\<String, Table\<String>\> tables,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>\>> tables,
         @NotNull final Map\<String, File> outputFiles,
         @NotNull final CustomSqlProvider sqlProvider)
     {
@@ -384,7 +385,7 @@ public class PerTableTemplatesTest
 
         Assert.assertNotNull("No template generator found for " + templateName, generator);
 
-        for (@NotNull final Table\<String> table : tables.values())
+        for (@NotNull final Table\<String, Attribute\<String\>> table : tables.values())
         {
             @Nullable final PerTableTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
 

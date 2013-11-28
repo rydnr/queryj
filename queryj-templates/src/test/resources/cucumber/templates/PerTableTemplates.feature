@@ -65,6 +65,16 @@ Feature: Per-table templates
       | car_brands |        3 | VOLKSWAGEN |
       | car_brands |        4 |       AUDI |
 
+    And the following queries:
+      |       id      |     name      |  dao |  type  |                     value                         |
+      | first.select  | first-select  | user | select | select user_id, name from users where user_id = ? |
+      | second.select | second-select | user | select | select user_id, name from users where name = ?    |
+
+    And the following query parameters:
+      |      id      |      sql       | index |  type  |  name  |
+      | user.user_id |  first.select  |   1   |  long  | userId |
+      | user.name    |  second.select |   1   | String |  name  |
+
     When I generate with per-table <template>.stg for Oracle
 
     Then the generated per-table <output> file compiles successfully

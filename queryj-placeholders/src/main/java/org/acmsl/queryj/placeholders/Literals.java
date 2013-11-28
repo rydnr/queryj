@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,34 +23,39 @@
 
  ******************************************************************************
  *
- * Filename: BasePerForeignKeyFillTemplateChain.java
+ * Filename: Literals.java
  *
- * Author: Jose San Leandro Armendariz (chous)
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Sets up the chain required to provide placeholder replacements
- *              for per-foreign-key templates.
+ * Description: 
  *
- * Date: 6/3/12
- * Time: 12:38 PM
+ * Date: 2013/11/28
+ * Time: 21:57
  *
  */
-package org.acmsl.queryj.api.handlers.fillhandlers;
+package org.acmsl.queryj.placeholders;
 
 /*
- *Importing project classes.
-*/
-import org.acmsl.queryj.api.FillTemplateChain;
-import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Sets up the chain required to provide placeholder replacements for
- * {@link org.acmsl.queryj.api.PerForeignKeyTemplate per-foreign-key templates}.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * Literals for QueryJ Placeholders.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2012/06/18
+ * Created: 2013/11/28 21:57
  */
-@SuppressWarnings("unused")
-public interface BasePerForeignKeyFillTemplateChain<BC extends PerForeignKeyTemplateContext>
-    extends FillTemplateChain<BC>
+@ThreadSafe
+public class Literals
 {
+    public static final String CLASS_NAME = "class_name";
+    public static final String RESULT = "result";
+    public static final String FOREIGN_KEY = "foreign_key";
+    public static final String QUERYJ_PROPERTIES = "-queryj.properties";
+    public static final String HEADER = "header";
+    public static final String LOB_HANDLING_REQUIRED = "lob_handling_required";
+    public static final String PACKAGE1 = "package";
+    public static final String REPOSITORY1 = "repository";
+    public static final String TIMESTAMP1 = "timestamp";
 }

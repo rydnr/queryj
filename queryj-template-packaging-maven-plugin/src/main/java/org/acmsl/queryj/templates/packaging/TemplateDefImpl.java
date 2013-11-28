@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.tools.maven.Literals;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -304,7 +305,7 @@ public class TemplateDefImpl
                ", 'name': '" + m__strName + '\'' +
                ", 'type': '" + m__Type  + '\'' +
                ", 'filenameBuilder': '" + m__strFilenameBuilder + '\'' +
-               ", 'packageName': '" + m__strPackageName + '\'' +
+               Literals.PACKAGE_NAME + m__strPackageName + '\'' +
                ", 'file': '" + m__File.getAbsolutePath() + "' }";
     }
 }

@@ -57,7 +57,8 @@ import java.io.Serializable;
  * Used to fill the template's dynamic parameters based on a chain-of-responsibility pattern,
  * for clarity sake.
  * @author <a href="mailto:jose@acm-sl.org">Jose San Leandro</a>
- * @since 2012/05/13
+ * @since 3.0
+ * Created: 2012/05/13
  */
 public interface FillHandler<P>
     extends TemplateHandler<QueryJCommand>,

@@ -71,6 +71,7 @@ public class PerCustomSqlTemplateContext
     extends AbstractTemplateContext
 {
     private static final long serialVersionUID = -1302836113779801668L;
+
     /**
      * The Sql.
      */
@@ -188,5 +189,14 @@ public class PerCustomSqlTemplateContext
         }
         final PerCustomSqlTemplateContext other = (PerCustomSqlTemplateContext) obj;
         return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.m__Sql, other.m__Sql).isEquals();
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"class\": \"" + PerCustomSqlTemplateContext.class.getName() + '"'
+            + ", \"sql\": " + m__Sql + " }";
     }
 }

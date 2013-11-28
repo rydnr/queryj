@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
 /*
  * Importing QueryJ-Core classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
@@ -107,7 +108,7 @@ public class TemplateTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return "Template";
+        return Literals.TEMPLATE;
     }
 
     /**

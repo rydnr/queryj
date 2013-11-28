@@ -43,6 +43,7 @@ import org.acmsl.queryj.placeholders.AbstractDecoratedStringHandler;
 /*
  * Importing QueryJ Template Packaging classes.
  */
+import org.acmsl.queryj.placeholders.Literals;
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 
 /*
@@ -94,6 +95,6 @@ public class GlobalClassNameHandler
     @Override
     public String getPlaceHolder()
     {
-        return "class_name";
+        return Literals.CLASS_NAME;
     }
 }

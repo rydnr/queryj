@@ -77,7 +77,7 @@ public class ClassNameHandler<C extends TemplateContext>
     @Override
     public String getPlaceHolder()
     {
-        return "class_name";
+        return Literals.CLASS_NAME;
     }
 
     //            defaultThemeUtils.buildDAOImplementationClassName(

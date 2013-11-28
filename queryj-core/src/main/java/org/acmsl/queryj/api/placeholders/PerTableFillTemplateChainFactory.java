@@ -36,14 +36,17 @@
  */
 package org.acmsl.queryj.api.placeholders;
 
+/*
+ * Importing project classes.
+ */
 import org.acmsl.queryj.api.PerTableTemplateContext;
-import org.acmsl.queryj.api.placeholders.FillTemplateChainFactory;
 
 /**
  * JDK 6 Services'-compatible per-table {@link org.acmsl.queryj.api.placeholders.FillTemplateChainFactory}
  * implementation.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/08
+ * @since 3.0
+ * Created: 2013/06/08
  */
 @SuppressWarnings("unused")
 public interface PerTableFillTemplateChainFactory

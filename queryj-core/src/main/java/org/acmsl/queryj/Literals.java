@@ -23,22 +23,21 @@
 
  ******************************************************************************
  *
- * Filename: TemplateTemplate.java
+ * Filename: Literals.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: A template used to generate QueryJ template classes.
+ * Description: Literals all over QueryJ Core.
  *
- * Date: 2013/08/15
- * Time: 07:49
+ * Date: 2013/11/21
+ * Time: 19:41
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj;
 
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.Literals;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -47,33 +46,26 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * A template used to generate QueryJ {@link org.acmsl.queryj.api.Template} classes.
+ * Literals all over QueryJ Core.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/15 07:49
+ * Created: 2013/11/21 19:41
  */
 @ThreadSafe
-public class TemplateTemplate<C extends TemplatePackagingContext>
-    extends AbstractTemplatePackagingTemplate<C>
+public interface Literals
 {
-    /**
-     * Builds an <code>TemplateTemplate</code> using given
-     * information.
-     * @param context the {@link TemplatePackagingContext} instance.
-     */
-    protected TemplateTemplate(@NotNull final C context)
-    {
-        super(context);
-    }
+    String JSON_PARENT_ATTR = " 'parent': ";
+    String TEMPLATE = "Template";
+    String GENERATING = "Generating ";
+    String CONTEXT = "Context";
+    String FILL_TEMPLATE_CHAIN_FACTORY = "FillTemplateChainFactory";
+    String DEFAULT_PLACEHOLDER_PACKAGE = "org.acmsl.queryj.api.placeholders";
 
-    /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return Literals.TEMPLATE;
-    }
+
+    String SOURCE = "source";
+    String INVALID_TABLE_COMMENT = "Invalid table comment: ";
+    String INVALID_COLUMN_COMMENT = "Invalid column comment: ";
+    String REFERENCED_RESULT_NOT_FOUND = "Referenced result not found: ";
+    String RESULT_SUFFIX = ".result";
+    String TABLE_NOT_FOUND = "Table not found: ";
 }

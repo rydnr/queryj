@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.tools.maven.Literals;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -260,8 +261,8 @@ public class AbstractTemplatePackagingContext
         return "{ 'class': 'DefaultTemplatePackagingContext' " +
                ", 'fileName': '" + m__strFileName + '\'' +
                ", 'templateName': '" + m__strTemplateName + '\'' +
-               ", 'packageName': '" + m__strPackageName + '\'' +
+               Literals.PACKAGE_NAME + m__strPackageName + '\'' +
                ", 'rootDir': '" + m__RootDir.getAbsolutePath() + '\'' +
-               ", 'outputDir': '" + m__OutputDir.getAbsolutePath() + "' }";
+               Literals.OUTPUT_DIR + m__OutputDir.getAbsolutePath() + "' }";
     }
 }

@@ -77,6 +77,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
+@SuppressWarnings("unused")
 public abstract class BasePerCustomResultTemplateBuildHandler
     <T extends PerCustomResultTemplate,
      TF extends PerCustomResultTemplateFactory<T>>
@@ -96,6 +97,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     /**
      * Creates a <code>BasePerCustomResultTemplateBuildHandler</code> instance.
      */
+    @SuppressWarnings("unused")
     public BasePerCustomResultTemplateBuildHandler() {}
 
     /**
@@ -289,7 +291,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         if (DebugUtils.getInstance().debugEnabledForResultId(customResult.getId()))
         {
             @SuppressWarnings("unused")
-            int a = 1;
+            final int a = 1;
         }
 
         boolean result =

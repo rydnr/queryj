@@ -85,7 +85,7 @@ public class ForeignKeyHandler
     @Override
     public String getPlaceHolder()
     {
-        return "foreign_key";
+        return Literals.FOREIGN_KEY;
     }
 
     /**

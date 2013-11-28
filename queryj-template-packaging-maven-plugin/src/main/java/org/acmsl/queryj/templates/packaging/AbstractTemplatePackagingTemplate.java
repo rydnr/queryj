@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing QueryJ-Core classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.AbstractTemplate;
 import org.acmsl.queryj.api.STTemplate;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
@@ -129,7 +130,7 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
     @NotNull
     protected String buildHeader(@NotNull final String templateName)
     {
-        return GENERATING + templateName;
+        return Literals.GENERATING + templateName;
     }
 
     /**

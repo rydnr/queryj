@@ -31,6 +31,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.exceptions.InvalidPerTableTemplateException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 
@@ -96,7 +97,7 @@ public abstract class AbstractBasePerTableTemplate<C extends PerTableTemplateCon
     protected String buildHeader(
         @NotNull final String templateName, @NotNull final String tableName)
     {
-        return GENERATING + templateName + " for " + tableName + ".";
+        return Literals.GENERATING + templateName + " for " + tableName + ".";
     }
 
     /**

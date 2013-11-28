@@ -1253,7 +1253,7 @@ public class JdbcMetadataTypeManager
         if  (!result)
         {
             if  (   ("time".equalsIgnoreCase(dataType))
-                 || ("timestamp".equalsIgnoreCase(dataType)))
+                 || (Literals.TIMESTAMP1.equalsIgnoreCase(dataType)))
             {
                 result = true;
             }

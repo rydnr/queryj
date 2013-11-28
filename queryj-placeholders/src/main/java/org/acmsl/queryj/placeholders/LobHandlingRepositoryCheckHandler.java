@@ -80,7 +80,7 @@ public class LobHandlingRepositoryCheckHandler
     @Override
     public String getPlaceHolder()
     {
-        return "lob_handling_required";
+        return Literals.LOB_HANDLING_REQUIRED;
     }
 
     /**

@@ -35,14 +35,9 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.utils.io.FileUtils;
 
 /*
  * Importing some JetBrains annotations.
@@ -53,13 +48,6 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-
-/*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 /**
  * Common logic for QueryJ-specific template generators.
@@ -95,7 +83,7 @@ public abstract class AbstractQueryJTemplateGenerator<N extends QueryJTemplate<?
     public String toString()
     {
         return "{ 'class': 'AbstractQueryJTemplateGenerator', " +
-               " 'parent': " + super.toString() +
+               Literals.JSON_PARENT_ATTR + super.toString() +
                " }";
     }
 }

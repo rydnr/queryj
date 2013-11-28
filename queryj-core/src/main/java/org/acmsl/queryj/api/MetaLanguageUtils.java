@@ -40,6 +40,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.tools.antlr.PerCommentLexer;
@@ -167,7 +168,7 @@ public class MetaLanguageUtils
                 if  (t_Log != null)
                 {
                     t_Log.error(
-                        "Invalid table comment: " + tableComment,
+                        Literals.INVALID_TABLE_COMMENT + tableComment,
                         recognitionException);
                 }
             }
@@ -208,7 +209,7 @@ public class MetaLanguageUtils
                 if  (t_Log != null)
                 {
                     t_Log.error(
-                        "Invalid table comment: " + tableComment,
+                        Literals.INVALID_TABLE_COMMENT + tableComment,
                         recognitionException);
                 }
             }
@@ -248,7 +249,7 @@ public class MetaLanguageUtils
                 if  (t_Log != null)
                 {
                     t_Log.error(
-                        "Invalid table comment: " + tableComment,
+                        Literals.INVALID_TABLE_COMMENT + tableComment,
                         recognitionException);
                 }
             }
@@ -297,7 +298,7 @@ public class MetaLanguageUtils
                  if  (t_Log != null)
                  {
                      t_Log.error(
-                         "Invalid column comment: " + columnComment,
+                         Literals.INVALID_COLUMN_COMMENT + columnComment,
                          recognitionException);
                  }
              }
@@ -340,7 +341,7 @@ public class MetaLanguageUtils
                 if  (t_Log != null)
                 {
                     t_Log.error(
-                        "Invalid column comment: " + columnComment,
+                        Literals.INVALID_COLUMN_COMMENT + columnComment,
                         recognitionException);
                 }
             }
@@ -381,7 +382,7 @@ public class MetaLanguageUtils
                 if  (t_Log != null)
                 {
                     t_Log.error(
-                        "Invalid column comment: " + columnComment,
+                        Literals.INVALID_COLUMN_COMMENT + columnComment,
                         recognitionException);
                 }
             }
@@ -418,7 +419,7 @@ public class MetaLanguageUtils
                 if  (t_Log != null)
                 {
                     t_Log.error(
-                        "Invalid table comment: " + tableComment,
+                        Literals.INVALID_TABLE_COMMENT + tableComment,
                         recognitionException);
                 }
             }
@@ -457,7 +458,7 @@ public class MetaLanguageUtils
                 if  (t_Log != null)
                 {
                     t_Log.error(
-                        "Invalid table comment: " + tableComment,
+                        Literals.INVALID_TABLE_COMMENT + tableComment,
                         recognitionException);
                 }
             }

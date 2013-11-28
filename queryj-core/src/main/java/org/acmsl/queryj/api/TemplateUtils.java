@@ -37,6 +37,7 @@ package org.acmsl.queryj.api;
  * Importing some project classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.exceptions.ReferencedResultNotFoundException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
@@ -519,7 +520,7 @@ public class TemplateUtils
                                 if (t_Log != null)
                                 {
                                     t_Log.error(
-                                        "Referenced result not found: "
+                                        Literals.REFERENCED_RESULT_NOT_FOUND
                                         + t_ResultRef.getId());
                                 }
                             }
@@ -527,7 +528,7 @@ public class TemplateUtils
                             {
                                 // class-loading problem.
                                 System.err.println(
-                                    "Referenced result not found:"
+                                    Literals.REFERENCED_RESULT_NOT_FOUND
                                     + t_ResultRef.getId());
                             }
                             throw new ReferencedResultNotFoundException(t_ResultRef, t_Sql);
@@ -571,14 +572,14 @@ public class TemplateUtils
 
             @NotNull final Result singleResult =
                 new ResultElement(
-                    "_single." + tableName.toLowerCase(Locale.getDefault()) + ".result",
+                    "_single." + tableName.toLowerCase(Locale.getDefault()) + Literals.RESULT_SUFFIX,
                     classValue,
                     Result.SINGLE);
             result.add(singleResult);
 
             @NotNull final Result multipleResult =
                 new ResultElement(
-                    "_multiple." + tableName.toLowerCase(Locale.getDefault()) + ".result",
+                    "_multiple." + tableName.toLowerCase(Locale.getDefault()) + Literals.RESULT_SUFFIX,
                     classValue,
                     Result.MULTIPLE);
             result.add(multipleResult);
@@ -591,13 +592,13 @@ public class TemplateUtils
 
                 if (t_Log != null)
                 {
-                    t_Log.error("Table not found:" + table);
+                    t_Log.error(Literals.TABLE_NOT_FOUND + tableName);
                 }
             }
             catch  (@NotNull final Throwable throwable)
             {
                 // class-loading problem.
-                System.err.println("Table not found:" + table);
+                System.err.println(Literals.TABLE_NOT_FOUND + tableName);
             }
         }
 

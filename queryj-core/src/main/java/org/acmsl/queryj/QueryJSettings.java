@@ -72,12 +72,12 @@ public interface QueryJSettings
     /**
      * The repository.
      */
-    public static final String REPOSITORY = PREFIX + "repository";
+    public static final String REPOSITORY = PREFIX + Literals.REPOSITORY1;
 
     /**
      * The output package of the generated classes.
      */
-    public static final String PACKAGE = PREFIX + "package";
+    public static final String PACKAGE = PREFIX + Literals.PACKAGE1;
 
     /**
      * The output folder.
@@ -87,7 +87,7 @@ public interface QueryJSettings
     /**
      * The header file.
      */
-    public static final String HEADER_FILE = PREFIX + "header";
+    public static final String HEADER_FILE = PREFIX + Literals.HEADER;
 
     /**
      * The JNDI location of the DataSource.

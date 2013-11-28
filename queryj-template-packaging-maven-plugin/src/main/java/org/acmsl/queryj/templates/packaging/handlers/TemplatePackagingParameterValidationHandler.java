@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Maven Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -48,11 +48,6 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-
-/*
- * Importing ACM-SL Commons classes.
- */
-import org.acmsl.commons.logging.UniqueLogFactory;
 
 /**
  * Importing Apache Commons Logging classes.
@@ -129,9 +124,6 @@ public class TemplatePackagingParameterValidationHandler
     protected void validateParameters(@Nullable final List<File> sources)
         throws  QueryJBuildException
     {
-        @Nullable final Log t_Log =
-            UniqueLogFactory.getLog(TemplatePackagingParameterValidationHandler.class);
-
         if  (   (sources == null)
              || (sources.size() == 0))
         {

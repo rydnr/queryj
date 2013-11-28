@@ -80,7 +80,7 @@ public class RepositoryNameHandler
     @Override
     public String getPlaceHolder()
     {
-        return "repository";
+        return Literals.REPOSITORY1;
     }
 
     /**

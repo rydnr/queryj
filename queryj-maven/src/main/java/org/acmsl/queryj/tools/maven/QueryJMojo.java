@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Maven
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -1422,7 +1422,7 @@ public class QueryJMojo
         }
         else
         {
-            log.info("Using encoding: '" + encoding + "' to generate QueryJ sources");
+            log.info("Using encoding: \"" + encoding + "\" to generate QueryJ sources");
         }
         result.setEncoding(encoding);
 
@@ -1681,29 +1681,28 @@ public class QueryJMojo
     @Override
     public String toString()
     {
-        return "{ 'class': 'QueryJMojo' " +
-               ", 'catalog': '" + catalog + '\'' +
-               ", 'driver': '" + m__strDriver + '\'' +
-               ", 'url': '" + m__strUrl + '\'' +
-               ", 'username': '" + m__strUsername + '\'' +
-               ", 'password': '" + m__strPassword + '\'' +
-               ", 'schema': '" + schema + '\'' +
-               ", 'repository': '" + m__strRepository + '\'' +
-               ", 'packageName': '" + m__strPackageName + '\'' +
-               ", 'outputDir': '" + m__OutputDir + '\'' +
-               ", 'jndiDataSource': '" + m__strJndiDataSource + '\'' +
-               ", 'sqlXmlFile': '" + m__SqlXmlFile + '\'' +
-               ", 'headerFile': '" + m__HeaderFile + '\'' +
-               ", 'externallyManagedFields': '" + Arrays.toString(externallyManagedFields) + '\'' +
-               ", 'grammarFolder': '" + m__GrammarFolder + '\'' +
-               ", 'grammarName': '" + m__strGrammarName + '\'' +
-               ", 'grammarSuffix': '" + m__strGrammarSuffix + '\'' +
-               ", 'tables': " + Arrays.toString(m__aTables) + '\'' +
-               ", 'encoding': '" + m__strEncoding + '\'' +
-               ", 'disableGenerationTimestamps': '" + m__bDisableGenerationTimestamps + '\'' +
-               ", 'disableNotNullAnnotations': '" + m__bDisableNotNullAnnotations + '\'' +
-               ", 'disableCheckthreadAnnotations': '" + m__bDisableCheckthreadAnnotations + '\'' +
-               ", 'session': '" + session + '\'' +
-               "' }";
+        return "{ \"class\": \"" + QueryJMojo.class.getName() + '"' +
+               ", \"catalog\": \"" + catalog + '"' +
+               ", \"driver\": \"" + m__strDriver + '"' +
+               ", \"url\": \"" + m__strUrl + '"' +
+               ", \"username\": \"" + m__strUsername + '"' +
+               ", \"password\": \"" + m__strPassword + '"' +
+               ", \"schema\": \"" + schema + '"' +
+               ", \"repository\": \"" + m__strRepository + '"' +
+               Literals.PACKAGE_NAME + m__strPackageName + '"' +
+               Literals.OUTPUT_DIR + m__OutputDir + '"' +
+               ", \"jndiDataSource\": \"" + m__strJndiDataSource + '"' +
+               ", \"sqlXmlFile\": \"" + m__SqlXmlFile + '"' +
+               ", \"headerFile\": \"" + m__HeaderFile + '"' +
+               ", \"externallyManagedFields\": \"" + Arrays.toString(externallyManagedFields) + '"' +
+               ", \"grammarFolder\": \"" + m__GrammarFolder + '"' +
+               ", \"grammarName\": \"" + m__strGrammarName + '"' +
+               ", \"grammarSuffix\": \"" + m__strGrammarSuffix + '"' +
+               ", \"tables\": " + Arrays.toString(m__aTables) + '"' +
+               ", \"encoding\": \"" + m__strEncoding + '"' +
+               ", \"disableGenerationTimestamps\": \"" + m__bDisableGenerationTimestamps + '"' +
+               ", \"disableNotNullAnnotations\": \"" + m__bDisableNotNullAnnotations + '"' +
+               ", \"disableCheckthreadAnnotations\": \"" + m__bDisableCheckthreadAnnotations + '"' +
+               ", \"session\": \"" + session + "\" }";
     }
 }

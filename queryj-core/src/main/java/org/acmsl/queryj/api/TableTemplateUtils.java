@@ -90,7 +90,6 @@ public class TableTemplateUtils
      * Retrieves the name of the <code>Table</code> instance.
      * @param table the table name.
      * @return such name.
-     * @precondition table != null
      */
     @NotNull
     public String retrieveTableClassName(@NotNull final String table)
@@ -104,8 +103,6 @@ public class TableTemplateUtils
      * @param table the  table name.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return such name.
-     * @precondition table != null
-     * @precondition decorationUtils != null
      */
     @NotNull
     protected String retrieveTableClassName(

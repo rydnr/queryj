@@ -46,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
  * template.
  * @since 3.0
  */
+@SuppressWarnings("unused")
 public interface FileNameResolver<C extends QueryJTemplateContext>
 {
     /**

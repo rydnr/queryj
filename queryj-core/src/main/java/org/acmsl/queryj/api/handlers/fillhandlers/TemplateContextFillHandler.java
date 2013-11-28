@@ -54,7 +54,8 @@ import org.checkthread.annotations.ThreadSafe;
  * Allows {@link FillHandler FillHandlers} to access the {@link org.acmsl.queryj.api.QueryJTemplateContext}.
  * @param <C> the {@link org.acmsl.queryj.api.QueryJTemplateContext}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/23
+ * @since 3.0
+ * Created: 2012/05/23
  */
 @ThreadSafe
 public interface TemplateContextFillHandler<C extends TemplateContext,P>

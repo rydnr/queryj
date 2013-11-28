@@ -42,6 +42,7 @@ import org.acmsl.commons.patterns.Utils;
 /*
  * Importing StringTemplate classes.
  */
+import org.acmsl.queryj.Literals;
 import org.stringtemplate.v4.STErrorListener;
 import org.stringtemplate.v4.STGroup;
 
@@ -148,7 +149,7 @@ public class STUtils
         @NotNull final Charset charset)
     {
         @NotNull final STGroupFile result = new STGroupFile(path, charset.displayName());
-        STGroup.verbose = true;
+//        STGroup.verbose = true;
 
 //        result.importTemplates(new STGroupDir("org/acmsl/queryj/dao", charset.displayName()));
 //        result.importTemplates(new STGroupDir("org/acmsl/queryj/vo", charset.displayName()));
@@ -159,7 +160,7 @@ public class STUtils
                 result.importTemplates(new STGroupDir(lookupPath, charset.displayName()));
             }
         }
-        result.isDefined("source");
+        result.isDefined(Literals.SOURCE);
         result.setListener(errorListener);
 
 //        STGroup.registerGroupLoader(loader);

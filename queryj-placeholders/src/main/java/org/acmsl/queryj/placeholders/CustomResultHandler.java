@@ -96,6 +96,6 @@ public class CustomResultHandler
     @Override
     public String getPlaceHolder()
     {
-        return "result";
+        return Literals.RESULT;
     }
 }

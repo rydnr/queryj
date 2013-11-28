@@ -38,6 +38,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing QueryJ-Core classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CannotFindPlaceholderImplementationException;
 import org.acmsl.queryj.api.exceptions.CannotFindTemplateGroupException;
@@ -106,12 +107,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 DefaultThemeConstants,
                 Serializable
 {
-    protected static final String GENERATING = "Generating ";
-    protected static final String CONTEXT_LITERAL = "Context";
-    protected static final String TEMPLATE_LITERAL = "Template";
-    protected static final String FILL_TEMPLATE_CHAIN_FACTORY_LITERAL = "FillTemplateChainFactory";
-    protected static final String DEFAULT_PLACEHOLDER_PACKAGE = "org.acmsl.queryj.api.placeholders";
-
     /**
      * The default StringTemplate error listener.
      */
@@ -209,7 +204,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      */
     protected AbstractTemplate(@NotNull final C context)
     {
-        this(context, DEFAULT_PLACEHOLDER_PACKAGE);
+        this(context, Literals.DEFAULT_PLACEHOLDER_PACKAGE);
     }
 
     /**
@@ -461,7 +456,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @NotNull
     protected String buildHeader()
     {
-        return GENERATING + getClass().getName() + ".";
+        return Literals.GENERATING + getClass().getName() + ".";
     }
 
     /**
@@ -923,19 +918,19 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         @NotNull String aux = contextName;
 
-        if (aux.endsWith(CONTEXT_LITERAL))
+        if (aux.endsWith(Literals.CONTEXT))
         {
-            aux = aux.substring(0, aux.lastIndexOf(CONTEXT_LITERAL));
+            aux = aux.substring(0, aux.lastIndexOf(Literals.CONTEXT));
         }
 
-        if (aux.endsWith(TEMPLATE_LITERAL))
+        if (aux.endsWith(Literals.TEMPLATE))
         {
-            aux = aux.substring(0, aux.lastIndexOf(TEMPLATE_LITERAL));
+            aux = aux.substring(0, aux.lastIndexOf(Literals.TEMPLATE));
         }
 
-        if (!aux.endsWith(FILL_TEMPLATE_CHAIN_FACTORY_LITERAL))
+        if (!aux.endsWith(Literals.FILL_TEMPLATE_CHAIN_FACTORY))
         {
-            aux = aux + FILL_TEMPLATE_CHAIN_FACTORY_LITERAL;
+            aux = aux + Literals.FILL_TEMPLATE_CHAIN_FACTORY;
         }
 
         result = placeholderPackage + "." + aux;

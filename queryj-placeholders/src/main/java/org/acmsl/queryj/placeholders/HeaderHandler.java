@@ -84,7 +84,7 @@ public class HeaderHandler
     @Override
     public String getPlaceHolder()
     {
-        return "header";
+        return Literals.HEADER;
     }
 
     /**
