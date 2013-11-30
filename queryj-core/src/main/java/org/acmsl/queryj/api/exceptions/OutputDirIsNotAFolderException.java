@@ -59,6 +59,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class OutputDirIsNotAFolderException
     extends QueryJBuildException
 {
+    private static final long serialVersionUID = 6119700972888989669L;
+
     /**
      * Creates an instance with given context.
      * @param outputDir the output folder.

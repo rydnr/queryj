@@ -54,8 +54,8 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public abstract class AbstractQueryJTemplateGenerator<N extends QueryJTemplate<? extends QueryJTemplateContext>>
-    extends AbstractTemplateGenerator<N>
+public abstract class AbstractQueryJTemplateGenerator<N extends QueryJTemplate<C>, C extends QueryJTemplateContext>
+    extends AbstractTemplateGenerator<N, C>
 {
     /**
      * Creates an {@link AbstractQueryJTemplateGenerator} with given settings.
@@ -82,8 +82,8 @@ public abstract class AbstractQueryJTemplateGenerator<N extends QueryJTemplate<?
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractQueryJTemplateGenerator', " +
-               Literals.JSON_PARENT_ATTR + super.toString() +
-               " }";
+        return
+              "{ \"class\": \"" + AbstractQueryJTemplateGenerator.class.getName() + '"'
+            + ", " + Literals.JSON_PARENT_ATTR + super.toString() + " }";
     }
 }

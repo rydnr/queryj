@@ -113,7 +113,7 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends PerForeignKeyT
      */
     @NotNull
     protected String buildHeader(
-        final String templateName, @NotNull final ForeignKey foreignKey)
+        final String templateName, @NotNull final ForeignKey<String> foreignKey)
     {
         return
               Literals.GENERATING + templateName + " for "

@@ -37,6 +37,7 @@ package org.acmsl.queryj.customsql.xml;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.PropertyElement;
 
 /*
@@ -129,7 +130,7 @@ public class PropertyElementFactory
 
         if (t_strType == null)
         {
-            t_strType = "String";
+            t_strType = Literals.STRING;
         }
 
         result =

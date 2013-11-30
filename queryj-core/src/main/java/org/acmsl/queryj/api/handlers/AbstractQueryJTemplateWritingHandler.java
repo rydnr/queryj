@@ -75,8 +75,10 @@ import java.util.concurrent.CyclicBarrier;
  */
 @ThreadSafe
 public abstract class AbstractQueryJTemplateWritingHandler
-    <T extends QueryJTemplate<C>, TG extends TemplateGenerator<T>, C extends QueryJTemplateContext>
-    extends AbstractTemplateWritingHandler<T, TG, C>
+    <T extends QueryJTemplate<C>,
+     C extends QueryJTemplateContext,
+     TG extends TemplateGenerator<T, C>>
+    extends AbstractTemplateWritingHandler<T, C, TG>
 {
     /**
      * Creates a new generator thread.
@@ -92,7 +94,7 @@ public abstract class AbstractQueryJTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected TemplateGeneratorThread<T, TG, C> buildGeneratorThread(
+    protected TemplateGeneratorThread<T, C, TG> buildGeneratorThread(
         @NotNull final T template,
         @NotNull final TG generator,
         @NotNull final File outputDir,
@@ -103,7 +105,7 @@ public abstract class AbstractQueryJTemplateWritingHandler
         @NotNull final QueryJCommand parameters)
     {
         return
-            new TemplateGeneratorThread<T, TG, C>(
+            new TemplateGeneratorThread<T, C, TG>(
                 generator, template, outputDir, rootDir, charset, threadIndex + 1, barrier);
     }
 

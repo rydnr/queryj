@@ -60,5 +60,5 @@ public interface PerTemplateDefTemplateContext
      * @return such instance.
      */
     @NotNull
-    public TemplateDef getTemplateDef();
+    public TemplateDef<String> getTemplateDef();
 }

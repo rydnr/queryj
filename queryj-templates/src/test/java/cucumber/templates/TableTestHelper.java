@@ -43,6 +43,7 @@ import cucumber.api.DataTable;
 /*
  * Importing QueryJ-Core classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.ParameterElement;
 import org.acmsl.queryj.customsql.Sql;
@@ -304,7 +305,7 @@ public class TableTestHelper
     {
         @NotNull final String[] result = new String[3];
 
-        @Nullable final String booleanInfo = row.get("boolean");
+        @Nullable final String booleanInfo = row.get(Literals.BOOLEAN);
 
         if (   (booleanInfo != null)
                && (!"".equals(booleanInfo.trim())))

@@ -297,7 +297,7 @@ public class TableTestHelper
     {
         @NotNull final String[] result = new String[3];
 
-        @Nullable final String booleanInfo = row.get("boolean");
+        @Nullable final String booleanInfo = row.get(Literals.BOOLEAN);
 
         if (   (booleanInfo != null)
                && (!"".equals(booleanInfo.trim())))

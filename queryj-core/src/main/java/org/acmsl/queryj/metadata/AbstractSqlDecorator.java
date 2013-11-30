@@ -36,6 +36,7 @@ package org.acmsl.queryj.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.ConnectionFlagsRef;
 import org.acmsl.queryj.customsql.ParameterRef;
 import org.acmsl.queryj.customsql.ResultSetFlagsRef;
@@ -502,12 +503,12 @@ public abstract class AbstractSqlDecorator
             {
                 try
                 {
-                    final Log t_Log = UniqueLogFactory.getLog("custom-sql");
+                    final Log t_Log = UniqueLogFactory.getLog(Literals.CUSTOM_SQL);
 
                     if (t_Log != null)
                     {
                         t_Log.warn(
-                              "Referenced result not found:"
+                              Literals.REFERENCED_RESULT_NOT_FOUND
                             + resultRef.getId());
                     }
                 }
@@ -582,12 +583,12 @@ public abstract class AbstractSqlDecorator
             {
                 try
                 {
-                    final Log t_Log = UniqueLogFactory.getLog("custom-sql");
+                    final Log t_Log = UniqueLogFactory.getLog(Literals.CUSTOM_SQL);
 
                     if (t_Log != null)
                     {
                         t_Log.warn(
-                            "Referenced result not found:"
+                            Literals.REFERENCED_RESULT_NOT_FOUND
                             + resultRef.getId());
                     }
                 }
@@ -629,6 +630,7 @@ public abstract class AbstractSqlDecorator
     {
         return new CachingResultDecorator(result, customSqlProvider, metadataManager, decoratorFactory);
     }
+
     /**
      * Retrieves the result id as constant.
      * @return such information.
@@ -689,6 +691,7 @@ public abstract class AbstractSqlDecorator
      * @return such id.
      */
     @Nullable
+    @SuppressWarnings("unused")
     public String getResultIdCapitalized()
     {
         return getResultIdCapitalized(DecorationUtils.getInstance());
@@ -720,6 +723,7 @@ public abstract class AbstractSqlDecorator
      * @return such information.
      */
     @NotNull
+    @Override
     public String toString()
     {
         return
@@ -735,6 +739,7 @@ public abstract class AbstractSqlDecorator
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return hashCode(getSql());
@@ -755,9 +760,10 @@ public abstract class AbstractSqlDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
+    @Override
     public boolean equals(@Nullable final Object object)
     {
-        boolean result;
+        final boolean result;
 
         if  (object instanceof AbstractSqlDecorator)
         {
@@ -821,10 +827,11 @@ public abstract class AbstractSqlDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(@NotNull final IdentifiableElement object)
+    @Override
+    public int compareTo(@Nullable final IdentifiableElement object)
         throws  ClassCastException
     {
-        int result;
+        final int result;
 
         if  (object instanceof AbstractSqlDecorator)
         {

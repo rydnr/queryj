@@ -62,22 +62,22 @@ public interface QueryJSettings
     /**
      * The JDBC catalog.
      */
-    public static final String JDBC_CATALOG = PREFIX + "catalog";
+    public static final String JDBC_CATALOG = PREFIX + Literals.CATALOG;
 
     /**
      * The JDBC schema.
      */
-    public static final String JDBC_SCHEMA = PREFIX + "schema";
+    public static final String JDBC_SCHEMA = PREFIX + Literals.SCHEMA;
 
     /**
      * The repository.
      */
-    public static final String REPOSITORY = PREFIX + Literals.REPOSITORY1;
+    public static final String REPOSITORY = PREFIX + Literals.REPOSITORY;
 
     /**
      * The output package of the generated classes.
      */
-    public static final String PACKAGE = PREFIX + Literals.PACKAGE1;
+    public static final String PACKAGE = PREFIX + Literals.PACKAGE;
 
     /**
      * The output folder.
@@ -97,18 +97,21 @@ public interface QueryJSettings
     /**
      * Whether to generate Mock DAO implementations.
      */
+    @SuppressWarnings("unused")
     public static final String GENERATE_MOCK_DAO_IMPLEMENTATION =
         PREFIX + "generateMockImplementation";
 
     /**
      * Whether to generate Xml DAO implementations.
      */
+    @SuppressWarnings("unused")
     public static final String GENERATE_XML_DAO_IMPLEMENTATION =
         PREFIX + "generateXmlImplementation";
 
     /**
      * Whether to generate test cases.
      */
+    @SuppressWarnings("unused")
     public static final String GENERATE_TESTS =
         PREFIX + "generateTests";
 
@@ -158,6 +161,7 @@ public interface QueryJSettings
     /**
      * Whether to use template caching.
      */
+    @SuppressWarnings("unused")
     public static final String DISABLE_CACHING = PREFIX + "disableCaching";
 
     /**

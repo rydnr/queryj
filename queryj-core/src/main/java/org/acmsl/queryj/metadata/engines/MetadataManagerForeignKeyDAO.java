@@ -121,11 +121,11 @@ public class MetadataManagerForeignKeyDAO
      */
     @NotNull
     @Override
-    public List<ForeignKey> findForeignKeys(
+    public List<ForeignKey<String>> findForeignKeys(
         @NotNull final String table, @Nullable final String catalog, @Nullable final String schema)
     {
         // TODO
-        return new ArrayList<ForeignKey>(0);
+        return new ArrayList<ForeignKey<String>>(0);
     }
 
     /**
@@ -137,11 +137,11 @@ public class MetadataManagerForeignKeyDAO
      */
     @NotNull
     @Override
-    public List<ForeignKey> findReferringForeignKeys(
+    public List<ForeignKey<String>> findReferringForeignKeys(
         @NotNull final String table, @Nullable final String catalog, @Nullable final String schema)
     {
         // TODO
-        return new ArrayList<ForeignKey>(0);
+        return new ArrayList<ForeignKey<String>>(0);
     }
 
     /**
@@ -154,11 +154,20 @@ public class MetadataManagerForeignKeyDAO
      */
     public void insert(
         @NotNull final String table,
-        @NotNull final List<Attribute> sourceAttributes,
-        @NotNull final List<Attribute> targetAttributes,
+        @NotNull final List<Attribute<String>> sourceAttributes,
+        @NotNull final List<Attribute<String>> targetAttributes,
         @Nullable final String catalog,
         @Nullable final String schema)
     {
         // TODO
+    }
+
+    @Override
+    @NotNull
+    public String toString()
+    {
+        return
+              "{ \"class\": \"" + MetadataManagerForeignKeyDAO.class.getName() + '"'
+            + ", \"metadataManager\": " + m__MetadataManager + " }";
     }
 }

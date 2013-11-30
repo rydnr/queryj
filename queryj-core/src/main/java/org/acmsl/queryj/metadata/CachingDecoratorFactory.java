@@ -35,6 +35,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
@@ -452,7 +453,7 @@ public class CachingDecoratorFactory
         {
             exceptionToThrow =
                 new ClassCastException(
-                      "Cannot compare "
+                      Literals.CANNOT_COMPARE
                     + object
                     + " with "
                     + toString());

@@ -42,6 +42,7 @@ package org.acmsl.queryj.customsql.xml;
 * Importing project classes.
 */
 // JUnitDoclet begin import
+import org.acmsl.commons.Literals;
 import org.acmsl.queryj.customsql.xml.UntrimmedCallMethodRule;
 // JUnitDoclet end import
 
@@ -112,7 +113,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.customsql.xml.UntrimmedCallMethodRule("toString");
+    return new org.acmsl.queryj.customsql.xml.UntrimmedCallMethodRule(Literals.TO_STRING);
     // JUnitDoclet end method testcase.createInstance
   }
   

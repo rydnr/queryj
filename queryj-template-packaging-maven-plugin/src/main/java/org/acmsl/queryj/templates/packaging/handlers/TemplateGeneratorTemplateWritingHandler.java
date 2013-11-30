@@ -73,9 +73,9 @@ import java.util.List;
 public class TemplateGeneratorTemplateWritingHandler
     extends TemplatePackagingWritingHandler
                 <TemplateGeneratorTemplate<DefaultTemplatePackagingContext>,
+                 DefaultTemplatePackagingContext,
                  TemplatePackagingTemplateGenerator
-                     <TemplateGeneratorTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>,
-                 DefaultTemplatePackagingContext>
+                     <TemplateGeneratorTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>>
 {
     /**
      * Retrieves the template generator.

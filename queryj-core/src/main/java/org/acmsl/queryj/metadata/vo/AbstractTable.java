@@ -457,7 +457,8 @@ public abstract class AbstractTable<V, A extends Attribute<V>>
         {
             return false;
         }
-        final AbstractTable other = (AbstractTable) obj;
+        @SuppressWarnings("unchecked")
+        final AbstractTable<V, A> other = (AbstractTable<V, A>) obj;
         return new EqualsBuilder().append(this.m__Name, other.m__Name).isEquals();
     }
 

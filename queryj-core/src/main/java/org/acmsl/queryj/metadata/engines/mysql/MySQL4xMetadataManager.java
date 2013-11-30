@@ -35,7 +35,6 @@ package org.acmsl.queryj.metadata.engines.mysql;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.metadata.engines.JdbcMetadataManagerOld;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.acmsl.queryj.api.exceptions.QueryJException;
 
@@ -62,7 +61,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class MySQL4xMetadataManager
-    extends JdbcMetadataManagerOld
+//    extends JdbcMetadataManager
 {
     private static final long serialVersionUID = -9087872657546547720L;
 
@@ -105,6 +104,7 @@ public class MySQL4xMetadataManager
         throws  SQLException,
                 QueryJException
     {
+        /*
         super(
             tableNames,
             procedureNames,
@@ -119,6 +119,7 @@ public class MySQL4xMetadataManager
             engineName,
             engineVersion,
             quote);
+            */
     }
 
     /**

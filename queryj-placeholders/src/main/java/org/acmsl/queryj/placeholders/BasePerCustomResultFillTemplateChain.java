@@ -107,7 +107,7 @@ public class BasePerCustomResultFillTemplateChain
     @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final PerCustomResultTemplateContext context)
     {
-        @NotNull final List result = new ArrayList<FillHandler>(3);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(3);
 
         result.add(
             (FillAdapterHandler)

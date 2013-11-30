@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,11 +36,6 @@
 package org.acmsl.queryj;
 
 /*
- * Importing JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
-/*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
@@ -68,4 +63,38 @@ public interface Literals
     String REFERENCED_RESULT_NOT_FOUND = "Referenced result not found: ";
     String RESULT_SUFFIX = ".result";
     String TABLE_NOT_FOUND = "Table not found: ";
+
+    String REPOSITORY = "repository";
+    String PACKAGE = "package";
+    String HEADER = "header";
+    String CATALOG = "catalog";
+    String SCHEMA = "schema";
+    String TIMESTAMP = "Timestamp";
+    String CUSTOM_SQL = "custom-sql";
+    String BOOLEAN = "boolean";
+    String DECIMAL = "DECIMAL";
+    String BIG_DECIMAL = "BigDecimal";
+    String TINYINT = "TINYINT";
+    String SMALLINT = "SMALLINT";
+    String INTEGER = "Integer";
+    String INTEGER_U = "INTEGER";
+    String NUMERIC_U = "NUMERIC";
+    String BIGINT_U = "BIGINT";
+    String FLOAT_U = "FLOAT";
+    String DOUBLE_U = "DOUBLE";
+    String FLOAT = "float";
+    String DOUBLE = "double";
+    String TIMESTAMP_U = "TIMESTAMP";
+    String VARCHAR_U = "VARCHAR";
+    String LONGVARCHAR_U = "LONGVARCHAR";
+    String VARBINARY_U = "VARBINARY";
+    String STRING = "String";
+    String TINYINT_L = "tinyint";
+    String SMALLINT_L = "smallint";
+    String DOUBLE_C = "Double";
+    String FALSE_L = org.acmsl.commons.Literals.FALSE;
+    String FLOAT_C = "Float";
+    String CANNOT_COMPARE = "Cannot compare ";
+    String EXTRACTED = " extracted";
+    String TABLE_NAME = "tableName";
 }

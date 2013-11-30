@@ -72,8 +72,9 @@ public interface ForeignKeyDAO
      * @param schema the schema.
      * @return the list of foreign keys.
      */
+    @SuppressWarnings("unused")
     @NotNull
-    List<ForeignKey> findForeignKeys(
+    List<ForeignKey<String>> findForeignKeys(
         @NotNull final String table, @Nullable final String catalog, @Nullable final String schema);
 
     /**
@@ -83,8 +84,9 @@ public interface ForeignKeyDAO
      * @param schema the schema.
      * @return the list of foreign keys.
      */
+    @SuppressWarnings("unused")
     @NotNull
-    List<ForeignKey> findReferringForeignKeys(
+    List<ForeignKey<String>> findReferringForeignKeys(
         @NotNull final String table, @Nullable final String catalog, @Nullable final String schema);
 
     /**
@@ -97,8 +99,8 @@ public interface ForeignKeyDAO
      */
     void insert(
         @NotNull final String table,
-        @NotNull final List<Attribute> sourceAttributes,
-        @NotNull final List<Attribute> targetAttributes,
+        @NotNull final List<Attribute<String>> sourceAttributes,
+        @NotNull final List<Attribute<String>> targetAttributes,
         @Nullable final String catalog,
         @Nullable final String schema);
 }

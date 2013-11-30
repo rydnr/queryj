@@ -61,6 +61,8 @@ import org.stringtemplate.v4.STGroup;
 public class CannotFindTemplateInGroupException
     extends InvalidTemplateException
 {
+    private static final long serialVersionUID = 6979086659119761573L;
+
     /**
      * Creates an instance for given class.
      * @param group the {@link STGroup} instance.

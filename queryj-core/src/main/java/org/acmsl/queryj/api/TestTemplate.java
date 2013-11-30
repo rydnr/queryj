@@ -38,8 +38,8 @@ package org.acmsl.queryj.api;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @SuppressWarnings("unused")
-public interface TestTemplate
-    extends  Template
+public interface TestTemplate<T extends TemplateContext>
+    extends  Template<T>
 {
     /**
      * Retrieves the test name.

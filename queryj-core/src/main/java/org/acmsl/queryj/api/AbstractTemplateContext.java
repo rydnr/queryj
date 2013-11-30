@@ -620,7 +620,7 @@ public abstract class AbstractTemplateContext
     {
         @NotNull final StringBuilder result = new StringBuilder();
 
-        for (@Nullable final Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<String> t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {

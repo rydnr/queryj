@@ -57,9 +57,9 @@ import java.io.File;
  */
 public abstract class BasePerRepositoryTemplateWritingHandler
     <T extends AbstractBasePerRepositoryTemplate<C>,
-     G extends PerRepositoryTemplateGenerator<T>,
-     C extends PerRepositoryTemplateContext>
-    extends    AbstractQueryJTemplateWritingHandler<T, G, C>
+     C extends PerRepositoryTemplateContext,
+     G extends PerRepositoryTemplateGenerator<T, C>>
+    extends    AbstractQueryJTemplateWritingHandler<T, C, G>
     implements TemplateWritingHandler
 {
     /**

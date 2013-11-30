@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Abstract logicless implementation of Row interface.
+ * Description: Abstract logic-less implementation of Row interface.
  *
  */
 package org.acmsl.queryj.metadata.vo;
@@ -35,6 +35,7 @@ package org.acmsl.queryj.metadata.vo;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +45,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * Abstract logicless implementation of <code>Row</code> interface.
+ * Abstract logic-less implementation of <code>Row</code> interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractRow<V>
@@ -181,7 +182,7 @@ public abstract class AbstractRow<V>
         return
             new org.apache.commons.lang.builder.ToStringBuilder(this)
                 .append("name", getName())
-                .append("tableName", getTableName())
+                .append(Literals.TABLE_NAME, getTableName())
                 .append("attributes", getAttributes())
                 .toString();
     }
@@ -211,9 +212,9 @@ public abstract class AbstractRow<V>
     {
         boolean result = false;
 
-        if  (object instanceof Row)
+        if  (object instanceof Row<?>)
         {
-            @NotNull final Row t_OtherInstance = (Row) object;
+            @NotNull final Row<?> t_OtherInstance = (Row<?>) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -260,7 +261,7 @@ public abstract class AbstractRow<V>
      * @return a positive number of the first is considered 'greater'
      * than the second; 0 if they're equal; a negative number otherwise.
      */
-    protected int compareThem(@NotNull final Row<V> first, @NotNull final Row second)
+    protected int compareThem(@NotNull final Row<V> first, @NotNull final Row<?> second)
     {
         return
             new org.apache.commons.lang.builder.CompareToBuilder()

@@ -63,7 +63,7 @@ import java.util.List;
  * Created: 2012/06/03
  */
 public abstract class AbstractFillTemplateChain<C extends TemplateContext>
-    extends AbstractQueryJChain<FillHandler<?>>
+    extends AbstractQueryJChain<QueryJCommand, FillHandler<?>>
     implements FillTemplateChain<C>
 {
     /**
@@ -130,7 +130,8 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
      */
     @Override
     @NotNull
-    protected Chain<FillHandler<?>> buildChain(@NotNull final Chain<FillHandler<?>> chain)
+    protected Chain<QueryJCommand, QueryJBuildException, FillHandler<?>> buildChain(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, FillHandler<?>> chain)
     {
         return buildChain(chain, false);
     }
@@ -144,12 +145,13 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
      */
     @NotNull
     @SuppressWarnings("unchecked")
-    protected Chain<FillHandler<?>> buildChain(
-        @NotNull final Chain<FillHandler<?>> chain, final boolean relevantOnly)
+    protected Chain<QueryJCommand, QueryJBuildException, FillHandler<?>> buildChain(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, FillHandler<?>> chain, final boolean relevantOnly)
     {
-        @NotNull final List<FillAdapterHandler<?, ?>>
-            t_lHandlers = (List< FillAdapterHandler<?, ?>>) getHandlers();
+        // Don't know how to fix the generics warnings
+        @NotNull final List<FillAdapterHandler> t_lHandlers = (List<FillAdapterHandler>) getHandlers();
 
+        // Don't know how to fix the generics warnings
         for (@NotNull final FillAdapterHandler t_Handler : t_lHandlers)
         {
             add(chain, t_Handler, relevantOnly);
@@ -186,7 +188,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
      */
     @SuppressWarnings("unchecked")
     protected <F extends FillHandler<P>, P> void add(
-        @NotNull final Chain<F> chain,
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, F> chain,
         @NotNull final FillAdapterHandler<F, P> handler,
         final boolean relevantOnly)
     {
@@ -195,7 +197,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
         if (   (relevantOnly)
             && (handler.getFillHandler() instanceof NonRelevantFillHandler))
         {
-            actualHandler = (F) new EmptyFillAdapterHandler(handler.getFillHandler());
+            actualHandler = (F) new EmptyFillAdapterHandler<F, P>(handler.getFillHandler());
         }
         else
         {

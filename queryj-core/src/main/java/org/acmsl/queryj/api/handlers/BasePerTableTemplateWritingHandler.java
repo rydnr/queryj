@@ -57,8 +57,10 @@ import java.io.File;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerTableTemplateWritingHandler
-    <T extends PerTableTemplate<C>, TG extends PerTableTemplateGenerator<T>, C extends PerTableTemplateContext>
-    extends    AbstractQueryJTemplateWritingHandler<T, TG, C>
+    <T extends PerTableTemplate<C>,
+     C extends PerTableTemplateContext,
+     TG extends PerTableTemplateGenerator<T, C>>
+    extends    AbstractQueryJTemplateWritingHandler<T, C, TG>
     implements TemplateWritingHandler
 {
     /**

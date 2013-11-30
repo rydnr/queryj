@@ -55,7 +55,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents entities able to create per-<i>custom sql</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface PerCustomSqlTemplateFactory<T extends PerCustomSqlTemplate>
+public interface PerCustomSqlTemplateFactory<T extends PerCustomSqlTemplate<C>, C extends PerCustomSqlTemplateContext>
     extends  Factory
 {
     /**

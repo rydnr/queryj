@@ -51,7 +51,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface RowDecorator
-    extends Row,
+    extends Row<DecoratedString>,
             Decorator
 {
     /**
@@ -59,5 +59,5 @@ public interface RowDecorator
      * @return such row.
      */
     @NotNull
-    public Row getRow();
+    public Row<String> getRow();
 }

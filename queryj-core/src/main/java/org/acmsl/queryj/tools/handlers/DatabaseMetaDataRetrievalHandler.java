@@ -257,9 +257,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @Nullable final AntTablesElement t_TablesElement =
             retrieveTablesElement(parameters);
 
-        @Nullable final Iterator t_itTableElements;
+        @Nullable final Iterator<AntTableElement> t_itTableElements;
 
-        @Nullable final Collection t_cTableElements;
+        @Nullable final Collection<AntTableElement> t_cTableElements;
 
         if  (t_TablesElement != null)
         {
@@ -274,8 +274,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                 while  (t_itTableElements.hasNext())
                 {
-                    @NotNull final AntTableElement t_Table =
-                        (AntTableElement) t_itTableElements.next();
+                    @NotNull final AntTableElement t_Table = t_itTableElements.next();
 
                     result.add(convertToTable(t_Table));
                 }
@@ -381,7 +380,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @SuppressWarnings("unused") @NotNull final Map<String, List<AntFieldElement>> fieldMap,
         @NotNull final Map<String, List<AntFieldFkElement>> fieldFkMap,
         @NotNull final Map<String, String> fieldNameMap,
-        @NotNull final Map<String, List<Attribute>> attributeMap)
+        @NotNull final Map<String, List<Attribute<String>>> attributeMap)
     {
         @Nullable List<AntTableElement> t_cTableElements = null;
 
@@ -423,20 +422,19 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 if  (   (t_cFieldElements  != null)
                      && (t_cFieldElements.size() > 0))
                 {
-                    @NotNull final Iterator t_itFieldElements = t_cFieldElements.iterator();
+                    @NotNull final Iterator<AntFieldElement> t_itFieldElements = t_cFieldElements.iterator();
 
                     while  (t_itFieldElements.hasNext())
                     {
-                        @NotNull final AntFieldElement t_Field =
-                            (AntFieldElement) t_itFieldElements.next();
+                        @NotNull final AntFieldElement t_Field = t_itFieldElements.next();
 
                         @SuppressWarnings("unchecked")
-                        @Nullable List<Attribute> t_lFields =
+                        @Nullable List<Attribute<String>> t_lFields =
                             attributeMap.get(buildTableFieldsKey(t_Table.getName()));
 
                         if  (t_lFields == null)
                         {
-                            t_lFields = new ArrayList<Attribute>(4);
+                            t_lFields = new ArrayList<Attribute<String>>(4);
 
                             attributeMap.put(buildTableFieldsKey(t_Table.getName()), t_lFields);
                         }
@@ -445,12 +443,12 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                         if  (t_Field.isPk())
                         {
-                            @Nullable List<Attribute> t_lPks =
+                            @Nullable List<Attribute<String>> t_lPks =
                                 attributeMap.get(buildPkKey(t_Table.getName()));
 
                             if  (t_lPks == null)
                             {
-                                t_lPks = new ArrayList<Attribute>(1);
+                                t_lPks = new ArrayList<Attribute<String>>(1);
                                 attributeMap.put(buildPkKey(t_Table.getName()), t_lPks);
                             }
 
@@ -480,14 +478,13 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     }
                 }
 
-                @Nullable final List<Attribute> t_lFields =
+                @Nullable final List<Attribute<String>> t_lFields =
                     attributeMap.get(buildTableFieldsKey(t_Table.getName()));
 
                 if (t_lFields != null)
                 {
                     metadataManager.getPrimaryKeyDAO().insert(
-                        t_Table.getName(),
-                        t_lFields);
+                        t_Table.getName(), t_lFields);
                 }
             }
         }
@@ -515,7 +512,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         if  (metadataManager != null)
         {
-            @NotNull final Map t_mKeys = new HashMap();
+            @NotNull final Map<String, ?> t_mKeys = new HashMap<String, Object>();
 
             storeMetadataManager(metadataManager, parameters);
 
@@ -527,12 +524,12 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 metadataManager,
                 t_MetadataTypeManager,
                 retrieveTablesElement(parameters),
-                t_mKeys,
-                t_mKeys,
-                t_mKeys,
-                t_mKeys,
-                t_mKeys,
-                t_mKeys);
+                (Map<String, List<AntTableElement>>) t_mKeys,
+                (Map<String, List<String>>) t_mKeys,
+                (Map<String, List<AntFieldElement>>) t_mKeys,
+                (Map<String, List<AntFieldFkElement>>) t_mKeys,
+                (Map<String, String>) t_mKeys,
+                (Map<String, List<Attribute<String>>>) t_mKeys);
 
             @Nullable final List<Table<String, Attribute<String>>> t_lTables =
                 (List<Table<String, Attribute<String>>>) t_mKeys.get(buildTableKey());
@@ -568,7 +565,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                             final Iterator<AntFieldFkElement> t_itFieldFks = t_lFieldFks.iterator();
 
-                            @NotNull final List<Attribute> t_lFk = new ArrayList<Attribute>(1);
+                            @NotNull final List<Attribute<String>> t_lFk = new ArrayList<Attribute<String>>(1);
 
                             while  (t_itFieldFks.hasNext())
                             {
@@ -724,7 +721,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             {
                 if  (t_Table != null)
                 {
-                    @Nullable final Collection t_cFields = t_Table.getFields();
+                    @Nullable final Collection<AntFieldElement> t_cFields = t_Table.getFields();
 
                     if  (   (t_cFields != null)
                          && (t_cFields.size()> 0))
@@ -747,32 +744,30 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     @SuppressWarnings("unused")
     protected void extractForeignKeys(
-        @NotNull final Collection tables,
-        @NotNull final Map<String, ?> extractedMap,
+        @NotNull final Collection<String> tables,
+        @NotNull final Map<String, Collection<String>> extractedMap,
         @NotNull final MetadataManager metadataManager,
         @NotNull final Object tableKey)
     {
-        final Iterator t_itTables = tables.iterator();
+        final Iterator<String> t_itTables = tables.iterator();
 
         while  (t_itTables.hasNext())
         {
-            @NotNull final String t_strTableName = (String) t_itTables.next();
+            @NotNull final String t_strTableName = t_itTables.next();
 
-            @NotNull final Collection t_cFields =
-                (Collection)
-                    extractedMap.get(buildTableFieldsKey(t_strTableName));
+            @NotNull final Collection<String> t_cFields =
+                extractedMap.get(buildTableFieldsKey(t_strTableName));
 
-            final Iterator t_itFields = t_cFields.iterator();
+            final Iterator<String> t_itFields = t_cFields.iterator();
 
             while  (t_itFields.hasNext())
             {
-                @NotNull final String t_strFieldName =
-                    (String) t_itFields.next();
+                @NotNull final String t_strFieldName = t_itFields.next();
 
-                @NotNull final Collection t_cFieldFks =
-                    (Collection) extractedMap.get(buildFkKey(t_strTableName, t_strFieldName));
+                @NotNull final Collection<String> t_cFieldFks =
+                    extractedMap.get(buildFkKey(t_strTableName, t_strFieldName));
 
-                @Nullable final Iterator t_itFieldFks = null;
+                @Nullable final Iterator<String> t_itFieldFks = null;
 
 //                        if  (t_cFieldFks != null)
 //                        {

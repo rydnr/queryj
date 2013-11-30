@@ -73,6 +73,7 @@ import org.acmsl.queryj.tools.PackageUtils;
 /*
  * Importing custom templates.
  */
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.templates.<def.name.capitalized>Template;
 import org.acmsl.queryj.templates.<def.name.capitalized>TemplateFactory;
 
@@ -108,7 +109,10 @@ class(def, C) ::= <<
  */
 @ThreadSafe
 public class <C.class_name>
-    extends Base<def.type.capitalized>TemplateBuildHandler\<<def.name.capitalized>Template, <def.name.capitalized>TemplateFactory>
+    extends Base<def.type.capitalized>TemplateBuildHandler\<
+                <def.name.capitalized>Template,
+                <def.type.capitalized>TemplateContext,
+                <def.name.capitalized>TemplateFactory>
 {
     /**
      * The key to access the templates in the command.

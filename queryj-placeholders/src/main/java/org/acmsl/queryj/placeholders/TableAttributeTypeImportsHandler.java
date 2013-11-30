@@ -165,7 +165,7 @@ public class TableAttributeTypeImportsHandler
 
         String t_strImport;
 
-        for (@Nullable final Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<String> t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {

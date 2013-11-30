@@ -150,7 +150,7 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
         {
             return false;
         }
-        final AbstractTemplateContextFillHandler other = (AbstractTemplateContextFillHandler) obj;
+        final AbstractTemplateContextFillHandler<?, ?> other = (AbstractTemplateContextFillHandler<?, ?>) obj;
         return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.templateContext, other.templateContext)
             .isEquals();
     }

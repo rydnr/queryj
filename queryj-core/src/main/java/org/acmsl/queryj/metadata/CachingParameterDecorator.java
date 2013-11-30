@@ -266,6 +266,7 @@ public class CachingParameterDecorator
      * Retrieves the field type of the parameter.
      * @return such information.
      */
+    @NotNull
     public String getFieldType()
     {
         String result = getCachedFieldType();

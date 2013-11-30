@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.handlers.TemplateHandler;
 
 /*
@@ -53,14 +54,15 @@ import java.util.List;
 /**
  * Provides the chain required to generate custom templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/04
+ * @since 3.0
+ * Created: 2013/06/04
  */
-public interface TemplateChainProvider<CH extends TemplateHandler>
+public interface TemplateChainProvider<TH extends TemplateHandler<C>, C extends QueryJCommand>
 {
     /**
      * Retrieves the custom handlers.
      * @return such handlers.
      */
     @NotNull
-    public List<CH> getHandlers();
+    public List<TH> getHandlers();
 }

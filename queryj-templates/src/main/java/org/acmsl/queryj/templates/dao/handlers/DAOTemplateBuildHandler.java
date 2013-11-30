@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.dao.handlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.templates.dao.DAOTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -66,7 +67,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOTemplateBuildHandler
-    extends  BasePerTableTemplateBuildHandler<DAOTemplate, DAOTemplateFactory>
+    extends  BasePerTableTemplateBuildHandler<DAOTemplate, PerTableTemplateContext, DAOTemplateFactory>
 {
     /**
      * Creates a <code>DAOTemplateBuildHandler</code> instance.

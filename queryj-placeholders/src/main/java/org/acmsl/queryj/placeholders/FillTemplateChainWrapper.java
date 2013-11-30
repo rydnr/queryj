@@ -86,9 +86,9 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
     @Override
     @NotNull
     @SuppressWarnings("unchecked")
-    protected List<FillHandler> getHandlers(@NotNull final C context)
+    protected List<FillHandler<?>> getHandlers(@NotNull final C context)
     {
-        @NotNull final List result = new ArrayList(22);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(22);
 
         result.add(new AreTimestampsAllowedHandler(context));
         result.add(new ClassNameHandler<C>(context));

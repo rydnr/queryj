@@ -62,6 +62,8 @@ public class GlobalTemplateContextImpl
     extends AbstractTemplatePackagingContext
     implements GlobalTemplateContext
 {
+    private static final long serialVersionUID = -1563568480106519552L;
+
     /**
      * The list of {@link TemplateDef}s.
      */

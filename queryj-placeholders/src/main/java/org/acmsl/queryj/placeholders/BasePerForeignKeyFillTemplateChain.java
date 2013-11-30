@@ -43,7 +43,6 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
-import org.acmsl.queryj.api.handlers.FillAdapterHandler;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.metadata.ForeignKeyDecorator;
@@ -105,19 +104,17 @@ public class BasePerForeignKeyFillTemplateChain
     @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final PerForeignKeyTemplateContext context)
     {
-        @NotNull final List result = new ArrayList<FillHandler>(2);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(2);
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerForeignKeyTemplateContext, ForeignKeyHandler,ForeignKeyDecorator>(
-                        new ForeignKeyHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerForeignKeyTemplateContext, ForeignKeyHandler,ForeignKeyDecorator>(
+                    new ForeignKeyHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerForeignKeyTemplateContext, ForeignKeyAttributeTypeImportsHandler,List<String>>(
-                        new ForeignKeyAttributeTypeImportsHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerForeignKeyTemplateContext, ForeignKeyAttributeTypeImportsHandler,List<String>>(
+                    new ForeignKeyAttributeTypeImportsHandler(context)));
 
         return result;
     }

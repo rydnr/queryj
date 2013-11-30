@@ -102,7 +102,7 @@ public class BasePerCustomSqlFillTemplateChain
     @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final PerCustomSqlTemplateContext context)
     {
-        @NotNull final List result = new ArrayList<FillHandler>(0);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(0);
 
         // TODO
 

@@ -76,12 +76,11 @@ import java.util.List;
 @ThreadSafe
 public class DefaultTemplateChainProviderTemplateWritingHandler
     extends TemplatePackagingWritingHandler
-                <DefaultTemplateChainProviderTemplate
-                    <GlobalTemplateContext>,
-                    TemplatePackagingTemplateGenerator
-                        <DefaultTemplateChainProviderTemplate<GlobalTemplateContext>,
-                         GlobalTemplateContext>,
-                    GlobalTemplateContext>
+                <DefaultTemplateChainProviderTemplate<GlobalTemplateContext>,
+                 GlobalTemplateContext,
+                 TemplatePackagingTemplateGenerator
+                     <DefaultTemplateChainProviderTemplate<GlobalTemplateContext>,
+                      GlobalTemplateContext>>
 {
     /**
      * Retrieves the template generator.

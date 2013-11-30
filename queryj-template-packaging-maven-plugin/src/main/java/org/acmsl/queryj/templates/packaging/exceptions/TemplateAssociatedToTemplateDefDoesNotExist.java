@@ -67,7 +67,7 @@ public class TemplateAssociatedToTemplateDefDoesNotExist
      * Creates an exception representing a TemplateDef pointing to a missing template.
      * @param templateDef the {@link TemplateDef}.
      */
-    public TemplateAssociatedToTemplateDefDoesNotExist(@NotNull final TemplateDef templateDef)
+    public TemplateAssociatedToTemplateDefDoesNotExist(@NotNull final TemplateDef<String> templateDef)
     {
         super(
             "template.associated.to.templatedef.does.not.exist",

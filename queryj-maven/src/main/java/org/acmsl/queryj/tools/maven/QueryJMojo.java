@@ -1650,9 +1650,9 @@ public class QueryJMojo
     @SuppressWarnings("unchecked")
     protected boolean isMultithreadEnabled()
     {
-        @NotNull final Set<Map.Entry> entrySet = (Set<Map.Entry>) super.getPluginContext().entrySet();
+        @NotNull final Set<Map.Entry<?, ?>> entrySet = (Set<Map.Entry<?, ?>>) super.getPluginContext().entrySet();
 
-        for (@NotNull final Map.Entry item : entrySet)
+        for (@NotNull final Map.Entry<?, ?> item : entrySet)
         {
             getLog().info(item.getKey() + " -> " + item.getValue());
         }

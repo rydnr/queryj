@@ -79,7 +79,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJCommand>>
-    extends AbstractQueryJChain<CH>
+    extends AbstractQueryJChain<QueryJCommand, CH>
     implements TemplatePackagingSettings
 {
     /**
@@ -97,7 +97,8 @@ public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJComman
      */
     @SuppressWarnings("unchecked")
     @NotNull
-    protected Chain<CH> buildChain(@NotNull final Chain<CH> chain)
+    protected Chain<QueryJCommand, QueryJBuildException, CH> buildChain(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain)
         throws QueryJBuildException
     {
         chain.add((CH) new TemplatePackagingParameterValidationHandler());

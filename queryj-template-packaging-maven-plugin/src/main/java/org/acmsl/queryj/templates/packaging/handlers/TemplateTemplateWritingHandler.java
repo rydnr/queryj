@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -73,8 +73,9 @@ import java.util.List;
 public class TemplateTemplateWritingHandler
     extends TemplatePackagingWritingHandler
         <TemplateTemplate<DefaultTemplatePackagingContext>,
-         TemplatePackagingTemplateGenerator<TemplateTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>,
-         DefaultTemplatePackagingContext>
+         DefaultTemplatePackagingContext,
+         TemplatePackagingTemplateGenerator
+             <TemplateTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>>
 {
     /**
      * Retrieves the template generator.

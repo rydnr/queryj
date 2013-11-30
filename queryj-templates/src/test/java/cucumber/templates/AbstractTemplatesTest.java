@@ -40,6 +40,7 @@ package cucumber.templates;
  */
 import cucumber.templates.sql.CucumberSqlDAO;
 import cucumber.templates.sql.CucumberSqlParameterDAO;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.templates.antlr.JavaLexer;
 import org.acmsl.queryj.templates.antlr.JavaPackageVisitor;
@@ -473,7 +474,7 @@ public abstract class AbstractTemplatesTest<G, F>
      */
     protected boolean isProperties(@NotNull final File outputFile)
     {
-        return outputFile.getAbsolutePath().endsWith(".properties");
+        return outputFile.getAbsolutePath().endsWith(org.acmsl.commons.Literals.PROPERTIES);
     }
 
     /**
@@ -624,8 +625,8 @@ public abstract class AbstractTemplatesTest<G, F>
                 "fake manager",
                 null, // database metadata
                 new MetadataExtractionLogger(), // extraction listener
-                "catalog",
-                "schema",
+                Literals.CATALOG,
+                Literals.SCHEMA,
                 tableNames,
                 tables,
                 true, // disable table extraction

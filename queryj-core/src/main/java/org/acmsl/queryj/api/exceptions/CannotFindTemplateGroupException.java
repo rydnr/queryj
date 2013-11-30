@@ -57,6 +57,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class CannotFindTemplateGroupException
     extends InvalidTemplateException
 {
+    private static final long serialVersionUID = -1584089960030868585L;
+
     /**
      * Creates an instance for given class.
      * @param contextClassName the class name of the context.

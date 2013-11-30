@@ -56,6 +56,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class CannotFindPlaceholderImplementationException
     extends QueryJBuildException
 {
+    private static final long serialVersionUID = -3428381021481724858L;
+
     /**
      * Creates an instance for given class.
      * @param contextClassName the class name of the context.
@@ -69,7 +71,7 @@ public class CannotFindPlaceholderImplementationException
      * Creates an instance for given class.
      * @param factoryClass the factory class.
      */
-    public CannotFindPlaceholderImplementationException(@NotNull final Class factoryClass)
+    public CannotFindPlaceholderImplementationException(@NotNull final Class<?> factoryClass)
     {
         super("cannot.find.placeholder.implementation", new Object[] { factoryClass.getName() } );
     }

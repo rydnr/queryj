@@ -59,8 +59,10 @@ import java.io.File;
  */
 @ThreadSafe
 public class TemplateDefImpl
-    implements TemplateDef
+    implements TemplateDef<String>
 {
+    private static final long serialVersionUID = 3072766515558433392L;
+
     /**
      * The name.
      */

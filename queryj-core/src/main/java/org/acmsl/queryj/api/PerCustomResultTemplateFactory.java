@@ -57,7 +57,7 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface PerCustomResultTemplateFactory
-    <T extends PerCustomResultTemplate>
+    <T extends PerCustomResultTemplate<C>, C extends PerCustomResultTemplateContext>
     extends  Factory
 {
     /**

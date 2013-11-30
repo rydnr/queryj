@@ -60,6 +60,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class ClassNameHandler<C extends TemplateContext>
     extends AbstractDecoratedStringHandler<C>
 {
+    private static final long serialVersionUID = -8115642710430136475L;
+
     /**
      * Creates a {@link ClassNameHandler} using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.

@@ -268,18 +268,27 @@ public class CompositeQueryJCommandHandler<C extends QueryJCommand, CH extends Q
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final Object obj)
+    public boolean equals(@Nullable final Object obj)
     {
+        final boolean result;
+
         if (obj == null)
         {
-            return false;
+            result = false;
         }
-        if (getClass() != obj.getClass())
+        else if (getClass() != obj.getClass())
         {
-            return false;
+            result = false;
         }
-        final CompositeQueryJCommandHandler other = (CompositeQueryJCommandHandler) obj;
-        return new EqualsBuilder().append(this.m__cHandlers, other.m__cHandlers).isEquals();
+        else
+        {
+            @SuppressWarnings("unchecked")
+            final CompositeQueryJCommandHandler<C, CH> other = (CompositeQueryJCommandHandler<C, CH>) obj;
+
+            result = new EqualsBuilder().append(this.m__cHandlers, other.m__cHandlers).isEquals();
+        }
+
+        return result;
     }
 
     /**

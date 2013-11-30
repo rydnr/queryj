@@ -77,6 +77,8 @@ public class PerTemplateDefClassNameHandler
     @NotNull
     public static final Pattern STG_EXT = Pattern.compile("\\.stg$");
 
+    private static final long serialVersionUID = 7668827891857653722L;
+
     /**
      * Creates a new instance to resolve "class_name" placeholders in
      * per-{@link org.acmsl.queryj.templates.packaging.TemplateDef} templates.

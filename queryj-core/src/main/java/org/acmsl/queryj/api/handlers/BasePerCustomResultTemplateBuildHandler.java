@@ -38,6 +38,7 @@ package org.acmsl.queryj.api.handlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.exceptions.CannotCreateCustomResultTemplateException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.exceptions.QueryJException;
@@ -79,8 +80,9 @@ import java.util.List;
 @ThreadSafe
 @SuppressWarnings("unused")
 public abstract class BasePerCustomResultTemplateBuildHandler
-    <T extends PerCustomResultTemplate,
-     TF extends PerCustomResultTemplateFactory<T>>
+    <T extends PerCustomResultTemplate<C>,
+     C extends PerCustomResultTemplateContext,
+     TF extends PerCustomResultTemplateFactory<T, C>>
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {

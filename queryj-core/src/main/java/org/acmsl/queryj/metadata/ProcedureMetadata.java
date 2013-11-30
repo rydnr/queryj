@@ -33,6 +33,7 @@
  */
 package org.acmsl.queryj.metadata;
 
+import org.acmsl.queryj.Literals;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -272,7 +273,7 @@ public class ProcedureMetadata
         {
             exceptionToThrow =
                 new ClassCastException(
-                    "Cannot compare "
+                    Literals.CANNOT_COMPARE
                     + object
                     + " with "
                     + toString());

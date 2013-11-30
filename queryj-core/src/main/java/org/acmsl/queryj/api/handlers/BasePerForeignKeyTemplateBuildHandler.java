@@ -71,7 +71,8 @@ import java.util.List;
 @SuppressWarnings("unused")
 public abstract class BasePerForeignKeyTemplateBuildHandler
     <T extends PerForeignKeyTemplate<C>,
-        TF extends PerForeignKeyTemplateFactory<T>, C extends PerForeignKeyTemplateContext>
+     C extends PerForeignKeyTemplateContext,
+     TF extends PerForeignKeyTemplateFactory<T, C>>
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {

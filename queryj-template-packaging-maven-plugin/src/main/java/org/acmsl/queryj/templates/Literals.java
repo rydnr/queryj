@@ -1,5 +1,5 @@
 /*
-                        QueryJ Placeholders
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,13 +27,13 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Literals for QueryJ Template Packaging Plugin.
  *
- * Date: 2013/11/28
- * Time: 21:57
+ * Date: 2013/11/30
+ * Time: 11:16
  *
  */
-package org.acmsl.queryj.placeholders;
+package org.acmsl.queryj.templates;
 
 /*
  * Importing checkthread.org annotations.
@@ -41,21 +41,16 @@ package org.acmsl.queryj.placeholders;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Literals for QueryJ Placeholders.
+ * Literals for QueryJ Template Packaging Plugin.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/11/28 21:57
+ * Created: 2013/11/30 11:16
  */
 @ThreadSafe
-public class Literals
+public interface Literals
 {
-    public static final String CLASS_NAME = "class_name";
-    public static final String RESULT = "result";
-    public static final String FOREIGN_KEY = "foreign_key";
-    public static final String QUERYJ_PROPERTIES = "-queryj.properties";
-    public static final String HEADER = org.acmsl.queryj.Literals.HEADER;
-    public static final String LOB_HANDLING_REQUIRED = "lob_handling_required";
-    public static final String PACKAGE1 = org.acmsl.queryj.Literals.PACKAGE;
-    public static final String REPOSITORY1 = org.acmsl.queryj.Literals.REPOSITORY;
-    public static final String TIMESTAMP1 = "timestamp";
+    String TABLE_NAME = org.acmsl.queryj.Literals.TABLE_NAME;
+    String PACKAGE_NAME = "packageName";
+    String ENGINE_NAME = "engineName";
+    String PACKAGE_NAME_DAO = "<packageName>.dao";
 }

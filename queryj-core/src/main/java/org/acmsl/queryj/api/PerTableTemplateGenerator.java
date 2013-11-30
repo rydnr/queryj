@@ -36,7 +36,7 @@ package org.acmsl.queryj.api;
  * Represents entities able to write per-table templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface PerTableTemplateGenerator<N extends PerTableTemplate>
-    extends TemplateGenerator<N>
+public interface PerTableTemplateGenerator<N extends PerTableTemplate<C>, C extends PerTableTemplateContext>
+    extends TemplateGenerator<N, C>
 {
 }

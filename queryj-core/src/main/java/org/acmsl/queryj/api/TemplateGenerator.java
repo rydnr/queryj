@@ -50,7 +50,7 @@ import java.nio.charset.Charset;
  * Marker for template generators.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface TemplateGenerator<T extends Template>
+public interface TemplateGenerator<T extends Template<C>, C extends TemplateContext>
 {
     /**
      * Writes a template to disk.

@@ -118,10 +118,10 @@ public class MetadataManagerPrimaryKeyDAO
      */
     @NotNull
     @Override
-    public List<Attribute> findPrimaryKey(@NotNull final String table)
+    public List<Attribute<String>> findPrimaryKey(@NotNull final String table)
     {
         // TODO
-        return new ArrayList<Attribute>(0);
+        return new ArrayList<Attribute<String>>(0);
     }
 
     /**
@@ -143,9 +143,18 @@ public class MetadataManagerPrimaryKeyDAO
      * @param table the table name.
      * @param primaryKey the primary key.
      */
+    @Override
     public void insert(
-        @NotNull final String table, @NotNull final List<Attribute> primaryKey)
+        @NotNull final String table, @NotNull final List<Attribute<String>> primaryKey)
     {
         // TODO
+    }
+
+    @Override
+    public String toString()
+    {
+        return "MetadataManagerPrimaryKeyDAO{" +
+               "metadataManager=" + m__MetadataManager +
+               '}';
     }
 }

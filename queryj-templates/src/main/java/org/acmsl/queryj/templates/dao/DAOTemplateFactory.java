@@ -74,7 +74,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOTemplateFactory
-    implements PerTableTemplateFactory<DAOTemplate>,
+    implements PerTableTemplateFactory<DAOTemplate, PerTableTemplateContext>,
                 Singleton
 {
     /**

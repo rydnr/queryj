@@ -68,7 +68,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class DAOTemplateWritingHandler
-    extends BasePerTableTemplateWritingHandler<DAOTemplate, DAOTemplateGenerator, PerTableTemplateContext>
+    extends BasePerTableTemplateWritingHandler<DAOTemplate, PerTableTemplateContext, DAOTemplateGenerator>
 {
     /**
      * Creates a <code>DAOTemplateWritingHandler</code> instance.

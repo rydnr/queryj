@@ -142,10 +142,10 @@ public class ResultElement
      */
     @SuppressWarnings("unused")
     protected int hashCode(
-        final String id,
-        final String classValue,
-        final String matches,
-        final Collection propertyRefs)
+        @NotNull final String id,
+        @NotNull final String classValue,
+        @NotNull final String matches,
+        @NotNull final Collection<PropertyRef> propertyRefs)
     {
         return id.toLowerCase(Locale.US).hashCode() + Result.class.hashCode();
     }
@@ -187,7 +187,7 @@ public class ResultElement
         @NotNull final String id,
         @Nullable final String classValue,
         @NotNull final String matches,
-        final Collection<PropertyRef> propertyRefs)
+        @NotNull final Collection<PropertyRef> propertyRefs)
     {
         return id.equalsIgnoreCase(candidate.getId());
     }
@@ -217,10 +217,10 @@ public class ResultElement
      */
     @NotNull
     protected String toString(
-        final String id,
-        final String classValue,
-        final String matches,
-        final Collection propertyRefs)
+        @NotNull final String id,
+        @NotNull final String classValue,
+        @NotNull final String matches,
+        @NotNull final Collection<PropertyRef> propertyRefs)
     {
         return
               getClass().getName()

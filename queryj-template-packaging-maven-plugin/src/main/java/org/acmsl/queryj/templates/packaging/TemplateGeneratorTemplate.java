@@ -55,6 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class TemplateGeneratorTemplate<C extends TemplatePackagingContext>
     extends AbstractTemplatePackagingTemplate<C>
 {
+    private static final long serialVersionUID = 6495367163153844355L;
+
     /**
      * Creates a TemplateGeneratorTemplate instance.
      * @param context the {@link TemplatePackagingContext context}.

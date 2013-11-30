@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -168,7 +168,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Caches the StringTemplateGroup for each template class.
      */
-    private static Map m__mSTCache;
+    private static Map<String, ?> m__mSTCache;
 
     /**
      * The placeholder package.
@@ -216,7 +216,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     {
         immutableSetTemplateContext(context);
         immutableSetPlaceholderPackage(placeholderPackage);
-        setSTCache(new HashMap());
+        setSTCache(new HashMap<String, Object>());
     }
 
     /**
@@ -282,7 +282,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Specifies the ST cache.
      * @param map the map to use as cache.
      */
-    protected static void setSTCache(@NotNull final Map map)
+    protected static void setSTCache(@NotNull final Map<String, ?> map)
     {
         m__mSTCache = map;
     }
@@ -292,7 +292,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return the map being used as cache.
      */
     @NotNull
-    protected static Map getSTCache()
+    protected static Map<String, ?> getSTCache()
     {
         return m__mSTCache;
     }
@@ -312,6 +312,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such instance.
      */
     @Nullable
+    @SuppressWarnings("unchecked")
     protected STGroup retrieveGroup(@NotNull final String path, @NotNull final List<String> lookupPaths)
     {
         return
@@ -319,7 +320,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 path,
                 lookupPaths,
                 Charset.defaultCharset(),
-                getSTCache());
+                (Map<String, STGroup>) getSTCache());
     }
 
     /**
@@ -336,13 +337,13 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @NotNull final String path,
         @NotNull final List<String> lookupPaths,
         @NotNull final Charset charset,
-        @NotNull final Map cache)
+        @NotNull final Map<String, STGroup> cache)
     {
         @Nullable STGroup result;
 
-        @NotNull final Object t_Key = buildSTGroupKey(path);
+        @NotNull final String t_Key = buildSTGroupKey(path);
 
-        result = (STGroup) cache.get(t_Key);
+        result = cache.get(t_Key);
 
         if  (result == null)
         {
@@ -380,7 +381,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such key.
      */
     @NotNull
-    protected final Object buildSTGroupKey(@NotNull final String path)
+    protected final String buildSTGroupKey(@NotNull final String path)
     {
         return ".:\\AbstractQueryJTemplate//STCACHE//" + path + "//";
     }
@@ -745,10 +746,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 {
                     @NotNull final Map<String, Object> placeHolders = new HashMap<String, Object>();
 
-                    @NotNull final List<FillTemplateChain<? extends FillHandler>> fillChains =
+                    @NotNull final List<FillTemplateChain<? extends FillHandler<?>>> fillChains =
                         buildFillTemplateChains(context);
 
-                    for (@NotNull final FillTemplateChain<? extends FillHandler> chain : fillChains)
+                    for (@NotNull final FillTemplateChain<? extends FillHandler<?>> chain : fillChains)
                     {
                         @NotNull final QueryJCommand command = chain.providePlaceholders(relevantOnly);
 
@@ -829,11 +830,11 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      */
     @SuppressWarnings("unchecked")
     @NotNull
-    public List<FillTemplateChain<? extends FillHandler>> buildFillTemplateChains(@NotNull final C context)
+    public List<FillTemplateChain<? extends FillHandler<?>>> buildFillTemplateChains(@NotNull final C context)
         throws QueryJBuildException
     {
-        @NotNull final List<FillTemplateChain<? extends FillHandler>> result =
-            new ArrayList<FillTemplateChain<? extends FillHandler>>();
+        @NotNull final List<FillTemplateChain<? extends FillHandler<?>>> result =
+            new ArrayList<FillTemplateChain<? extends FillHandler<?>>>();
 
         @Nullable final Class<FillTemplateChainFactory<C>> factoryClass =
             retrieveFillTemplateChainFactoryClass(context, getPlaceholderPackage());
@@ -848,7 +849,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 for (@NotNull final FillTemplateChainFactory<C> factory : loader)
                 {
                     result.add(
-                        (FillTemplateChain <? extends FillHandler >)
+                        (FillTemplateChain <? extends FillHandler<?>>)
                             factory.createFillChain(context));
                 }
             }

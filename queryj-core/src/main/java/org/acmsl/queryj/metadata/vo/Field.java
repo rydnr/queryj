@@ -36,6 +36,7 @@ package org.acmsl.queryj.metadata.vo;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 
 /*
  * Importing some JDK classes.
@@ -56,20 +57,8 @@ public interface Field
     public boolean isPk();
 
     /**
-     * Retrieves the field's keyword.
-     * @return such keyword.
-     */
-    public String getKeyword();
-
-    /**
-     * Retrieves the query to retrieve the field value.
-     * @return such information.
-     */
-    public String getRetrievalQuery();
-
-    /**
      * Retrieves the field fk collection.
      * @return such collection.
      */
-    public Collection getFieldFks();
+    public Collection<AntFieldFkElement> getFieldFks();
 }

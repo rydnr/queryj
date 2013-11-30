@@ -120,7 +120,7 @@ public abstract class AbstractQueryJTemplate<C extends QueryJTemplateContext>
      */
     @Nullable
     @SuppressWarnings("unused")
-    public String getProcessedHeader(@NotNull final Map input)
+    public String getProcessedHeader(@NotNull final Map<String, String> input)
     {
         @Nullable final String result = getCachedProcessedHeader();
         

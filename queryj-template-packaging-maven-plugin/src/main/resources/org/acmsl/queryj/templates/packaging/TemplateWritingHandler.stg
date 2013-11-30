@@ -108,7 +108,9 @@ class(def, C) ::= <<
 @ThreadSafe
 public class <C.class_name>
     extends Base<def.type.capitalized>TemplateWritingHandler\<
-                <def.name.capitalized>Template, <def.name.capitalized>TemplateGenerator, <def.type.capitalized>TemplateContext>
+                <def.name.capitalized>Template,
+                <def.type.capitalized>TemplateContext,
+                <def.name.capitalized>TemplateGenerator>
 {
     /**
      * Creates a new writing handler for {@link <def.name.capitalized>Template templates}.

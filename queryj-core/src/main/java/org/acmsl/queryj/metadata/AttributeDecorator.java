@@ -54,7 +54,7 @@ public interface AttributeDecorator
      * Retrieves the decorated <code>Attribute</code>.
      * @return such instance.
      */
-    public Attribute getAttribute();
+    public Attribute<String> getAttribute();
 
     /**
      * Retrieves whether the attribute is a clob or not.

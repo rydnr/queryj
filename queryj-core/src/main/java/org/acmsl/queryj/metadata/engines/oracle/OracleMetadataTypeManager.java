@@ -36,6 +36,7 @@ package org.acmsl.queryj.metadata.engines.oracle;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 
 /*
@@ -134,7 +135,7 @@ public class OracleMetadataTypeManager
         switch  (dataType)
         {
             case Types.OTHER:
-                result = "String";
+                result = Literals.STRING;
                 break;
 
             default:

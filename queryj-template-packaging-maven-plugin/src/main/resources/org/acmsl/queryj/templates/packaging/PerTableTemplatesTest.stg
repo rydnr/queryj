@@ -77,10 +77,11 @@ import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-//import org.acmsl.queryj.metadata.vo.Row;
+import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.api.PerTableTemplate;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.PerTableTemplateFactory;
 import org.acmsl.queryj.api.PerTableTemplateGenerator;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -164,7 +165,9 @@ class(defs, C) ::= <<
   timestamp=C.timestamp)>
  */
 public class PerTableTemplatesTest
-    extends AbstractTemplatesTest\<PerTableTemplateGenerator, PerTableTemplateFactory>
+    extends AbstractTemplatesTest\<
+                PerTableTemplateGenerator\<? extends PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext>,
+                PerTableTemplateFactory\<? extends PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext\>>
 {
     /**
      * Creates an instance.
@@ -342,7 +345,8 @@ public class PerTableTemplatesTest
      */
     @NotNull
     @Override
-    protected DecoratorFactory retrieveDecoratorFactory(@NotNull final PerTableTemplateGenerator generator)
+    protected DecoratorFactory retrieveDecoratorFactory(
+        @NotNull final PerTableTemplateGenerator\<? extends PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext> generator)
     {
         return generator.getDecoratorFactory();
     }
@@ -380,18 +384,20 @@ public class PerTableTemplatesTest
         @NotNull final Map\<String, File> outputFiles,
         @NotNull final CustomSqlProvider sqlProvider)
     {
-        @Nullable final PerTableTemplateGenerator generator =
-            retrieveTemplateGenerator(templateName);
+        @Nullable final PerTableTemplateGenerator\<PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext> generator =
+            (PerTableTemplateGenerator\<PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext>) retrieveTemplateGenerator(
+                templateName);
 
         Assert.assertNotNull("No template generator found for " + templateName, generator);
 
         for (@NotNull final Table\<String, Attribute\<String\>> table : tables.values())
         {
-            @Nullable final PerTableTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
+            @Nullable final PerTableTemplateFactory\<? extends PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext> templateFactory =
+                retrieveTemplateFactory(templateName);
 
             Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
-            @Nullable final PerTableTemplate template =
+            @Nullable final PerTableTemplate\<PerTableTemplateContext> template =
                 templateFactory.createTemplate(
                     retrieveMetadataManager(engine, table),
                     sqlProvider,
@@ -407,7 +413,7 @@ public class PerTableTemplatesTest
                     false, // disable NotNull annotations
                     true, // disable checkThread.org annotations
                     table.getName(),
-                    new ArrayList<Row>(0));
+                    new ArrayList\<Row\<String\>>(0));
 
             Assert.assertNotNull("No template found for " + templateName, template);
 

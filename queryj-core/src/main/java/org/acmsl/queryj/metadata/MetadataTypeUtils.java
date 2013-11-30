@@ -38,6 +38,7 @@ package org.acmsl.queryj.metadata;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.acmsl.queryj.Literals;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -91,11 +92,11 @@ public class MetadataTypeUtils
     {
         String result = type;
 
-        if  (   ("boolean".equals(type))
-             || ("Boolean".equals(type))
+        if  (   (Literals.BOOLEAN.equals(type))
+             || (Literals.BOOLEAN.equals(type))
              || ("java.lang.Boolean".equals(type)))
         {
-            result = "Boolean";
+            result = Literals.BOOLEAN;
         }
         else if  (   ("byte".equals(type))
                   || ("Byte".equals(type))
@@ -116,10 +117,10 @@ public class MetadataTypeUtils
             result = "Character";
         }
         else if  (   ("int".equals(type))
-                  || ("Integer".equals(type))
+                  || (Literals.INTEGER.equals(type))
                   || ("java.lang.Long".equals(type)))
         {
-            result = "Integer";
+            result = Literals.INTEGER;
         }
         else if  (   ("long".equals(type))
                   || ("Long".equals(type))
@@ -127,17 +128,17 @@ public class MetadataTypeUtils
         {
             result = "Long";
         }
-        else if  (   ("float".equals(type))
-                  || ("Float".equals(type))
+        else if  (   (Literals.FLOAT.equals(type))
+                  || (Literals.FLOAT_C.equals(type))
                   || ("java.lang.Float".equals(type)))
         {
-            result = "Float";
+            result = Literals.FLOAT_C;
         }
-        else if  (   ("double".equals(type))
-                  || ("Double".equals(type))
+        else if  (   (Literals.DOUBLE.equals(type))
+                  || (Literals.DOUBLE_C.equals(type))
                   || ("java.lang.Double".equals(type)))
         {
-            result = "Double";
+            result = Literals.DOUBLE_C;
         }
 
         return result;

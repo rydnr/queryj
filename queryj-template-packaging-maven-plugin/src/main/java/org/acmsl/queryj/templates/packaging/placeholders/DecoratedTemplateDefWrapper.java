@@ -73,6 +73,8 @@ import java.io.File;
 public class DecoratedTemplateDefWrapper
     implements TemplateDef<DecoratedString>
 {
+    private static final long serialVersionUID = 1996073167613801985L;
+
     /**
      * The wrapped instance.
      */

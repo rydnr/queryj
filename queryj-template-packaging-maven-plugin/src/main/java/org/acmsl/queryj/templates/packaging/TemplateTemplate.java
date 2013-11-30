@@ -56,6 +56,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class TemplateTemplate<C extends TemplatePackagingContext>
     extends AbstractTemplatePackagingTemplate<C>
 {
+    private static final long serialVersionUID = -392473631653215353L;
+
     /**
      * Builds an <code>TemplateTemplate</code> using given
      * information.

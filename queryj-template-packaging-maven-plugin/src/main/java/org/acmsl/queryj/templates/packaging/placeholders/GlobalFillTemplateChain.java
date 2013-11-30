@@ -107,7 +107,7 @@ public class GlobalFillTemplateChain
     @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final GlobalTemplateContext context)
     {
-        @NotNull final List result = new ArrayList<FillHandler>(0);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(0);
 
         // TODO
 

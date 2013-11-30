@@ -826,6 +826,7 @@ public abstract class AbstractAttribute<T>
      * @return such information.
      */
     @Override
+    @NotNull
     public String toString()
     {
         return

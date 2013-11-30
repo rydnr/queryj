@@ -57,7 +57,7 @@ import java.util.List;
  * @since 2013/06/06
  */
 @SuppressWarnings("unused")
-public interface PlaceholderChainProvider<FH extends FillHandler>
+public interface PlaceholderChainProvider<FH extends FillHandler<?>>
 {
     /**
      * Retrieves the custom placeholder handlers.

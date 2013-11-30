@@ -48,6 +48,7 @@ import org.acmsl.queryj.QueryJCommand;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +61,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings("unused")
 public abstract class TemplateFillChain<C extends QueryJTemplateContext>
-    extends AbstractQueryJChain
+    extends AbstractQueryJChain<QueryJCommand, QueryJCommandHandler<QueryJCommand>>
 {
     /**
      * The template context.
@@ -114,9 +115,10 @@ public abstract class TemplateFillChain<C extends QueryJTemplateContext>
      */
     @Override
     @NotNull
-    protected Chain buildChain(@NotNull final Chain chain)
+    protected Chain<QueryJCommand, QueryJBuildException, QueryJCommandHandler<QueryJCommand>> buildChain(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, QueryJCommandHandler<QueryJCommand>> chain)
     {
-        @NotNull final Chain result = chain;
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, QueryJCommandHandler<QueryJCommand>> result = chain;
 
         fillChain(result, getTemplateContext());
 
@@ -155,12 +157,16 @@ public abstract class TemplateFillChain<C extends QueryJTemplateContext>
      * @param chain the chain to customize.
      * @param context the {@link QueryJTemplateContext context}.
      */
-    protected abstract void fillChain(@NotNull final Chain chain, @NotNull final C context);
+    protected abstract void fillChain(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, QueryJCommandHandler<QueryJCommand>> chain,
+        @NotNull final C context);
 
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'TemplateFillChain', 'templateContext': '" + templateContext + "' }";
+        return
+              "{ \"class\": \"" + TemplateFillChain.class.getName() + '"'
+            + ", \"templateContext\": " + templateContext + " }";
     }
 }

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2001-today  Jose San Leandro Armendariz
                         chous@acm-sl.org
@@ -65,6 +65,7 @@ public interface MetadataExtractionListener
     /**
      * Notifies all table name extraction have been started.
      */
+    @SuppressWarnings("unused")
     public void tableNamesExtractionStarted();
 
     /**
@@ -76,12 +77,14 @@ public interface MetadataExtractionListener
      * Notifies the table extraction has been started.
      * @param table the table.
      */
+    @SuppressWarnings("unused")
     public void tableExtractionStarted(@NotNull final String table);
 
     /**
      * Notifies the table extraction has been completed.
      * @param table the table.
      */
+    @SuppressWarnings("unused")
     public void tableExtracted(@NotNull final String table);
 
     /**
@@ -98,6 +101,7 @@ public interface MetadataExtractionListener
      * Notifies the table comment extraction has been started.
      * @param table the table.
      */
+    @SuppressWarnings("unused")
     public void tableCommentExtractionStarted(@NotNull final String table);
 
     /**
@@ -105,6 +109,7 @@ public interface MetadataExtractionListener
      * @param table the table name.
      * @param comment the comment.
      */
+    @SuppressWarnings("unused")
     public void tableCommentExtracted(
         @NotNull final String table, @NotNull final String comment);
 
@@ -112,6 +117,7 @@ public interface MetadataExtractionListener
      * Notifies column name extraction has been started.
      * @param table the table.
      */
+    @SuppressWarnings("unused")
     public void columnNamesExtractionStarted(@NotNull final String table);
 
     /**
@@ -119,12 +125,14 @@ public interface MetadataExtractionListener
      * @param table the table name.
      * @param count the count.
      */
+    @SuppressWarnings("unused")
     public void columnNamesExtracted(@NotNull final String table, final int count);
 
     /**
      * Notifies column comment extraction has been started.
      * @param table the table.
      */
+    @SuppressWarnings("unused")
     public void columnCommentsExtractionStarted(@NotNull final String table);
 
     /**
@@ -133,6 +141,7 @@ public interface MetadataExtractionListener
      * @param column the column name.
      * @param comment the column comment.
      */
+    @SuppressWarnings("unused")
     public void columnCommentExtracted(
         @NotNull final String table, @NotNull final String column, @NotNull final String comment);
 
@@ -140,35 +149,41 @@ public interface MetadataExtractionListener
      * Notifies all column comments have been extracted.
      * @param table the table name.
      */
+    @SuppressWarnings("unused")
     public void columnCommentsExtracted(@NotNull final String table);
 
     /**
      * Notifies column type extraction has been started.
      * @param table the table.
      */
+    @SuppressWarnings("unused")
     public void columnTypesExtractionStarted(@NotNull final String table);
 
     /**
      * Notifies all column types have been extracted.
      * @param table the table name.
      */
+    @SuppressWarnings("unused")
     public void columnTypesExtracted(@NotNull final String table);
 
     /**
      * Notifies column nullable setting extraction has been extracted.
      * @param table the table.
      */
+    @SuppressWarnings("unused")
     public void columnNullablesExtractionStarted(@NotNull final String table);
 
     /**
      * Notifies all column nullable settings have been extracted.
      * @param table the table name.
      */
+    @SuppressWarnings("unused")
     public void columnNullablesExtracted(@NotNull final String table);
 
     /**
      * Notifies a primary key extraction has been started.
      */
+    @SuppressWarnings("unused")
     public void primaryKeyExtractionStarted();
 
     /**
@@ -178,16 +193,18 @@ public interface MetadataExtractionListener
      */
     @SuppressWarnings("unused")
     public void primaryKeyExtracted(
-        @NotNull final String table, @NotNull final List<Attribute> primaryKey);
+        @NotNull final String table, @NotNull final List<Attribute<String>> primaryKey);
 
     /**
      * Notifies all primary keys have been extracted.
      */
+    @SuppressWarnings("unused")
     public void allPrimaryKeysExtracted();
 
     /**
      * Notifies a foreign key extraction has been started.
      */
+    @SuppressWarnings("unused")
     public void foreignKeyExtractionStarted();
 
     /**
@@ -195,10 +212,11 @@ public interface MetadataExtractionListener
      * @param foreignKey the foreign key.
      */
     @SuppressWarnings("unused")
-    public void foreignKeyExtracted(@NotNull final ForeignKey foreignKey);
+    public void foreignKeyExtracted(@NotNull final ForeignKey<String> foreignKey);
 
     /**
      * Notifies all foreign keys have been extracted.
      */
+    @SuppressWarnings("unused")
     public void allForeignKeysExtracted();
 }

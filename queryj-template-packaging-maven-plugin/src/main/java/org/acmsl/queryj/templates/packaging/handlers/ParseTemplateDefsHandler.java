@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -119,19 +119,19 @@ public class ParseTemplateDefsHandler
 
         if (templateDefFiles != null)
         {
-            @Nullable List<TemplateDef> templateDefs =
-                new QueryJCommandWrapper<TemplateDef>(command).getListSetting(TEMPLATE_DEFS);
+            @Nullable List<TemplateDef<String>> templateDefs =
+                new QueryJCommandWrapper<TemplateDef<String>>(command).getListSetting(TEMPLATE_DEFS);
 
             if (templateDefs == null)
             {
-                templateDefs = new ArrayList<TemplateDef>(templateDefFiles.size());
+                templateDefs = new ArrayList<TemplateDef<String>>(templateDefFiles.size());
             }
 
             for (@Nullable final File defFile : templateDefFiles)
             {
                 if (defFile != null)
                 {
-                    @NotNull final TemplateDef templateDef = parseDefFile(defFile);
+                    @NotNull final TemplateDef<String> templateDef = parseDefFile(defFile);
 
                     if (isValid(templateDef))
                     {
@@ -144,7 +144,8 @@ public class ParseTemplateDefsHandler
 
 //                    if (templateDefs.size() == 1)
 //                    {
-                        new QueryJCommandWrapper<List<TemplateDef>>(command).setSetting(TEMPLATE_DEFS, templateDefs);
+                        new QueryJCommandWrapper<List<TemplateDef<String>>>(command).setSetting(
+                            TEMPLATE_DEFS, templateDefs);
 //                    }
                 }
             }
@@ -158,7 +159,7 @@ public class ParseTemplateDefsHandler
      * @param templateDef the {@link TemplateDef} to check.
      * @return {@code true} in such case.
      */
-    protected boolean isValid(@NotNull final TemplateDef templateDef)
+    protected boolean isValid(@NotNull final TemplateDef<String> templateDef)
     {
         final boolean result;
 
@@ -178,10 +179,10 @@ public class ParseTemplateDefsHandler
      * @throws TemplatePackagingCheckedException if the parsing fails.
      */
     @NotNull
-    protected TemplateDef parseDefFile(@NotNull final File file)
+    protected TemplateDef<String> parseDefFile(@NotNull final File file)
         throws TemplatePackagingCheckedException
     {
-        @NotNull final TemplateDef result;
+        @NotNull final TemplateDef<String> result;
 
         @Nullable final TemplateDefParser t_Parser;
 

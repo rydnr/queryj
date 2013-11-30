@@ -74,9 +74,9 @@ import java.io.File;
 @ThreadSafe
 public abstract class TemplatePackagingTestWritingHandler
     <T extends TemplatePackagingTemplate<C>,
-        TG extends TemplatePackagingTemplateGenerator<T, C>,
-        C extends TemplatePackagingContext>
-    extends TemplatePackagingWritingHandler<T, TG, C>
+     C extends TemplatePackagingContext,
+     TG extends TemplatePackagingTemplateGenerator<T, C>>
+    extends TemplatePackagingWritingHandler<T, C, TG>
 {
     /**
      * Retrieves the output dir from the attribute map.

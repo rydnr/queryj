@@ -56,7 +56,8 @@ import java.util.List;
  * Represents entities able to create per-repository templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface PerRepositoryTemplateFactory<T extends AbstractBasePerRepositoryTemplate>
+public interface PerRepositoryTemplateFactory
+    <T extends AbstractBasePerRepositoryTemplate<C>, C extends PerRepositoryTemplateContext>
     extends  Factory
 {
     /**

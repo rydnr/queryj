@@ -271,7 +271,7 @@ public class LazyAttribute
     {
         int result = -1;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, name, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, name, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -487,7 +487,7 @@ public class LazyAttribute
     {
         boolean result = false;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -563,7 +563,7 @@ public class LazyAttribute
     {
         boolean result = false;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -639,7 +639,7 @@ public class LazyAttribute
     {
         boolean result = false;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -716,7 +716,7 @@ public class LazyAttribute
     {
         boolean result = false;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {

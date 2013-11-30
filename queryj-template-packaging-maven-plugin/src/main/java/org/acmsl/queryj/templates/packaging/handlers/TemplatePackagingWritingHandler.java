@@ -68,9 +68,9 @@ import java.util.concurrent.CyclicBarrier;
 @ThreadSafe
 public abstract class TemplatePackagingWritingHandler
     <T extends TemplatePackagingTemplate<C>,
-     TG extends TemplatePackagingTemplateGenerator<T, C>,
-     C extends TemplatePackagingContext>
-    extends AbstractTemplateWritingHandler<T, TG, C>
+     C extends TemplatePackagingContext,
+     TG extends TemplatePackagingTemplateGenerator<T, C>>
+    extends AbstractTemplateWritingHandler<T, C, TG>
     implements TemplatePackagingSettings
 {
     /**
@@ -118,7 +118,7 @@ public abstract class TemplatePackagingWritingHandler
      */
     @NotNull
     @Override
-    protected TemplateGeneratorThread<T, TG, C> buildGeneratorThread(
+    protected TemplateGeneratorThread<T, C, TG> buildGeneratorThread(
         @NotNull final T template,
         @NotNull final TG generator,
         @NotNull final File outputDir,
@@ -129,7 +129,7 @@ public abstract class TemplatePackagingWritingHandler
         @NotNull final QueryJCommand parameters)
     {
         return
-            new TemplateGeneratorThread<T, TG, C>(
+            new TemplateGeneratorThread<T, C, TG>(
                 generator,
                 template,
                 outputDir,

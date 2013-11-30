@@ -43,7 +43,6 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.api.handlers.FillAdapterHandler;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.customsql.Result;
@@ -109,79 +108,67 @@ public class BasePerTableFillTemplateChain
     @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final PerTableTemplateContext context)
     {
-        @NotNull final List result = new ArrayList<FillHandler>(12);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(12);
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, CustomResultsHandler, List<Result>>(
-                        new CustomResultsHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, CustomResultsHandler, List<Result>>(
+                    new CustomResultsHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, DAOClassNameHandler, DecoratedString>(
-                        new DAOClassNameHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, DAOClassNameHandler, DecoratedString>(
+                    new DAOClassNameHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, DAOImplementationClassNameHandler, DecoratedString>(
-                        new DAOImplementationClassNameHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, DAOImplementationClassNameHandler, DecoratedString>(
+                    new DAOImplementationClassNameHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, DAOFactoryClassNameHandler, DecoratedString>(
-                        new DAOFactoryClassNameHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, DAOFactoryClassNameHandler, DecoratedString>(
+                    new DAOFactoryClassNameHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, ForeignKeyListHandler,List<ForeignKey<String>>>(
-                        new ForeignKeyListHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, ForeignKeyListHandler,List<ForeignKey<String>>>(
+                    new ForeignKeyListHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, LobHandlingTableCheckHandler,Boolean>(
-                        new LobHandlingTableCheckHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, LobHandlingTableCheckHandler,Boolean>(
+                    new LobHandlingTableCheckHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, NonPrimaryKeyAttributesHandler,List<Attribute<String>>>(
-                        new NonPrimaryKeyAttributesHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, NonPrimaryKeyAttributesHandler,List<Attribute<String>>>(
+                    new NonPrimaryKeyAttributesHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, PrimaryKeyHandler,List<Attribute<String>>>(
-                        new PrimaryKeyHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, PrimaryKeyHandler,List<Attribute<String>>>(
+                    new PrimaryKeyHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, TableHandler,TableDecorator>(
-                        new TableHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, TableHandler,TableDecorator>(
+                    new TableHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, TableNameHandler, DecoratedString>(
-                        new TableNameHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, TableNameHandler, DecoratedString>(
+                    new TableNameHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, ValueObjectNameHandler, DecoratedString>(
-                        new ValueObjectNameHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, ValueObjectNameHandler, DecoratedString>(
+                    new ValueObjectNameHandler(context)));
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerTableTemplateContext, TableAttributeTypeImportsHandler,List<String>>(
-                        new TableAttributeTypeImportsHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerTableTemplateContext, TableAttributeTypeImportsHandler,List<String>>(
+                    new TableAttributeTypeImportsHandler(context)));
 
         return result;
     }

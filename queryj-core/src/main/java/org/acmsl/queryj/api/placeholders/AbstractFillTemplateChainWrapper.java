@@ -71,6 +71,7 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -152,6 +153,7 @@ public abstract class AbstractFillTemplateChainWrapper<C extends TemplateContext
     public QueryJCommand providePlaceholders(final boolean relevantOnly)
         throws QueryJBuildException
     {
+        // Don't know how to fix the generics warnings
         @NotNull final List t_lHandlers = getWrappedChain().getHandlers();
 
         t_lHandlers.addAll(getHandlers());
@@ -171,14 +173,14 @@ public abstract class AbstractFillTemplateChainWrapper<C extends TemplateContext
     @NotNull
     protected QueryJCommand providePlaceholders(
         final boolean relevantOnly,
-        @NotNull final List<FillHandler> handlers)
+        @NotNull final List<FillHandler<?>> handlers)
         throws QueryJBuildException
     {
         @NotNull final QueryJCommand result;
 
         @NotNull final Configuration t_Configuration = new PropertiesConfiguration();
 
-        for (@NotNull final FillHandler handler : handlers)
+        for (@NotNull final FillHandler<?> handler : handlers)
         {
             if (   (!relevantOnly)
                 || (!(handler instanceof NonRelevantFillHandler)))

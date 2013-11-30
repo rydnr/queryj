@@ -37,6 +37,7 @@ package org.acmsl.queryj.api.handlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.api.PerTableTemplate;
 import org.acmsl.queryj.api.PerTableTemplateFactory;
@@ -81,8 +82,9 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerTableTemplateBuildHandler
-       <T extends PerTableTemplate,
-        TF extends PerTableTemplateFactory<T>>
+       <T extends PerTableTemplate<C>,
+        C extends PerTableTemplateContext,
+        TF extends PerTableTemplateFactory<T, C>>
     extends AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {

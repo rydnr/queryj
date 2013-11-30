@@ -39,8 +39,6 @@ package org.acmsl.queryj.tools.handlers;
  */
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
-import org.acmsl.queryj.api.QueryJTemplate;
-import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseMetadataException;
 import org.acmsl.queryj.api.Template;
 import org.acmsl.queryj.api.exceptions.UnsupportedCharsetQueryjException;
@@ -65,7 +63,6 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -474,7 +471,7 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      */
     @SuppressWarnings("unused")
-    protected <T extends Template> void annotateGenerationTasks(
+    protected <T extends Template<?>> void annotateGenerationTasks(
         @NotNull final List<Future<T>> tasks, @NotNull final QueryJCommand parameters)
     {
         new QueryJCommandWrapper<List<Future<T>>>(parameters).setSetting(buildGenerationTasksKey(), tasks);

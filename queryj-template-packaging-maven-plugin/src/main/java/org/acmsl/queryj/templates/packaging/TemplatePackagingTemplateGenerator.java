@@ -62,7 +62,7 @@ import org.jetbrains.annotations.NotNull;
 @ThreadSafe
 public class TemplatePackagingTemplateGenerator
     <T extends TemplatePackagingTemplate<C>, C extends TemplatePackagingContext>
-    extends AbstractTemplateGenerator<T>
+    extends AbstractTemplateGenerator<T, C>
 {
     /**
      * Creates a new TemplatePackagingTemplateGenerator instance.

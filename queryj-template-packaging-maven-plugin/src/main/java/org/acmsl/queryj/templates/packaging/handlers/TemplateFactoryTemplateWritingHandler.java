@@ -73,8 +73,10 @@ import java.util.List;
 public class TemplateFactoryTemplateWritingHandler
     extends TemplatePackagingWritingHandler
                 <TemplateFactoryTemplate<DefaultTemplatePackagingContext>,
-                 TemplatePackagingTemplateGenerator<TemplateFactoryTemplate<DefaultTemplatePackagingContext>,
-                 DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>
+                 DefaultTemplatePackagingContext,
+                 TemplatePackagingTemplateGenerator
+                     <TemplateFactoryTemplate<DefaultTemplatePackagingContext>,
+                      DefaultTemplatePackagingContext>>
 {
     /**
      * Retrieves the template generator.

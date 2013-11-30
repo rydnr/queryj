@@ -48,10 +48,13 @@ import org.acmsl.commons.utils.ConversionUtils;
  * Importing some additional classes.
  */
 import org.apache.commons.digester.Digester;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -80,22 +83,20 @@ public class ConnectionFlagsElementFactory
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;sql&gt; information.
      * @throws SAXException if the attributes are not valid.
-     * @precondition attributes != null
-     * @precondition digester != null
-     * @precondition conversionUtils != null
      */
-    @Nullable
+    @Override
+    @NotNull
     public Object createObject(
         @NotNull final Attributes attributes,
-        final Digester digester,
-        final ConversionUtils conversionUtils)
+        @NotNull final Digester digester,
+        @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable ConnectionFlagsElement result = null;
+        @NotNull final ConnectionFlagsElement result;
 
-        String t_strId = attributes.getValue("id");
+        final String t_strId = attributes.getValue("id");
 
-        String t_strTransactionIsolation =
+        final String t_strTransactionIsolation =
             attributes.getValue("transactionisolation");
 
         result =

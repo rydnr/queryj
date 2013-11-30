@@ -539,7 +539,7 @@ public abstract class AbstractForeignKeyDecorator
      * @param foreignKey the decorated foreign key.
      * @return such information.
      */
-    protected int hashCode(@NotNull final ForeignKey foreignKey)
+    protected int hashCode(@NotNull final ForeignKey<String> foreignKey)
     {
         return foreignKey.hashCode();
     }
@@ -550,13 +550,14 @@ public abstract class AbstractForeignKeyDecorator
      * @return the result of such comparison.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 
         if (object instanceof ForeignKey)
         {
-            result = equals(getForeignKey(), (ForeignKey) object);
+            result = equals(getForeignKey(), (ForeignKey<String>) object);
         }
 
         return result;
@@ -568,7 +569,7 @@ public abstract class AbstractForeignKeyDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    protected boolean equals(@NotNull final ForeignKey foreignKey, final ForeignKey object)
+    protected boolean equals(@NotNull final ForeignKey<String> foreignKey, final ForeignKey<String> object)
     {
         return foreignKey.equals(object);
     }    
@@ -641,9 +642,10 @@ public abstract class AbstractForeignKeyDecorator
         final List<Attribute<String>> t_lFirstAttributes = first.getAttributes();
         final List<Attribute<DecoratedString>> t_lSecondAttributes = second.getAttributes();
 
-        final Attribute<String>[] t_aFirstAttributes = (Attribute<String>[]) new Attribute[t_lFirstAttributes.size()];
+        final Attribute<String>[] t_aFirstAttributes = (Attribute<String>[]) new Attribute<?>[t_lFirstAttributes.size()];
         t_lFirstAttributes.toArray(t_aFirstAttributes);
-        final Attribute<DecoratedString>[] t_aSecondAttributes = (Attribute<DecoratedString>[]) new Attribute[t_lSecondAttributes.size()];
+        final Attribute<DecoratedString>[] t_aSecondAttributes =
+            (Attribute<DecoratedString>[]) new Attribute<?>[t_lSecondAttributes.size()];
         t_lSecondAttributes.toArray(t_aSecondAttributes);
 
         for (int t_iIndex = 0; t_iIndex < t_aFirstAttributes.length; t_iIndex++)

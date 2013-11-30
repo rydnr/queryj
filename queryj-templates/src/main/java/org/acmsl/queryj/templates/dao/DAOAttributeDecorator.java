@@ -70,7 +70,7 @@ public class DAOAttributeDecorator
      * @param metadataManager the metadata manager.
      */
     public DAOAttributeDecorator(
-        @NotNull final Attribute attribute,
+        @NotNull final Attribute<String> attribute,
         @NotNull final MetadataManager metadataManager)
     {
         super(attribute, metadataManager);

@@ -42,6 +42,7 @@ package org.acmsl.queryj.api;
  */
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.tools.antlr.PerCommentLexer;
 import org.acmsl.queryj.tools.antlr.PerCommentParser;
@@ -267,6 +268,7 @@ public class MetaLanguageUtils
      * if the column is not boolean.
      */
     @NotNull
+    @SuppressWarnings("unused")
     public String[] retrieveColumnBool(@NotNull final String columnComment)
     {
         @Nullable String[] result = new String[3];
@@ -318,6 +320,7 @@ public class MetaLanguageUtils
      * @param columnComment the column comment.
      * @return such condition.
      */
+    @SuppressWarnings("unused")
     public boolean retrieveColumnReadOnly(@NotNull final String columnComment)
     {
         boolean result = false;
@@ -537,7 +540,7 @@ public class MetaLanguageUtils
     {
         boolean result = false;
 
-        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {

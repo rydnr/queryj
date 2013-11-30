@@ -107,7 +107,7 @@ class(defs, C) ::= <<
  */
 @ThreadSafe
 public class <C.class_name>
-    implements TemplateChainProvider\<TemplateHandler\<QueryJCommand\>>
+    implements TemplateChainProvider\<TemplateHandler\<QueryJCommand>, QueryJCommand>
 {
     /**
      * Retrieves the custom chain.

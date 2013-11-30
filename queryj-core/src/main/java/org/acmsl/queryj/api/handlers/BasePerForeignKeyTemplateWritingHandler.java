@@ -59,8 +59,8 @@ import java.io.File;
 public abstract class BasePerForeignKeyTemplateWritingHandler
     <T extends PerForeignKeyTemplate<C>,
      C extends PerForeignKeyTemplateContext,
-     TG extends PerForeignKeyTemplateGenerator<T>>
-    extends    AbstractQueryJTemplateWritingHandler<T, TG, C>
+     TG extends PerForeignKeyTemplateGenerator<T, C>>
+    extends    AbstractQueryJTemplateWritingHandler<T, C, TG>
     implements TemplateWritingHandler
 {
     /**

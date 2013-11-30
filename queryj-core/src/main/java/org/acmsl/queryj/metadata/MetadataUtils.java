@@ -366,16 +366,10 @@ public class MetadataUtils
 
         if  (attributes != null)
         {
-            @NotNull final Iterator<Attribute<String>> t_itAttributes = attributes.iterator();
-
-            @Nullable Attribute t_CurrentAttribute;
-
-            while  (t_itAttributes.hasNext())
+            for (@Nullable final Attribute<String> attribute : attributes)
             {
-                t_CurrentAttribute = t_itAttributes.next();
-
-                if  (   (t_CurrentAttribute != null)
-                     && (t_CurrentAttribute.isNullable()))
+                if  (   (attribute != null)
+                     && (attribute.isNullable()))
                 {
                     result = true;
                     break;
@@ -501,7 +495,7 @@ public class MetadataUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Attribute> retrieveLobAttributes(
+    public List<Attribute<String>> retrieveLobAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager)
@@ -523,7 +517,7 @@ public class MetadataUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Attribute> retrieveAllButLobAttributes(
+    public List<Attribute<String>> retrieveAllButLobAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager)
@@ -545,13 +539,13 @@ public class MetadataUtils
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> filterLobAttributes(
+    public List<Attribute<String>> filterLobAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         final boolean includeLob)
     {
-        @Nullable List<Attribute> result = null;
+        @Nullable List<Attribute<String>> result = null;
 
         @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
@@ -576,7 +570,7 @@ public class MetadataUtils
                 {
                     if (result == null)
                     {
-                        result = new ArrayList<Attribute>(1);
+                        result = new ArrayList<Attribute<String>>(1);
                     }
                     result.add(t_Attribute);
                 }
@@ -585,7 +579,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<Attribute<String>>(0);
         }
 
         return result;

@@ -58,9 +58,12 @@ import java.io.File;
  * @since 2013/06/16
  */
 @ThreadSafe
+@SuppressWarnings("unused")
 public class CustomSqlXmlFileDoesNotExistException
     extends QueryJBuildException
 {
+    private static final long serialVersionUID = -2817072036794125684L;
+
     /**
      * Creates an instance with given context.
      * @param file the file.

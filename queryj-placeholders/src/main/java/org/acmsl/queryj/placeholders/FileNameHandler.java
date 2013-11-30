@@ -62,6 +62,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class FileNameHandler<C extends TemplateContext>
     extends AbstractTemplateContextFillHandler<C, DecoratedString>
 {
+    private static final long serialVersionUID = 3334025281960418823L;
+
     /**
      * Creates a new handler associated to given {@link org.acmsl.queryj.api.QueryJTemplateContext}.
      * @param context the template.

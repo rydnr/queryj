@@ -113,8 +113,9 @@ public class CustomSqlValidationHandler
     /**
      * A cached class array.
      */
-    private static final Class[] CLASS_ARRAY_OF_ONE_STRING =
-        new Class[] { String.class };
+    @SuppressWarnings("unchecked")
+    private static final Class<String>[] CLASS_ARRAY_OF_ONE_STRING =
+        (Class<String>[]) new Class<?>[] { String.class };
     protected static final String COULD_NOT_BIND_PARAMETER_VIA = "Could not bind parameter via ";
     protected static final String PREPARED_STATEMENT_SET = "PreparedStatement.set";
     protected static final String VALIDATION_FAILED_FOR = "Validation failed for ";
@@ -407,7 +408,7 @@ public class CustomSqlValidationHandler
 
         @Nullable Method t_Method;
 
-        @Nullable Collection<Class> t_cSetterParams;
+        @Nullable Collection<Class<?>> t_cSetterParams;
 
         @Nullable Class<?> t_Type;
 
@@ -427,7 +428,7 @@ public class CustomSqlValidationHandler
             {
                 t_Method = null;
 
-                t_cSetterParams = new ArrayList<Class>();
+                t_cSetterParams = new ArrayList<Class<?>>();
 
                 t_cSetterParams.add(Integer.TYPE);
 
@@ -453,7 +454,7 @@ public class CustomSqlValidationHandler
                         retrieveMethod(
                             statement.getClass(),
                             getSetterMethod(t_strType, metadataTypeManager),
-                            t_cSetterParams.toArray(new Class[t_cSetterParams.size()]));
+                            t_cSetterParams.toArray(new Class<?>[t_cSetterParams.size()]));
                 }
                 catch  (@NotNull final NoSuchMethodException noSuchMethodException)
                 {
@@ -542,7 +543,7 @@ public class CustomSqlValidationHandler
                         // We have only once chance: constructor call.
                         try
                         {
-                            @Nullable final Constructor t_Constructor =
+                            @Nullable final Constructor<?> t_Constructor =
                                 t_Type.getConstructor(CLASS_ARRAY_OF_ONE_STRING);
 
                             if  (t_Constructor != null)
@@ -814,7 +815,7 @@ public class CustomSqlValidationHandler
                                     getGetterMethod(
                                         t_Property.getType(),
                                         metadataTypeManager),
-                                    new Class[]
+                                    new Class<?>[]
                                     {
                                         (t_Property.getIndex() > 0)
                                         ?  Integer.TYPE
@@ -1103,10 +1104,10 @@ public class CustomSqlValidationHandler
      * @return such class.
      */
     @Nullable
-    protected Class retrieveType(
+    protected Class<?> retrieveType(
         @NotNull final String type, @NotNull final String parameterType)
     {
-        @Nullable Class result = null;
+        @Nullable Class<?> result = null;
 
         try
         {

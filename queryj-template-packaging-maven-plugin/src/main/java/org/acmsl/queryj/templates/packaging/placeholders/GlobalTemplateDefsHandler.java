@@ -70,6 +70,8 @@ import java.util.List;
 public class GlobalTemplateDefsHandler<C extends GlobalTemplateContext>
     extends AbstractTemplateContextFillHandler<C, List<TemplateDef<DecoratedString>>>
 {
+    private static final long serialVersionUID = 6074422493902086923L;
+
     /**
      * Creates a new instance to resolve "templateDefs" placeholders in global templates.
      * @param context the {@link GlobalTemplateContext context}.

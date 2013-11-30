@@ -229,7 +229,7 @@ public abstract class AbstractField
      * @return the result of such comparison.
      */
     @Override
-    public boolean equals(final Object object)
+    public boolean equals(@Nullable final Object object)
     {
         final boolean result;
 
@@ -269,7 +269,8 @@ public abstract class AbstractField
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Attribute object)
+    @Override
+    public int compareTo(@Nullable final Attribute<String> object)
         throws  ClassCastException
     {
         final int result;

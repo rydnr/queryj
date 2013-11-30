@@ -48,12 +48,14 @@ import java.util.Collection;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Models pre-defined per-DAO &lt;result&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
+@SuppressWarnings("unused")
 public class ImplicitDAOResult
     extends  AbstractResult
 {
@@ -68,12 +70,10 @@ public class ImplicitDAOResult
      * @param id the <i>id</i> attribute.
      * @param matches the <i>matches</i> attribute.
      * @param daoRef the <i>daoRef</i> attribute.
-     * @precondition id != null
-     * @precondition matches != null
-     * @precondition daoRef != null
      */
+    @SuppressWarnings("unused")
     public ImplicitDAOResult(
-        final String id, final String matches, final String daoRef)
+        @NotNull final String id, @NotNull final String matches, @NotNull final String daoRef)
     {
         super(id, matches);
         immutableSetDaoRef(daoRef);
@@ -83,7 +83,7 @@ public class ImplicitDAOResult
      * Specifies the <i>daoRef</i> attribute.
      * @param daoRef such value.
      */
-    protected final void immutableSetDaoRef(final String daoRef)
+    protected final void immutableSetDaoRef(@NotNull final String daoRef)
     {
         m__strDAORef = daoRef;
     }
@@ -92,7 +92,8 @@ public class ImplicitDAOResult
      * Specifies the <i>daoRef</i> attribute.
      * @param daoRef such value.
      */
-    protected void setDaoRef(final String daoRef)
+    @SuppressWarnings("unused")
+    protected void setDaoRef(@NotNull final String daoRef)
     {
         immutableSetDaoRef(daoRef);
     }
@@ -141,7 +142,7 @@ public class ImplicitDAOResult
         final String id,
         final String matches,
         final String daoRef,
-        final Collection propertyRefs)
+        final Collection<PropertyRef> propertyRefs)
     {
         return
             (id + "@#" + matches + "#@" + daoRef + "@#" + propertyRefs)
@@ -183,7 +184,7 @@ public class ImplicitDAOResult
 
         if  (instance instanceof ImplicitDAOResult)
         {
-            @NotNull ImplicitDAOResult candidate = (ImplicitDAOResult) instance;
+            @NotNull final ImplicitDAOResult candidate = (ImplicitDAOResult) instance;
 
             result =
                 (   (id.equalsIgnoreCase(candidate.getId())
@@ -241,10 +242,11 @@ public class ImplicitDAOResult
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Result object)
+    @Override
+    public int compareTo(@Nullable final Result object)
         throws  ClassCastException
     {
-        int result = 1;
+        final int result;
 
         if  (object instanceof ImplicitDAOResult)
         {

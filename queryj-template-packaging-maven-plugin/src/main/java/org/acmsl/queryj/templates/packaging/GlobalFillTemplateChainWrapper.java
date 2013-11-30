@@ -101,9 +101,9 @@ public class GlobalFillTemplateChainWrapper
      */
     @NotNull
     @Override
-    protected List<FillHandler> getHandlers(@NotNull final GlobalTemplateContext context)
+    protected List<?> getHandlers(@NotNull final GlobalTemplateContext context)
     {
-        @NotNull final List<FillHandler> result = new ArrayList<FillHandler>(9);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(9);
 
         result.add(new GlobalClassNameHandler(context));
         result.add(new CopyrightYearsHandler());

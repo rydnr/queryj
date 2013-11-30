@@ -82,9 +82,9 @@ import java.util.List;
 public class PerTableTemplatesTestTemplateWritingHandler
     extends TemplatePackagingTestWritingHandler
                 <PerTableTemplatesTestTemplate,
-                    TemplatePackagingTemplateGenerator<PerTableTemplatesTestTemplate,
-                        GlobalTemplateContext>,
-                    GlobalTemplateContext>
+                 GlobalTemplateContext,
+                 TemplatePackagingTemplateGenerator
+                      <PerTableTemplatesTestTemplate, GlobalTemplateContext>>
 {
     /**
      * Creates a new writing handler for {@link PerTableTemplatesTestTemplate templates}.
