@@ -132,7 +132,7 @@ public abstract class AbstractTemplatesTest<G, F>
     /**
      * The package name.
      */
-    public static final String PACKAGE_NAME = "com.foo.bar";
+    public static final String BASE_PACKAGE_NAME = "com.foo.bar";
 
     /**
      * A temporary folder for generated files.

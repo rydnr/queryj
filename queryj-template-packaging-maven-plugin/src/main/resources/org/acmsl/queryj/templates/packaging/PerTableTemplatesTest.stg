@@ -397,13 +397,15 @@ public class PerTableTemplatesTest
 
             Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
+            @NotNull final String packageName = PACKAGE_MAPPINGS.get(templateName);
+
             @Nullable final PerTableTemplate\<PerTableTemplateContext> template =
                 templateFactory.createTemplate(
                     retrieveMetadataManager(engine, table),
                     sqlProvider,
                     retrieveDecoratorFactory(generator),
-                    PACKAGE_MAPPINGS.get(templateName),
-                    PACKAGE_NAME,
+                    packageName,
+                    BASE_PACKAGE_NAME,
                     "acme", // repository
                     "", // header
                     false, // marker
@@ -422,11 +424,25 @@ public class PerTableTemplatesTest
             try
             {
                 rootFolder.create();
-                outputDir = rootFolder.newFolder("dao");
+
+                @NotNull final String[] packages = packageName.split("\\\.");
+                @NotNull final StringBuilder folder = new StringBuilder();
+
+                for (@NotNull final String pkg : packages)
+                {
+                    folder.append(File.separator);
+                    folder.append(pkg);
+                }
+
+                outputDir = new File(rootFolder.getRoot().getAbsolutePath().concat(folder.toString()));
             }
             catch (@NotNull final IOException ioException)
             {
-                Assert.fail(ioException.getMessage());
+                if (   (outputDir == null)
+                    || (!outputDir.exists()))
+                {
+                    Assert.fail(ioException.getMessage());
+                }
             }
 
 //            Assert.assertTrue("Cannot create folder: " + outputDir.getAbsolutePath(), outputDir.mkdirs());
@@ -467,7 +483,7 @@ public class PerTableTemplatesTest
         @NotNull final String result;
 
         @NotNull final ST template = new ST(packageTemplate);
-        template.add("packageName", PACKAGE_NAME);
+        template.add("packageName", BASE_PACKAGE_NAME);
 
         result = template.render();
 
