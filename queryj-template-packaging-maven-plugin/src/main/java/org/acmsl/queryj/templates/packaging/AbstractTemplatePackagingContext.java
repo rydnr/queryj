@@ -47,6 +47,7 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  *
@@ -56,7 +57,10 @@ import java.io.File;
  */
 @ThreadSafe
 public class AbstractTemplatePackagingContext
+    implements Serializable
 {
+    private static final long serialVersionUID = -7291939701431286380L;
+
     /**
      * The template name.
      */

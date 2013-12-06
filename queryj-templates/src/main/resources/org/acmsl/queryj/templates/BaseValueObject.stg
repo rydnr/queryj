@@ -76,11 +76,7 @@ sourceImpl(table, C) ::= <<
  * Importing some JDK classes.
  */
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+<imports(table=table)>
 
 <class(table=table, C=C)>
 >>
@@ -90,7 +86,15 @@ description(table) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-<if(table.comment)><table.comment><else>ValueObject for <table.name> information.<endif>
+<if(table.comment.empty)><table.comment><else>ValueObject for <table.name> information.<endif>
+>>
+
+imports(table) ::= <<
+<!
+  Generates the imports for the attributes' types.
+  @param table the table.
+!>
+<table.attributeTypes:{ t | import <t>;} ; separator="\n">
 >>
 
 class(table, C) ::= <<
@@ -104,11 +108,11 @@ class(table, C) ::= <<
       description(table=table)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(
-  template="org/acmsl/queryj/templates/BaseDAO.stg",
-  generation_timestamps_allowed=C.generation_timestamps_allowed,
+  template="org/acmsl/queryj/templates/BaseValueObject.stg",
+  generation_timestamps_enabled=C.generation_timestamps_enabled,
   timestamp=C.timestamp)>
  */
-public interface <table.voName>
+public interface <table.name.voName>
     extends Serializable
 {
     <table.attributes:getter(); separator="\n\n">
@@ -124,6 +128,6 @@ getter(attribute) ::= <<
  * <if(attribute.comment)><attribute.comment><else>Retrieves the \<i\><attribute.name>\</i\> value<endif>.
  * @return such information.
  */
-<if(!attr.primitive)><if(attr.nullable)>@Nullable<else>@NotNull<endif><endif>
-<attr.type> get<attr.name.capitalized>();
+<if(!attribute.primitive)><if(attribute.nullable)>@Nullable<else>@NotNull<endif><endif>
+<attribute.javaType> get<attribute.name.capitalized>();
 >>

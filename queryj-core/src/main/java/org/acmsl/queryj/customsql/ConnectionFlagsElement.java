@@ -208,8 +208,6 @@ public class ConnectionFlagsElement
             exceptionToThrow =
                 new ClassCastException(
                       Literals.CANNOT_COMPARE
-                    + object
-                    + " with "
                     + toString());
         }
 

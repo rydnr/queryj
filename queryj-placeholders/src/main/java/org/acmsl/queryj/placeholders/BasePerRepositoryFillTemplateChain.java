@@ -105,13 +105,12 @@ public class BasePerRepositoryFillTemplateChain
     @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final PerRepositoryTemplateContext context)
     {
-        @NotNull final List result = new ArrayList<FillHandler>(1);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(1);
 
         result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerRepositoryTemplateContext, TableListHandler,List<TableDecorator>>(
-                        new TableListHandler(context)));
+            new TemplateContextFillAdapterHandler
+                <PerRepositoryTemplateContext, TableListHandler,List<TableDecorator>>(
+                    new TableListHandler(context)));
 
         return result;
     }

@@ -42,6 +42,7 @@ package org.acmsl.queryj.metadata.engines.oracle;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.queryj.Field;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.StringField;
 import org.acmsl.queryj.Table;
     import org.jetbrains.annotations.NotNull;
@@ -78,7 +79,7 @@ public class OracleUserTablesTable
      */
     @NotNull
     public StringField TABLE_NAME =
-        new StringField("TABLE_NAME", this);
+        new StringField(Literals.TABLE_NAME_U, this);
 
     /**
      * Protected constructor to avoid accidental instantiation.

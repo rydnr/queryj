@@ -93,7 +93,7 @@ java_header(year, fileName, description, template, timestamp, timestamps_enabled
 
 class_common_javadoc(template, generation_timestamps_enabled, timestamp) ::= <<
  * @author \<a href="http://www.acm-sl.org/projects/queryj">QueryJ\</a> <if(template)>(<template>)<endif><if(generation_timestamps_enabled)>
- * @since <timestamp><endif>
+ * Created: <timestamp><endif>
 >>
 
 attribute_javadoc(name) ::= <<

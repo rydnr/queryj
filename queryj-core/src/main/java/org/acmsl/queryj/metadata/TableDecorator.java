@@ -184,4 +184,11 @@ public interface TableDecorator
      */
     @NotNull
     List<Result> getDifferentCustomResults();
+
+    /**
+     * Retrieves the ordered list of the fully-qualified attribute types.
+     * @return such list.
+     */
+    @NotNull
+    List<DecoratedString> getAttributeTypes();
 }

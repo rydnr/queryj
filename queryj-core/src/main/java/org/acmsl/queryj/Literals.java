@@ -97,4 +97,9 @@ public interface Literals
     String CANNOT_COMPARE = "Cannot compare ";
     String EXTRACTED = " extracted";
     String TABLE_NAME = "tableName";
+    String TABLE_NAME_U = "TABLE_NAME";
+    String COLUMN_NAME_U = "COLUMN_NAME";
+    String POSITION_U = "POSITION";
+    String USER_CONSTRAINTS_U = "USER_CONSTRAINTS";
+    String CONSTRAINT_NAME_U = "CONSTRAINT_NAME";
 }

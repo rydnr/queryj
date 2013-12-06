@@ -44,6 +44,7 @@ import org.acmsl.commons.patterns.Singleton;
  */
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.IntField;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.StringField;
 import org.acmsl.queryj.Table;
 
@@ -84,28 +85,28 @@ public class OracleUserConsColumnsTable
      */
     @NotNull
     public StringField CONSTRAINT_NAME =
-        new StringField("CONSTRAINT_NAME", this);
+        new StringField(Literals.CONSTRAINT_NAME_U, this);
 
     /**
      * The user_cons_columns table table_name field.
      */
     @NotNull
     public StringField TABLE_NAME =
-        new StringField("TABLE_NAME", this);
+        new StringField(Literals.TABLE_NAME_U, this);
 
     /**
      * The user_cons_columns table column_name field.
      */
     @NotNull
     public StringField COLUMN_NAME =
-        new StringField("COLUMN_NAME", this);
+        new StringField(Literals.COLUMN_NAME_U, this);
 
     /**
      * The user_constraints table position field.
      */
     @NotNull
     public IntField POSITION =
-        new IntField("POSITION", this);
+        new IntField(Literals.POSITION_U, this);
 
     /**
      * Protected constructor to avoid accidental instantiation.

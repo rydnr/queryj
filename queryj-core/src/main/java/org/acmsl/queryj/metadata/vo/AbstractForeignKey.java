@@ -292,7 +292,8 @@ public abstract class AbstractForeignKey<V>
 
         if  (object instanceof ForeignKey)
         {
-            @NotNull final ForeignKey t_OtherInstance = (ForeignKey) object;
+            @SuppressWarnings("unchecked")
+            @NotNull final ForeignKey<String> t_OtherInstance = (ForeignKey<String>) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -363,9 +364,9 @@ public abstract class AbstractForeignKey<V>
         final List<Attribute<V>> t_lFirstAttributes = first.getAttributes();
         final List<Attribute<V>> t_lSecondAttributes = second.getAttributes();
 
-        final Attribute<V>[] t_aFirstAttributes = (Attribute<V>[]) new Attribute[t_lFirstAttributes.size()];
+        final Attribute<V>[] t_aFirstAttributes = (Attribute<V>[]) new Attribute<?>[t_lFirstAttributes.size()];
         t_lFirstAttributes.toArray(t_aFirstAttributes);
-        final Attribute<V>[] t_aSecondAttributes = (Attribute<V>[]) new Attribute[t_lSecondAttributes.size()];
+        final Attribute<V>[] t_aSecondAttributes = (Attribute<V>[]) new Attribute<?>[t_lSecondAttributes.size()];
         t_lSecondAttributes.toArray(t_aSecondAttributes);
 
         for (int t_iIndex = 0; t_iIndex < t_aFirstAttributes.length; t_iIndex++)
@@ -390,7 +391,7 @@ public abstract class AbstractForeignKey<V>
             + ", \"nullable\": " + m__bNullable
             + ", \"fkName\": \"" + m__strFkName + '"'
             + ", \"sourceTableName\": \"" + m__strSourceTableName + '"'
-            + ", \"attributes\": [" + Arrays.toString(m__lAttributes.toArray(new Attribute[m__lAttributes.size()])) + ']'
+            + ", \"attributes\": [" + Arrays.toString(m__lAttributes.toArray(new Attribute<?>[m__lAttributes.size()])) + ']'
             + ", \"targetTableName\": \"" + m__strTargetTableName + "\" }";
     }
 }

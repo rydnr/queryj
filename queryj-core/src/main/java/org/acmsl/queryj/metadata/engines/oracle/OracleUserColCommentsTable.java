@@ -43,6 +43,7 @@ import org.acmsl.commons.patterns.Singleton;
  * Importing some QueryJ-SQL classes.
  */
 import org.acmsl.queryj.Field;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.StringField;
 import org.acmsl.queryj.Table;
 
@@ -83,14 +84,14 @@ public class OracleUserColCommentsTable
      */
     @NotNull
     public StringField TABLE_NAME =
-        new StringField("TABLE_NAME", this);
+        new StringField(Literals.TABLE_NAME_U, this);
 
     /**
      * The user_col_comments table column_name field.
      */
     @NotNull
     public StringField COLUMN_NAME =
-        new StringField("COLUMN_NAME", this);
+        new StringField(Literals.COLUMN_NAME_U, this);
 
     /**
      * The user_col_comments table comments field.

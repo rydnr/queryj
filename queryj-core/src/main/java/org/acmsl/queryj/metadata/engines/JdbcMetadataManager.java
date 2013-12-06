@@ -38,6 +38,7 @@ package org.acmsl.queryj.metadata.engines;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseTableNamesException;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
@@ -193,7 +194,7 @@ public class JdbcMetadataManager
 
             while (t_rsTables.next())
             {
-                t_strTableName = t_rsTables.getString("TABLE_NAME");
+                t_strTableName = t_rsTables.getString(Literals.TABLE_NAME_U);
                 t_strTableComment = t_rsTables.getString("REMARKS");
 
                 if (passesFilter(t_strTableName, caseSensitiveness, tableNames))
@@ -277,7 +278,7 @@ public class JdbcMetadataManager
 
             while (t_rsColumns.next())
             {
-                t_strTableName = t_rsColumns.getString("TABLE_NAME");
+                t_strTableName = t_rsColumns.getString(Literals.TABLE_NAME_U);
 
                 if (passesFilter(t_strTableName, tables, caseSensitiveness))
                 {
@@ -289,7 +290,7 @@ public class JdbcMetadataManager
                         t_mAux.put(t_strTableName, t_lColumns);
                     }
 
-                    t_strColumnName = t_rsColumns.getString("COLUMN_NAME");
+                    t_strColumnName = t_rsColumns.getString(Literals.COLUMN_NAME_U);
                     t_iColumnType = t_rsColumns.getInt("COLUMN_TYPE");
                     t_strTypeName = t_rsColumns.getString("TYPE_NAME");
                     t_iColumnSize = t_rsColumns.getInt("COLUMN_SIZE");
@@ -378,7 +379,7 @@ public class JdbcMetadataManager
 
             while (t_rsPrimaryKeys.next())
             {
-                t_strTableName = t_rsPrimaryKeys.getString("TABLE_NAME");
+                t_strTableName = t_rsPrimaryKeys.getString(Literals.TABLE_NAME_U);
 
                 @Nullable final Table<String, Attribute<String>> t_Table =
                     findTable(t_strTableName, tables, caseSensitiveness);
@@ -394,7 +395,7 @@ public class JdbcMetadataManager
                         t_mAux.put(t_strTableName, t_lPrimaryKeys);
                     }
 
-                    t_strColumnName = t_rsPrimaryKeys.getString("COLUMN_NAME");
+                    t_strColumnName = t_rsPrimaryKeys.getString(Literals.COLUMN_NAME_U);
                     t_iOrdinalPosition = t_rsPrimaryKeys.getInt("KEY_SEQ");
 
                     t_Attribute = findAttribute(t_strColumnName, t_Table.getAttributes(), caseSensitiveness);

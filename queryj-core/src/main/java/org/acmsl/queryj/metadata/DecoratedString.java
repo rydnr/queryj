@@ -52,6 +52,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -61,6 +62,7 @@ import java.util.Locale;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Decorates String objects with some alternate representation.
@@ -70,7 +72,11 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class DecoratedString
+    implements Serializable,
+               Comparable<DecoratedString>
 {
+    private static final long serialVersionUID = 9213626121877319923L;
+
     /**
      * The actual value.
      */
@@ -309,6 +315,23 @@ public class DecoratedString
         @NotNull final String value, @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return englishGrammarUtils.getSingular(value);
+    }
+
+    @Override
+    public int compareTo(@Nullable final DecoratedString decoratedString)
+    {
+        final int result;
+
+        if (decoratedString == null)
+        {
+            result = 1;
+        }
+        else
+        {
+            result = getValue().compareTo(decoratedString.getValue());
+        }
+
+        return result;
     }
 
     /**

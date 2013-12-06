@@ -56,8 +56,10 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.Date;
 import java.util.Locale;
 import java.util.HashMap;
 import java.util.Map;
@@ -761,6 +763,42 @@ public class JdbcMetadataTypeManager
                     result = Literals.STRING;
                     break;
             }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the import type of given data type.
+     * @param dataType the data type.
+     * @return the associated type for using in import statements.
+     */
+    @Nullable
+    @Override
+    public String getImport(final int dataType)
+    {
+        @NotNull final String result;
+
+        switch (dataType)
+        {
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+                result = BigDecimal.class.getName();
+                break;
+
+            case Types.TIME:
+            case Types.DATE:
+            case 11:
+                result = Date.class.getName();
+                break;
+
+            case Types.TIMESTAMP:
+                result = Timestamp.class.getName();
+                break;
+
+            default:
+                result = null;
+                break;
         }
 
         return result;

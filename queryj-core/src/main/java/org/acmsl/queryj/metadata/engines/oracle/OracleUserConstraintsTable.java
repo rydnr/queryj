@@ -12,7 +12,7 @@
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANCONSILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    RESPONSIBILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     General Public License for more details.
 
     You should have received a copy of the GNU General Public
@@ -44,6 +44,7 @@ import org.acmsl.commons.patterns.Singleton;
  */
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.IntField;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.StringField;
 import org.acmsl.queryj.Table;
 
@@ -84,7 +85,7 @@ public class OracleUserConstraintsTable
      */
     @NotNull
     public StringField CONSTRAINT_NAME =
-        new StringField("CONSTRAINT_NAME", this);
+        new StringField(Literals.CONSTRAINT_NAME_U, this);
 
     /**
      * The user_constraints table r_constraint_name field.
@@ -97,6 +98,7 @@ public class OracleUserConstraintsTable
      * The user_constraints table constraint_type field.
      */
     @NotNull
+    @SuppressWarnings("unused")
     public StringField CONSTRAINT_TYPE =
         new StringField("CONSTRAINT_TYPE", this);
 
@@ -105,21 +107,21 @@ public class OracleUserConstraintsTable
      */
     @NotNull
     public StringField TABLE_NAME =
-        new StringField("TABLE_NAME", this);
+        new StringField(Literals.TABLE_NAME_U, this);
 
     /**
      * The user_constraints table column_name field.
      */
     @NotNull
     public StringField COLUMN_NAME =
-        new StringField("COLUMN_NAME", this);
+        new StringField(Literals.COLUMN_NAME_U, this);
 
     /**
      * The user_constraints table position field.
      */
     @NotNull
     public IntField POSITION =
-        new IntField("POSITION", this);
+        new IntField(Literals.POSITION_U, this);
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -127,7 +129,7 @@ public class OracleUserConstraintsTable
      */
     protected OracleUserConstraintsTable(final String alias)
     {
-        super("USER_CONSTRAINTS", alias);
+        super(Literals.USER_CONSTRAINTS_U, alias);
     }
 
     /**
@@ -135,7 +137,7 @@ public class OracleUserConstraintsTable
      */
     protected OracleUserConstraintsTable()
     {
-        this("USER_CONSTRAINTS");
+        this(Literals.USER_CONSTRAINTS_U);
     }
 
     /**
@@ -146,7 +148,7 @@ public class OracleUserConstraintsTable
     @Nullable
     public static OracleUserConstraintsTable getInstance(@Nullable final String alias)
     {
-        @Nullable OracleUserConstraintsTable result;
+        @Nullable final OracleUserConstraintsTable result;
 
         if  (alias != null)
         {
@@ -177,7 +179,7 @@ public class OracleUserConstraintsTable
     @NotNull
     public String getTableName()
     {
-        return "USER_CONSTRAINTS";
+        return Literals.USER_CONSTRAINTS_U;
     }
 
     /**
@@ -196,5 +198,18 @@ public class OracleUserConstraintsTable
                 COLUMN_NAME,
                 POSITION
             };
+    }
+
+    @Override
+    public String toString()
+    {
+        return "OracleUserConstraintsTable{" +
+               "COLUMN_NAME=" + COLUMN_NAME +
+               ", CONSTRAINT_NAME=" + CONSTRAINT_NAME +
+               ", R_CONSTRAINT_NAME=" + R_CONSTRAINT_NAME +
+               ", CONSTRAINT_TYPE=" + CONSTRAINT_TYPE +
+               ", TABLE_NAME=" + TABLE_NAME +
+               ", POSITION=" + POSITION +
+               '}';
     }
 }

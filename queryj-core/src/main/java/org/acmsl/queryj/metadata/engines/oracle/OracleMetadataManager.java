@@ -40,6 +40,7 @@ package org.acmsl.queryj.metadata.engines.oracle;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
@@ -506,9 +507,9 @@ public class OracleMetadataManager
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws SQLException
     {
-        @NotNull final String t_strTableName = resultSet.getString("TABLE_NAME");
+        @NotNull final String t_strTableName = resultSet.getString(Literals.TABLE_NAME_U);
         @Nullable final String t_strTableComment = resultSet.getString("TABLE_COMMENT");
-        @NotNull final String t_strColumnName = resultSet.getString("COLUMN_NAME");
+        @NotNull final String t_strColumnName = resultSet.getString(Literals.COLUMN_NAME_U);
         @Nullable final String t_strColumnComment = resultSet.getString("COLUMN_COMMENT");
         @NotNull final String t_strType = resultSet.getString("DATA_TYPE");
         final int t_iLength = resultSet.getInt("DATA_LENGTH");

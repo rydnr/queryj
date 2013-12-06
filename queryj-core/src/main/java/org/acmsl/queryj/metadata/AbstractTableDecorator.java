@@ -82,8 +82,7 @@ import java.util.List;
 /**
  * Decorates <code>Table</code> instances to provide required alternate
  * representations of the information stored therein.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
 public abstract class AbstractTableDecorator
     extends     AbstractTable<DecoratedString, Attribute<DecoratedString>>
@@ -2730,6 +2729,49 @@ public abstract class AbstractTableDecorator
                 result.add(new CachingRowDecorator(row, metadataManager, decoratorFactory));
             }
         }
+        return result;
+    }
+
+    /**
+     * Retrieves the ordered list of the fully-qualified attribute types.
+     * @return such list.
+     */
+    @Override
+    @NotNull
+    public List<DecoratedString> getAttributeTypes()
+    {
+        return getAttributeTypes(getAttributes(), getMetadataManager().getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves the ordered list of the fully-qualified types of given attributes.
+     * @param attrs such attributes.
+     * @return such list.
+     */
+    @NotNull
+    protected List<DecoratedString> getAttributeTypes(
+        @NotNull final List<Attribute<DecoratedString>> attrs,
+        @NotNull final MetadataTypeManager typeManager)
+    {
+        @NotNull final List<DecoratedString> result = new ArrayList<DecoratedString>(attrs.size());
+
+        for (@Nullable final Attribute<DecoratedString> attr: attrs)
+        {
+            if (attr != null)
+            {
+                @Nullable final String importType =
+                    typeManager.getImport(
+                        typeManager.getJavaType(attr.getType().getValue()));
+
+                if (importType != null)
+                {
+                    result.add(new DecoratedString(importType));
+                }
+            }
+        }
+
+        Collections.sort(result);
+
         return result;
     }
 
