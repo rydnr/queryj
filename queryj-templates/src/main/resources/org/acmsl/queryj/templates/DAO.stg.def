@@ -1,8 +1,8 @@
 /*
- * BaseValueObject template metadata.
+ * DAO template metadata.
  */
 // The template name (the filename).
-name : BaseValueObject.stg;
+name : DAO.stg;
 
 // The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-sql.
 type : per-table;
@@ -11,10 +11,7 @@ type : per-table;
 output: Java;
 
 // The filename builder.
-filename  builder : <tableName.voName>.java;
+filename  builder : <engineName.capitalized><tableName.capitalized>DAO.java;
 
 // The package.
-package: <packageName>.vo;
-
-// Uncomment to disable.
-disabled;
+package: <packageName>.dao.rdb.<engineName.lowercase>;

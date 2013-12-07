@@ -161,7 +161,7 @@ class(defs, C) ::= <<
  * <description()>
 <class_common_javadoc(
   template="org/acmsl/queryj/dao/PerTableTemplatesTest.stg",
-  generation_timestamps_allowed=C.generation_timestamps_allowed,
+  generation_timestamps_enabled=C.generation_timestamps_enabled,
   timestamp=C.timestamp)>
  */
 public class PerTableTemplatesTest
@@ -176,7 +176,7 @@ public class PerTableTemplatesTest
     {
         super();
 
-        <defs:{ d | <generator_mapping(def=d)>}; separator="\n">
+        <defs:{ d | <if(!d.disabled)><generator_mapping(def=d)><endif>}; separator="\n">
     }
 
     /**

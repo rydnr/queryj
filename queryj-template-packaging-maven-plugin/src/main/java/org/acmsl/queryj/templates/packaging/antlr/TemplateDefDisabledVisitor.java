@@ -1,4 +1,5 @@
 /*
+/*
                         QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
@@ -23,74 +24,76 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefPackageVisitor.java
+ * Filename: TemplateDefDisabledVisitor.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: ANTLR4 visitor to retrieve the package definition.
+ * Description: ANTLR4 visitor to retrieve whether the template def is
+ *              disabled or not.
  *
- * Date: 2013/08/13
- * Time: 17:51
+ * Date: 2013/12/07
+ * Time: 11:06
  *
  */
 package org.acmsl.queryj.templates.packaging.antlr;
 
 /*
- * Importing ANTLR-generated classes.
+ * Importing project classes.
  */
-import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser.PackageRuleContext;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser.DisabledRuleContext;
 
 /*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
-import org.checkthread.annotations.NotThreadSafe;
+import org.checkthread.annotations.ThreadSafe;
 
 /**
- * ANTLR4 visitor to retrieve the package definition.
+ * ANTLR4 visitor to retrieve whether the template def is disabled or not.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/13 17:51
+ * Created: 2013/12/07 11:06
  */
-@NotThreadSafe
-public class TemplateDefPackageVisitor
-    extends TemplateDefBaseVisitor<String>
+@ThreadSafe
+public class TemplateDefDisabledVisitor
+    extends TemplateDefBaseVisitor<Boolean>
 {
     /**
-     * The package name.
+     * Whether the template def is disabled or not.
      */
-    private String m__strPackageName;
+    private boolean m__bDisabled;
 
     /**
-     * Specifies the package name.
-     * @param packageName the package name.
+     * Specifies whether the template def is disabled.
+     * @param disabled if the template def is disabled.
      */
-    protected final void immutableSetPackageName(@NotNull final String packageName)
+    protected final void immutableSetDisabled(final boolean disabled)
     {
-        this.m__strPackageName = packageName;
+        this.m__bDisabled = disabled;
     }
 
     /**
-     * Specifies the package name.
-     * @param packageName the package name.
+     * Specifies whether the template def is disabled.
+     * @param disabled if the template def is disabled.
      */
-    protected void setPackageName(@NotNull final String packageName)
+    @SuppressWarnings("unused")
+    protected void setDisabled(final boolean disabled)
     {
-        immutableSetPackageName(packageName);
+        immutableSetDisabled(disabled);
     }
 
     /**
-     * Retrieves the package name.
+     * Retrieves whether the template def is disabled.
      * @return such information.
      */
-    @NotNull
-    public String getPackageName()
+    public boolean isDisabled()
     {
-        return this.m__strPackageName;
+        return this.m__bDisabled;
     }
 
     /**
@@ -100,11 +103,12 @@ public class TemplateDefPackageVisitor
      * {@link #visitChildren} on {@code ctx}.
      */
     @Override
-    public String visitPackageRule(@NotNull final PackageRuleContext ctx)
+    @Nullable
+    public Boolean visitDisabledRule(@NotNull final DisabledRuleContext ctx)
     {
-        setPackageName(ctx.getChild(2).getText());
+        setDisabled(true);
 
-        return super.visitPackageRule(ctx);
+        return super.visitDisabledRule(ctx);
     }
 
     @NotNull
@@ -112,7 +116,7 @@ public class TemplateDefPackageVisitor
     public String toString()
     {
         return
-              "{ \"class\": \"" + TemplateDefPackageVisitor.class.getName() + '"'
-            + ", \"packageName\": \"" + m__strPackageName + "\" }";
+              "{ \"class\": \"" + TemplateDefDisabledVisitor.class.getName() + '"'
+            + ", \"disabled\": " + m__bDisabled + " }";
     }
 }

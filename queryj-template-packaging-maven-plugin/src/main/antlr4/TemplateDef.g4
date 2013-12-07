@@ -16,7 +16,7 @@ package org.acmsl.queryj.templates.packaging.antlr;
 }
 
 templateDef
-:   nameRule typeRule outputRule filenameBuilderRule packageRule
+:   nameRule typeRule outputRule filenameBuilderRule packageRule disabledRule?
     EOF;
 
 nameRule:
@@ -32,7 +32,10 @@ filenameBuilderRule:
         'filename' 'builder' ':' ID ';';
 
 packageRule:
-           'package' ':' ID ';';
+        'package' ':' ID ';';
+
+disabledRule:
+        'disabled' ';';
 
 ID : [a-zA-Z0-9\.\-_,<>]+ ;
 

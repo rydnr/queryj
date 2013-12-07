@@ -194,6 +194,8 @@ public class <C.class_name>
             new ST("<def.filenameBuilder>");
 
         template.add("tableName", new DecoratedString(tableName));
+        template.add("engineName", new DecoratedString(metadataManager.getEngineName()));
+        template.add("engineVersion", new DecoratedString(metadataManager.getEngineVersion()));
 
         result = template.render();
 

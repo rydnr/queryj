@@ -104,4 +104,10 @@ public interface TemplateDef<S>
      */
     @NotNull
     File getFile();
+
+    /**
+     * Checks whether this template def is disabled or not.
+     * @return such information.
+     */
+    boolean isDisabled();
 }

@@ -272,10 +272,32 @@ public class DecoratedTemplateDefWrapper
         return def.getType();
     }
 
+    /**
+     * Checks whether given template def is disabled.
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean isDisabled()
+    {
+        return isDisabled(getTemplateDef());
+    }
+
+    /**
+     * Checks whether given template def is disabled.
+     * @param templateDef the template def.
+     * @return {@code true} in such case.
+     */
+    protected boolean isDisabled(@NotNull final TemplateDef<String> templateDef)
+    {
+        return templateDef.isDisabled();
+    }
+
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'DecoratedTemplateDefWrapper', 'templateDef': " + this.m__TemplateDef + " }";
+        return
+              "{ \"class\": \"" + DecoratedTemplateDefWrapper.class.getName() + '"'
+            + ", \"templateDef\": " + this.m__TemplateDef + " }";
     }
 }
