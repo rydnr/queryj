@@ -40,9 +40,10 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.MissingExternallyManagedFieldNameException;
 import org.acmsl.queryj.api.exceptions.MissingExternallyManagedFieldTableNameException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.tools.exceptions.MissingExternallyManagedFieldsAtRuntimeException;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 
@@ -87,7 +88,7 @@ public class ExternallyManagedFieldsRetrievalHandler
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
-        throws  QueryJBuildException
+        throws QueryJBuildException
     {
         return
             handle(
@@ -188,8 +189,7 @@ public class ExternallyManagedFieldsRetrievalHandler
 
         if (aux == null)
         {
-            // TODO
-            throw new RuntimeException("TODO: fix me");
+            throw new MissingExternallyManagedFieldsAtRuntimeException();
         }
         else
         {

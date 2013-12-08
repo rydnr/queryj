@@ -23,25 +23,25 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefOutput.java
+ * Filename: MissingTemplatesException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The supported outputs in template defs.
+ * Description: The list of already-built templates are not found.
  *
- * Date: 2013/08/14
- * Time: 09:16
+ * Date: 2013/12/08
+ * Time: 16:44
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.templates.packaging.exceptions;
 
 /*
- * Importing ACM-SL Commons classes.
+ * Importing QueryJ-API classes.
  */
-import org.acmsl.commons.utils.EnumUtils;
+import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 
 /*
- * Importing Jetbrains annotations.
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
@@ -51,24 +51,21 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The supported outputs in template defs.
+ * The list of already-built templates are not found.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
+ * Created: 2013/12/08 16:44
  */
 @ThreadSafe
-public enum TemplateDefOutput
+public class MissingTemplatesException
+    extends QueryJNonCheckedException
 {
-    JAVA,
-    CUCUMBER;
-
     /**
-     * Retrieves the template def output for given value.
-     * @param type the value.
-     * @return the enum.
+     * Creates a new instance.
+     * @param templateType the type of template.
      */
-    public static TemplateDefOutput getEnumFromString(@NotNull final String type)
+    public MissingTemplatesException(@NotNull final String templateType)
     {
-        return EnumUtils.getInstance().getEnumFromString(TemplateDefOutput.class, type);
+        super("missing." + templateType + ".templates");
     }
-
 }

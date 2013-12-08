@@ -69,6 +69,12 @@ import java.util.concurrent.Future;
 /*
  * Importing some Apache Commons Logging classes.
  */
+import org.acmsl.queryj.tools.exceptions.MissingConnectionAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingCustomSqlProviderAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingDataSourceJndiPathAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingOutputDirAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingProjectPackageAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingRepositoryNameAtRuntimeException;
 import org.apache.commons.logging.Log;
 
 /*
@@ -98,8 +104,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            // TODO: throw suitable exception.
-            throw new RuntimeException("TODO: fix me");
+            throw new MissingOutputDirAtRuntimeException();
         }
 
         return result;
@@ -117,8 +122,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            // TODO: throw suitable exception.
-            throw new RuntimeException("TODO: fix me");
+            throw new MissingProjectPackageAtRuntimeException();
         }
 
         return result;
@@ -225,7 +229,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            throw new RuntimeException("TODO: fix me");
+            throw new MissingCustomSqlProviderAtRuntimeException();
         }
 
         return result;
@@ -243,7 +247,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            throw new RuntimeException("TODO: fix me");
+            throw new MissingRepositoryNameAtRuntimeException();
         }
 
         return result;
@@ -330,7 +334,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            throw new RuntimeException("TODO: fix me");
+            throw new MissingConnectionAtRuntimeException();
         }
 
         return result;
@@ -409,7 +413,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            throw new RuntimeException("TODO: Fix me");
+            throw new MissingDataSourceJndiPathAtRuntimeException();
         }
 
         return result;

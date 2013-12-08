@@ -86,6 +86,15 @@ public class QueryJNonCheckedException
     }
 
     /**
+     * Creates a QueryJNonCheckedException with given message.
+     * @param messageKey the key to build the exception message.
+     */
+    public QueryJNonCheckedException(@NotNull final String messageKey)
+    {
+        this(messageKey, new Object[0]);
+    }
+
+    /**
      * Creates a InvalidTemplateException with given cause.
      * @param messageKey the key to build the exception message.
      * @param params the parameters to build the exception message.

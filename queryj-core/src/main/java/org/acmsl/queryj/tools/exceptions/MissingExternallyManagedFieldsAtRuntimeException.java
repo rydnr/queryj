@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,27 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefOutput.java
+ * Filename: MissingExternallyManagedFieldsAtRuntimeException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The supported outputs in template defs.
+ * Description: The <externally-managed-fields> runtime information is missing.
  *
- * Date: 2013/08/14
- * Time: 09:16
+ * Date: 2013/12/08
+ * Time: 10:53
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.tools.exceptions;
 
 /*
- * Importing ACM-SL Commons classes.
+ * Importing QueryJ-API classes.
  */
-import org.acmsl.commons.utils.EnumUtils;
-
-/*
- * Importing Jetbrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
+import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 
 /*
  * Importing checkthread.org annotations.
@@ -51,24 +46,20 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The supported outputs in template defs.
+ * The &lt;externally-managed-fields&gt runtime information is missing.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
+ * Created: 2013/12/08 10:53
  */
 @ThreadSafe
-public enum TemplateDefOutput
+public class MissingExternallyManagedFieldsAtRuntimeException
+    extends QueryJNonCheckedException
 {
-    JAVA,
-    CUCUMBER;
-
     /**
-     * Retrieves the template def output for given value.
-     * @param type the value.
-     * @return the enum.
+     * Creates a new instance.
      */
-    public static TemplateDefOutput getEnumFromString(@NotNull final String type)
+    public MissingExternallyManagedFieldsAtRuntimeException()
     {
-        return EnumUtils.getInstance().getEnumFromString(TemplateDefOutput.class, type);
+        super("missing.externally.managed.fields.at.runtime");
     }
-
 }

@@ -23,27 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefOutput.java
+ * Filename: FoundNullTemplateDefException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The supported outputs in template defs.
+ * Description: A null TemplateDef was found.
  *
- * Date: 2013/08/14
- * Time: 09:16
+ * Date: 2013/12/08
+ * Time: 16:38
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.templates.packaging.exceptions;
 
 /*
- * Importing ACM-SL Commons classes.
+ * Importing QueryJ-API classes.
  */
-import org.acmsl.commons.utils.EnumUtils;
-
-/*
- * Importing Jetbrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
+import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 
 /*
  * Importing checkthread.org annotations.
@@ -51,24 +46,22 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The supported outputs in template defs.
+ * A null {@link org.acmsl.queryj.templates.packaging.TemplateDef} was found.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
+ * Created: 2013/12/08 16:38
  */
 @ThreadSafe
-public enum TemplateDefOutput
+public class FoundNullTemplateDefException
+    extends QueryJNonCheckedException
 {
-    JAVA,
-    CUCUMBER;
+    private static final long serialVersionUID = -2504448731780226213L;
 
     /**
-     * Retrieves the template def output for given value.
-     * @param type the value.
-     * @return the enum.
+     * Creates a new instance.
      */
-    public static TemplateDefOutput getEnumFromString(@NotNull final String type)
+    public FoundNullTemplateDefException()
     {
-        return EnumUtils.getInstance().getEnumFromString(TemplateDefOutput.class, type);
+        super("found.null.templatedef");
     }
-
 }

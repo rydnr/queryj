@@ -1,5 +1,5 @@
 /*
-                  QueryJ's Template Packaging
+                  QueryJ Template Packaging
 
     Copyright (C) 2013-today Jose San Leandro Armendariz
                               queryj@acm-sl.org
@@ -42,7 +42,7 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-API classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
@@ -50,6 +50,7 @@ import org.acmsl.queryj.QueryJCommandWrapper;
 /*
  * Importing QueryJ Template Packaging classes.
  */
+import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.acmsl.queryj.templates.packaging.PerTableTemplatesTestTemplate;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
@@ -68,7 +69,6 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -122,7 +122,7 @@ public class PerTableTemplatesTestTemplateWritingHandler
 
         if (aux == null)
         {
-            result = new ArrayList<PerTableTemplatesTestTemplate>(0);
+            throw new MissingTemplatesException("per-table-templates-test");
         }
         else
         {

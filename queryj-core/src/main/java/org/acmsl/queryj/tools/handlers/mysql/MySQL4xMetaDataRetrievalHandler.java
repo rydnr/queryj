@@ -39,6 +39,7 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.exceptions.MySQLNotSupportedYetException;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.metadata.vo.Table;
 
@@ -126,8 +127,7 @@ public class MySQL4xMetaDataRetrievalHandler
         @NotNull final String quote)
         throws  QueryJBuildException
     {
-        // TODO: MySQL
-        throw new RuntimeException("TODO: Not supported yet");
+        throw new MySQLNotSupportedYetException();
         /*
         final MetadataManager result;
 

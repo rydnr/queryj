@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,27 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefOutput.java
+ * Filename: MissingJdbcDriverAtRuntimeException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The supported outputs in template defs.
+ * Description: The JDBC driver information is missing at runtime.
  *
- * Date: 2013/08/14
- * Time: 09:16
+ * Date: 2013/12/08
+ * Time: 11:02
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.tools.exceptions;
 
 /*
- * Importing ACM-SL Commons classes.
+ * Importing QueryJ-API classes.
  */
-import org.acmsl.commons.utils.EnumUtils;
-
-/*
- * Importing Jetbrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
+import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 
 /*
  * Importing checkthread.org annotations.
@@ -51,24 +46,22 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The supported outputs in template defs.
+ * The JDBC driver information is missing at runtime.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
+ * Created: 2013/12/08 11:02
  */
 @ThreadSafe
-public enum TemplateDefOutput
+public class MissingJdbcDriverAtRuntimeException
+    extends QueryJNonCheckedException
 {
-    JAVA,
-    CUCUMBER;
+    private static final long serialVersionUID = 94270582279560215L;
 
     /**
-     * Retrieves the template def output for given value.
-     * @param type the value.
-     * @return the enum.
+     * Creates a new instance.
      */
-    public static TemplateDefOutput getEnumFromString(@NotNull final String type)
+    public MissingJdbcDriverAtRuntimeException()
     {
-        return EnumUtils.getInstance().getEnumFromString(TemplateDefOutput.class, type);
+        super("missing.jdbc.driver.at.runtime");
     }
-
 }

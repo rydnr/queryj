@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,14 +37,19 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-API classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
 import org.acmsl.queryj.templates.packaging.TemplateFactoryTemplate;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
+import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 
 /*
  * Importing Jetbrains annotations.
@@ -58,9 +63,8 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JDK classes.
  */
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -113,7 +117,7 @@ public class TemplateFactoryTemplateWritingHandler
 
         if (aux == null)
         {
-            result =  new ArrayList<TemplateFactoryTemplate<DefaultTemplatePackagingContext>>(0);
+            throw new MissingTemplatesException("template-factory");
         }
         else
         {

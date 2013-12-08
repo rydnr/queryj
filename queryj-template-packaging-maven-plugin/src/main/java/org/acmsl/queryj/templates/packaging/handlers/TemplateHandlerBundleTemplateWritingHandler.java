@@ -37,11 +37,16 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-API classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
 import org.acmsl.queryj.templates.packaging.TemplateHandlerBundleTemplate;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
@@ -60,7 +65,6 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -112,7 +116,7 @@ public class TemplateHandlerBundleTemplateWritingHandler
 
         if (aux == null)
         {
-            result = new ArrayList<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>>(0);
+            throw new MissingTemplatesException("template-handler-bundle");
         }
         else
         {

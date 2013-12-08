@@ -52,6 +52,9 @@ import org.acmsl.queryj.templates.packaging.antlr.TemplateDefOutputVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefPackageVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefTypeVisitor;
+import org.acmsl.queryj.templates.packaging.exceptions.CannotProcessTemplateDefException;
+import org.acmsl.queryj.templates.packaging.exceptions.CannotSetUpTemplateDefParserException;
+import org.acmsl.queryj.templates.packaging.exceptions.InvalidTemplateDefException;
 import org.acmsl.queryj.templates.packaging.exceptions.TemplateAssociatedToTemplateDefDoesNotExist;
 import org.acmsl.queryj.templates.packaging.exceptions.TemplatePackagingCheckedException;
 
@@ -196,8 +199,7 @@ public class ParseTemplateDefsHandler
         }
         catch (final IOException missingFile)
         {
-            // TODO
-            throw new RuntimeException("Cannot set up the parser", missingFile);
+            throw new CannotSetUpTemplateDefParserException(file, missingFile);
         }
 
         @Nullable final ParseTree tree;
@@ -208,8 +210,7 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Cannot process the template definition", invalidClass);
+            throw new CannotProcessTemplateDefException(file, invalidClass);
         }
 
         @NotNull final TemplateDefNameVisitor nameVisitor = new TemplateDefNameVisitor();
@@ -224,8 +225,7 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Invalid template definition (name)", invalidClass);
+            throw new InvalidTemplateDefException("name", file, invalidClass);
         }
 
         @NotNull final TemplateDefTypeVisitor typeVisitor = new TemplateDefTypeVisitor();
@@ -240,8 +240,7 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Invalid template definition (type)", invalidClass);
+            throw new InvalidTemplateDefException("type", file, invalidClass);
         }
 
         @NotNull final TemplateDefOutputVisitor outputVisitor = new TemplateDefOutputVisitor();
@@ -256,8 +255,7 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Invalid template definition (output)", invalidClass);
+            throw new InvalidTemplateDefException("output", file, invalidClass);
         }
 
         @NotNull final TemplateDefFilenameBuilderVisitor filenameBuilderVisitor =
@@ -273,8 +271,7 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Invalid template definition (filename builder)", invalidClass);
+            throw new InvalidTemplateDefException("filenameBuilder", file, invalidClass);
         }
 
         @NotNull final TemplateDefPackageVisitor packageVisitor = new TemplateDefPackageVisitor();
@@ -289,8 +286,7 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Invalid template definition (package)", invalidClass);
+            throw new InvalidTemplateDefException("package", file, invalidClass);
         }
 
         @NotNull final TemplateDefDisabledVisitor disabledVisitor = new TemplateDefDisabledVisitor();
@@ -305,8 +301,7 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Invalid template definition (disabled)", invalidClass);
+            throw new InvalidTemplateDefException("disabled", file, invalidClass);
         }
 
         result =

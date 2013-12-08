@@ -1,3 +1,49 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: PerTableTemplatesFeature.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate PerTableTemplates.feature
+//              Cucumber tests
+//
+group PerTableTemplatesFeature;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+  Generates PerTableTemplates.feature files.
+!>
 Feature: Per-table templates
 
   Scenario Outline: Per-table templates compile for a type 1 table
@@ -35,17 +81,7 @@ Feature: Per-table templates
 
     Examples:
       | template           | output                            |
-      | DAOFactory         | UserDAOFactory.java               |
-      | BaseDAOFactory     | AbstractUserDAOFactory.java       |
-      | BaseDAO            | UserDAO.java                      |
-      | BaseValueObject    | UserValueObject.java              |
-#      | DAO                | OracleUserDAO.java                |
-#      | PkStatementSetter  | OracleUserPkStatementSetter.java  |
-#      | ResultSetExtractor | OracleUserResultSetExtractor.java |
-#      | BaseValueObject    | AbstractUserValueObject.java      |
-#      | ValueObject        | UserValueObject.java              |
-#      | ValueObjectFactory | UserValueObjectFactory.java       |
-#      | ValueObjectImpl    | UserValueObjectImpl.java          |
+<C.templateDefs:{ d | <template_outline(def=d)>}, separator="\n">
 
   Scenario Outline: Per-table templates compiles for a type 2 table
 
@@ -75,19 +111,19 @@ Feature: Per-table templates
       | user.user_id |  first.select  |   1   |  long  | userId |
       | user.name    |  second.select |   1   | String |  name  |
 
-    When I generate with per-table <template>.stg for Oracle
+    When I generate with per-table \<template>.stg for Oracle
 
-    Then the generated per-table <output> file compiles successfully
+    Then the generated per-table \<output> file compiles successfully
 
     Examples:
       | template           | output                            |
-      | DAOFactory         | UserDAOFactory.java               |
-      | BaseDAOFactory     | AbstractUserDAOFactory.java       |
-      | BaseDAO            | UserDAO.java                      |
-      | BaseValueObject    | UserValueObject.java              |
-#      | DAO                | OracleUserDAO.java                |
-#      | PkStatementSetter  | OracleUserPkStatementSetter.java  |
-#      | ResultSetExtractor | OracleUserResultSetExtractor.java |
-#      | ValueObject        | UserValueObject.java              |
-#      | ValueObjectFactory | UserValueObjectFactory.java       |
-#      | ValueObjectImpl    | UserValueObjectImpl.java          |
+<C.templateDefs:{ d | <template_outline(def=d)>}, separator="\n">
+>>
+
+template_outline(def) ::= <<
+<!
+ Includes the template def in the Cucumber test outline.
+ @param def the template def.
+!>
+| <def.name> | <def.(fileNameBuilder)(engineName="Oracle", tableName="CarBrand")> |
+>>

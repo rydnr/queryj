@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -52,6 +52,8 @@ import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateFactory;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.templates.packaging.exceptions.FoundNullTemplateDefException;
+import org.acmsl.queryj.templates.packaging.exceptions.TemplateFactoryRefusedToBuildTemplateException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -119,8 +121,7 @@ public abstract class PerTemplateDefBuildHandler
         {
             if (templateDef == null)
             {
-                // TODO
-                throw new RuntimeException("TemplateDef null");
+                throw new FoundNullTemplateDefException();
             }
             else
             {
@@ -130,8 +131,7 @@ public abstract class PerTemplateDefBuildHandler
 
                 if (template == null)
                 {
-                    // TODO
-                    throw new RuntimeException("Template null");
+                    throw new TemplateFactoryRefusedToBuildTemplateException(factory, context);
                 }
                 else
                 {

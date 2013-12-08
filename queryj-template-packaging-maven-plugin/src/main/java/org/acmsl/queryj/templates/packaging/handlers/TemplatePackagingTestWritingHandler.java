@@ -52,6 +52,7 @@ import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.templates.packaging.exceptions.MissingOutputDirForTestsException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -93,8 +94,7 @@ public abstract class TemplatePackagingTestWritingHandler
 
         if (aux == null)
         {
-            // TODO
-            throw new RuntimeException("Missing output dir for tests");
+            throw new MissingOutputDirForTestsException();
         }
         else
         {
@@ -111,7 +111,7 @@ public abstract class TemplatePackagingTestWritingHandler
      * @param rootDir the root dir.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the output-dir retrieval process fails.
+     * @throws QueryJBuildException if the output-dir retrieval process fails.
      */
     @NotNull
     @Override

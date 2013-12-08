@@ -23,25 +23,25 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefOutput.java
+ * Filename: CannotProcessTemplateDefException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The supported outputs in template defs.
+ * Description: The parser could not process a given TemplateDef file.
  *
- * Date: 2013/08/14
- * Time: 09:16
+ * Date: 2013/12/08
+ * Time: 15:03
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.templates.packaging.exceptions;
 
 /*
- * Importing ACM-SL Commons classes.
+ * Importing QueryJ-API classes.
  */
-import org.acmsl.commons.utils.EnumUtils;
+import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 
 /*
- * Importing Jetbrains annotations.
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
@@ -50,25 +50,31 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
+import java.io.File;
+
 /**
- * The supported outputs in template defs.
+ * The parser could not process a given {@link org.acmsl.queryj.templates.packaging.TemplateDef} file.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
+ * Created: 2013/12/08 15:03
  */
 @ThreadSafe
-public enum TemplateDefOutput
+public class CannotProcessTemplateDefException
+    extends QueryJNonCheckedException
 {
-    JAVA,
-    CUCUMBER;
+    private static final long serialVersionUID = -6806400103110889176L;
 
     /**
-     * Retrieves the template def output for given value.
-     * @param type the value.
-     * @return the enum.
+     * Creates a new instance.
+     * @param file the {@link org.acmsl.queryj.templates.packaging.TemplateDef} file.
+     * @param cause the cause.
      */
-    public static TemplateDefOutput getEnumFromString(@NotNull final String type)
+    public CannotProcessTemplateDefException(
+        @NotNull final File file, @NotNull final Throwable cause)
     {
-        return EnumUtils.getInstance().getEnumFromString(TemplateDefOutput.class, type);
+        super("cannot.process.templatedef", new Object[] { file.getAbsolutePath() }, cause);
     }
-
 }

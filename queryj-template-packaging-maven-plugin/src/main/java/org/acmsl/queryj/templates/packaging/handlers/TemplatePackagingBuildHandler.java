@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -41,8 +41,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.handlers.TemplateBuildHandler;
-import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
-import org.acmsl.queryj.templates.packaging.GlobalTemplateContextImpl;
+import org.acmsl.queryj.tools.exceptions.MissingOutputDirAtRuntimeException;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
@@ -54,6 +53,8 @@ import org.acmsl.queryj.metadata.DecoratedString;
  * Importing QueryJ Template-Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContextImpl;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingContext;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
@@ -254,8 +255,7 @@ public abstract class TemplatePackagingBuildHandler
 
         if (result == null)
         {
-            // TODO
-            throw new RuntimeException("Output dir missing");
+            throw new MissingOutputDirAtRuntimeException();
         }
 
         return result;

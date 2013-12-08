@@ -37,7 +37,7 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-API classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
@@ -47,6 +47,7 @@ import org.acmsl.queryj.api.exceptions.QueryJBuildException;
  * Importing QueryJ-Template-Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.DefaultTemplateChainProviderTemplate;
+import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
 
@@ -64,7 +65,6 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -120,7 +120,7 @@ public class DefaultTemplateChainProviderTemplateWritingHandler
 
         if (aux == null)
         {
-            result = new ArrayList<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>>(0);
+            throw new MissingTemplatesException("default-template-chain-provider");
         }
         else
         {

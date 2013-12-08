@@ -52,6 +52,7 @@ import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateFactory;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.templates.packaging.exceptions.MissingOutputDirForTestsException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,8 +92,7 @@ public abstract class TemplatePackagingTestBuildHandler
 
         if (result == null)
         {
-            // TODO
-            throw new RuntimeException("Output dir for tests missing");
+            throw new MissingOutputDirForTestsException();
         }
 
         return result;

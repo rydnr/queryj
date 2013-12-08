@@ -39,7 +39,9 @@ package org.acmsl.queryj.metadata.engines;
  * Importing project classes.
  */
 import org.acmsl.queryj.api.exceptions.QueryJException;
+import org.acmsl.queryj.api.MetaLanguageUtils;
 import org.acmsl.queryj.metadata.ColumnDAO;
+import org.acmsl.queryj.metadata.exceptions.MissingDatabaseMetadataAtRuntimeException;
 import org.acmsl.queryj.metadata.ForeignKeyDAO;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -53,7 +55,7 @@ import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
 import org.acmsl.queryj.metadata.vo.TableValueObject;
-import org.acmsl.queryj.api.MetaLanguageUtils;
+import org.acmsl.queryj.tools.DebugUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -63,7 +65,6 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 /*
  * Importing some Apache Commons-Logging classes.
  */
-import org.acmsl.queryj.tools.DebugUtils;
 import org.apache.commons.logging.Log;
 
 /*
@@ -425,7 +426,7 @@ public abstract class AbstractJdbcMetadataManager
 
         if (result == null)
         {
-            throw new RuntimeException("missing required DatabaseMetaData information");
+            throw new MissingDatabaseMetadataAtRuntimeException();
         }
 
         return result;

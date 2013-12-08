@@ -239,6 +239,8 @@ public abstract class AbstractQueryJChain
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractQueryJChain', 'chain': '" + getChain() + "' }";
+        return
+              "{ \"class\": \"" + AbstractQueryJChain.class.getName() + '"'
+            + ", \"chain\": " + getChain() + " }";
     }
 }

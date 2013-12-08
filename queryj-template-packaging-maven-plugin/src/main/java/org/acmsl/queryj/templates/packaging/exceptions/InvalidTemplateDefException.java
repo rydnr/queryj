@@ -23,26 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefOutput.java
+ * Filename: InvalidTemplateDefException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The supported outputs in template defs.
+ * Description: The TemplateDef is invalid.
  *
- * Date: 2013/08/14
- * Time: 09:16
+ * Date: 2013/12/08
+ * Time: 15:08
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.templates.packaging.exceptions;
 
 /*
- * Importing ACM-SL Commons classes.
+ * Importing JetBrains annotations.
  */
-import org.acmsl.commons.utils.EnumUtils;
-
-/*
- * Importing Jetbrains annotations.
- */
+import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -50,25 +46,29 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+import java.io.File;
+
 /**
- * The supported outputs in template defs.
+ * The {@link org.acmsl.queryj.templates.packaging.TemplateDef} is invalid.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
+ * Created: 2013/12/08 15:08
  */
 @ThreadSafe
-public enum TemplateDefOutput
+public class InvalidTemplateDefException
+    extends QueryJNonCheckedException
 {
-    JAVA,
-    CUCUMBER;
+    private static final long serialVersionUID = -2699031028498366917L;
 
     /**
-     * Retrieves the template def output for given value.
-     * @param type the value.
-     * @return the enum.
+     * Creates a new instance.
+     * @param type the type.
+     * @param file the file.
+     * @param cause the cause.
      */
-    public static TemplateDefOutput getEnumFromString(@NotNull final String type)
+    public InvalidTemplateDefException(
+        @NotNull final String type, @NotNull final File file, @NotNull final Throwable cause)
     {
-        return EnumUtils.getInstance().getEnumFromString(TemplateDefOutput.class, type);
+        super("invalid.templatedef." + type, new Object[] { file.getAbsolutePath() }, cause);
     }
-
 }
