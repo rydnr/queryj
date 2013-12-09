@@ -55,7 +55,7 @@ import org.acmsl.queryj.api.handlers.TemplateHandlerBundle;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Handler bundle for {@link PerTableTemplatesFeatureTemplate}s.
+ * Handler bundle for {@link org.acmsl.queryj.templates.packaging.PerTableTemplatesFeatureTemplate}s.
  * @author <a href="http://www.acm-sl.org/projects/queryj">QueryJ's Template Packaging</a>
  * Generation template: org/acmsl/templates/packaging/TemplateHandlerBundle.stg
  * Created: 2013/12/07 12:29

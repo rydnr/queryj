@@ -81,7 +81,7 @@ Feature: Per-table templates
 
     Examples:
       | template           | output                            |
-<C.templateDefs:{ d | <template_outline(def=d)>}, separator="\n">
+      <C.templateDefs:{ d | <indirect_template(def=d, engineName="Oracle", tableName="CarBrand")>}; separator="\n">
 
   Scenario Outline: Per-table templates compiles for a type 2 table
 
@@ -117,13 +117,9 @@ Feature: Per-table templates
 
     Examples:
       | template           | output                            |
-<C.templateDefs:{ d | <template_outline(def=d)>}, separator="\n">
+      <C.templateDefs:{ d | <indirect_template(def=d, engineName="Oracle", tableName="CarBrand")>}; separator="\n">
 >>
 
-template_outline(def) ::= <<
-<!
- Includes the template def in the Cucumber test outline.
- @param def the template def.
-!>
-| <def.name> | <def.(fileNameBuilder)(engineName="Oracle", tableName="CarBrand")> |
+indirect_template(def, engineName, tableName) ::= <<
+| <def.name> | <(def.filenameRule)(engineName, tableName)> |
 >>

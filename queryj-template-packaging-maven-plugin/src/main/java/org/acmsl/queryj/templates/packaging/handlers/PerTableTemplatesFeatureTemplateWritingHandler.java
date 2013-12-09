@@ -38,9 +38,6 @@
  * org/acmsl/templates/packaging/TemplateWritingHandler.stg
  * at timestamp: 2013/12/07 12:29
  *
- * DO NOT MODIFY THIS CLASS MANUALLY, SINCE IT GETS GENERATED AUTOMATICALLY.
- * EITHER MODIFY org/acmsl/templates/packaging/TemplateWritingHandler.stg
- * OR CREATE AND APPLY A PATCH.
  */
 package org.acmsl.queryj.templates.packaging.handlers;
 
@@ -49,16 +46,14 @@ package org.acmsl.queryj.templates.packaging.handlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.api.PerRepositoryTemplateContext;
-import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateWritingHandler;
-import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.acmsl.queryj.templates.packaging.PerTableTemplatesFeatureTemplate;
-import org.acmsl.queryj.templates.packaging.PerTableTemplatesFeatureTemplateGenerator;
+import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -74,7 +69,6 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
-import java.io.File;
 import java.util.List;
 
 /**
@@ -85,10 +79,10 @@ import java.util.List;
  */
 @ThreadSafe
 public class PerTableTemplatesFeatureTemplateWritingHandler
-    extends BasePerRepositoryTemplateWritingHandler<
-                PerTableTemplatesFeatureTemplate,
-                PerRepositoryTemplateContext,
-                PerTableTemplatesFeatureTemplateGenerator>
+    extends TemplatePackagingTestWritingHandler
+                <PerTableTemplatesFeatureTemplate,
+                    GlobalTemplateContext,
+                    TemplatePackagingTemplateGenerator<PerTableTemplatesFeatureTemplate, GlobalTemplateContext>>
 {
     /**
      * Creates a new writing handler for {@link PerTableTemplatesFeatureTemplate templates}.
@@ -100,9 +94,10 @@ public class PerTableTemplatesFeatureTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected PerTableTemplatesFeatureTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
+    protected TemplatePackagingTemplateGenerator<PerTableTemplatesFeatureTemplate, GlobalTemplateContext> retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return new PerTableTemplatesFeatureTemplateGenerator(caching, threadCount);
+        return new TemplatePackagingTemplateGenerator<PerTableTemplatesFeatureTemplate, GlobalTemplateContext>(caching, threadCount);
     }
 
     /**
@@ -115,8 +110,8 @@ public class PerTableTemplatesFeatureTemplateWritingHandler
         @NotNull final List<PerTableTemplatesFeatureTemplate> result;
 
         @Nullable final List<PerTableTemplatesFeatureTemplate> aux =
-            new QueryJCommandWrapper<List<PerTableTemplatesFeatureTemplate>>(parameters)
-                .getSetting(PerTableTemplatesFeatureTemplateBuildHandler.TEMPLATE_KEY);
+            new QueryJCommandWrapper<PerTableTemplatesFeatureTemplate>(parameters)
+                .getListSetting(PerTableTemplatesFeatureTemplateBuildHandler.TEMPLATE_KEY);
 
         if (aux == null)
         {
@@ -126,39 +121,6 @@ public class PerTableTemplatesFeatureTemplateWritingHandler
         {
             result = aux;
         }
-
-        return result;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    protected File retrieveOutputDir(
-        @NotNull final File projectFolder,
-        @NotNull final String projectPackage,
-        final boolean useSubfolders,
-        @NotNull final String engineName,
-        @NotNull final QueryJCommand parameters,
-        @NotNull final PackageUtils packageUtils)
-    {
-        @NotNull final File result;
-
-        @NotNull final String packageName =
-            PerTableTemplatesFeatureTemplateBuildHandler.buildPackageName(
-                engineName, projectPackage);
-
-        @NotNull final String[] pieces = packageName.split("\\.");
-
-        @NotNull final StringBuilder aux = new StringBuilder();
-
-        for (@NotNull final String piece : pieces)
-        {
-            aux.append(piece);
-        }
-
-        result = new File(projectFolder.getAbsolutePath() + aux.toString());
 
         return result;
     }

@@ -74,6 +74,6 @@ public class TemplateFactoryTemplate<C extends TemplatePackagingContext>
     @Override
     public String getTemplateName()
     {
-        return "TemplateFactory";
+        return Literals.TEMPLATE_FACTORY;
     }
 }

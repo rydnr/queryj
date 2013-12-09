@@ -50,6 +50,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
+import org.acmsl.queryj.templates.packaging.Literals;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 
 /*
@@ -122,7 +123,6 @@ public class PerTableTemplatesTestTemplateBuildHandler
 
     /**
      * Retrieves the output package for the generated file.
-     *
      * @param parameters the parameters.
      * @return such package.
      */
@@ -130,12 +130,11 @@ public class PerTableTemplatesTestTemplateBuildHandler
     @Override
     protected String retrieveOutputPackage(@NotNull final QueryJCommand parameters)
     {
-        return "cucumber.templates";
+        return Literals.CUCUMBER_TEMPLATES;
     }
 
     /**
      * Retrieves the template name, using the parameters if necessary.
-     *
      * @param parameters the parameters.
      * @return the template name.
      */
@@ -143,7 +142,7 @@ public class PerTableTemplatesTestTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return "PerTableTemplatesTest";
+        return Literals.PER_TABLE_TEMPLATES_TEST;
     }
 
     /**

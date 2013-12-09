@@ -80,7 +80,7 @@ public class PackageNameHandler<C extends TemplateContext>
     @Override
     public String getPlaceHolder()
     {
-        return Literals.PACKAGE1;
+        return Literals.PACKAGE;
     }
 
     /**

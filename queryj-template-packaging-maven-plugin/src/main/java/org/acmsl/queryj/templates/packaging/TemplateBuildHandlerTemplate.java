@@ -74,6 +74,6 @@ public class TemplateBuildHandlerTemplate<C extends TemplatePackagingContext>
     @Override
     public String getTemplateName()
     {
-        return "TemplateBuildHandler";
+        return Literals.TEMPLATE_BUILD_HANDLER;
     }
 }

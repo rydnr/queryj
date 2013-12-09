@@ -292,6 +292,27 @@ public class DecoratedTemplateDefWrapper
         return templateDef.isDisabled();
     }
 
+    /**
+     * Retrieves the filename rule.
+     * @return such rule.
+     */
+    @NotNull
+    @Override
+    public String getFilenameRule()
+    {
+        return getFilenameRule(getTemplateDef());
+    }
+
+    /**
+     * Retrieves the filename rule.
+     * @return such rule.
+     */
+    @NotNull
+    protected String getFilenameRule(@NotNull final TemplateDef<String> templateDef)
+    {
+        return templateDef.getFilenameRule();
+    }
+
     @NotNull
     @Override
     public String toString()

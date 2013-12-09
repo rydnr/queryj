@@ -38,25 +38,22 @@
  * org/acmsl/templates/packaging/TemplateBuildHandler.stg
  * at timestamp: 2013/12/07 12:29
  *
- * DO NOT MODIFY THIS CLASS MANUALLY, SINCE IT GETS GENERATED AUTOMATICALLY.
- * EITHER MODIFY org/acmsl/templates/packaging/TemplateBuildHandler.stg
- * OR CREATE AND APPLY A PATCH.
  */
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-API classes.
  */
-import org.acmsl.queryj.api.handlers.BasePerRepositoryTemplateBuildHandler;
-import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.metadata.DecoratedString;
-import org.acmsl.queryj.tools.PackageUtils;
 
 /*
- * Importing custom templates.
+ * Importing QueryJ Template Packaging classes.
  */
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
+import org.acmsl.queryj.templates.packaging.Literals;
+import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.PerTableTemplatesFeatureTemplate;
 import org.acmsl.queryj.templates.packaging.PerTableTemplatesFeatureTemplateFactory;
 
@@ -75,6 +72,11 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
+import java.util.List;
+
 /**
  * Build handler for {@link PerTableTemplatesFeatureTemplate}s.
  * @author <a href="http://www.acm-sl.org/projects/queryj">QueryJ's Template Packaging</a>
@@ -83,10 +85,10 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class PerTableTemplatesFeatureTemplateBuildHandler
-    extends BasePerRepositoryTemplateBuildHandler<
-                PerTableTemplatesFeatureTemplate,
-                PerRepositoryTemplateContext,
-                PerTableTemplatesFeatureTemplateFactory>
+    extends TemplatePackagingTestBuildHandler
+                <PerTableTemplatesFeatureTemplate,
+                    PerTableTemplatesFeatureTemplateFactory,
+                    GlobalTemplateContext>
 {
     /**
      * The key to access the templates in the command.
@@ -110,16 +112,58 @@ public class PerTableTemplatesFeatureTemplateBuildHandler
     }
 
     /**
-     * {@inheritDoc}
+     * Builds the context from given parameters.
+     *
+     * @param templateDefs the template defs.
+     * @param parameters   the command with the parameters.
+     * @return the template context.
      */
-    @Override
     @NotNull
-    protected String retrievePackage(
-        @NotNull final String engineName,
-        @NotNull final String projectPackage,
-        @NotNull final PackageUtils packageUtils)
+    @Override
+    protected GlobalTemplateContext buildContext(
+        @NotNull final List<TemplateDef<String>> templateDefs, @NotNull final QueryJCommand parameters)
     {
-        return buildPackageName(engineName, projectPackage);
+        return buildGlobalContext(templateDefs, parameters);
+    }
+
+    /**
+     * Builds the final file name.
+     * @param templateDefs the {@link TemplateDef} instances.
+     * @param templateName the template name.
+     * @return such file name.
+     */
+    @NotNull
+    protected String buildFilename(
+        @SuppressWarnings("unused") @NotNull final List<TemplateDef<String>> templateDefs,
+        @NotNull final String templateName)
+    {
+        return
+              new DecoratedString(templateName).getCapitalized().getValue().replaceAll("Feature$", "")
+            + ".feature";
+    }
+
+    /**
+     * Retrieves the output package for the generated file.
+     * @param parameters the parameters.
+     * @return such package.
+     */
+    @NotNull
+    @Override
+    protected String retrieveOutputPackage(@NotNull final QueryJCommand parameters)
+    {
+        return Literals.CUCUMBER_TEMPLATES;
+    }
+
+    /**
+     * Retrieves the template name, using the parameters if necessary.
+     * @param parameters the parameters.
+     * @return the template name.
+     */
+    @NotNull
+    @Override
+    protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
+    {
+        return Literals.PER_TABLE_TEMPLATES_FEATURE;
     }
 
     /**
@@ -135,10 +179,10 @@ public class PerTableTemplatesFeatureTemplateBuildHandler
     {
         @NotNull final String result;
 
-        @NotNull final ST packageTemplate = new ST("cucumber.templates");
+        @NotNull final ST packageTemplate = new ST(Literals.CUCUMBER_TEMPLATES);
 
-        packageTemplate.add("packageName", new DecoratedString(projectPackage));
-        packageTemplate.add("engineName", new DecoratedString(engineName));
+        packageTemplate.add(Literals.PACKAGE_NAME1, new DecoratedString(projectPackage));
+        packageTemplate.add(Literals.ENGINE_NAME, new DecoratedString(engineName));
 
         result = packageTemplate.render();
 

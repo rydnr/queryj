@@ -99,8 +99,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
     {
-        return
-            handle(command, retrieveProjectPackage(command));
+        return handle(command, retrieveProjectPackage(command));
     }
 
     /**

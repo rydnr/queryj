@@ -55,7 +55,7 @@ public class Literals
     public static final String QUERYJ_PROPERTIES = "-queryj.properties";
     public static final String HEADER = org.acmsl.queryj.Literals.HEADER;
     public static final String LOB_HANDLING_REQUIRED = "lob_handling_required";
-    public static final String PACKAGE1 = org.acmsl.queryj.Literals.PACKAGE;
-    public static final String REPOSITORY1 = org.acmsl.queryj.Literals.REPOSITORY;
-    public static final String TIMESTAMP1 = "timestamp";
+    public static final String PACKAGE = org.acmsl.queryj.Literals.PACKAGE;
+    public static final String REPOSITORY = org.acmsl.queryj.Literals.REPOSITORY;
+    public static final String TIMESTAMP = "timestamp";
 }

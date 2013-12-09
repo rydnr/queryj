@@ -41,6 +41,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.Literals;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.TemplateFactoryTemplate;
 import org.acmsl.queryj.templates.packaging.TemplateFactoryTemplateFactory;
@@ -107,7 +108,7 @@ public class TemplateFactoryTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return "TemplateFactory";
+        return Literals.TEMPLATE_FACTORY;
     }
 
     /**

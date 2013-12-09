@@ -41,6 +41,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.Literals;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.TemplateHandlerBundleTemplate;
 import org.acmsl.queryj.templates.packaging.TemplateHandlerBundleTemplateFactory;
@@ -107,7 +108,7 @@ public class TemplateHandlerBundleTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return "TemplateHandlerBundle";
+        return Literals.TEMPLATE_HANDLER_BUNDLE;
     }
 
     /**
@@ -134,6 +135,6 @@ public class TemplateHandlerBundleTemplateBuildHandler
     @Override
     protected String retrieveOutputPackage(@NotNull final QueryJCommand parameters)
     {
-        return OUTPUT_PACKAGE + ".handlers";
+        return OUTPUT_PACKAGE + Literals.DOT_HANDLERS;
     }
 }

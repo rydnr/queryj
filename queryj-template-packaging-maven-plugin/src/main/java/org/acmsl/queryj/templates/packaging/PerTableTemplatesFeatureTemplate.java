@@ -47,24 +47,26 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.api.AbstractBasePerRepositoryTemplate;
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing StringTemplate classes.
  */
+import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.stringtemplate.v4.STGroupString;
 
 /*
  * Importing JDK classes.
@@ -79,7 +81,7 @@ import java.util.Arrays;
  */
 @ThreadSafe
 public class PerTableTemplatesFeatureTemplate
-    extends AbstractBasePerRepositoryTemplate<PerRepositoryTemplateContext>
+    extends AbstractTemplatePackagingTemplate<GlobalTemplateContext>
 {
     /**
      * The serial version UID for serialization.
@@ -90,7 +92,7 @@ public class PerTableTemplatesFeatureTemplate
      * Builds a PerTableTemplatesFeature using given context.
      * @param context the {@link PerRepositoryTemplateContext}.
      */
-    public PerTableTemplatesFeatureTemplate(@NotNull final PerRepositoryTemplateContext context)
+    public PerTableTemplatesFeatureTemplate(@NotNull final GlobalTemplateContext context)
     {
         super(context);
     }
@@ -105,8 +107,35 @@ public class PerTableTemplatesFeatureTemplate
     {
         return
             retrieveGroup(
-                "org/acmsl/queryj/templates/PerTableTemplatesFeature.stg",
-                Arrays.asList("org/acmsl/queryj/templates"));
+                "org/acmsl/queryj/templates/packaging/PerTableTemplatesFeature.stg",
+                Arrays.asList(Literals.ORG_ACMSL_QUERYJ_TEMPLATES));
+    }
+
+    /**
+     * Retrieves the template in given group.
+     * @param group the StringTemplate group.
+     * @return the template.
+     */
+    @Nullable
+    @Override
+    protected ST retrieveTemplate(@Nullable final STGroup group)
+    {
+        @Nullable final ST result = super.retrieveTemplate(group);
+
+        if (group != null)
+        {
+            for (@NotNull final TemplateDef<String> def : getTemplateContext().getTemplateDefs())
+            {
+                @NotNull final String ruleBody =
+                      def.getFilenameRule()
+                    + "(engineName, fileName) ::= <<\n" + def.getFilenameBuilder() + ">>\n";
+
+                new STGroupString()
+                group.importTemplates(new STGroupString(def.getName() + "_filename", ruleBody));
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -117,6 +146,6 @@ public class PerTableTemplatesFeatureTemplate
     @Override
     public String getTemplateName()
     {
-        return "PerTableTemplatesFeature";
+        return Literals.PER_TABLE_TEMPLATES_FEATURE;
     }
 }

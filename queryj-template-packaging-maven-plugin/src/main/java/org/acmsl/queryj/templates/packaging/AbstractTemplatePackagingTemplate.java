@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -108,7 +108,7 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
         return
             retrieveGroup(
                 TEMPLATE_PACKAGING_GROUP + getTemplateName() + ".stg",
-                Arrays.asList("org/acmsl/queryj/templates/packaging/"));
+                Arrays.asList(org.acmsl.queryj.templates.packaging.Literals.ORG_ACMSL_QUERYJ_TEMPLATES_PACKAGING));
     }
 
     /**

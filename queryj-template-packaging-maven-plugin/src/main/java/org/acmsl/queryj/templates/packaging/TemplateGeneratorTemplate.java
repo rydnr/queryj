@@ -75,6 +75,6 @@ public class TemplateGeneratorTemplate<C extends TemplatePackagingContext>
     @Override
     public String getTemplateName()
     {
-        return "TemplateGenerator";
+        return Literals.TEMPLATE_GENERATOR;
     }
 }

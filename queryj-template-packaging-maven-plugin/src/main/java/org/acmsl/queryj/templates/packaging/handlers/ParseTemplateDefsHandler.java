@@ -39,6 +39,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.templates.packaging.Literals;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.TemplateDefImpl;
 import org.acmsl.queryj.templates.packaging.TemplateDefOutput;
@@ -286,7 +287,7 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            throw new InvalidTemplateDefException("package", file, invalidClass);
+            throw new InvalidTemplateDefException(Literals.PACKAGE, file, invalidClass);
         }
 
         @NotNull final TemplateDefDisabledVisitor disabledVisitor = new TemplateDefDisabledVisitor();

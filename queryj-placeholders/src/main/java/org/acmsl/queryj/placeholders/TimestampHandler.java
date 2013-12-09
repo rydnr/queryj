@@ -75,7 +75,7 @@ public class TimestampHandler
     @Override
     public String getPlaceHolder()
     {
-        return Literals.TIMESTAMP1;
+        return Literals.TIMESTAMP;
     }
 
     /**

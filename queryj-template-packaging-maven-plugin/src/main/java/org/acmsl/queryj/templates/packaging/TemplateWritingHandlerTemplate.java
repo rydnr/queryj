@@ -75,6 +75,6 @@ public class TemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
     @Override
     public String getTemplateName()
     {
-        return "TemplateWritingHandler";
+        return Literals.TEMPLATE_WRITING_HANDLER;
     }
 }

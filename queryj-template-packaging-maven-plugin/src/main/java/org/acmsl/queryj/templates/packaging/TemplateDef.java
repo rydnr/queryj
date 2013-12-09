@@ -110,4 +110,11 @@ public interface TemplateDef<S>
      * @return such information.
      */
     boolean isDisabled();
+
+    /**
+     * Retrieves the filename rule.
+     * @return such rule.
+     */
+    @NotNull
+    public String getFilenameRule();
 }

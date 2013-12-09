@@ -67,7 +67,7 @@ public interface TemplatePackagingSettings
     /**
      * The template packaging group.
      */
-    String TEMPLATE_PACKAGING_GROUP = "org/acmsl/queryj/templates/packaging/";
+    String TEMPLATE_PACKAGING_GROUP = Literals.ORG_ACMSL_QUERYJ_TEMPLATES_PACKAGING;
 
     /**
      * The key to access the output dir.

@@ -299,14 +299,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
     /**
      * Retrieves the string template group.
-     * @return such instance.
-     */
-    @Nullable
-    @Override
-    public abstract STGroup retrieveGroup();
-
-    /**
-     * Retrieves the string template group.
      * @param path the path.
      * @param lookupPaths the lookup paths.
      * @return such instance.
@@ -621,44 +613,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
             t_Log.fatal(t_sbMessage.toString());
         }
-    }
-
-    /**
-     * Normalizes given value, in lower-case.
-     * @param value the value.
-     * @param decorationUtils the {@link org.acmsl.queryj.metadata.DecorationUtils} instance.
-     * @return such output.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    protected String normalizeLowercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalizeLowercase(value);
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @return such output.
-     */
-    @NotNull
-    protected String capitalize(@NotNull final String value)
-    {
-        return capitalize(value, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such output.
-     */
-    @NotNull
-    protected String capitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(value);
     }
 
     /**

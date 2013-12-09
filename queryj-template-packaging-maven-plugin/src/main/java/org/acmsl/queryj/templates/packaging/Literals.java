@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,22 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: TemplateHandlerBundleTemplate.java
+ * Filename: Literals.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Template to build QueryJ's handler bundle sources.
+ * Description: Literals used in QueryJ Template Packaging.
  *
- * Date: 2013/08/16
- * Time: 09:39
+ * Date: 2013/12/08
+ * Time: 20:19
  *
  */
 package org.acmsl.queryj.templates.packaging;
-
-/*
- * Importing JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -46,34 +41,28 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Template to build QueryJ's handler bundle sources.
+ * Literals used in QueryJ Template Packaging.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/16 09/39
+ * Created: 2013/12/08 20:19
  */
 @ThreadSafe
-public class TemplateHandlerBundleTemplate<C extends TemplatePackagingContext>
-    extends AbstractTemplatePackagingTemplate<C>
+public interface Literals
 {
-    private static final long serialVersionUID = 8730773422397519040L;
-
-    /**
-     * Creates a TemplateHandlerBundleTemplate instance.
-     * @param context the {@link TemplatePackagingContext context}.
-     */
-    public TemplateHandlerBundleTemplate(@NotNull final C context)
-    {
-        super(context);
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return such name.
-     */
-    @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return Literals.TEMPLATE_HANDLER_BUNDLE;
-    }
+    String ORG_ACMSL_QUERYJ_TEMPLATES = "org/acmsl/queryj/templates";
+    String REPOSITORY = org.acmsl.queryj.Literals.REPOSITORY;
+    String ENGINE_NAME = "engineName";
+    String ENGINE_VERSION = "engineVersion";
+    String CUCUMBER_TEMPLATES = "cucumber.templates";
+    String PACKAGE_NAME1 = "packageName";
+    String PER_TABLE_TEMPLATES_TEST = "PerTableTemplatesTest";
+    String TEMPLATE_BUILD_HANDLER = "TemplateBuildHandler";
+    String DOT_HANDLERS = ".handlers";
+    String TEMPLATE_FACTORY = "TemplateFactory";
+    String TEMPLATE_GENERATOR = "TemplateGenerator";
+    String TEMPLATE_HANDLER_BUNDLE = "TemplateHandlerBundle";
+    String TEMPLATE_WRITING_HANDLER = "TemplateWritingHandler";
+    String PER_TABLE_TEMPLATES_FEATURE = "PerTableTemplatesFeature";
+    String PACKAGE = org.acmsl.queryj.Literals.PACKAGE;
+    String ORG_ACMSL_QUERYJ_TEMPLATES_PACKAGING = "org/acmsl/queryj/templates/packaging/";
 }

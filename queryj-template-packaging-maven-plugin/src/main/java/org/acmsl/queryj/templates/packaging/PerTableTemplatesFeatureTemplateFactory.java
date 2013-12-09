@@ -38,20 +38,13 @@
  * org/acmsl/templates/packaging/TemplateFactory.stg
  * at timestamp: 2013/12/07 12:29
  *
- * DO NOT MODIFY THIS CLASS MANUALLY, SINCE IT GETS GENERATED AUTOMATICALLY.
- * EITHER MODIFY org/acmsl/templates/packaging/TemplateFactory.stg
- * OR CREATE AND APPLY A PATCH.
  */
 package org.acmsl.queryj.templates.packaging;
 
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.api.PerRepositoryTemplateContext;
-import org.acmsl.queryj.api.PerRepositoryTemplateFactory;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratedString;
-import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
@@ -75,11 +68,6 @@ import org.jetbrains.annotations.Nullable;
  */
 import org.checkthread.annotations.ThreadSafe;
 
-/*
- * Importing JDK classes.
- */
-import java.util.List;
-
 /**
  * Factory for {@link PerTableTemplatesFeatureTemplate}s.
  * @author <a href="http://www.acm-sl.org/projects/queryj">QueryJ's Template Packaging</a>
@@ -88,8 +76,7 @@ import java.util.List;
  */
 @ThreadSafe
 public class PerTableTemplatesFeatureTemplateFactory
-    implements PerRepositoryTemplateFactory<
-               PerTableTemplatesFeatureTemplate, PerRepositoryTemplateContext>,
+    implements TemplatePackagingTemplateFactory<PerTableTemplatesFeatureTemplate, GlobalTemplateContext>,
                Singleton
 {
     /**
@@ -114,44 +101,16 @@ public class PerTableTemplatesFeatureTemplateFactory
     }
 
     /**
-     * {@inheritDoc}
+     * Generates a template.
+     *
+     * @param context the context.
+     * @return such template.
      */
+    @Nullable
     @Override
-    @NotNull
-    public PerTableTemplatesFeatureTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repository,
-        @Nullable final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations)
+    public PerTableTemplatesFeatureTemplate createTemplate(@NotNull final GlobalTemplateContext context)
     {
-        return
-            new PerTableTemplatesFeatureTemplate(
-                new PerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    decoratorFactory,
-                    packageName,
-                    basePackageName,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation,
-                    disableGenerationTimestamps,
-                    disableNotNullAnnotations,
-                    disableCheckthreadAnnotations,
-                    retrieveTemplateFileName(repository, metadataManager)));
+        return new PerTableTemplatesFeatureTemplate(context);
     }
 
     /**
@@ -169,9 +128,9 @@ public class PerTableTemplatesFeatureTemplateFactory
         @NotNull final ST template =
             new ST("PerTableTemplates.feature");
 
-        template.add("repository", new DecoratedString(repository));
-        template.add("engineName", new DecoratedString(metadataManager.getEngineName()));
-        template.add("engineVersion", new DecoratedString(metadataManager.getEngineVersion()));
+        template.add(Literals.REPOSITORY, new DecoratedString(repository));
+        template.add(Literals.ENGINE_NAME, new DecoratedString(metadataManager.getEngineName()));
+        template.add(Literals.ENGINE_VERSION, new DecoratedString(metadataManager.getEngineVersion()));
 
         result = template.render();
 

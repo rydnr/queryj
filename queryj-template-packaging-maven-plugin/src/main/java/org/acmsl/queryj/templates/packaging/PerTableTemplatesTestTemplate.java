@@ -84,6 +84,6 @@ public class PerTableTemplatesTestTemplate
     @Override
     public String getTemplateName()
     {
-        return "PerTableTemplatesTest";
+        return Literals.PER_TABLE_TEMPLATES_TEST;
     }
 }

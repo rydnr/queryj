@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -332,6 +333,17 @@ public class TemplateDefImpl
     public boolean isDisabled()
     {
         return this.m__bDisabled;
+    }
+
+    /**
+     * Retrieves the filename rule.
+     * @return such rule.
+     */
+    @Override
+    @NotNull
+    public String getFilenameRule()
+    {
+        return new DecoratedString(getName()).getNormalized().getLowercased().getValue();
     }
 
     @NotNull
