@@ -168,7 +168,7 @@
             </goals>
             <configuration>
               <sources>
-                <source>src/main/resources</source>
+                <source>${project.basedir}/src/main/resources</source>
               </sources>
             </configuration>
           </execution>
@@ -187,7 +187,7 @@
             </goals>
             <configuration>
               <sources>
-                <source>target/generated-sources/</source>
+                <source>${project.build.directory}/generated-sources/</source>
               </sources>
             </configuration>
           </execution>
@@ -199,13 +199,18 @@
             </goals>
             <configuration>
               <sources>
-                <source>target/generated-test-sources/</source>
+                <source>${project.build.directory}/generated-test-sources/</source>
               </sources>
             </configuration>
           </execution>
         </executions>
       </plugin>
    </plugins>
+   <testResources>
+     <testResource>
+       <directory>${project.build.directory}/generated-test-sources</directory>
+     </testResource>
+   </testResources>
   </build>
 
 

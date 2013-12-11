@@ -75,13 +75,13 @@ Feature: Per-table templates
       | user.user_id |  first.select  |   1   |  long  | userId |
       | user.name    |  second.select |   1   | String |  name  |
 
-    When I generate with per-table <template>.stg for Oracle
+    When I generate with per-table \<template>.stg for Oracle
 
-    Then the generated per-table <output> file compiles successfully
+    Then the generated per-table \<output> file compiles successfully
 
     Examples:
       | template           | output                            |
-      <C.templateDefs:{ d | <indirect_template(def=d, engineName="Oracle", tableName="CarBrand")>}; separator="\n">
+      <C.templateDefs:{ d | <indirect_template(def=d, engineName="Oracle", tableName="User")>}; separator="\n">
 
   Scenario Outline: Per-table templates compiles for a type 2 table
 
@@ -121,5 +121,5 @@ Feature: Per-table templates
 >>
 
 indirect_template(def, engineName, tableName) ::= <<
-| <def.name> | <(def.filenameRule)(engineName, tableName)> |
+| <def.name; format="%-30s"> | <(def.filenameRule)(engineName, tableName)> |
 >>

@@ -38,9 +38,6 @@
  * org/acmsl/templates/packaging/Template.stg
  * at timestamp: 2013/12/07 12:29
  *
- * DO NOT MODIFY THIS CLASS MANUALLY, SINCE IT GETS GENERATED AUTOMATICALLY.
- * EITHER MODIFY org/acmsl/templates/packaging/Template.stg
- * OR CREATE AND APPLY A PATCH.
  */
 package org.acmsl.queryj.templates.packaging;
 
@@ -52,7 +49,6 @@ import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.DecoratedString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -130,7 +126,6 @@ public class PerTableTemplatesFeatureTemplate
                       def.getFilenameRule()
                     + "(engineName, fileName) ::= <<\n" + def.getFilenameBuilder() + ">>\n";
 
-                new STGroupString()
                 group.importTemplates(new STGroupString(def.getName() + "_filename", ruleBody));
             }
         }
