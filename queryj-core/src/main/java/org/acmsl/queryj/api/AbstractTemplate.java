@@ -47,7 +47,6 @@ import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.api.placeholders.FillTemplateChainFactory;
-import org.acmsl.queryj.metadata.DecorationUtils;
 
 /*
  * Importing ACM-SL Commons classes.
@@ -177,6 +176,11 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     private String m__strPlaceholderPackage;
 
     /**
+     * Whether we are in debug mode.
+     */
+    private boolean m__bDebug;
+
+    /**
      * A singleton container to avoid the double-checking lock idiom.
      */
     protected static final class FinalizingThreadSingletonContainer
@@ -217,6 +221,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         immutableSetTemplateContext(context);
         immutableSetPlaceholderPackage(placeholderPackage);
         setSTCache(new HashMap<String, Object>());
+        immutableSetDebugMode(false);
     }
 
     /**
@@ -295,6 +300,33 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     protected static Map<String, ?> getSTCache()
     {
         return m__mSTCache;
+    }
+
+    /**
+     * Specifies the debug mode.
+     * @param mode such mode.
+     */
+    protected final void immutableSetDebugMode(final boolean mode)
+    {
+        this.m__bDebug = mode;
+    }
+
+    /**
+     * Specifies the debug mode.
+     * @param mode such mode.
+     */
+    public void setDebugMode(final boolean mode)
+    {
+        immutableSetDebugMode(mode);
+    }
+
+    /**
+     * Retrieves the debug mode.
+     * @return such mode.
+     */
+    public boolean getDebugMode()
+    {
+        return this.m__bDebug;
     }
 
     /**
@@ -633,18 +665,31 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     public String generate(final boolean relevantOnly)
         throws InvalidTemplateException
     {
-        return generate(getTemplateContext(), relevantOnly);
+        return generate(getTemplateContext(), relevantOnly, getDebugMode());
+    }
+
+    /**
+     * Generates the source code.
+     * @return such output.
+     * @throws org.acmsl.queryj.api.exceptions.InvalidTemplateException if the template cannot be generated.
+     */
+    @Nullable
+    public String generate(final boolean relevantOnly, final boolean debug)
+        throws InvalidTemplateException
+    {
+        return generate(getTemplateContext(), relevantOnly, debug);
     }
 
     /**
      * Generates the source code.
      * @param context the {@link QueryJTemplateContext} instance.
      * @param relevantOnly whether to include only relevant placeholders.
+     * @param debug if we're debugging the template.
      * @return such output.
      * @throws InvalidTemplateException if the template cannot be generated.
      */
     @Nullable
-    protected String generate(@NotNull final C context, final boolean relevantOnly)
+    protected String generate(@NotNull final C context, final boolean relevantOnly, final boolean debug)
         throws  InvalidTemplateException
     {
         final String result;
@@ -656,7 +701,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         //traceClassLoaders();
 
-        result = generateOutput(getHeader(context), context, relevantOnly);
+        result = generateOutput(getHeader(context), context, relevantOnly, debug);
 
         //cleanUpClassLoaderTracing();
 
@@ -668,6 +713,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param header the header.
      * @param context the context.
      * @param relevantOnly whether to include only relevant placeholders.
+     * @param debug if we're debugging the template.
      * @return such code.
      * @throws InvalidTemplateException if the template cannot be processed.
      */
@@ -675,7 +721,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     protected String generateOutput(
         @SuppressWarnings("unused") @Nullable final String header,
         @NotNull final C context,
-        final boolean relevantOnly)
+        final boolean relevantOnly,
+        final boolean debug)
       throws InvalidTemplateException
     {
         @Nullable String result = null;
@@ -715,11 +762,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
                     t_Template.add(CONTEXT, placeHolders);
 
-//                    for (final Map.Entry<Object, Object> placeHolder : (Set <Map.Entry<Object, Object>>) placeHolders.entrySet())
-//                    {
-//                        t_Template.add(placeHolder.getKey().toString(), placeHolder.getValue());
-//                    }
-                    //t_Template.setErrorListener(DEFAULT_ST_ERROR_LISTENER);
                 }
                 catch (@NotNull final QueryJBuildException invalidTemplate)
                 {
@@ -730,6 +772,17 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 {
                     try
                     {
+                        if (debug)
+                        {
+                            try
+                            {
+                                t_Template.inspect().waitForClose();
+                            }
+                            catch (InterruptedException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
                         result = t_Template.render();
                     }
                     catch (@NotNull final Throwable throwable)
@@ -744,6 +797,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                                 "Error in template " + getTemplateName(), throwable);
                         }
 
+//                        if (System.getProperty("queryj.debug") != null)
+//                        {
+                            t_Template.inspect();
+//                        }
     /*                    @Nullable final STTreeView debugTool =
                             new StringTemplateTreeView("Debugging " + getTemplateName(), t_Template);
 
