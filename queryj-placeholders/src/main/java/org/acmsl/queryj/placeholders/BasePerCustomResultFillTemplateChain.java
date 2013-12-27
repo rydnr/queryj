@@ -115,8 +115,7 @@ public class BasePerCustomResultFillTemplateChain
     {
         add(
             chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, CustomResultHandler, ResultDecorator>(
-                new CustomResultHandler(context)),
+            new TemplateContextFillAdapterHandler(new CustomResultHandler(context)),
             relevantOnly);
         add(
             chain,
