@@ -72,19 +72,20 @@ source(C) ::= <<
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.Parameter;
-import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.metadata.vo.Row;
-import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.api.AbstractTemplate;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.PerTableTemplate;
 import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.PerTableTemplateFactory;
 import org.acmsl.queryj.api.PerTableTemplateGenerator;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.ForeignKey;
+import org.acmsl.queryj.metadata.vo.Row;
+import org.acmsl.queryj.metadata.vo.Table;
 
 /*
  * Importing StringTemplate classes.
@@ -435,19 +436,22 @@ public class PerTableTemplatesTest
                 }
 
                 outputDir = new File(rootFolder.getRoot().getAbsolutePath().concat(folder.toString()));
+
+                outputDir.mkdirs();
             }
             catch (@NotNull final IOException ioException)
             {
-                if (   (outputDir == null)
-                    || (!outputDir.exists()))
-                {
-                    Assert.fail(ioException.getMessage());
-                }
+                Assert.fail(ioException.getMessage());
             }
 
-//            Assert.assertTrue("Cannot create folder: " + outputDir.getAbsolutePath(), outputDir.mkdirs());
+            if (!outputDir.exists())
+            {
+                Assert.fail("Cannot create folder: " + outputDir.getAbsolutePath());
+            }
 
             UniqueLogFactory.initializeInstance(LogFactory.getLog(PerTableTemplatesTest.class));
+
+            ((AbstractTemplate) template).setDebugMode(true);
 
             try
             {

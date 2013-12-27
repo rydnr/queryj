@@ -71,7 +71,7 @@ attribute_declaration(attr) ::= <<
   Writes the parameter declaration for a concrete attribute.
   @param attr the attribute.
 !>
-<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.nameLowercased>
+<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.lowercased>
 >>
 
 attribute_declaration_impl(attr) ::= <<
@@ -79,7 +79,7 @@ attribute_declaration_impl(attr) ::= <<
   Writes the parameter declaration for a concrete attribute.
   @param attr the attribute.
 !>
-<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.nameLowercased>
+<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.lowercased>
 >>
 
 attribute_isolated_declaration(attr) ::= <<
@@ -95,7 +95,7 @@ attribute_isolated_declaration_impl(attr) ::= <<
   Writes the parameter declaration for a concrete attribute.
   @param attr the attribute.
 !>
-<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.nameLowercased>,
+<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.lowercased>,
 >>
 
 indirect_template(name, extra1, extra2) ::= <<
@@ -168,12 +168,10 @@ class_annotations() ::= <<
 >>
 
 find_constant_check_attribute(attribute) ::= <<
-// !!
 <if(attribute.primitive)>
-&& (item.get<attribute.nameCapitalized>() == <attribute.nameLowercased>)
+&& (item.get<attribute.name.capitalized>() == <attribute.name.lowercased>)
 <else>
-&& (item.get<attribute.nameCapitalized>().equals(<attribute.nameLowercased>))
-<endif>
+&& (item.get<attribute.name.capitalized>().equals(<attribute.name.lowercased>))<endif>
 >>
 
 import_template(type) ::= <<

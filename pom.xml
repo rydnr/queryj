@@ -23,6 +23,7 @@
   </organization>
 
   <properties>
+    <version.queryj>3.0-SNAPSHOT</version.queryj>
     <!-- to ensure encoding is not platform-dependent -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <antlr4.visitor>true</antlr4.visitor>
@@ -104,27 +105,27 @@
       <dependency>
         <groupId>org.acmsl</groupId>
         <artifactId>queryj-core</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${version.queryj}</version>
       </dependency>
       <dependency>
         <groupId>org.acmsl</groupId>
         <artifactId>queryj-placeholders</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${version.queryj}</version>
       </dependency>
       <dependency>
         <groupId>org.acmsl</groupId>
         <artifactId>queryj-templates</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${version.queryj}</version>
       </dependency>
       <dependency>
         <groupId>org.acmsl</groupId>
         <artifactId>queryj-maven</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${version.queryj}</version>
       </dependency>
       <dependency>
         <groupId>org.acmsl</groupId>
         <artifactId>queryj-template-packaging-maven-plugin</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>${version.queryj}</version>
       </dependency>
 
       <dependency>
@@ -333,6 +334,11 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.acmsl</groupId>
+          <artifactId>queryj-template-packaging-maven-plugin</artifactId>
+          <version>${version.queryj}</version>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
