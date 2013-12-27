@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Abstract logicless implementation of Row interface.
+ * Description: Abstract logic-less implementation of Row interface.
  *
  */
 package org.acmsl.queryj.metadata.vo;
@@ -35,6 +35,7 @@ package org.acmsl.queryj.metadata.vo;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,26 +45,26 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * Abstract logicless implementation of <code>Row</code> interface.
+ * Abstract logic-less implementation of <code>Row</code> interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractRow
-    implements Row
+public abstract class AbstractRow<V>
+    implements Row<V>
 {
     /**
      * The name.
      */
-    private String m__strName;
+    private V m__strName;
     
     /**
      * The table name.
      */
-    private String m__strTableName;
+    private V m__strTableName;
 
     /**
      * The attributes.
      */
-    private List<Attribute> m__lAttributes;
+    private List<Attribute<V>> m__lAttributes;
 
     /**
      * Creates an <code>AbstractRow</code> with the following
@@ -73,9 +74,9 @@ public abstract class AbstractRow
      * @param attributes the attributes.
      */
     protected AbstractRow(
-        @NotNull final String name,
-        @NotNull final String tableName,
-        @NotNull final List<Attribute> attributes)
+        @NotNull final V name,
+        @NotNull final V tableName,
+        @NotNull final List<Attribute<V>> attributes)
     {
         immutableSetName(name);
         immutableSetTableName(tableName);
@@ -86,7 +87,7 @@ public abstract class AbstractRow
      * Specifies the name.
      * @param name such name.
      */
-    protected final void immutableSetName(@NotNull final String name)
+    protected final void immutableSetName(@NotNull final V name)
     {
         m__strName = name;
     }
@@ -95,7 +96,7 @@ public abstract class AbstractRow
      * Specifies the name.
      * @param name such name.
      */
-    protected void setName(@NotNull final String name)
+    protected void setName(@NotNull final V name)
     {
         immutableSetName(name);
     }
@@ -104,8 +105,9 @@ public abstract class AbstractRow
      * Retrieves the attribute name.
      * @return such name.
      */
+    @Override
     @NotNull
-    public String getName()
+    public V getName()
     {
         return m__strName;
     }
@@ -114,7 +116,7 @@ public abstract class AbstractRow
      * Specifies the table name.
      * @param tableName such information.
      */
-    protected final void immutableSetTableName(@NotNull final String tableName)
+    protected final void immutableSetTableName(@NotNull final V tableName)
     {
         m__strTableName = tableName;
     }
@@ -124,7 +126,7 @@ public abstract class AbstractRow
      * @param tableName such information.
      */
     @SuppressWarnings("unused")
-    protected void setTableName(@NotNull final String tableName)
+    protected void setTableName(@NotNull final V tableName)
     {
         immutableSetTableName(tableName);
     }
@@ -134,7 +136,7 @@ public abstract class AbstractRow
      * @return such information.
      */
     @NotNull
-    public String getTableName()
+    public V getTableName()
     {
         return m__strTableName;
     }
@@ -143,7 +145,7 @@ public abstract class AbstractRow
      * Specifies the attributes.
      * @param attributes such information.
      */
-    protected final void immutableSetAttributes(@NotNull final List<Attribute> attributes)
+    protected final void immutableSetAttributes(@NotNull final List<Attribute<V>> attributes)
     {
         m__lAttributes = attributes;
     }
@@ -153,7 +155,7 @@ public abstract class AbstractRow
      * @param attributes such information.
      */
     @SuppressWarnings("unused")
-    protected void setAttributes(@NotNull final List<Attribute> attributes)
+    protected void setAttributes(@NotNull final List<Attribute<V>> attributes)
     {
         immutableSetAttributes(attributes);
     }
@@ -162,8 +164,9 @@ public abstract class AbstractRow
      * Retrieves the attributes.
      * @return such information.
      */
+    @Override
     @NotNull
-    public List<Attribute> getAttributes()
+    public List<Attribute<V>> getAttributes()
     {
         return m__lAttributes;
     }
@@ -179,7 +182,7 @@ public abstract class AbstractRow
         return
             new org.apache.commons.lang.builder.ToStringBuilder(this)
                 .append("name", getName())
-                .append("tableName", getTableName())
+                .append(Literals.TABLE_NAME, getTableName())
                 .append("attributes", getAttributes())
                 .toString();
     }
@@ -209,9 +212,9 @@ public abstract class AbstractRow
     {
         boolean result = false;
 
-        if  (object instanceof Row)
+        if  (object instanceof Row<?>)
         {
-            @NotNull final Row t_OtherInstance = (Row) object;
+            @NotNull final Row<?> t_OtherInstance = (Row<?>) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -238,7 +241,7 @@ public abstract class AbstractRow
      * object prevents it from being compared to this Object.
      */
     @Override
-    public int compareTo(@Nullable final Row object)
+    public int compareTo(@Nullable final Row<V> object)
         throws  ClassCastException
     {
         int result = 1;
@@ -258,7 +261,7 @@ public abstract class AbstractRow
      * @return a positive number of the first is considered 'greater'
      * than the second; 0 if they're equal; a negative number otherwise.
      */
-    protected int compareThem(@NotNull final Row first, @NotNull final Row second)
+    protected int compareThem(@NotNull final Row<V> first, @NotNull final Row<?> second)
     {
         return
             new org.apache.commons.lang.builder.CompareToBuilder()

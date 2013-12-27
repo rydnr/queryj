@@ -43,9 +43,8 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public final class AttributeValueObject
-    extends AbstractAttribute
+    extends AbstractAttribute<String>
 {
-
     private static final long serialVersionUID = 8975433666493838327L;
 
     /**
@@ -106,6 +105,29 @@ public final class AttributeValueObject
             booleanTrue,
             booleanFalse,
             booleanNull);
+    }
+
+    /**
+     * Retrieves whether it's managed externally.
+     * @return such information.
+     */
+    @Override
+    public boolean isExternallyManaged()
+    {
+        boolean result = false;
+
+        @Nullable final String keyword = getKeyword();
+        @Nullable final String retrievalQuery = getRetrievalQuery();
+
+        if (   (keyword != null)
+            && (!keyword.trim().equals(""))
+            && (retrievalQuery != null)
+            && (!retrievalQuery.trim().equals("")))
+        {
+            result = true;
+        }
+
+        return result;
     }
 }
 

@@ -55,6 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class TemplateHandlerBundleTemplate<C extends TemplatePackagingContext>
     extends AbstractTemplatePackagingTemplate<C>
 {
+    private static final long serialVersionUID = 8730773422397519040L;
+
     /**
      * Creates a TemplateHandlerBundleTemplate instance.
      * @param context the {@link TemplatePackagingContext context}.
@@ -72,6 +74,6 @@ public class TemplateHandlerBundleTemplate<C extends TemplatePackagingContext>
     @Override
     public String getTemplateName()
     {
-        return "TemplateHandlerBundle";
+        return Literals.TEMPLATE_HANDLER_BUNDLE;
     }
 }

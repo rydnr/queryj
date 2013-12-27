@@ -36,6 +36,7 @@ package org.acmsl.queryj.metadata.vo;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 
 /*
  * Importing some JDK classes.
@@ -47,7 +48,7 @@ import java.util.Collection;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface Field
-    extends  Attribute
+    extends  Attribute<String>
 {
     /**
      * Retrieves if the field is part of the primary key.
@@ -56,20 +57,8 @@ public interface Field
     public boolean isPk();
 
     /**
-     * Retrieves the field's keyword.
-     * @return such keyword.
-     */
-    public String getKeyword();
-
-    /**
-     * Retrieves the query to retrieve the field value.
-     * @return such information.
-     */
-    public String getRetrievalQuery();
-
-    /**
      * Retrieves the field fk collection.
      * @return such collection.
      */
-    public Collection getFieldFks();
+    public Collection<AntFieldFkElement> getFieldFks();
 }

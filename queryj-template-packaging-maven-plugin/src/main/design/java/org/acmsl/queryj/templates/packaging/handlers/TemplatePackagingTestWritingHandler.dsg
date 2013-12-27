@@ -1,0 +1,10 @@
+- Create a new abstract class TemplatePackagingTestWritingHandler, in package org.acmsl.queryj.templates.packaging.handlers;
+- Add comment: Customizes default behavior for test-related generated sources.
+- Make it parameterized:
+  - T extends TemplatePackagingTemplate<C>;
+  - TG extends TemplatePackagingTemplateGenerator<T, C>;
+  - C extends TemplatePackagingContext;
+- Make it extend TemplatePackagingWritingHandler<T, TG, C>;
+- Override method retrieveProjectOutputDir(QueryJCommand): java.io.File:
+  - return the content associated to the key OUTPUT_DIR_FOR_TESTS in the command;
+- Fix import groups;

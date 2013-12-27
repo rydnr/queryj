@@ -38,6 +38,7 @@ package org.acmsl.queryj.api.handlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.exceptions.CannotCreateCustomResultTemplateException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.exceptions.QueryJException;
@@ -77,9 +78,11 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
+@SuppressWarnings("unused")
 public abstract class BasePerCustomResultTemplateBuildHandler
-    <T extends PerCustomResultTemplate,
-     TF extends PerCustomResultTemplateFactory<T>>
+    <T extends PerCustomResultTemplate<C>,
+     C extends PerCustomResultTemplateContext,
+     TF extends PerCustomResultTemplateFactory<T, C>>
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
@@ -96,6 +99,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     /**
      * Creates a <code>BasePerCustomResultTemplateBuildHandler</code> instance.
      */
+    @SuppressWarnings("unused")
     public BasePerCustomResultTemplateBuildHandler() {}
 
     /**
@@ -289,7 +293,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         if (DebugUtils.getInstance().debugEnabledForResultId(customResult.getId()))
         {
             @SuppressWarnings("unused")
-            int a = 1;
+            final int a = 1;
         }
 
         boolean result =

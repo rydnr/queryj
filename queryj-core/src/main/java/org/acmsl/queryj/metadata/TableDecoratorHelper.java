@@ -39,6 +39,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.commons.patterns.Decorator;
 import org.acmsl.queryj.metadata.vo.Attribute;
 
 /*
@@ -107,15 +108,15 @@ public class TableDecoratorHelper
      * @return the cleaned-up attributes.
      */
     @NotNull
-    public List<Attribute> removeOverridden(
-        @NotNull final List<Attribute> firstAttributes,
-        @NotNull final List<Attribute> secondAttributes,
+    public List<Attribute<DecoratedString>> removeOverridden(
+        @NotNull final List<Attribute<DecoratedString>> firstAttributes,
+        @NotNull final List<Attribute<DecoratedString>> secondAttributes,
         @Nullable final String parentTableName,
         @NotNull final MetadataManager metadataManager)
     {
-        List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        for  (@Nullable Attribute t_Attribute : secondAttributes)
+        for  (final @Nullable Attribute<DecoratedString> t_Attribute : secondAttributes)
         {
             if  (t_Attribute != null)
             {
@@ -139,11 +140,11 @@ public class TableDecoratorHelper
      */
     @SuppressWarnings("unused")
     protected boolean isOverridden(
-        @NotNull final Attribute attribute,
+        @NotNull final Attribute<DecoratedString> attribute,
         @NotNull final MetadataManager metadataManager,
         @Nullable final String parentTableName)
     {
-        boolean result = false;
+        final boolean result = false;
 
 
         // TODO
@@ -174,16 +175,16 @@ public class TableDecoratorHelper
      * @return the cleaned-up attributes.
      */
     @NotNull
-    public List<Attribute> removeOverriddenPlusPk(
-        @NotNull final List<Attribute> firstAttributes,
-        @NotNull final List<Attribute> secondAttributes,
-        @NotNull final List<Attribute> primaryKey,
+    public List<Attribute<DecoratedString>> removeOverriddenPlusPk(
+        @NotNull final List<Attribute<DecoratedString>> firstAttributes,
+        @NotNull final List<Attribute<DecoratedString>> secondAttributes,
+        @NotNull final List<Attribute<DecoratedString>> primaryKey,
         @NotNull final String parentTableName,
         @NotNull final MetadataManager metadataManager)
     {
-        List<Attribute> result = new ArrayList<Attribute>();
+        final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        for (@Nullable Attribute t_Attribute : secondAttributes)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : secondAttributes)
         {
             if  (t_Attribute != null)
             {
@@ -206,11 +207,11 @@ public class TableDecoratorHelper
      * @return <code>true</code> in such case.
      */
     public boolean contains(
-        @NotNull final List<Attribute> attributes, @NotNull final Attribute attribute)
+        @NotNull final List<Attribute<DecoratedString>> attributes, @NotNull final Attribute<DecoratedString> attribute)
     {
         boolean result = false;
 
-        for  (@Nullable Attribute t_Attribute : attributes)
+        for  (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
         {
             if (    (t_Attribute != null)
                  && (attribute.getName().equals(t_Attribute.getName())))
@@ -232,16 +233,16 @@ public class TableDecoratorHelper
      * @return such collection.
      */
     @NotNull
-    public List<Attribute> sumUpParentAndChildAttributes(
+    public <V> List<Attribute<DecoratedString>> sumUpParentAndChildAttributes(
         @NotNull final String parentTable,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<V>> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             sumUpParentAndChildAttributes(
                 decoratorFactory.decorateAttributes(parentTable, metadataManager),
-                attributes);
+                decoratorFactory.decorateAttributes(attributes, metadataManager));
     }
     
     /**
@@ -251,10 +252,11 @@ public class TableDecoratorHelper
      * @return such collection.
      */
     @NotNull
-    protected List<Attribute> sumUpParentAndChildAttributes(
-        @NotNull final List<Attribute> attributes, @Nullable final List<Attribute> childAttributes)
+    protected List<Attribute<DecoratedString>> sumUpParentAndChildAttributes(
+        @NotNull final List<Attribute<DecoratedString>> attributes,
+        @Nullable final List<Attribute<DecoratedString>> childAttributes)
     {
-        List<Attribute> result = new ArrayList<Attribute>();
+        final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
         result.addAll(attributes);
 
@@ -274,11 +276,11 @@ public class TableDecoratorHelper
      * @return the list without the read-only attributes.
      */
     @NotNull
-    public List<Attribute> removeReadOnly(@NotNull final List<Attribute> attributes)
+    public List<Attribute<DecoratedString>> removeReadOnly(@NotNull final List<Attribute<DecoratedString>> attributes)
     {
-        List<Attribute> result = new ArrayList<Attribute>();
+        final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
         {
             if  (   (t_Attribute != null)
                  && (!t_Attribute.isReadOnly()))
@@ -296,11 +298,12 @@ public class TableDecoratorHelper
      * @return the list without the externally-managed attributes.
      */
     @NotNull
-    public List<Attribute> removeExternallyManaged(@NotNull final List<Attribute> attributes)
+    public List<Attribute<DecoratedString>> removeExternallyManaged(
+        @NotNull final List<Attribute<DecoratedString>> attributes)
     {
-        List<Attribute> result = new ArrayList<Attribute>();
+        final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
         {
             if  (   (t_Attribute != null)
                  && (!t_Attribute.isExternallyManaged()))
@@ -318,11 +321,12 @@ public class TableDecoratorHelper
      * @return such information.
      */
     @NotNull
-    public List<Attribute> removeNonReadOnlyAttributes(@NotNull final List<Attribute> attributes)
+    public List<Attribute<DecoratedString>> removeNonReadOnlyAttributes(
+        @NotNull final List<Attribute<DecoratedString>> attributes)
     {
-        List<Attribute> result = new ArrayList<Attribute>();
+        final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
 
-        for (@Nullable Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
         {
             if  (   (t_Attribute != null)
                  && (t_Attribute.isReadOnly()))

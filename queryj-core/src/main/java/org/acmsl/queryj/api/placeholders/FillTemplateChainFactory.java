@@ -39,19 +39,19 @@ package org.acmsl.queryj.api.placeholders;
  * Importing project classes.
  */
 import org.acmsl.queryj.api.FillTemplateChain;
-import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.api.TemplateContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to create {@link org.acmsl.queryj.api.FillTemplateChain}s for a given context.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/08
+ * @since 3.0
+ * Created: 2013/06/08
  */
 public interface FillTemplateChainFactory<C extends TemplateContext>
 {

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Maven
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -31,7 +31,11 @@
  */
 package org.acmsl.queryj.tools.maven;
 
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -68,7 +72,7 @@ public class Field
      * Specifies the name.
      * @param name such name.
      */
-    protected final void immutableSetName(final String name)
+    protected final void immutableSetName(@NotNull final String name)
     {
         m__strName = name;
     }
@@ -77,7 +81,7 @@ public class Field
      * Specifies the name.
      * @param name such name.
      */
-    public void setName(final String name)
+    public void setName(@NotNull final String name)
     {
         immutableSetName(name);
     }
@@ -86,6 +90,7 @@ public class Field
      * Returns the name.
      * @return such value.
      */
+    @NotNull
     protected final String immutableGetName()
     {
         return m__strName;
@@ -95,6 +100,7 @@ public class Field
      * Returns the name.
      * @return such value.
      */
+    @NotNull
     public String getName()
     {
         return immutableGetName();
@@ -104,7 +110,7 @@ public class Field
      * Specifies the type.
      * @param type such type.
      */
-    protected final void immutableSetType(final String type)
+    protected final void immutableSetType(@NotNull final String type)
     {
         m__strType = type;
     }
@@ -113,7 +119,7 @@ public class Field
      * Specifies the type.
      * @param type such type.
      */
-    public void setType(final String type)
+    public void setType(@NotNull final String type)
     {
         immutableSetType(type);
     }
@@ -122,6 +128,7 @@ public class Field
      * Returns the type.
      * @return such value.
      */
+    @NotNull
     protected final String immutableGetType()
     {
         return m__strType;
@@ -131,6 +138,7 @@ public class Field
      * Returns the type.
      * @return such value.
      */
+    @NotNull
     public String getType()
     {
         return immutableGetType();
@@ -140,7 +148,7 @@ public class Field
      * Specifies the pk.
      * @param pk such pk.
      */
-    protected final void immutableSetPk(final String pk)
+    protected final void immutableSetPk(@NotNull final String pk)
     {
         m__strPk = pk;
     }
@@ -149,7 +157,8 @@ public class Field
      * Specifies the pk.
      * @param pk such pk.
      */
-    public void setPk(final String pk)
+    @SuppressWarnings("unused")
+    public void setPk(@NotNull final String pk)
     {
         immutableSetPk(pk);
     }
@@ -158,6 +167,7 @@ public class Field
      * Returns the primary key.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetPk() 
     {
         return m__strPk;
@@ -167,6 +177,7 @@ public class Field
      * Returns the primary key.
      * @return such value.
      */
+    @Nullable
     public String getPk() 
     {
         return immutableGetPk();
@@ -175,6 +186,8 @@ public class Field
     /**
      * {@inheritDoc}
      */
+    @Override
+    @NotNull
     public String toString()
     {
         return
@@ -193,21 +206,22 @@ public class Field
      * @param pk whether it's part of the primary key or not.
      * @return the formatted text.
      */
+    @NotNull
     protected String toString(
         final String className,
         final String name,
         final String type,
         final String pk)
     {
-        @NotNull StringBuilder result = new StringBuilder();
+        @NotNull final StringBuilder result = new StringBuilder();
 
-        result.append(" { class-name : \"");
+        result.append(" { \"class\": \"");
         result.append(className);
-        result.append("\", name : \"");
+        result.append("\", \"name\" : \"");
         result.append(name);
-        result.append("\", type : \"");
+        result.append("\", \"type\" : \"");
         result.append(type);
-        result.append("\", pk : \"");
+        result.append("\", \"pk\" : \"");
         result.append(pk);
         result.append("\" }");
 

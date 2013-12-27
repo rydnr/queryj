@@ -56,10 +56,13 @@ import org.checkthread.annotations.ThreadSafe;
 public class CannotFindTemplatesException
     extends QueryJBuildException
 {
+    private static final long serialVersionUID = -7995068061389759333L;
+
     /**
      * Creates an instance for given class.
      * @param contextClassName the class name of the context.
      */
+    @SuppressWarnings("unused")
     public CannotFindTemplatesException(@NotNull final String contextClassName)
     {
         super("null.template.chain.provider.implementation", new Object[] { contextClassName });
@@ -69,7 +72,7 @@ public class CannotFindTemplatesException
      * Creates an instance for given class.
      * @param factoryClass the factory class.
      */
-    public CannotFindTemplatesException(@NotNull final Class factoryClass)
+    public CannotFindTemplatesException(@NotNull final Class<?> factoryClass)
     {
         super("cannot.find.template.chain.provider.implementation", new Object[] { factoryClass.getName() } );
     }

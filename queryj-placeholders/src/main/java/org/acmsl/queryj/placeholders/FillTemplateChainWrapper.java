@@ -83,11 +83,12 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
      * Retrieves the list of generic placeholder handlers.
      * @return such list.
      */
+    @Override
     @NotNull
     @SuppressWarnings("unchecked")
-    protected List<FillHandler> getHandlers(@NotNull final C context)
+    protected List<FillHandler<?>> getHandlers(@NotNull final C context)
     {
-        @NotNull final List result = new ArrayList();
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(22);
 
         result.add(new AreTimestampsAllowedHandler(context));
         result.add(new ClassNameHandler<C>(context));
@@ -97,18 +98,18 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
         result.add(new DAOSubpackageNameHandler(context));
         result.add(new DatabaseEngineNameHandler(context));
         result.add(new DatabaseEngineVersionHandler(context));
-        result.add(new FileNameHandler(context));
+        result.add(new FileNameHandler<C>(context));
         result.add(new HeaderHandler(context));
         result.add(new IsRepositoryDAOHandler(context));
         result.add(new JndiLocationFillHandler(context));
         result.add(new LobHandlingFlavorHandler(context));
         result.add(new LobHandlingRepositoryCheckHandler(context));
-        result.add(new PackageNameHandler(context));
+        result.add(new PackageNameHandler<C>(context));
         result.add(new ProjectPackageHandler(context));
         result.add(new RepositoryNameHandler(context));
-        result.add(new SerialVersionUIDHandler(context));
+        result.add(new SerialVersionUIDHandler<C>(context));
         result.add(new TimestampHandler());
-        result.add(new TemplateNameHandler(context));
+        result.add(new TemplateNameHandler<C>(context));
         result.add(new UseCheckthreadAnnotationsHandler(context));
         result.add(new UseNotNullAnnotationsHandler(context));
 
@@ -119,7 +120,8 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
     @Override
     public String toString()
     {
-        return "{ 'class': 'FillTemplateChainWrapper', " +
-               " 'parent: " + super.toString() +  " }";
+        return
+              "{ \"class\": \"" + FillTemplateChainWrapper.class.getName() + "\""
+            + ", \"parent\": \"" + super.toString() +  "\" }";
     }
 }

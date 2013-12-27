@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,12 +37,17 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-API classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
 import org.acmsl.queryj.templates.packaging.TemplateTemplate;
 
@@ -72,8 +77,8 @@ import java.util.List;
 public class TemplateTemplateWritingHandler
     extends TemplatePackagingWritingHandler
         <TemplateTemplate<DefaultTemplatePackagingContext>,
-         TemplatePackagingTemplateGenerator<TemplateTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>,
-         DefaultTemplatePackagingContext>
+            DefaultTemplatePackagingContext,
+            TemplatePackagingTemplateGenerator<TemplateTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>>
 {
     /**
      * Retrieves the template generator.
@@ -95,12 +100,26 @@ public class TemplateTemplateWritingHandler
      * @return the template.
      * @throws QueryJBuildException if the template retrieval process if faulty.
      */
-    @Nullable
+    @NotNull
     @Override
     protected List<TemplateTemplate<DefaultTemplatePackagingContext>> retrieveTemplates(
         @NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {
-        return new QueryJCommandWrapper<TemplateTemplate<DefaultTemplatePackagingContext>>(parameters).getListSetting(TEMPLATE_TEMPLATES);
+        @NotNull final List<TemplateTemplate<DefaultTemplatePackagingContext>> result;
+
+        @Nullable final List<TemplateTemplate<DefaultTemplatePackagingContext>> aux =
+            new QueryJCommandWrapper<TemplateTemplate<DefaultTemplatePackagingContext>>(parameters).getListSetting(TEMPLATE_TEMPLATES);
+
+        if (aux == null)
+        {
+            throw new MissingTemplatesException("template");
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
     }
 }

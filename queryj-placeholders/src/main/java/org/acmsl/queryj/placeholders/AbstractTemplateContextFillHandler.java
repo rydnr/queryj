@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -150,7 +150,7 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
         {
             return false;
         }
-        final AbstractTemplateContextFillHandler other = (AbstractTemplateContextFillHandler) obj;
+        final AbstractTemplateContextFillHandler<?, ?> other = (AbstractTemplateContextFillHandler<?, ?>) obj;
         return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.templateContext, other.templateContext)
             .isEquals();
     }

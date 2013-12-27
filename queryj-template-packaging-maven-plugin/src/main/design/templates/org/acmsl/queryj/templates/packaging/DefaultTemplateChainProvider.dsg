@@ -1,0 +1,54 @@
+- Create a new StringTemplate template DefaultTemplateChainProvider.stg in folder src/main/resources/org/acmsl/queryj/templates/packaging;
+- Add QueryJ header;
+- Add comment: Defines the rules to generate QueryJ's DefaultTemplateChainProvider.;
+- Declare the group DefaultTemplateChainProvider;
+- Import "common.stg";
+- Define a rule source(C):
+  - Add comment: Generates a DefaultTemplateChainProvider source file.;
+  - Add comment: @param C the context.;
+  - Call <sourceImpl(defs=C.templateDefs, C=C)>;
+- Define a rule sourceImpl(defs, C):
+  - Add comment: Generates a DefaultTemplateChainProvider source file according to a list of TemplateDefs.;
+  - Add comment: @param defs the template definitions.;
+  - Add comment: @param C the context.;
+  - Call
+--
+<java_header(
+    description=[ "Implements {@link TemplateChainProvider} to generate", "the default templates." ],
+    description_oneline=false,
+    filename=C.class_name,
+    template="org/acmsl/queryj/templates/packaging/DefaultTemplateChainProvider.stg",
+    C=C)>
+--
+  - Call <package_declaration(packageName="org.acmsl.queryj.templates")>;
+  - Write project import group:
+    - For each TemplateDef, call <import_bundle(def)>;
+  - Write QueryJ-Core import group;
+  - Write JetBrains import group;
+  - Write checkthread.org import group;
+  - Write JDK import group;
+  - Call <class(def=defs, C=C)>;
+- Define a rule class(defs, C):
+  - Add comment: Generator for {@link DefaultTemplateChainProviders}.;
+  - Call class_common_javadoc template:
+    - Pass the template name;
+    - Pass the timestamp from the context;
+  - Add @ThreadSafe class annotation;
+  - Define the class with <C.class_name> as name;
+  - Make it implement TemplateChainProvider<TemplateHandler<QueryJCommand>>;
+  - Implement getHandlers() method:
+    - Add comment: Retrieves the custom chain.;
+    - Add comment: @return such chain.;
+    - Add @Override annotation;
+    - Add @NotNull annotation;
+    - Implement it as:
+      - Declare and instantiate the result variable, of type List<TemplateHandler<QueryJCommand>>;
+      - Call add_handler_bundle rule for every TemplateDef;
+      - return result;
+  - Implement getFillHandlers() method:
+    - Add comment {@inheritDoc}.
+    - Implement it as:
+      - Declare and instantiate the result variable, of type List<TemplateHandler<QueryJCommand>>;
+      - return result;
+- Define a rule add_handler_bundle(def):
+  - call result.add(new <def.name>HandlerBundle());

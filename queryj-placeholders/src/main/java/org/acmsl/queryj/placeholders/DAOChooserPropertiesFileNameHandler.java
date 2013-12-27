@@ -93,6 +93,6 @@ public class DAOChooserPropertiesFileNameHandler
     @Override
     protected String resolveContextValue(@NotNull final QueryJTemplateContext context)
     {
-        return context.getRepositoryName().toLowerCase(Locale.US) + "-queryj.properties";
+        return context.getRepositoryName().toLowerCase(Locale.US) + Literals.QUERYJ_PROPERTIES;
     }
 }

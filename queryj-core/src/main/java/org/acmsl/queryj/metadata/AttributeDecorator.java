@@ -47,14 +47,14 @@ import org.acmsl.commons.patterns.Decorator;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface AttributeDecorator
-    extends  Attribute,
+    extends  Attribute<DecoratedString>,
              Decorator
 {
     /**
      * Retrieves the decorated <code>Attribute</code>.
      * @return such instance.
      */
-    public Attribute getAttribute();
+    public Attribute<String> getAttribute();
 
     /**
      * Retrieves whether the attribute is a clob or not.

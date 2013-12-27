@@ -1,6 +1,6 @@
 - Create a new StringTemplate template TemplateBuildHandler.stg in folder src/main/resources/org/acmsl/queryj/templates/packaging;
 - Add QueryJ header;
-- Add comment: Defines the rules to generate QueryJ's TemplateBuildHandlers.
+- Add comment: Defines the rules to generate QueryJ's TemplateBuildHandlers.;
 - Declare the group TemplateBuildHandler;
 - Import "common.stg";
 - Define a rule source(C):
@@ -8,10 +8,18 @@
   - Add comment: @param C the context.;
   - Call <sourceImpl(def=C.templateDef, C=C)>;
 - Define a rule sourceImpl(def, C):
-  - Add comment: Generates a TemplateBuildHandler source file.;
+  - Add comment: Generates a TemplateBuildHandler source file according to a TemplateDef.;
   - Add comment: @param def the template definition.;
   - Add comment: @param C the context.;
-  - Call <java_header(description="Build handler for <def.name.capitalized>Templates.", C=C)>;
+  - Call
+--
+<java_header(
+    description=[ "Build handler for", def.name.capitalized, "Templates" ],
+    description_oneline=true,
+    filename=C.class_name,
+    template="org/acmsl/queryj/templates/packaging/TemplateBuildHandler.stg",
+    C=C)>
+--
   - Call <package_declaration(packageName=def.packageName)>;
   - Write the QueryJ-Core import group;
   - Write the JetBrains import group;
@@ -27,7 +35,7 @@
   timestamp=C.timestamp)>
  */
 @ThreadSafe
-public class <def.name.capitalized>TemplateBuildHandler
+public class <C.class_name>
     extends Base<def.type.capitalized>TemplateBuildHandler\<<def.name.capitalized>Template, <def.name.capitalized>TemplateFactory\>
 {
     /**

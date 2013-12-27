@@ -43,15 +43,11 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.FillAdapterHandler;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Chain;
 
 /*
  * Importing some JetBrains annotations.
@@ -66,6 +62,7 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -101,18 +98,16 @@ public class BasePerCustomResultFillTemplateChain
     }
 
     /**
-     * Adds additional per-custom-result handlers.
-     * @param chain the chain to be configured.
+     * Retrieves the additional per-custom-result handlers.
      * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
+     * @return such handlers.
      */
+    @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    protected void addHandlers(
-        @NotNull final Chain<FillHandler<?>> chain,
-        @NotNull final PerCustomResultTemplateContext context,
-        final boolean relevantOnly)
+    protected List<FillHandler<?>> getHandlers(@NotNull final PerCustomResultTemplateContext context)
     {
+<<<<<<< HEAD
         add(
             chain,
             new TemplateContextFillAdapterHandler(new CustomResultHandler(context)),
@@ -128,5 +123,28 @@ public class BasePerCustomResultFillTemplateChain
             (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, ResultIdHandler, DecoratedString>(
                 new ResultIdHandler(context)),
             relevantOnly);
+=======
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(3);
+
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerCustomResultTemplateContext, CustomResultHandler, ResultDecorator>(
+                        new CustomResultHandler(context)));
+
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerCustomResultTemplateContext, CustomResultTypeImportsHandler, List<String>>(
+                        new CustomResultTypeImportsHandler(context)));
+
+        result.add(
+            (FillAdapterHandler)
+                new TemplateContextFillAdapterHandler
+                    <PerCustomResultTemplateContext, ResultIdHandler, DecoratedString>(
+                        new ResultIdHandler(context)));
+
+        return result;
+>>>>>>> b37280242ce72f7e8a1999ed71e17f11de7c823a
     }
 }

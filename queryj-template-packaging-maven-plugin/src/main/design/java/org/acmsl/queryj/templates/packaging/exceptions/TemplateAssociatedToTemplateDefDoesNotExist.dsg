@@ -1,0 +1,12 @@
+- Create a new class TemplateAssociatedToTemplateDefDoesNotExist.java, in package org.acmsl.queryj.templates.packaging.exceptions;
+- Add comment: Error when the template described in a TemplateDef does not exist.
+- Make it extend TemplatePackagingCheckedException;
+- Add serialVersionUID field;
+- Define a constructor, accepting a TemplateDef instance:
+  - Add comment: Creates an exception representing a TemplateDef pointing to a missing template.;
+  - Add comment: @param templateDef the {@link TemplateDef}.
+  - Call super("template.associated.to.templatedef.does.not.exist", new Object[] { templateDef.getFile().getAbsolutePath().replaceAll("\\.def$", ""), templateDef.getName(), templateDef.getFile().getAbsolutePath() });
+- Add an entry in the "template-pacxkaging-exceptions" message bundle:
+  - english: template.associated.to.templatedef.does.not.exist=The template {0} associated to {1} ({2}) does not exist.
+  - spanish: template.associated.to.templatedef.does.not.exist=La plantilla {0} referenciada en la definición {1} ({2}) no existe.
+- Fix import groups;

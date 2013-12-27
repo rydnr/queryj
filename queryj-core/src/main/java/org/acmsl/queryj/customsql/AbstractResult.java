@@ -193,7 +193,7 @@ public abstract class AbstractResult
     protected int hashCode(
         final String id,
         final String matches,
-        final Collection propertyRefs)
+        final Collection<PropertyRef> propertyRefs)
     {
         return
             (id + "@#" + matches + "@#" + propertyRefs)
@@ -233,7 +233,7 @@ public abstract class AbstractResult
         @NotNull final Result candidate,
         @NotNull final String id,
         @NotNull final String matches,
-        final Collection propertyRefs)
+        final Collection<PropertyRef> propertyRefs)
     {
         return
             (   (id.equalsIgnoreCase(candidate.getId())
@@ -267,7 +267,7 @@ public abstract class AbstractResult
     protected String toString(
         final String id,
         final String matches,
-        final Collection propertyRefs)
+        final Collection<PropertyRef> propertyRefs)
     {
         return
               getClass().getName()
@@ -283,6 +283,7 @@ public abstract class AbstractResult
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
+    @Override
     public int compareTo(@Nullable final Result object)
         throws  ClassCastException
     {

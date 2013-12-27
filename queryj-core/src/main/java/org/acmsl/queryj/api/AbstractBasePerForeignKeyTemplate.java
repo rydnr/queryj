@@ -36,6 +36,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.exceptions.InvalidPerForeignKeyTemplateException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
@@ -75,6 +76,7 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends PerForeignKeyT
      * given information.
      * @param context the {@link PerForeignKeyTemplateContext} instance.
      */
+    @SuppressWarnings("unused")
     public AbstractBasePerForeignKeyTemplate(@NotNull final C context)
     {
         super(context);
@@ -111,10 +113,10 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends PerForeignKeyT
      */
     @NotNull
     protected String buildHeader(
-        final String templateName, @NotNull final ForeignKey foreignKey)
+        final String templateName, @NotNull final ForeignKey<String> foreignKey)
     {
         return
-              GENERATING + templateName + " for "
+              Literals.GENERATING + templateName + " for "
             + foreignKey.getSourceTableName()
             + "(" + concat(foreignKey.getAttributes(), ",") + ")"
             + "->"

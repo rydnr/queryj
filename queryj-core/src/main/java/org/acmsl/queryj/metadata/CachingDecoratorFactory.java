@@ -35,12 +35,14 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.Table;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -50,7 +52,6 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -112,11 +113,24 @@ public class CachingDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
      */
+    @Override
     @NotNull
-    public AttributeDecorator createDecorator(
-        @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager)
+    @SuppressWarnings("unchecked")
+    public <V, DecoratedString> Attribute<DecoratedString> createDecorator(
+        @NotNull final Attribute<V> attribute, @NotNull final MetadataManager metadataManager)
     {
-        return new CachingAttributeDecorator(attribute, metadataManager);
+        @NotNull final Attribute<DecoratedString> result;
+
+        if (attribute.getName() instanceof String)
+        {
+            result = (Attribute<DecoratedString>) new CachingAttributeDecorator((Attribute<String>) attribute, metadataManager);
+        }
+        else
+        {
+            result = (Attribute<DecoratedString>) attribute;
+        }
+
+        return result;
     }
 
     /**
@@ -126,6 +140,7 @@ public class CachingDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated property for the concrete template.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public PropertyDecorator createDecorator(
         @NotNull final Property property, @NotNull final MetadataManager metadataManager)
@@ -171,7 +186,6 @@ public class CachingDecoratorFactory
             new CachingSqlDecorator(
                 sql, customSqlProvider, metadataManager);
     }
-
 
     /**
      * Creates an <code>ParameterDecorator</code> for given
@@ -227,7 +241,7 @@ public class CachingDecoratorFactory
     {
         @Nullable TableDecorator result = null;
 
-        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(table);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(table);
 
         if (t_Table != null)
         {
@@ -245,12 +259,12 @@ public class CachingDecoratorFactory
      */
     @NotNull
     @Override
-    public List<Attribute> decorateAttributes(
+    public List<Attribute<DecoratedString>> decorateAttributes(
         @NotNull final String table, @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<Attribute> result = null;
+        @Nullable List<Attribute<DecoratedString>> result = null;
 
-        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(table);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(table);
 
         if (t_Table != null)
         {
@@ -259,7 +273,7 @@ public class CachingDecoratorFactory
 
         if (result == null)
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<Attribute<DecoratedString>>(0);
         }
 
         return result;
@@ -273,28 +287,27 @@ public class CachingDecoratorFactory
      */
     @NotNull
     @Override
-    public List<Attribute> decorateAttributes(
-        @NotNull final List<Attribute> attributes, @NotNull final MetadataManager metadataManager)
+    @SuppressWarnings("unchecked")
+    public <V> List<Attribute<DecoratedString>> decorateAttributes(
+        @NotNull final List<Attribute<V>> attributes, @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<Attribute> result = null;
+        @NotNull final List<Attribute<DecoratedString>> result =
+            new ArrayList<Attribute<DecoratedString>>(attributes.size());
 
-        for (@Nullable final Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<V> t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {
-                if (result == null)
+                if (t_Attribute.getName() instanceof String)
                 {
-                    result = new ArrayList<Attribute>(attributes.size());
+                    result.add(
+                        new CachingAttributeDecorator((Attribute<String>) t_Attribute, metadataManager));
                 }
-
-                result.add(
-                    new CachingAttributeDecorator(t_Attribute, metadataManager));
+                else
+                {
+                    result.add((Attribute<DecoratedString>) t_Attribute);
+                }
             }
-        }
-
-        if (result == null)
-        {
-            result = new ArrayList<Attribute>(0);
         }
 
         return result;
@@ -308,34 +321,31 @@ public class CachingDecoratorFactory
      */
     @NotNull
     @Override
-    public List<Attribute> decoratePrimaryKey(
+    public List<Attribute<DecoratedString>> decoratePrimaryKey(
         @NotNull final String table, @NotNull final MetadataManager metadataManager)
     {
-        @Nullable List<Attribute> result = null;
+        @NotNull final List<Attribute<DecoratedString>> result;
 
-        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(table);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(table);
 
         if (t_Table != null)
         {
-            @NotNull final List<Attribute> t_lPrimaryKey = t_Table.getPrimaryKey();
+            @NotNull final List<Attribute<String>> t_lPrimaryKey = t_Table.getPrimaryKey();
 
-            for (@Nullable final Attribute t_Attribute : t_lPrimaryKey)
+            result = new ArrayList<Attribute<DecoratedString>>(t_lPrimaryKey.size());
+
+            for (@Nullable final Attribute<String> t_Attribute : t_lPrimaryKey)
             {
                 if (t_Attribute != null)
                 {
-                    if (result == null)
-                    {
-                        result = new ArrayList<Attribute>(t_lPrimaryKey.size());
-                    }
                     result.add(
                         new CachingAttributeDecorator(t_Attribute, metadataManager));
                 }
             }
         }
-
-        if (result == null)
+        else
         {
-            result = new ArrayList<Attribute>(0);
+            result = new ArrayList<Attribute<DecoratedString>>(0);
         }
 
         return result;
@@ -355,7 +365,7 @@ public class CachingDecoratorFactory
     @Override
     public ForeignKeyDecorator createDecorator(
         @NotNull final String sourceTableName,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final String targetTableName,
         final boolean allowsNull,
         @NotNull final MetadataManager metadataManager,
@@ -443,7 +453,7 @@ public class CachingDecoratorFactory
         {
             exceptionToThrow =
                 new ClassCastException(
-                      "Cannot compare "
+                      Literals.CANNOT_COMPARE
                     + object
                     + " with "
                     + toString());

@@ -41,6 +41,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.Literals;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.TemplateHandlerBundleTemplate;
 import org.acmsl.queryj.templates.packaging.TemplateHandlerBundleTemplateFactory;
@@ -68,7 +69,10 @@ import java.util.List;
  */
 @ThreadSafe
 public class TemplateHandlerBundleTemplateBuildHandler
-    extends TemplatePackagingBuildHandler<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>, TemplateHandlerBundleTemplateFactory, DefaultTemplatePackagingContext>
+    extends PerTemplateDefBuildHandler
+                <TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>,
+                 TemplateHandlerBundleTemplateFactory,
+                 DefaultTemplatePackagingContext>
 {
     /**
      * Builds the context from given parameters.
@@ -79,7 +83,7 @@ public class TemplateHandlerBundleTemplateBuildHandler
     @NotNull
     @Override
     protected DefaultTemplatePackagingContext buildContext(
-        @NotNull final TemplateDef templateDef, @NotNull final QueryJCommand parameters)
+        @NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand parameters)
     {
         return buildDefaultContext(templateDef, parameters);
     }
@@ -104,7 +108,7 @@ public class TemplateHandlerBundleTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return "HandlerBundle";
+        return Literals.TEMPLATE_HANDLER_BUNDLE;
     }
 
     /**
@@ -117,7 +121,8 @@ public class TemplateHandlerBundleTemplateBuildHandler
         @NotNull final List<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>> templates,
         @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper<List<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>>>(parameters)
+        new QueryJCommandWrapper
+            <List<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>>>(parameters)
             .setSetting(TEMPLATE_HANDLER_BUNDLE_TEMPLATES, templates);
     }
 
@@ -130,6 +135,6 @@ public class TemplateHandlerBundleTemplateBuildHandler
     @Override
     protected String retrieveOutputPackage(@NotNull final QueryJCommand parameters)
     {
-        return OUTPUT_PACKAGE + ".handlers";
+        return OUTPUT_PACKAGE + Literals.DOT_HANDLERS;
     }
 }

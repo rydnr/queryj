@@ -1,0 +1,49 @@
+- Create a new StringTemplate template TemplateGenerator.stg in folder src/main/resources/org/acmsl/queryj/templates/packaging;
+- Add QueryJ header;
+- Add comment: Defines the rules to generate QueryJ's TemplateGenerators.;
+- Declare the group TemplateGenerator;
+- Import "common.stg";
+- Define a rule source(C):
+  - Add comment: Generates a TemplateGenerator source file.;
+  - Add comment: @param C the context.;
+  - Call <sourceImpl(def=C.templateDef, C=C)>;
+- Define a rule sourceImpl(def, C):
+  - Add comment: Generates a TemplateGenerator source file according to a TemplateDef.;
+  - Add comment: @param def the template definition.;
+  - Add comment: @param C the context.;
+  - Call
+--
+<java_header(
+    description=[ "Generator for", def.name.capitalized, "Templates" ],
+    description_oneline=true,
+    filename=C.class_name,
+    template="org/acmsl/queryj/templates/packaging/TemplateGenerator.stg",
+    C=C)>
+--
+  - Call <package_declaration(packageName=def.packageName)>;
+  - Write QueryJ-Core import group;
+  - Write ACM-SL Commons import group;
+  - Write JetBrains import group;
+  - Write checkthread.org import group;
+  - Write JDK import group;
+  - Call <class(def=def, C=C)>;
+- Define a rule class(def, C):
+  - Add comment: Generator for {@link <def.name.capitalized>Template}s.;
+  - Call class_common_javadoc template:
+    - Pass the template name;
+    - Pass the timestamp from the context;
+  - Add @ThreadSafe class annotation;
+  - Define the class with <C.class_name> as name;
+  - Make it extend AbstractQueryJTemplateGenerator, bound to <def.name.capitalized>Template;
+  - Make it implement <def.type.name.capitalized>TemplateGenerator, bound to <def.name.capitalized>Template;
+  - Define a constructor <C.class_name>(boolean, int):
+    - Add comment: Creates a new generator instance with given settings.;
+    - Add comment: @param caching whether to enable caching.;
+    - Add comment: @param threadCount the number of threads to use.;
+    - Call super(caching, threadCount);
+  - Implement getDecoratorFactory() method:
+    - Add comment: @{inheritDoc};
+    - Add @Override annotation;
+    - Add @NotNull annotation;
+    - Return CachingDecoratorFactory.getInstance();
+  - Fix group imports;

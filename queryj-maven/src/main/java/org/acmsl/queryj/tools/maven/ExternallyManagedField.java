@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Maven
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -31,6 +31,9 @@
  */
 package org.acmsl.queryj.tools.maven;
 
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,7 +77,7 @@ public class ExternallyManagedField
      * Specifies the name.
      * @param name such name.
      */
-    protected final void immutableSetName(final String name)
+    protected final void immutableSetName(@NotNull final String name)
     {
         m__strName = name;
     }
@@ -83,7 +86,7 @@ public class ExternallyManagedField
      * Specifies the name.
      * @param name such name.
      */
-    public void setName(final String name)
+    public void setName(@NotNull final String name)
     {
         immutableSetName(name);
     }
@@ -92,6 +95,7 @@ public class ExternallyManagedField
      * Returns the name.
      * @return such value.
      */
+    @NotNull
     protected final String immutableGetName()
     {
         return m__strName;
@@ -101,6 +105,7 @@ public class ExternallyManagedField
      * Returns the name.
      * @return such value.
      */
+    @NotNull
     public String getName()
     {
         return immutableGetName();
@@ -110,7 +115,7 @@ public class ExternallyManagedField
      * Specifies the table name.
      * @param tableName such name.
      */
-    protected final void immutableSetTableName(final String tableName)
+    protected final void immutableSetTableName(@NotNull final String tableName)
     {
         m__strTableName = tableName;
     }
@@ -119,7 +124,7 @@ public class ExternallyManagedField
      * Specifies the table name.
      * @param tableName such name.
      */
-    public void setTableName(final String tableName)
+    public void setTableName(@NotNull final String tableName)
     {
         immutableSetTableName(tableName);
     }
@@ -128,6 +133,7 @@ public class ExternallyManagedField
      * Returns the table name.
      * @return such value.
      */
+    @NotNull
     protected final String immutableGetTableName()
     {
         return m__strTableName;
@@ -137,6 +143,7 @@ public class ExternallyManagedField
      * Returns the table name.
      * @return such value.
      */
+    @NotNull
     public String getTableName()
     {
         return immutableGetTableName();
@@ -146,7 +153,7 @@ public class ExternallyManagedField
      * Specifies the keyword.
      * @param keyword such value.
      */
-    protected final void immutableSetKeyword(final String keyword)
+    protected final void immutableSetKeyword(@NotNull final String keyword)
     {
         m__strKeyword = keyword;
     }
@@ -155,7 +162,8 @@ public class ExternallyManagedField
      * Specifies the keyword.
      * @param keyword such value.
      */
-    public void setKeyword(final String keyword)
+    @SuppressWarnings("unused")
+    public void setKeyword(@NotNull final String keyword)
     {
         immutableSetKeyword(keyword);
     }
@@ -164,6 +172,7 @@ public class ExternallyManagedField
      * Returns the keyword.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetKeyword() 
     {
         return m__strKeyword;
@@ -173,6 +182,7 @@ public class ExternallyManagedField
      * Returns the keyword.
      * @return such value.
      */
+    @Nullable
     public String getKeyword()
     {
         return immutableGetKeyword();
@@ -182,7 +192,7 @@ public class ExternallyManagedField
      * Specifies the retrieval query.
      * @param query such query.
      */
-    protected final void immutableSetRetrievalQuery(final String query)
+    protected final void immutableSetRetrievalQuery(@NotNull final String query)
     {
         m__strRetrievalQuery = query;
     }
@@ -191,7 +201,8 @@ public class ExternallyManagedField
      * Specifies the retrieval query.
      * @param query such query.
      */
-    public void setRetrievalQuery(final String query)
+    @SuppressWarnings("unused")
+    public void setRetrievalQuery(@NotNull final String query)
     {
         immutableSetRetrievalQuery(query);
     }
@@ -209,6 +220,7 @@ public class ExternallyManagedField
      * Returns the retrieval query.
      * @return such value.
      */
+    @Nullable
     public String getRetrievalQuery()
     {
         return immutableGetRetrievalQuery();
@@ -217,6 +229,8 @@ public class ExternallyManagedField
     /**
      * {@inheritDoc}
      */
+    @Override
+    @NotNull
     public String toString()
     {
         return
@@ -238,14 +252,15 @@ public class ExternallyManagedField
      * @param retrievalQuery the retrieval query.
      * @return the formatted text.
      */
+    @NotNull
     protected String toString(
-        final String className,
-        final String tableName,
-        final String name,
+        @NotNull final String className,
+        @NotNull final String tableName,
+        @NotNull final String name,
         @Nullable final String keyword,
         @Nullable final String retrievalQuery)
     {
-        @NotNull StringBuilder result = new StringBuilder();
+        @NotNull final StringBuilder result = new StringBuilder();
 
         result.append("{ class-name : \"");
         result.append(className);

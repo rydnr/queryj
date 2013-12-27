@@ -78,165 +78,120 @@ public class CachingTableDecorator
 
     private static final long serialVersionUID = 7125795956047030470L;
     /**
-     * The cached uppercased name.
-     */
-    private String m__strCachedNameUppercased;
-
-    /**
-     * The cached capitalized name.
-     */
-    private String m__strCachedNameCapitalized;
-
-    /**
-     * The cached lowercased name.
-     */
-    private String m__strCachedNameLowercased;
-
-    /**
-     * The cached uncapitalized name.
-     */
-    private String m__strCachedUncapitalizedName;
-
-    /**
-     * The cached VO name.
-     */
-    private String m__strCachedVoName;
-
-    /**
-     * The cached normalized lowercased name.
-     */
-    private String m__strCachedNameNormalizedLowercased;
-
-    /**
-     * The cached normalized lowercased singular name.
-     */
-    private String m__strCachedSingularNameNormalizedLowercased;
-
-    /**
-     * The cached normalized name.
-     */
-    private String m__strCachedNameNormalized;
-
-    /**
-     * The cached capitalized singular name.
-     */
-    private String m__strCachedSingularNameCapitalized;
-
-    /**
      * The cached primary key.
      */
-    private List<Attribute> m__lCachedPrimaryKey;
+    private List<Attribute<DecoratedString>> m__lCachedPrimaryKey;
 
     /**
      * The cached non-readonly attributes.
      */
-    private List<Attribute> m__lCachedNonReadOnlyAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedNonReadOnlyAttributes;
 
     /**
      * The cached non-readonly attributes, including parent's.
      */
-    private List<Attribute> m__lCachedAllNonReadOnlyAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllNonReadOnlyAttributes;
 
     /**
      * The cached non-parent attributes.
      */
-    private List<Attribute> m__lCachedNonParentAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedNonParentAttributes;
 
     /**
      * The cached parent table.
      */
-    private Table m__CachedParentTable;
+    private Table<DecoratedString, Attribute<DecoratedString>> m__CachedParentTable;
 
     /**
      * The cached all attributes.
      */
-    private List<Attribute> m__lCachedAllAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllAttributes;
 
     /**
      * The cached attributes.
      */
-    private List<Attribute> m__lCachedAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAttributes;
 
     /**
      * The cached non-parent non-managed-externally attributes.
      */
-    private List<Attribute> m__lCachedNonParentNonExternallyManagedAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedNonParentNonExternallyManagedAttributes;
 
     /**
      * The cached parent's all attributes and the non-parent own attributes.
      */
-    private List<Attribute> m__lCachedAllParentAndNonParentAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllParentAndNonParentAttributes;
 
     /**
      * The cached parent's all attributes and the non-parent non-managed-externally attributes.
      */
-    private List<Attribute> m__lCachedAllParentAndNonParentNonExternallyManagedAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllParentAndNonParentNonExternallyManagedAttributes;
 
     /**
      * The cached all non-managed externally attributes.
      */
-    private List<Attribute> m__lCachedAllNonExternallyManagedAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllNonExternallyManagedAttributes;
 
     /**
      * The cached all parent and non-parent non-managed-externally read-only attributes.
      */
-    private List<Attribute> m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes;
 
     /**
      * The cached all parent and non-parent non-read-only attributes.
      */
-    private List<Attribute> m__lCachedAllParentAndNonParentNonReadOnlyAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllParentAndNonParentNonReadOnlyAttributes;
 
     /**
      * The cached all parent and non-parent read-only attributes.
      */
-    private List<Attribute> m__lCachedAllParentAndNonParentReadOnlyAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllParentAndNonParentReadOnlyAttributes;
 
     /**
      * The cached non-parent non-managed-externally attributes, plus the primary key.
      */
-    private List<Attribute> m__lCachedNonParentNonExternallyManagedPlusPkAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedNonParentNonExternallyManagedPlusPkAttributes;
 
     /**
      * The cached all non-managed-externally attributes, plus the primary key.
      */
-    private List<Attribute> m__lCachedAllNonExternallyManagedPlusPkAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllNonExternallyManagedPlusPkAttributes;
 
     /**
      * The cached all non-managed-externally, non-readonly attributes, plus the primary key.
      */
-    private List<Attribute> m__lCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes;
 
     /**
      * The cached all parent and non-parent non-managed-externally, non-readonly attributes,
      * plus the primary key.
      */
-    private List<Attribute> m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes;
 
     /**
      * The cached non-parent attributes, plus the primary key.
      */
-    private List<Attribute> m__lCachedNonParentPlusPkAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedNonParentPlusPkAttributes;
 
     /**
      * The cached non-readonly, except the externally-managed attributes.
      */
-    private List<Attribute> m__lCachedAllNonReadOnlyButExternallyManagedAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllNonReadOnlyButExternallyManagedAttributes;
 
     /**
      * The cached non-primary-key, non-readonly attributes.
      */
-    private List<Attribute> m__lCachedNonPrimaryKeyNonReadOnlyAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedNonPrimaryKeyNonReadOnlyAttributes;
 
     /**
      * The cached all parent tables.
      */
-    private List<Table> m__lCachedAllParentTables;
+    private List<Table<DecoratedString, Attribute<DecoratedString>>> m__lCachedAllParentTables;
 
     /**
      * The cached static rows.
      */
-    private List<Row> m__lCachedStaticContents;
+    private List<Row<DecoratedString>> m__lCachedStaticContents;
 
     /**
      * The cached dynamic queries.
@@ -246,12 +201,7 @@ public class CachingTableDecorator
     /**
      * The cached non-primary-key attributes.
      */
-    private List<Attribute> m__lCachedNonPrimaryKeyAttributes;
-
-    /**
-     * The cached value-object name, uncapitalized;
-     */
-    private String m__strCachedVoNameUncapitalized;
+    private List<Attribute<DecoratedString>> m__lCachedNonPrimaryKeyAttributes;
 
     /**
      * The cached custom selects.
@@ -271,17 +221,17 @@ public class CachingTableDecorator
     /**
      * The cached child attributes.
      */
-    private List<Attribute> m__lCachedChildAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedChildAttributes;
 
     /**
      * The cached foreign keys.
      */
-    private List<ForeignKey> m__lCachedForeignKeys;
+    private List<ForeignKey<DecoratedString>> m__lCachedForeignKeys;
 
     /**
      * The cached parent foreign key.
      */
-    private ForeignKey m__CachedParentForeignKey;
+    private ForeignKey<DecoratedString> m__CachedParentForeignKey;
 
     /**
      * Whether the parent foreign key was already retrieved.
@@ -289,29 +239,19 @@ public class CachingTableDecorator
     private boolean m__bParentForeignKeyAlreadyRetrieved;
 
     /**
-     * The cached version of the singular name, in upper case.
-     */
-    private String m__strCachedSingularNameUppercased;
-
-    /**
-     * The cached version of the singular name, in lower case.
-     */
-    private String m__strCachedSingularNameLowercased;
-
-    /**
      * The cached read-only attributes.
      */
-    private List<Attribute> m__lCachedReadOnlyAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedReadOnlyAttributes;
 
     /**
      * The cached non-read only, non-primary key attributes.
      */
-    private List<Attribute> m__lCachedNonPrimaryKeyReadOnlyAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedNonPrimaryKeyReadOnlyAttributes;
 
     /**
      * The cached externally-managed attributes.
      */
-    private List<AttributeDecorator> m__lCachedAllExternallyManagedAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAllExternallyManagedAttributes;
 
     /**
      * The cached list of different results.
@@ -327,7 +267,7 @@ public class CachingTableDecorator
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
     public CachingTableDecorator(
-        @NotNull final Table table,
+        @NotNull final Table<String, Attribute<String>> table,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -339,7 +279,7 @@ public class CachingTableDecorator
      * Specifies the cached primary key.
      * @param list the attribute list.
      */
-    protected final void immutableSetCachedPrimaryKey(@NotNull final List<Attribute> list)
+    protected final void immutableSetCachedPrimaryKey(@NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedPrimaryKey = list;
     }
@@ -348,7 +288,7 @@ public class CachingTableDecorator
      * Specifies the cached primary key.
      * @param list the attribute list.
      */
-    protected void setCachedPrimaryKey(@NotNull final List<Attribute> list)
+    protected void setCachedPrimaryKey(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedPrimaryKey(list);
     }
@@ -358,7 +298,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    public List<Attribute> getCachedPrimaryKey()
+    public List<Attribute<DecoratedString>> getCachedPrimaryKey()
     {
         return m__lCachedPrimaryKey;
     }
@@ -369,15 +309,13 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Attribute> getPrimaryKey()
+    public List<Attribute<DecoratedString>> getPrimaryKey()
     {
-        @Nullable List<Attribute> result = getCachedPrimaryKey();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedPrimaryKey();
 
         if (result == null)
         {
             result = super.getPrimaryKey();
-
-            result = decorateAttributes(result, getMetadataManager(), getDecoratorFactory());
 
             setCachedPrimaryKey(result);
         }
@@ -391,7 +329,7 @@ public class CachingTableDecorator
      * @param attributes the attributes.
      */
     protected final void immutableSetCachedAllAttributes(
-        @NotNull final List<Attribute> attributes)
+        @NotNull final List<Attribute<DecoratedString>> attributes)
     {
         m__lCachedAllAttributes = attributes;
     }
@@ -400,7 +338,7 @@ public class CachingTableDecorator
      * Specifies the cached all attributes.
      * @param attributes the attributes.
      */
-    protected void setCachedAllAttributes(@NotNull final List<Attribute> attributes)
+    protected void setCachedAllAttributes(@NotNull final List<Attribute<DecoratedString>> attributes)
     {
         immutableSetCachedAllAttributes(attributes);
     }
@@ -410,7 +348,7 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @Nullable
-    protected List<Attribute> getCachedAllAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllAttributes()
     {
         return m__lCachedAllAttributes;
     }
@@ -420,9 +358,9 @@ public class CachingTableDecorator
      * @return such information.
      */
     @NotNull
-    public List<Attribute> getAllAttributes()
+    public List<Attribute<DecoratedString>> getAllAttributes()
     {
-        List<Attribute> result = getCachedAllAttributes();
+        List<Attribute<DecoratedString>> result = getCachedAllAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
@@ -438,7 +376,7 @@ public class CachingTableDecorator
      * Specifies the cached attributes.
      * @param attributes the attributes.
      */
-    protected final void immutableSetCachedAttributes(@NotNull final List<Attribute> attributes)
+    protected final void immutableSetCachedAttributes(@NotNull final List<Attribute<DecoratedString>> attributes)
     {
         m__lCachedAttributes = attributes;
     }
@@ -447,7 +385,7 @@ public class CachingTableDecorator
      * Specifies the cached attributes.
      * @param attributes the attributes.
      */
-    protected void setCachedAttributes(@NotNull final List<Attribute> attributes)
+    protected void setCachedAttributes(@NotNull final List<Attribute<DecoratedString>> attributes)
     {
         immutableSetCachedAttributes(attributes);
     }
@@ -457,7 +395,7 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @Nullable
-    protected List<Attribute> getCachedAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAttributes()
     {
         return m__lCachedAttributes;
     }
@@ -467,9 +405,9 @@ public class CachingTableDecorator
      * @return such information.
      */
     @NotNull
-    public List<Attribute> getAttributes()
+    public List<Attribute<DecoratedString>> getAttributes()
     {
-        List<Attribute> result = getCachedAttributes();
+        List<Attribute<DecoratedString>> result = getCachedAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
@@ -485,7 +423,8 @@ public class CachingTableDecorator
      * Specifies the cached parent table.
      * @param parent such table.
      */
-    protected final void immutableSetCachedParentTable(@NotNull final Table parent)
+    protected final void immutableSetCachedParentTable(
+        @NotNull final Table<DecoratedString, Attribute<DecoratedString>> parent)
     {
         m__CachedParentTable = parent;
     }
@@ -494,7 +433,7 @@ public class CachingTableDecorator
      * Specifies the cached parent table.
      * @param parent such table.
      */
-    protected void setCachedParentTable(@NotNull final Table parent)
+    protected void setCachedParentTable(@NotNull final Table<DecoratedString, Attribute<DecoratedString>> parent)
     {
         immutableSetCachedParentTable(parent);
     }
@@ -504,7 +443,7 @@ public class CachingTableDecorator
      * @return such table.
      */
     @Nullable
-    public Table getCachedParentTable()
+    public Table<DecoratedString, Attribute<DecoratedString>> getCachedParentTable()
     {
         return m__CachedParentTable;
     }
@@ -514,9 +453,9 @@ public class CachingTableDecorator
      * @return such information.
      */
     @Nullable
-    public Table getParentTable()
+    public Table<DecoratedString, Attribute<DecoratedString>> getParentTable()
     {
-        @Nullable Table result = getCachedParentTable();
+        @Nullable Table<DecoratedString, Attribute<DecoratedString>> result = getCachedParentTable();
 
         if  (result == null)
         {
@@ -534,7 +473,7 @@ public class CachingTableDecorator
      * Specifies the cached, non-parent attributes.
      * @param attrs such attributes.
      */
-    protected final void immutableSetCachedNonReadOnlyAttributes(@NotNull final List<Attribute> attrs)
+    protected final void immutableSetCachedNonReadOnlyAttributes(@NotNull final List<Attribute<DecoratedString>> attrs)
     {
         m__lCachedNonReadOnlyAttributes = attrs;
     }
@@ -543,7 +482,7 @@ public class CachingTableDecorator
      * Specifies the cached, non-read-only attributes.
      * @param attrs such attributes.
      */
-    protected void setCachedNonReadOnlyAttributes(@NotNull final List<Attribute> attrs)
+    protected void setCachedNonReadOnlyAttributes(@NotNull final List<Attribute<DecoratedString>> attrs)
     {
         immutableSetCachedNonReadOnlyAttributes(attrs);
     }
@@ -553,7 +492,7 @@ public class CachingTableDecorator
      * @return such information.
      */
     @Nullable
-    protected List<Attribute> getCachedNonReadOnlyAttributes()
+    protected List<Attribute<DecoratedString>> getCachedNonReadOnlyAttributes()
     {
         return m__lCachedNonReadOnlyAttributes;
     }
@@ -564,9 +503,9 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Attribute> getNonReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getNonReadOnlyAttributes()
     {
-        List<Attribute> result = getCachedNonReadOnlyAttributes();
+        List<Attribute<DecoratedString>> result = getCachedNonReadOnlyAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
@@ -582,7 +521,7 @@ public class CachingTableDecorator
      * Specifies the cached, non-parent attributes.
      * @param attrs such attributes.
      */
-    protected final void immutableSetCachedAllNonReadOnlyAttributes(@NotNull final List<Attribute> attrs)
+    protected final void immutableSetCachedAllNonReadOnlyAttributes(@NotNull final List<Attribute<DecoratedString>> attrs)
     {
         m__lCachedAllNonReadOnlyAttributes = attrs;
     }
@@ -591,7 +530,7 @@ public class CachingTableDecorator
      * Specifies the cached, non-read-only attributes, including parent's.
      * @param attrs such attributes.
      */
-    protected void setCachedAllNonReadOnlyAttributes(@NotNull final List<Attribute> attrs)
+    protected void setCachedAllNonReadOnlyAttributes(@NotNull final List<Attribute<DecoratedString>> attrs)
     {
         immutableSetCachedAllNonReadOnlyAttributes(attrs);
     }
@@ -601,7 +540,7 @@ public class CachingTableDecorator
      * @return such information.
      */
     @Nullable
-    protected List<Attribute> getCachedAllNonReadOnlyAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllNonReadOnlyAttributes()
     {
         return m__lCachedAllNonReadOnlyAttributes;
     }
@@ -612,9 +551,9 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Attribute> getAllNonReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getAllNonReadOnlyAttributes()
     {
-        List<Attribute> result = getCachedAllNonReadOnlyAttributes();
+        List<Attribute<DecoratedString>> result = getCachedAllNonReadOnlyAttributes();
 
         if  (   (result == null)
                 || (result.size() == 0))
@@ -630,7 +569,7 @@ public class CachingTableDecorator
      * Specifies the cached, non-parent attributes.
      * @param attrs such attributes.
      */
-    protected final void immutableSetCachedNonParentAttributes(@NotNull final List<Attribute> attrs)
+    protected final void immutableSetCachedNonParentAttributes(@NotNull final List<Attribute<DecoratedString>> attrs)
     {
         m__lCachedNonParentAttributes = attrs;
     }
@@ -639,7 +578,7 @@ public class CachingTableDecorator
      * Specifies the cached, non-parent attributes.
      * @param attrs such attributes.
      */
-    protected void setCachedNonParentAttributes(@NotNull final List<Attribute> attrs)
+    protected void setCachedNonParentAttributes(@NotNull final List<Attribute<DecoratedString>> attrs)
     {
         immutableSetCachedNonParentAttributes(attrs);
     }
@@ -649,7 +588,7 @@ public class CachingTableDecorator
      * @return such information.
      */
     @Nullable
-    protected List<Attribute> getCachedNonParentAttributes()
+    protected List<Attribute<DecoratedString>> getCachedNonParentAttributes()
     {
         return m__lCachedNonParentAttributes;
     }
@@ -659,9 +598,9 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getNonParentAttributes()
+    public List<Attribute<DecoratedString>> getNonParentAttributes()
     {
-        @Nullable List<Attribute> result = getCachedNonParentAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedNonParentAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
@@ -670,477 +609,6 @@ public class CachingTableDecorator
             setCachedNonParentAttributes(result);
         }
 
-        return result;
-    }
-
-    /**
-     * Specifies the cached uppercased name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameUppercased(
-        @NotNull final String value)
-    {
-        m__strCachedNameUppercased = value;
-    }
-    
-    /**
-     * Specifies the cached uppercased name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameUppercased(@NotNull final String value)
-    {
-        immutableSetCachedNameUppercased(value);
-    }
-
-    /**
-     * Retrieves the cached uppercased name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameUppercased()
-    {
-        return m__strCachedNameUppercased;
-    }
-
-    /**
-     * Retrieves the name, in upper case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameUppercased()
-    {
-        @Nullable String result = getCachedNameUppercased();
-        
-        if  (result == null)
-        {
-            result = super.getNameUppercased();
-            setCachedNameUppercased(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached capitalized name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameCapitalized(
-        @NotNull final String value)
-    {
-        m__strCachedNameCapitalized = value;
-    }
-    
-    /**
-     * Specifies the cached capitalized name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameCapitalized(@NotNull final String value)
-    {
-        immutableSetCachedNameCapitalized(value);
-    }
-
-    /**
-     * Retrieves the cached capitalized name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameCapitalized()
-    {
-        return m__strCachedNameCapitalized;
-    }
-
-    /**
-     * Retrieves the name, in upper case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameCapitalized()
-    {
-        @Nullable String result = getCachedNameCapitalized();
-        
-        if  (result == null)
-        {
-            result = super.getNameCapitalized();
-            setCachedNameCapitalized(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached lowercased name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameLowercased(
-        @NotNull final String value)
-    {
-        m__strCachedNameLowercased = value;
-    }
-    
-    /**
-     * Specifies the cached lowercased name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameLowercased(@NotNull final String value)
-    {
-        immutableSetCachedNameLowercased(value);
-    }
-
-    /**
-     * Retrieves the cached lowercased name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameLowercased()
-    {
-        return m__strCachedNameLowercased;
-    }
-
-    /**
-     * Retrieves the name, in lower case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameLowercased()
-    {
-        @Nullable String result = getCachedNameLowercased();
-        
-        if  (result == null)
-        {
-            result = super.getNameLowercased();
-            setCachedNameLowercased(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached uncapitalized name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedUncapitalizedName(
-        @NotNull final String value)
-    {
-        m__strCachedUncapitalizedName = value;
-    }
-    
-    /**
-     * Specifies the cached uncapitalized name.
-     * @param value the value to cache.
-     */
-    protected void setCachedUncapitalizedName(@NotNull final String value)
-    {
-        immutableSetCachedUncapitalizedName(value);
-    }
-
-    /**
-     * Retrieves the cached uncapitalized name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedUncapitalizedName()
-    {
-        return m__strCachedUncapitalizedName;
-    }
-    
-    /**
-     * Retrieves the table name, uncapitalized.
-     * @return such value.
-     */
-    @NotNull
-    public String getUncapitalizedName()
-    {
-        @Nullable String result = getCachedUncapitalizedName();
-        
-        if  (result == null)
-        {
-            result = super.getUncapitalizedName();
-            setCachedUncapitalizedName(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached VO name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedVoName(
-        @NotNull final String value)
-    {
-        m__strCachedVoName = value;
-    }
-    
-    /**
-     * Specifies the cached VO name.
-     * @param value the value to cache.
-     */
-    protected void setCachedVoName(@NotNull final String value)
-    {
-        immutableSetCachedVoName(value);
-    }
-
-    /**
-     * Retrieves the cached VO name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedVoName()
-    {
-        return m__strCachedVoName;
-    }
-
-    /**
-     * Retrieves the value-object name associated to the table name.
-     * @return such name.
-     */
-    @Override
-    @NotNull
-    public String getVoName()
-    {
-        @Nullable String result = getCachedVoName();
-        
-        if  (result == null)
-        {
-            result = super.getVoName();
-            setCachedVoName(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Caches the value-object name, uncapitalized.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedVoNameUncapitalized(@NotNull final String value)
-    {
-        m__strCachedVoNameUncapitalized = value;
-    }
-
-    /**
-     * Caches the value-object name, uncapitalized.
-     * @param value the value to cache.
-     */
-    protected void setCachedVoNameUncapitalized(@NotNull final String value)
-    {
-        immutableSetCachedVoNameUncapitalized(value);
-    }
-
-    /**
-     * Retrieves the cached value-object name, uncapitalized.
-     * @return the cached value.
-     */
-    @Nullable
-    protected String getCachedVoNameUncapitalized()
-    {
-        return m__strCachedVoNameUncapitalized;
-    }
-
-    /**
-     * Retrieves the value-object name associated to the table name, uncapitalized.
-     * @return such name.
-     */
-    @Override
-    @NotNull
-    public String getVoNameUncapitalized()
-    {
-        String result = getCachedVoNameUncapitalized();
-
-        if (result == null)
-        {
-            result = super.getVoNameUncapitalized();
-            setCachedVoNameUncapitalized(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the cached normalized lowercased name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameNormalizedLowercased(
-        @NotNull final String value)
-    {
-        m__strCachedNameNormalizedLowercased = value;
-    }
-    
-    /**
-     * Specifies the cached normalized lowercased name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameNormalizedLowercased(@NotNull final String value)
-    {
-        immutableSetCachedNameNormalizedLowercased(value);
-    }
-
-    /**
-     * Retrieves the cached normalized lowercased name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameNormalizedLowercased()
-    {
-        return m__strCachedNameNormalizedLowercased;
-    }
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getNameNormalizedLowercased()
-    {
-        @Nullable String result = getCachedNameNormalizedLowercased();
-        
-        if  (result == null)
-        {
-            result = super.getNameNormalizedLowercased();
-            setCachedNameNormalizedLowercased(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached normalized lowercased singular name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedSingularNameNormalizedLowercased(
-        @NotNull final String value)
-    {
-        m__strCachedSingularNameNormalizedLowercased = value;
-    }
-    
-    /**
-     * Specifies the cached normalized lowercased singular name.
-     * @param value the value to cache.
-     */
-    protected void setCachedSingularNameNormalizedLowercased(@NotNull final String value)
-    {
-        immutableSetCachedSingularNameNormalizedLowercased(value);
-    }
-
-    /**
-     * Retrieves the cached normalized lowercased singular name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedSingularNameNormalizedLowercased()
-    {
-        return m__strCachedSingularNameNormalizedLowercased;
-    }
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getSingularNameNormalizedLowercased()
-    {
-        @Nullable String result = getCachedSingularNameNormalizedLowercased();
-        
-        if  (result == null)
-        {
-            result = super.getSingularNameNormalizedLowercased();
-            setCachedSingularNameNormalizedLowercased(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached normalized name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameNormalized(
-        @NotNull final String value)
-    {
-        m__strCachedNameNormalized = value;
-    }
-    
-    /**
-     * Specifies the cached normalized name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameNormalized(@NotNull final String value)
-    {
-        immutableSetCachedNameNormalized(value);
-    }
-
-    /**
-     * Retrieves the cached normalized name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameNormalized()
-    {
-        return m__strCachedNameNormalized;
-    }
-
-    /**
-     * Retrieves the name, in lower case.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameNormalized()
-    {
-        @Nullable String result = getCachedNameNormalized();
-        
-        if  (result == null)
-        {
-            result = super.getNameNormalized();
-            setCachedNameNormalized(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached capitalized singular name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedSingularNameCapitalized(
-        @NotNull final String value)
-    {
-        m__strCachedSingularNameCapitalized = value;
-    }
-    
-    /**
-     * Specifies the cached capitalized singular name.
-     * @param value the value to cache.
-     */
-    protected void setCachedSingularNameCapitalized(@NotNull final String value)
-    {
-        immutableSetCachedSingularNameCapitalized(value);
-    }
-
-    /**
-     * Retrieves the cached capitalized singular name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedSingularNameCapitalized()
-    {
-        return m__strCachedSingularNameCapitalized;
-    }
-
-    /**
-     * Retrieves the capitalized table name in singular form.
-     * @return such information.
-     */
-    @NotNull
-    public String getSingularNameCapitalized()
-    {
-        @Nullable String result = getCachedSingularNameCapitalized();
-        
-        if  (result == null)
-        {
-            result = super.getSingularNameCapitalized();
-            setCachedSingularNameCapitalized(result);
-        }
-        
         return result;
     }
 
@@ -1157,10 +625,10 @@ public class CachingTableDecorator
      * @return such decorator.
      */
     @Nullable
-    protected TableDecorator createTableDecorator(
+    protected Table<DecoratedString, Attribute<DecoratedString>> createTableDecorator(
         @Nullable final String parentTable,
-        @NotNull final List<Attribute> primaryKey,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> primaryKey,
+        @NotNull final List<Attribute<String>> attributes,
         final boolean isStatic,
         final boolean voDecorated,
         @NotNull final MetadataManager metadataManager,
@@ -1169,7 +637,7 @@ public class CachingTableDecorator
     {
         @Nullable TableDecorator result = null;
 
-        @Nullable Table t_ParentTable = null;
+        @Nullable Table<String, Attribute<String>> t_ParentTable = null;
 
         if (parentTable != null)
         {
@@ -1198,7 +666,7 @@ public class CachingTableDecorator
      * @return such decorator.
      */
     protected TableDecorator createTableDecorator(
-        @NotNull final Table parentTable,
+        @NotNull final Table<String, Attribute<String>> parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -1216,7 +684,8 @@ public class CachingTableDecorator
      * attributes.
      * @param list such list.
      */
-    protected final void immutableSetCachedNonParentNonExternallyManagedAttributes(@NotNull final List<Attribute> list)
+    protected final void immutableSetCachedNonParentNonExternallyManagedAttributes(
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedNonParentNonExternallyManagedAttributes = list;
     }
@@ -1226,7 +695,8 @@ public class CachingTableDecorator
      * attributes.
      * @param list such list.
      */
-    protected void setCachedNonParentNonExternallyManagedAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedNonParentNonExternallyManagedAttributes(
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedNonParentNonExternallyManagedAttributes(list);
     }
@@ -1237,7 +707,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedNonParentNonExternallyManagedAttributes()
+    protected List<Attribute<DecoratedString>> getCachedNonParentNonExternallyManagedAttributes()
     {
         return m__lCachedNonParentNonExternallyManagedAttributes;
     }
@@ -1248,9 +718,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getNonParentNonExternallyManagedAttributes()
+    public List<Attribute<DecoratedString>> getNonParentNonExternallyManagedAttributes()
     {
-        @Nullable List<Attribute> result = getCachedNonParentNonExternallyManagedAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedNonParentNonExternallyManagedAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
@@ -1266,7 +736,8 @@ public class CachingTableDecorator
      * Specifies the cached non-primary-key attributes.
      * @param attributes the attributes to cache.
      */
-    protected final void immutableSetCachedNonPrimaryKeyAttributes(@NotNull final List<Attribute> attributes)
+    protected final void immutableSetCachedNonPrimaryKeyAttributes(
+        @NotNull final List<Attribute<DecoratedString>> attributes)
     {
         m__lCachedNonPrimaryKeyAttributes = attributes;
     }
@@ -1275,7 +746,7 @@ public class CachingTableDecorator
      * Specifies the cached non-primary-key attributes.
      * @param attributes the attributes to cache.
      */
-    protected void setCachedNonPrimaryKeyAttributes(@NotNull final List<Attribute> attributes)
+    protected void setCachedNonPrimaryKeyAttributes(@NotNull final List<Attribute<DecoratedString>> attributes)
     {
         immutableSetCachedNonPrimaryKeyAttributes(attributes);
     }
@@ -1285,7 +756,7 @@ public class CachingTableDecorator
      * @return the attributes to cache.
      */
     @Nullable
-    protected List<Attribute> getCachedNonPrimaryKeyAttributes()
+    protected List<Attribute<DecoratedString>> getCachedNonPrimaryKeyAttributes()
     {
         return m__lCachedNonPrimaryKeyAttributes;
     }
@@ -1296,9 +767,9 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Attribute> getNonPrimaryKeyAttributes()
+    public List<Attribute<DecoratedString>> getNonPrimaryKeyAttributes()
     {
-        @Nullable List<Attribute> result = getCachedNonPrimaryKeyAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedNonPrimaryKeyAttributes();
 
         if (result == null)
         {
@@ -1312,7 +783,8 @@ public class CachingTableDecorator
      * Specifies the cached list of parent's all attributes and the non-parent own attributes.
      * @param list such list.
      */
-    protected final void immutableSetCachedAllParentAndNonParentAttributes(@NotNull final List<Attribute> list)
+    protected final void immutableSetCachedAllParentAndNonParentAttributes(
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedAllParentAndNonParentAttributes = list;
     }
@@ -1321,7 +793,7 @@ public class CachingTableDecorator
      * Specifies the cached list of parent's all attributes and the non-parent own attributes.
      * @param list such list.
      */
-    protected void setCachedAllParentAndNonParentAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedAllParentAndNonParentAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAllParentAndNonParentAttributes(list);
     }
@@ -1331,7 +803,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedAllParentAndNonParentAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllParentAndNonParentAttributes()
     {
         return m__lCachedAllParentAndNonParentAttributes;
     }
@@ -1341,9 +813,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllParentAndNonParentAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedAllParentAndNonParentAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
@@ -1362,7 +834,7 @@ public class CachingTableDecorator
      * @param list such list.
      */
     protected final void immutableSetCachedAllParentAndNonParentNonExternallyManagedAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedAllParentAndNonParentNonExternallyManagedAttributes = list;
     }
@@ -1372,7 +844,7 @@ public class CachingTableDecorator
      * non-managed-externally own attributes.
      * @param list such list.
      */
-    protected void setCachedAllParentAndNonParentNonExternallyManagedAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedAllParentAndNonParentNonExternallyManagedAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAllParentAndNonParentNonExternallyManagedAttributes(list);
     }
@@ -1383,7 +855,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedAllParentAndNonParentNonExternallyManagedAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllParentAndNonParentNonExternallyManagedAttributes()
     {
         return m__lCachedAllParentAndNonParentNonExternallyManagedAttributes;
     }
@@ -1394,9 +866,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonExternallyManagedAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllParentAndNonParentNonExternallyManagedAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedAllParentAndNonParentNonExternallyManagedAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
@@ -1412,7 +884,8 @@ public class CachingTableDecorator
      * Specifies cached all attributes, including the parent's, but not the externally-managed.
      * @param list such attributes.
      */
-    protected final void immutableSetCachedAllNonExternallyManagedAttributes(@NotNull final List<Attribute> list)
+    protected final void immutableSetCachedAllNonExternallyManagedAttributes(
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedAllNonExternallyManagedAttributes = list;
     }
@@ -1421,7 +894,7 @@ public class CachingTableDecorator
      * Specifies cached all attributes, including the parent's, but not the externally-managed.
      * @param list such attributes.
      */
-    protected void setCachedAllNonExternallyManagedAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedAllNonExternallyManagedAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAllNonExternallyManagedAttributes(list);
     }
@@ -1431,7 +904,7 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @Nullable
-    protected List<Attribute> getCachedAllNonExternallyManagedAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllNonExternallyManagedAttributes()
     {
         return m__lCachedAllNonExternallyManagedAttributes;
     }
@@ -1441,9 +914,9 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonExternallyManagedAttributes()
+    public List<Attribute<DecoratedString>> getAllNonExternallyManagedAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllNonExternallyManagedAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedAllNonExternallyManagedAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
@@ -1460,7 +933,7 @@ public class CachingTableDecorator
      * @param list such list.
      */
     protected final void immutableSetCachedAllNonReadOnlyButExternallyManagedAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedAllNonReadOnlyButExternallyManagedAttributes = list;
     }
@@ -1470,7 +943,7 @@ public class CachingTableDecorator
      * @param list such list.
      */
     protected void setCachedAllNonReadOnlyButExternallyManagedAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAllNonReadOnlyButExternallyManagedAttributes(list);
     }
@@ -1480,7 +953,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    public List<Attribute> getCachedAllNonReadOnlyButExternallyManagedAttributes()
+    public List<Attribute<DecoratedString>> getCachedAllNonReadOnlyButExternallyManagedAttributes()
     {
         return m__lCachedAllNonReadOnlyButExternallyManagedAttributes;
     }
@@ -1491,15 +964,13 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Attribute> getAllNonReadOnlyButExternallyManagedAttributes()
+    public List<Attribute<DecoratedString>> getAllNonReadOnlyButExternallyManagedAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllNonReadOnlyButExternallyManagedAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedAllNonReadOnlyButExternallyManagedAttributes();
 
         if (result == null)
         {
             result = super.getAllNonReadOnlyButExternallyManagedAttributes();
-
-            result = decorateAttributes(result, getMetadataManager(), getDecoratorFactory());
 
             setCachedAllNonReadOnlyButExternallyManagedAttributes(result);
         }
@@ -1513,7 +984,7 @@ public class CachingTableDecorator
      * @param list such list.
      */
     protected final void immutableSetCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes = list;
     }
@@ -1524,7 +995,7 @@ public class CachingTableDecorator
      * @param list such list.
      */
     protected void setCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes(
             list);
@@ -1536,7 +1007,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes()
     {
         return m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes;
     }
@@ -1547,9 +1018,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes()
     {
-        @Nullable List<Attribute> result =
+        @Nullable List<Attribute<DecoratedString>> result =
             getCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes();
 
         if  (   (result == null)
@@ -1568,7 +1039,7 @@ public class CachingTableDecorator
      * @param list the list.
      */
     protected final void immutableSetCachedAllParentAndNonParentNonReadOnlyAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedAllParentAndNonParentNonReadOnlyAttributes = list;
     }
@@ -1579,7 +1050,7 @@ public class CachingTableDecorator
      * @param list the list.
      */
     protected void setCachedAllParentAndNonParentNonReadOnlyAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAllParentAndNonParentNonReadOnlyAttributes(list);
     }
@@ -1590,7 +1061,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedAllParentAndNonParentNonReadOnlyAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllParentAndNonParentNonReadOnlyAttributes()
     {
         return m__lCachedAllParentAndNonParentNonReadOnlyAttributes;
     }
@@ -1601,9 +1072,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentNonReadOnlyAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllParentAndNonParentNonReadOnlyAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedAllParentAndNonParentNonReadOnlyAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
@@ -1620,7 +1091,7 @@ public class CachingTableDecorator
      * @param list such list.
      */
     protected final void immutableSetCachedAllParentAndNonParentReadOnlyAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedAllParentAndNonParentReadOnlyAttributes = list;
     }
@@ -1629,7 +1100,7 @@ public class CachingTableDecorator
      * Specifies the cached list of all parent's and non parent's read-only attributes.
      * @param list such list.
      */
-    protected void setCachedAllParentAndNonParentReadOnlyAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedAllParentAndNonParentReadOnlyAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAllParentAndNonParentReadOnlyAttributes(list);
     }
@@ -1639,7 +1110,7 @@ public class CachingTableDecorator
      * @return such condition.
      */
     @Nullable
-    protected List<Attribute> getCachedAllParentAndNonParentReadOnlyAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllParentAndNonParentReadOnlyAttributes()
     {
         return m__lCachedAllParentAndNonParentReadOnlyAttributes;
     }
@@ -1649,9 +1120,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentReadOnlyAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllParentAndNonParentReadOnlyAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedAllParentAndNonParentReadOnlyAttributes();
 
         if  (result == null)
         {
@@ -1668,7 +1139,7 @@ public class CachingTableDecorator
      * @param list such list.
      */
     protected final void immutableSetCachedNonParentNonExternallyManagedPlusPkAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedNonParentNonExternallyManagedPlusPkAttributes = list;
     }
@@ -1678,7 +1149,7 @@ public class CachingTableDecorator
      * plus the primary key.
      * @param list such list.
      */
-    protected void setCachedNonParentNonExternallyManagedPlusPkAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedNonParentNonExternallyManagedPlusPkAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedNonParentNonExternallyManagedPlusPkAttributes(list);
     }
@@ -1689,7 +1160,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedNonParentNonExternallyManagedPlusPkAttributes()
+    protected List<Attribute<DecoratedString>> getCachedNonParentNonExternallyManagedPlusPkAttributes()
     {
         return m__lCachedNonParentNonExternallyManagedPlusPkAttributes;
     }
@@ -1700,9 +1171,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getNonParentNonExternallyManagedPlusPkAttributes()
+    public List<Attribute<DecoratedString>> getNonParentNonExternallyManagedPlusPkAttributes()
     {
-        @Nullable List<Attribute> result = getCachedNonParentNonExternallyManagedPlusPkAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedNonParentNonExternallyManagedPlusPkAttributes();
 
         if  (result == null)
         {
@@ -1719,7 +1190,7 @@ public class CachingTableDecorator
      * @param list the list.
      */
     protected final void immutableSetCachedAllNonExternallyManagedPlusPkAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedAllNonExternallyManagedPlusPkAttributes = list;
     }
@@ -1729,7 +1200,7 @@ public class CachingTableDecorator
      * plus the primary key.
      * @param list the list.
      */
-    protected void setCachedAllNonExternallyManagedPlusPkAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedAllNonExternallyManagedPlusPkAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAllNonExternallyManagedPlusPkAttributes(list);
     }
@@ -1740,7 +1211,7 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @Nullable
-    protected List<Attribute> getCachedAllNonExternallyManagedPlusPkAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllNonExternallyManagedPlusPkAttributes()
     {
         return m__lCachedAllNonExternallyManagedPlusPkAttributes;
     }
@@ -1750,10 +1221,11 @@ public class CachingTableDecorator
      * plus the primary key.
      * @return such attributes.
      */
+    @Override
     @NotNull
-    public List<Attribute> getAllNonExternallyManagedPlusPkAttributes()
+    public List<Attribute<DecoratedString>> getAllNonExternallyManagedPlusPkAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllNonExternallyManagedPlusPkAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedAllNonExternallyManagedPlusPkAttributes();
 
         if  (result == null)
         {
@@ -1770,7 +1242,7 @@ public class CachingTableDecorator
      * @param list the list.
      */
     protected final void immutableSetCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes = list;
     }
@@ -1780,7 +1252,7 @@ public class CachingTableDecorator
      * or read-only, plus the primary key.
      * @param list the list.
      */
-    protected void setCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes(list);
     }
@@ -1791,7 +1263,7 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @Nullable
-    protected List<Attribute> getCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
         return m__lCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes;
     }
@@ -1802,9 +1274,9 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes()
+    public List<Attribute<DecoratedString>> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes();
 
         if  (result == null)
         {
@@ -1821,7 +1293,7 @@ public class CachingTableDecorator
      * @param list such list.
      */
     protected final void immutableSetCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes = list;
     }
@@ -1832,7 +1304,7 @@ public class CachingTableDecorator
      * @param list such list.
      */
     protected void setCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
-        @NotNull final List<Attribute> list)
+        @NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
             list);
@@ -1844,7 +1316,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
         return m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes;
     }
@@ -1855,9 +1327,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes()
+    public List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
-        @Nullable List<Attribute> result =
+        @Nullable List<Attribute<DecoratedString>> result =
             getCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes();
 
         if  (result == null)
@@ -1874,7 +1346,7 @@ public class CachingTableDecorator
      * Specifies the cached, non-parent attributes, plus the primary key.
      * @param attrs such attributes.
      */
-    protected final void immutableSetCachedNonParentPlusPkAttributes(@NotNull final List<Attribute> attrs)
+    protected final void immutableSetCachedNonParentPlusPkAttributes(@NotNull final List<Attribute<DecoratedString>> attrs)
     {
         m__lCachedNonParentPlusPkAttributes = attrs;
     }
@@ -1883,7 +1355,7 @@ public class CachingTableDecorator
      * Specifies the cached, non-parent attributes, plus the primary key.
      * @param attrs such attributes.
      */
-    protected void setCachedNonParentPlusPkAttributes(@NotNull final List<Attribute> attrs)
+    protected void setCachedNonParentPlusPkAttributes(@NotNull final List<Attribute<DecoratedString>> attrs)
     {
         immutableSetCachedNonParentPlusPkAttributes(attrs);
     }
@@ -1893,7 +1365,7 @@ public class CachingTableDecorator
      * @return such information.
      */
     @Nullable
-    protected List<Attribute> getCachedNonParentPlusPkAttributes()
+    protected List<Attribute<DecoratedString>> getCachedNonParentPlusPkAttributes()
     {
         return m__lCachedNonParentPlusPkAttributes;
     }
@@ -1903,9 +1375,9 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getNonParentPlusPkAttributes()
+    public List<Attribute<DecoratedString>> getNonParentPlusPkAttributes()
     {
-        @Nullable List<Attribute> result = getCachedNonParentPlusPkAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedNonParentPlusPkAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
@@ -1921,7 +1393,7 @@ public class CachingTableDecorator
      * Specifies the cached all parent tables.
      * @param list such list.
      */
-    protected final void immutableSetCachedAllParentTables(@NotNull final List<Table> list)
+    protected final void immutableSetCachedAllParentTables(@NotNull final List<Table<DecoratedString, Attribute<DecoratedString>>> list)
     {
         m__lCachedAllParentTables = list;
     }
@@ -1930,7 +1402,7 @@ public class CachingTableDecorator
      * Specifies the cached all parent tables.
      * @param list such list.
      */
-    protected void setCachedAllParentTables(@NotNull final List<Table> list)
+    protected void setCachedAllParentTables(@NotNull final List<Table<DecoratedString, Attribute<DecoratedString>>> list)
     {
         immutableSetCachedAllParentTables(list);
     }
@@ -1940,7 +1412,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Table> getCachedAllParentTables()
+    protected List<Table<DecoratedString, Attribute<DecoratedString>>> getCachedAllParentTables()
     {
         return m__lCachedAllParentTables;
     }
@@ -1950,9 +1422,9 @@ public class CachingTableDecorator
      * @return such information.
      */
     @NotNull
-    public List<Table> getAllParentTables()
+    public List<Table<DecoratedString, Attribute<DecoratedString>>> getAllParentTables()
     {
-        @Nullable List<Table> result = getCachedAllParentTables();
+        @Nullable List<Table<DecoratedString, Attribute<DecoratedString>>> result = getCachedAllParentTables();
 
         if  (result == null)
         {
@@ -1967,7 +1439,7 @@ public class CachingTableDecorator
      * Specifies the cached static contents.
      * @param rows the rows.
      */
-    protected final void immutableSetCachedStaticContent(@NotNull final List<Row> rows)
+    protected final void immutableSetCachedStaticContent(@NotNull final List<Row<DecoratedString>> rows)
     {
         m__lCachedStaticContents = rows;
     }
@@ -1976,7 +1448,7 @@ public class CachingTableDecorator
      * Specifies the cached static contents.
      * @param rows the rows.
      */
-    protected void setCachedStaticContent(@NotNull final List<Row> rows)
+    protected void setCachedStaticContent(@NotNull final List<Row<DecoratedString>> rows)
     {
         immutableSetCachedStaticContent(rows);
     }
@@ -1986,7 +1458,7 @@ public class CachingTableDecorator
      * @return such rows.
      */
     @Nullable
-    public List<Row> getCachedStaticContent()
+    public List<Row<DecoratedString>> getCachedStaticContent()
     {
         return m__lCachedStaticContents;
     }
@@ -1996,9 +1468,9 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Row> getStaticContent()
+    public List<Row<DecoratedString>> getStaticContent()
     {
-        @Nullable List<Row> result = getCachedStaticContent();
+        @Nullable List<Row<DecoratedString>> result = getCachedStaticContent();
 
         if (result == null)
         {
@@ -2060,7 +1532,7 @@ public class CachingTableDecorator
      * @param attributes the attributes to cache.
      */
     protected final void immutableSetCachedNonPrimaryKeyNonReadOnlyAttributes(
-        @NotNull final List<Attribute> attributes)
+        @NotNull final List<Attribute<DecoratedString>> attributes)
     {
         m__lCachedNonPrimaryKeyNonReadOnlyAttributes = attributes;
     }
@@ -2070,7 +1542,7 @@ public class CachingTableDecorator
      * @param attributes the attributes to cache.
      */
     protected void setCachedNonPrimaryKeyNonReadOnlyAttributes(
-        @NotNull final List<Attribute> attributes)
+        @NotNull final List<Attribute<DecoratedString>> attributes)
     {
         immutableSetCachedNonPrimaryKeyNonReadOnlyAttributes(attributes);
     }
@@ -2079,7 +1551,7 @@ public class CachingTableDecorator
      * Retrieves the cached non-primary-key, non-readonly attributes.
      * @return the cached attributes.
      */
-    protected List<Attribute> getCachedNonPrimaryKeyNonReadOnlyAttributes()
+    protected List<Attribute<DecoratedString>> getCachedNonPrimaryKeyNonReadOnlyAttributes()
     {
         return m__lCachedNonPrimaryKeyNonReadOnlyAttributes;
     }
@@ -2089,9 +1561,9 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Attribute> getNonPrimaryKeyNonReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getNonPrimaryKeyNonReadOnlyAttributes()
     {
-        @Nullable List<Attribute> result = getCachedNonPrimaryKeyNonReadOnlyAttributes();
+        @Nullable List<Attribute<DecoratedString>> result = getCachedNonPrimaryKeyNonReadOnlyAttributes();
 
         if (result == null)
         {
@@ -2248,7 +1720,7 @@ public class CachingTableDecorator
      * Specifies the cached child attributes.
      * @param attributes such {@link Attribute attributes}.
      */
-    protected final void immutableSetCachedChildAttributes(@NotNull final List<Attribute> attributes)
+    protected final void immutableSetCachedChildAttributes(@NotNull final List<Attribute<DecoratedString>> attributes)
     {
         this.m__lCachedChildAttributes = attributes;
     }
@@ -2257,7 +1729,7 @@ public class CachingTableDecorator
      * Specifies the cached child attributes.
      * @param attributes such {@link Attribute attributes}.
      */
-    protected void setCachedChildAttributes(@NotNull final List<Attribute> attributes)
+    protected void setCachedChildAttributes(@NotNull final List<Attribute<DecoratedString>> attributes)
     {
         immutableSetCachedChildAttributes(attributes);
     }
@@ -2267,7 +1739,7 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @Nullable
-    public List<Attribute> getCachedChildAttributes()
+    public List<Attribute<DecoratedString>> getCachedChildAttributes()
     {
         return m__lCachedChildAttributes;
     }
@@ -2278,16 +1750,16 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Attribute> getChildAttributes()
+    public List<Attribute<DecoratedString>> getChildAttributes()
     {
-        List<Attribute> result = getCachedChildAttributes();
+        List<Attribute<DecoratedString>> result = getCachedChildAttributes();
 
         if (result == null)
         {
             result = super.getChildAttributes();
             if (result == null)
             {
-                result = new ArrayList<Attribute>(0);
+                result = new ArrayList<Attribute<DecoratedString>>(0);
             }
             setCachedChildAttributes(result);
         }
@@ -2299,7 +1771,7 @@ public class CachingTableDecorator
      * Specifies the cached foreign keys.
      * @param foreignKeys the {@link ForeignKey foreignKeys}.
      */
-    protected final void immutableSetCachedForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
+    protected final void immutableSetCachedForeignKeys(@NotNull final List<ForeignKey<DecoratedString>> foreignKeys)
     {
         this.m__lCachedForeignKeys = foreignKeys;
     }
@@ -2308,7 +1780,7 @@ public class CachingTableDecorator
      * Specifies the cached foreign keys.
      * @param foreignKeys the {@link ForeignKey foreignKeys}.
      */
-    protected void setCachedForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
+    protected void setCachedForeignKeys(@NotNull final List<ForeignKey<DecoratedString>> foreignKeys)
     {
         immutableSetCachedForeignKeys(foreignKeys);
     }
@@ -2318,7 +1790,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    public List<ForeignKey> getCachedForeignKeys()
+    public List<ForeignKey<DecoratedString>> getCachedForeignKeys()
     {
         return this.m__lCachedForeignKeys;
     }
@@ -2330,9 +1802,9 @@ public class CachingTableDecorator
      */
     @NotNull
     @Override
-    public List<ForeignKey> getForeignKeys()
+    public List<ForeignKey<DecoratedString>> getForeignKeys()
     {
-        List<ForeignKey> result = getCachedForeignKeys();
+        List<ForeignKey<DecoratedString>> result = getCachedForeignKeys();
 
         if (result == null)
         {
@@ -2347,7 +1819,7 @@ public class CachingTableDecorator
      * Specifies the cached parent foreign key.
      * @param foreignKey such {@link ForeignKey}.
      */
-    protected final void immutableSetCachedParentForeignKey(@NotNull final ForeignKey foreignKey)
+    protected final void immutableSetCachedParentForeignKey(@NotNull final ForeignKey<DecoratedString> foreignKey)
     {
         this.m__CachedParentForeignKey = foreignKey;
     }
@@ -2356,7 +1828,7 @@ public class CachingTableDecorator
      * Specifies the cached parent foreign key.
      * @param foreignKey such {@link ForeignKey}.
      */
-    protected void setCachedParentForeignKey(@NotNull final ForeignKey foreignKey)
+    protected void setCachedParentForeignKey(@NotNull final ForeignKey<DecoratedString> foreignKey)
     {
         immutableSetCachedParentForeignKey(foreignKey);
     }
@@ -2366,7 +1838,7 @@ public class CachingTableDecorator
      * @return such {@link ForeignKey}.
      */
     @Nullable
-    public ForeignKey getCachedParentForeignKey()
+    public ForeignKey<DecoratedString> getCachedParentForeignKey()
     {
         return this.m__CachedParentForeignKey;
     }
@@ -2404,9 +1876,9 @@ public class CachingTableDecorator
      */
     @Override
     @Nullable
-    public ForeignKey getParentForeignKey()
+    public ForeignKey<DecoratedString> getParentForeignKey()
     {
-        ForeignKey result = getCachedParentForeignKey();
+        ForeignKey<DecoratedString> result = getCachedParentForeignKey();
 
         if (   (result == null)
             && (!isParentForeignKeyAlreadyRetrieved()))
@@ -2426,107 +1898,10 @@ public class CachingTableDecorator
     }
 
     /**
-     * Specifies the cached singular name, in upper case.
-     * @param value such value.
-     */
-    protected final void immutableSetCachedSingularNameUppercased(@NotNull final String value)
-    {
-        this.m__strCachedSingularNameUppercased = value;
-    }
-
-    /**
-     * Specifies the cached singular name, in upper case.
-     * @param value such value.
-     */
-    protected void setCachedSingularNameUppercased(@NotNull final String value)
-    {
-        immutableSetCachedSingularNameUppercased(value);
-    }
-
-    /**
-     * Retrieves the cached singular name, in upper case.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedSingularNameUppercased()
-    {
-        return m__strCachedSingularNameUppercased;
-    }
-
-    /**
-     * Retrieves the singular table's name, upper-cased.
-     *
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String getSingularNameUppercased()
-    {
-        String result = getCachedSingularNameUppercased();
-
-        if (result == null)
-        {
-            result = super.getSingularNameUppercased();
-            setCachedSingularNameUppercased(result);
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Specifies the cached singular name, in lower case.
-     * @param value such value.
-     */
-    protected final void immutableSetCachedSingularNameLowercased(@NotNull final String value)
-    {
-        this.m__strCachedSingularNameLowercased = value;
-    }
-
-    /**
-     * Specifies the cached singular name, in lower case.
-     * @param value such value.
-     */
-    protected void setCachedSingularNameLowercased(@NotNull final String value)
-    {
-        immutableSetCachedSingularNameLowercased(value);
-    }
-
-    /**
-     * Retrieves the cached singular name, in lower case.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedSingularNameLowercased()
-    {
-        return m__strCachedSingularNameLowercased;
-    }
-
-    /**
-     * Retrieves the singular table's name, lower-cased.
-     *
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String getSingularNameLowercased()
-    {
-        String result = getCachedSingularNameLowercased();
-
-        if (result == null)
-        {
-            result = super.getSingularNameLowercased();
-            setCachedSingularNameLowercased(result);
-        }
-
-        return result;
-    }
-
-    /**
      * Specifies the cached read-only attributes.
      * @param list such {@link Attribute} list.
      */
-    protected final void immutableSetCachedReadOnlyAttributes(@NotNull final List<Attribute> list)
+    protected final void immutableSetCachedReadOnlyAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         this.m__lCachedReadOnlyAttributes = list;
     }
@@ -2535,7 +1910,7 @@ public class CachingTableDecorator
      * Specifies the cached read-only attributes.
      * @param list such {@link Attribute} list.
      */
-    protected void setCachedReadOnlyAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedReadOnlyAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedReadOnlyAttributes(list);
     }
@@ -2545,7 +1920,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    public List<Attribute> getCachedReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getCachedReadOnlyAttributes()
     {
         return m__lCachedReadOnlyAttributes;
     }
@@ -2557,9 +1932,9 @@ public class CachingTableDecorator
      */
     @NotNull
     @Override
-    public List<Attribute> getReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getReadOnlyAttributes()
     {
-        List<Attribute> result = getCachedReadOnlyAttributes();
+        List<Attribute<DecoratedString>> result = getCachedReadOnlyAttributes();
 
         if (result == null)
         {
@@ -2574,7 +1949,7 @@ public class CachingTableDecorator
      * Specifies the cached non-read-only, non-primary-key attributes.
      * @param list such {@link Attribute} list.
      */
-    protected final void immutableSetCachedNonPrimaryKeyReadOnlyAttributes(@NotNull final List<Attribute> list)
+    protected final void immutableSetCachedNonPrimaryKeyReadOnlyAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         this.m__lCachedNonPrimaryKeyReadOnlyAttributes = list;
     }
@@ -2583,7 +1958,7 @@ public class CachingTableDecorator
      * Specifies the cached non-read-only, non-primary-key attributes.
      * @param list such {@link Attribute} list.
      */
-    protected void setCachedNonPrimaryKeyReadOnlyAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedNonPrimaryKeyReadOnlyAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedNonPrimaryKeyReadOnlyAttributes(list);
     }
@@ -2593,7 +1968,7 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    public List<Attribute> getCachedNonPrimaryKeyReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getCachedNonPrimaryKeyReadOnlyAttributes()
     {
         return m__lCachedNonPrimaryKeyReadOnlyAttributes;
     }
@@ -2604,9 +1979,9 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Attribute> getNonPrimaryKeyReadOnlyAttributes()
+    public List<Attribute<DecoratedString>> getNonPrimaryKeyReadOnlyAttributes()
     {
-        List<Attribute> result = getCachedNonPrimaryKeyReadOnlyAttributes();
+        List<Attribute<DecoratedString>> result = getCachedNonPrimaryKeyReadOnlyAttributes();
 
         if (result == null)
         {
@@ -2635,7 +2010,7 @@ public class CachingTableDecorator
      * Specifies the cached, externally-managed attributes.
      * @param list such {@link AttributeDecorator attributes}.
      */
-    protected final void immutableSetCachedAllExternallyManagedAttributes(@NotNull final List<AttributeDecorator> list)
+        protected final void immutableSetCachedAllExternallyManagedAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         this.m__lCachedAllExternallyManagedAttributes = list;
     }
@@ -2644,7 +2019,7 @@ public class CachingTableDecorator
      * Specifies the cached, externally-managed attributes.
      * @param list such {@link AttributeDecorator attributes}.
      */
-    protected void setCachedAllExternallyManagedAttributes(@NotNull final List<AttributeDecorator> list)
+    protected void setCachedAllExternallyManagedAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAllExternallyManagedAttributes(list);
     }
@@ -2654,7 +2029,7 @@ public class CachingTableDecorator
      * @return such {@link AttributeDecorator list}.
      */
     @Nullable
-    protected List<AttributeDecorator> getCachedAllExternallyManagedAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAllExternallyManagedAttributes()
     {
         return m__lCachedAllExternallyManagedAttributes;
     }
@@ -2665,9 +2040,9 @@ public class CachingTableDecorator
      */
     @NotNull
     @Override
-    public List<AttributeDecorator> getAllExternallyManagedAttributes()
+    public List<Attribute<DecoratedString>> getAllExternallyManagedAttributes()
     {
-        List<AttributeDecorator> result = getCachedAllExternallyManagedAttributes();
+        List<Attribute<DecoratedString>> result = getCachedAllExternallyManagedAttributes();
 
         if (result == null)
         {
@@ -2733,5 +2108,61 @@ public class CachingTableDecorator
     public boolean getStStuff()
     {
         return true;
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+            // TODO !!!
+            "CachingTableDecorator{" +
+               "m__bParentForeignKeyAlreadyRetrieved=" + m__bParentForeignKeyAlreadyRetrieved +
+               ", m__lCachedPrimaryKey=" + m__lCachedPrimaryKey +
+               ", m__lCachedNonReadOnlyAttributes=" + m__lCachedNonReadOnlyAttributes +
+               ", m__lCachedAllNonReadOnlyAttributes=" + m__lCachedAllNonReadOnlyAttributes +
+               ", m__lCachedNonParentAttributes=" + m__lCachedNonParentAttributes +
+               ", m__CachedParentTable=" + m__CachedParentTable +
+               ", m__lCachedAllAttributes=" + m__lCachedAllAttributes +
+               ", m__lCachedAttributes=" + m__lCachedAttributes +
+               ", m__lCachedNonParentNonExternallyManagedAttributes=" +
+               m__lCachedNonParentNonExternallyManagedAttributes +
+               ", m__lCachedAllParentAndNonParentAttributes=" + m__lCachedAllParentAndNonParentAttributes +
+               ", m__lCachedAllParentAndNonParentNonExternallyManagedAttributes=" +
+               m__lCachedAllParentAndNonParentNonExternallyManagedAttributes +
+               ", m__lCachedAllNonExternallyManagedAttributes=" + m__lCachedAllNonExternallyManagedAttributes +
+               ", m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes=" +
+               m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes +
+               ", m__lCachedAllParentAndNonParentNonReadOnlyAttributes=" +
+               m__lCachedAllParentAndNonParentNonReadOnlyAttributes +
+               ", m__lCachedAllParentAndNonParentReadOnlyAttributes=" +
+               m__lCachedAllParentAndNonParentReadOnlyAttributes +
+               ", m__lCachedNonParentNonExternallyManagedPlusPkAttributes=" +
+               m__lCachedNonParentNonExternallyManagedPlusPkAttributes +
+               ", m__lCachedAllNonExternallyManagedPlusPkAttributes=" +
+               m__lCachedAllNonExternallyManagedPlusPkAttributes +
+               ", m__lCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes=" +
+               m__lCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes +
+               ", m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes=" +
+               m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes +
+               ", m__lCachedNonParentPlusPkAttributes=" + m__lCachedNonParentPlusPkAttributes +
+               ", m__lCachedAllNonReadOnlyButExternallyManagedAttributes=" +
+               m__lCachedAllNonReadOnlyButExternallyManagedAttributes +
+               ", m__lCachedNonPrimaryKeyNonReadOnlyAttributes=" + m__lCachedNonPrimaryKeyNonReadOnlyAttributes +
+               ", m__lCachedAllParentTables=" + m__lCachedAllParentTables +
+               ", m__lCachedStaticContents=" + m__lCachedStaticContents +
+               ", m__lCachedDynamicQueries=" + m__lCachedDynamicQueries +
+               ", m__lCachedNonPrimaryKeyAttributes=" + m__lCachedNonPrimaryKeyAttributes +
+               ", m__lCachedCustomSelects=" + m__lCachedCustomSelects +
+               ", m__lCachedCustomUpdatesOrInserts=" + m__lCachedCustomUpdatesOrInserts +
+               ", m__lCachedCustomResults=" + m__lCachedCustomResults +
+               ", m__lCachedChildAttributes=" + m__lCachedChildAttributes +
+               ", m__lCachedForeignKeys=" + m__lCachedForeignKeys +
+               ", m__CachedParentForeignKey=" + m__CachedParentForeignKey +
+               ", m__lCachedReadOnlyAttributes=" + m__lCachedReadOnlyAttributes +
+               ", m__lCachedNonPrimaryKeyReadOnlyAttributes=" + m__lCachedNonPrimaryKeyReadOnlyAttributes +
+               ", m__lCachedAllExternallyManagedAttributes=" + m__lCachedAllExternallyManagedAttributes +
+               ", m__lCachedDifferentCustomResults=" + m__lCachedDifferentCustomResults +
+               '}';
     }
 }

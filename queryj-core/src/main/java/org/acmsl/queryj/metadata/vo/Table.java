@@ -54,51 +54,51 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface Table
+public interface Table<V, A extends Attribute<V>>
     extends Serializable,
-            Comparable<Table>
+            Comparable<Table<V, A>>
 {
     /**
      * Retrieves the table name.
      * @return such name.
      */
     @NotNull
-    String getName();
+    V getName();
 
     /**
      * Retrieves the table comment.
      * @return such comment.
      */
     @Nullable
-    String getComment();
+    V getComment();
 
     /**
      * Retrieves the primary key attributes.
      * @return such list.
      */
     @NotNull
-    List<Attribute> getPrimaryKey();
+    List<A> getPrimaryKey();
 
     /**
      * Retrieves the attributes.
      * @return such list.
      */
     @NotNull
-    List<Attribute> getAttributes();
+    List<A> getAttributes();
 
     /**
      * Retrieves the {@link org.acmsl.queryj.metadata.vo.ForeignKey foreign keys}.
      * @return such list.
      */
     @NotNull
-    List<ForeignKey> getForeignKeys();
+    List<ForeignKey<V>> getForeignKeys();
 
     /**
      * Retrieves the parent table.
      * @return such table.
      */
     @Nullable
-    Table getParentTable();
+    Table<V, A> getParentTable();
 
     /**
      * Retrieves whether the table contains static values or not.

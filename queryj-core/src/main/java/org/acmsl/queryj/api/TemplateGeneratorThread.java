@@ -61,8 +61,8 @@ import java.util.concurrent.CyclicBarrier;
  */
 @ThreadSafe
 public class TemplateGeneratorThread
-    <T extends Template<C>, TG extends TemplateGenerator<T>, C extends TemplateContext>
-    extends AbstractTemplateGeneratorThread<T, TG>
+    <T extends Template<C>, C extends TemplateContext, TG extends TemplateGenerator<T, C>>
+    extends AbstractTemplateGeneratorThread<T, C, TG>
 {
     /**
      * Creates a new thread with given information.

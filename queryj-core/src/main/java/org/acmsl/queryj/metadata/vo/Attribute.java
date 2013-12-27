@@ -47,8 +47,8 @@ import java.io.Serializable;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface Attribute
-    extends Comparable<Attribute>,
+public interface Attribute<V>
+    extends Comparable<Attribute<V>>,
             Serializable
 {
     /**
@@ -56,7 +56,7 @@ public interface Attribute
      * @return such name.
      */
     @NotNull
-    String getName();
+    V getName();
 
     /**
      * Retrieves the attribute type.
@@ -69,21 +69,21 @@ public interface Attribute
      * @return such information.
      */
     @NotNull
-    String getType();
+    V getType();
 
     /**
      * Retrieves the table name.
      * @return such information.
      */
     @NotNull
-    String getTableName();
+    V getTableName();
 
     /**
      * Retrieves the column comment.
      * @return such information.
      */
     @Nullable
-    String getComment();
+    V getComment();
 
     /**
      * Retrieves whether the value is managed externally (via keyword or retrieval query).
@@ -96,14 +96,14 @@ public interface Attribute
      * @return such information.
      */
     @Nullable
-    String getKeyword();
+    V getKeyword();
 
     /**
      * Retrieves the query used to retrieve the value, if any.
      * @return such information.
      */
     @Nullable
-    String getRetrievalQuery();
+    V getRetrievalQuery();
 
     /**
      * Retrieves whether it allows null values or not.
@@ -118,7 +118,7 @@ public interface Attribute
      * @return such information.
      */
     @Nullable
-    String getValue();
+    V getValue();
 
     /**
      * Retrieves whether the attribute is marked as read-only.
@@ -137,21 +137,21 @@ public interface Attribute
      * @return such information.
      */
     @Nullable
-    String getBooleanTrue();
+    V getBooleanTrue();
 
     /**
      * Retrieves the symbol for <code>false</code> values.
      * @return such information.
      */
     @Nullable
-    String getBooleanFalse();
+    V getBooleanFalse();
 
     /**
      * Retrieves the symbol for <code>null</code> values.
      * @return such information.
      */
     @Nullable
-    String getBooleanNull();
+    V getBooleanNull();
 
     /**
      * Retrieves the ordinal position.

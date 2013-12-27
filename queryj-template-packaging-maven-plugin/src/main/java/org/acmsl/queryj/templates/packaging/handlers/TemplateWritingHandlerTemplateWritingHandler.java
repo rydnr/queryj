@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,12 +37,17 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-API classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
 import org.acmsl.queryj.templates.packaging.TemplateWritingHandlerTemplate;
 
@@ -72,10 +77,10 @@ import java.util.List;
 public class TemplateWritingHandlerTemplateWritingHandler
     extends TemplatePackagingWritingHandler
                 <TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>,
+                 DefaultTemplatePackagingContext,
                  TemplatePackagingTemplateGenerator
                      <TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>,
-                      DefaultTemplatePackagingContext>,
-                 DefaultTemplatePackagingContext>
+                      DefaultTemplatePackagingContext>>
 {
     /**
      * Retrieves the template generator.
@@ -98,14 +103,27 @@ public class TemplateWritingHandlerTemplateWritingHandler
      * @return the template.
      * @throws QueryJBuildException if the template retrieval process fails.
      */
-    @Nullable
+    @NotNull
     @Override
     protected List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>> retrieveTemplates(
         @NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {
-        return
+        @NotNull final List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>> result;
+
+        @Nullable final List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>> aux =
             new QueryJCommandWrapper<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>>(parameters)
                 .getListSetting(TEMPLATE_WRITING_HANDLER_TEMPLATES);
+
+        if (aux == null)
+        {
+            throw new MissingTemplatesException("template-writing-handler");
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
     }
 }

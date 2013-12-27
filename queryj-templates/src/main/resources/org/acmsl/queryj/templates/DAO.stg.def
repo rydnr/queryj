@@ -1,0 +1,17 @@
+/*
+ * DAO template metadata.
+ */
+// The template name (the filename).
+name : DAO.stg;
+
+// The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-sql.
+type : per-table;
+
+// The output flavor.
+output: Java;
+
+// The filename builder.
+filename  builder : <engineName><tableName>DAO.java;
+
+// The package.
+package: <packageName>.dao.rdb.<engineName.lowercase>;

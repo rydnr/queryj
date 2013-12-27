@@ -49,11 +49,6 @@ import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.metadata.TableDecorator;
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Chain;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -61,6 +56,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -100,23 +96,22 @@ public class BasePerRepositoryFillTemplateChain
     }
 
     /**
-     * Adds additional per-repository handlers.
-     * @param chain the chain to be configured.
+     * Retrieves the additional per-repository handlers.
      * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
+     * @return such handlers.
      */
+    @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    protected void addHandlers(
-        @NotNull final Chain<FillHandler<?>>  chain,
-        @NotNull final PerRepositoryTemplateContext context,
-        final boolean relevantOnly)
+    protected List<FillHandler<?>> getHandlers(@NotNull final PerRepositoryTemplateContext context)
     {
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(1);
+
+        result.add(
+            new TemplateContextFillAdapterHandler
                 <PerRepositoryTemplateContext, TableListHandler,List<TableDecorator>>(
-                new TableListHandler(context)),
-            relevantOnly);
+                    new TableListHandler(context)));
+
+        return result;
     }
 }

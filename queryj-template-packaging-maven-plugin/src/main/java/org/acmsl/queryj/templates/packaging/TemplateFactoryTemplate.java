@@ -55,6 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class TemplateFactoryTemplate<C extends TemplatePackagingContext>
     extends AbstractTemplatePackagingTemplate<C>
 {
+    private static final long serialVersionUID = 8888727361009078421L;
+
     /**
      * Creates a TemplateFactoryTemplate instance.
      * @param context the {@link TemplatePackagingContext context}.
@@ -72,6 +74,6 @@ public class TemplateFactoryTemplate<C extends TemplatePackagingContext>
     @Override
     public String getTemplateName()
     {
-        return "TemplateFactory";
+        return Literals.TEMPLATE_FACTORY;
     }
 }

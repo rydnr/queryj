@@ -84,7 +84,7 @@ public class LobHandlingTableCheckHandler
     @Override
     public String getPlaceHolder()
     {
-        return "lob_handling_required";
+        return Literals.LOB_HANDLING_REQUIRED;
     }
 
     /**
@@ -126,7 +126,7 @@ public class LobHandlingTableCheckHandler
     {
         boolean result = false;
 
-        for (@Nullable final Attribute t_Column : metadataManager.getColumnDAO().findColumns(tableName))
+        for (@Nullable final Attribute<String> t_Column : metadataManager.getColumnDAO().findColumns(tableName))
         {
             if (t_Column != null)
             {

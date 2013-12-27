@@ -37,7 +37,6 @@ package org.acmsl.queryj.api.dao;
  */
 import org.acmsl.queryj.api.MetaLanguageUtils;
 import org.acmsl.queryj.customsql.*;
-import org.acmsl.queryj.metadata.CachingRowDecorator;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
@@ -45,6 +44,7 @@ import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.metadata.vo.Row;
+import org.acmsl.queryj.metadata.vo.RowValueObject;
 import org.acmsl.queryj.metadata.vo.Table;
 
 /*
@@ -414,7 +414,7 @@ public class DAOTemplateUtils
      * @throws SQLException if the operation fails.
      */
     @Nullable
-    public List<Row> queryContents(
+    public List<Row<String>> queryContents(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -440,7 +440,7 @@ public class DAOTemplateUtils
      * @throws SQLException if the operation fails.
      */
     @NotNull
-    public List<Row> queryContents(
+    public List<Row<String>> queryContents(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -448,9 +448,9 @@ public class DAOTemplateUtils
         @NotNull final MetadataUtils metadataUtils)
       throws  SQLException
     {
-        List<Row> result = null;
+        List<Row<String>> result = null;
 
-        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -471,7 +471,7 @@ public class DAOTemplateUtils
 
         if (result == null)
         {
-            result = new ArrayList<Row>(0);
+            result = new ArrayList<Row<String>>(0);
         }
 
         return result;
@@ -488,10 +488,10 @@ public class DAOTemplateUtils
      * @throws SQLException if the operation fails.
      */
     @NotNull
-    public List<Row> queryContents(
+    public List<Row<String>> queryContents(
         @NotNull final String tableName,
         @Nullable final String staticAttributeName,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
       throws  SQLException
@@ -520,10 +520,10 @@ public class DAOTemplateUtils
      * @throws SQLException if the operation fails.
      */
     @NotNull
-    protected List<Row> queryContents(
+    protected List<Row<String>> queryContents(
         @NotNull final String tableName,
         @Nullable final String staticAttributeName,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -557,10 +557,10 @@ public class DAOTemplateUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected List<Row> queryContents(
+    protected List<Row<String>> queryContents(
         @NotNull final String tableName,
         @Nullable final String staticAttributeName,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -569,7 +569,7 @@ public class DAOTemplateUtils
       throws  SQLException
     {
         // TODO: Move this to TableDAO
-        @NotNull final List<Row> result = new ArrayList<Row>();
+        @NotNull final List<Row<String>> result = new ArrayList<Row<String>>();
 
         @Nullable final Log t_Log = UniqueLogFactory.getLog(DAOTemplateUtils.class);
         
@@ -626,13 +626,13 @@ public class DAOTemplateUtils
                     reorderAttributes(
                         attributes, t_astrColumnNames, t_astrColumnValues);
 
-                    @NotNull final List<Attribute> t_lAttributes = new ArrayList<Attribute>(t_astrColumnValues.length);
+                    @NotNull final List<Attribute<String>> t_lAttributes = new ArrayList<Attribute<String>>(t_astrColumnValues.length);
 
-                    Attribute t_NewAttribute;
+                    Attribute<String> t_NewAttribute;
 
                     for (int t_iIndex = 0; t_iIndex < t_astrColumnValues.length; t_iIndex++)
                     {
-                        @Nullable final Attribute t_Attribute = attributes.get(t_iIndex);
+                        @Nullable final Attribute<String> t_Attribute = attributes.get(t_iIndex);
 
                         if (t_Attribute != null)
                         {
@@ -664,9 +664,7 @@ public class DAOTemplateUtils
                         buildRow(
                             t_strRowName,
                             tableName,
-                            t_lAttributes,
-                            metadataManager,
-                            decoratorFactory));
+                            t_lAttributes));
                 }
             }
         }
@@ -715,21 +713,15 @@ public class DAOTemplateUtils
      * @param rowName the row name.
      * @param tableName the table name.
      * @param attributes the attributes.
-     * @param metadataManager the metadata manager.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return the row.
      */
     @NotNull
-    protected Row buildRow(
+    protected Row<String> buildRow(
         @NotNull final String rowName,
         @NotNull final String tableName,
-        @NotNull final List<Attribute> attributes,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final List<Attribute<String>> attributes)
     {
-        return
-            new CachingRowDecorator(
-                rowName, tableName, attributes, metadataManager, decoratorFactory);
+        return new RowValueObject(rowName, tableName, attributes);
     }
 
     /**
@@ -739,16 +731,16 @@ public class DAOTemplateUtils
      * @param values the retrieved attribute values.
      */
     protected void reorderAttributes(
-        @Nullable final Collection<Attribute> attributes,
+        @Nullable final Collection<Attribute<String>> attributes,
         @NotNull final String[] names,
         @NotNull final String[] values)
     {
-        @Nullable final Iterator<Attribute> t_itAttributeIterator =
+        @Nullable final Iterator<Attribute<String>> t_itAttributeIterator =
             (attributes != null) ? attributes.iterator() : null;
 
         if  (t_itAttributeIterator != null)
         {
-            Attribute t_CurrentAttribute;
+            Attribute<String> t_CurrentAttribute;
             int t_iIndex = 0;
             int t_iPosition;
             final int t_iCount = attributes.size();

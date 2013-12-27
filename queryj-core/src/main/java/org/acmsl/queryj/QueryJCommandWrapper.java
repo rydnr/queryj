@@ -159,10 +159,10 @@ public class QueryJCommandWrapper<T>
         {
             result = Arrays.asList((T[]) single);
         }
-        else if (single.getClass().isAssignableFrom(List.class))
+        else if (List.class.isAssignableFrom(single.getClass()))
         {
             result = new ArrayList<T>();
-            result.addAll((List) single);
+            result.addAll((List<T>) single);
         }
         else
         {

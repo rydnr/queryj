@@ -35,6 +35,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.Literals;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -105,6 +106,7 @@ public abstract class AbstractQueryJTemplate<C extends QueryJTemplateContext>
      * @param context the template context.
      * @return such information.
      */
+    @Override
     @Nullable
     protected String getHeader(@NotNull final QueryJTemplateContext context)
     {
@@ -118,7 +120,7 @@ public abstract class AbstractQueryJTemplate<C extends QueryJTemplateContext>
      */
     @Nullable
     @SuppressWarnings("unused")
-    public String getProcessedHeader(@NotNull final Map input)
+    public String getProcessedHeader(@NotNull final Map<String, String> input)
     {
         @Nullable final String result = getCachedProcessedHeader();
         
@@ -135,9 +137,9 @@ public abstract class AbstractQueryJTemplate<C extends QueryJTemplateContext>
     public String toString()
     {
         return
-            "{ 'class': 'AbstractQueryJTemplate', "
-            + " 'cachedProcessedHeader': '" + m__strCachedProcessedHeader + '\''
-            + " 'parent': " + super.toString()
+              "{ \"class\": \"" + AbstractQueryJTemplate.class.getName() + '"'
+            + ", \"cachedProcessedHeader\": \"" + m__strCachedProcessedHeader + '"'
+            + Literals.JSON_PARENT_ATTR + super.toString()
             + " }";
     }
 }

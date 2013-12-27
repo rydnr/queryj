@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,12 +37,17 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-API classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 import org.acmsl.queryj.templates.packaging.TemplateBuildHandlerTemplate;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
 
@@ -72,8 +77,9 @@ import java.util.List;
 public class TemplateBuildHandlerTemplateWritingHandler
     extends TemplatePackagingWritingHandler
                 <TemplateBuildHandlerTemplate<DefaultTemplatePackagingContext>,
-                 TemplatePackagingTemplateGenerator<TemplateBuildHandlerTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>,
-                 DefaultTemplatePackagingContext>
+                    DefaultTemplatePackagingContext,
+                    TemplatePackagingTemplateGenerator<TemplateBuildHandlerTemplate<DefaultTemplatePackagingContext>,
+                                          DefaultTemplatePackagingContext>>
 {
     /**
      * Retrieves the template generator.
@@ -111,8 +117,7 @@ public class TemplateBuildHandlerTemplateWritingHandler
 
         if (result == null)
         {
-            // TODO
-            throw new RuntimeException("Missing template build handlen templates");
+            throw new MissingTemplatesException("template-build-handler");
         }
 
         return result;

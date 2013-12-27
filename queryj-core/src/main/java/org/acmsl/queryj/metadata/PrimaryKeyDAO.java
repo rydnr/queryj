@@ -70,7 +70,8 @@ public interface PrimaryKeyDAO
      * @return the {@link Attribute} of the primary key for given table.
      */
     @NotNull
-    List<Attribute> findPrimaryKey(@NotNull final String table);
+    @SuppressWarnings("unused")
+    List<Attribute<String>> findPrimaryKey(@NotNull final String table);
 
     /**
      * Retrieves whether given {@link Attribute column} is part of the primary key for the table, or not.
@@ -78,6 +79,7 @@ public interface PrimaryKeyDAO
      * @param column the column name.
      * @return <code>true</code> if the column is part of the primary key.
      */
+    @SuppressWarnings("unused")
     boolean isPartOfPrimaryKey(
         @NotNull final String table, @NotNull final String column);
 
@@ -88,5 +90,5 @@ public interface PrimaryKeyDAO
      */
     void insert(
         @NotNull final String table,
-        @NotNull final List<Attribute> primaryKey);
+        @NotNull final List<Attribute<String>> primaryKey);
 }

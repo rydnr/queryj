@@ -67,12 +67,17 @@ public interface TemplatePackagingSettings
     /**
      * The template packaging group.
      */
-    String TEMPLATE_PACKAGING_GROUP = "org/acmsl/queryj/templates/packaging/";
+    String TEMPLATE_PACKAGING_GROUP = Literals.ORG_ACMSL_QUERYJ_TEMPLATES_PACKAGING;
 
     /**
      * The key to access the output dir.
      */
     String OUTPUT_DIR = "output-dir";
+
+    /**
+     * The key to access the output dir for tests.
+     */
+    String OUTPUT_DIR_FOR_TESTS = "output-dir-for-tests";
 
     /**
      * The key to access the template templates.
@@ -108,4 +113,9 @@ public interface TemplatePackagingSettings
      * The base package for the QueryJ-specific output files.
      */
     String OUTPUT_PACKAGE = "org.acmsl.queryj.templates";
+
+    /**
+     * The key to access the DefaultTemplateChainProvider template.
+     */
+    String DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE = "default_template_chain_provider_template";
 }

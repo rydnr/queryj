@@ -91,7 +91,6 @@ public class TableRepositoryTemplateUtils
      * Retrieves the name of the <code>TableRepository</code> instance.
      * @param repository the repository name.
      * @return such name.
-     * @precondition repository != null
      */
     @NotNull
     public String retrieveTableRepositoryClassName(@NotNull final String repository)
@@ -106,8 +105,6 @@ public class TableRepositoryTemplateUtils
      * @param repository the repository name.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return such name.
-     * @precondition repository != null
-     * @precondition decorationUtils != null
      */
     @NotNull
     protected String retrieveTableRepositoryClassName(

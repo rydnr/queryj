@@ -1,0 +1,18 @@
+- Create a new Java class GlobalClassNameHandler in package org.acmsl.queryj.templates.packaging.placeholders;
+- Add comment: Resolves "class_name" placeholders, for global templates.;
+- Make it extend AbstractDecoratedStringHandler<GlobalTemplateContext>;
+- Define a constructor GlobalClassNameHandler(GlobalTemplateContext):
+  - Add comment: Creates a new instance to resolve "class_name" placeholders in global templates.;
+  - Add comment: @param context the {@link GlobalTemplateContext}.;
+  - Call super(context);
+- Implement getPlaceHolder() method:
+  - Add comment: Returns "class_name".;
+  - Add comment: @return such placeholder.;
+  - Add @Override;
+  - Add @NotNull;
+  - Return "class_name";
+- Implement resolveContextValue(GlobalTemplateContext) method:
+  - Add comment: Resolves "class_name" values.;
+  - Add comment: @param context the {@link GlobalTemplateContext context}.
+  - Return context.getTemplateName();
+- Fix import groups;

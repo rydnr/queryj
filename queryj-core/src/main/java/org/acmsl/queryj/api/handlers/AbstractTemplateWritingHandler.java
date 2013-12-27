@@ -86,7 +86,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @ThreadSafe
 public abstract class AbstractTemplateWritingHandler
-    <T extends Template<C>, TG extends TemplateGenerator<T>, C extends TemplateContext>
+    <T extends Template<C>,
+     C extends TemplateContext,
+     TG extends TemplateGenerator<T, C>>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
@@ -300,7 +302,7 @@ public abstract class AbstractTemplateWritingHandler
      * @return the thread.
      */
     @NotNull
-    protected abstract TemplateGeneratorThread<T, TG, C> buildGeneratorThread(
+    protected abstract TemplateGeneratorThread<T, C, TG> buildGeneratorThread(
         @NotNull final T template,
         @NotNull final TG generator,
         @NotNull final File outputDir,
@@ -324,7 +326,7 @@ public abstract class AbstractTemplateWritingHandler
     @ThreadSafe
     @NotNull
     @SuppressWarnings("unused")
-    protected List<Future> writeTemplatesMultithread2ndVersion(
+    protected List<Future<?>> writeTemplatesMultithread2ndVersion(
         @Nullable final List<T> templates,
         @NotNull final String engineName,
         @NotNull final QueryJCommand parameters,
@@ -334,11 +336,11 @@ public abstract class AbstractTemplateWritingHandler
         @NotNull final File rootDir)
         throws  QueryJBuildException
     {
-        @NotNull final List<Future> result;
+        @NotNull final List<Future<?>> result;
 
         if (templates != null)
         {
-            result = new ArrayList<Future>(templates.size());
+            result = new ArrayList<Future<?>>(templates.size());
 
             @NotNull final ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 
@@ -367,16 +369,17 @@ public abstract class AbstractTemplateWritingHandler
 
                         result.add(
                             threadPool.submit(
-                                buildGeneratorThread(
-                                    t_Template,
-                                    templateGenerator,
-                                    retrieveOutputDir(
-                                        t_Template.getTemplateContext(), rootDir, parameters),
-                                    rootDir,
-                                    charset,
-                                    intIndex,
-                                    round,
-                                    parameters)));
+                                (Runnable)
+                                    buildGeneratorThread(
+                                        t_Template,
+                                        templateGenerator,
+                                        retrieveOutputDir(
+                                            t_Template.getTemplateContext(), rootDir, parameters),
+                                        rootDir,
+                                        charset,
+                                        intIndex,
+                                        round,
+                                        parameters)));
                     }
                     else
                     {
@@ -421,7 +424,7 @@ public abstract class AbstractTemplateWritingHandler
         }
         else
         {
-            result = new ArrayList<Future>(0);
+            result = new ArrayList<Future<?>>(0);
         }
 
         return result;
@@ -442,7 +445,7 @@ public abstract class AbstractTemplateWritingHandler
      * @return the template.
      * @throws QueryJBuildException if the template retrieval process fails.
      */
-    @Nullable
+    @NotNull
     protected abstract List<T> retrieveTemplates(@NotNull final QueryJCommand parameters)
         throws QueryJBuildException;
 

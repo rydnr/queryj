@@ -39,11 +39,11 @@ package org.acmsl.queryj.metadata;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
+import org.acmsl.queryj.metadata.vo.Table;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,12 +72,12 @@ public class CachingForeignKeyDecorator
     /**
      * The cached source table.
      */
-    private Table m__CachedSource;
+    private Table<DecoratedString, Attribute<DecoratedString>> m__CachedSource;
 
     /**
      * The cached target table.
      */
-    private Table m__CachedTarget;
+    private Table<DecoratedString, Attribute<DecoratedString>> m__CachedTarget;
 
     /**
      * Creates a <code>CachingForeignKeyDecorator</code> with the
@@ -89,7 +89,7 @@ public class CachingForeignKeyDecorator
      */
     @SuppressWarnings("unused")
     public CachingForeignKeyDecorator(
-        @NotNull final ForeignKey foreignKey,
+        @NotNull final ForeignKey<String> foreignKey,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -108,10 +108,9 @@ public class CachingForeignKeyDecorator
      * @param decoratorFactory the {@link DecoratorFactory} implementation.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
-    @SuppressWarnings("unused")
-     protected CachingForeignKeyDecorator(
+    protected CachingForeignKeyDecorator(
         @NotNull final String sourceTableName,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final String targetTableName,
         final boolean allowsNull,
         @NotNull final MetadataManager metadataManager,
@@ -132,7 +131,8 @@ public class CachingForeignKeyDecorator
      * Specifies the cached source table.
      * @param source such table.
      */
-    protected final void immutableSetCachedSource(@NotNull final Table source)
+    protected final void immutableSetCachedSource(
+        @NotNull final Table<DecoratedString, Attribute<DecoratedString>> source)
     {
         m__CachedSource = source;
     }
@@ -141,7 +141,7 @@ public class CachingForeignKeyDecorator
      * Specifies the cached source table.
      * @param source such table.
      */
-    protected void setCachedSource(@NotNull final Table source)
+    protected void setCachedSource(@NotNull final Table<DecoratedString, Attribute<DecoratedString>> source)
     {
         immutableSetCachedSource(source);
     }
@@ -151,7 +151,7 @@ public class CachingForeignKeyDecorator
      * @return such table.
      */
     @Nullable
-    protected Table getCachedSource()
+    protected Table<DecoratedString, Attribute<DecoratedString>> getCachedSource()
     {
         return m__CachedSource;
     }
@@ -162,9 +162,9 @@ public class CachingForeignKeyDecorator
      * @return such information.
      */
     @Override
-    public Table getSource()
+    public Table<DecoratedString, Attribute<DecoratedString>> getSource()
     {
-        @Nullable Table result = getCachedSource();
+        @Nullable Table<DecoratedString, Attribute<DecoratedString>> result = getCachedSource();
 
         if (result == null)
         {
@@ -184,7 +184,8 @@ public class CachingForeignKeyDecorator
      * Specifies the cached target table.
      * @param target such table.
      */
-    protected final void immutableSetCachedTarget(@NotNull final Table target)
+    protected final void immutableSetCachedTarget(
+        @NotNull final Table<DecoratedString, Attribute<DecoratedString>> target)
     {
         m__CachedTarget = target;
     }
@@ -193,7 +194,7 @@ public class CachingForeignKeyDecorator
      * Specifies the cached target table.
      * @param target such table.
      */
-    protected void setCachedTarget(@NotNull final Table target)
+    protected void setCachedTarget(@NotNull final Table<DecoratedString, Attribute<DecoratedString>> target)
     {
         immutableSetCachedTarget(target);
     }
@@ -203,7 +204,7 @@ public class CachingForeignKeyDecorator
      * @return such table.
      */
     @Nullable
-    protected Table getCachedTarget()
+    protected Table<DecoratedString, Attribute<DecoratedString>> getCachedTarget()
     {
         return m__CachedTarget;
     }
@@ -214,9 +215,9 @@ public class CachingForeignKeyDecorator
      * @return such information.
      */
     @Override
-    public Table getTarget()
+    public Table<DecoratedString, Attribute<DecoratedString>> getTarget()
     {
-        @Nullable Table result = getCachedTarget();
+        @Nullable Table<DecoratedString, Attribute<DecoratedString>> result = getCachedTarget();
 
         if (result == null)
         {
@@ -229,5 +230,15 @@ public class CachingForeignKeyDecorator
         }
 
         return result;
+    }
+
+    @Override
+    @NotNull
+    public String toString()
+    {
+        return "CachingForeignKeyDecorator{" +
+               "cachedSource=" + m__CachedSource +
+               ", cachedTarget=" + m__CachedTarget +
+               '}';
     }
 }

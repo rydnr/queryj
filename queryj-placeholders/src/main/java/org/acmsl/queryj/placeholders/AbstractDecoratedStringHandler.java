@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -44,6 +44,7 @@ import org.acmsl.queryj.api.TemplateContext;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.jetbrains.annotations.NotNull;
 
 /*

@@ -58,43 +58,16 @@ import java.io.File;
  */
 @ThreadSafe
 public class DefaultTemplatePackagingContext
-    implements TemplatePackagingContext
+    extends AbstractTemplatePackagingContext
+    implements PerTemplateDefTemplateContext
 {
+    private static final long serialVersionUID = -1034808848836900245L;
+
     /**
      * The template def.
      */
     @NotNull
-    private TemplateDef m__TemplateDef;
-
-    /**
-     * The template name.
-     */
-    @NotNull
-    private String m__strTemplateName;
-
-    /**
-     * The file name.
-     */
-    @NotNull
-    private String m__strFileName;
-
-    /**
-     * The package name.
-     */
-    @NotNull
-    private String m__strPackageName;
-
-    /**
-     * The root dir.
-     */
-    @NotNull
-    private File m__RootDir;
-
-    /**
-     * The output dir.
-     */
-    @NotNull
-    private File m__OutputDir;
+    private TemplateDef<String> m__TemplateDef;
 
     /**
      * Creates a new instance.
@@ -104,26 +77,22 @@ public class DefaultTemplatePackagingContext
      * @param outputDir the output dir.
      */
     public DefaultTemplatePackagingContext(
-        @NotNull final TemplateDef templateDef,
+        @NotNull final TemplateDef<String> templateDef,
         @NotNull final String templateName,
         @NotNull final String fileName,
         @NotNull final String packageName,
         @NotNull final File rootDir,
         @NotNull final File outputDir)
     {
+        super(templateName, fileName, packageName, rootDir, outputDir);
         immutableSetTemplateDef(templateDef);
-        immutableSetTemplateName(templateName);
-        immutableSetFileName(fileName);
-        immutableSetPackageName(packageName);
-        immutableSetRootDir(rootDir);
-        immutableSetOutputDir(outputDir);
     }
 
     /**
      * Specifies the template def.
      * @param templateDef the template def.
      */
-    protected final void immutableSetTemplateDef(@NotNull final TemplateDef templateDef)
+    protected final void immutableSetTemplateDef(@NotNull final TemplateDef<String> templateDef)
     {
         this.m__TemplateDef = templateDef;
     }
@@ -133,7 +102,7 @@ public class DefaultTemplatePackagingContext
      * @param templateDef the template def.
      */
     @SuppressWarnings("unused")
-    protected void setTemplateDef(@NotNull final TemplateDef templateDef)
+    protected void setTemplateDef(@NotNull final TemplateDef<String> templateDef)
     {
         immutableSetTemplateDef(templateDef);
     }
@@ -144,171 +113,17 @@ public class DefaultTemplatePackagingContext
      */
     @Override
     @NotNull
-    public TemplateDef getTemplateDef()
+    public TemplateDef<String> getTemplateDef()
     {
         return this.m__TemplateDef;
-    }
-
-    /**
-     * Specifies the name of the template.
-     * @param templateName such name.
-     */
-    protected final void immutableSetTemplateName(@NotNull final String templateName)
-    {
-        this.m__strTemplateName = templateName;
-    }
-
-    /**
-     * Specifies the name of the template.
-     * @param templateName such name.
-     */
-    @SuppressWarnings("unused")
-    protected void setTemplateName(@NotNull final String templateName)
-    {
-        immutableSetTemplateName(templateName);
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    @Override
-    @NotNull
-    public String getTemplateName()
-    {
-        return this.m__strTemplateName;
-    }
-
-    /**
-     * Specifies the file name.
-     * @param fileName such file name.
-     */
-    protected final void immutableSetFileName(@NotNull final String fileName)
-    {
-        this.m__strFileName = fileName;
-    }
-
-    /**
-     * Specifies the file name.
-     * @param fileName such file name.
-     */
-    @SuppressWarnings("unused")
-    protected void setFileName(@NotNull final String fileName)
-    {
-        immutableSetFileName(fileName);
-    }
-
-    /**
-     * Retrieves the file name.
-     * @return such information.
-     */
-    @Override
-    @NotNull
-    public String getFileName()
-    {
-        return this.m__strFileName;
-    }
-
-    /**
-     * Specifies the package name.
-     * @param packageName such information.
-     */
-    protected void immutableSetPackageName(@NotNull final String packageName)
-    {
-        this.m__strPackageName = packageName;
-    }
-
-    /**
-     * Specifies the package name.
-     * @param packageName such information.
-     */
-    @SuppressWarnings("unused")
-    protected void setPackageName(@NotNull final String packageName)
-    {
-        immutableSetPackageName(packageName);
-    }
-
-    /**
-     * Retrieves the package name.
-     * @return such information.
-     */
-    @Override
-    @NotNull
-    public String getPackageName()
-    {
-        return m__strPackageName;
-    }
-
-    /**
-     * Specifies the root dir.
-     * @param dir such dir.
-     */
-    protected final void immutableSetRootDir(@NotNull final File dir)
-    {
-        this.m__RootDir = dir;
-    }
-
-    /**
-     * Specifies the root dir.
-     * @param dir such dir.
-     */
-    @SuppressWarnings("unused")
-    protected void setRootDir(@NotNull final File dir)
-    {
-        immutableSetRootDir(dir);
-    }
-
-    /**
-     * Retrieves the root dir.
-     * @return such folder.
-     */
-    @Override
-    @NotNull
-    public File getRootDir()
-    {
-        return this.m__RootDir;
-    }
-
-    /**
-     * Specifies the output dir.
-     * @param dir such dir.
-     */
-    protected final void immutableSetOutputDir(@NotNull final File dir)
-    {
-        this.m__OutputDir = dir;
-    }
-
-    /**
-     * Specifies the output dir.
-     * @param dir such dir.
-     */
-    @SuppressWarnings("unused")
-    protected void setOutputDir(@NotNull final File dir)
-    {
-        immutableSetOutputDir(dir);
-    }
-
-    /**
-     * Retrieves the output dir.
-     * @return such folder.
-     */
-    @Override
-    @NotNull
-    public File getOutputDir()
-    {
-        return this.m__OutputDir;
     }
 
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'DefaultTemplatePackagingContext' " +
-               ", 'fileName': '" + m__strFileName + '\'' +
-               ", 'templateName': '" + m__strTemplateName + '\'' +
-               ", 'packageName': '" + m__strPackageName + '\'' +
-               ", 'templateDef': " + m__TemplateDef +
-               ", 'rootDir': '" + m__RootDir.getAbsolutePath() + '\'' +
-               ", 'outputDir': '" + m__OutputDir.getAbsolutePath() + "' }";
+        return
+              "{ \"class\": \"" + DefaultTemplatePackagingContext.class.getName() + "\""
+            + "', \"templateDef\": \"" + m__TemplateDef + "\" }";
     }
 }

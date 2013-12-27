@@ -39,8 +39,6 @@ package org.acmsl.queryj.tools.handlers;
  */
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
-import org.acmsl.queryj.api.QueryJTemplate;
-import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseMetadataException;
 import org.acmsl.queryj.api.Template;
 import org.acmsl.queryj.api.exceptions.UnsupportedCharsetQueryjException;
@@ -65,13 +63,18 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
+import org.acmsl.queryj.tools.exceptions.MissingConnectionAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingCustomSqlProviderAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingDataSourceJndiPathAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingOutputDirAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingProjectPackageAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingRepositoryNameAtRuntimeException;
 import org.apache.commons.logging.Log;
 
 /*
@@ -101,8 +104,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            // TODO: throw suitable exception.
-            throw new RuntimeException("TODO: fix me");
+            throw new MissingOutputDirAtRuntimeException();
         }
 
         return result;
@@ -120,8 +122,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            // TODO: throw suitable exception.
-            throw new RuntimeException("TODO: fix me");
+            throw new MissingProjectPackageAtRuntimeException();
         }
 
         return result;
@@ -228,7 +229,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            throw new RuntimeException("TODO: fix me");
+            throw new MissingCustomSqlProviderAtRuntimeException();
         }
 
         return result;
@@ -246,7 +247,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            throw new RuntimeException("TODO: fix me");
+            throw new MissingRepositoryNameAtRuntimeException();
         }
 
         return result;
@@ -333,7 +334,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            throw new RuntimeException("TODO: fix me");
+            throw new MissingConnectionAtRuntimeException();
         }
 
         return result;
@@ -412,7 +413,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            throw new RuntimeException("TODO: Fix me");
+            throw new MissingDataSourceJndiPathAtRuntimeException();
         }
 
         return result;
@@ -474,7 +475,7 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      */
     @SuppressWarnings("unused")
-    protected <T extends Template> void annotateGenerationTasks(
+    protected <T extends Template<?>> void annotateGenerationTasks(
         @NotNull final List<Future<T>> tasks, @NotNull final QueryJCommand parameters)
     {
         new QueryJCommandWrapper<List<Future<T>>>(parameters).setSetting(buildGenerationTasksKey(), tasks);

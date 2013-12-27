@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.Literals;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -55,6 +56,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class TemplateTemplate<C extends TemplatePackagingContext>
     extends AbstractTemplatePackagingTemplate<C>
 {
+    private static final long serialVersionUID = -392473631653215353L;
+
     /**
      * Builds an <code>TemplateTemplate</code> using given
      * information.
@@ -73,6 +76,6 @@ public class TemplateTemplate<C extends TemplatePackagingContext>
     @Override
     public String getTemplateName()
     {
-        return TEMPLATE_LITERAL;
+        return Literals.TEMPLATE;
     }
 }

@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
 /*
  * Importing QueryJ-Core classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
@@ -68,7 +69,7 @@ import java.util.List;
  */
 @ThreadSafe
 public class TemplateTemplateBuildHandler
-    extends TemplatePackagingBuildHandler
+    extends PerTemplateDefBuildHandler
                 <TemplateTemplate<DefaultTemplatePackagingContext>,
                  TemplateTemplateFactory,
                  DefaultTemplatePackagingContext>
@@ -82,7 +83,7 @@ public class TemplateTemplateBuildHandler
     @NotNull
     @Override
     protected DefaultTemplatePackagingContext buildContext(
-        @NotNull final TemplateDef templateDef, @NotNull final QueryJCommand parameters)
+        @NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand parameters)
     {
         return buildDefaultContext(templateDef, parameters);
     }
@@ -107,7 +108,7 @@ public class TemplateTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return "TemplateTemplate";
+        return Literals.TEMPLATE;
     }
 
     /**

@@ -64,6 +64,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
 import java.util.ServiceLoader;
 
 /*
@@ -88,7 +89,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
-    extends AbstractQueryJChain<CH>
+    extends AbstractQueryJChain<QueryJCommand, CH>
     implements QueryJSettings
 {
     /**
@@ -106,7 +107,9 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
      */
     @SuppressWarnings("unchecked")
     @NotNull
-    protected Chain<CH> buildChain(@NotNull final Chain<CH> chain)
+    @Override
+    protected Chain<QueryJCommand, QueryJBuildException, CH> buildChain(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain)
        throws QueryJBuildException
     {
         chain.add((CH) new ParameterValidationHandler());
@@ -142,17 +145,20 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
      * @throws QueryJBuildException if the chain cannot be built successfully.
      */
     @SuppressWarnings("unchecked")
-    protected void fillTemplateHandlers(@NotNull final Chain<CH> chain)
+    protected void fillTemplateHandlers(@NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain)
         throws QueryJBuildException
     {
-         @NotNull final ServiceLoader<TemplateChainProvider> loader =
+        // Don't know how to fix the generics warnings
+        @NotNull final ServiceLoader<TemplateChainProvider> loader =
              ServiceLoader.load(TemplateChainProvider.class);
 
         if (loader.iterator().hasNext())
         {
-            @NotNull final TemplateChainProvider<TemplateHandler> provider = loader.iterator().next();
+            // Don't know how to fix the generics warnings
+            @NotNull final TemplateChainProvider provider = loader.iterator().next();
 
-            for (@Nullable final TemplateHandler handler : provider.getHandlers())
+            // Don't know how to fix the generics warnings
+            for (@Nullable final TemplateHandler handler : (List<TemplateHandler>) provider.getHandlers())
             {
                 if (handler != null)
                 {
@@ -171,6 +177,7 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
      * @param buildException the error that triggers this clean-up.
      * @param command the command.
      */
+    @Override
     protected void cleanUpOnError(
         @NotNull final QueryJBuildException buildException, @NotNull final QueryJCommand command)
     {

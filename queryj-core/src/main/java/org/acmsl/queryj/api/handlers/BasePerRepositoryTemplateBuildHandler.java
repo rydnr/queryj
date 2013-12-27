@@ -73,8 +73,8 @@ import java.util.List;
  */
 public abstract class BasePerRepositoryTemplateBuildHandler
     <T extends AbstractBasePerRepositoryTemplate<C>,
-     TF extends PerRepositoryTemplateFactory<T>,
-     C extends PerRepositoryTemplateContext>
+     C extends PerRepositoryTemplateContext,
+     TF extends PerRepositoryTemplateFactory<T, C>>
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
@@ -99,8 +99,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
     {
-        return
-            handle(command, retrieveProjectPackage(command));
+        return handle(command, retrieveProjectPackage(command));
     }
 
     /**

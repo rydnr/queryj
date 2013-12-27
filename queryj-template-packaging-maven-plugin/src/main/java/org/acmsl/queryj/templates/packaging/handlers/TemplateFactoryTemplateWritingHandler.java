@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,14 +37,19 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-API classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
 import org.acmsl.queryj.templates.packaging.TemplateFactoryTemplate;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
+import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 
 /*
  * Importing Jetbrains annotations.
@@ -58,7 +63,7 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JDK classes.
  */
 import java.util.List;
 
@@ -72,8 +77,10 @@ import java.util.List;
 public class TemplateFactoryTemplateWritingHandler
     extends TemplatePackagingWritingHandler
                 <TemplateFactoryTemplate<DefaultTemplatePackagingContext>,
-                 TemplatePackagingTemplateGenerator<TemplateFactoryTemplate<DefaultTemplatePackagingContext>,
-                 DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>
+                 DefaultTemplatePackagingContext,
+                 TemplatePackagingTemplateGenerator
+                     <TemplateFactoryTemplate<DefaultTemplatePackagingContext>,
+                      DefaultTemplatePackagingContext>>
 {
     /**
      * Retrieves the template generator.
@@ -97,13 +104,26 @@ public class TemplateFactoryTemplateWritingHandler
      * @return the template.
      * @throws QueryJBuildException if the template retrieval process fails.
      */
-    @Nullable
+    @NotNull
     @Override
     protected List<TemplateFactoryTemplate<DefaultTemplatePackagingContext>> retrieveTemplates(@NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {
-        return
+        @NotNull final List<TemplateFactoryTemplate<DefaultTemplatePackagingContext>> result;
+
+        @Nullable final List<TemplateFactoryTemplate<DefaultTemplatePackagingContext>> aux =
             new QueryJCommandWrapper<TemplateFactoryTemplate<DefaultTemplatePackagingContext>>(parameters)
                 .getListSetting(TEMPLATE_FACTORY_TEMPLATES);
+
+        if (aux == null)
+        {
+            throw new MissingTemplatesException("template-factory");
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
     }
 }

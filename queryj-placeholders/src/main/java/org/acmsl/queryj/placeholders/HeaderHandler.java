@@ -44,6 +44,7 @@ import org.acmsl.queryj.api.QueryJTemplateContext;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -83,7 +84,7 @@ public class HeaderHandler
     @Override
     public String getPlaceHolder()
     {
-        return "header";
+        return Literals.HEADER;
     }
 
     /**

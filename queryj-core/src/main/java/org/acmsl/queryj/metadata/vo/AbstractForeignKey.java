@@ -52,30 +52,30 @@ import java.util.List;
  * Provides the common logic for foreign key implementations.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractForeignKey
-    implements ForeignKey
+public abstract class AbstractForeignKey<V>
+    implements ForeignKey<V>
 {
     private static final long serialVersionUID = -671217258820687779L;
 
     /**
      * (Optional) the foreign key name.
      */
-    private String m__strFkName;
+    private V m__strFkName;
 
     /**
      * The source table name.
      */
-    private String m__strSourceTableName;
+    private V m__strSourceTableName;
     
     /**
      * The attributes.
      */
-    private List<Attribute> m__lAttributes;
+    private List<Attribute<V>> m__lAttributes;
     
     /**
      * The target table name.
      */
-    private String m__strTargetTableName;
+    private V m__strTargetTableName;
     
     /**
      * Whether the foreign key allows null values.
@@ -90,9 +90,9 @@ public abstract class AbstractForeignKey
      * @param allowsNull whether the foreign key can take null values.
      */
     protected AbstractForeignKey(
-        @NotNull final String sourceTableName,
-        @NotNull final List<Attribute> attributes,
-        @NotNull final String targetTableName,
+        @NotNull final V sourceTableName,
+        @NotNull final List<Attribute<V>> attributes,
+        @NotNull final V targetTableName,
         final boolean allowsNull)
     {
         immutableSetSourceTableName(sourceTableName);
@@ -108,9 +108,9 @@ public abstract class AbstractForeignKey
      * @param targetTableName the target table name.
      */
     protected AbstractForeignKey(
-        @NotNull final String fkName,
-        @NotNull final String sourceTableName,
-        @NotNull final String targetTableName)
+        @NotNull final V fkName,
+        @NotNull final V sourceTableName,
+        @NotNull final V targetTableName)
     {
         immutableSetFkName(fkName);
         immutableSetSourceTableName(sourceTableName);
@@ -121,7 +121,7 @@ public abstract class AbstractForeignKey
      * Specifies the foreign key name.
      * @param name such name.
      */
-    protected final void immutableSetFkName(@NotNull final String name)
+    protected final void immutableSetFkName(@NotNull final V name)
     {
         this.m__strFkName = name;
     }
@@ -131,7 +131,7 @@ public abstract class AbstractForeignKey
      * @param name such name.
      */
     @SuppressWarnings("unused")
-    protected void setFkName(@NotNull final String name)
+    protected void setFkName(@NotNull final V name)
     {
         immutableSetFkName(name);
     }
@@ -142,7 +142,7 @@ public abstract class AbstractForeignKey
      */
     @SuppressWarnings("unused")
     @Nullable
-    public String getFkName()
+    public V getFkName()
     {
         return m__strFkName;
     }
@@ -151,7 +151,7 @@ public abstract class AbstractForeignKey
      * Specifies the source table name.
      * @param tableName such table name.
      */
-    protected final void immutableSetSourceTableName(@NotNull final String tableName)
+    protected final void immutableSetSourceTableName(@NotNull final V tableName)
     {
         m__strSourceTableName = tableName;
     }
@@ -161,7 +161,7 @@ public abstract class AbstractForeignKey
      * @param tableName such table name.
      */
     @SuppressWarnings("unused")
-    protected void setSourceTableName(@NotNull final String tableName)
+    protected void setSourceTableName(@NotNull final V tableName)
     {
         immutableSetSourceTableName(tableName);
     }
@@ -171,7 +171,7 @@ public abstract class AbstractForeignKey
      * @return such table name.
      */
     @NotNull
-    public String getSourceTableName()
+    public V getSourceTableName()
     {
         return m__strSourceTableName;
     }
@@ -180,7 +180,7 @@ public abstract class AbstractForeignKey
      * Specifies the attributes.
      * @param attributes such attributes.
      */
-    protected final void immutableSetAttributes(@NotNull final List<Attribute> attributes)
+    protected final void immutableSetAttributes(@NotNull final List<Attribute<V>> attributes)
     {
         m__lAttributes = attributes;
     }
@@ -189,7 +189,7 @@ public abstract class AbstractForeignKey
      * Specifies the attributes.
      * @param attributes the attributes.
      */
-    protected void setAttributes(@NotNull final List<Attribute> attributes)
+    protected void setAttributes(@NotNull final List<Attribute<V>> attributes)
     {
         immutableSetAttributes(attributes);
     }
@@ -200,7 +200,7 @@ public abstract class AbstractForeignKey
      */
     @NotNull
     @Override
-    public List<Attribute> getAttributes()
+    public List<Attribute<V>> getAttributes()
     {
         return m__lAttributes;
     }
@@ -209,7 +209,7 @@ public abstract class AbstractForeignKey
      * Specifies the target table name.
      * @param tableName such table name.
      */
-    protected final void immutableSetTargetTableName(@NotNull final String tableName)
+    protected final void immutableSetTargetTableName(@NotNull final V tableName)
     {
         m__strTargetTableName = tableName;
     }
@@ -219,7 +219,7 @@ public abstract class AbstractForeignKey
      * @param tableName such table name.
      */
     @SuppressWarnings("unused")
-    protected void setTargetTableName(@NotNull final String tableName)
+    protected void setTargetTableName(@NotNull final V tableName)
     {
         immutableSetTargetTableName(tableName);
     }
@@ -230,7 +230,7 @@ public abstract class AbstractForeignKey
      */
     @NotNull
     @Override
-    public String getTargetTableName()
+    public V getTargetTableName()
     {
         return m__strTargetTableName;
     }
@@ -292,7 +292,8 @@ public abstract class AbstractForeignKey
 
         if  (object instanceof ForeignKey)
         {
-            @NotNull final ForeignKey t_OtherInstance = (ForeignKey) object;
+            @SuppressWarnings("unchecked")
+            @NotNull final ForeignKey<String> t_OtherInstance = (ForeignKey<String>) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -322,7 +323,7 @@ public abstract class AbstractForeignKey
      * object prevents it from being compared to this Object.
      */
     @Override
-    public int compareTo(@Nullable final ForeignKey object)
+    public int compareTo(@Nullable final ForeignKey<V> object)
     {
         int result = 1;
 
@@ -341,7 +342,8 @@ public abstract class AbstractForeignKey
      * @return a positive number if the first is considered 'greater' than the second;
      * 0 if they are equal; a negative number otherwise.
      */
-    protected int compareThem(@NotNull final ForeignKey first, @NotNull final ForeignKey second)
+    @SuppressWarnings("unchecked")
+    protected int compareThem(@NotNull final ForeignKey<V> first, @NotNull final ForeignKey<V> second)
     {
         final int result;
 
@@ -359,12 +361,12 @@ public abstract class AbstractForeignKey
             first.isNullable(),
             second.isNullable());
 
-        final List<Attribute> t_lFirstAttributes = first.getAttributes();
-        final List<Attribute> t_lSecondAttributes = second.getAttributes();
+        final List<Attribute<V>> t_lFirstAttributes = first.getAttributes();
+        final List<Attribute<V>> t_lSecondAttributes = second.getAttributes();
 
-        final Attribute[] t_aFirstAttributes = new Attribute[t_lFirstAttributes.size()];
+        final Attribute<V>[] t_aFirstAttributes = (Attribute<V>[]) new Attribute<?>[t_lFirstAttributes.size()];
         t_lFirstAttributes.toArray(t_aFirstAttributes);
-        final Attribute[] t_aSecondAttributes = new Attribute[t_lSecondAttributes.size()];
+        final Attribute<V>[] t_aSecondAttributes = (Attribute<V>[]) new Attribute<?>[t_lSecondAttributes.size()];
         t_lSecondAttributes.toArray(t_aSecondAttributes);
 
         for (int t_iIndex = 0; t_iIndex < t_aFirstAttributes.length; t_iIndex++)
@@ -384,11 +386,12 @@ public abstract class AbstractForeignKey
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractForeignKey'" +
-               ", 'nullable': '" + m__bNullable + '\'' +
-               ", 'fkName': '" + m__strFkName + '\'' +
-               ", 'sourceTableName': '" + m__strSourceTableName + '\'' +
-               ", 'attributes': [" + Arrays.toString(m__lAttributes.toArray(new Attribute[m__lAttributes.size()])) + ']' +
-               ", 'targetTableName': '" + m__strTargetTableName + "' }";
+        return
+              "{ \"class\": \"" + AbstractForeignKey.class.getName() + '"'
+            + ", \"nullable\": " + m__bNullable
+            + ", \"fkName\": \"" + m__strFkName + '"'
+            + ", \"sourceTableName\": \"" + m__strSourceTableName + '"'
+            + ", \"attributes\": [" + Arrays.toString(m__lAttributes.toArray(new Attribute<?>[m__lAttributes.size()])) + ']'
+            + ", \"targetTableName\": \"" + m__strTargetTableName + "\" }";
     }
 }

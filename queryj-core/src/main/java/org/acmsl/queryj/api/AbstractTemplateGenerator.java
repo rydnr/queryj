@@ -80,8 +80,8 @@ import java.security.NoSuchAlgorithmException;
  * Created: 2013/08/17 10:26
  */
 @ThreadSafe
-public abstract class AbstractTemplateGenerator<N extends Template<? extends TemplateContext>>
-    implements TemplateGenerator<N>
+public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends TemplateContext>
+    implements TemplateGenerator<N, C>
 {
     protected static final String CANNOT_SERIALIZE_TEMPLATE_LITERAL = "Cannot serialize template ";
 
@@ -543,9 +543,10 @@ public abstract class AbstractTemplateGenerator<N extends Template<? extends Tem
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractTemplateGenerator' " +
-               ", 'caching': '" + m__bCaching + '\'' +
-               ", 'threadCount': " + m__iThreadCount +
-               " }";
+        return
+              "{ \"class\': \"" + AbstractTemplateGenerator.class.getName() + "\""
+            + "\", \"caching\": " + m__bCaching
+            + ", \"threadCount\": " + m__iThreadCount
+            + " }";
     }
 }

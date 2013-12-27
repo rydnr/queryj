@@ -42,25 +42,25 @@ import java.util.List;
  * Represents <i>row</i> entities in the metadata model.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface Row
-    extends  Comparable<Row>,
+public interface Row<V>
+    extends  Comparable<Row<V>>,
              Serializable
 {
     /**
      * Retrieves the attribute name.
      * @return such name.
      */
-    public String getName();
+    public V getName();
 
     /**
      * Retrieves the table name.
      * @return such information.
      */
-    public String getTableName();
+    public V getTableName();
 
     /**
      * Retrieves the attributes.
      * @return such information.
      */
-    public List<Attribute> getAttributes();
+    public List<Attribute<V>> getAttributes();
 }

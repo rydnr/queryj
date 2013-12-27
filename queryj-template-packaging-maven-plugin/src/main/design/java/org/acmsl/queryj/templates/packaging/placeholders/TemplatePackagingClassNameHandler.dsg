@@ -1,0 +1,19 @@
+- Create a new Java class TemplatePackagingClassNameHandler in package org.acmsl.queryj.templates.packaging.placeholders;
+- Add comment: Resolves "class_name" placeholders, for Template Packaging.;
+- Make it extend AbstractDecoratedStringHandler<DefaultTemplatePackagingContext>;
+- Implement constructor: TemplatePackagingClassNameHandler(DefaultTemplatePackagingContext):
+  - Add comment: Creates a new instance to resolve "class_name" placeholders in Template Packaging templates.;
+  - Add comment: @param context the {@link DefaultTemplatePackagingContext context}.;
+  - Call super(context);
+- Implement String getPlaceHolder() method:
+  - Add comment: Returns "class_name".;
+  - Add comment: @return such variable name.;
+  - Return "class_name";
+- Create a new Pattern constant STG_EXT:
+  - Pattern.compile("\\.stg$");
+- Implement String resolveContextValue(DefaultTemplatePackagingContext):
+  - Add comment: Resolves "class_name" values.;
+  - Add comment: @param context the {@link DefaultTemplatePackagingContext context}.;
+  - Add comment: @return such value.
+  - Return new DecoratedString(STG_EXT.matcher(context.getTemplateDef().getName()).replaceAll("")).getCapitalized() + context.getTemplateName();
+- Fix import groups;

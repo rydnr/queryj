@@ -41,6 +41,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.Literals;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.TemplateWritingHandlerTemplate;
 import org.acmsl.queryj.templates.packaging.TemplateWritingHandlerTemplateFactory;
@@ -61,7 +62,7 @@ import java.util.List;
  */
 @ThreadSafe
 public class TemplateWritingHandlerTemplateBuildHandler
-    extends TemplatePackagingBuildHandler
+    extends PerTemplateDefBuildHandler
                 <TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>,
                  TemplateWritingHandlerTemplateFactory,
                  DefaultTemplatePackagingContext>
@@ -75,7 +76,8 @@ public class TemplateWritingHandlerTemplateBuildHandler
     @NotNull
     @Override
     protected DefaultTemplatePackagingContext buildContext(
-        @NotNull final TemplateDef templateDef, @NotNull final QueryJCommand parameters)
+        @NotNull final TemplateDef<String> templateDef,
+        @NotNull final QueryJCommand parameters)
     {
         return buildDefaultContext(templateDef, parameters);
     }
@@ -100,7 +102,7 @@ public class TemplateWritingHandlerTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return "TemplateWritingHandler";
+        return Literals.TEMPLATE_WRITING_HANDLER;
     }
 
     /**
@@ -113,7 +115,8 @@ public class TemplateWritingHandlerTemplateBuildHandler
         @NotNull final List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>> templates,
         @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper<List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>>>(parameters)
+        new QueryJCommandWrapper
+            <List<TemplateWritingHandlerTemplate<DefaultTemplatePackagingContext>>>(parameters)
             .setSetting(TEMPLATE_WRITING_HANDLER_TEMPLATES, templates);
     }
 
@@ -126,6 +129,6 @@ public class TemplateWritingHandlerTemplateBuildHandler
     @Override
     protected String retrieveOutputPackage(@NotNull final QueryJCommand parameters)
     {
-        return OUTPUT_PACKAGE + ".handlers";
+        return OUTPUT_PACKAGE + Literals.DOT_HANDLERS;
     }
 }

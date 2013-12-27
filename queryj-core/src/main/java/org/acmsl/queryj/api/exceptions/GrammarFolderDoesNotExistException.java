@@ -59,6 +59,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class GrammarFolderDoesNotExistException
     extends QueryJBuildException
 {
+    private static final long serialVersionUID = -3786774099040571616L;
+
     /**
      * Creates an instance with given context.
      * @param grammarFolder the grammar folder.

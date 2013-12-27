@@ -472,7 +472,7 @@ public abstract class AbstractTemplatesTest<G, F>
      */
     protected boolean isProperties(@NotNull final File outputFile)
     {
-        return outputFile.getAbsolutePath().endsWith(".properties");
+        return outputFile.getAbsolutePath().endsWith(Literals.PROPERTIES);
     }
 
     /**
@@ -622,8 +622,8 @@ public abstract class AbstractTemplatesTest<G, F>
                 "fake manager",
                 null, // database metadata
                 new MetadataExtractionLogger(), // extraction listener
-                "catalog",
-                "schema",
+                Literals.CATALOG,
+                Literals.SCHEMA,
                 tableNames,
                 tables,
                 true, // disable table extraction

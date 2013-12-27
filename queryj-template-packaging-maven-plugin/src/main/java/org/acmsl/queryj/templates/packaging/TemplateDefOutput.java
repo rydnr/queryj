@@ -58,7 +58,8 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public enum TemplateDefOutput
 {
-    JAVA;
+    JAVA,
+    CUCUMBER;
 
     /**
      * Retrieves the template def output for given value.

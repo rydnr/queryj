@@ -145,7 +145,7 @@ public class ConfigurationPropertiesTemplateFactory
     @NotNull
     public String retrieveTemplateFileName(@NotNull final String repository)
     {
-        return repository.toLowerCase(Locale.US) + "-queryj.properties";
+        return repository.toLowerCase(Locale.US) + Literals.QUERYJ_PROPERTIES;
     }
 
 }

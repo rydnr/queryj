@@ -44,10 +44,16 @@ import org.acmsl.queryj.customsql.ParameterElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Decorates &lt;parameter&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public abstract class AbstractParameterDecorator
     extends  ParameterElement
     implements  ParameterDecorator
@@ -66,12 +72,10 @@ public abstract class AbstractParameterDecorator
      * Creates an <code>AbstractParameterDecorator</code> with given parameter.
      * @param parameter the parameter to decorate.
      * @param metadataTypeManager the metadata type manager.
-     * @precondition parameter != null
-     * @precondition metadataTypeManager != null
      */
     public AbstractParameterDecorator(
         @NotNull final Parameter parameter,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         super(
             parameter.getId(),
@@ -89,7 +93,7 @@ public abstract class AbstractParameterDecorator
      * @param parameter the parameter.
      */
     protected final void immutableSetParameter(
-        final Parameter parameter)
+        @NotNull final Parameter parameter)
     {
         m__Parameter = parameter;
     }
@@ -99,7 +103,7 @@ public abstract class AbstractParameterDecorator
      * @param parameter the parameter.
      */
     @SuppressWarnings("unused")
-    protected void setParameter(final Parameter parameter)
+    protected void setParameter(@NotNull final Parameter parameter)
     {
         immutableSetParameter(parameter);
     }
@@ -108,6 +112,8 @@ public abstract class AbstractParameterDecorator
      * Retrieves the decorated parameter.
      * @return such instance.
      */
+    @NotNull
+    @Override
     public Parameter getParameter()
     {
         return m__Parameter;
@@ -118,7 +124,7 @@ public abstract class AbstractParameterDecorator
      * @param metadataTypeManager such instance.
      */
     protected final void immutableSetMetadataTypeManager(
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         m__MetadataTypeManager = metadataTypeManager;
     }
@@ -129,7 +135,7 @@ public abstract class AbstractParameterDecorator
      */
     @SuppressWarnings("unused")
     protected void setMetadataTypeManager(
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         immutableSetMetadataTypeManager(metadataTypeManager);
     }
@@ -138,6 +144,7 @@ public abstract class AbstractParameterDecorator
      * Retrieves the metadata type manager.
      * @return such instance.
      */
+    @NotNull
     protected MetadataTypeManager getMetadataTypeManager()
     {
         return m__MetadataTypeManager;
@@ -148,6 +155,7 @@ public abstract class AbstractParameterDecorator
      * @return such information.
      * @see java.sql.Types
      */
+    @Override
     @Nullable
     public String getSqlType()
     {
@@ -159,11 +167,10 @@ public abstract class AbstractParameterDecorator
      * @param type the type.
      * @param metadataTypeManager the metadata type manager.
      * @return such information.
-     * @precondition metadataTypeManager != null
      */
     @Nullable
     protected String getSqlType(
-        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.getConstantName(
@@ -175,6 +182,7 @@ public abstract class AbstractParameterDecorator
      * @return such information.
      */
     @Nullable
+    @Override
     public String getObjectType()
     {
         return getObjectType(getType(), getMetadataTypeManager());
@@ -185,11 +193,10 @@ public abstract class AbstractParameterDecorator
      * @param type the type.
      * @param metadataTypeManager the metadata type manager.
      * @return such information.
-     * @precondition metadataTypeManager != null
      */
     @Nullable
     public String getObjectType(
-        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         // TODO; support boolean parameters
         return
@@ -201,6 +208,7 @@ public abstract class AbstractParameterDecorator
      * Retrieves whether the parameter type is a class or not.
      * @return such information.
      */
+    @Override
     public boolean isObject()
     {
         return isObject(getType(), getMetadataTypeManager());
@@ -211,10 +219,9 @@ public abstract class AbstractParameterDecorator
      * @param type the type.
      * @param metadataTypeManager the metadata type manager.
      * @return such information.
-     * @precondition metadataTypeManager != null
      */
     protected boolean isObject(
-        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.isObject(
@@ -225,6 +232,7 @@ public abstract class AbstractParameterDecorator
      * Retrieves whether the parameter type is a String or not.
      * @return such information.
      */
+    @Override
     public boolean isString()
     {
         return isString(getType(), getMetadataTypeManager());
@@ -235,10 +243,9 @@ public abstract class AbstractParameterDecorator
      * @param type the type.
      * @param metadataTypeManager the metadata type manager.
      * @return such information.
-     * @precondition metadataTypeManager != null
      */
     protected boolean isString(
-        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.isString(
@@ -249,6 +256,8 @@ public abstract class AbstractParameterDecorator
      * Retrieves the field type of the parameter.
      * @return such information.
      */
+    @NotNull
+    @Override
     public String getFieldType()
     {
         return getFieldType(getType(), getMetadataTypeManager());
@@ -259,10 +268,9 @@ public abstract class AbstractParameterDecorator
      * @param type the type.
      * @param metadataTypeManager the metadata type manager.
      * @return such information.
-     * @precondition metadataTypeManager != null
      */
     public String getFieldType(
-        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.getFieldType(
@@ -273,6 +281,7 @@ public abstract class AbstractParameterDecorator
      * Retrieves the name, in lower case.
      * @return such value.
      */
+    @NotNull
     public String getNameLowercased()
     {
         return lowerCase(getName(), DecorationUtils.getInstance());
@@ -283,8 +292,6 @@ public abstract class AbstractParameterDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
     protected String lowerCase(
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
@@ -307,11 +314,9 @@ public abstract class AbstractParameterDecorator
      * @param metadataTypeManager the <code>MetadataTypeManager</code>
      * instance.
      * return such information.
-     * @precondition type != null
-     * @precondition metadataTypeManager != null
      */
     protected boolean isClob(
-        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.isClob(metadataTypeManager.getJavaType(type));
@@ -358,11 +363,13 @@ public abstract class AbstractParameterDecorator
     {
         return metadataTypeManager.isPrimitive(type);
     }
+
     /**
      * Provides a text representation of the information
-     * contained in this instance.
+     * contained in given instance.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {
@@ -376,7 +383,7 @@ public abstract class AbstractParameterDecorator
      * @return such information.
      */
     @NotNull
-    protected String toString(final Parameter parameter)
+    protected String toString(@NotNull final Parameter parameter)
     {
         return "" + parameter;
     }
@@ -385,6 +392,7 @@ public abstract class AbstractParameterDecorator
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return hashCode(getParameter());
@@ -394,7 +402,6 @@ public abstract class AbstractParameterDecorator
      * Retrieves the hash code associated to given instance.
      * @param parameter the decorated parameter.
      * @return such information.
-     * @precondition parameter != null
      */
     protected int hashCode(@NotNull final Parameter parameter)
     {
@@ -406,11 +413,12 @@ public abstract class AbstractParameterDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    @Override
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 
-        Parameter parameter = getParameter();
+        @Nullable final Parameter parameter = getParameter();
 
         if (   (parameter != null)
             && (object instanceof Parameter))
@@ -428,7 +436,8 @@ public abstract class AbstractParameterDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Parameter object)
+    @Override
+    public int compareTo(@Nullable final Parameter object)
         throws  ClassCastException
     {
         return compareTo(getParameter(), object);
@@ -441,10 +450,9 @@ public abstract class AbstractParameterDecorator
      * @return the result of such comparison.
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
-     * @precondition parameter != null
      */
     @SuppressWarnings("unchecked")
-    protected int compareTo(@NotNull final Parameter parameter, final Parameter object)
+    protected int compareTo(@NotNull final Parameter parameter, @Nullable final Parameter object)
         throws  ClassCastException
     {
         int result = 1;

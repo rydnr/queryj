@@ -46,6 +46,8 @@ import org.acmsl.queryj.api.exceptions.QueryJBuildException;
  */
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Chain to provide placeholders.
  * @param <C> the QueryJTemplateContext.
@@ -71,4 +73,11 @@ public interface FillTemplateChain<C extends TemplateContext>
     @NotNull
     QueryJCommand providePlaceholders(final boolean relevantOnly)
         throws QueryJBuildException;
+
+    /**
+     * Retrieves the handlers.
+     * @return such handlers.
+     */
+    @NotNull
+    List<?> getHandlers();
 }

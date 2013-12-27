@@ -1,0 +1,125 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: PerTableTemplatesFeature.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate PerTableTemplates.feature
+//              Cucumber tests
+//
+group PerTableTemplatesFeature;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+  Generates PerTableTemplates.feature files.
+!>
+Feature: Per-table templates
+
+  Scenario Outline: Per-table templates compile for a type 1 table
+
+    Given the following tables:
+    | table | parent table | decorated | relationship | static |
+    | users |              |           |              |        |
+
+    And the following columns:
+    | table | column        | type      | pk    | allows null | readonly | sequence  | keyword | boolean | length | precision |
+    | users | user_id       | number    | true  | false       | false    | seq_users |         |         |     10 |         0 |
+    | users | company_id    | number    | false | true        | false    |           |         |         |     10 |         0 |
+    | users | name          | varchar   | false | false       | false    |           |         |         |     30 |           |
+    | users | email         | varchar   | false | false       | false    |           |         |         |     30 |         0 |
+    | users | registered    | number    | false | false       | false    |           |         | 0,1     |      1 |         1 |
+    | users | creation_date | timestamp | false | false       | true     |           | sysdate |         |        |           |
+
+    And the following foreign keys:
+    | source table | source columns | target table | allows null |
+    | users        | company_id     | companies    | true        |
+
+    And the following queries:
+      |       id      |     name      |  dao  |  type  |                     value                         |
+      | first.select  | first-select  | users | select | select user_id, name from users where user_id = ? |
+      | second.select | second-select | users | select | select user_id, name from users where name = ?    |
+
+    And the following query parameters:
+      |      id       |      sql       | index |  type  |  name  |
+      | users.user_id |  first.select  |   1   |  long  | userId |
+      | users.name    |  second.select |   1   | String |  name  |
+
+    When I generate with per-table \<template>.stg for Oracle
+
+    Then the generated per-table \<output> file compiles successfully
+
+    Examples:
+      | template           | output                            |
+      <C.templateDefs:{ d | <indirect_template(def=d, engineName="Oracle", tableName="User")>}; separator="\n">
+
+  Scenario Outline: Per-table templates compiles for a type 2 table
+
+    Given the following tables:
+      | table       | parent table | decorated | relationship | static |
+      | car_brands  |              |           |              | name   |
+
+    And the following columns:
+      | table      | column    | type      | pk    | allows null | readonly | sequence  | keyword | boolean | length | precision |
+      | car_brands | brand_id  | number    | true  | false       | false    |           |         |         |     10 |         0 |
+      | car_brands | name      | varchar   | false | false       | false    |           |         |         |     30 |           |
+
+    And the following values:
+      | car_brands | brand_id |       name |
+      | car_brands |        1 |       SEAT |
+      | car_brands |        2 |    CITROEN |
+      | car_brands |        3 | VOLKSWAGEN |
+      | car_brands |        4 |       AUDI |
+
+    And the following queries:
+      |       id      |     name      |     dao    |  type  |                     value                                |
+      | first.select  | first-select  | car_brands | select | select brand_id, name from car_brands where brand_id = ? |
+      | second.select | second-select | car_brands | select | select brand_id, name from car_brands where name = ?     |
+
+    And the following query parameters:
+      |         id          |      sql       | index |  type  |  name    |
+      | car_brands.brand_id |  first.select  |   1   |  long  |  brandId |
+      | car_brands.name     |  second.select |   1   | String |  name    |
+
+    When I generate with per-table \<template>.stg for Oracle
+
+    Then the generated per-table \<output> file compiles successfully
+
+    Examples:
+      | template           | output                            |
+      <C.templateDefs:{ d | <indirect_template(def=d, engineName="Oracle", tableName="CarBrand")>}; separator="\n">
+>>
+
+indirect_template(def, engineName, tableName) ::= <<
+| <def.name; format="%-30s"> | <(def.filenameRule)(engineName, tableName)> |
+>>

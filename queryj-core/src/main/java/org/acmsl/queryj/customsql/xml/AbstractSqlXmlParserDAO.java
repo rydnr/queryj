@@ -107,7 +107,7 @@ public abstract class AbstractSqlXmlParserDAO
     @NotNull
     protected List<IdentifiableElement> getCollection(@NotNull final SqlXmlParser parser)
     {
-        List<IdentifiableElement> result =
+        @NotNull final List<IdentifiableElement> result =
             new ArrayList<IdentifiableElement>(parser.getQueries());
 
         result.addAll(parser.getResults());
@@ -133,7 +133,7 @@ public abstract class AbstractSqlXmlParserDAO
     {
         @Nullable T result = null;
 
-        for (@Nullable T t_Item : collection)
+        for (@Nullable final T t_Item : collection)
         {
             if  (   (t_Item != null)
                  && (type.isAssignableFrom(t_Item.getClass()))
@@ -174,9 +174,9 @@ public abstract class AbstractSqlXmlParserDAO
         @NotNull final List<IdentifiableElement> collection)
     {
 
-        @NotNull List<T> result = new ArrayList<T>();
+        @NotNull final List<T> result = new ArrayList<T>();
 
-        for (@Nullable Object t_Item : collection)
+        for (@Nullable final IdentifiableElement t_Item : collection)
         {
             if  (   (t_Item != null)
                  && (type.isAssignableFrom(t_Item.getClass())))
@@ -202,9 +202,9 @@ public abstract class AbstractSqlXmlParserDAO
         @NotNull final Class<I> itemClass,
         @Nullable final String idFilter)
     {
-        @NotNull List<I> result = new ArrayList<I>(contents.size());
+        @NotNull final List<I> result = new ArrayList<I>(contents.size());
 
-        for (final IdentifiableElement t_CurrentItem : contents)
+        for (@Nullable final IdentifiableElement t_CurrentItem : contents)
         {
             if (   (t_CurrentItem != null)
                 && (itemClass.isAssignableFrom(t_CurrentItem.getClass())))
@@ -225,12 +225,18 @@ public abstract class AbstractSqlXmlParserDAO
      * @param element the element.
      * @param idFilter the filter.
      * @return <code>true</code> if both identifiers match.
-     * @precondition element != null
-     * @precondition idFilters != null
      */
     protected boolean filterById(
         @NotNull final IdentifiableElement element, @NotNull final String idFilter)
     {
         return idFilter.equalsIgnoreCase(element.getId());
+    }
+
+    @Override
+    public String toString()
+    {
+        return "AbstractSqlXmlParserDAO{" +
+               "parser=" + parser +
+               '}';
     }
 }

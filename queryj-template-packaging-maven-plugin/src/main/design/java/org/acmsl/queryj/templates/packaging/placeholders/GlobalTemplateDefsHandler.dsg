@@ -1,0 +1,21 @@
+- Create a new Java class GlobalTemplateDefsHandler in package org.acmsl.queryj.templates.packaging.placeholders;
+- Add comment: Resolves "templateDefs" placeholders, for global templates.;
+- Add class parameter: C extends GlobalTemplateContext;
+- Make it extend AbstractTemplateContextFillHandler<C, List<TemplateDef<DecoratedString>>;
+- Define a constructor GlobalTemplateDefsHandler(GlobalTemplateContext):
+  - Add comment: Creates a new instance to resolve "templateDefs" placeholders in global templates.;
+  - Add comment: @param context the {@link GlobalTemplateContext context}.;
+  - Call super(context);
+- Implement getPlaceHolder() method:
+  - Add comment: Returns "templateDefs".;
+  - Add comment: @return such placeholder.;
+  - Add @Override;
+  - Add @NotNull;
+  - Return "templateDefs";
+- Implement resolveContextValue(GlobalTemplateContext) method:
+  - Add comment: Resolves "templateDefs" values.;
+  - Add comment: @param context the {@link GlobalTemplateContext context}.;
+  - Create a new ArrayList<TemplateDef<DecoratedString>>();
+  - Add to the list a new DecoratedTemplateDefWrapper each TemplateDef from context.getTemplateDefs();
+  - Return the new list;
+- Fix import groups;

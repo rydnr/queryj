@@ -1,5 +1,5 @@
 /*
-                        Queryj Template Packaging
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -58,8 +59,10 @@ import java.io.File;
  */
 @ThreadSafe
 public class TemplateDefImpl
-    implements TemplateDef
+    implements TemplateDef<String>
 {
+    private static final long serialVersionUID = 3072766515558433392L;
+
     /**
      * The name.
      */
@@ -91,6 +94,11 @@ public class TemplateDefImpl
     private File m__File;
 
     /**
+     * Whether the template def is disabled or not.
+     */
+    private boolean m__bDisabled;
+
+    /**
      * Creates an instance using given information.
      * @param name the name.
      * @param type the type.
@@ -98,6 +106,7 @@ public class TemplateDefImpl
      * @param filenameBuilder the builder.
      * @param packageName the package name.
      * @param file the file.
+     * @param disabled whether the template def is marked as disabled.
      */
     public TemplateDefImpl(
         @NotNull final String name,
@@ -105,7 +114,8 @@ public class TemplateDefImpl
         @NotNull final TemplateDefOutput output,
         @NotNull final String filenameBuilder,
         @NotNull final String packageName,
-        @NotNull final File file)
+        @NotNull final File file,
+        final boolean disabled)
     {
         immutableSetName(name);
         immutableSetType(type);
@@ -113,6 +123,7 @@ public class TemplateDefImpl
         immutableSetFilenameBuilder(filenameBuilder);
         immutableSetPackageName(packageName);
         immutableSetFile(file);
+        immutableSetDisabled(disabled);
     }
 
     /**
@@ -295,16 +306,58 @@ public class TemplateDefImpl
         return this.m__File;
     }
 
+    /**
+     * Specifies whether the template def is disabled.
+     * @param disabled whether the template def is disabled.
+     */
+    protected final void immutableSetDisabled(final boolean disabled)
+    {
+        this.m__bDisabled = disabled;
+    }
+
+    /**
+     * Specifies whether the template def is disabled.
+     * @param disabled whether the template def is disabled.
+     */
+    @SuppressWarnings("unused")
+    protected void setDisabled(final boolean disabled)
+    {
+        immutableSetDisabled(disabled);
+    }
+
+    /**
+     * Checks whether the template def is disabled.
+     * @return such condition.
+     */
+    @Override
+    public boolean isDisabled()
+    {
+        return this.m__bDisabled;
+    }
+
+    /**
+     * Retrieves the filename rule.
+     * @return such rule.
+     */
+    @Override
+    @NotNull
+    public String getFilenameRule()
+    {
+        return new DecoratedString(getName()).getNormalized().getLowercased().getValue();
+    }
+
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'TemplateDefImpl'" +
-               ", 'output': '" + m__Output + '\'' +
-               ", 'name': '" + m__strName + '\'' +
-               ", 'type': '" + m__Type  + '\'' +
-               ", 'filenameBuilder': '" + m__strFilenameBuilder + '\'' +
-               ", 'packageName': '" + m__strPackageName + '\'' +
-               ", 'file': '" + m__File.getAbsolutePath() + "' }";
+        return
+              "{ \"class\": \"" + TemplateDefImpl.class.getName() + '"'
+            + ", \"output\": \"" + m__Output + '"'
+            + ", \"name\": \"" + m__strName + '"'
+            + ", \"type\": \"" + m__Type  + '"'
+            + ", \"filenameBuilder\": \"" + m__strFilenameBuilder + '"'
+            + ", \"packageName\": \"" + m__strPackageName + '"'
+            + ", \"file\": \"" + m__File.getAbsolutePath() + '"'
+            + ", \"disabled\": " + m__bDisabled + " }";
     }
 }

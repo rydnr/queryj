@@ -55,7 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class TemplateFactoryTemplateFactory
-    implements TemplatePackagingTemplateFactory<TemplateFactoryTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>
+    implements TemplatePackagingTemplateFactory
+                   <TemplateFactoryTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>
 {
     /**
      * Singleton implementation to avoid double-locking check.

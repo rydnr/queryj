@@ -44,6 +44,10 @@ import org.acmsl.queryj.metadata.vo.AbstractField;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
+
+/*
+* Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,7 +55,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /*
  * Importing checkthread.org annotations.
@@ -167,7 +171,7 @@ public class AntFieldElement
         {
             result = new AntFieldFkElement();
 
-            Collection<AntFieldFkElement> t_cFieldFks = getFieldFks();
+            List<AntFieldFkElement> t_cFieldFks = getFieldFks();
 
             if  (t_cFieldFks == null)
             {

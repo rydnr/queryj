@@ -37,7 +37,7 @@ package org.acmsl.queryj.api;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface PerForeignKeyTemplateGenerator
-    <N extends PerForeignKeyTemplate>
-    extends   TemplateGenerator<N>
+    <N extends PerForeignKeyTemplate<C>, C extends PerForeignKeyTemplateContext>
+    extends   TemplateGenerator<N, C>
 {
 }

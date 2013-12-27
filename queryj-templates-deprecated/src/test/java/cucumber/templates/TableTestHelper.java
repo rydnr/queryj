@@ -139,7 +139,7 @@ public class TableTestHelper
             result =
                 convertToTable(
                     table,
-                    tableEntry.get("comment"),
+                    tableEntry.get(TableTestHelper.COMMENT),
                     tableEntry.get("parent table"),
                     tableEntry.get("static") != null,
                     tableEntry.get("decorated") != null);
@@ -297,7 +297,7 @@ public class TableTestHelper
     {
         @NotNull final String[] result = new String[3];
 
-        @Nullable final String booleanInfo = row.get("boolean");
+        @Nullable final String booleanInfo = row.get(Literals.BOOLEAN);
 
         if (   (booleanInfo != null)
                && (!"".equals(booleanInfo.trim())))

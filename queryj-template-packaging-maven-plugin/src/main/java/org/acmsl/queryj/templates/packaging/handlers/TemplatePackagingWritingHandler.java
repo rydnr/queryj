@@ -1,5 +1,5 @@
 /*
-                        queryj
+                       QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,25 +36,37 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ-API classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.TemplateGeneratorThread;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.AbstractTemplateWritingHandler;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.TemplatePackagingContext;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplate;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
+import org.acmsl.queryj.tools.exceptions.MissingOutputDirAtRuntimeException;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.concurrent.CyclicBarrier;
@@ -68,9 +80,9 @@ import java.util.concurrent.CyclicBarrier;
 @ThreadSafe
 public abstract class TemplatePackagingWritingHandler
     <T extends TemplatePackagingTemplate<C>,
-     TG extends TemplatePackagingTemplateGenerator<T, C>,
-     C extends TemplatePackagingContext>
-    extends AbstractTemplateWritingHandler<T, TG, C>
+     C extends TemplatePackagingContext,
+     TG extends TemplatePackagingTemplateGenerator<T, C>>
+    extends AbstractTemplateWritingHandler<T, C, TG>
     implements TemplatePackagingSettings
 {
     /**
@@ -93,8 +105,7 @@ public abstract class TemplatePackagingWritingHandler
 
         if (aux == null)
         {
-            // TODO
-            throw new RuntimeException("Missing output dir");
+            throw new MissingOutputDirAtRuntimeException();
         }
         else
         {
@@ -118,7 +129,7 @@ public abstract class TemplatePackagingWritingHandler
      */
     @NotNull
     @Override
-    protected TemplateGeneratorThread<T, TG, C> buildGeneratorThread(
+    protected TemplateGeneratorThread<T, C, TG> buildGeneratorThread(
         @NotNull final T template,
         @NotNull final TG generator,
         @NotNull final File outputDir,
@@ -129,7 +140,7 @@ public abstract class TemplatePackagingWritingHandler
         @NotNull final QueryJCommand parameters)
     {
         return
-            new TemplateGeneratorThread<T, TG, C>(
+            new TemplateGeneratorThread<T, C, TG>(
                 generator,
                 template,
                 outputDir,

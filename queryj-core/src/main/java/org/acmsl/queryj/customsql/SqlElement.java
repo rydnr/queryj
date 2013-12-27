@@ -180,8 +180,7 @@ public class SqlElement
         final boolean dynamic,
         @NotNull final String repositoryScope)
     {
-        this(
-            id, null, repositoryScope, name, type, implementation, validate, dynamic);
+        this(id, null, repositoryScope, name, type, implementation, validate, dynamic);
     }
 
     /**
@@ -694,6 +693,8 @@ public class SqlElement
                 getType(),
                 getImplementation(),
                 getValue(),
+                isValidate(),
+                isDynamic(),
                 getParameterRefs(),
                 getResultRef(),
                 getConnectionFlagsRef(),
@@ -728,7 +729,9 @@ public class SqlElement
         final String type,
         final String implementation,
         final String value,
-        final Collection parameterRefs,
+        final boolean validate,
+        final boolean dynamic,
+        final Collection<ParameterRef> parameterRefs,
         final ResultRef resultRef,
         final ConnectionFlagsRef connectionFlagsRef,
         final StatementFlagsRef statementFlagsRef,
@@ -743,6 +746,8 @@ public class SqlElement
             + "[" + "name=" + name + "]"
             + "[" + "type=" + type + "]"
             + "[" + "value=" + value + "]"
+            + "[" + "validate=" + validate + "]"
+            + "[" + "dynamic=" + dynamic + "]"
             + "[" + "implementation=" + implementation + "]"
             + "[" + "parameter-refs=" + parameterRefs + "]"
             + "[" + "result-ref=" + resultRef + "]"

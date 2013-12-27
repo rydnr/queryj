@@ -63,7 +63,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class LazyAttribute
-    extends  AbstractAttribute
+    extends  AbstractAttribute<String>
 {
     private static final long serialVersionUID = -3002626986582985895L;
 
@@ -271,7 +271,7 @@ public class LazyAttribute
     {
         int result = -1;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, name, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, name, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -410,7 +410,8 @@ public class LazyAttribute
     {
         @Nullable String result = null;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute =
+            retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -486,7 +487,7 @@ public class LazyAttribute
     {
         boolean result = false;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -562,7 +563,7 @@ public class LazyAttribute
     {
         boolean result = false;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -638,7 +639,7 @@ public class LazyAttribute
     {
         boolean result = false;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -715,7 +716,7 @@ public class LazyAttribute
     {
         boolean result = false;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -793,7 +794,7 @@ public class LazyAttribute
     {
         @Nullable String result = null;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -810,18 +811,18 @@ public class LazyAttribute
      * @param metadataManager the {@link MetadataManager} instance.
      */
     @Nullable
-    protected Attribute retrieveAttribute(
+    protected Attribute<String> retrieveAttribute(
         @NotNull final String tableName,
         @NotNull final String columnName,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable Attribute result = null;
+        @Nullable Attribute<String> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
-            for (Attribute t_Attribute : t_Table.getAttributes())
+            for (@Nullable final Attribute<String> t_Attribute : t_Table.getAttributes())
             {
                 if (   (t_Attribute != null)
                     && (t_Attribute.getName().equalsIgnoreCase(columnName)))
@@ -903,7 +904,7 @@ public class LazyAttribute
     {
         @Nullable String result = null;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -982,7 +983,7 @@ public class LazyAttribute
     {
         @Nullable String result = null;
 
-        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+        @Nullable final Attribute<String> t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
 
         if (t_Attribute != null)
         {
@@ -1042,7 +1043,7 @@ public class LazyAttribute
      *                            from being compared to this object.
      */
     @Override
-    public int compareTo(@Nullable final Attribute o)
+    public int compareTo(@Nullable final Attribute<String> o)
     {
         int result = 1;
 
@@ -1165,5 +1166,25 @@ public class LazyAttribute
         result = 31 * result + (m__MetadataManager != null ? m__MetadataManager.hashCode() : 0);
         result = 31 * result + (m__MetadataTypeManager != null ? m__MetadataTypeManager.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"class\": \"" + LazyAttribute.class.getName() + '"'
+            + ", \"cachedAllowsNull\": " + m__CachedAllowsNull
+            + ", \"cachedTypeId\": " + m__CachedTypeId
+            + ", \"cachedType\": \"" + m__CachedType + '"'
+            + ", \"cachedComment\": \"" + m__strCachedComment + '"'
+            + ", \"cachedManagedExternally\": " + m__CachedManagedExternally
+            + ", \"cachedReadOnly\": " + m__CachedReadOnly
+            + ", \"cachedBoolean\": " + m__CachedBoolean
+            + ", \"cachedBooleanTrue\": \"" + m__strCachedBooleanTrue + '"'
+            + ", \"cachedBooleanFalse\": \"" + m__strCachedBooleanFalse + '"'
+            + ", \"cachedBooleanNull\": \"" + m__strCachedBooleanNull + '"'
+            + ", \"metadataManager\": " + m__MetadataManager
+            + ", \"metadataTypeManager\": " + m__MetadataTypeManager
+            + " }";
     }
 }

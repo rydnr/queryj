@@ -86,10 +86,9 @@ public class DefaultThemeUtils
      * Builds the base DAO name.
      * @param tableName the table name, in singular form.
      * @return such name.
-     * @precondition tableName != null
      */
     @NotNull
-    public String buildDAOClassName(final String tableName)
+    public String buildDAOClassName(@NotNull final String tableName)
     {
         return tableName + "DAO";
     }
@@ -98,11 +97,9 @@ public class DefaultThemeUtils
      * Builds the base DAO factory name.
      * @param tableName the table name, in singular form.
      * @return such name.
-     * @precondition tableName != null
      */
     @NotNull
-    public String buildDAOFactoryClassName(
-        final String tableName)
+    public String buildDAOFactoryClassName(@NotNull final String tableName)
     {
         return buildDAOClassName(tableName) + "Factory";
     }
@@ -112,12 +109,11 @@ public class DefaultThemeUtils
      * @param engineName the engine name.
      * @param tableName the table name, in singular form.
      * @return such name.
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String buildDAOFactoryImplementationClassName(
-        final String engineName, final String tableName)
+        @NotNull final String engineName, @NotNull final String tableName)
     {
         return engineName + buildDAOFactoryClassName(tableName);
     }
@@ -127,12 +123,10 @@ public class DefaultThemeUtils
      * @param engineName the engine name.
      * @param tableName the table name, in singular form.
      * @return such name.
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
     @NotNull
     public String buildDAOImplementationClassName(
-        final String engineName, final String tableName)
+        @NotNull final String engineName, @NotNull final String tableName)
     {
         return engineName + buildDAOClassName(tableName);
     }

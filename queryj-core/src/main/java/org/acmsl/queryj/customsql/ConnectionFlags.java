@@ -57,7 +57,7 @@ package org.acmsl.queryj.customsql;
  */
 public interface ConnectionFlags
     extends  IdentifiableElement,
-             java.lang.Comparable
+             java.lang.Comparable<ConnectionFlags>
 {
     /**
      * The <b>TRANSACTION_NONE</b> value for

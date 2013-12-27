@@ -136,7 +136,7 @@ public class TableAttributeTypeImportsHandler
     {
         @Nullable List<String> result = null;
 
-        @Nullable final Table t_Table = tableDAO.findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = tableDAO.findByName(tableName);
 
         if (t_Table != null)
         {
@@ -159,13 +159,13 @@ public class TableAttributeTypeImportsHandler
      */
     @NotNull
     protected static List<String> retrieveImports(
-        @NotNull final List<Attribute> attributes, @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final List<Attribute<String>> attributes, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         @NotNull final List<String> result = new ArrayList<String>();
 
         String t_strImport;
 
-        for (@Nullable final Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<String> t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {

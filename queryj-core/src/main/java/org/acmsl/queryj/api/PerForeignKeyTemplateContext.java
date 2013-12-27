@@ -75,7 +75,7 @@ public class PerForeignKeyTemplateContext
     /**
      * The result.
      */
-    private ForeignKey m__ForeignKey;
+    private ForeignKey<String> m__ForeignKey;
 
     /**
      * Creates a {@link PerForeignKeyTemplateContext} with given information.
@@ -109,7 +109,7 @@ public class PerForeignKeyTemplateContext
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
         @NotNull final String fileName,
-        @NotNull final ForeignKey foreignKey)
+        @NotNull final ForeignKey<String> foreignKey)
     {
         super(
             metadataManager,
@@ -134,7 +134,7 @@ public class PerForeignKeyTemplateContext
      * Specifies the foreign key.
      * @param foreignKey the foreign key.
      */
-    protected final void immutableSetForeignKey(@NotNull final ForeignKey foreignKey)
+    protected final void immutableSetForeignKey(@NotNull final ForeignKey<String> foreignKey)
     {
         m__ForeignKey = foreignKey;
     }
@@ -144,7 +144,7 @@ public class PerForeignKeyTemplateContext
      * @param foreignKey the foreign key.
      */
     @SuppressWarnings("unused")
-    protected void setForeignKey(@NotNull final ForeignKey foreignKey)
+    protected void setForeignKey(@NotNull final ForeignKey<String> foreignKey)
     {
         immutableSetForeignKey(foreignKey);
     }
@@ -154,7 +154,7 @@ public class PerForeignKeyTemplateContext
      * @return such information.
      */
     @NotNull
-    public ForeignKey getForeignKey()
+    public ForeignKey<String> getForeignKey()
     {
         return m__ForeignKey;
     }
@@ -174,7 +174,7 @@ public class PerForeignKeyTemplateContext
      * @return the template name.
      */
     @NotNull
-    protected String getTemplateName(@NotNull final ForeignKey foreignKey)
+    protected String getTemplateName(@NotNull final ForeignKey<String> foreignKey)
     {
         String result = foreignKey.getFkName();
 

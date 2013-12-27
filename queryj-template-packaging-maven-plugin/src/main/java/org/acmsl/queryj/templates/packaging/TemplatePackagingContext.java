@@ -72,13 +72,6 @@ public interface TemplatePackagingContext
     public String getPackageName();
 
     /**
-     * Retrieves the template def.
-     * @return such instance.
-     */
-    @NotNull
-    public TemplateDef getTemplateDef();
-
-    /**
      * Retrieves the root dir.
      * @return such folder.
      */

@@ -43,6 +43,7 @@ import org.acmsl.queryj.api.TemplateContext;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -79,7 +80,7 @@ public class PackageNameHandler<C extends TemplateContext>
     @Override
     public String getPlaceHolder()
     {
-        return "package";
+        return Literals.PACKAGE;
     }
 
     /**

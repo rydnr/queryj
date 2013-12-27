@@ -43,6 +43,7 @@ package org.acmsl.queryj.metadata;
  * Importing some JetBrains annotations.
  */
 import org.acmsl.queryj.api.exceptions.QueryJException;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +59,8 @@ import java.util.List;
 /**
  * A refactored version of the original {@link MetadataManager}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/06
+ * @since 3.0
+ * Created: 2012/06/06
  */
 public interface MetadataManager
     extends Serializable
@@ -187,14 +189,14 @@ public interface MetadataManager
      * @param foreignKey the foreign key.
      * @return <code>true</code> in such case.
      */
-    boolean isGenerationAllowedForForeignKey(@NotNull ForeignKey foreignKey);
+    boolean isGenerationAllowedForForeignKey(@NotNull ForeignKey<String> foreignKey);
 
     /**
      * Retrieves the tables.
      * @return the list of {@link Table tables}.
      */
     @NotNull
-    List<Table> getTables();
+    List<Table<String, Attribute<String>>> getTables();
 
     /**
      * Retrieves the table names.

@@ -39,12 +39,13 @@ package org.acmsl.queryj.metadata.engines;
  * Importing project classes.
  */
 import org.acmsl.queryj.api.exceptions.QueryJException;
+import org.acmsl.queryj.api.MetaLanguageUtils;
 import org.acmsl.queryj.metadata.ColumnDAO;
+import org.acmsl.queryj.metadata.exceptions.MissingDatabaseMetadataAtRuntimeException;
 import org.acmsl.queryj.metadata.ForeignKeyDAO;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.PrimaryKeyDAO;
-import org.acmsl.queryj.metadata.vo.AbstractTable;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.AttributeIncompleteValueObject;
 import org.acmsl.queryj.metadata.vo.AttributeValueObject;
@@ -54,7 +55,7 @@ import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
 import org.acmsl.queryj.metadata.vo.TableValueObject;
-import org.acmsl.queryj.api.MetaLanguageUtils;
+import org.acmsl.queryj.tools.DebugUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -64,7 +65,6 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 /*
  * Importing some Apache Commons-Logging classes.
  */
-import org.acmsl.queryj.tools.DebugUtils;
 import org.apache.commons.logging.Log;
 
 /*
@@ -126,12 +126,12 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * The table list.
      */
-    private List<Table> m__lTables;
+    private List<Table<String, Attribute<String>>> m__lTables;
 
     /**
      * The table attributes (table name -> columns).
      */
-    private Map<String,List<Attribute>> m__mColumns;
+    private Map<String,List<Attribute<String>>> m__mColumns;
 
     /**
      * The table extraction flag. This flag allows to disable
@@ -201,7 +201,7 @@ public abstract class AbstractJdbcMetadataManager
         @Nullable final String catalog,
         @Nullable final String schema,
         @NotNull final List<String> tableNames,
-        @NotNull final List<Table> tables,
+        @NotNull final List<Table<String, Attribute<String>>> tables,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean caseSensitive,
@@ -305,7 +305,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the tables.
      * @param tables the tables.
      */
-    protected final void immutableSetTables(@NotNull final List<Table> tables)
+    protected final void immutableSetTables(@NotNull final List<Table<String, Attribute<String>>> tables)
     {
         m__lTables = tables;
     }
@@ -314,7 +314,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the tables.
      * @param tables the tables.
      */
-    protected void setTables(@NotNull final List<Table> tables)
+    protected void setTables(@NotNull final List<Table<String, Attribute<String>>> tables)
     {
         immutableSetTables(tables);
     }
@@ -324,7 +324,7 @@ public abstract class AbstractJdbcMetadataManager
      * @return the list of {@link Table tables}.
      */
     @Nullable
-    protected final List<Table> immutableGetTables()
+    protected final List<Table<String, Attribute<String>>> immutableGetTables()
     {
         return m__lTables;
     }
@@ -335,13 +335,13 @@ public abstract class AbstractJdbcMetadataManager
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Table> getTables()
+    public List<Table<String, Attribute<String>>> getTables()
     {
-        List<Table> result = immutableGetTables();
+        List<Table<String, Attribute<String>>> result = immutableGetTables();
 
         if (result == null)
         {
-            result = new ArrayList<Table>();
+            result = new ArrayList<Table<String, Attribute<String>>>();
             setTables(result);
         }
 
@@ -352,7 +352,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the columns.
      * @param columns the information about all columns for all tables.
      */
-    protected final void immutableSetColumns(@NotNull final Map<String,List<Attribute>> columns)
+    protected final void immutableSetColumns(@NotNull final Map<String, List<Attribute<String>>> columns)
     {
         m__mColumns = columns;
     }
@@ -361,7 +361,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the columns.
      * @param columns the information about all columns for all tables.
      */
-    protected void setColumns(@NotNull final Map<String,List<Attribute>> columns)
+    protected void setColumns(@NotNull final Map<String, List<Attribute<String>>> columns)
     {
         immutableSetColumns(columns);
     }
@@ -371,7 +371,7 @@ public abstract class AbstractJdbcMetadataManager
      * @return such information.
      */
     @Nullable
-    protected final Map<String,List<Attribute>> immutableGetColumns()
+    protected final Map<String, List<Attribute<String>>> immutableGetColumns()
     {
         return m__mColumns;
     }
@@ -382,13 +382,13 @@ public abstract class AbstractJdbcMetadataManager
      */
     @SuppressWarnings("unused")
     @NotNull
-    public Map<String,List<Attribute>> getColumns()
+    public Map<String, List<Attribute<String>>> getColumns()
     {
-        Map<String,List<Attribute>> result = immutableGetColumns();
+        Map<String, List<Attribute<String>>> result = immutableGetColumns();
 
         if (result == null)
         {
-            result = new HashMap<String,List<Attribute>>(0);
+            result = new HashMap<String, List<Attribute<String>>>(0);
             setColumns(result);
         }
 
@@ -426,7 +426,7 @@ public abstract class AbstractJdbcMetadataManager
 
         if (result == null)
         {
-            throw new RuntimeException("missing required DatabaseMetaData information");
+            throw new MissingDatabaseMetadataAtRuntimeException();
         }
 
         return result;
@@ -834,7 +834,7 @@ public abstract class AbstractJdbcMetadataManager
      * occurs.
      */
     @NotNull
-    protected List<Table> extractTableMetadata(
+    protected List<Table<String, Attribute<String>>> extractTableMetadata(
         @Nullable final List<String> tableNames,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
@@ -903,9 +903,9 @@ public abstract class AbstractJdbcMetadataManager
      * @param list the list to convert.
      */
     @NotNull
-    protected List<Attribute> toAttributeList(@NotNull final List<AttributeIncompleteValueObject> list)
+    protected List<Attribute<String>> toAttributeList(@NotNull final List<AttributeIncompleteValueObject> list)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>(list.size());
+        @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>(list.size());
 
         for (@Nullable final AttributeIncompleteValueObject t_Attribute : list)
         {
@@ -920,11 +920,11 @@ public abstract class AbstractJdbcMetadataManager
      * @param list the list to convert.
      */
     @NotNull
-    protected List<ForeignKey> toForeignKeyList(@NotNull final List<ForeignKeyIncompleteValueObject> list)
+    protected List<ForeignKey<String>> toForeignKeyList(@NotNull final List<ForeignKeyIncompleteValueObject> list)
     {
-        @NotNull final List<ForeignKey> result = new ArrayList<ForeignKey>(list.size());
+        @NotNull final List<ForeignKey<String>> result = new ArrayList<ForeignKey<String>>(list.size());
 
-        for (@Nullable final ForeignKey t_Item : list)
+        for (@Nullable final ForeignKey<String> t_Item : list)
         {
             result.add(t_Item);
         }
@@ -937,11 +937,13 @@ public abstract class AbstractJdbcMetadataManager
      * @param tables the tables to clone.
      * @return the ultimate table list.
      */
-    protected List<Table> cloneTables(@NotNull final Collection<TableIncompleteValueObject> tables)
+    protected List<Table<String, Attribute<String>>> cloneTables(
+        @NotNull final Collection<TableIncompleteValueObject> tables)
     {
-        @NotNull final List<Table> result = new ArrayList<Table>(tables.size());
+        @NotNull final List<Table<String, Attribute<String>>> result =
+            new ArrayList<Table<String, Attribute<String>>>(tables.size());
 
-        for (@Nullable final Table t_Table : tables)
+        for (@Nullable final Table<String, Attribute<String>> t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -956,9 +958,9 @@ public abstract class AbstractJdbcMetadataManager
      * @param table the table to clone.
      * @return the ultimate table list.
      */
-    protected Table cloneTable(@NotNull final Table table)
+    protected Table<String, Attribute<String>> cloneTable(@NotNull final Table<String, Attribute<String>> table)
     {
-        @NotNull final Table result;
+        @NotNull final Table<String, Attribute<String>> result;
 
         if (table instanceof TableValueObject)
         {
@@ -966,7 +968,7 @@ public abstract class AbstractJdbcMetadataManager
         }
         else
         {
-            Table t_Table = table.getParentTable();
+            Table<String, Attribute<String>> t_Table = table.getParentTable();
 
             if (t_Table != null)
             {
@@ -993,11 +995,11 @@ public abstract class AbstractJdbcMetadataManager
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> cloneAttributes(@NotNull final List<Attribute> attributes)
+    protected List<Attribute<String>> cloneAttributes(@NotNull final List<Attribute<String>> attributes)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>(attributes.size());
+        @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>(attributes.size());
 
-        for (@Nullable final Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<String> t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {
@@ -1032,12 +1034,12 @@ public abstract class AbstractJdbcMetadataManager
      * @return the cloned foreign keys.
      */
     @NotNull
-    protected List<ForeignKey> cloneForeignKeys(
-        @NotNull final List<ForeignKey> foreignKeys)
+    protected List<ForeignKey<String>> cloneForeignKeys(
+        @NotNull final List<ForeignKey<String>> foreignKeys)
     {
-        @NotNull final List<ForeignKey> result = new ArrayList<ForeignKey>(foreignKeys.size());
+        @NotNull final List<ForeignKey<String>> result = new ArrayList<ForeignKey<String>>(foreignKeys.size());
 
-        for (@Nullable final ForeignKey t_ForeignKey : foreignKeys)
+        for (@Nullable final ForeignKey<String> t_ForeignKey : foreignKeys)
         {
             if (t_ForeignKey != null)
             {
@@ -1061,10 +1063,10 @@ public abstract class AbstractJdbcMetadataManager
         @NotNull final Collection<TableIncompleteValueObject> tables,
         @NotNull final Map<String, List<AttributeIncompleteValueObject>> attributes)
     {
-        Table t_ParentTable;
-        List<Attribute> t_lParentTableAttributes;
+        Table<String, Attribute<String>> t_ParentTable;
+        List<Attribute<String>> t_lParentTableAttributes;
         List<AttributeIncompleteValueObject> t_lChildTableAttributes;
-        List<Attribute> t_lCompleteAttributes;
+        List<Attribute<String>> t_lCompleteAttributes;
 
         for (@NotNull final TableIncompleteValueObject t_Table : tables)
         {
@@ -1077,7 +1079,7 @@ public abstract class AbstractJdbcMetadataManager
                 t_lParentTableAttributes = t_ParentTable.getAttributes();
 
                 t_lCompleteAttributes =
-                    new ArrayList<Attribute>(t_lParentTableAttributes.size() + t_lChildTableAttributes.size());
+                    new ArrayList<Attribute<String>>(t_lParentTableAttributes.size() + t_lChildTableAttributes.size());
 
                 t_lCompleteAttributes.addAll(t_lParentTableAttributes);
                 t_lCompleteAttributes.addAll(t_lChildTableAttributes);
@@ -1102,7 +1104,7 @@ public abstract class AbstractJdbcMetadataManager
         @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
         String t_strTableName;
-        Table t_Parent;
+        Table<String, Attribute<String>> t_Parent;
 
         for (@NotNull final TableIncompleteValueObject t_Table : tables)
         {
@@ -1126,13 +1128,13 @@ public abstract class AbstractJdbcMetadataManager
      * @return the {@link Table parent table}, if any.
      */
     @Nullable
-    protected Table retrieveParentTable(
+    protected Table<String, Attribute<String>> retrieveParentTable(
         @NotNull final String tableComment,
-        @NotNull final Collection<? extends Table> tables,
+        @NotNull final Collection<? extends Table<String, Attribute<String>>> tables,
         final boolean caseSensitiveness,
         @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
-        Table result = null;
+        Table<String, Attribute<String>> result = null;
 
         @Nullable final String t_strParentTable = metaLanguageUtils.retrieveDeclaredParent(tableComment);
 
@@ -1152,12 +1154,14 @@ public abstract class AbstractJdbcMetadataManager
      * @return the matching {@link Table} or <code>null</code> otherwise.
      */
     @Nullable
-    protected Table findTableByName(
-        @NotNull final String table, @NotNull final Collection<? extends Table> tables, final boolean caseSensitiveness)
+    protected Table<String, Attribute<String>> findTableByName(
+        @NotNull final String table,
+        @NotNull final Collection<? extends Table<String, Attribute<String>>> tables,
+        final boolean caseSensitiveness)
     {
-        @Nullable Table result = null;
+        @Nullable Table<String, Attribute<String>> result = null;
 
-        for (@Nullable final Table t_Table : tables)
+        for (@Nullable final Table<String, Attribute<String>> t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -1189,11 +1193,12 @@ public abstract class AbstractJdbcMetadataManager
      * @param tables the table information.
      * @return just the table names.
      */
-    protected List<String> retrieveTableNames(@NotNull final List<? extends AbstractTable> tables)
+    protected List<String> retrieveTableNames(
+        @NotNull final List<? extends Table<String, Attribute<String>>> tables)
     {
         @NotNull final List<String> result = new ArrayList<String>(tables.size());
 
-        for (@Nullable final AbstractTable t_Table : tables)
+        for (@Nullable final Table<String, Attribute<String>> t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -1448,7 +1453,7 @@ public abstract class AbstractJdbcMetadataManager
      * @return <code>true</code> in such case.
      */
     @Override
-    public boolean isGenerationAllowedForForeignKey(@NotNull final ForeignKey foreignKey)
+    public boolean isGenerationAllowedForForeignKey(@NotNull final ForeignKey<String> foreignKey)
     {
         return
             isGenerationAllowed(
@@ -1463,7 +1468,7 @@ public abstract class AbstractJdbcMetadataManager
      * @return such representation.
      */
     @NotNull
-    protected String toNormalizedString(@NotNull final ForeignKey foreignKey)
+    protected String toNormalizedString(@NotNull final ForeignKey<String> foreignKey)
     {
         return
             foreignKey.getSourceTableName()
@@ -1477,13 +1482,13 @@ public abstract class AbstractJdbcMetadataManager
      * @return such representation.
      */
     @NotNull
-    protected String toNormalizedString(@NotNull final List<Attribute> attributes)
+    protected String toNormalizedString(@NotNull final List<Attribute<String>> attributes)
     {
         @NotNull final StringBuilder t_sbResult = new StringBuilder();
 
         boolean t_bFirstTime = true;
 
-        for (@Nullable final Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<String> t_Attribute : attributes)
         {
             if (!t_bFirstTime)
             {
@@ -1561,11 +1566,13 @@ public abstract class AbstractJdbcMetadataManager
      * @return <code>true</code> if the table passes the filter.
      */
     protected boolean passesFilter(
-        @NotNull final String table, @NotNull final List<? extends Table> fixedTables, final boolean caseSensitiveness)
+        @NotNull final String table,
+        @NotNull final List<? extends Table<String, Attribute<String>>> fixedTables,
+        final boolean caseSensitiveness)
     {
         boolean result = true;
 
-        for (@Nullable final Table t_FixedTable : fixedTables)
+        for (@Nullable final Table<String, Attribute<String>> t_FixedTable : fixedTables)
         {
             if (t_FixedTable != null)
             {
@@ -1596,11 +1603,13 @@ public abstract class AbstractJdbcMetadataManager
      * @return <code>true</code> if the table passes the filter.
      */
     protected boolean passesFilter(
-        @NotNull final Table table, @NotNull final List<? extends Table> fixedTables, final boolean caseSensitiveness)
+        @NotNull final Table<String, Attribute<String>> table,
+        @NotNull final List<? extends Table<String, Attribute<String>>> fixedTables,
+        final boolean caseSensitiveness)
     {
         boolean result = true;
 
-        for (@Nullable final Table t_FixedTable : fixedTables)
+        for (@Nullable final Table<String, Attribute<String>> t_FixedTable : fixedTables)
         {
             if (t_FixedTable != null)
             {
@@ -1663,12 +1672,14 @@ public abstract class AbstractJdbcMetadataManager
      * @return the matching table.
      */
     @Nullable
-    protected Table findTable(
-        @NotNull final String name, @NotNull final List<? extends Table> tables, final boolean caseSensitiveness)
+    protected Table<String, Attribute<String>> findTable(
+        @NotNull final String name,
+        @NotNull final List<? extends Table<String, Attribute<String>>> tables,
+        final boolean caseSensitiveness)
     {
-        @Nullable Table result = null;
+        @Nullable Table<String, Attribute<String>> result = null;
 
-        for (@Nullable final Table t_Table : tables)
+        for (@Nullable final Table<String, Attribute<String>> t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -1698,14 +1709,14 @@ public abstract class AbstractJdbcMetadataManager
      * @return the matching attribute.
      */
     @Nullable
-    protected Attribute findAttribute(
+    protected Attribute<String> findAttribute(
         @NotNull final String name,
-        @NotNull final List<? extends Attribute> attributes,
+        @NotNull final List<? extends Attribute<String>> attributes,
         final boolean caseSensitiveness)
     {
-        @Nullable Attribute result = null;
+        @Nullable Attribute<String> result = null;
 
-        for (@Nullable final Attribute t_Attribute : attributes)
+        for (@Nullable final Attribute<String> t_Attribute : attributes)
         {
             if (t_Attribute != null)
             {
@@ -1735,9 +1746,9 @@ public abstract class AbstractJdbcMetadataManager
      * @return the updated attribute.
      */
     @NotNull
-    protected Attribute fixOrdinalPosition(final int position, @NotNull final Attribute attribute)
+    protected Attribute<String> fixOrdinalPosition(final int position, @NotNull final Attribute<String> attribute)
     {
-        Attribute result = attribute;
+        Attribute<String> result = attribute;
 
         if (result instanceof AttributeIncompleteValueObject)
         {
@@ -1774,9 +1785,9 @@ public abstract class AbstractJdbcMetadataManager
      * order in the list (involves attribute cloning if necessary).
      * @param list the list of attributes.
      */
-    protected void fixOrdinalPositions(@NotNull final List<Attribute> list)
+    protected void fixOrdinalPositions(@NotNull final List<Attribute<String>> list)
     {
-        Attribute t_Attribute;
+        Attribute<String> t_Attribute;
 
         for (int t_iIndex = 0; t_iIndex < list.size(); t_iIndex++)
         {
@@ -1796,11 +1807,11 @@ public abstract class AbstractJdbcMetadataManager
      * @return the list of table names.
      */
     @NotNull
-    protected List<String> extractTableNames(@NotNull final List<Table> tables)
+    protected List<String> extractTableNames(@NotNull final List<Table<String, Attribute<String>>> tables)
     {
         @NotNull final List<String> result = new ArrayList<String>(tables.size());
 
-        for (@Nullable final Table t_Table : tables)
+        for (@Nullable final Table<String, Attribute<String>> t_Table : tables)
         {
             if (t_Table != null)
             {
@@ -1811,24 +1822,25 @@ public abstract class AbstractJdbcMetadataManager
         return result;
     }
 
+    @NotNull
     @Override
     public String toString()
     {
-        return "AbstractJdbcMetadataManager{" +
-               "caseSensitive=" + m__bCaseSensitive +
-               ", name='" + m__strName + '\'' +
-               ", metaData=" + m__MetaData +
-               ", metadataExtractionListener=" + m__MetadataExtractionListener +
-               ", catalog='" + m__strCatalog + '\'' +
-               ", schema='" + m__strSchema + '\'' +
-               ", tableNames=" + m__lTableNames +
-               ", tables=" + m__lTables +
-               ", columns=" + m__mColumns +
-               ", disableTableExtraction=" + m__bDisableTableExtraction +
-               ", lazyTableExtraction=" + m__bLazyTableExtraction +
-               ", engineName='" + m__strEngineName + '\'' +
-               ", engineVersion='" + m__strEngineVersion + '\'' +
-               ", quote='" + m__strQuote + '\'' +
-               '}';
+        return
+              "{  \"class\": \"" + AbstractJdbcMetadataManager.class.getName() + "\""
+            + ", \"caseSensitive\": \"" + m__bCaseSensitive + "\""
+            + ", \"name\": \"" + m__strName + "\""
+            + ", \"metaData\": \"" + m__MetaData + "\""
+            + ", \"metadataExtractionListener\": \"" + m__MetadataExtractionListener + "\""
+            + ", \"catalog\": \"" + m__strCatalog + "\""
+            + ", \"schema\": \"" + m__strSchema + "\""
+            + ", \"tableNames\": \"" + m__lTableNames + "\""
+            + ", \"tables\": \"" + m__lTables + "\""
+            + ", \"columns\": \"" + m__mColumns + "\""
+            + ", \"disableTableExtraction\": \"" + m__bDisableTableExtraction + "\""
+            + ", \"lazyTableExtraction\": \"" + m__bLazyTableExtraction + "\""
+            + ", \"engineName\": \"" + m__strEngineName + "\""
+            + ", \"engineVersion\": \"" + m__strEngineVersion + "\""
+            + ", \"quote\": \"" + m__strQuote + "\" }";
     }
 }

@@ -43,6 +43,7 @@ import org.acmsl.queryj.api.Template;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,7 +53,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  */
 @SuppressWarnings("unused")
-public interface TemplateFillHandler<T extends Template, P>
+public interface TemplateFillHandler<T extends Template<C>, C extends TemplateContext, P>
     extends FillHandler<P>
 {
     /**

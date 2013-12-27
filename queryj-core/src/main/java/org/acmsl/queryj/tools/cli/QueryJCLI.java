@@ -37,6 +37,8 @@ package org.acmsl.queryj.tools.cli;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.tools.logging.QueryJCLILog;
 import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -254,7 +256,7 @@ public final class QueryJCLI
         @NotNull final String customSqlFile)
       throws  QueryJBuildException
     {
-        new QueryJChain()
+        new QueryJChain<QueryJCommandHandler<QueryJCommand>>()
             .process(
                 new ConfigurationQueryJCommandImpl(configurationSettings, new QueryJCLILog(logThreshold, System.err)));
     }

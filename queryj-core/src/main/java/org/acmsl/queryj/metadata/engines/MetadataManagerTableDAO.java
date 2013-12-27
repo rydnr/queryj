@@ -41,6 +41,7 @@ package org.acmsl.queryj.metadata.engines;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
 import org.acmsl.queryj.metadata.TableDAO;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
 
@@ -75,7 +76,8 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
     /**
      * The cache of DAO -> Table.
      */
-    private static final Map<String, Table> FIND_BY_DAO_CACHE = new HashMap<String, Table>();
+    private static final Map<String, Table<String, Attribute<String>>> FIND_BY_DAO_CACHE =
+        new HashMap<String, Table<String, Attribute<String>>>();
 
     /**
      * The cache miss.
@@ -127,7 +129,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      */
     @Override
     @Nullable
-    public Table findByName(@NotNull final String name)
+    public Table<String, Attribute<String>> findByName(@NotNull final String name)
     {
         return findByName(name, getMetadataManager().isCaseSensitive());
     }
@@ -139,13 +141,13 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @return the associated {@link Table} instance, if the table is found.
      */
     @Nullable
-    protected Table findByName(@NotNull final String name, final boolean caseSensitiveness)
+    protected Table<String, Attribute<String>> findByName(@NotNull final String name, final boolean caseSensitiveness)
     {
-        @Nullable Table result = null;
+        @Nullable Table<String, Attribute<String>> result = null;
 
-        @NotNull final List<Table> t_Tables = findAllTables();
+        @NotNull final List<Table<String, Attribute<String>>> t_Tables = findAllTables();
 
-        for (@Nullable Table t_Table : t_Tables)
+        for (@Nullable final Table<String, Attribute<String>> t_Table : t_Tables)
         {
             if (t_Table != null)
             {
@@ -173,21 +175,21 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @return the list of referring tables.
      */
     @NotNull
-    public List<Table> findReferringTables(@NotNull final String target)
+    public List<Table<String, Attribute<String>>> findReferringTables(@NotNull final String target)
     {
-        @NotNull final List<Table> result = new ArrayList<Table>(1);
+        @NotNull final List<Table<String, Attribute<String>>> result = new ArrayList<Table<String, Attribute<String>>>(1);
 
-        @Nullable final List<Table> t_Tables = findAllTables();
+        @Nullable final List<Table<String, Attribute<String>>> t_Tables = findAllTables();
 
-        @NotNull List<ForeignKey> t_lForeignKeys;
+        @NotNull List<ForeignKey<String>> t_lForeignKeys;
 
-        for (@Nullable Table t_Table : t_Tables)
+        for (@Nullable final Table<String, Attribute<String>> t_Table : t_Tables)
         {
             if (t_Table != null)
             {
                 t_lForeignKeys = t_Table.getForeignKeys();
 
-                for (@Nullable ForeignKey t_ForeignKey : t_lForeignKeys)
+                for (@Nullable final ForeignKey<String> t_ForeignKey : t_lForeignKeys)
                 {
                     if (   (t_ForeignKey != null)
                         && (t_ForeignKey.getTargetTableName().equalsIgnoreCase(target)))
@@ -210,7 +212,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      */
     @Override
     @Nullable
-    public Table findByDAO(@NotNull final String dao)
+    public Table<String, Attribute<String>> findByDAO(@NotNull final String dao)
     {
         return findByDAO(dao, MetadataUtils.getInstance());
     }
@@ -220,7 +222,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param dao the DAO.
      * @return such {@link Table}, or <code>null</code> if not found.
      */
-    protected synchronized static Table getCachedByDAO(@NotNull final String dao)
+    protected synchronized static Table<String, Attribute<String>> getCachedByDAO(@NotNull final String dao)
     {
         return FIND_BY_DAO_CACHE.get(dao.toLowerCase(Locale.US));
     }
@@ -230,7 +232,8 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param dao the DAO.
      * @param table the associated table.
      */
-    protected synchronized static void cacheByDAO(@NotNull final String dao, @NotNull final Table table)
+    protected synchronized static void cacheByDAO(
+        @NotNull final String dao, @NotNull final Table<String, Attribute<String>> table)
     {
         FIND_BY_DAO_CACHE.put(dao, table);
     }
@@ -253,7 +256,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
     {
         boolean result = false;
 
-        Boolean miss = FIND_BY_DAO_CACHE_MISS.get(dao);
+        final Boolean miss = FIND_BY_DAO_CACHE_MISS.get(dao);
 
         if (miss != null)
         {
@@ -270,14 +273,15 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @return the table.
      */
     @Nullable
-    protected Table findByDAO(@NotNull final String dao, @NotNull final MetadataUtils metadataUtils)
+    protected Table<String, Attribute<String>> findByDAO(
+        @NotNull final String dao, @NotNull final MetadataUtils metadataUtils)
     {
-        Table result = getCachedByDAO(dao);
+        @Nullable Table<String, Attribute<String>> result = getCachedByDAO(dao);
 
         if (   (result == null)
             && (!isDaoAlreadyProcessed(dao)))
         {
-            for (@Nullable Table t_Table : findAllTables())
+            for (@Nullable final Table<String, Attribute<String>> t_Table : findAllTables())
             {
                 if  (   (t_Table != null)
                      && (metadataUtils.matches(t_Table.getName(), dao)))
@@ -298,5 +302,14 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
         }
 
         return result;
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"class\": \"" + MetadataManagerTableDAO.class.getName() + "\""
+            + ", \"metadataManager\": \"" + m__MetadataManager + "\" }";
     }
 }

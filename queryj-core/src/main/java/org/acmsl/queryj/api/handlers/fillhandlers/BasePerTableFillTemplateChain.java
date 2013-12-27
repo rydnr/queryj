@@ -46,8 +46,10 @@ import org.acmsl.queryj.api.PerTableTemplateContext;
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.api.PerTableTemplate per-table templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/03
+ * @since 3.0
+ * Created: 2012/06/03
  */
+@SuppressWarnings("unused")
 public interface BasePerTableFillTemplateChain<BC extends PerTableTemplateContext>
     extends FillTemplateChain<BC>
 {

@@ -64,8 +64,8 @@ import java.io.File;
 public abstract class BasePerCustomResultTemplateWritingHandler
     <T extends PerCustomResultTemplate<C>,
         C extends PerCustomResultTemplateContext,
-        TG extends PerCustomResultTemplateGenerator<T>>
-    extends    AbstractQueryJTemplateWritingHandler<T, TG, C>
+        TG extends PerCustomResultTemplateGenerator<T, C>>
+    extends    AbstractQueryJTemplateWritingHandler<T, C, TG>
     implements TemplateWritingHandler
 {
     /**

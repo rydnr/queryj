@@ -38,6 +38,7 @@ package org.acmsl.queryj.api;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Row;
 
 /*
@@ -79,7 +80,7 @@ public class PerTableTemplateContext
     /**
      * The static contents.
      */
-    private List<Row> m__lStaticValues;
+    private List<Row<String>> m__lStaticValues;
 
     /**
      * Creates a {@link PerTableTemplateContext} with given information.
@@ -115,7 +116,7 @@ public class PerTableTemplateContext
         final boolean disableCheckthreadAnnotations,
         @NotNull final String fileName,
         @NotNull final String tableName,
-        @Nullable final List<Row> staticValues)
+        @Nullable final List<Row<String>> staticValues)
     {
         super(
             metadataManager,
@@ -170,7 +171,7 @@ public class PerTableTemplateContext
      * Specifies the static values.
      * @param values such values.
      */
-    protected final void immutableSetStaticValues(@Nullable final List<Row> values)
+    protected final void immutableSetStaticValues(@Nullable final List<Row<String>> values)
     {
         m__lStaticValues = values;
     }
@@ -180,7 +181,7 @@ public class PerTableTemplateContext
      * @param values such values.
      */
     @SuppressWarnings("unused")
-    protected void setStaticValues(@Nullable final List<Row> values)
+    protected void setStaticValues(@Nullable final List<Row<String>> values)
     {
         immutableSetStaticValues(values);
     }
@@ -189,7 +190,7 @@ public class PerTableTemplateContext
      * Retrieves the static values.
      * @return such values.
      */
-    protected final List<Row> immutableGetStaticValues()
+    protected final List<Row<String>> immutableGetStaticValues()
     {
         return m__lStaticValues;
     }
@@ -199,15 +200,15 @@ public class PerTableTemplateContext
      * @return such values.
      */
     @Nullable
-    public List<Row> getStaticValues()
+    public List<Row<String>> getStaticValues()
     {
-        @Nullable List<Row> result = null;
+        @Nullable List<Row<String>> result = null;
 
-        @Nullable final List<Row> t_lRows = immutableGetStaticValues();
+        @Nullable final List<Row<String>> t_lRows = immutableGetStaticValues();
 
         if (t_lRows != null)
         {
-            result = new ArrayList<Row>(t_lRows.size());
+            result = new ArrayList<Row<String>>(t_lRows.size());
 
             Collections.copy(result, t_lRows);
         }
@@ -237,7 +238,7 @@ public class PerTableTemplateContext
     {
         @NotNull final StringBuilder result = new StringBuilder(tableName);
 
-        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {

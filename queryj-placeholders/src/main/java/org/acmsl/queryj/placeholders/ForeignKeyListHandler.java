@@ -66,7 +66,7 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class ForeignKeyListHandler
-    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<ForeignKey>>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<ForeignKey<String>>>
 {
 
     private static final long serialVersionUID = 7359967862456047176L;
@@ -97,7 +97,7 @@ public class ForeignKeyListHandler
      */
     @NotNull
     @Override
-    protected List<ForeignKey> getValue(@NotNull final PerTableTemplateContext context)
+    protected List<ForeignKey<String>> getValue(@NotNull final PerTableTemplateContext context)
     {
         return
             retrieveForeignKeys(
@@ -114,7 +114,7 @@ public class ForeignKeyListHandler
      * @return such value.
      */
     @NotNull
-    protected List<ForeignKey> retrieveForeignKeys(
+    protected List<ForeignKey<String>> retrieveForeignKeys(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataUtils metadataUtils)

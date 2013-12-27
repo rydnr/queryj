@@ -33,11 +33,21 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing some project classes.
+ * Importing some QueryJ-Core classes.
  */
 import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.templates.packaging.handlers.DefaultTemplateChainProviderTemplateHandlerBundle;
+import org.acmsl.queryj.templates.packaging.handlers.PerTableTemplatesFeatureTemplateHandlerBundle;
+import org.acmsl.queryj.templates.packaging.handlers.PerTableTemplatesTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.QueryJChain;
+import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
+
+/*
+ * Importing some QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.handlers.FindTemplateDefsHandler;
 import org.acmsl.queryj.templates.packaging.handlers.ParseTemplateDefsHandler;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateBuildHandlerTemplateHandlerBundle;
@@ -45,10 +55,8 @@ import org.acmsl.queryj.templates.packaging.handlers.TemplateFactoryTemplateHand
 import org.acmsl.queryj.templates.packaging.handlers.TemplateGeneratorTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateHandlerBundleTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplatePackagingParameterValidationHandler;
+import org.acmsl.queryj.templates.packaging.handlers.TemplateTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateWritingHandlerTemplateHandlerBundle;
-import org.acmsl.queryj.tools.QueryJChain;
-import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
  * Importing some ACM-SL classes.
@@ -72,7 +80,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJCommand>>
-    extends AbstractQueryJChain<CH>
+    extends AbstractQueryJChain<QueryJCommand, CH>
     implements TemplatePackagingSettings
 {
     /**
@@ -90,7 +98,8 @@ public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJComman
      */
     @SuppressWarnings("unchecked")
     @NotNull
-    protected Chain<CH> buildChain(@NotNull final Chain<CH> chain)
+    protected Chain<QueryJCommand, QueryJBuildException, CH> buildChain(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain)
         throws QueryJBuildException
     {
         chain.add((CH) new TemplatePackagingParameterValidationHandler());
@@ -109,9 +118,15 @@ public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJComman
 
         chain.add((CH) new TemplateHandlerBundleTemplateHandlerBundle());
 
-        chain.add((CH) new TemplateFactoryTemplateHandlerBundle());
+        chain.add((CH) new TemplateTemplateHandlerBundle());
 
         chain.add((CH) new TemplateWritingHandlerTemplateHandlerBundle());
+
+        chain.add((CH) new PerTableTemplatesTestTemplateHandlerBundle());
+
+        chain.add((CH) new PerTableTemplatesFeatureTemplateHandlerBundle());
+
+        chain.add((CH) new DefaultTemplateChainProviderTemplateHandlerBundle());
 
         return chain;
     }

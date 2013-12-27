@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Abstract logicless implementation of Attribute interface.
+ * Description: Abstract logic-less implementation of Attribute interface.
  *
  */
 package org.acmsl.queryj.metadata.vo;
@@ -54,13 +54,13 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class AbstractAttribute
-    implements Attribute
+public abstract class AbstractAttribute<T>
+    implements Attribute<T>
 {
     /**
      * The name.
      */
-    private String m__strName;
+    private T m__strName;
 
     /**
      * The type.
@@ -70,27 +70,27 @@ public abstract class AbstractAttribute
     /**
      * The type.
      */
-    private String m__strType;
+    private T m__strType;
 
     /**
      * The table name.
      */
-    private String m__strTableName;
+    private T m__strTableName;
 
     /**
      * The comment.
      */
-    private String m__strComment;
+    private T m__strComment;
 
     /**
      * The keyword user to retrieve the value, if any.
      */
-    private String m__strKeyword;
+    private T m__strKeyword;
 
     /**
      * The query user to retrieve the value, if any.
      */
-    private String m__strRetrievalQuery;
+    private T m__strRetrievalQuery;
 
     /**
      * Whether the attribute allows null values or not.
@@ -100,7 +100,7 @@ public abstract class AbstractAttribute
     /**
      * The optional value.
      */
-    private String m__strValue;
+    private T m__strValue;
 
     /**
      * Whether the attribute is marked as read-only.
@@ -115,17 +115,17 @@ public abstract class AbstractAttribute
     /**
      * The symbol for <code>true</code> values in boolean attributes.
      */
-    private String m__strBooleanTrue;
+    private T m__strBooleanTrue;
 
     /**
      * The symbol for <code>false</code> values in boolean attributes.
      */
-    private String m__strBooleanFalse;
+    private T m__strBooleanFalse;
 
     /**
      * The symbol for <code>null</code> values in boolean attributes.
      */
-    private String m__strBooleanNull;
+    private T m__strBooleanNull;
 
     /**
      * The ordinal position.
@@ -155,7 +155,7 @@ public abstract class AbstractAttribute
      * @param name the name.
      */
     protected AbstractAttribute(
-        final String tableName, final String name)
+        final T tableName, final T name)
     {
         immutableSetTableName(tableName);
         immutableSetName(name);
@@ -176,16 +176,16 @@ public abstract class AbstractAttribute
      * @param value the optional value.
      */
     protected AbstractAttribute(
-        @Nullable final String name,
+        @Nullable final T name,
         final int typeId,
-        @Nullable final String type,
-        @Nullable final String tableName,
-        @Nullable final String comment,
+        @Nullable final T type,
+        @Nullable final T tableName,
+        @Nullable final T comment,
         final int ordinalPosition,
         final int length,
         final int precision,
         final boolean allowsNull,
-        @Nullable final String value)
+        @Nullable final T value)
     {
         this(tableName, name);
         immutableSetTypeId(typeId);
@@ -223,23 +223,23 @@ public abstract class AbstractAttribute
      * @param booleanNull the symbol for <code>null</code> values in boolean attributes.
      */
     protected AbstractAttribute(
-        @NotNull final String name,
+        @NotNull final T name,
         final int typeId,
-        @NotNull final String type,
-        @NotNull final String tableName,
-        @NotNull final String comment,
+        @NotNull final T type,
+        @NotNull final T tableName,
+        @Nullable final T comment,
         final int ordinalPosition,
         final int length,
         final int precision,
-        @Nullable final String keyword,
-        @Nullable final String retrievalQuery,
+        @Nullable final T keyword,
+        @Nullable final T retrievalQuery,
         final boolean allowsNull,
-        @Nullable final String value,
+        @Nullable final T value,
         final boolean readOnly,
         final boolean isBool,
-        @Nullable final String booleanTrue,
-        @Nullable final String booleanFalse,
-        @Nullable final String booleanNull)
+        @Nullable final T booleanTrue,
+        @Nullable final T booleanFalse,
+        @Nullable final T booleanNull)
     {
         this(
             name,
@@ -272,7 +272,7 @@ public abstract class AbstractAttribute
      * Specifies the name.
      * @param name such name.
      */
-    protected final void immutableSetName(@NotNull final String name)
+    protected final void immutableSetName(@NotNull final T name)
     {
         m__strName = name;
     }
@@ -281,7 +281,7 @@ public abstract class AbstractAttribute
      * Specifies the name.
      * @param name such name.
      */
-    protected void setName(@NotNull final String name)
+    protected void setName(@NotNull final T name)
     {
         immutableSetName(name);
     }
@@ -291,7 +291,7 @@ public abstract class AbstractAttribute
      * @return such name.
      */
     @NotNull
-    public String getName()
+    public T getName()
     {
         return m__strName;
     }
@@ -328,7 +328,7 @@ public abstract class AbstractAttribute
      * Specifies the type.
      * @param type such information.
      */
-    protected final void immutableSetType(@NotNull final String type)
+    protected final void immutableSetType(@NotNull final T type)
     {
         m__strType = type;
     }
@@ -338,7 +338,7 @@ public abstract class AbstractAttribute
      * @param type such information.
      */
     @SuppressWarnings("unused")
-    protected void setType(@NotNull final String type)
+    protected void setType(@NotNull final T type)
     {
         immutableSetType(type);
     }
@@ -348,7 +348,7 @@ public abstract class AbstractAttribute
      * @return such information.
      */
     @NotNull
-    public String getType()
+    public T getType()
     {
         return m__strType;
     }
@@ -357,7 +357,7 @@ public abstract class AbstractAttribute
      * Specifies the table name.
      * @param tableName such information.
      */
-    protected final void immutableSetTableName(@NotNull final String tableName)
+    protected final void immutableSetTableName(@NotNull final T tableName)
     {
         m__strTableName = tableName;
     }
@@ -366,7 +366,7 @@ public abstract class AbstractAttribute
      * Specifies the table name.
      * @param tableName such information.
      */
-    protected void setTableName(@NotNull final String tableName)
+    protected void setTableName(@NotNull final T tableName)
     {
         immutableSetTableName(tableName);
     }
@@ -376,7 +376,7 @@ public abstract class AbstractAttribute
      * @return such information.
      */
     @NotNull
-    public String getTableName()
+    public T getTableName()
     {
         return m__strTableName;
     }
@@ -385,7 +385,7 @@ public abstract class AbstractAttribute
      * Specifies the comment.
      * @param comment such comment.
      */
-    protected final void immutableSetComment(@Nullable final String comment)
+    protected final void immutableSetComment(@Nullable final T comment)
     {
         m__strComment = comment;
     }
@@ -395,7 +395,7 @@ public abstract class AbstractAttribute
      * @param comment such comment.
      */
     @SuppressWarnings("unused")
-    protected void setComment(@Nullable final String comment)
+    protected void setComment(@Nullable final T comment)
     {
         immutableSetComment(comment);
     }
@@ -405,7 +405,7 @@ public abstract class AbstractAttribute
      * @return such comment.
      */
     @Nullable
-    public String getComment()
+    public T getComment()
     {
         return m__strComment;
     }
@@ -414,7 +414,7 @@ public abstract class AbstractAttribute
      * Specifies the keyword used to retrieve the value, if any.
      * @param keyword such information.
      */
-    protected final void immutableSetKeyword(@NotNull final String keyword)
+    protected final void immutableSetKeyword(@NotNull final T keyword)
     {
         m__strKeyword = keyword;
     }
@@ -424,7 +424,7 @@ public abstract class AbstractAttribute
      * @param keyword such information.
      */
     @SuppressWarnings("unused")
-    protected void setKeyword(@NotNull final String keyword)
+    protected void setKeyword(@NotNull final T keyword)
     {
         immutableSetKeyword(keyword);
     }
@@ -434,7 +434,7 @@ public abstract class AbstractAttribute
      * @return such information.
      */
     @Nullable
-    public String getKeyword()
+    public T getKeyword()
     {
         return m__strKeyword;
     }
@@ -443,7 +443,7 @@ public abstract class AbstractAttribute
      * Specifies the query used to retrieve the value, if any.
      * @param query such information.
      */
-    protected final void immutableSetRetrievalQuery(@NotNull final String query)
+    protected final void immutableSetRetrievalQuery(@NotNull final T query)
     {
         m__strRetrievalQuery = query;
     }
@@ -453,7 +453,7 @@ public abstract class AbstractAttribute
      * @param query such information.
      */
     @SuppressWarnings("unused")
-    protected void setRetrievalQuery(@NotNull final String query)
+    protected void setRetrievalQuery(@NotNull final T query)
     {
         immutableSetRetrievalQuery(query);
     }
@@ -463,33 +463,22 @@ public abstract class AbstractAttribute
      * @return such information.
      */
     @Nullable
-    public String getRetrievalQuery()
+    @Override
+    public T getRetrievalQuery()
     {
         return m__strRetrievalQuery;
     }
 
     /**
-     * Retrieves whether it's managed externally.
-     * @return such information.
+     * {@inheritDoc}
      */
+    @Override
     public boolean isExternallyManaged()
     {
-        boolean result = false;
-
-        @Nullable final String keyword = getKeyword();
-        @Nullable final String retrievalQuery = getRetrievalQuery();
-
-        if (   (keyword != null)
-            && (!keyword.trim().equals(""))
-            && (retrievalQuery != null)
-            && (!retrievalQuery.trim().equals("")))
-        {
-            result = true;
-        }
-
-        return result;
+        return
+            (   (getRetrievalQuery() != null)
+             || (getKeyword() != null));
     }
-
     /**
      * Specifies whether the attribute allows null values or not.
      * @param allowsNull such information.
@@ -534,7 +523,7 @@ public abstract class AbstractAttribute
      * contains data.
      * @param value such information.
      */
-    protected final void immutableSetValue(@Nullable final String value)
+    protected final void immutableSetValue(@Nullable final T value)
     {
         m__strValue = value;
     }
@@ -546,7 +535,7 @@ public abstract class AbstractAttribute
      * @param value such information.
      */
     @SuppressWarnings("unused")
-    protected void setValue(@Nullable final String value)
+    protected void setValue(@Nullable final T value)
     {
         immutableSetValue(value);
     }
@@ -558,7 +547,7 @@ public abstract class AbstractAttribute
      * @return such information.
      */
     @Nullable
-    public String getValue()
+    public T getValue()
     {
         return m__strValue;
     }
@@ -623,7 +612,7 @@ public abstract class AbstractAttribute
      * Specifies the symbol for <code>true</code> values.
      * @param value such information.
      */
-    protected final void immutableSetBooleanTrue(@Nullable final String value)
+    protected final void immutableSetBooleanTrue(@Nullable final T value)
     {
         m__strBooleanTrue = value;
     }
@@ -633,7 +622,7 @@ public abstract class AbstractAttribute
      * @param value such information.
      */
     @SuppressWarnings("unused")
-    protected void setBooleanTrue(@Nullable final String value)
+    protected void setBooleanTrue(@Nullable final T value)
     {
         immutableSetBooleanTrue(value);
     }
@@ -643,7 +632,7 @@ public abstract class AbstractAttribute
      * @return such information.
      */
     @Nullable
-    public String getBooleanTrue()
+    public T getBooleanTrue()
     {
         return m__strBooleanTrue;
     }
@@ -652,7 +641,7 @@ public abstract class AbstractAttribute
      * Specifies the symbol for <code>false</code> values.
      * @param value such information.
      */
-    protected final void immutableSetBooleanFalse(@Nullable final String value)
+    protected final void immutableSetBooleanFalse(@Nullable final T value)
     {
         m__strBooleanFalse = value;
     }
@@ -662,7 +651,7 @@ public abstract class AbstractAttribute
      * @param value such information.
      */
     @SuppressWarnings("unused")
-    protected void setBooleanFalse(@Nullable final String value)
+    protected void setBooleanFalse(@Nullable final T value)
     {
         immutableSetBooleanFalse(value);
     }
@@ -672,7 +661,7 @@ public abstract class AbstractAttribute
      * @return such information.
      */
     @Nullable
-    public String getBooleanFalse()
+    public T getBooleanFalse()
     {
         return m__strBooleanFalse;
     }
@@ -681,7 +670,7 @@ public abstract class AbstractAttribute
      * Specifies the symbol for <code>null</code> values.
      * @param value such information.
      */
-    protected final void immutableSetBooleanNull(@Nullable final String value)
+    protected final void immutableSetBooleanNull(@Nullable final T value)
     {
         m__strBooleanNull = value;
     }
@@ -691,7 +680,7 @@ public abstract class AbstractAttribute
      * @param value such information.
      */
     @SuppressWarnings("unused")
-    protected void setBooleanNull(@Nullable final String value)
+    protected void setBooleanNull(@Nullable final T value)
     {
         immutableSetBooleanNull(value);
     }
@@ -701,7 +690,7 @@ public abstract class AbstractAttribute
      * @return such information.
      */
     @Nullable
-    public String getBooleanNull()
+    public T getBooleanNull()
     {
         return m__strBooleanNull;
     }
@@ -803,13 +792,63 @@ public abstract class AbstractAttribute
     }
 
     /**
+     * Prints given stack trace in JSON format.
+     * @param stackTrace the stack trace.
+     * @return the JSON format.
+     */
+    @NotNull
+    protected String toJSON(@NotNull final StackTraceElement[] stackTrace)
+    {
+        @NotNull final StringBuilder result = new StringBuilder("[ ");
+
+        boolean firstTime = true;
+        for (@NotNull final StackTraceElement entry : stackTrace)
+        {
+            if (firstTime)
+            {
+                firstTime = false;
+            }
+            else
+            {
+                result.append(", ");
+            }
+
+            result.append("\"");
+            result.append(entry);
+            result.append("\"");
+        }
+
+        return result.toString();
+    }
+
+    /**
      * Retrieves the attribute name.
      * @return such information.
      */
     @Override
+    @NotNull
     public String toString()
     {
-        return getName();
+        return
+              "{ \"class\": \"" + AbstractAttribute.class.getName() + "\""
+            + ", \"stackTrace\": " + toJSON(m__aStackTrace)
+            + ", \"name\": \"" + m__strName + "\""
+            + ", \"typeId\": " + m__iTypeId
+            + ", \"type\": \"" + m__strType + "\""
+            + ", \"tableName\": \"" + m__strTableName + "\""
+            + ", \"comment\": \"" + m__strComment + "\""
+            + ", \"keyword\": \"" + m__strKeyword +  "\""
+            + ", \"retrievalQuery\": \"" + m__strRetrievalQuery + "\""
+            + ", \"nullable\": \"" + m__bNullable + "\""
+            + ", \"value\": " + m__strValue
+            + ", \"readOnly\": " + m__bReadOnly
+            + ", \"boolean\": " + m__bBoolean
+            + ", \"booleanTrue\": \"" + m__strBooleanTrue + "\""
+            + ", \"booleanFalse\": \"" + m__strBooleanFalse + "\""
+            + ", \"booleanNull\":" + m__strBooleanNull + "\""
+            + ", \"ordinalPosition\":" + m__iOrdinalPosition
+            + ", \"columnLength\": " + m__iColumnLength
+            + ", \"columnPrecision\": " + m__iColumnPrecision + " }";
     }
 
     @Override
@@ -824,13 +863,14 @@ public abstract class AbstractAttribute
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(@Nullable final Object obj)
     {
         boolean result = false;
 
         if (obj instanceof Attribute)
         {
-            result = areEqual(this, (Attribute) obj);
+            result = areEqual(this, (Attribute<T>) obj);
         }
 
         return result;
@@ -842,7 +882,7 @@ public abstract class AbstractAttribute
      * @param second the second attribute.
      * @return <code>true</code> in such case.
      */
-    protected boolean areEqual(@NotNull final Attribute first, @NotNull final Attribute second)
+    protected boolean areEqual(@NotNull final Attribute<T> first, @NotNull final Attribute<T> second)
     {
         return
             new EqualsBuilder()
@@ -860,7 +900,7 @@ public abstract class AbstractAttribute
      * object prevents it from being compared to this Object.
      */
     @Override
-    public int compareTo(@Nullable final Attribute object)
+    public int compareTo(@Nullable final Attribute<T> object)
         throws  ClassCastException
     {
         int result = 1;
@@ -880,7 +920,7 @@ public abstract class AbstractAttribute
      * @return the outcome of comparing <code>first.getOrdinalPosition()</code> vs
      * <code>second.getOrdinalPosition()</code>
      */
-    protected int compareThem(@NotNull final Attribute first, @NotNull final Attribute second)
+    protected int compareThem(@NotNull final Attribute<T> first, @NotNull final Attribute<T> second)
     {
         return first.getOrdinalPosition() - second.getOrdinalPosition();
     }

@@ -135,7 +135,7 @@
   value 	CDATA  #REQUIRED
 >
 
-<!ENTITY % local_entities SYSTEM "file:///home/chous/servers/1proc221/conf/local_entities">
+<!ENTITY % local_entities SYSTEM "file:///home/chous/.m2/local_entities">
 %local_entities;
 
 <!ENTITY pattern "&#x00025;d{yyyy/MMM/dd HH:mm:ss,SSS} &#x00025;-5p [&#x00025;t][&#x00025;c] &#x00025;m&#x00025;n">

@@ -1,0 +1,51 @@
+- Create a new StringTemplate Template.stg in folder src/main/resources/org/acmsl/queryj/templates/packaging;
+- Add QueryJ header;
+- Add comment: Defines the rules to generate QueryJ's Templates.;
+- Declare the group Template;
+- Import "common.stg";
+- Define a rule source(C):
+  - Add comment: Generates a Template source file.;
+  - Add comment: @param C the context.;
+  - Call <sourceImpl(def=C.templateDef, C=C)>;
+- Define a rule sourceImpl(def, C):
+  - Add comment: Generates a Template source file according to a TemplateDef.;
+  - Add comment: @param def the template definition.;
+  - Add comment: @param C the context.;
+  - Call
+--
+<java_header(
+    description=[ "Used to generate sources using ", def.name ],
+    description_oneline=true,
+    filename=C.class_name,
+    template="org/acmsl/queryj/templates/packaging/Template.stg",
+    C=C)>
+--
+  - Call <package_declaration(packageName=def.packageName)>;
+  - Write QueryJ-Core import group;
+  - Write ACM-SL Commons import group;
+  - Write JetBrains import group;
+  - Write checkthread.org import group;
+  - Call <class(def=def, C=C)>;
+- Define a rule class(def, C):
+  - Define a class <C.class_name>;
+  - Add comment: Used to generate sources using <def.name>.;
+  - Call class_common_javadoc:
+    - Pass template as "org/acmsl/queryj/templates/packaging/Template.stg";
+    - Pass timestamp as C.timestamp;
+  - Add @ThreadSafe annotation;
+  - Make it extend Abstract<def.type.capitalized>Template, bound to <def.type.capitalized>TemplateContext;
+  - Add a serialVersionUID field with the value <C.serialVersionUID>;
+  - Add a constructor accepting a <def.type.capitalized>TemplateContext argument:
+    - Add comment: Builds a <C.class_name> using given context.;
+    - Add comment: @param context the {@link <def.type.capitalized>TemplateContext context}.;
+    - Call super(context);
+  - Implement retrieveGroup() method:
+    - Add comment: {@inheritDoc};
+    - Add @Override annotation;
+    - Add @Nullable annotation;
+    - Return retrieveGroup("<def.name>");
+  - Implement getTemplateName() method:
+    - Add comment: {@inheritDoc}
+    - Add @Override annotation;
+    - Add @NotNull annotation;
+    - Return "<def.name.capitalized>";

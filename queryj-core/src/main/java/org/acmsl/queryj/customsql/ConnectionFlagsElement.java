@@ -36,6 +36,7 @@ package org.acmsl.queryj.customsql;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.Literals;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -186,31 +187,27 @@ public class ConnectionFlagsElement
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    public int compareTo(final ConnectionFlags object)
         throws  ClassCastException
     {
         int result = 1;
 
         @Nullable ClassCastException exceptionToThrow = null;
 
-        if  (object instanceof ConnectionFlags)
+        if  (object != null)
         {
-            @NotNull final ConnectionFlags t_OtherInstance = (ConnectionFlags) object;
-
             result =
                 new org.apache.commons.lang.builder.CompareToBuilder()
                 .append(
                     getTransactionIsolation(),
-                    t_OtherInstance.getTransactionIsolation())
+                    object.getTransactionIsolation())
                 .toComparison();
         }
         else
         {
             exceptionToThrow =
                 new ClassCastException(
-                      "Cannot compare "
-                    + object
-                    + " with "
+                      Literals.CANNOT_COMPARE
                     + toString());
         }
 

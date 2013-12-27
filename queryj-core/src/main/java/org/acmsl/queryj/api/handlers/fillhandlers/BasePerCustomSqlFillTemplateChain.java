@@ -42,16 +42,14 @@ package org.acmsl.queryj.api.handlers.fillhandlers;
 import org.acmsl.queryj.api.FillTemplateChain;
 import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
 
-/*
- * Importing some JetBrains annotations.
- */
-
 /**
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.api.PerCustomSqlTemplate per-custom-sql templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/07/07
+ * @since 3.0
+ * Created: 2012/07/07
  */
+@SuppressWarnings("unused")
 public interface BasePerCustomSqlFillTemplateChain<BC extends PerCustomSqlTemplateContext>
     extends FillTemplateChain<BC>
 {

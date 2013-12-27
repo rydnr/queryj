@@ -1,0 +1,7 @@
+- Create interface GlobalTemplateContext, in package org.acmsl.queryj.templates.packaging;
+- Add comment: Context for templates requiring global access to all information available.;
+- Make it implement TemplatePackagingContext;
+- Define List<TemplateDef> getTemplateDefs():
+  - Add comment: Retrieves all {@link TemplateDef}s.
+  - Add comment: @return such information.
+- Fix import groups;

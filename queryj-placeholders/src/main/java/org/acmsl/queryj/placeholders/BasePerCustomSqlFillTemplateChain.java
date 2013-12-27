@@ -43,22 +43,23 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Chain;
+import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
@@ -92,18 +93,19 @@ public class BasePerCustomSqlFillTemplateChain
     }
 
     /**
-     * Adds additional per-custom-sql handlers.
-     * @param chain the chain to be configured.
+     * Retrieves the additional per-custom-sql handlers.
      * @param context the {@link org.acmsl.queryj.api.PerCustomSqlTemplateContext context}.
-     * @param relevantOnly whether to include only relevant placeholders.
+     * @return such handlers.
      */
-    @SuppressWarnings("unused")
+    @NotNull
     @Override
-    protected void addHandlers(
-        @NotNull final Chain<FillHandler<?>> chain,
-        @NotNull final PerCustomSqlTemplateContext context,
-        final boolean relevantOnly)
+    @SuppressWarnings("unchecked")
+    protected List<FillHandler<?>> getHandlers(@NotNull final PerCustomSqlTemplateContext context)
     {
+        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(0);
+
         // TODO
+
+        return result;
     }
 }

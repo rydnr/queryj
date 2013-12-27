@@ -82,7 +82,7 @@ public class ResultHandler
     @Override
     public String getPlaceHolder()
     {
-        return "result";
+        return Literals.RESULT;
     }
 
     /**

@@ -42,6 +42,7 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
+import org.acmsl.queryj.templates.packaging.exceptions.MissingSourceFoldersAtRuntimeException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 
 /**
@@ -210,8 +211,7 @@ public class FindTemplateDefsHandler
 
         if (aux == null)
         {
-            // TODO
-            throw new RuntimeException("No source folders");
+            throw new MissingSourceFoldersAtRuntimeException();
         }
         else
         {
@@ -309,8 +309,9 @@ public class FindTemplateDefsHandler
         @Override
         public String toString()
         {
-            return "{ 'class': 'ExtensionFilenameFilter', " +
-                   "'extension': '" + m__strExtension + "' }";
+            return
+                  "{ \"class\": \"" + ExtensionFilenameFilter.class.getName() + '"'
+                + ", \"extension\": \"" + m__strExtension + "\" }";
         }
     }
 

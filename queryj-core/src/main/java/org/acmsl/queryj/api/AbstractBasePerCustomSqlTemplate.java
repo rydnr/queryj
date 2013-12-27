@@ -37,6 +37,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.exceptions.InvalidPerCustomSqlTemplateException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.acmsl.queryj.customsql.Sql;
@@ -56,6 +57,7 @@ import org.jetbrains.annotations.Nullable;
  * Logic-less container for all templates to be processed once per custom SQL.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public abstract class AbstractBasePerCustomSqlTemplate<C extends PerCustomSqlTemplateContext>
     extends AbstractQueryJTemplate<C>
     implements PerCustomSqlTemplate<C>
@@ -65,6 +67,7 @@ public abstract class AbstractBasePerCustomSqlTemplate<C extends PerCustomSqlTem
      * given context.
      * @param context the {@link PerCustomSqlTemplateContext} instance.
      */
+    @SuppressWarnings("unused")
     public AbstractBasePerCustomSqlTemplate(@NotNull final C context)
     {
         super(context);
@@ -102,7 +105,7 @@ public abstract class AbstractBasePerCustomSqlTemplate<C extends PerCustomSqlTem
     protected String buildHeader(
         final String templateName, @NotNull final Sql sql)
     {
-        return GENERATING + templateName + " for " + sql.getName();
+        return Literals.GENERATING + templateName + " for " + sql.getName();
     }
 
     /**

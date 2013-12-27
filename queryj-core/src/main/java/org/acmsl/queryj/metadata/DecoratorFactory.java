@@ -79,8 +79,8 @@ public interface DecoratorFactory
      * @return the decorated attribute for the concrete template.
      */
     @NotNull
-    public AttributeDecorator createDecorator(
-        @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager);
+    public <V, DecoratedString> Attribute<DecoratedString> createDecorator(
+        @NotNull final Attribute<V> attribute, @NotNull final MetadataManager metadataManager);
 
     /**
      * Creates an <code>ParameterDecorator</code> for given
@@ -89,6 +89,7 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public ParameterDecorator createDecorator(
         @NotNull final Parameter parameter, @NotNull final MetadataManager metadataManager);
@@ -117,6 +118,7 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated result for the concrete template.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public ResultDecorator createDecorator(
         @NotNull final Result result,
@@ -157,7 +159,7 @@ public interface DecoratorFactory
      * @return the attribute list
      */
     @NotNull
-    public List<Attribute> decorateAttributes(
+    public List<Attribute<DecoratedString>> decorateAttributes(
         @NotNull final String table, @NotNull final MetadataManager metadataManager);
 
     /**
@@ -167,8 +169,8 @@ public interface DecoratorFactory
      * @return the decorated version of the attribute list.
      */
     @NotNull
-    public List<Attribute> decorateAttributes(
-        @NotNull final List<Attribute> attributes, @NotNull final MetadataManager metadataManager);
+    public <V> List<Attribute<DecoratedString>> decorateAttributes(
+        @NotNull final List<Attribute<V>> attributes, @NotNull final MetadataManager metadataManager);
 
     /**
      * Retrieves the decorated list of attributes of given table.
@@ -178,7 +180,7 @@ public interface DecoratorFactory
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Attribute> decoratePrimaryKey(
+    public List<Attribute<DecoratedString>> decoratePrimaryKey(
         @NotNull final String table, @NotNull final MetadataManager metadataManager);
 
     /**
@@ -191,10 +193,11 @@ public interface DecoratorFactory
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return the decorator instance.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public ForeignKeyDecorator createDecorator(
         @NotNull final String sourceTableName,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final String targetTableName,
         final boolean allowsNull,
         @NotNull final MetadataManager metadataManager,

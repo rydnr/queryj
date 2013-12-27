@@ -70,7 +70,7 @@ public class InvalidPerForeignKeyTemplateException
      */
     public InvalidPerForeignKeyTemplateException(
         @NotNull final String name,
-        @NotNull final ForeignKey foreignKey,
+        @NotNull final ForeignKey<?> foreignKey,
         @NotNull final String repository,
         @NotNull final Throwable cause)
     {

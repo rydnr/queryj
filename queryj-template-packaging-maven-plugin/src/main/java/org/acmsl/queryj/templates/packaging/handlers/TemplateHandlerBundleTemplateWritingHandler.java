@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,11 +37,16 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ-API classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
 import org.acmsl.queryj.templates.packaging.TemplateHandlerBundleTemplate;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
@@ -72,9 +77,10 @@ import java.util.List;
 public class TemplateHandlerBundleTemplateWritingHandler
     extends TemplatePackagingWritingHandler
                 <TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>,
+                 DefaultTemplatePackagingContext,
                  TemplatePackagingTemplateGenerator
-                     <TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>,
-                 DefaultTemplatePackagingContext>
+                     <TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>,
+                      DefaultTemplatePackagingContext>>
 {
     /**
      * Retrieves the template generator.
@@ -96,14 +102,27 @@ public class TemplateHandlerBundleTemplateWritingHandler
      * @return the template.
      * @throws QueryJBuildException if the template retrieval process fails.
      */
-    @Nullable
+    @NotNull
     @Override
     protected List<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>> retrieveTemplates(
         @NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {
-        return
+        @NotNull final List<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>> result;
+
+        @Nullable final List<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>> aux =
             new QueryJCommandWrapper<TemplateHandlerBundleTemplate<DefaultTemplatePackagingContext>>(parameters)
                 .getListSetting(TEMPLATE_HANDLER_BUNDLE_TEMPLATES);
+
+        if (aux == null)
+        {
+            throw new MissingTemplatesException("template-handler-bundle");
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
     }
 }

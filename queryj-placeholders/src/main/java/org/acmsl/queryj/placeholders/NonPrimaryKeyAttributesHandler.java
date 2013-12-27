@@ -66,7 +66,7 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class NonPrimaryKeyAttributesHandler
-    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Attribute>>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Attribute<String>>>
 {
     private static final long serialVersionUID = 2484558064912624673L;
 
@@ -97,7 +97,7 @@ public class NonPrimaryKeyAttributesHandler
      */
     @NotNull
     @Override
-    protected List<Attribute> getValue(@NotNull final PerTableTemplateContext context)
+    protected List<Attribute<String>> getValue(@NotNull final PerTableTemplateContext context)
     {
         return
             retrieveNonPkAttributes(
@@ -113,7 +113,7 @@ public class NonPrimaryKeyAttributesHandler
      * @param metadataUtils the {@link MetadataUtils} instance.
      */
     @NotNull
-    protected List<Attribute> retrieveNonPkAttributes(
+    protected List<Attribute<String>> retrieveNonPkAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataUtils metadataUtils)

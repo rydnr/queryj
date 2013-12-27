@@ -44,9 +44,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 /*
  * Importing checkthread.org annotations.
@@ -65,24 +63,9 @@ public class CachingRowDecorator
     private static final long serialVersionUID = 7506582704616898824L;
 
     /**
-     * The cached normalized uppercased name.
-     */
-    private String m__strCachedNameNormalizedUppercased;
-
-    /**
-     * The cached lowercased version of the name.
-     */
-    private String m__strCachedNameLowercased;
-
-    /**
-     * The cached capitalized version of the name.
-     */
-    private String m__strCachedNameCapitalized;
-
-    /**
      * The cached decorated attributes.
      */
-    private List<Attribute> m__lCachedAttributes;
+    private List<Attribute<DecoratedString>> m__lCachedAttributes;
 
     /**
      * Creates a <code>CachingRowDecorator</code> with the
@@ -93,7 +76,7 @@ public class CachingRowDecorator
      */
     @SuppressWarnings("unused")
     public CachingRowDecorator(
-        @NotNull final Row row,
+        @NotNull final Row<String> row,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
@@ -112,159 +95,19 @@ public class CachingRowDecorator
     public CachingRowDecorator(
         @NotNull final String name,
         @NotNull final String tableName,
-        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute<String>> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
         super(name, tableName, attributes, metadataManager, decoratorFactory);
     }
 
-    /**
-     * Specifies the cached normalized uppercased name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameNormalizedUppercased(
-        @NotNull final String value)
-    {
-        m__strCachedNameNormalizedUppercased = value;
-    }
-    
-    /**
-     * Specifies the cached normalized uppercased name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameNormalizedUppercased(@NotNull final String value)
-    {
-        immutableSetCachedNameNormalizedUppercased(value);
-    }
 
-    /**
-     * Retrieves the cached normalized uppercased name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameNormalizedUppercased()
-    {
-        return m__strCachedNameNormalizedUppercased;
-    }
-
-    /**
-     * Retrieves the id, normalized and upper-cased.
-     * @return such information.
-     */
-    @NotNull
-    public String getNameNormalizedUppercased()
-    {
-        String result = getCachedNameNormalizedUppercased();
-        
-        if  (result == null)
-        {
-            result = super.getNameNormalizedUppercased();
-            setCachedNameNormalizedUppercased(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached lowercased version of the name.
-     * @param value the value.
-     */
-    protected final void immutableSetCachedNameLowercased(@NotNull final String value)
-    {
-        m__strCachedNameLowercased = value;
-    }
-
-    /**
-     * Specifies the cached lowercased version of the name.
-     * @param value the value.
-     */
-    @SuppressWarnings("unused")
-    protected void setCachedNameLowercased(@NotNull final String value)
-    {
-        immutableSetCachedNameLowercased(value);
-    }
-
-    /**
-     * Retrieves the cached lowercased version of the name.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedNameLowercased()
-    {
-        return m__strCachedNameLowercased;
-    }
-
-    /**
-     * Retrieves the lowercased version of the name.
-     * @return such value.
-     */
-    @NotNull
-    public String getNameLowercased()
-    {
-        @Nullable String result = getCachedNameLowercased();
-
-        if (result == null)
-        {
-            result = super.getNameLowercased();
-            setCachedNameLowercased(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the cached capitalized version of the name.
-     * @param value the value.
-     */
-    protected final void immutableSetCachedNameCapitalized(@NotNull final String value)
-    {
-        m__strCachedNameCapitalized = value;
-    }
-
-    /**
-     * Specifies the cached capitalized version of the name.
-     * @param value the value.
-     */
-    @SuppressWarnings("unused")
-    protected void setCachedNameCapitalized(@NotNull final String value)
-    {
-        immutableSetCachedNameCapitalized(value);
-    }
-
-    /**
-     * Retrieves the cached capitalized version of the name.
-     * @return the value.
-     */
-    @Nullable
-    protected String getCachedNameCapitalized()
-    {
-        return m__strCachedNameCapitalized;
-    }
-
-    /**
-     * Retrieves the name, capitalized.
-     * @return such value.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    public String getNameCapitalized()
-    {
-        @Nullable String result = getCachedNameCapitalized();
-
-        if (result == null)
-        {
-            result = super.getNameCapitalized();
-            setCachedNameCapitalized(result);
-        }
-
-        return result;
-    }
     /**
      * Specifies the cached list of decorated attributes.
      * @param list the list.
      */
-    protected final void immutableSetCachedAttributes(@NotNull final List<Attribute> list)
+    protected final void immutableSetCachedAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         m__lCachedAttributes = list;
     }
@@ -273,7 +116,7 @@ public class CachingRowDecorator
      * Specifies the cached list of decorated attributes.
      * @param list the list.
      */
-    protected void setCachedAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedAttributes(@NotNull final List<Attribute<DecoratedString>> list)
     {
         immutableSetCachedAttributes(list);
     }
@@ -283,7 +126,7 @@ public class CachingRowDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedAttributes()
+    protected List<Attribute<DecoratedString>> getCachedAttributes()
     {
         return m__lCachedAttributes;
     }
@@ -293,9 +136,9 @@ public class CachingRowDecorator
      */
     @Override
     @NotNull
-    public List<Attribute> getAttributes()
+    public List<Attribute<DecoratedString>> getAttributes()
     {
-        List<Attribute> result = getCachedAttributes();
+        List<Attribute<DecoratedString>> result = getCachedAttributes();
 
         if (result == null)
         {
@@ -304,5 +147,14 @@ public class CachingRowDecorator
         }
 
         return result;
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"class\": \"" + CachingRowDecorator.class.getName() + '"'
+            + ", \"cachedAttributes\": \"" + m__lCachedAttributes + "\" }";
     }
 }

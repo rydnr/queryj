@@ -55,6 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class TemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
     extends AbstractTemplatePackagingTemplate<C>
 {
+    private static final long serialVersionUID = 2464272892781177697L;
+
     /**
      * Creates a TemplateWritingHandlerTemplate instance.
      * @param context the {@link TemplatePackagingContext context}.
@@ -73,6 +75,6 @@ public class TemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
     @Override
     public String getTemplateName()
     {
-        return "TemplateWritingHandler";
+        return Literals.TEMPLATE_WRITING_HANDLER;
     }
 }

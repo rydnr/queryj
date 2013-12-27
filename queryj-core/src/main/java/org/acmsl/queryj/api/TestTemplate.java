@@ -37,8 +37,9 @@ package org.acmsl.queryj.api;
  * Identifies all test templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface TestTemplate
-    extends  Template
+@SuppressWarnings("unused")
+public interface TestTemplate<T extends TemplateContext>
+    extends  Template<T>
 {
     /**
      * Retrieves the test name.

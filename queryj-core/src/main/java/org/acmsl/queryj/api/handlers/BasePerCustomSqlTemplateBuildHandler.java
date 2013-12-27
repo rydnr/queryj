@@ -39,6 +39,7 @@ package org.acmsl.queryj.api.handlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
 import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseInformationException;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.SqlDAO;
@@ -71,6 +72,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 public abstract class BasePerCustomSqlTemplateBuildHandler
+    <T extends PerCustomSqlTemplate<C>, C extends PerCustomSqlTemplateContext>
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
@@ -194,7 +196,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @return such instance.
      */
     @NotNull
-    protected abstract PerCustomSqlTemplateFactory retrieveTemplateFactory();
+    protected abstract PerCustomSqlTemplateFactory<T, C> retrieveTemplateFactory();
 
     /**
      * Builds the templates.
@@ -218,15 +220,14 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
         @NotNull final String quote,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final PerCustomSqlTemplateFactory templateFactory,
+        @NotNull final PerCustomSqlTemplateFactory<T, C> templateFactory,
         @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final List<Sql> sqlElements,
         @Nullable final String header)
       throws  QueryJBuildException
     {
-        @NotNull final List<PerCustomSqlTemplate> t_lTemplates =
-            new ArrayList<PerCustomSqlTemplate>(sqlElements.size());
+        @NotNull final List<T> t_lTemplates = new ArrayList<T>(sqlElements.size());
 
         @Nullable final SqlElement t_SqlElement = null;
 
@@ -293,8 +294,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param parameters the parameter map.
      */
     protected abstract void storeTemplates(
-        @NotNull final List<PerCustomSqlTemplate> templates,
-        @NotNull final QueryJCommand parameters);
+        @NotNull final List<T> templates, @NotNull final QueryJCommand parameters);
 
     /**
      * Retrieves the foreign keys.

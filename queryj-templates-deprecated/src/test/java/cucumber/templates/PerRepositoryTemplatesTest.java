@@ -286,7 +286,7 @@ public class PerRepositoryTemplatesTest
         @NotNull final StringUtils stringUtils)
     {
         checkPropertiesFiles(outputName, outputFiles);
-        @Nullable final File file = retrieveOutputFile(outputName.concat("-queryj.properties"));
+        @Nullable final File file = retrieveOutputFile(outputName.concat(Literals.QUERYJ_PROPERTIES));
 
         if (file != null)
         {

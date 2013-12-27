@@ -112,7 +112,7 @@ public class ForeignKeyAttributeTypeImportsHandler
      */
     @NotNull
     protected List<String> retrieveImports(
-        @NotNull final ForeignKey foreignKey, @NotNull final MetadataManager metadataManager)
+        @NotNull final ForeignKey<String> foreignKey, @NotNull final MetadataManager metadataManager)
     {
         return
             TableAttributeTypeImportsHandler.retrieveImports(

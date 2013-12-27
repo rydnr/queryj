@@ -60,26 +60,27 @@ import org.jetbrains.annotations.Nullable;
  * Manages a sequential chain of actions within QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
+public abstract class AbstractQueryJChain
+    <C extends QueryJCommand, CH extends QueryJCommandHandler<C>>
 {
     /**
      * The chain.
      */
-    private Chain<CH> m__Chain;
+    private Chain<C, QueryJBuildException, CH> m__Chain;
 
     /**
      * Constructs an {@link AbstractQueryJChain} instance.
      */
     public AbstractQueryJChain()
     {
-        immutableSetChain(new ArrayListChainAdapter<CH>());
+        immutableSetChain(new ArrayListChainAdapter<C, QueryJBuildException, CH>());
     }
 
     /**
      * Specifies the chain.
      * @param chain the new chain.
      */
-    protected final void immutableSetChain(@NotNull final Chain<CH> chain)
+    protected final void immutableSetChain(@NotNull final Chain<C, QueryJBuildException, CH> chain)
     {
         m__Chain = chain;
     }
@@ -89,7 +90,7 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<QueryJ
      * @param chain the new chain.
      */
     @SuppressWarnings("unused")
-    protected void setChain(@NotNull final Chain<CH> chain)
+    protected void setChain(@NotNull final Chain<C, QueryJBuildException, CH> chain)
     {
         immutableSetChain(chain);
     }
@@ -99,7 +100,7 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<QueryJ
      * @return such chain.
      */
     @NotNull
-    public Chain<CH> getChain()
+    public Chain<C, QueryJBuildException, CH> getChain()
     {
         return m__Chain;
     }
@@ -110,7 +111,7 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<QueryJ
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
-    public void process(@NotNull final QueryJCommand settings)
+    public void process(@NotNull final C settings)
         throws QueryJBuildException
     {
         process(buildChain(getChain()), settings);
@@ -122,7 +123,7 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<QueryJ
      * @return the updated chain.
      * @throws QueryJBuildException if the chain cannot be built successfully.
      */
-    protected abstract Chain<CH> buildChain(@NotNull final Chain<CH> chain)
+    protected abstract Chain<C, QueryJBuildException, CH> buildChain(@NotNull final Chain<C, QueryJBuildException, CH> chain)
         throws QueryJBuildException;
 
     /**
@@ -134,7 +135,7 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<QueryJ
      */
     @Nullable
     public CH getNextChainLink(
-        @Nullable final Chain<CH> chain,
+        @Nullable final Chain<C, QueryJBuildException, CH> chain,
         @Nullable final CH commandHandler)
     {
         @Nullable CH result = null;
@@ -170,7 +171,7 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<QueryJ
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean process(
-        @NotNull final Chain<CH> chain, @NotNull final QueryJCommand command)
+        @NotNull final Chain<C, QueryJBuildException, CH> chain, @NotNull final C command)
       throws QueryJBuildException
     {
         boolean result = false;
@@ -238,6 +239,8 @@ public abstract class AbstractQueryJChain<CH extends QueryJCommandHandler<QueryJ
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractQueryJChain', 'chain': '" + getChain() + "' }";
+        return
+              "{ \"class\": \"" + AbstractQueryJChain.class.getName() + '"'
+            + ", \"chain\": " + getChain() + " }";
     }
 }

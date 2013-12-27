@@ -35,14 +35,9 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.utils.io.FileUtils;
 
 /*
  * Importing some JetBrains annotations.
@@ -54,20 +49,13 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
-/*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-
 /**
  * Common logic for QueryJ-specific template generators.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public abstract class AbstractQueryJTemplateGenerator<N extends QueryJTemplate<? extends QueryJTemplateContext>>
-    extends AbstractTemplateGenerator<N>
+public abstract class AbstractQueryJTemplateGenerator<N extends QueryJTemplate<C>, C extends QueryJTemplateContext>
+    extends AbstractTemplateGenerator<N, C>
 {
     /**
      * Creates an {@link AbstractQueryJTemplateGenerator} with given settings.
@@ -94,8 +82,8 @@ public abstract class AbstractQueryJTemplateGenerator<N extends QueryJTemplate<?
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractQueryJTemplateGenerator', " +
-               " 'parent': " + super.toString() +
-               " }";
+        return
+              "{ \"class\": \"" + AbstractQueryJTemplateGenerator.class.getName() + '"'
+            + ", " + Literals.JSON_PARENT_ATTR + super.toString() + " }";
     }
 }

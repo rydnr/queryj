@@ -54,6 +54,8 @@ import org.acmsl.commons.patterns.Chain;
  */
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Sets up the chain to provide all placeholder replacements in templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
@@ -61,7 +63,7 @@ import org.jetbrains.annotations.NotNull;
  * Created: 2012/06/03
  */
 public abstract class AbstractFillTemplateChain<C extends TemplateContext>
-    extends AbstractQueryJChain<FillHandler<?>>
+    extends AbstractQueryJChain<QueryJCommand, FillHandler<?>>
     implements FillTemplateChain<C>
 {
     /**
@@ -127,7 +129,9 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
      * documentation, etc. can be considered not relevant.
      */
     @Override
-    protected Chain<FillHandler<?>> buildChain(@NotNull final Chain<FillHandler<?>> chain)
+    @NotNull
+    protected Chain<QueryJCommand, QueryJBuildException, FillHandler<?>> buildChain(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, FillHandler<?>> chain)
     {
         return buildChain(chain, false);
     }
@@ -139,24 +143,41 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
      * be able to find out if two template realizations are equivalent. Usually, generation timestamps,
      * documentation, etc. can be considered not relevant.
      */
-    protected Chain<FillHandler<?>> buildChain(
-        @NotNull final Chain<FillHandler<?>> chain, final boolean relevantOnly)
+    @NotNull
+    @SuppressWarnings("unchecked")
+    protected Chain<QueryJCommand, QueryJBuildException, FillHandler<?>> buildChain(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, FillHandler<?>> chain, final boolean relevantOnly)
     {
-        addHandlers(chain, getTemplateContext(), relevantOnly);
+        @NotNull final List<FillAdapterHandler<?, ?>> t_lHandlers = (List<FillAdapterHandler<?, ?>>) getHandlers();
+
+        // Don't know how to fix the generics warnings
+        for (@NotNull final FillAdapterHandler t_Handler : t_lHandlers)
+        {
+            add(chain, t_Handler, relevantOnly);
+        }
 
         return chain;
     }
 
     /**
-     * Adds additional per-table handlers.
-     * @param chain the chain to be configured.
-     * @param context the context.
-     * @param relevantOnly whether to use relevant-only placeholders.
+     * Retrieves the handlers.
+     *
+     * @return such handlers.
      */
-    protected abstract void addHandlers(
-        @NotNull final Chain<FillHandler<?>> chain,
-        @NotNull final C context,
-        final boolean relevantOnly);
+    @NotNull
+    @Override
+    public List<?> getHandlers()
+    {
+        return getHandlers(getTemplateContext());
+    }
+
+    /**
+     * Retrieves the handlers.
+     * @param context the context.
+     * @return such handlers.
+     */
+    @NotNull
+    protected abstract List<?> getHandlers(@NotNull final C context);
 
     /**
      * Adds given handler depending on whether it's relevant or not.
@@ -166,7 +187,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
      */
     @SuppressWarnings("unchecked")
     protected <F extends FillHandler<P>, P> void add(
-        @NotNull final Chain<F> chain,
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, F> chain,
         @NotNull final FillAdapterHandler<F, P> handler,
         final boolean relevantOnly)
     {
@@ -175,7 +196,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
         if (   (relevantOnly)
             && (handler.getFillHandler() instanceof NonRelevantFillHandler))
         {
-            actualHandler = (F) new EmptyFillAdapterHandler(handler.getFillHandler());
+            actualHandler = (F) new EmptyFillAdapterHandler<F, P>(handler.getFillHandler());
         }
         else
         {
@@ -190,7 +211,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
     public String toString()
     {
         return
-              "{ 'class': 'AbstractFillTemplateChain', 'templateContext': '" + templateContext
-            + "' }";
+              "{ \"class\": \"" + AbstractFillTemplateChain.class.getName() + "\""
+            + ", \"templateContext\": \"" + templateContext + "\" }";
     }
 }

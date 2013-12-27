@@ -38,6 +38,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
@@ -133,7 +134,7 @@ public class MetadataExtractionLogger
     @Override
     public void tableExtracted(@NotNull final String table)
     {
-        debug("Table " + table + " extracted");
+        debug("Table " + table + Literals.EXTRACTED);
     }
 
     /**
@@ -162,7 +163,7 @@ public class MetadataExtractionLogger
     @Override
     public void tableCommentExtractionStarted(@NotNull final String table)
     {
-        debug("comments for table " + table + " extracted");
+        debug("comments for table " + table + Literals.EXTRACTED);
     }
 
     /**
@@ -197,7 +198,7 @@ public class MetadataExtractionLogger
     @Override
     public void columnNamesExtracted(@NotNull final String table, final int count)
     {
-        debug("columns (" + count + ") for " + table + " extracted");
+        debug("columns (" + count + ") for " + table + Literals.EXTRACTED);
     }
 
     /**
@@ -246,7 +247,7 @@ public class MetadataExtractionLogger
     @Override
     public void columnTypesExtractionStarted(@NotNull final String table)
     {
-        debug("column types for " + table + " extracted");
+        debug("column types for " + table + Literals.EXTRACTED);
     }
 
     /**
@@ -257,7 +258,7 @@ public class MetadataExtractionLogger
     @Override
     public void columnTypesExtracted(@NotNull final String table)
     {
-        debug("Column types for " + table + " extracted");
+        debug("Column types for " + table + Literals.EXTRACTED);
     }
 
     /**
@@ -268,7 +269,7 @@ public class MetadataExtractionLogger
     @Override
     public void columnNullablesExtractionStarted(@NotNull final String table)
     {
-        debug("Extraction of Nullable information for table " + table + " extracted");
+        debug("Extraction of Nullable information for table " + table + Literals.EXTRACTED);
     }
 
     /**
@@ -289,9 +290,9 @@ public class MetadataExtractionLogger
      * @param primaryKey the primary key.
      */
     @Override
-    public void primaryKeyExtracted(@NotNull final String table, @NotNull final List<Attribute> primaryKey)
+    public void primaryKeyExtracted(@NotNull final String table, @NotNull final List<Attribute<String>> primaryKey)
     {
-        debug("Primary key for table " + table + " extracted");
+        debug("Primary key for table " + table + Literals.EXTRACTED);
     }
 
     /**
@@ -326,7 +327,7 @@ public class MetadataExtractionLogger
      * @param foreignKey  the foreign key.
      */
     @Override
-    public void foreignKeyExtracted(@NotNull final ForeignKey foreignKey)
+    public void foreignKeyExtracted(@NotNull final ForeignKey<String> foreignKey)
     {
         debug(
               "Foreign key ("

@@ -42,6 +42,7 @@ import org.acmsl.queryj.customsql.Parameter;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Decorator;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -89,5 +90,6 @@ public interface ParameterDecorator
      * Retrieves the field type of the parameter.
      * @return such information.
      */
+    @NotNull
     public String getFieldType();
 }

@@ -70,21 +70,21 @@ public interface ColumnDAO
      * @param columnName the column name.
      */
     @Nullable
-    Attribute findColumn(@NotNull final String table, @NotNull final String columnName);
+    Attribute<String> findColumn(@NotNull final String table, @NotNull final String columnName);
 
     /**
      * Retrieves the columns for given table.
      * @param table the table name.
      */
     @NotNull
-    List<Attribute> findColumns(@NotNull final String table);
+    List<Attribute<String>> findColumns(@NotNull final String table);
 
     /**
      * Retrieves the columns for given table, including parent's, if any.
      * @param table the table name.
      */
     @NotNull
-    List<Attribute> findAllColumns(@NotNull final String table);
+    List<Attribute<String>> findAllColumns(@NotNull final String table);
 
     /**
      * Inserts a new column (needed when processing manually-defined schemas)

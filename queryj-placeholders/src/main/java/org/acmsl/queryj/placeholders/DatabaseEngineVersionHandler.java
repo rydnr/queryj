@@ -38,6 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.NonRelevantFillHandler;
 import org.acmsl.queryj.api.QueryJTemplateContext;

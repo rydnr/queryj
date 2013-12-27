@@ -36,7 +36,7 @@
 package org.acmsl.queryj.api;
 
 /*
- * Imporing project classes.
+ * Importing project classes.
  */
 import org.acmsl.queryj.tools.antlr.PerCommentBaseVisitor;
 import org.acmsl.queryj.tools.antlr.PerCommentParser.IdentContext;

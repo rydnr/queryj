@@ -40,10 +40,12 @@ package org.acmsl.queryj.metadata.engines.oracle;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.AttributeIncompleteValueObject;
 import org.acmsl.queryj.metadata.vo.ForeignKeyIncompleteValueObject;
 import org.acmsl.queryj.metadata.vo.Table;
@@ -123,7 +125,7 @@ public class OracleMetadataManager
         @Nullable final String catalog,
         @Nullable final String schema,
         @NotNull final List<String> tableNames,
-        @NotNull final List<Table> tables,
+        @NotNull final List<Table<String, Attribute<String>>> tables,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean caseSensitive,
@@ -149,25 +151,22 @@ public class OracleMetadataManager
 
     /**
      * Retrieves the table names.
-     *
-     * @param tableNames                 optionally specified table names.
-     * @param metaData                   the metadata.
-     * @param catalog                    the catalog.
-     * @param schema                     the schema.
-     * @param caseSensitiveness          whether it's case sensitive or not.
-     * @param metadataExtractionListener the
-     *                                   <code>MetadataExtractionListener</code> instance.
-     * @param metaLanguageUtils          the {@link org.acmsl.queryj.api.MetaLanguageUtils} instance.
+     * @param tableNames optionally specified table names.
+     * @param metaData the metadata.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param caseSensitiveness whether it's case sensitive or not.
+     * @param metadataExtractionListener the {@link MetadataExtractionListener} instance.
+     * @param metaLanguageUtils the {@link org.acmsl.queryj.api.MetaLanguageUtils} instance.
      * @return the list of tables.
      * @throws java.sql.SQLException if the database operation fails.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJException
-     *                               if an error, which is identified by QueryJ,
-     *                               occurs.
+     * @throws org.acmsl.queryj.api.exceptions.QueryJException if an error, which is identified
+     * by QueryJ, occurs.
      */
     @NotNull
     @Override
     @SuppressWarnings("unused")
-    protected List<Table> extractTableMetadata(
+    protected List<Table<String, Attribute<String>>> extractTableMetadata(
         @Nullable final List<String> tableNames,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
@@ -175,7 +174,8 @@ public class OracleMetadataManager
         final boolean caseSensitiveness,
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         @NotNull final MetaLanguageUtils metaLanguageUtils)
-      throws SQLException, QueryJException
+      throws SQLException,
+             QueryJException
     {
         return
             extractTableMetadata(
@@ -200,7 +200,7 @@ public class OracleMetadataManager
      */
     @NotNull
     @SuppressWarnings("unused")
-    protected List<Table> extractTableMetadata(
+    protected List<Table<String, Attribute<String>>> extractTableMetadata(
         @Nullable final List<String> tableNames,
         @NotNull final Connection connection,
         final boolean caseSensitiveness,
@@ -209,9 +209,9 @@ public class OracleMetadataManager
         @NotNull final MetadataTypeManager metadataTypeManager)
         throws SQLException, QueryJException
     {
-        @NotNull final List<Table> result;
+        @NotNull final List<Table<String, Attribute<String>>> result;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
 
         @Nullable SQLException sqlExceptionToThrow = null;
 
@@ -221,19 +221,19 @@ public class OracleMetadataManager
 
         @Nullable TableIncompleteValueObject t_Table;
 
-        @NotNull final Map<String,TableIncompleteValueObject> t_mTableMap =
+        @NotNull final Map<String, TableIncompleteValueObject> t_mTableMap =
             new HashMap<String, TableIncompleteValueObject>();
 
-        @NotNull final Map<String,List<AttributeIncompleteValueObject>> t_mColumnMap =
+        @NotNull final Map<String ,List<AttributeIncompleteValueObject>> t_mColumnMap =
             new HashMap<String, List<AttributeIncompleteValueObject>>();
 
-        @NotNull final Map<String,List<AttributeIncompleteValueObject>> t_mPrimaryKeyMap =
+        @NotNull final Map<String, List<AttributeIncompleteValueObject>> t_mPrimaryKeyMap =
             new HashMap<String, List<AttributeIncompleteValueObject>>();
 
-        @NotNull final Map<String,List<ForeignKeyIncompleteValueObject>> t_mForeignKeyMap =
+        @NotNull final Map<String, List<ForeignKeyIncompleteValueObject>> t_mForeignKeyMap =
             new HashMap<String, List<ForeignKeyIncompleteValueObject>>();
 
-        @NotNull final Map<String,List<AttributeIncompleteValueObject>> t_mForeignKeyAttributeMap =
+        @NotNull final Map<String, List<AttributeIncompleteValueObject>> t_mForeignKeyAttributeMap =
             new HashMap<String, List<AttributeIncompleteValueObject>>();
 
         try
@@ -393,33 +393,33 @@ public class OracleMetadataManager
         final boolean caseSensitiveness,
         @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
-        for (@Nullable TableIncompleteValueObject t_Table : tableMap.values())
+        for (@Nullable final TableIncompleteValueObject t_Table : tableMap.values())
         {
             if (t_Table != null)
             {
-                List<AttributeIncompleteValueObject> t_lColumns = columnMap.get(t_Table.getName());
+                @Nullable final List<AttributeIncompleteValueObject> t_lColumns = columnMap.get(t_Table.getName());
 
                 if (t_lColumns != null)
                 {
                     t_Table.setAttributes(toAttributeList(t_lColumns));
                 }
 
-                List<AttributeIncompleteValueObject> t_lPrimaryKeys = primaryKeyMap.get(t_Table.getName());
+                @Nullable final List<AttributeIncompleteValueObject> t_lPrimaryKeys = primaryKeyMap.get(t_Table.getName());
 
                 if (t_lPrimaryKeys != null)
                 {
                     t_Table.setPrimaryKey(toAttributeList(t_lPrimaryKeys));
                 }
 
-                List<ForeignKeyIncompleteValueObject> t_lForeignKeys = foreignKeyMap.get(t_Table.getName());
+                @Nullable final List<ForeignKeyIncompleteValueObject> t_lForeignKeys = foreignKeyMap.get(t_Table.getName());
 
                 if (t_lForeignKeys != null)
                 {
-                    for (@Nullable ForeignKeyIncompleteValueObject t_ForeignKey : t_lForeignKeys)
+                    for (@Nullable final ForeignKeyIncompleteValueObject t_ForeignKey : t_lForeignKeys)
                     {
                         if (t_ForeignKey != null)
                         {
-                            List<AttributeIncompleteValueObject> t_lForeignKeyAttributes =
+                            final List<AttributeIncompleteValueObject> t_lForeignKeyAttributes =
                                 foreignKeyAttributeMap.get(t_ForeignKey.getFkName());
 
                             if (t_lForeignKeyAttributes != null)
@@ -450,11 +450,11 @@ public class OracleMetadataManager
         @NotNull final Collection<TableIncompleteValueObject> tables,
         @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
-        for (@Nullable TableIncompleteValueObject t_Table : tables)
+        for (@Nullable final TableIncompleteValueObject t_Table : tables)
         {
             if (t_Table != null)
             {
-                @Nullable String t_strComment = t_Table.getComment();
+                @Nullable final String t_strComment = t_Table.getComment();
 
                 if (t_strComment != null)
                 {
@@ -507,19 +507,19 @@ public class OracleMetadataManager
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws SQLException
     {
-        String t_strTableName = resultSet.getString("TABLE_NAME");
-        String t_strTableComment = resultSet.getString("TABLE_COMMENT");
-        String t_strColumnName = resultSet.getString("COLUMN_NAME");
-        String t_strColumnComment = resultSet.getString("COLUMN_COMMENT");
-        String t_strType = resultSet.getString("DATA_TYPE");
-        int t_iLength = resultSet.getInt("DATA_LENGTH");
-        Integer t_iPrecision = resultSet.getInt("DATA_PRECISION");
+        @NotNull final String t_strTableName = resultSet.getString(Literals.TABLE_NAME_U);
+        @Nullable final String t_strTableComment = resultSet.getString("TABLE_COMMENT");
+        @NotNull final String t_strColumnName = resultSet.getString(Literals.COLUMN_NAME_U);
+        @Nullable final String t_strColumnComment = resultSet.getString("COLUMN_COMMENT");
+        @NotNull final String t_strType = resultSet.getString("DATA_TYPE");
+        final int t_iLength = resultSet.getInt("DATA_LENGTH");
+        @Nullable final Integer t_iPrecision = resultSet.getInt("DATA_PRECISION");
         //Integer t_iScale = resultSet.getInt("DATA_SCALE");
-        boolean t_bNullable = "Y".equalsIgnoreCase(resultSet.getString("NULLABLE"));
-        int t_iOrdinalPosition = resultSet.getInt("COLUMN_ID");
-        Integer t_iPkPosition = resultSet.getInt("PK_POSITION");
-        String t_strFkName = resultSet.getString("FK_NAME");
-        String t_strTargetTable = resultSet.getString("TARGET_TABLE");
+        final boolean t_bNullable = "Y".equalsIgnoreCase(resultSet.getString("NULLABLE"));
+        final int t_iOrdinalPosition = resultSet.getInt("COLUMN_ID");
+        @Nullable final Integer t_iPkPosition = resultSet.getInt("PK_POSITION");
+        @Nullable final String t_strFkName = resultSet.getString("FK_NAME");
+        @Nullable final String t_strTargetTable = resultSet.getString("TARGET_TABLE");
         //Integer t_iFkPosition = resultSet.getInt("FK_POSITION");
 
         @Nullable TableIncompleteValueObject t_Table = tableMap.get(t_strTableName);
@@ -537,7 +537,7 @@ public class OracleMetadataManager
             t_lColumns = new ArrayList<AttributeIncompleteValueObject>();
             columnMap.put(t_strTableName, t_lColumns);
         }
-        AttributeIncompleteValueObject t_CurrentAttribute =
+        @NotNull final AttributeIncompleteValueObject t_CurrentAttribute =
             new AttributeIncompleteValueObject(
                 t_strColumnName,
                 metadataTypeManager.getJavaType(t_strType, t_iPrecision),
@@ -615,7 +615,7 @@ public class OracleMetadataManager
     {
         @Nullable ForeignKeyIncompleteValueObject result = null;
 
-        for (@Nullable ForeignKeyIncompleteValueObject t_ForeignKey : foreignKeys)
+        for (@Nullable final ForeignKeyIncompleteValueObject t_ForeignKey : foreignKeys)
         {
             if (t_ForeignKey != null)
             {

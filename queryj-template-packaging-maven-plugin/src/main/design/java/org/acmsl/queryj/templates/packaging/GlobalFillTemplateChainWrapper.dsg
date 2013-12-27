@@ -1,0 +1,14 @@
+- Create a new Java class GlobalFillTemplateChainWrapper, in package org.acmsl.queryj.templates.packaging;
+- Add comment: Wraps a chain to provide Template Packaging's global placeholders.;
+- Make it extend AbstractFillTemplateChainWrapper<GlobalTemplateContext>;
+- Define a constructor GlobalFillTemplateChainWrapper(FillTemplateChain<GlobalTemplateContext>):
+  - Add comment: Creates a new instance.;
+  - Add comment: @param chain the chain.;
+  - call super(chain);
+- Implement the getHandlers(GlobalTemplateContext) method:
+  - Add @Override;
+  - Add @NotNull;
+  - Define a variable result, as a new ArrayList<FillHandler>;
+  - Add a TO-DO mark to add placeholders afterwards;
+  - Return the result variable;
+- Fix import groups;

@@ -1,0 +1,7 @@
+- Create a new Java class GlobalTemplatePackagingFillTemplateChainFactoryImpl, in package org.acmsl.queryj.templates.packaging.placeholders;
+- Add comment: Default implementation for {@link GlobalTemplatePackagingFillTemplateChainFactory}.;
+- Make it implement GlobalTemplatePackagingFillTemplateChainFactory;
+- Rename TemplatePackagingFillTemplateChainWrapper to PerTemplateDefFillTemplateChainWrapper;
+- Rename TemplatePackagingFillTemplateChain to PerTemplateDefFillTemplateChain;
+- Implement createFillChain(GlobalTemplateContext):
+  - return new PerTemplateDefFillTemplateChainWrapper

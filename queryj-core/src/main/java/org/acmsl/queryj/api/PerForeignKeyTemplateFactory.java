@@ -56,7 +56,8 @@ import org.jetbrains.annotations.Nullable;
  * Represents entities able to create per-<i>foreign key</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface PerForeignKeyTemplateFactory<T extends PerForeignKeyTemplate>
+public interface PerForeignKeyTemplateFactory
+    <T extends PerForeignKeyTemplate<C>, C extends PerForeignKeyTemplateContext>
     extends  Factory
 {
     /**
@@ -91,5 +92,5 @@ public interface PerForeignKeyTemplateFactory<T extends PerForeignKeyTemplate>
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final ForeignKey foreignKey);
+        @NotNull final ForeignKey<String> foreignKey);
 }

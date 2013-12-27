@@ -33,6 +33,8 @@
  */
 package org.acmsl.queryj.api;
 
+import org.acmsl.queryj.Literals;
+
 /**
  * Defines some constants for the default theme.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -42,17 +44,19 @@ public interface DefaultThemeConstants
     /**
      * The starting year.
      */
+    @SuppressWarnings("unused")
     public static final Integer STARTING_YEAR = Integer.valueOf(2002);
 
     /**
      * The timestamp formatter.
      */
+    @SuppressWarnings("unused")
     public static final String TIMESTAMP_FORMAT = "HH:mm:ss.SSS yyyy/MM/dd";
 
     /**
      * The template name.
      */
-    public static final String TEMPLATE_NAME = "source";
+    public static final String TEMPLATE_NAME = Literals.SOURCE;
 
     /**
      * The placeholder context name within the template itself.

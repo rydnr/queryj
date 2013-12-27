@@ -1,0 +1,20 @@
+- Create a new Java class GlobalFillTemplateChain, in package org.acmsl.queryj.templates.packaging.placeholders;
+- Add comment: Sets up the chain required to provide placeholder replacements for Template-Packaging global templates.
+- Make it extend AbstractFillTemplateChain<GlobalTemplateContext>;
+- Define a constructor GlobalFillTemplateChain(GlobalTemplateContext):
+  - Add comment: Creates a new instance using given context.;
+  - Add comment: @param context the {@link GlobalTemplateContext} context.;
+  - Call super(context);
+- Override providePlaceholders(boolean) method:
+  - Add @Override
+  - Add @NotNull
+  - Add comment: {@inheritDoc};
+  - return new GlobalFillTemplateChainWrapper(this).providePlaceholders(relevantOnly);
+- Override addHandlers(Chain<FillHandler<?>>, GlobalTemplateContext, boolean):
+  - Add comment: Adds additional global handlers.;
+  - Add comment: @param chain the chain to configure.;
+  - Add comment: @param context the {@link GlobalTemplateContext} instance.;
+  - Add comment: @param relevantOnly whether to use only relevant placeholders;
+  - Add @Override;
+  - Leave the method body empty for now;
+- Fix import groups;

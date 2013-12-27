@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing QueryJ-Core classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.AbstractTemplate;
 import org.acmsl.queryj.api.STTemplate;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
@@ -107,7 +108,7 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
         return
             retrieveGroup(
                 TEMPLATE_PACKAGING_GROUP + getTemplateName() + ".stg",
-                Arrays.asList("org/acmsl/queryj/templates/packaging/"));
+                Arrays.asList(org.acmsl.queryj.templates.packaging.Literals.ORG_ACMSL_QUERYJ_TEMPLATES_PACKAGING));
     }
 
     /**
@@ -129,7 +130,7 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
     @NotNull
     protected String buildHeader(@NotNull final String templateName)
     {
-        return GENERATING + templateName;
+        return Literals.GENERATING + templateName;
     }
 
     /**

@@ -113,6 +113,13 @@ public class TemplatePackagingMojo
     private File m__OutputDir;
 
     /**
+     * The output folder for tests.
+     * @parameter property="outputDirForTests" expression="${project.build.directory}/generated-test-sources" default-value="${project.build.directory}/generated-test-sources"
+     */
+    @Parameter( property = OUTPUT_DIR_FOR_TESTS, defaultValue = "${project.build.directory}/generated-test-sources")
+    private File m__OutputDirForTests;
+
+    /**
      * The <code>QueryJChain</code> delegee.
      */
     private QueryJCommand m__QueryJCommand;
@@ -238,6 +245,35 @@ public class TemplatePackagingMojo
     }
 
     /**
+     * Specifies the output dir for tests.
+     * @param dir such folder.
+     */
+    protected final void immutableSetOutputDirForTests(@NotNull final File dir)
+    {
+        this.m__OutputDirForTests = dir;
+    }
+
+    /**
+     * Specifies the output dir for tests.
+     * @param dir such folder.
+     */
+    @SuppressWarnings("unused")
+    public void setOutputDirForTests(@NotNull final File dir)
+    {
+        immutableSetOutputDirForTests(dir);
+    }
+
+    /**
+     * Retrieves the output dir for tests.
+     * @return such folder.
+     */
+    @NotNull
+    public File getOutputDirForTests()
+    {
+        return this.m__OutputDirForTests;
+    }
+
+    /**
      * Executes Template Packaging via Maven2.
      * @throws MojoExecutionException if something goes wrong.
      */
@@ -323,6 +359,7 @@ public class TemplatePackagingMojo
         {
             populateCommand(command, getSources());
             populateCommand(command, getOutputDir());
+            populateCommandForTests(command, getOutputDirForTests());
 
             new TemplatePackagingChain<QueryJCommandHandler<QueryJCommand>>().process(command);
         }
@@ -352,14 +389,26 @@ public class TemplatePackagingMojo
         new QueryJCommandWrapper<File>(command).setSetting(OUTPUT_DIR, outputDir);
     }
 
+    /**
+     * Populates the output dir for tests to be available in the command.
+     * @param command the command.
+     * @param outputDir the output dir.
+     */
+    protected void populateCommandForTests(@NotNull final QueryJCommand command, @NotNull final File outputDir)
+    {
+        new QueryJCommandWrapper<File>(command).setSetting(OUTPUT_DIR_FOR_TESTS, outputDir);
+    }
+
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'TemplatePackagingMojo " +
-               "', 'queryJCommand': '" + this.m__QueryJCommand +
-               "', 'sources': '" + Arrays.toString(this.m__aSources) +
-               "', 'outputDir': '" + this.m__OutputDir.getAbsolutePath() +
-               "' }";
+        return
+              "{ \"class\": \"" + TemplatePackagingMojo.class.getName() + "\""
+            + ", \"queryJCommand\": \"" + this.m__QueryJCommand + "\""
+            + ", \"sources\": \"" + Arrays.toString(this.m__aSources) + "\""
+            + ", \"outputDir\": \"" + this.m__OutputDir.getAbsolutePath() + "\""
+            + ", \"outputDirForTests\": \"" + this.m__OutputDirForTests.getAbsolutePath() + "\""
+            + " }";
     }
 }

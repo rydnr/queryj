@@ -95,14 +95,14 @@ public class EmptyFillAdapterHandler<F extends FillHandler<P>, P>
     @SuppressWarnings("unchecked")
     protected F wrap(final F handler)
     {
-        return (F) new EmptyFillHandler(handler);
+        return (F) new EmptyFillHandler<F, P>(handler);
     }
 
     protected static class EmptyFillHandler<F extends FillHandler<P>, P>
         implements FillHandler<P>
     {
-
         private static final long serialVersionUID = -1540206214719043458L;
+
         /**
          * The fill handler to wrap.
          */

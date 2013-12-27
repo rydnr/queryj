@@ -44,7 +44,7 @@ source(C) ::= <<
   Generates a TemplateBuildHandler source file.
   @param C the context.
 !>
-<sourceImpl(def=C.def, C=C)>
+<sourceImpl(def=C.templateDef, C=C)>
 >>
 
 sourceImpl(def, C) ::= <<
@@ -53,26 +53,37 @@ sourceImpl(def, C) ::= <<
   @param def the template def.
   @param C the context.
 !>
-<java_header(description="Build handler for <def.name.capitalized>Templates.", C=C)>
-<package_declaration(packageName=def.packageName)>
+<java_header(
+  description=[ "Build handler for ", def.name.capitalized, "Templates." ],
+  description_oneline=true,
+  filename=C.class_name,
+  template="org/acmsl/templates/packaging/TemplateBuildHandler.stg",
+   C=C)>
+<package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
 
 /*
  * Importing QueryJ-Core classes.
  */
+import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateBuildHandler;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateBuildHandler;
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing custom templates.
  */
-import <def.packageName>.<def.name.capitalized>Template;
-import <def.packageName>.<def.name.capitalized>TemplateFactory;
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
+import org.acmsl.queryj.templates.<def.name.capitalized>Template;
+import org.acmsl.queryj.templates.<def.name.capitalized>TemplateFactory;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
+
+/*
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
@@ -91,14 +102,17 @@ import java.util.List;
 
 class(def, C) ::= <<
 /**
- * Build handler for {@link <def.name.capitalized>Template}s.
+ * Build handler for {@link org.acmsl.queryj.templates.<def.name.capitalized>Template}s.
 <class_common_javadoc(
   template="org/acmsl/templates/packaging/TemplateBuildHandler.stg",
   timestamp=C.timestamp)>
  */
 @ThreadSafe
-public class <def.name.capitalized>TemplateBuildHandler
-    extends Base<def.type.capitalized>TemplateBuildHandler\<<def.name.capitalized>Template, <def.name.capitalized>TemplateFactory>
+public class <C.class_name>
+    extends Base<def.type.capitalized>TemplateBuildHandler\<
+                <def.name.capitalized>Template,
+                <def.type.capitalized>TemplateContext,
+                <def.name.capitalized>TemplateFactory>
 {
     /**
      * The key to access the templates in the command.
@@ -124,28 +138,53 @@ public class <def.name.capitalized>TemplateBuildHandler
     /**
      * {@inheritDoc}
      */
-     @Override
-     @NotNull
-     protected String retrievePackage(
-         @NotNull final String tableName,
-         @NotNull final String engineName,
-         @NotNull final String projectPackage,
-         @NotNull final PackageUtils packageUtils)
-       throws QueryJBuildException
-     {
-         return "<def.packageName>";
-     }
+    @Override
+    @NotNull
+    protected String retrievePackage(
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
+        @NotNull final PackageUtils packageUtils)
+    {
+        return buildPackageName(tableName, engineName, projectPackage);
+    }
 
-     /**
-      * {@inheritDoc}
-      */
-      @Override
-      protected void storeTemplates(
-          @NotNull final List\<<def.name.capitalized>Template> templates,
-          @NotNull final QueryJCommand parameters)
-      {
-          new QueryJCommandWrapper\<List\<<def.name.capitalized>\>>(parameters)
-              .setSetting(TEMPLATES_KEY, templates);
-      }
+    /**
+     * Builds the actual package name.
+     * @param tableName the table name.
+     * @param engineName the engine name.
+     * @param projectPackage the project package.
+     * @return the package name.
+     */
+    @NotNull
+    static String buildPackageName(
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage)
+    {
+        @NotNull final String result;
+
+        @NotNull final ST packageTemplate = new ST("<def.packageName>");
+
+        packageTemplate.add("packageName", new DecoratedString(projectPackage));
+        packageTemplate.add("tableName", new DecoratedString(tableName));
+        packageTemplate.add("engineName", new DecoratedString(engineName));
+
+        result = packageTemplate.render();
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void storeTemplates(
+        @NotNull final List\<<def.name.capitalized>Template> templates,
+        @NotNull final QueryJCommand parameters)
+    {
+        new QueryJCommandWrapper\<List\<<def.name.capitalized>Template\>>(parameters)
+            .setSetting(TEMPLATES_KEY, templates);
+    }
 }
 >>

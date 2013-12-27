@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -80,7 +80,7 @@ public class TemplateDefPackageVisitor
      */
     protected void setPackageName(@NotNull final String packageName)
     {
-        this.m__strPackageName = packageName;
+        immutableSetPackageName(packageName);
     }
 
     /**
@@ -100,7 +100,7 @@ public class TemplateDefPackageVisitor
      * {@link #visitChildren} on {@code ctx}.
      */
     @Override
-    public String visitPackageRule(@org.antlr.v4.runtime.misc.NotNull final PackageRuleContext ctx)
+    public String visitPackageRule(@NotNull final PackageRuleContext ctx)
     {
         setPackageName(ctx.getChild(2).getText());
 
@@ -111,7 +111,8 @@ public class TemplateDefPackageVisitor
     @Override
     public String toString()
     {
-        return "{ 'class': 'TemplateDefPackageVisitor', " +
-               " 'packageName': '" + m__strPackageName + "' }";
+        return
+              "{ \"class\": \"" + TemplateDefPackageVisitor.class.getName() + '"'
+            + ", \"packageName\": \"" + m__strPackageName + "\" }";
     }
 }

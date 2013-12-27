@@ -43,6 +43,7 @@ package org.acmsl.queryj.metadata;
  */
 import org.acmsl.commons.patterns.Manager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides some useful methods when working with database metadata.
@@ -430,4 +431,12 @@ public interface MetadataTypeManager
      * @return <code>true</code> in such case.
      */
     boolean inJavaLang(@NotNull final String type);
+
+    /**
+     * Retrieves the import type of given data type.
+     * @param dataType the data type.
+     * @return the associated type for using in import statements.
+     */
+    @Nullable
+    public String getImport(final int dataType);
 }

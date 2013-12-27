@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Common logic for all templates.
  *
  * Date: 2013/08/15
  * Time: 08:24
@@ -38,6 +38,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing QueryJ-Core classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CannotFindPlaceholderImplementationException;
 import org.acmsl.queryj.api.exceptions.CannotFindTemplateGroupException;
@@ -46,7 +47,6 @@ import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.api.placeholders.FillTemplateChainFactory;
-import org.acmsl.queryj.metadata.DecorationUtils;
 
 /*
  * Importing ACM-SL Commons classes.
@@ -95,7 +95,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 /**
- *
+ * Common logic for all templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/08/15 08/24
@@ -158,11 +158,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 }
             }
         };
-    protected static final String GENERATING = "Generating ";
-    protected static final String CONTEXT_LITERAL = "Context";
-    protected static final String TEMPLATE_LITERAL = "Template";
-    protected static final String FILL_TEMPLATE_CHAIN_FACTORY_LITERAL = "FillTemplateChainFactory";
-    protected static final String DEFAULT_PLACEHOLDER_PACKAGE = "org.acmsl.queryj.api.placeholders";
 
     /**
      * The template context.
@@ -172,13 +167,18 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Caches the StringTemplateGroup for each template class.
      */
-    private static Map m__mSTCache;
+    private static Map<String, ?> m__mSTCache;
 
     /**
      * The placeholder package.
      */
     @NotNull
     private String m__strPlaceholderPackage;
+
+    /**
+     * Whether we are in debug mode.
+     */
+    private boolean m__bDebug;
 
     /**
      * A singleton container to avoid the double-checking lock idiom.
@@ -208,7 +208,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      */
     protected AbstractTemplate(@NotNull final C context)
     {
-        this(context, DEFAULT_PLACEHOLDER_PACKAGE);
+        this(context, Literals.DEFAULT_PLACEHOLDER_PACKAGE);
     }
 
     /**
@@ -220,7 +220,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     {
         immutableSetTemplateContext(context);
         immutableSetPlaceholderPackage(placeholderPackage);
-        setSTCache(new HashMap());
+        setSTCache(new HashMap<String, Object>());
+        immutableSetDebugMode(false);
     }
 
     /**
@@ -286,7 +287,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Specifies the ST cache.
      * @param map the map to use as cache.
      */
-    protected static void setSTCache(@NotNull final Map map)
+    protected static void setSTCache(@NotNull final Map<String, ?> map)
     {
         m__mSTCache = map;
     }
@@ -296,18 +297,37 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return the map being used as cache.
      */
     @NotNull
-    protected static Map getSTCache()
+    protected static Map<String, ?> getSTCache()
     {
         return m__mSTCache;
     }
 
     /**
-     * Retrieves the string template group.
-     * @return such instance.
+     * Specifies the debug mode.
+     * @param mode such mode.
      */
-    @Nullable
-    @Override
-    public abstract STGroup retrieveGroup();
+    protected final void immutableSetDebugMode(final boolean mode)
+    {
+        this.m__bDebug = mode;
+    }
+
+    /**
+     * Specifies the debug mode.
+     * @param mode such mode.
+     */
+    public void setDebugMode(final boolean mode)
+    {
+        immutableSetDebugMode(mode);
+    }
+
+    /**
+     * Retrieves the debug mode.
+     * @return such mode.
+     */
+    public boolean getDebugMode()
+    {
+        return this.m__bDebug;
+    }
 
     /**
      * Retrieves the string template group.
@@ -316,6 +336,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such instance.
      */
     @Nullable
+    @SuppressWarnings("unchecked")
     protected STGroup retrieveGroup(@NotNull final String path, @NotNull final List<String> lookupPaths)
     {
         return
@@ -323,7 +344,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 path,
                 lookupPaths,
                 Charset.defaultCharset(),
-                getSTCache());
+                (Map<String, STGroup>) getSTCache());
     }
 
     /**
@@ -340,13 +361,13 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @NotNull final String path,
         @NotNull final List<String> lookupPaths,
         @NotNull final Charset charset,
-        @NotNull final Map cache)
+        @NotNull final Map<String, STGroup> cache)
     {
         @Nullable STGroup result;
 
-        @NotNull final Object t_Key = buildSTGroupKey(path);
+        @NotNull final String t_Key = buildSTGroupKey(path);
 
-        result = (STGroup) cache.get(t_Key);
+        result = cache.get(t_Key);
 
         if  (result == null)
         {
@@ -384,7 +405,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such key.
      */
     @NotNull
-    protected final Object buildSTGroupKey(@NotNull final String path)
+    protected final String buildSTGroupKey(@NotNull final String path)
     {
         return ".:\\AbstractQueryJTemplate//STCACHE//" + path + "//";
     }
@@ -460,7 +481,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @NotNull
     protected String buildHeader()
     {
-        return GENERATING + getClass().getName() + ".";
+        return Literals.GENERATING + getClass().getName() + ".";
     }
 
     /**
@@ -543,7 +564,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @Override
         public String toString()
         {
-            return "FinalizingThread{ new=" + m__bNew + '}';
+            return
+                  "{ \"class\": \"" + FinalizingThread.class.getName() + "\""
+                + ", \"new\": \"" + m__bNew + "\" }";
         }
     }
 
@@ -574,7 +597,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 t_ClassLoaderUtils.findLocation(ST.class);
 
             t_sbMessage.append(
-                "A fatal error in StringTemplate-based generation "
+                  "A fatal error in StringTemplate-based generation "
                 + "has stopped QueryJ build process.\n"
                 + "If you see error messages from StringTemplate, "
                 + "review your templates. Otherwise, if the VM "
@@ -625,44 +648,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
 
     /**
-     * Normalizes given value, in lower-case.
-     * @param value the value.
-     * @param decorationUtils the {@link org.acmsl.queryj.metadata.DecorationUtils} instance.
-     * @return such output.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    protected String normalizeLowercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalizeLowercase(value);
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @return such output.
-     */
-    @NotNull
-    protected String capitalize(@NotNull final String value)
-    {
-        return capitalize(value, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such output.
-     */
-    @NotNull
-    protected String capitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(value);
-    }
-
-    /**
      * Retrieves the header.
      * @param context the template context.
      * @return such information.
@@ -680,18 +665,31 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     public String generate(final boolean relevantOnly)
         throws InvalidTemplateException
     {
-        return generate(getTemplateContext(), relevantOnly);
+        return generate(getTemplateContext(), relevantOnly, getDebugMode());
+    }
+
+    /**
+     * Generates the source code.
+     * @return such output.
+     * @throws org.acmsl.queryj.api.exceptions.InvalidTemplateException if the template cannot be generated.
+     */
+    @Nullable
+    public String generate(final boolean relevantOnly, final boolean debug)
+        throws InvalidTemplateException
+    {
+        return generate(getTemplateContext(), relevantOnly, debug);
     }
 
     /**
      * Generates the source code.
      * @param context the {@link QueryJTemplateContext} instance.
      * @param relevantOnly whether to include only relevant placeholders.
+     * @param debug if we're debugging the template.
      * @return such output.
      * @throws InvalidTemplateException if the template cannot be generated.
      */
     @Nullable
-    protected String generate(@NotNull final C context, final boolean relevantOnly)
+    protected String generate(@NotNull final C context, final boolean relevantOnly, final boolean debug)
         throws  InvalidTemplateException
     {
         final String result;
@@ -703,7 +701,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         //traceClassLoaders();
 
-        result = generateOutput(getHeader(context), context, relevantOnly);
+        result = generateOutput(getHeader(context), context, relevantOnly, debug);
 
         //cleanUpClassLoaderTracing();
 
@@ -715,6 +713,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param header the header.
      * @param context the context.
      * @param relevantOnly whether to include only relevant placeholders.
+     * @param debug if we're debugging the template.
      * @return such code.
      * @throws InvalidTemplateException if the template cannot be processed.
      */
@@ -722,7 +721,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     protected String generateOutput(
         @SuppressWarnings("unused") @Nullable final String header,
         @NotNull final C context,
-        final boolean relevantOnly)
+        final boolean relevantOnly,
+        final boolean debug)
       throws InvalidTemplateException
     {
         @Nullable String result = null;
@@ -747,10 +747,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 {
                     @NotNull final Map<String, Object> placeHolders = new HashMap<String, Object>();
 
-                    @NotNull final List<FillTemplateChain<? extends FillHandler>> fillChains =
+                    @NotNull final List<FillTemplateChain<? extends FillHandler<?>>> fillChains =
                         buildFillTemplateChains(context);
 
-                    for (@NotNull final FillTemplateChain<? extends FillHandler> chain : fillChains)
+                    for (@NotNull final FillTemplateChain<? extends FillHandler<?>> chain : fillChains)
                     {
                         @NotNull final QueryJCommand command = chain.providePlaceholders(relevantOnly);
 
@@ -762,11 +762,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
                     t_Template.add(CONTEXT, placeHolders);
 
-//                    for (final Map.Entry<Object, Object> placeHolder : (Set <Map.Entry<Object, Object>>) placeHolders.entrySet())
-//                    {
-//                        t_Template.add(placeHolder.getKey().toString(), placeHolder.getValue());
-//                    }
-                    //t_Template.setErrorListener(DEFAULT_ST_ERROR_LISTENER);
                 }
                 catch (@NotNull final QueryJBuildException invalidTemplate)
                 {
@@ -777,6 +772,17 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 {
                     try
                     {
+                        if (debug)
+                        {
+                            try
+                            {
+                                t_Template.inspect().waitForClose();
+                            }
+                            catch (InterruptedException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
                         result = t_Template.render();
                     }
                     catch (@NotNull final Throwable throwable)
@@ -791,6 +797,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                                 "Error in template " + getTemplateName(), throwable);
                         }
 
+//                        if (System.getProperty("queryj.debug") != null)
+//                        {
+                            t_Template.inspect();
+//                        }
     /*                    @Nullable final STTreeView debugTool =
                             new StringTemplateTreeView("Debugging " + getTemplateName(), t_Template);
 
@@ -831,11 +841,11 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      */
     @SuppressWarnings("unchecked")
     @NotNull
-    public List<FillTemplateChain<? extends FillHandler>> buildFillTemplateChains(@NotNull final C context)
+    public List<FillTemplateChain<? extends FillHandler<?>>> buildFillTemplateChains(@NotNull final C context)
         throws QueryJBuildException
     {
-        @NotNull final List<FillTemplateChain<? extends FillHandler>> result =
-            new ArrayList<FillTemplateChain<? extends FillHandler>>();
+        @NotNull final List<FillTemplateChain<? extends FillHandler<?>>> result =
+            new ArrayList<FillTemplateChain<? extends FillHandler<?>>>();
 
         @Nullable final Class<FillTemplateChainFactory<C>> factoryClass =
             retrieveFillTemplateChainFactoryClass(context, getPlaceholderPackage());
@@ -850,7 +860,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 for (@NotNull final FillTemplateChainFactory<C> factory : loader)
                 {
                     result.add(
-                        (FillTemplateChain <? extends FillHandler >)
+                        (FillTemplateChain <? extends FillHandler<?>>)
                             factory.createFillChain(context));
                 }
             }
@@ -886,24 +896,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         @NotNull final String contextName = context.getClass().getSimpleName();
 
-        @NotNull String baseName = contextName;
-
-        if (baseName.endsWith(CONTEXT_LITERAL))
-        {
-            baseName = baseName.substring(0, baseName.lastIndexOf(CONTEXT_LITERAL));
-        }
-
-        if (baseName.endsWith(TEMPLATE_LITERAL))
-        {
-            baseName = baseName.substring(0, baseName.lastIndexOf(TEMPLATE_LITERAL));
-        }
-
-        if (!baseName.endsWith(FILL_TEMPLATE_CHAIN_FACTORY_LITERAL))
-        {
-            baseName = baseName + FILL_TEMPLATE_CHAIN_FACTORY_LITERAL;
-        }
-
-        baseName = placeholderPackage + "." + baseName;
+        @NotNull final String baseName =
+            buildFillTemplateChainFactoryClass(contextName, placeholderPackage);
 
         try
         {
@@ -911,13 +905,47 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         }
         catch (@NotNull final ClassNotFoundException classNotFound)
         {
-            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
+            @Nullable final Log t_Log =
+                UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
 
             if (t_Log != null)
             {
                 t_Log.info("Template context " + contextName + " not supported", classNotFound);
             }
         }
+
+        return result;
+    }
+
+    /**
+     * Builds the {@link FillTemplateChainFactory} class name.
+     * @param contextName the context name.
+     * @param placeholderPackage the placeholder package.
+     * @return the class name.
+     */
+    @NotNull String buildFillTemplateChainFactoryClass(
+        @NotNull final String contextName, @NotNull final String placeholderPackage)
+    {
+        @NotNull final String result;
+
+        @NotNull String aux = contextName;
+
+        if (aux.endsWith(Literals.CONTEXT))
+        {
+            aux = aux.substring(0, aux.lastIndexOf(Literals.CONTEXT));
+        }
+
+        if (aux.endsWith(Literals.TEMPLATE))
+        {
+            aux = aux.substring(0, aux.lastIndexOf(Literals.TEMPLATE));
+        }
+
+        if (!aux.endsWith(Literals.FILL_TEMPLATE_CHAIN_FACTORY))
+        {
+            aux = aux + Literals.FILL_TEMPLATE_CHAIN_FACTORY;
+        }
+
+        result = placeholderPackage + "." + aux;
 
         return result;
     }
@@ -938,8 +966,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @Override
     public String toString()
     {
-        return "{ 'class': 'AbstractTemplate" +
-               "', 'templateContext': '" + this.m__TemplateContext +
-               "', 'placeholderPackage': '" + this.m__strPlaceholderPackage + "' }";
+        return "{ \"class\": \"AbstractTemplate" +
+               "\", \"templateContext\": \"" + this.m__TemplateContext +
+               "\", \"placeholderPackage\": \"" + this.m__strPlaceholderPackage + "\" }";
     }
 }

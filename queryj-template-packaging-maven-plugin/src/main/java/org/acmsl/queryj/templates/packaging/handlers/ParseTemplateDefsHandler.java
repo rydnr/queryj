@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -39,11 +39,13 @@ package org.acmsl.queryj.templates.packaging.handlers;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.templates.packaging.Literals;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.TemplateDefImpl;
 import org.acmsl.queryj.templates.packaging.TemplateDefOutput;
 import org.acmsl.queryj.templates.packaging.TemplateDefType;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefDisabledVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefFilenameBuilderVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefLexer;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefNameVisitor;
@@ -51,6 +53,10 @@ import org.acmsl.queryj.templates.packaging.antlr.TemplateDefOutputVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefPackageVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefTypeVisitor;
+import org.acmsl.queryj.templates.packaging.exceptions.CannotProcessTemplateDefException;
+import org.acmsl.queryj.templates.packaging.exceptions.CannotSetUpTemplateDefParserException;
+import org.acmsl.queryj.templates.packaging.exceptions.InvalidTemplateDefException;
+import org.acmsl.queryj.templates.packaging.exceptions.TemplateAssociatedToTemplateDefDoesNotExist;
 import org.acmsl.queryj.templates.packaging.exceptions.TemplatePackagingCheckedException;
 
 /*
@@ -118,26 +124,37 @@ public class ParseTemplateDefsHandler
 
         if (templateDefFiles != null)
         {
-            @Nullable List<TemplateDef> templateDefs =
-                new QueryJCommandWrapper<TemplateDef>(command).getListSetting(TEMPLATE_DEFS);
+            @Nullable List<TemplateDef<String>> templateDefs =
+                new QueryJCommandWrapper<TemplateDef<String>>(command).getListSetting(TEMPLATE_DEFS);
 
             if (templateDefs == null)
             {
-                templateDefs = new ArrayList<TemplateDef>(templateDefFiles.size());
+                templateDefs = new ArrayList<TemplateDef<String>>(templateDefFiles.size());
             }
 
             for (@Nullable final File defFile : templateDefFiles)
             {
                 if (defFile != null)
                 {
-                    @NotNull final TemplateDef templateDef = parseDefFile(defFile);
+                    @NotNull final TemplateDef<String> templateDef = parseDefFile(defFile);
 
-                    templateDefs.add(templateDef);
-
-                    if (templateDefs.size() == 1)
+                    if (isValid(templateDef))
                     {
-                        new QueryJCommandWrapper<List<TemplateDef>>(command).setSetting(TEMPLATE_DEFS, templateDefs);
+                        if (!templateDef.isDisabled())
+                        {
+                            templateDefs.add(templateDef);
+                        }
                     }
+                    else
+                    {
+                        throw new TemplateAssociatedToTemplateDefDoesNotExist(templateDef);
+                    }
+
+//                    if (templateDefs.size() == 1)
+//                    {
+                        new QueryJCommandWrapper<List<TemplateDef<String>>>(command).setSetting(
+                            TEMPLATE_DEFS, templateDefs);
+//                    }
                 }
             }
         }
@@ -146,15 +163,34 @@ public class ParseTemplateDefsHandler
     }
 
     /**
+     * Checks whether the template def is valid.
+     * @param templateDef the {@link TemplateDef} to check.
+     * @return {@code true} in such case.
+     */
+    protected boolean isValid(@NotNull final TemplateDef<String> templateDef)
+    {
+        final boolean result;
+
+        @NotNull final File templateDefFile = templateDef.getFile();
+
+        @NotNull final File templateFile =
+            new File(templateDefFile.getAbsolutePath().replaceAll("\\.def", ""));
+
+        result = templateFile.exists();
+
+        return result;
+    }
+
+    /**
      * Parses a template def file.
      * @param file the file to parse.
      * @throws TemplatePackagingCheckedException if the parsing fails.
      */
     @NotNull
-    protected TemplateDef parseDefFile(@NotNull final File file)
+    protected TemplateDef<String> parseDefFile(@NotNull final File file)
         throws TemplatePackagingCheckedException
     {
-        @NotNull final TemplateDef result;
+        @NotNull final TemplateDef<String> result;
 
         @Nullable final TemplateDefParser t_Parser;
 
@@ -164,8 +200,7 @@ public class ParseTemplateDefsHandler
         }
         catch (final IOException missingFile)
         {
-            // TODO
-            throw new RuntimeException("Cannot set up the parser", missingFile);
+            throw new CannotSetUpTemplateDefParserException(file, missingFile);
         }
 
         @Nullable final ParseTree tree;
@@ -176,8 +211,7 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Cannot process the template definition", invalidClass);
+            throw new CannotProcessTemplateDefException(file, invalidClass);
         }
 
         @NotNull final TemplateDefNameVisitor nameVisitor = new TemplateDefNameVisitor();
@@ -192,11 +226,8 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Invalid template definition (name)", invalidClass);
+            throw new InvalidTemplateDefException("name", file, invalidClass);
         }
-
-        System.out.println("Name found: '" + defName + '\'');
 
         @NotNull final TemplateDefTypeVisitor typeVisitor = new TemplateDefTypeVisitor();
 
@@ -210,11 +241,8 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Invalid template definition (type)", invalidClass);
+            throw new InvalidTemplateDefException("type", file, invalidClass);
         }
-
-        System.out.println("Type found: '" + defType + '\'');
 
         @NotNull final TemplateDefOutputVisitor outputVisitor = new TemplateDefOutputVisitor();
 
@@ -228,11 +256,8 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Invalid template definition (output)", invalidClass);
+            throw new InvalidTemplateDefException("output", file, invalidClass);
         }
-
-        System.out.println("Output found: '" + defOutput + '\'');
 
         @NotNull final TemplateDefFilenameBuilderVisitor filenameBuilderVisitor =
             new TemplateDefFilenameBuilderVisitor();
@@ -247,11 +272,8 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Invalid template definition (filename builder)", invalidClass);
+            throw new InvalidTemplateDefException("filenameBuilder", file, invalidClass);
         }
-
-        System.out.println("Filename builder found: '" + defFilenameBuilder + '\'');
 
         @NotNull final TemplateDefPackageVisitor packageVisitor = new TemplateDefPackageVisitor();
 
@@ -265,11 +287,23 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            // TODO
-            throw new RuntimeException("Invalid template definition (package)", invalidClass);
+            throw new InvalidTemplateDefException(Literals.PACKAGE, file, invalidClass);
         }
 
-        System.out.println("Package found: '" + defPackage + '\'');
+        @NotNull final TemplateDefDisabledVisitor disabledVisitor = new TemplateDefDisabledVisitor();
+
+        @Nullable final boolean disabled;
+
+        try
+        {
+            disabledVisitor.visit(tree);
+
+            disabled = disabledVisitor.isDisabled();
+        }
+        catch (@NotNull final Throwable invalidClass)
+        {
+            throw new InvalidTemplateDefException("disabled", file, invalidClass);
+        }
 
         result =
             new TemplateDefImpl(
@@ -278,7 +312,8 @@ public class ParseTemplateDefsHandler
                 TemplateDefOutput.getEnumFromString(defOutput),
                 defFilenameBuilder,
                 defPackage,
-                file);
+                file,
+                disabled);
 
         return result;
     }

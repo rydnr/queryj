@@ -1,0 +1,17 @@
+- Create a new Java abstract class GlobalBuildHandler, in package org.acmsl.queryj.templates.packaging;
+- Add comment: Base build handler for all templates using global scope (i.e. need all available information).;
+- Declare a T extends TemplatePackagingTemplate<C> parameter;
+- Declare a TF extends TemplatePackagingFactory<T, C> parameter;
+- Declare a C extends GlobalTemplateContext parameter;
+- Make it extend TemplatePackagingBuildHandler<T, TF, C>;
+- Implement handle(QueryJCommand):
+  - Retrieve the template returned from calling buildTemplate(parameters, retrieveTemplateFactory());
+  - Store the template using storeTemplate(template, parameters);
+  - return false;
+- Implement buildTemplate(QueryJCommand, TF):
+  - Retrieve the list of TemplateDefs returned from calling retrieveTemplateDefs(parameters);
+  - Retrieve the context returned from calling buildContext(templateDefs, parameters);
+  - Return the template returned from calling buildTemplate(factory, context);
+- Define an abstract method C buildContext(List<TemplateDef>, QueryJCommand);
+- Define an abstract method void storeTemplate(T, QueryJCommand);
+- Fix import groups;

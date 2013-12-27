@@ -41,10 +41,13 @@ import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.CannotEstablishDatabaseConnectionException;
 import org.acmsl.queryj.api.exceptions.JdbcDriverNotFoundException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.tools.exceptions.MissingJdbcDriverAtRuntimeException;
 
 /*
  * Importing some Commons-Logging classes.
  */
+import org.acmsl.queryj.tools.exceptions.MissingJdbcUrlAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingJdbcUserNameAtRuntimeException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -119,18 +122,15 @@ public class JdbcConnectionOpeningHandler
 
         if (driver == null)
         {
-            // TODO
-            throw new RuntimeException("TODO: Fix me");
+            throw new MissingJdbcDriverAtRuntimeException();
         }
         else if (url == null)
         {
-            // TODO
-            throw new RuntimeException("TODO: Fix me");
+            throw new MissingJdbcUrlAtRuntimeException();
         }
         else if (userName == null)
         {
-            // TODO
-            throw new RuntimeException("TODO: Fix me");
+            throw new MissingJdbcUserNameAtRuntimeException();
         }
 
         result = openConnection(driver, url, userName, password);

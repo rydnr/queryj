@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -40,19 +40,26 @@ package org.acmsl.queryj.templates.packaging.handlers;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.TemplateBuildHandler;
+import org.acmsl.queryj.tools.exceptions.MissingOutputDirAtRuntimeException;
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
- * Importing Template-Packaging classes.
+ * Importing QueryJ Placeholders classes.
+ */
+import org.acmsl.queryj.metadata.DecoratedString;
+
+/*
+ * Importing QueryJ Template-Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContextImpl;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingContext;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplate;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateFactory;
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
  * Importing JetBrains annotations.
@@ -71,6 +78,7 @@ import org.checkthread.annotations.ThreadSafe;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Base build handler for Template Packaging templates.
@@ -87,27 +95,13 @@ public abstract class TemplatePackagingBuildHandler
                QueryJCommandHandler<QueryJCommand>,
                TemplatePackagingSettings
 {
+    @NotNull
+    private static final Pattern STG_EXT = Pattern.compile("\\.stg$");
+
     /**
      * Creates a {@link TemplatePackagingBuildHandler} instance.
      */
     protected TemplatePackagingBuildHandler() {}
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
-     */
-    @Override
-    public boolean handle(@NotNull final QueryJCommand parameters)
-        throws QueryJBuildException
-    {
-        @Nullable final List<T> templates = buildTemplates(parameters, retrieveTemplateFactory());
-
-        storeTemplates(templates, parameters);
-
-        return false;
-    }
 
     /**
      * Retrieves the template factory.
@@ -117,71 +111,6 @@ public abstract class TemplatePackagingBuildHandler
     protected abstract TF retrieveTemplateFactory();
 
     /**
-     * Builds the template.
-     * @param parameters the parameters.
-     * @param factory the TF instance.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    @NotNull
-    protected List<T> buildTemplates(@NotNull final QueryJCommand parameters, @NotNull final TF factory)
-        throws  QueryJBuildException
-    {
-        @NotNull final List<T> result = new ArrayList<T>();
-
-        @NotNull final List<TemplateDef> templateDefs = retrieveTemplateDefs(parameters);
-
-        for (@Nullable final TemplateDef templateDef : templateDefs)
-        {
-            if (templateDef == null)
-            {
-                // TODO
-                throw new RuntimeException("TemplateDef null");
-            }
-            else
-            {
-                @NotNull final C context = buildContext(templateDef, parameters);
-
-                @Nullable final T template = buildTemplate(factory, context);
-
-                if (template == null)
-                {
-                    // TODO
-                    throw new RuntimeException("Template null");
-                }
-                else
-                {
-                    result.add(template);
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Creates a template with required information.
-     * @param templateFactory the {@link TemplatePackagingTemplateFactory} instance.
-     * @param context the context.
-     * @return the template.
-     */
-    @Nullable
-    protected T buildTemplate(@NotNull final TF templateFactory, @NotNull final C context)
-        throws  QueryJBuildException
-    {
-        return templateFactory.createTemplate(context);
-    }
-
-    /**
-     * Builds the context from given parameters.
-     * @param templateDef the template def.
-     * @param parameters the command with the parameters.
-     * @return the template context.
-     */
-    @NotNull
-    protected abstract C buildContext(
-        @NotNull final TemplateDef templateDef, @NotNull final QueryJCommand parameters);
-
-    /**
      * Builds the default context.
      * @param templateDef the template def.
      * @param parameters the parameters.
@@ -189,7 +118,8 @@ public abstract class TemplatePackagingBuildHandler
      */
     @NotNull
     protected DefaultTemplatePackagingContext buildDefaultContext(
-        @NotNull final TemplateDef templateDef, @NotNull final QueryJCommand parameters)
+        @NotNull final TemplateDef<String> templateDef,
+        @NotNull final QueryJCommand parameters)
     {
         @NotNull final String templateName = retrieveTemplateName(parameters);
         @NotNull final String outputPackage = retrieveOutputPackage(parameters);
@@ -200,11 +130,71 @@ public abstract class TemplatePackagingBuildHandler
             new DefaultTemplatePackagingContext(
                 templateDef,
                 templateName,
-                templateName + ".java",
+                buildFilename(templateDef, templateName),
                 outputPackage,
                 rootDir,
                 new File(rootDir.getAbsolutePath()
                     + File.separator + outputPackage.replaceAll("\\.", File.separator)));
+    }
+
+    /**
+     * Builds the default context.
+     * @param templateDefs the template defs.
+     * @param parameters the parameters.
+     * @return the default context.
+     */
+    @NotNull
+    protected GlobalTemplateContext buildGlobalContext(
+        @NotNull final List<TemplateDef<String>> templateDefs,
+        @NotNull final QueryJCommand parameters)
+    {
+        @NotNull final String templateName = retrieveTemplateName(parameters);
+        @NotNull final String outputPackage = retrieveOutputPackage(parameters);
+
+        @NotNull final File rootDir = retrieveRootDir(parameters);
+
+        return
+            new GlobalTemplateContextImpl(
+                templateName,
+                buildFilename(templateDefs, templateName),
+                outputPackage,
+                rootDir,
+                new File(rootDir.getAbsolutePath()
+                         + File.separator + outputPackage.replaceAll("\\.", File.separator)),
+                templateDefs);
+    }
+
+    /**
+     * Builds the final file name.
+     * @param templateDef the {@link TemplateDef} instance.
+     * @param templateName the template name.
+     * @return such file name.
+     */
+    @NotNull
+    protected String buildFilename(
+        @NotNull final TemplateDef<String> templateDef,
+        @NotNull final String templateName)
+    {
+        return
+              new DecoratedString(STG_EXT.matcher(templateDef.getName()).replaceAll("")).getCapitalized()
+            + templateName
+            + ".java";
+    }
+
+    /**
+     * Builds the final file name.
+     * @param templateDefs the {@link TemplateDef} instances.
+     * @param templateName the template name.
+     * @return such file name.
+     */
+    @NotNull
+    protected String buildFilename(
+        @SuppressWarnings("unused") @NotNull final List<TemplateDef<String>> templateDefs,
+        @NotNull final String templateName)
+    {
+        return
+            new DecoratedString(templateName).getCapitalized()
+            + ".java";
     }
 
     /**
@@ -213,7 +203,8 @@ public abstract class TemplatePackagingBuildHandler
      * @return such package.
      */
     @NotNull
-    protected abstract String retrieveOutputPackage(@NotNull final QueryJCommand parameters);
+    protected abstract String retrieveOutputPackage(
+        @NotNull final QueryJCommand parameters);
 
     /**
      * Retrieves the template defs.
@@ -221,16 +212,18 @@ public abstract class TemplatePackagingBuildHandler
      * @return the list of {@link TemplateDef}s.
      */
     @NotNull
-    public List<TemplateDef> retrieveTemplateDefs(@NotNull final QueryJCommand parameters)
+    public List<TemplateDef<String>> retrieveTemplateDefs(
+        @NotNull final QueryJCommand parameters)
     {
-        @NotNull final List<TemplateDef> result;
+        @NotNull final List<TemplateDef<String>> result;
 
-        @Nullable final List<TemplateDef> aux =
-            new QueryJCommandWrapper<TemplateDef>(parameters).getListSetting(TEMPLATE_DEFS);
+        @Nullable final List<TemplateDef<String>> aux =
+            new QueryJCommandWrapper<TemplateDef<String>>(parameters)
+                .getListSetting(TEMPLATE_DEFS);
 
         if (aux == null)
         {
-            result = new ArrayList<TemplateDef>(0);
+            result = new ArrayList<TemplateDef<String>>(0);
         }
         else
         {
@@ -246,15 +239,8 @@ public abstract class TemplatePackagingBuildHandler
      * @return the template name.
      */
     @NotNull
-    protected abstract String retrieveTemplateName(@NotNull final QueryJCommand parameters);
-
-    /**
-     * Stores the templates in given attribute map.
-     * @param templates the templates.
-     * @param parameters the parameter map.
-     */
-    protected abstract void storeTemplates(
-        @NotNull final List<T> templates, @NotNull final QueryJCommand parameters);
+    protected abstract String retrieveTemplateName(
+        @NotNull final QueryJCommand parameters);
 
     /**
      * Retrieves the output dir.
@@ -264,14 +250,27 @@ public abstract class TemplatePackagingBuildHandler
     @NotNull
     public File retrieveRootDir(@NotNull final QueryJCommand parameters)
     {
-        @Nullable final File result = new QueryJCommandWrapper<File>(parameters).getSetting(OUTPUT_DIR);
+        @Nullable final File result =
+            new QueryJCommandWrapper<File>(parameters).getSetting(OUTPUT_DIR);
 
         if (result == null)
         {
-            // TODO
-            throw new RuntimeException("Output dir missing");
+            throw new MissingOutputDirAtRuntimeException();
         }
 
         return result;
+    }
+
+    /**
+     * Creates a template with required information.
+     * @param templateFactory the {@link TemplatePackagingTemplateFactory} instance.
+     * @param context the context.
+     * @return the template.
+     */
+    @Nullable
+    protected T buildTemplate(
+        @NotNull final TF templateFactory, @NotNull final C context)
+    {
+        return templateFactory.createTemplate(context);
     }
 }

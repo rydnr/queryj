@@ -64,113 +64,28 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public interface TableDecorator
-    extends  Table
+    extends  Table<DecoratedString, Attribute<DecoratedString>>
 {
-    /**
-     * Retrieves the name, in upper case.
-     * @return such value.
-     */
-    @NotNull
-    String getNameUppercased();
-    
-    /**
-     * Retrieves the capitalized name.
-     * @return such name.
-     */
-    @NotNull
-    String getNameCapitalized();
-
-    /**
-     * Retrieves the name, in lower case.
-     * @return such value.
-     */
-    @NotNull
-    String getNameLowercased();
-
-    /**
-     * Retrieves the table name, uncapitalized.
-     * @return such value.
-     */
-    @NotNull
-    String getUncapitalizedName();
-
-    /**
-     * Retrieves the value-object name associated to the table name.
-     * @return such name.
-     */
-    @NotNull
-    String getVoName();
-
-    /**
-     * Retrieves the value-object name associated to the table name, uncapitalized.
-     * @return such name.
-     */
-    @NotNull
-    String getVoNameUncapitalized();
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    String getNameNormalizedLowercased();
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    String getSingularNameNormalizedLowercased();
-
-    /**
-     * Retrieves the table's name in lower-case, once normalized.
-     * @return such information.
-     */
-    @NotNull
-    String getNameNormalized();
-
-    /**
-     * Retrieves the table's name once normalized.
-     * @return such information.
-     */
-    @NotNull
-    String getSingularNameCapitalized();
-
-    /**
-     * Retrieves the singular table's name, upper-cased.
-     * @return such information.
-     */
-    @NotNull
-    String getSingularNameUppercased();
-
-    /**
-     * Retrieves the singular table's name, lower-cased.
-     * @return such information.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    String getSingularNameLowercased();
-
     /**
      * Retrieves all attributes, including the parent's.
      * @return such attributes.
      */
     @NotNull
-    List<Attribute> getAllAttributes();
+    List<Attribute<DecoratedString>> getAllAttributes();
 
     /**
      * Retrieves all parent tables.
      * @return such tables.
      */
     @NotNull
-    List<Table> getAllParentTables();
+    List<Table<DecoratedString, Attribute<DecoratedString>>> getAllParentTables();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed.
      * @return such attributes.
      */
     @NotNull
-    List<Attribute> getAllNonExternallyManagedAttributes();
+    List<Attribute<DecoratedString>> getAllNonExternallyManagedAttributes();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed,
@@ -178,7 +93,7 @@ public interface TableDecorator
      * @return such attributes.
      */
     @NotNull
-    List<Attribute> getAllNonExternallyManagedPlusPkAttributes();
+    List<Attribute<DecoratedString>> getAllNonExternallyManagedPlusPkAttributes();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed,
@@ -186,21 +101,21 @@ public interface TableDecorator
      * @return such attributes.
      */
     @NotNull
-    List<Attribute> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes();
+    List<Attribute<DecoratedString>> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes();
 
     /**
      * Retrieves the non-parent attributes.
      * @return such attributes.
      */
     @NotNull
-    List<Attribute> getNonParentAttributes();
+    List<Attribute<DecoratedString>> getNonParentAttributes();
 
     /**
      * Retrieves the non-read-only attributes.
      * @return such attributes.
      */
     @NotNull
-    List<Attribute> getNonReadOnlyAttributes();
+    List<Attribute<DecoratedString>> getNonReadOnlyAttributes();
 
     /**
      * Retrieves the list of non-parent, non-externally-managed
@@ -208,14 +123,14 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    List<Attribute> getNonParentNonExternallyManagedAttributes();
+    List<Attribute<DecoratedString>> getNonParentNonExternallyManagedAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent own attributes.
      * @return such list.
      */
     @NotNull
-    List<Attribute> getAllParentAndNonParentAttributes();
+    List<Attribute<DecoratedString>> getAllParentAndNonParentAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent
@@ -223,7 +138,7 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes();
+    List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent
@@ -231,7 +146,7 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes();
+    List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent,
@@ -239,14 +154,14 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    List<Attribute> getAllParentAndNonParentNonReadOnlyAttributes();
+    List<Attribute<DecoratedString>> getAllParentAndNonParentNonReadOnlyAttributes();
 
     /**
      * Retrieves the parent's and non parent's read-only attributes.
      * @return such information.
      */
     @NotNull
-    List<Attribute> getAllParentAndNonParentReadOnlyAttributes();
+    List<Attribute<DecoratedString>> getAllParentAndNonParentReadOnlyAttributes();
 
     /**
      * Retrieves the list of dynamic queries.
@@ -261,7 +176,7 @@ public interface TableDecorator
      * @return the list of static contents.
      */
     @NotNull
-    List<Row> getStaticContent();
+    List<Row<DecoratedString>> getStaticContent();
 
     /**
      * Retrieves the list of different results defined for this table (using the referring custom-selects).
@@ -269,4 +184,11 @@ public interface TableDecorator
      */
     @NotNull
     List<Result> getDifferentCustomResults();
+
+    /**
+     * Retrieves the ordered list of the fully-qualified attribute types.
+     * @return such list.
+     */
+    @NotNull
+    List<DecoratedString> getAttributeTypes();
 }

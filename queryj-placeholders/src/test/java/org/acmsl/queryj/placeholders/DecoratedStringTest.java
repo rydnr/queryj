@@ -36,6 +36,8 @@
 package org.acmsl.queryj.placeholders;
 
 import junit.framework.TestCase;
+import org.acmsl.queryj.metadata.DecoratedString;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,14 +54,14 @@ public class DecoratedStringTest
     extends TestCase
 {
     /**
-     * Tests {@link DecoratedString#getCapitalized()}
+     * Tests {@link org.acmsl.queryj.metadata.DecoratedString#getCapitalized()}
      */
     @Test
     public void testCapitalized()
     {
-        DecoratedString decorator = new DecoratedString("E-Commerce");
+        @NotNull final DecoratedString decorator = new DecoratedString("E-Commerce");
 
-        Assert.assertEquals("Invalid capitalization for E-Commerce", "ECommerce", decorator.getCapitalized());
+        Assert.assertEquals("Invalid capitalization for E-Commerce", "ECommerce", decorator.getCapitalized().getValue());
     }
 
     /**
@@ -68,19 +70,25 @@ public class DecoratedStringTest
     @Test
     public void testUppercased()
     {
-        DecoratedString decorator = new DecoratedString("E-Commerce");
+        @NotNull final DecoratedString decorator = new DecoratedString("E-Commerce");
 
-        Assert.assertEquals("Invalid upper-case transformation for E-Commerce", "E-COMMERCE", decorator.getUppercased());
+        Assert.assertEquals(
+            "Invalid upper-case transformation for E-Commerce",
+            "E-COMMERCE",
+            decorator.getUppercased().getValue());
     }
 
     /**
-     * Tests {@link DecoratedString#getNormalizedUppercased()}
+     * Tests {@link DecoratedString#getNormalized().getUppercased()}
      */
     @Test
     public void testNormalizedUppercased()
     {
-        DecoratedString decorator = new DecoratedString("E-Commerce");
+        @NotNull final DecoratedString decorator = new DecoratedString("E-Commerce");
 
-        Assert.assertEquals("Invalid upper-case transformation for E-Commerce", "E_COMMERCE", decorator.getNormalizedUppercased());
+        Assert.assertEquals(
+            "Invalid upper-case transformation for E-Commerce",
+            "E_COMMERCE",
+            decorator.getNormalized().getUppercased().getValue());
     }
 }

@@ -1,0 +1,132 @@
+//;-*- mode: stringtemplate -*-
+//
+//                   QueryJ's Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: DefaultTemplateChainProvider.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate QueryJ's
+//              DefaultTemplateChainProvider.
+//
+group Template;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+ Generates a DefaultTemplateChainProvider source file.
+ @param C the context.
+ !>
+<sourceImpl(defs=C.templateDefs, C=C)>
+>>
+
+sourceImpl(defs, C) ::= <<
+<!
+  Generates a DefaultTemplateChainProvider source file.
+  @param defs the template defs.
+  @param C the context.
+!>
+<java_header(
+  description=[ "Implements {@link TemplateChainProvider} to generate", "the default templates." ],
+  description_oneline=false,
+  filename=C.class_name,
+  template="org/acmsl/templates/packaging/DefaultTemplateChainProvider.stg",
+  C=C)>
+<package_declaration(packageName="org.acmsl.queryj.templates")>
+
+/*
+ * Importing project classes.
+ */
+<defs:{ d | <import_bundle(def=d)> }; separator="\n">
+
+/*
+ * Importing QueryJ-Core classes.
+ */
+import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
+import org.acmsl.queryj.api.handlers.TemplateHandler;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.tools.TemplateChainProvider;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.ArrayList;
+import java.util.List;
+
+<class(defs=defs, C=C)>
+>>
+
+import_bundle(def) ::= <<
+import org.acmsl.queryj.templates.handlers.<def.name.capitalized>TemplateHandlerBundle;
+>>
+
+class(defs, C) ::= <<
+/**
+ * Generator for {@link DefaultTemplateChainProvider}s.
+<class_common_javadoc(
+  template="org/acmsl/templates/packaging/DefaultTemplateChainProvider.stg",
+  timestamp=C.timestamp)>
+ */
+@ThreadSafe
+public class <C.class_name>
+    implements TemplateChainProvider\<TemplateHandler\<QueryJCommand>, QueryJCommand>
+{
+    /**
+     * Retrieves the custom chain.
+     * @return such chain.
+     */
+    @NotNull
+    @Override
+    public List\<TemplateHandler\<QueryJCommand\>> getHandlers()
+    {
+        @NotNull
+        final List\<TemplateHandler\<QueryJCommand\>> result = new ArrayList\<TemplateHandler\<QueryJCommand\>>();
+
+        <defs:{ d | <add_handler_bundle(def=d)> }; separator="\n">
+
+        return result;
+    }
+}
+>>
+
+add_handler_bundle(def) ::= <<
+result.add(new <def.name.capitalized>TemplateHandlerBundle());
+>>

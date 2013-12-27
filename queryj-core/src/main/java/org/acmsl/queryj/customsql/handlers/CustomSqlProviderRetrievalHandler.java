@@ -40,6 +40,7 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.exceptions.MissingCustomSqlFileAtRuntimeException;
 import org.acmsl.queryj.customsql.xml.SqlXmlParser;
 import org.acmsl.queryj.customsql.xml.SqlXmlParserFactory;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
@@ -139,7 +140,7 @@ public class CustomSqlProviderRetrievalHandler
 
         if (aux == null)
         {
-            throw new RuntimeException("TODO: Fix me");
+            throw new MissingCustomSqlFileAtRuntimeException();
         }
         else
         {

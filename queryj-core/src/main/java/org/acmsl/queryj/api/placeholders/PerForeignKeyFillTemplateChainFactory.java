@@ -45,7 +45,8 @@ import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
  * JDK 6 Services'-compatible per-foreign-key {@link org.acmsl.queryj.api.placeholders.FillTemplateChainFactory}
  * implementation.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/08
+ * @since 3.0
+ * Created: 2013/06/08
  */
 @SuppressWarnings("unused")
 public interface PerForeignKeyFillTemplateChainFactory

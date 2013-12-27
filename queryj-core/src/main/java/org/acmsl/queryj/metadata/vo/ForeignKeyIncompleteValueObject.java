@@ -57,9 +57,8 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ForeignKeyIncompleteValueObject
-    extends AbstractForeignKey
+    extends AbstractForeignKey<String>
 {
-
     private static final long serialVersionUID = 6949444359297510253L;
 
     /**
@@ -81,7 +80,7 @@ public class ForeignKeyIncompleteValueObject
      * @param attributes the attributes.
      */
     @Override
-    public void setAttributes(@NotNull final List<Attribute> attributes)
+    public void setAttributes(@NotNull final List<Attribute<String>> attributes)
     {
         super.setAttributes(attributes);
     }
