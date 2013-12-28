@@ -107,7 +107,6 @@ public class BasePerCustomResultFillTemplateChain
     @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final PerCustomResultTemplateContext context)
     {
-<<<<<<< HEAD
         add(
             chain,
             new TemplateContextFillAdapterHandler(new CustomResultHandler(context)),
@@ -123,28 +122,5 @@ public class BasePerCustomResultFillTemplateChain
             (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, ResultIdHandler, DecoratedString>(
                 new ResultIdHandler(context)),
             relevantOnly);
-=======
-        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(3);
-
-        result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerCustomResultTemplateContext, CustomResultHandler, ResultDecorator>(
-                        new CustomResultHandler(context)));
-
-        result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerCustomResultTemplateContext, CustomResultTypeImportsHandler, List<String>>(
-                        new CustomResultTypeImportsHandler(context)));
-
-        result.add(
-            (FillAdapterHandler)
-                new TemplateContextFillAdapterHandler
-                    <PerCustomResultTemplateContext, ResultIdHandler, DecoratedString>(
-                        new ResultIdHandler(context)));
-
-        return result;
->>>>>>> b37280242ce72f7e8a1999ed71e17f11de7c823a
     }
 }
