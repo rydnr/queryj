@@ -107,23 +107,6 @@ public class BasePerCustomResultFillTemplateChain
     @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final PerCustomResultTemplateContext context)
     {
-<<<<<<< HEAD
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler(new CustomResultHandler(context)),
-            relevantOnly);
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, CustomResultTypeImportsHandler, List<String>>(
-                new CustomResultTypeImportsHandler(context)),
-            relevantOnly);
-
-        add(
-            chain,
-            (FillAdapterHandler) new TemplateContextFillAdapterHandler<PerCustomResultTemplateContext, ResultIdHandler, DecoratedString>(
-                new ResultIdHandler(context)),
-            relevantOnly);
-=======
         @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(3);
 
         result.add(
@@ -145,6 +128,5 @@ public class BasePerCustomResultFillTemplateChain
                         new ResultIdHandler(context)));
 
         return result;
->>>>>>> b37280242ce72f7e8a1999ed71e17f11de7c823a
     }
 }
