@@ -197,7 +197,7 @@ public abstract class BasePerTableTemplateBuildHandler
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final List<Table<String, Attribute<String>>> tables,
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
       throws  QueryJBuildException
@@ -206,7 +206,7 @@ public abstract class BasePerTableTemplateBuildHandler
 
         @Nullable T t_Template;
 
-        for  (@Nullable final Table<String, Attribute<String>> t_Table : tables)
+        for  (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : tables)
         {
             if (t_Table != null)
             {

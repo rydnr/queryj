@@ -64,7 +64,7 @@ public class PackageNameHandler<C extends TemplateContext>
     private static final long serialVersionUID = 6902259512128669602L;
 
     /**
-     * Creates a handler to resolve "project_package" placeholders.
+     * Creates a handler to resolve "package" placeholders.
      * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
     public PackageNameHandler(@NotNull final C context)
@@ -73,7 +73,7 @@ public class PackageNameHandler<C extends TemplateContext>
     }
 
     /**
-     * Returns "project_package".
+     * Returns "package".
      * @return such placeholder.
      */
     @NotNull

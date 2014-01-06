@@ -540,7 +540,8 @@ public class MetaLanguageUtils
     {
         boolean result = false;
 
-        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+            metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -554,8 +555,9 @@ public class MetaLanguageUtils
     @NotNull
     public String toString()
     {
-        return "MetaLanguageUtils{" +
-               "PARSER_CACHE=" + PARSER_CACHE +
-               '}';
+        return
+              "{ \"class\": \"" + MetaLanguageUtils.class.getName() + '"'
+            + ", \"PARSER_CACHE\": " + PARSER_CACHE
+            + " }";
     }
 }

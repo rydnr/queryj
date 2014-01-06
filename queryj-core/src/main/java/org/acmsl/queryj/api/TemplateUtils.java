@@ -560,7 +560,8 @@ public class TemplateUtils
     {
         @NotNull final List<Result> result = new ArrayList<Result>(2);
 
-        @Nullable final Table<String, Attribute<String>> table = tableDAO.findByName(tableName);
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> table =
+            tableDAO.findByName(tableName);
 
         if (table != null)
         {

@@ -309,9 +309,10 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     {
         @Nullable List<ForeignKey<String>> result = null;
 
-        @NotNull final List<Table<String, Attribute<String>>> t_lTables = metadataManager.getTableDAO().findAllTables();
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> t_lTables =
+            metadataManager.getTableDAO().findAllTables();
 
-        for (@Nullable final Table<String, Attribute<String>> t_Table : t_lTables)
+        for (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : t_lTables)
         {
             if (t_Table != null)
             {

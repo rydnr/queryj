@@ -117,7 +117,7 @@ public class MySQL4xMetaDataRetrievalHandler
     @Override
     protected MetadataManager buildMetadataManager(
         @SuppressWarnings("unused") @NotNull final QueryJCommand parameters,
-        @NotNull final List<Table<String, Attribute<String>>> tables,
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,

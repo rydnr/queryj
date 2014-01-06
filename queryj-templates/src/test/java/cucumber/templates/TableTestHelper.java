@@ -55,12 +55,12 @@ import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableValueObject;
+import org.acmsl.queryj.tools.ant.AntFieldElement;
+import org.acmsl.queryj.tools.ant.AntTablesElement;
 
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.tools.ant.AntFieldElement;
-import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -113,11 +113,12 @@ public class TableTestHelper
      * @param tables the table collection.
      */
     public void defineInputTables(
-        @NotNull final DataTable tableInfo, @NotNull final Map<String, Table<String, Attribute<String>>> tables)
+        @NotNull final DataTable tableInfo,
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
         @NotNull final List<Map<String, String>> tableEntries = tableInfo.asMaps();
 
-        @Nullable Table<String, Attribute<String>> table;
+        @Nullable Table<String, Attribute<String>, List<Attribute<String>>> table;
 
         for (@NotNull final Map<String, String> tableEntry: tableEntries)
         {
@@ -136,9 +137,10 @@ public class TableTestHelper
      * @return the {@link Table} instance.
      */
     @Nullable
-    protected Table<String, Attribute<String>> convertToTable(@NotNull final Map<String, String> tableEntry)
+    protected Table<String, Attribute<String>, List<Attribute<String>>> convertToTable(
+        @NotNull final Map<String, String> tableEntry)
     {
-        @Nullable Table<String, Attribute<String>> result = null;
+        @Nullable Table<String, Attribute<String>, List<Attribute<String>>> result = null;
 
         @Nullable final String table =  tableEntry.get(AntTablesElement.TABLE);
 
@@ -161,12 +163,14 @@ public class TableTestHelper
      * @param columnInfo the column information.
      * @param tables the tables.
      */
-    public List<Table<String, Attribute<String>>> defineInputColumns(
-        @NotNull final DataTable columnInfo, @NotNull final Map<String, Table<String, Attribute<String>>> tables)
+    public List<Table<String, Attribute<String>, List<Attribute<String>>>> defineInputColumns(
+        @NotNull final DataTable columnInfo,
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
-        @NotNull final List<Table<String, Attribute<String>>> result = new ArrayList<Table<String, Attribute<String>>>(tables.size());
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> result =
+            new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(tables.size());
 
-        for (@NotNull final Table<String, Attribute<String>> table : tables.values())
+        for (@NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table : tables.values())
         {
             result.add(table);
 
@@ -231,7 +235,7 @@ public class TableTestHelper
      * @return the {@link Table} instance.
      */
     @Nullable
-    public Table<String, Attribute<String>> convertToTable(
+    public Table<String, Attribute<String>, List<Attribute<String>>> convertToTable(
         @NotNull final String tableName,
         @Nullable final String comment,
         @SuppressWarnings("unused") @Nullable final String parentTable,
@@ -334,7 +338,8 @@ public class TableTestHelper
      * @return the list of attributes matching given column names.
      */
     @NotNull
-    public List<Attribute<String>> filterAttributes(final Table<String, Attribute<String>> table, final String[] columns)
+    public List<Attribute<String>> filterAttributes(
+        final Table<String, Attribute<String>, List<Attribute<String>>> table, final String[] columns)
     {
         @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>();
 
@@ -372,7 +377,7 @@ public class TableTestHelper
      */
     public void defineForeignKeys(
         @NotNull final DataTable fkInfo,
-        @NotNull final Map<String, Table<String, Attribute<String>>> tables,
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables,
         @NotNull final List<ForeignKey<String>> foreignKeys)
     {
         String sourceTable;
@@ -382,7 +387,7 @@ public class TableTestHelper
 
         ForeignKey<String> foreignKey;
 
-        for (@NotNull final Table<String, Attribute<String>> table : tables.values())
+        for (@NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table : tables.values())
         {
             for (@NotNull final Map<String, String> fkEntry: fkInfo.asMaps())
             {
@@ -418,9 +423,11 @@ public class TableTestHelper
      * @param tables the tables.
      */
     @SuppressWarnings("unused")
-    public void defineValues(@NotNull final DataTable values, @NotNull final Map<String, Table<String, Attribute<String>>> tables)
+    public void defineValues(
+        @NotNull final DataTable values,
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
-        for (@NotNull final Table<String, Attribute<String>> table : tables.values())
+        for (@NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table : tables.values())
         {
             @NotNull final List<Attribute<String>> attributes = table.getAttributes();
 

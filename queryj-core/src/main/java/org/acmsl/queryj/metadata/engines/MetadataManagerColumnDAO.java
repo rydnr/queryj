@@ -159,7 +159,8 @@ public class MetadataManagerColumnDAO
     {
         Attribute<String> result = null;
 
-        @Nullable final Table<String, Attribute<String>> t_Table = tableDAO.findByName(table);
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+            tableDAO.findByName(table);
 
         if (t_Table != null)
         {
@@ -208,11 +209,13 @@ public class MetadataManagerColumnDAO
      * @return the list of {@link Attribute columns}.
      */
     @NotNull
-    protected List<Attribute<String>> findColumns(@NotNull final String table, @NotNull final TableDAO tableDAO)
+    protected List<Attribute<String>> findColumns(
+        @NotNull final String table, @NotNull final TableDAO tableDAO)
     {
         @NotNull final List<Attribute<String>> result;
 
-        @Nullable final Table<String, Attribute<String>> t_Table = tableDAO.findByName(table);
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+            tableDAO.findByName(table);
 
         if (t_Table != null)
         {
@@ -258,15 +261,18 @@ public class MetadataManagerColumnDAO
      * @return the list of {@link Attribute columns}.
      */
     @NotNull
-    protected List<Attribute<String>> findAllColumns(@NotNull final String table, @NotNull final TableDAO tableDAO)
+    protected List<Attribute<String>> findAllColumns(
+        @NotNull final String table, @NotNull final TableDAO tableDAO)
     {
         @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>(0);
 
-        @Nullable final Table<String, Attribute<String>> t_Table = tableDAO.findByName(table);
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+            tableDAO.findByName(table);
 
         if (t_Table != null)
         {
-            @Nullable Table<String, Attribute<String>> t_Parent = t_Table.getParentTable();
+            @Nullable Table<String, Attribute<String>, List<Attribute<String>>> t_Parent =
+                t_Table.getParentTable();
 
             while (t_Parent != null)
             {

@@ -72,12 +72,12 @@ public class CachingForeignKeyDecorator
     /**
      * The cached source table.
      */
-    private Table<DecoratedString, Attribute<DecoratedString>> m__CachedSource;
+    private Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> m__CachedSource;
 
     /**
      * The cached target table.
      */
-    private Table<DecoratedString, Attribute<DecoratedString>> m__CachedTarget;
+    private Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> m__CachedTarget;
 
     /**
      * Creates a <code>CachingForeignKeyDecorator</code> with the
@@ -132,7 +132,7 @@ public class CachingForeignKeyDecorator
      * @param source such table.
      */
     protected final void immutableSetCachedSource(
-        @NotNull final Table<DecoratedString, Attribute<DecoratedString>> source)
+        @NotNull final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> source)
     {
         m__CachedSource = source;
     }
@@ -141,7 +141,8 @@ public class CachingForeignKeyDecorator
      * Specifies the cached source table.
      * @param source such table.
      */
-    protected void setCachedSource(@NotNull final Table<DecoratedString, Attribute<DecoratedString>> source)
+    protected void setCachedSource(
+        @NotNull final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> source)
     {
         immutableSetCachedSource(source);
     }
@@ -151,7 +152,7 @@ public class CachingForeignKeyDecorator
      * @return such table.
      */
     @Nullable
-    protected Table<DecoratedString, Attribute<DecoratedString>> getCachedSource()
+    protected Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> getCachedSource()
     {
         return m__CachedSource;
     }
@@ -162,9 +163,10 @@ public class CachingForeignKeyDecorator
      * @return such information.
      */
     @Override
-    public Table<DecoratedString, Attribute<DecoratedString>> getSource()
+    public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> getSource()
     {
-        @Nullable Table<DecoratedString, Attribute<DecoratedString>> result = getCachedSource();
+        @Nullable Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> result =
+            getCachedSource();
 
         if (result == null)
         {
@@ -185,7 +187,7 @@ public class CachingForeignKeyDecorator
      * @param target such table.
      */
     protected final void immutableSetCachedTarget(
-        @NotNull final Table<DecoratedString, Attribute<DecoratedString>> target)
+        @NotNull final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> target)
     {
         m__CachedTarget = target;
     }
@@ -194,7 +196,8 @@ public class CachingForeignKeyDecorator
      * Specifies the cached target table.
      * @param target such table.
      */
-    protected void setCachedTarget(@NotNull final Table<DecoratedString, Attribute<DecoratedString>> target)
+    protected void setCachedTarget(
+        @NotNull final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> target)
     {
         immutableSetCachedTarget(target);
     }
@@ -204,7 +207,7 @@ public class CachingForeignKeyDecorator
      * @return such table.
      */
     @Nullable
-    protected Table<DecoratedString, Attribute<DecoratedString>> getCachedTarget()
+    protected Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> getCachedTarget()
     {
         return m__CachedTarget;
     }
@@ -215,9 +218,10 @@ public class CachingForeignKeyDecorator
      * @return such information.
      */
     @Override
-    public Table<DecoratedString, Attribute<DecoratedString>> getTarget()
+    public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> getTarget()
     {
-        @Nullable Table<DecoratedString, Attribute<DecoratedString>> result = getCachedTarget();
+        @Nullable Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> result =
+            getCachedTarget();
 
         if (result == null)
         {

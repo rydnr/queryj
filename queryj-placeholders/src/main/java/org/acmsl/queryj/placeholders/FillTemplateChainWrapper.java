@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description:
  *
  * Date: 6/11/13
  * Time: 6:31 PM
@@ -121,7 +121,7 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
     public String toString()
     {
         return
-              "{ \"class\": \"" + FillTemplateChainWrapper.class.getName() + "\""
+              "{ \"class\": \"" + FillTemplateChainWrapper.class.getName() + '"'
             + ", \"parent\": \"" + super.toString() +  "\" }";
     }
 }

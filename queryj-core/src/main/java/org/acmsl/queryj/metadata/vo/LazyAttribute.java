@@ -55,6 +55,11 @@ import org.jetbrains.annotations.Nullable;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
+import java.util.List;
+
 /**
  * <code>Attribute</code> implementation which retrieves its information
  * lazily.
@@ -818,7 +823,8 @@ public class LazyAttribute
     {
         @Nullable Attribute<String> result = null;
 
-        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+            metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {

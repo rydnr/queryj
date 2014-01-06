@@ -76,8 +76,8 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
     /**
      * The cache of DAO -> Table.
      */
-    private static final Map<String, Table<String, Attribute<String>>> FIND_BY_DAO_CACHE =
-        new HashMap<String, Table<String, Attribute<String>>>();
+    private static final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> FIND_BY_DAO_CACHE =
+        new HashMap<String, Table<String, Attribute<String>, List<Attribute<String>>>>();
 
     /**
      * The cache miss.
@@ -129,7 +129,8 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      */
     @Override
     @Nullable
-    public Table<String, Attribute<String>> findByName(@NotNull final String name)
+    public Table<String, Attribute<String>, List<Attribute<String>>> findByName(
+        @NotNull final String name)
     {
         return findByName(name, getMetadataManager().isCaseSensitive());
     }
@@ -141,13 +142,15 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @return the associated {@link Table} instance, if the table is found.
      */
     @Nullable
-    protected Table<String, Attribute<String>> findByName(@NotNull final String name, final boolean caseSensitiveness)
+    protected Table<String, Attribute<String>, List<Attribute<String>>> findByName(
+        @NotNull final String name, final boolean caseSensitiveness)
     {
-        @Nullable Table<String, Attribute<String>> result = null;
+        @Nullable Table<String, Attribute<String>, List<Attribute<String>>> result = null;
 
-        @NotNull final List<Table<String, Attribute<String>>> t_Tables = findAllTables();
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> t_Tables =
+            findAllTables();
 
-        for (@Nullable final Table<String, Attribute<String>> t_Table : t_Tables)
+        for (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : t_Tables)
         {
             if (t_Table != null)
             {
@@ -175,15 +178,17 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @return the list of referring tables.
      */
     @NotNull
-    public List<Table<String, Attribute<String>>> findReferringTables(@NotNull final String target)
+    public List<Table<String, Attribute<String>, List<Attribute<String>>>> findReferringTables(
+        @NotNull final String target)
     {
-        @NotNull final List<Table<String, Attribute<String>>> result = new ArrayList<Table<String, Attribute<String>>>(1);
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> result =
+            new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(1);
 
-        @Nullable final List<Table<String, Attribute<String>>> t_Tables = findAllTables();
+        @Nullable final List<Table<String, Attribute<String>, List<Attribute<String>>>> t_Tables = findAllTables();
 
         @NotNull List<ForeignKey<String>> t_lForeignKeys;
 
-        for (@Nullable final Table<String, Attribute<String>> t_Table : t_Tables)
+        for (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : t_Tables)
         {
             if (t_Table != null)
             {
@@ -212,7 +217,8 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      */
     @Override
     @Nullable
-    public Table<String, Attribute<String>> findByDAO(@NotNull final String dao)
+    public Table<String, Attribute<String>, List<Attribute<String>>> findByDAO(
+        @NotNull final String dao)
     {
         return findByDAO(dao, MetadataUtils.getInstance());
     }
@@ -222,7 +228,8 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param dao the DAO.
      * @return such {@link Table}, or <code>null</code> if not found.
      */
-    protected synchronized static Table<String, Attribute<String>> getCachedByDAO(@NotNull final String dao)
+    protected static Table<String, Attribute<String>, List<Attribute<String>>> getCachedByDAO(
+        @NotNull final String dao)
     {
         return FIND_BY_DAO_CACHE.get(dao.toLowerCase(Locale.US));
     }
@@ -233,7 +240,8 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param table the associated table.
      */
     protected synchronized static void cacheByDAO(
-        @NotNull final String dao, @NotNull final Table<String, Attribute<String>> table)
+        @NotNull final String dao,
+        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table)
     {
         FIND_BY_DAO_CACHE.put(dao, table);
     }
@@ -273,15 +281,16 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @return the table.
      */
     @Nullable
-    protected Table<String, Attribute<String>> findByDAO(
+    protected Table<String, Attribute<String>, List<Attribute<String>>> findByDAO(
         @NotNull final String dao, @NotNull final MetadataUtils metadataUtils)
     {
-        @Nullable Table<String, Attribute<String>> result = getCachedByDAO(dao);
+        @Nullable Table<String, Attribute<String>, List<Attribute<String>>> result =
+            getCachedByDAO(dao);
 
         if (   (result == null)
             && (!isDaoAlreadyProcessed(dao)))
         {
-            for (@Nullable final Table<String, Attribute<String>> t_Table : findAllTables())
+            for (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : findAllTables())
             {
                 if  (   (t_Table != null)
                      && (metadataUtils.matches(t_Table.getName(), dao)))

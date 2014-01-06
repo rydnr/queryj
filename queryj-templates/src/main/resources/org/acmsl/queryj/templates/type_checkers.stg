@@ -38,18 +38,21 @@
 group type_checkers;
 
 notnull() ::= <<
-<! Conditionally add @NotNull annotations. !>
-<if(notnull_annotations_enabled)> @NotNull <else> <endif>
+<!
+ Conditionally add @NotNull annotations.
+ !><if(notnull_annotations_enabled)> @NotNull <else> <endif>
 >>
 
 notnull_arg_single_line() ::= <<
-<! Conditionally add @NotNull annotations. !>
-<if(notnull_annotations_enabled)>@NotNull <endif>
+<!
+ Conditionally add @NotNull annotations.
+ !><if(notnull_annotations_enabled)>@NotNull <endif>
 >>
 
 notnull_method() ::= <<
-<! Conditionally add @NotNull annotations. !>
-<if(notnull_annotations_enabled)> @NotNull <else>
+<!
+ Conditionally add @NotNull annotations.
+ !><if(notnull_annotations_enabled)> @NotNull <else>
 <endif>
 >>
 

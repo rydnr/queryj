@@ -121,7 +121,7 @@ public class JdbcMetadataManager
         @Nullable final String catalog,
         @Nullable final String schema,
         @NotNull final List<String> tableNames,
-        @NotNull final List<Table<String, Attribute<String>>> tables,
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean caseSensitive,
@@ -381,7 +381,7 @@ public class JdbcMetadataManager
             {
                 t_strTableName = t_rsPrimaryKeys.getString(Literals.TABLE_NAME_U);
 
-                @Nullable final Table<String, Attribute<String>> t_Table =
+                @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
                     findTable(t_strTableName, tables, caseSensitiveness);
 
                 if (   (t_Table != null)
@@ -424,7 +424,7 @@ public class JdbcMetadataManager
             throw sqlException;
         }
 
-        Table<String, Attribute<String>> t_ParentTable;
+        Table<String, Attribute<String>, List<Attribute<String>>> t_ParentTable;
         List<Attribute<String>> t_lParentTablePrimaryKey;
         List<Attribute<String>> t_lChildTablePrimaryKey;
         List<Attribute<String>> t_lCompletePrimaryKey;
@@ -479,9 +479,9 @@ public class JdbcMetadataManager
 
         final ResultSet t_rsForeignKeys;
         String t_strSourceTableName;
-        Table<String, Attribute<String>> t_SourceTable;
+        Table<String, Attribute<String>, List<Attribute<String>>> t_SourceTable;
         String t_strTargetTableName;
-        Table<String, Attribute<String>> t_TargetTable;
+        Table<String, Attribute<String>, List<Attribute<String>>> t_TargetTable;
         String t_strSourceColumnName;
         int t_iOrdinalPosition;
 
@@ -560,7 +560,7 @@ public class JdbcMetadataManager
             throw sqlException;
         }
 
-        Table<String, Attribute<String>> t_ParentTable;
+        Table<String, Attribute<String>, List<Attribute<String>>> t_ParentTable;
         List<ForeignKey<String>> t_lParentForeignKeys;
         List<ForeignKey<String>> t_lChildForeignKeys;
         List<ForeignKey<String>> t_lCompleteForeignKey;

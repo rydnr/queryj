@@ -78,7 +78,8 @@ public class TableAttributeTypeImportsHandler
     private static final long serialVersionUID = -358047028615374625L;
 
     /**
-     * Creates a {@link TableAttributeTypeImportsHandler} using given {@link org.acmsl.queryj.api.PerTableTemplateContext context}
+     * Creates a {@link TableAttributeTypeImportsHandler} using given
+     * {@link org.acmsl.queryj.api.PerTableTemplateContext context}
      * @param context the context.
      */
     public TableAttributeTypeImportsHandler(@NotNull final PerTableTemplateContext context)
@@ -118,7 +119,9 @@ public class TableAttributeTypeImportsHandler
     protected List<String> retrieveImports(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        return retrieveImports(tableName,  metadataManager.getTableDAO(), metadataManager.getMetadataTypeManager());
+        return
+            retrieveImports(
+                tableName,  metadataManager.getTableDAO(), metadataManager.getMetadataTypeManager());
     }
 
     /**
@@ -136,7 +139,8 @@ public class TableAttributeTypeImportsHandler
     {
         @Nullable List<String> result = null;
 
-        @Nullable final Table<String, Attribute<String>> t_Table = tableDAO.findByName(tableName);
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+            tableDAO.findByName(tableName);
 
         if (t_Table != null)
         {

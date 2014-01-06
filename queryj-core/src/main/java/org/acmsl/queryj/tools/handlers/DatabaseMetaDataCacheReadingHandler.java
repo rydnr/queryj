@@ -100,7 +100,7 @@ public class DatabaseMetaDataCacheReadingHandler
 
         if (!alreadyDone)
         {
-            result = super.handle(parameters, alreadyDone, metaData);
+            result = super.handle(parameters, false, metaData);
         }
 
         return result;
@@ -139,7 +139,7 @@ public class DatabaseMetaDataCacheReadingHandler
         // We only need the table names, if they're not extracted already.
         if (metadataManager != null)
         {
-            @NotNull final List<Table<String, Attribute<String>>> t_lTables =
+            @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> t_lTables =
                 metadataManager.getTableDAO().findAllTables();
 
             if (   (t_lTables.size() == 0))
@@ -152,7 +152,8 @@ public class DatabaseMetaDataCacheReadingHandler
                 {
                     result = true;
 
-                    @Nullable final Log t_Log = UniqueLogFactory.getLog(DatabaseMetaDataCacheReadingHandler.class);
+                    @Nullable final Log t_Log =
+                        UniqueLogFactory.getLog(DatabaseMetaDataCacheReadingHandler.class);
 
                     if (t_Log != null)
                     {
@@ -161,7 +162,8 @@ public class DatabaseMetaDataCacheReadingHandler
                 }
                 catch (@NotNull final QueryJException otherError)
                 {
-                    @Nullable final Log t_Log = UniqueLogFactory.getLog(DatabaseMetaDataCacheReadingHandler.class);
+                    @Nullable final Log t_Log =
+                        UniqueLogFactory.getLog(DatabaseMetaDataCacheReadingHandler.class);
 
                     if (t_Log != null)
                     {

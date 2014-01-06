@@ -308,7 +308,7 @@ public abstract class AbstractForeignKeyDecorator
      */
     @SuppressWarnings("unused")
     @Nullable
-    public Table<DecoratedString, Attribute<DecoratedString>> getSource()
+    public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> getSource()
     {
         return getTable(getSourceTableName().getValue(), getMetadataManager());
     }
@@ -319,7 +319,7 @@ public abstract class AbstractForeignKeyDecorator
      */
     @SuppressWarnings("unused")
     @Nullable
-    public Table<DecoratedString, Attribute<DecoratedString>> getTarget()
+    public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> getTarget()
     {
         return getTable(getTargetTableName(), getMetadataManager());
     }
@@ -331,7 +331,7 @@ public abstract class AbstractForeignKeyDecorator
      * @return such information.
      */
     @Nullable
-    public Table<DecoratedString, Attribute<DecoratedString>> getTable(
+    public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> getTable(
         @NotNull final String sourceTableName, @NotNull final MetadataManager metadataManager)
     {
         return getTable(sourceTableName, metadataManager.getTableDAO());
@@ -344,7 +344,7 @@ public abstract class AbstractForeignKeyDecorator
      * @return such information.
      */
     @Nullable
-    public Table<DecoratedString, Attribute<DecoratedString>> getTable(
+    public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> getTable(
         @NotNull final DecoratedString sourceTableName, @NotNull final MetadataManager metadataManager)
     {
         return getTable(sourceTableName.getValue(), metadataManager.getTableDAO());
@@ -357,12 +357,13 @@ public abstract class AbstractForeignKeyDecorator
      * @return such information.
      */
     @Nullable
-    public Table<DecoratedString, Attribute<DecoratedString>> getTable(
+    public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> getTable(
         @NotNull final String sourceTableName, @NotNull final TableDAO tableDAO)
     {
-        final Table<DecoratedString, Attribute<DecoratedString>> result;
+        final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> result;
 
-        final Table<String, Attribute<String>> aux = tableDAO.findByName(sourceTableName);
+        final Table<String, Attribute<String>, List<Attribute<String>>> aux =
+            tableDAO.findByName(sourceTableName);
 
         if (aux != null)
         {
@@ -412,8 +413,8 @@ public abstract class AbstractForeignKeyDecorator
      * @return the decorated table.
      */
     @NotNull
-    protected Table<DecoratedString, Attribute<DecoratedString>> decorate(
-        @NotNull final Table<String, Attribute<String>> table)
+    protected Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> decorate(
+        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table)
     {
         return new CachingTableDecorator(table, getMetadataManager(), getDecoratorFactory(), getCustomSqlProvider());
     }

@@ -221,7 +221,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         immutableSetTemplateContext(context);
         immutableSetPlaceholderPackage(placeholderPackage);
         setSTCache(new HashMap<String, Object>());
-        immutableSetDebugMode(false);
+        immutableSetDebugMode(Boolean.TRUE.equals(System.getProperty("queryj.debug")));
     }
 
     /**

@@ -90,7 +90,7 @@ public class JdbcTableDAO
      */
     @NotNull
     @Override
-    public List<Table<String, Attribute<String>>> findAllTables()
+    public List<Table<String, Attribute<String>, List<Attribute<String>>>> findAllTables()
     {
         return getMetadataManager().getTables();
     }
@@ -103,16 +103,16 @@ public class JdbcTableDAO
      * @return the associated {@link Table} instance, if the table is found.
      */
     @Nullable
-    public Table<String, Attribute<String>> findByName(
+    public Table<String, Attribute<String>, List<Attribute<String>>> findByName(
         @NotNull final String name,
         @SuppressWarnings("unused") @Nullable final String catalog,
         @SuppressWarnings("unused") @Nullable final String schema)
     {
-        @Nullable Table<String, Attribute<String>> result = null;
+        @Nullable Table<String, Attribute<String>, List<Attribute<String>>> result = null;
 
         final boolean t_bCaseSensitive = getMetadataManager().isCaseSensitive();
 
-        for (@Nullable final Table<String, Attribute<String>> t_Table : getMetadataManager().getTables())
+        for (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : getMetadataManager().getTables())
         {
             if (t_Table != null)
             {
@@ -141,14 +141,15 @@ public class JdbcTableDAO
      */
     @Override
     @NotNull
-    public List<Table<String, Attribute<String>>> findReferringTables(@NotNull final String target)
+    public List<Table<String, Attribute<String>, List<Attribute<String>>>> findReferringTables(
+        @NotNull final String target)
     {
-        @NotNull final List<Table<String, Attribute<String>>> result =
-            new ArrayList<Table<String, Attribute<String>>>(1);
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> result =
+            new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(1);
 
         final boolean t_bCaseSensitive = getMetadataManager().isCaseSensitive();
 
-        for (@Nullable final Table<String, Attribute<String>> t_Table : getMetadataManager().getTables())
+        for (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : getMetadataManager().getTables())
         {
             if (t_Table != null)
             {

@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2007  Jose San Leandro Armendariz
+    Copyright (C) 2002-2014  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -48,15 +48,15 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.io.Serializable;
 import java.util.List;
- 
+
 /**
  * Represents <i>table</i> entities in the metadata model.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface Table<V, A extends Attribute<V>>
+public interface Table<V, A extends Attribute<V>, L extends List<A>>
     extends Serializable,
-            Comparable<Table<V, A>>
+            Comparable<Table<V, A, L>>
 {
     /**
      * Retrieves the table name.
@@ -77,14 +77,14 @@ public interface Table<V, A extends Attribute<V>>
      * @return such list.
      */
     @NotNull
-    List<A> getPrimaryKey();
+    L getPrimaryKey();
 
     /**
      * Retrieves the attributes.
      * @return such list.
      */
     @NotNull
-    List<A> getAttributes();
+    L getAttributes();
 
     /**
      * Retrieves the {@link org.acmsl.queryj.metadata.vo.ForeignKey foreign keys}.
@@ -98,14 +98,14 @@ public interface Table<V, A extends Attribute<V>>
      * @return such table.
      */
     @Nullable
-    Table<V, A> getParentTable();
+    Table<V, A, L> getParentTable();
 
     /**
      * Retrieves whether the table contains static values or not.
      * @return <tt>true</tt> in such case.
      */
     boolean isStatic();
-    
+
     /**
      * Retrieves whether the value object for the table is
      * decorated or not.

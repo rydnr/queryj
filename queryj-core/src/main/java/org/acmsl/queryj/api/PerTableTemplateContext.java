@@ -199,6 +199,7 @@ public class PerTableTemplateContext
      * Retrieves the static values.
      * @return such values.
      */
+    @SuppressWarnings("unused")
     @Nullable
     public List<Row<String>> getStaticValues()
     {
@@ -234,11 +235,13 @@ public class PerTableTemplateContext
      * @return such information.
      */
     @NotNull
-    protected String getTemplateName(@NotNull final String tableName, @NotNull final MetadataManager metadataManager)
+    protected String getTemplateName(
+        @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
         @NotNull final StringBuilder result = new StringBuilder(tableName);
 
-        @Nullable final Table<String, Attribute<String>> t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+            metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {

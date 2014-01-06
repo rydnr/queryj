@@ -64,104 +64,28 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public interface TableDecorator
-    extends  Table<DecoratedString, Attribute<DecoratedString>>
+    extends  Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>
 {
     /**
-     * Retrieves all attributes, including the parent's.
+     * Retrieves the read-only attributes.
      * @return such attributes.
      */
     @NotNull
-    List<Attribute<DecoratedString>> getAllAttributes();
+    ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes();
 
     /**
      * Retrieves all parent tables.
      * @return such tables.
      */
     @NotNull
-    List<Table<DecoratedString, Attribute<DecoratedString>>> getAllParentTables();
+    List<Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>> getAllParentTables();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed.
      * @return such attributes.
      */
     @NotNull
-    List<Attribute<DecoratedString>> getAllNonExternallyManagedAttributes();
-
-    /**
-     * Retrieves all attributes, including the parent's, but not the externally-managed,
-     * plus primary key.
-     * @return such attributes.
-     */
-    @NotNull
-    List<Attribute<DecoratedString>> getAllNonExternallyManagedPlusPkAttributes();
-
-    /**
-     * Retrieves all attributes, including the parent's, but not the externally-managed,
-     * or read-only, plus primary key.
-     * @return such attributes.
-     */
-    @NotNull
-    List<Attribute<DecoratedString>> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes();
-
-    /**
-     * Retrieves the non-parent attributes.
-     * @return such attributes.
-     */
-    @NotNull
-    List<Attribute<DecoratedString>> getNonParentAttributes();
-
-    /**
-     * Retrieves the non-read-only attributes.
-     * @return such attributes.
-     */
-    @NotNull
-    List<Attribute<DecoratedString>> getNonReadOnlyAttributes();
-
-    /**
-     * Retrieves the list of non-parent, non-externally-managed
-     * attributes.
-     * @return such list.
-     */
-    @NotNull
-    List<Attribute<DecoratedString>> getNonParentNonExternallyManagedAttributes();
-
-    /**
-     * Retrieves the list of parent's all attributes and the non-parent own attributes.
-     * @return such list.
-     */
-    @NotNull
-    List<Attribute<DecoratedString>> getAllParentAndNonParentAttributes();
-
-    /**
-     * Retrieves the list of parent's all attributes and the non-parent
-     * non-managed-externally, non-read-only own attributes.
-     * @return such list.
-     */
-    @NotNull
-    List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes();
-
-    /**
-     * Retrieves the list of parent's all attributes and the non-parent
-     * non-managed-externally, non-read-only own attributes, plus the primary key.
-     * @return such list.
-     */
-    @NotNull
-    List<Attribute<DecoratedString>> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes();
-
-    /**
-     * Retrieves the list of parent's all attributes and the non-parent,
-     * non-read-only own attributes.
-     * @return such list.
-     */
-    @NotNull
-    List<Attribute<DecoratedString>> getAllParentAndNonParentNonReadOnlyAttributes();
-
-    /**
-     * Retrieves the parent's and non parent's read-only attributes.
-     * @return such information.
-     */
-    @NotNull
-    List<Attribute<DecoratedString>> getAllParentAndNonParentReadOnlyAttributes();
+    ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes();
 
     /**
      * Retrieves the list of dynamic queries.

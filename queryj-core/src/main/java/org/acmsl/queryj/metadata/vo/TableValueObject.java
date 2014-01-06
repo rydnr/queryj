@@ -33,6 +33,11 @@
 package org.acmsl.queryj.metadata.vo;
 
 /*
+ * Importing some checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -47,8 +52,9 @@ import java.util.List;
  * Value-object implementation of <code>Table</code> interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public final class TableValueObject
-    extends AbstractTable<String, Attribute<String>>
+    extends AbstractTable<String, Attribute<String>, List<Attribute<String>>>
 {
 
     private static final long serialVersionUID = -1699360842530765122L;
@@ -71,7 +77,7 @@ public final class TableValueObject
         @NotNull final List<Attribute<String>> primaryKey,
         @NotNull final List<Attribute<String>> attributes,
         @NotNull final List<ForeignKey<String>> foreignKeys,
-        @Nullable final Table<String, Attribute<String>> parentTable,
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable,
         final boolean isStatic,
         final boolean voDecorated)
     {

@@ -125,7 +125,7 @@ public class OracleMetadataManager
         @Nullable final String catalog,
         @Nullable final String schema,
         @NotNull final List<String> tableNames,
-        @NotNull final List<Table<String, Attribute<String>>> tables,
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean caseSensitive,
@@ -166,7 +166,7 @@ public class OracleMetadataManager
     @NotNull
     @Override
     @SuppressWarnings("unused")
-    protected List<Table<String, Attribute<String>>> extractTableMetadata(
+    protected List<Table<String, Attribute<String>, List<Attribute<String>>>> extractTableMetadata(
         @Nullable final List<String> tableNames,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
@@ -200,7 +200,7 @@ public class OracleMetadataManager
      */
     @NotNull
     @SuppressWarnings("unused")
-    protected List<Table<String, Attribute<String>>> extractTableMetadata(
+    protected List<Table<String, Attribute<String>, List<Attribute<String>>>> extractTableMetadata(
         @Nullable final List<String> tableNames,
         @NotNull final Connection connection,
         final boolean caseSensitiveness,
@@ -209,7 +209,7 @@ public class OracleMetadataManager
         @NotNull final MetadataTypeManager metadataTypeManager)
         throws SQLException, QueryJException
     {
-        @NotNull final List<Table<String, Attribute<String>>> result;
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> result;
 
         @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
 

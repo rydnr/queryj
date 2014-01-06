@@ -61,7 +61,6 @@ source(C) ::= <<
 <endif>
 
 <package_declaration(packageName="cucumber.templates")>
-
 <checkers_import()>
 
 /*
@@ -81,6 +80,7 @@ import org.acmsl.queryj.api.PerTableTemplateGenerator;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
@@ -199,7 +199,7 @@ public class PerTableTemplatesTest
      */
     protected void defineInputTables(
         @NotNull final DataTable tableInfo,
-        @NotNull final Map\<String, Table\<String, Attribute\<String>\>> tables,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables,
         @NotNull final TableTestHelper helper)
     {
         helper.defineInputTables(tableInfo, tables);
@@ -221,9 +221,9 @@ public class PerTableTemplatesTest
      * @param columnInfo the column information.
      * @param tables the tables.
      */
-    protected List\<Table\<String, Attribute\<String>\>> defineInputColumns(
+    protected List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> defineInputColumns(
         @NotNull final DataTable columnInfo,
-        @NotNull final Map\<String, Table\<String, Attribute\<String>\>> tables,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables,
         @NotNull final TableTestHelper helper)
     {
         return helper.defineInputColumns(columnInfo, tables);
@@ -249,7 +249,7 @@ public class PerTableTemplatesTest
      */
     protected void defineForeignKeys(
         @NotNull final DataTable fkInfo,
-        @NotNull final Map\<String, Table\<String, Attribute\<String>\>> tables,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables,
         @NotNull final List\<ForeignKey\<String\>> foreignKeys,
         @NotNull final TableTestHelper helper)
     {
@@ -275,7 +275,7 @@ public class PerTableTemplatesTest
      */
     protected void defineValues(
         @NotNull final DataTable values,
-        @NotNull final Map\<String, Table\<String, Attribute\<String>\>> tables,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables,
         @NotNull final TableTestHelper helper)
     {
         helper.defineValues(values, tables);
@@ -381,7 +381,7 @@ public class PerTableTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
-        @NotNull final Map\<String, Table\<String, Attribute\<String>\>> tables,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables,
         @NotNull final Map\<String, File> outputFiles,
         @NotNull final CustomSqlProvider sqlProvider)
     {
@@ -391,14 +391,14 @@ public class PerTableTemplatesTest
 
         Assert.assertNotNull("No template generator found for " + templateName, generator);
 
-        for (@NotNull final Table\<String, Attribute\<String\>> table : tables.values())
+        for (@NotNull final Table\<String, Attribute\<String>, List\<Attribute\<String>\>> table : tables.values())
         {
             @Nullable final PerTableTemplateFactory\<? extends PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext> templateFactory =
                 retrieveTemplateFactory(templateName);
 
             Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
-            @NotNull final String packageName = PACKAGE_MAPPINGS.get(templateName);
+            @NotNull final String packageName = resolvePackage(PACKAGE_MAPPINGS.get(templateName), engine);
 
             @Nullable final PerTableTemplate\<PerTableTemplateContext> template =
                 templateFactory.createTemplate(
@@ -479,15 +479,17 @@ public class PerTableTemplatesTest
     /**
      * Resolves the package.
      * @param packageTemplate the package template.
+     * @param engineName the engine name.
      * @return the actual package.
      */
     @NotNull
-    protected String resolvePackage(@NotNull final String packageTemplate)
+    protected String resolvePackage(@NotNull final String packageTemplate, @NotNull final String engineName)
     {
         @NotNull final String result;
 
         @NotNull final ST template = new ST(packageTemplate);
-        template.add("packageName", BASE_PACKAGE_NAME);
+        template.add("packageName", new DecoratedString(BASE_PACKAGE_NAME));
+        template.add("engineName", new DecoratedString(engineName));
 
         result = template.render();
 
@@ -503,5 +505,5 @@ generator_mapping(def) ::= <<
 !>
 GENERATOR_MAPPINGS.put("<def.name>", new <def.name>TemplateGenerator(false, 1));
 FACTORY_MAPPINGS.put("<def.name>", <def.name>TemplateFactory.getInstance());
-PACKAGE_MAPPINGS.put("<def.name>", resolvePackage("<def.packageName>"));
+PACKAGE_MAPPINGS.put("<def.name>", "<def.packageName>");
 >>

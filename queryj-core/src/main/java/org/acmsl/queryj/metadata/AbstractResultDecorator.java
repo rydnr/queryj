@@ -596,14 +596,18 @@ public abstract class AbstractResultDecorator
 
         if (t_strTable != null)
         {
-            @Nullable final Table<String, Attribute<String>> t_Table =
+            @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
                 metadataManager.getTableDAO().findByName(t_strTable);
 
             if (t_Table != null)
             {
                 result =
                     convert(
-                        t_Table.getAttributes(), sqlResult, customSqlProvider, metadataManager, decoratorFactory);
+                        t_Table.getAttributes(),
+                        sqlResult,
+                        customSqlProvider,
+                        metadataManager,
+                        decoratorFactory);
             }
         }
 
