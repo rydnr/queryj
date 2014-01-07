@@ -1174,6 +1174,7 @@ public class LazyAttribute
         return result;
     }
 
+    @NotNull
     @Override
     public String toString()
     {

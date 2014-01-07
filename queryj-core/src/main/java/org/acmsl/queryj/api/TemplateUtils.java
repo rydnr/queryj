@@ -26,7 +26,7 @@
  *
  * Filename: TemplateUtils.java
  *
- * Author: Jose San Leandro Armend&aacute;riz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Provides some useful methods when filling up templates.
  *
@@ -36,35 +36,36 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.api.dao.DAOTemplateUtils;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.exceptions.ReferencedResultNotFoundException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
-import org.acmsl.queryj.api.dao.DAOTemplateUtils;
+import org.acmsl.queryj.metadata.TableDAO;
+import org.acmsl.queryj.metadata.TableDecorator;
+import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.Table;
 
 /*
  * Importing ACM-SL Commons classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 
 /*
  * Importing some Apache Commons-Logging classes.
  */
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.metadata.TableDAO;
-import org.acmsl.queryj.metadata.TableDecorator;
-import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.metadata.vo.Table;
 import org.apache.commons.logging.Log;
 
 /*
@@ -565,7 +566,7 @@ public class TemplateUtils
 
         if (table != null)
         {
-            @Nullable final TableDecorator tableDecorator =
+            @Nullable final TableDecorator<Attribute<DecoratedString>> tableDecorator =
                 decoratorFactory.createTableDecorator(table.getName(), metadataManager, customSqlProvider);
 
             @Nullable final String classValue =

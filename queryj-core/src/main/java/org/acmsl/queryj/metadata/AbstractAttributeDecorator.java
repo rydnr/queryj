@@ -771,14 +771,17 @@ public abstract class AbstractAttributeDecorator
         return value == null;
     }
 
+    @NotNull
     @Override
     public String toString()
     {
         return
               "{ \"class\": \"" + AbstractAttributeDecorator.class.getName() + "\""
             + ", \"attribute\": " + this.m__Attribute
+/*
             + ", \"metadataManager\": " + this.m__MetadataManager
             + ", \"metadataTypeManager\": " + this.m__MetadataTypeManager
+*/
             + " }";
     }
 

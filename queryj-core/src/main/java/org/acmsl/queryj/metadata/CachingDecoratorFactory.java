@@ -234,12 +234,12 @@ public class CachingDecoratorFactory
      */
     @Override
     @Nullable
-    public TableDecorator createTableDecorator(
+    public TableDecorator<Attribute<DecoratedString>> createTableDecorator(
         @NotNull final String table,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @Nullable TableDecorator result = null;
+        @Nullable TableDecorator<Attribute<DecoratedString>> result = null;
 
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
             metadataManager.getTableDAO().findByName(table);

@@ -47,6 +47,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Adds a simple caching mechanism while decorating <code>Attribute</code>
@@ -155,6 +156,7 @@ public class CachingAttributeDecorator
      * @return <code>false</code> if no primitive matches.
      */
     @Override
+    @Nullable
     public Boolean isPrimitive()
     {
         Boolean result = getCachedIsPrimitive();
@@ -172,8 +174,7 @@ public class CachingAttributeDecorator
      * Specifies the cached object type.
      * @param value the value to cache.
      */
-    protected final void immutableSetCachedObjectType(
-        final String value)
+    protected final void immutableSetCachedObjectType(@NotNull final String value)
     {
         m__strCachedObjectType = value;
     }
@@ -182,7 +183,7 @@ public class CachingAttributeDecorator
      * Specifies the cached object type.
      * @param value the value to cache.
      */
-    protected void setCachedObjectType(final String value)
+    protected void setCachedObjectType(@NotNull final String value)
     {
         immutableSetCachedObjectType(value);
     }
@@ -191,6 +192,7 @@ public class CachingAttributeDecorator
      * Retrieves the cached object type.
      * @return such value.
      */
+    @Nullable
     public String getCachedObjectType()
     {
         return m__strCachedObjectType;
@@ -219,8 +221,7 @@ public class CachingAttributeDecorator
      * Specifies the cached <code>isClob</code> value.
      * @param value the value to cache.
      */
-    protected final void immutableSetCachedIsClob(
-        final Boolean value)
+    protected final void immutableSetCachedIsClob(@NotNull final Boolean value)
     {
         m__bCachedIsClob = value;
     }
@@ -229,7 +230,7 @@ public class CachingAttributeDecorator
      * Specifies the cached <code>isClob</code> value.
      * @param value the value to cache.
      */
-    protected void setCachedIsClob(final Boolean value)
+    protected void setCachedIsClob(@NotNull final Boolean value)
     {
         immutableSetCachedIsClob(value);
     }
@@ -238,6 +239,7 @@ public class CachingAttributeDecorator
      * Retrieves the cached <code>isClob</code> value.
      * @return such value.
      */
+    @Nullable
     public Boolean getCachedIsClob()
     {
         return m__bCachedIsClob;
@@ -264,8 +266,7 @@ public class CachingAttributeDecorator
      * Specifies the cached <code>isString</code> value.
      * @param value the value to cache.
      */
-    protected final void immutableSetCachedIsString(
-        final Boolean value)
+    protected final void immutableSetCachedIsString(@NotNull final Boolean value)
     {
         m__bCachedIsString = value;
     }
@@ -274,7 +275,7 @@ public class CachingAttributeDecorator
      * Specifies the cached <code>isString</code> value.
      * @param value the value to cache.
      */
-    protected void setCachedIsString(final Boolean value)
+    protected void setCachedIsString(@NotNull final Boolean value)
     {
         immutableSetCachedIsString(value);
     }
@@ -283,6 +284,7 @@ public class CachingAttributeDecorator
      * Retrieves the cached <code>isString</code> value.
      * @return such value.
      */
+    @Nullable
     public Boolean getCachedIsString()
     {
         return m__bCachedIsString;
@@ -310,8 +312,7 @@ public class CachingAttributeDecorator
      * Specifies the cached <code>isDate</code> value.
      * @param value the value to cache.
      */
-    protected final void immutableSetCachedIsDate(
-        final Boolean value)
+    protected final void immutableSetCachedIsDate(@NotNull final Boolean value)
     {
         m__bCachedIsDate = value;
     }
@@ -320,7 +321,7 @@ public class CachingAttributeDecorator
      * Specifies the cached <code>isDate</code> value.
      * @param value the value to cache.
      */
-    protected void setCachedIsDate(final Boolean value)
+    protected void setCachedIsDate(@NotNull final Boolean value)
     {
         immutableSetCachedIsDate(value);
     }
@@ -329,6 +330,7 @@ public class CachingAttributeDecorator
      * Retrieves the cached <code>isDate</code> value.
      * @return such value.
      */
+    @Nullable
     public Boolean getCachedIsDate()
     {
         return m__bCachedIsDate;
@@ -356,8 +358,7 @@ public class CachingAttributeDecorator
      * Specifies the cached query.
      * @param value the value to cache.
      */
-    protected final void immutableSetCachedQuery(
-        final String value)
+    protected final void immutableSetCachedQuery(@NotNull final String value)
     {
         m__strCachedQuery = value;
     }
@@ -366,7 +367,7 @@ public class CachingAttributeDecorator
      * Specifies the cached query.
      * @param value the value to cache.
      */
-    protected void setCachedQuery(final String value)
+    protected void setCachedQuery(@NotNull final String value)
     {
         immutableSetCachedQuery(value);
     }
@@ -375,6 +376,7 @@ public class CachingAttributeDecorator
      * Retrieves the cached query.
      * @return such value.
      */
+    @Nullable
     public String getCachedQuery()
     {
         return m__strCachedQuery;
@@ -384,6 +386,7 @@ public class CachingAttributeDecorator
      * @return such information.
      */
     @Override
+    @Nullable
     public String getQuery()
     {
         String result = getCachedQuery();
@@ -391,7 +394,10 @@ public class CachingAttributeDecorator
         if  (result == null)
         {
             result = super.getQuery();
-            setCachedQuery(result);
+            if (result != null)
+            {
+                setCachedQuery(result);
+            }
         }
 
         return result;
@@ -402,7 +408,7 @@ public class CachingAttributeDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedQueryJFieldType(
-        final String value)
+        @NotNull final String value)
     {
         m__strCachedQueryJFieldType = value;
     }
@@ -411,7 +417,7 @@ public class CachingAttributeDecorator
      * Specifies the cached QueryJ field type.
      * @param value the value to cache.
      */
-    protected void setCachedQueryJFieldType(final String value)
+    protected void setCachedQueryJFieldType(@NotNull final String value)
     {
         immutableSetCachedQueryJFieldType(value);
     }
@@ -420,6 +426,7 @@ public class CachingAttributeDecorator
      * Retrieves the cached QueryJ field type.
      * @return such value.
      */
+    @Nullable
     public String getCachedQueryJFieldType()
     {
         return m__strCachedQueryJFieldType;
@@ -449,7 +456,7 @@ public class CachingAttributeDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedStatementSetterFieldType(
-        final String value)
+        @NotNull final String value)
     {
         m__strCachedStatementSetterFieldType = value;
     }
@@ -458,7 +465,7 @@ public class CachingAttributeDecorator
      * Specifies the cached <code>StatementSetter</code> field type.
      * @param value the value to cache.
      */
-    protected void setCachedStatementSetterFieldType(final String value)
+    protected void setCachedStatementSetterFieldType(@NotNull final String value)
     {
         immutableSetCachedStatementSetterFieldType(value);
     }
@@ -467,6 +474,7 @@ public class CachingAttributeDecorator
      * Retrieves the cached <code>StatementSetter</code> field type.
      * @return such value.
      */
+    @Nullable
     public String getCachedStatementSetterFieldType()
     {
         return m__strCachedStatementSetterFieldType;
@@ -496,7 +504,7 @@ public class CachingAttributeDecorator
      * @param flag such condition.
      */
     protected final void immutableSetCachedNumberSmallerThanInt(
-        final Boolean flag)
+        @NotNull final Boolean flag)
     {
         m__bCachedNumberSmallerThanInt = flag;
     }
@@ -507,7 +515,7 @@ public class CachingAttributeDecorator
      * @param flag such condition.
      */
     protected void setCachedNumberSmallerThanInt(
-        final Boolean flag)
+        @NotNull final Boolean flag)
     {
         immutableSetCachedNumberSmallerThanInt(flag);
     }
@@ -517,6 +525,7 @@ public class CachingAttributeDecorator
      * number smaller than an int.
      * @return such condition.
      */
+    @Nullable
     protected Boolean getCachedNumberSmallerThanInt()
     {
         return m__bCachedNumberSmallerThanInt;
@@ -549,7 +558,7 @@ public class CachingAttributeDecorator
      * Specifies the cached type.
      * @param type such type.
      */
-    protected final void immutableSetCachedType(final DecoratedString type)
+    protected final void immutableSetCachedType(@NotNull final DecoratedString type)
     {
         m__strCachedType = type;
     }
@@ -558,7 +567,7 @@ public class CachingAttributeDecorator
      * Specifies the cached type.
      * @param type such type.
      */
-    protected void setCachedType(final DecoratedString type)
+    protected void setCachedType(@NotNull final DecoratedString type)
     {
         immutableSetCachedType(type);
     }
@@ -567,6 +576,7 @@ public class CachingAttributeDecorator
      * Retrieves the cached type.
      * @return such type.
      */
+    @Nullable
     public DecoratedString getCachedType()
     {
         return m__strCachedType;
@@ -578,6 +588,8 @@ public class CachingAttributeDecorator
     {
         return
               "{ \"class\": \"" + CachingAttributeDecorator.class.getName() + '"'
+            + ", \"super\": " + super.toString()
+/*
             + ", \"cachedIsClob\": \"" + m__bCachedIsClob + '"'
             + ", \"cachedIsPrimitive\" : " + m__bCachedIsPrimitive
             + ", \"cachedObjectType\" : " + m__strCachedObjectType
@@ -587,6 +599,8 @@ public class CachingAttributeDecorator
             + ", \"cachedQueryJFieldType\" : \"" + m__strCachedQueryJFieldType + '"'
             + ", \"cachedStatementSetterFieldType\" : \"" + m__strCachedStatementSetterFieldType + '"'
             + ", \"cachedNumberSmallerThanInt\" : " + m__bCachedNumberSmallerThanInt
-            + ", \"cachedType\" : '" + m__strCachedType + "\" }";
+            + ", \"cachedType\" : '" + m__strCachedType + '"'
+*/
+            + " }";
     }
 }

@@ -147,7 +147,7 @@ public interface DecoratorFactory
      * @return the decorated table for the concrete template.
      */
     @Nullable
-    public TableDecorator createTableDecorator(
+    public TableDecorator<Attribute<DecoratedString>> createTableDecorator(
         @NotNull final String table,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider);

@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2007  Jose San Leandro Armendariz
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -830,25 +830,34 @@ public abstract class AbstractAttribute<T>
     public String toString()
     {
         return
-              "{ \"class\": \"" + AbstractAttribute.class.getName() + "\""
+              "{ \"class\": \"" + AbstractAttribute.class.getName() + '"'
+/*
             + ", \"stackTrace\": " + toJSON(m__aStackTrace)
-            + ", \"name\": \"" + m__strName + "\""
+*/
+            + ", \"name\": \"" + m__strName + '"'
+/*
             + ", \"typeId\": " + m__iTypeId
-            + ", \"type\": \"" + m__strType + "\""
-            + ", \"tableName\": \"" + m__strTableName + "\""
-            + ", \"comment\": \"" + m__strComment + "\""
-            + ", \"keyword\": \"" + m__strKeyword +  "\""
-            + ", \"retrievalQuery\": \"" + m__strRetrievalQuery + "\""
-            + ", \"nullable\": \"" + m__bNullable + "\""
+            + ", \"type\": \"" + m__strType + '"'
+            + ", \"tableName\": \"" + m__strTableName + '"'
+            + ", \"comment\": \"" + m__strComment + '"'
+*/
+            + ((m__strKeyword != null) ? ", \"keyword\": \"" + m__strKeyword +  '"' : "")
+            + ((m__strRetrievalQuery != null) ? ", \"retrievalQuery\": \"" + m__strRetrievalQuery + '"' : "")
+/*
+            + ", \"nullable\": \"" + m__bNullable + '"'
             + ", \"value\": " + m__strValue
+*/
             + ", \"readOnly\": " + m__bReadOnly
+/*
             + ", \"boolean\": " + m__bBoolean
-            + ", \"booleanTrue\": \"" + m__strBooleanTrue + "\""
-            + ", \"booleanFalse\": \"" + m__strBooleanFalse + "\""
-            + ", \"booleanNull\":" + m__strBooleanNull + "\""
+            + ", \"booleanTrue\": \"" + m__strBooleanTrue + '"'
+            + ", \"booleanFalse\": \"" + m__strBooleanFalse + '"'
+            + ", \"booleanNull\":" + m__strBooleanNull + '"'
             + ", \"ordinalPosition\":" + m__iOrdinalPosition
             + ", \"columnLength\": " + m__iColumnLength
-            + ", \"columnPrecision\": " + m__iColumnPrecision + " }";
+            + ", \"columnPrecision\": " + m__iColumnPrecision
+*/
+            + " }";
     }
 
     @Override

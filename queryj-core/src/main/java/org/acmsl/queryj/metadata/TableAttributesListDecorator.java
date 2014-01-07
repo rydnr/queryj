@@ -36,7 +36,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
@@ -44,14 +44,21 @@ import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.List;
 
 /**
@@ -66,7 +73,7 @@ public class TableAttributesListDecorator<T>
 {
     public TableAttributesListDecorator(
         @NotNull final List<T> list,
-        @NotNull final TableDecorator table)
+        @NotNull final TableDecorator<T> table)
     {
         super(list, table);
     }
@@ -74,7 +81,7 @@ public class TableAttributesListDecorator<T>
 
     @NotNull
     @Override
-    public ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes()
+    public ListDecorator<T> getReadOnlyAttributes()
     {
         throw new RuntimeException("Invalid operation");
     }
@@ -89,7 +96,7 @@ public class TableAttributesListDecorator<T>
 
     @NotNull
     @Override
-    public ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes()
+    public ListDecorator<T> getExternallyManagedAttributes()
     {
         throw new RuntimeException("Invalid operation");
     }

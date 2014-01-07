@@ -71,12 +71,12 @@ import java.util.List;
 @ThreadSafe
 public abstract class AbstractTableAttributesListDecorator<T>
     extends AbstractListDecorator<T>
-    implements TableDecorator
+    implements TableDecorator<T>
 {
     /**
      * The table decorator.
      */
-    private TableDecorator m__Table;
+    private TableDecorator<T> m__Table;
 
     /**
      * Creates a new instance.
@@ -85,7 +85,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
      */
     public AbstractTableAttributesListDecorator(
         @NotNull final List<T> list,
-        @NotNull final TableDecorator table)
+        @NotNull final TableDecorator<T> table)
     {
         super(list);
         immutableSetTable(table);
@@ -95,7 +95,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
      * Specifies the table.
      * @param table the table.
      */
-    protected final void immutableSetTable(@NotNull final TableDecorator table)
+    protected final void immutableSetTable(@NotNull final TableDecorator<T> table)
     {
         this.m__Table = table;
     }
@@ -105,7 +105,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
      * @param table the table.
      */
     @SuppressWarnings("unused")
-    protected void setTable(@NotNull final TableDecorator table)
+    protected void setTable(@NotNull final TableDecorator<T> table)
     {
         immutableSetTable(table);
     }
@@ -115,7 +115,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
      * @return such instance.
      */
     @NotNull
-    public TableDecorator getTable()
+    public TableDecorator<T> getTable()
     {
         return this.m__Table;
     }
@@ -142,7 +142,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
 
     @NotNull
     @Override
-    public ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes()
+    public ListDecorator<T> getReadOnlyAttributes()
     {
         throw new RuntimeException("Invalid operation");
     }
@@ -157,7 +157,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
 
     @NotNull
     @Override
-    public ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes()
+    public ListDecorator<T> getExternallyManagedAttributes()
     {
         throw new RuntimeException("Invalid operation");
     }
@@ -250,5 +250,15 @@ public abstract class AbstractTableAttributesListDecorator<T>
     public int compareTo(final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> table)
     {
         return getTable().compareTo(table);
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"class\": " + AbstractTableAttributesListDecorator.class.getName() + '"'
+            + ", \"table\": " + m__Table
+            + " }";
     }
 }

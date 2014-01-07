@@ -88,7 +88,7 @@ import java.util.List;
 public abstract class AbstractTableDecorator
     extends     AbstractTable<
                     DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>
-    implements  TableDecorator
+    implements  TableDecorator<Attribute<DecoratedString>>
 {
     /**
      * The decorated table.
@@ -215,11 +215,9 @@ public abstract class AbstractTableDecorator
                 decorateAttributes(attributes, metadataManager, decoratorFactory), this));
         immutableSetReadOnlyAttributes(
             new TableAttributesListDecorator<Attribute<DecoratedString>>(
-                decorateAttributes(attributes, metadataManager, decoratorFactory), this));
+                filterReadOnlyAttributes(decorateAttributes(attributes, metadataManager, decoratorFactory)), this));
         immutableSetForeignKeys(
-            new TableAttributesListDecorator<ForeignKey<DecoratedString>>(
-                decorate(foreignKeys, metadataManager, decoratorFactory, customSqlProvider),
-                this));
+            decorate(foreignKeys, metadataManager, decoratorFactory, customSqlProvider));
         immutableSetMetadataManager(metadataManager);
         immutableSetDecoratorFactory(decoratorFactory);
         immutableSetCustomSqlProvider(customSqlProvider);
