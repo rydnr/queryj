@@ -138,6 +138,15 @@ public abstract class AbstractTableAttributesListDecorator<T>
                 this, getTable(), Operation.MINUS);
     }
 
+    @NotNull
+    @Override
+    public PartialListDecorator getOnly()
+    {
+        return
+            new TableAttributesPartialListDecorator<T>(
+                this, getTable(), Operation.ONLY);
+    }
+
     // TableDecorator implementation
 
     @NotNull
@@ -145,6 +154,17 @@ public abstract class AbstractTableAttributesListDecorator<T>
     public ListDecorator<T> getReadOnlyAttributes()
     {
         throw new RuntimeException("Invalid operation");
+    }
+
+    /**
+     * Alias to make templates more readable.
+     * @return the read-only attributes.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public ListDecorator<T> getReadOnly()
+    {
+        return getReadOnlyAttributes();
     }
 
     @NotNull
@@ -160,6 +180,17 @@ public abstract class AbstractTableAttributesListDecorator<T>
     public ListDecorator<T> getExternallyManagedAttributes()
     {
         throw new RuntimeException("Invalid operation");
+    }
+
+    /**
+     * Alias to make templates more readable.
+     * @return the externally-managed attributes.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public ListDecorator<T> getExternallyManaged()
+    {
+        return getExternallyManagedAttributes();
     }
 
     @NotNull
@@ -217,6 +248,17 @@ public abstract class AbstractTableAttributesListDecorator<T>
     public ListDecorator<Attribute<DecoratedString>> getAttributes()
     {
         return getTable().getAttributes();
+    }
+
+    /**
+     * Alias to make templates more readable.
+     * @return the table's own attributes.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public ListDecorator<Attribute<DecoratedString>> getOwn()
+    {
+        return getAttributes();
     }
 
     @NotNull

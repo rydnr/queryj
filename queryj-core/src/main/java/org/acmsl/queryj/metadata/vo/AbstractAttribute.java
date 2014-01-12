@@ -291,6 +291,7 @@ public abstract class AbstractAttribute<T>
      * @return such name.
      */
     @NotNull
+    @Override
     public T getName()
     {
         return m__strName;
@@ -319,6 +320,7 @@ public abstract class AbstractAttribute<T>
      * Retrieves the attribute type.
      * @return its type.
      */
+    @Override
     public int getTypeId()
     {
         return m__iTypeId;
@@ -348,6 +350,7 @@ public abstract class AbstractAttribute<T>
      * @return such information.
      */
     @NotNull
+    @Override
     public T getType()
     {
         return m__strType;
@@ -376,6 +379,7 @@ public abstract class AbstractAttribute<T>
      * @return such information.
      */
     @NotNull
+    @Override
     public T getTableName()
     {
         return m__strTableName;
@@ -405,6 +409,7 @@ public abstract class AbstractAttribute<T>
      * @return such comment.
      */
     @Nullable
+    @Override
     public T getComment()
     {
         return m__strComment;
@@ -434,6 +439,7 @@ public abstract class AbstractAttribute<T>
      * @return such information.
      */
     @Nullable
+    @Override
     public T getKeyword()
     {
         return m__strKeyword;
@@ -475,10 +481,42 @@ public abstract class AbstractAttribute<T>
     @Override
     public boolean isExternallyManaged()
     {
-        return
-            (   (getRetrievalQuery() != null)
-             || (getKeyword() != null));
+        return isExternallyManaged(getRetrievalQuery(), getKeyword());
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected boolean isExternallyManaged(
+        @Nullable final T retrievalQuery,
+        @Nullable final T keyword)
+    {
+        return
+            (   (!isNullOrEmpty(retrievalQuery))
+             || (!isNullOrEmpty(keyword)));
+    }
+
+    /**
+     * Checks whether given value is null or empty.
+     * @param value the value.
+     * @return {@code true} in such case.
+     */
+    protected boolean isNullOrEmpty(@Nullable final T value)
+    {
+        final boolean result;
+
+        if (value == null)
+        {
+            result = true;
+        }
+        else
+        {
+            result = "".equals(value.toString().trim());
+        }
+
+        return result;
+    }
+
     /**
      * Specifies whether the attribute allows null values or not.
      * @param allowsNull such information.
@@ -502,6 +540,7 @@ public abstract class AbstractAttribute<T>
      * Retrieves whether it allows null values or not.
      * @return such information.
      */
+    @Override
     public boolean isNullable()
     {
         return m__bNullable;
@@ -547,6 +586,7 @@ public abstract class AbstractAttribute<T>
      * @return such information.
      */
     @Nullable
+    @Override
     public T getValue()
     {
         return m__strValue;
@@ -575,6 +615,7 @@ public abstract class AbstractAttribute<T>
      * Retrieves whether the attribute is marked as read-only.
      * @return such condition.
      */
+    @Override
     public boolean isReadOnly()
     {
         return m__bReadOnly;
@@ -603,6 +644,7 @@ public abstract class AbstractAttribute<T>
      * Retrieves whether the attribute is marked as boolean.
      * @return such condition.
      */
+    @Override
     public boolean isBoolean()
     {
         return m__bBoolean;
@@ -632,6 +674,7 @@ public abstract class AbstractAttribute<T>
      * @return such information.
      */
     @Nullable
+    @Override
     public T getBooleanTrue()
     {
         return m__strBooleanTrue;
@@ -661,6 +704,7 @@ public abstract class AbstractAttribute<T>
      * @return such information.
      */
     @Nullable
+    @Override
     public T getBooleanFalse()
     {
         return m__strBooleanFalse;
@@ -690,6 +734,7 @@ public abstract class AbstractAttribute<T>
      * @return such information.
      */
     @Nullable
+    @Override
     public T getBooleanNull()
     {
         return m__strBooleanNull;
@@ -718,6 +763,7 @@ public abstract class AbstractAttribute<T>
      * Retrieves the ordinal position.
      * @return the position.
      */
+    @Override
     @SuppressWarnings("unused")
     public int getOrdinalPosition()
     {
@@ -747,6 +793,7 @@ public abstract class AbstractAttribute<T>
      * Retrieves the column length.
      * @return such information.
      */
+    @Override
     public int getLength()
     {
         return m__iColumnLength;
@@ -776,6 +823,7 @@ public abstract class AbstractAttribute<T>
      * Retrieves the column precision.
      * @return such information.
      */
+    @Override
     public int getPrecision()
     {
         return m__iColumnPrecision;

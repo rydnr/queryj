@@ -66,36 +66,36 @@ package_declaration(p) ::= <<
 package <p>;
 >>
 
-attribute_declaration(attr) ::= <<
+attribute_declaration(attr, C) ::= <<
 <!
   Writes the parameter declaration for a concrete attribute.
   @param attr the attribute.
 !>
-<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.lowercased>
+<type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.uncapitalized>
 >>
 
-attribute_declaration_impl(attr) ::= <<
+attribute_declaration_impl(attr, C) ::= <<
 <!
   Writes the parameter declaration for a concrete attribute.
   @param attr the attribute.
 !>
-<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.lowercased>
+<type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.uncapitalized>
 >>
 
-attribute_isolated_declaration(attr) ::= <<
+attribute_isolated_declaration(attr, C) ::= <<
 <!
   Writes the parameter declaration for a concrete attribute, isolated.
   @param attr the attribute.
 !>
-<attribute_declaration(attr=attr)>,
+<attribute_declaration(attr=attr, C=C)>,
 >>
 
-attribute_isolated_declaration_impl(attr) ::= <<
+attribute_isolated_declaration_impl(attr, C) ::= <<
 <!
   Writes the parameter declaration for a concrete attribute.
   @param attr the attribute.
 !>
-<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.lowercased>,
+<type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.lowercased>,
 >>
 
 indirect_template(name, extra1, extra2) ::= <<

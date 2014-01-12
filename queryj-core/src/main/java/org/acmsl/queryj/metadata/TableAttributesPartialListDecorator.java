@@ -59,6 +59,7 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -88,7 +89,8 @@ public class TableAttributesPartialListDecorator<T>
     public static enum Operation
     {
         PLUS,
-        MINUS
+        MINUS,
+        ONLY
     }
 
     /**
@@ -227,6 +229,19 @@ public class TableAttributesPartialListDecorator<T>
     }
 
     /**
+     * An alias to make templates more readable.
+     * @return the read-only attributes.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public ListDecorator<T> getReadOnly()
+    {
+        @NotNull final ListDecorator<T> result = getReadOnlyAttributes();
+
+        return result;
+    }
+
+    /**
      * Retrieves the result of adding or removing the read-only attributes from the wrapped list.
      * @param list the list.
      * @param table the table.
@@ -239,17 +254,24 @@ public class TableAttributesPartialListDecorator<T>
         @NotNull final TableDecorator<T> table,
         @NotNull final Operation operation)
     {
-        @NotNull final ListDecorator<T> result =
-            new TableAttributesListDecorator<T>(list, table);
+        @NotNull final ListDecorator<T> result;
+
+        @NotNull final List<T> aux = new ArrayList<T>(list);
 
         if (operation.equals(Operation.MINUS))
         {
-            result.removeAll(table.getReadOnlyAttributes());
+            aux.removeAll(table.getReadOnlyAttributes());
+        }
+        else if (operation.equals(Operation.PLUS))
+        {
+            aux.addAll(table.getReadOnlyAttributes());
         }
         else
         {
-            result.addAll(table.getReadOnlyAttributes());
+            aux.retainAll(table.getReadOnlyAttributes());
         }
+
+        result = new TableAttributesListDecorator<T>(aux, table);
 
         return result;
     }
@@ -260,6 +282,19 @@ public class TableAttributesPartialListDecorator<T>
     getAllParentTables()
     {
         return getTable().getAllParentTables();
+    }
+
+    /**
+     * An alias to make templates more readable.
+     * @return the externally managed attributes.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public ListDecorator<T> getExternallyManaged()
+    {
+        @NotNull final ListDecorator<T> result = getExternallyManagedAttributes();
+
+        return result;
     }
 
     @NotNull
@@ -282,21 +317,68 @@ public class TableAttributesPartialListDecorator<T>
         @NotNull final TableDecorator<T> table,
         @NotNull final Operation operation)
     {
-        @NotNull final ListDecorator<T> result =
-            new TableAttributesListDecorator<T>(list, table);
+        @NotNull final ListDecorator<T> result;
+
+        @NotNull final List<T> aux = new ArrayList<T>(list);
 
         if (operation.equals(Operation.MINUS))
         {
-            result.removeAll(table.getExternallyManagedAttributes());
+            aux.removeAll(table.getExternallyManagedAttributes());
+        }
+        else if (operation.equals(Operation.PLUS))
+        {
+            aux.addAll(table.getExternallyManagedAttributes());
         }
         else
         {
-            result.addAll(table.getExternallyManagedAttributes());
+            aux.retainAll(table.getExternallyManagedAttributes());
         }
+
+        result = new TableAttributesListDecorator<T>(aux, table);
 
         return result;
     }
 
+    /**
+     * Conditionally adds each element of the source, to the destination list,
+     * if it's not included already.
+     * @param source the source.
+     * @param destination the destination.
+     */
+    protected void addAll(@NotNull final List<T> source, @NotNull final List<T> destination)
+    {
+        for (@Nullable final T item : source)
+        {
+            if (   (item != null)
+                && (!destination.contains(item)))
+            {
+                destination.add(item);
+            }
+        }
+    }
+
+    /**
+     * Conditionally removes each element of the source, from the destination list,
+     * if it's included already.
+     * @param source the source.
+     * @param destination the destination.
+     */
+    protected void removeAll(@NotNull final List<T> source, @NotNull final List<T> destination)
+    {
+        for (@Nullable final T item : source)
+        {
+            if (   (item != null)
+                && (destination.contains(item)))
+            {
+                destination.remove(item);
+            }
+        }
+    }
+
+    /**
+     * Retrieves the dynamic queries.
+     * @return such queries.
+     */
     @NotNull
     @Override
     public List<Sql> getDynamicQueries()

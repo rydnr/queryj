@@ -68,6 +68,7 @@ public interface ListDecorator<T>
      * the union of both list.
      */
     @NotNull
+    @SuppressWarnings("unused")
     PartialListDecorator getPlus();
 
     /**
@@ -76,5 +77,15 @@ public interface ListDecorator<T>
      * the items not found in given list.
      */
     @NotNull
+    @SuppressWarnings("unused")
     PartialListDecorator getMinus();
+
+    /**
+     * Retains certain items from the list.
+     * @return a partial decorator expecting a new set, and would then represent
+     * the items retained in given list.
+     */
+    @NotNull
+    @SuppressWarnings("unused")
+    PartialListDecorator getOnly();
 }

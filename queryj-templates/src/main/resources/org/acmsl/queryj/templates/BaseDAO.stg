@@ -143,7 +143,7 @@ class(table, C) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/BaseDAO.stg",
-  generation_timestamps_allowed=C.generation_timestamps_allowed,
+  generation_timestamps_enabled=C.generation_timestamps_enabled,
   timestamp=C.timestamp)>
  */
 public interface <table.name.voName>DAO
@@ -266,7 +266,6 @@ find_constant_methods(attribute, primaryKeyAttributes, voName) ::= <<
  * @param <attribute.nameLowercased> the <attribute.name>
  * to filter.
  * @return the \<code><voName>\</code> instance.
- <precondition_notnull(name=attribute.name)>
  */
 public <voName> findConstantBy<attribute.nameCapitalized>(
     final <attribute.javaType> <attribute.nameLowercased>);

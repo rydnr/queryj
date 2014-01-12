@@ -37,34 +37,34 @@
 //
 group type_checkers;
 
-notnull() ::= <<
+notnull(C) ::= <<
 <!
  Conditionally add @NotNull annotations.
- !><if(notnull_annotations_enabled)> @NotNull <else> <endif>
+ !><if(C.notnull_annotations_enabled)>@NotNull <else> <endif>
 >>
 
-notnull_arg_single_line() ::= <<
+notnull_arg_single_line(C) ::= <<
 <!
  Conditionally add @NotNull annotations.
- !><if(notnull_annotations_enabled)>@NotNull <endif>
+ !><if(C.notnull_annotations_enabled)>@NotNull <endif>
 >>
 
-notnull_method() ::= <<
+notnull_method(C) ::= <<
 <!
  Conditionally add @NotNull annotations.
- !><if(notnull_annotations_enabled)> @NotNull <else>
+ !><if(C.notnull_annotations_enabled)> @NotNull <else>
 <endif>
 >>
 
-nullable() ::= <<
-<if(notnull_annotations_enabled)> @Nullable <else><endif>
+nullable(C) ::= <<
+<if(C.notnull_annotations_enabled)>@Nullable <endif>
 >>
 
-type_checker(attribute) ::= <<
+type_checker(attribute, C) ::= <<
 <!
  Type checker for given attribute
  @param attribute the attribute.
-!><if(attribute.nullable)><nullable()><else><if(!attribute.primitive)><notnull()><endif><endif>
+!><if(attribute.nullable)><nullable(C=C)><else><if(!attribute.primitive)><notnull(C=C)><endif><endif>
 >>
 
 checkers_import() ::= <<

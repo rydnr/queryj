@@ -113,6 +113,7 @@ public class STUtils
      * @param lookupPaths the lookup paths.
      * @param errorListener the {@link STErrorListener} instance.
      * @param charset the charset.
+     * @param debugMode whether we're debugging or not.
      * @return such instance.
      */
     @Nullable
@@ -120,9 +121,19 @@ public class STUtils
         @NotNull final String path,
         @NotNull final List<String> lookupPaths,
         @NotNull final STErrorListener errorListener,
-        @NotNull final Charset charset)
+        @NotNull final Charset charset,
+        final boolean debugMode)
     {
-        @Nullable STGroup result = ST_GROUPS.get(path);
+        @Nullable STGroup result;
+
+        if (debugMode)
+        {
+            result = null;
+        }
+        else
+        {
+            result = ST_GROUPS.get(path);
+        }
         
         if  (result == null)
         {

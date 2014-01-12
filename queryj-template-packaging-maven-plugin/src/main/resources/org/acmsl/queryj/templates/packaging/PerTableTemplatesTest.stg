@@ -72,6 +72,7 @@ source(C) ::= <<
  * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.api.AbstractTemplate;
+import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.PerTableTemplate;
 import org.acmsl.queryj.api.PerTableTemplateContext;
@@ -453,21 +454,36 @@ public class PerTableTemplatesTest
 
             ((AbstractTemplate) template).setDebugMode(true);
 
-            try
+            boolean firstTime = true;
+            boolean restart = false;
+
+            while (   (firstTime)
+                   || (restart))
             {
-                generator.write(
-                    template,
-                    outputDir,
-                    rootFolder.getRoot(),
-                    Charset.defaultCharset());
-            }
-            catch (@NotNull final IOException ioException)
-            {
-                Assert.fail(ioException.getMessage());
-            }
-            catch (@NotNull final QueryJBuildException queryjBuildException)
-            {
-                Assert.fail(queryjBuildException.getMessage());
+                firstTime = false;
+
+                try
+                {
+                    generator.write(
+                        template,
+                        outputDir,
+                        rootFolder.getRoot(),
+                        Charset.defaultCharset());
+                }
+                catch (@NotNull final IOException ioException)
+                {
+                    Assert.fail(ioException.getMessage());
+                    restart = false;
+                }
+                catch (@NotNull final DevelopmentModeException debugging)
+                {
+                    restart = true;
+                }
+                catch (@NotNull final QueryJBuildException queryjBuildException)
+                {
+                    Assert.fail(queryjBuildException.getMessage());
+                    restart = false;
+                }
             }
 
             outputFiles.put(

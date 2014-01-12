@@ -91,16 +91,16 @@ java_header(year, fileName, description, template, timestamp, timestamps_enabled
  */
 >>
 
-class_common_javadoc(template, generation_timestamps_enabled, timestamp) ::= <<
- * @author \<a href="http://www.acm-sl.org/projects/queryj">QueryJ\</a> <if(template)>(<template>)<endif><if(generation_timestamps_enabled)>
- * Created: <timestamp><endif>
+class_common_javadoc(template, C) ::= <<
+ * @author \<a href="http://www.acm-sl.org/projects/queryj">QueryJ\</a> <if(template)>(<template>)<endif><if(C.generation_timestamps_enabled)>
+ * Created: <C.timestamp><endif>
 >>
 
-attribute_javadoc(name) ::= <<
+attribute_javadoc(attr) ::= <<
 <!
   Writes the Javadoc for a attribute parameter.
   @param name the name of the attribute.
 !>
-* @param <name> the \<i><name>\</i> value.
+* @param <attr.name.uncapitalized> the \<i><attr.name>\</i> value.
 >>
 

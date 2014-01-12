@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com http://www.zeroturnaround.com/alderaan/rebel-2_0.xsd">
+
+    <classpath>
+        <dir name="/home/chous/github/queryj/queryj-core/src/main/resources"/>
+        <dir name="/home/chous/github/queryj/queryj-core/target/classes"/>
+        <dir name="/home/chous/github/queryj/queryj-maven/target/classes"/>
+        <dir name="/home/chous/github/queryj/queryj-placeholders/src/main/resources"/>
+        <dir name="/home/chous/github/queryj/queryj-placeholders/target/classes"/>
+        <dir name="/home/chous/github/queryj/queryj-template-packaging-maven-plugin/src/main/resources"/>
+        <dir name="/home/chous/github/queryj/queryj-template-packaging-maven-plugin/target/classes"/>
+        <dir name="/home/chous/github/queryj/queryj-templates/src/main/resources"/>
+        <dir name="/home/chous/github/queryj/queryj-templates/src/test/resources"/>
+        <dir name="/home/chous/github/queryj/queryj-templates/target/classes"/>
+        <dir name="/home/chous/github/queryj/queryj-templates/target/test-classes"/>
+    </classpath>
+
+
+</application>

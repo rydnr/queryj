@@ -107,7 +107,7 @@ interfaceImpl(table, repository, C) ::= <<
  * <description(tableName=table.name)>
 <class_common_javadoc(
   template="org/acmsl/queryj/dao/DAOFactory.stg",
-  generation_timestamps_allowed=C.generation_timestamps_allowed,
+  generation_timestamps_enabled=C.generation_timestamps_enabled,
   timestamp=C.timestamp)>
  */
 public interface <table.name.capitalized>DAOFactory

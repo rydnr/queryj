@@ -43,9 +43,14 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CannotFindPlaceholderImplementationException;
 import org.acmsl.queryj.api.exceptions.CannotFindTemplateGroupException;
 import org.acmsl.queryj.api.exceptions.CannotFindTemplateInGroupException;
+import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
+
+/*
+ * Importing QueryJ Placeholders classes.
+ */
 import org.acmsl.queryj.api.placeholders.FillTemplateChainFactory;
 
 /*
@@ -87,6 +92,7 @@ import org.stringtemplate.v4.misc.STMessage;
  * Importing JDK classes.
  */
 import java.io.Serializable;
+import java.lang.management.ManagementFactory;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -221,7 +227,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         immutableSetTemplateContext(context);
         immutableSetPlaceholderPackage(placeholderPackage);
         setSTCache(new HashMap<String, Object>());
-        immutableSetDebugMode(Boolean.TRUE.equals(System.getProperty("queryj.debug")));
+        immutableSetDebugMode(
+            ManagementFactory.getRuntimeMXBean(). getInputArguments().toString().contains("-Xrunjdwp:transport"));
     }
 
     /**
@@ -344,7 +351,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 path,
                 lookupPaths,
                 Charset.defaultCharset(),
-                (Map<String, STGroup>) getSTCache());
+                (Map<String, STGroup>) getSTCache(),
+                getDebugMode());
     }
 
     /**
@@ -353,6 +361,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param lookupPaths the lookup paths.
      * @param charset the charset.
      * @param cache the ST cache.
+     * @param debugMode if we're debugging.
      * @return such instance.
      */
     @SuppressWarnings("unchecked")
@@ -361,15 +370,28 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @NotNull final String path,
         @NotNull final List<String> lookupPaths,
         @NotNull final Charset charset,
-        @NotNull final Map<String, STGroup> cache)
+        @NotNull final Map<String, STGroup> cache,
+        final boolean debugMode)
     {
-        @Nullable STGroup result;
+        @Nullable STGroup result = null;
 
-        @NotNull final String t_Key = buildSTGroupKey(path);
+        @Nullable final STGroup cached;
 
-        result = cache.get(t_Key);
+        @Nullable final String t_Key;
 
-        if  (result == null)
+        if (!debugMode)
+        {
+            t_Key = buildSTGroupKey(path);
+            cached = cache.get(t_Key);
+        }
+        else
+        {
+            t_Key = null;
+            cached = null;
+        }
+
+        if  (   (debugMode)
+             || (cached == null))
         {
             result =
                 retrieveGroup(
@@ -377,9 +399,11 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     lookupPaths,
                     retrieveStErrorListener(),
                     charset,
+                    debugMode,
                     STUtils.getInstance());
 
-            if  (result != null)
+            if (   (!debugMode)
+                && (result != null))
             {
                 cache.put(t_Key, result);
             }
@@ -416,6 +440,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param lookupPaths the lookup paths.
      * @param errorListener the {@link STErrorListener} instance.
      * @param charset the charset.
+     * @param debugMode whether we're debugging or not.
      * @param stUtils the {@link STUtils} instance.
      * @return such instance.
      */
@@ -425,9 +450,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @NotNull final List<String> lookupPaths,
         @NotNull final STErrorListener errorListener,
         @NotNull final Charset charset,
+        final boolean debugMode,
         @NotNull final STUtils stUtils)
     {
-        return stUtils.retrieveGroup(path, lookupPaths, errorListener, charset);
+        return stUtils.retrieveGroup(path, lookupPaths, errorListener, charset, debugMode);
     }
 
     /**
@@ -660,37 +686,26 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such output.
      * @throws org.acmsl.queryj.api.exceptions.InvalidTemplateException if the template cannot be generated.
      */
+    @Nullable
     @Override
-    @Nullable
     public String generate(final boolean relevantOnly)
-        throws InvalidTemplateException
+        throws InvalidTemplateException,
+               DevelopmentModeException
     {
-        return generate(getTemplateContext(), relevantOnly, getDebugMode());
-    }
-
-    /**
-     * Generates the source code.
-     * @return such output.
-     * @throws org.acmsl.queryj.api.exceptions.InvalidTemplateException if the template cannot be generated.
-     */
-    @Nullable
-    public String generate(final boolean relevantOnly, final boolean debug)
-        throws InvalidTemplateException
-    {
-        return generate(getTemplateContext(), relevantOnly, debug);
+        return generate(getTemplateContext(), relevantOnly);
     }
 
     /**
      * Generates the source code.
      * @param context the {@link QueryJTemplateContext} instance.
      * @param relevantOnly whether to include only relevant placeholders.
-     * @param debug if we're debugging the template.
      * @return such output.
      * @throws InvalidTemplateException if the template cannot be generated.
      */
     @Nullable
-    protected String generate(@NotNull final C context, final boolean relevantOnly, final boolean debug)
-        throws  InvalidTemplateException
+    protected String generate(@NotNull final C context, final boolean relevantOnly)
+        throws  InvalidTemplateException,
+                DevelopmentModeException
     {
         final String result;
 
@@ -701,7 +716,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         //traceClassLoaders();
 
-        result = generateOutput(getHeader(context), context, relevantOnly, debug);
+        result = generateOutput(getHeader(context), context, relevantOnly);
 
         //cleanUpClassLoaderTracing();
 
@@ -713,7 +728,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param header the header.
      * @param context the context.
      * @param relevantOnly whether to include only relevant placeholders.
-     * @param debug if we're debugging the template.
      * @return such code.
      * @throws InvalidTemplateException if the template cannot be processed.
      */
@@ -721,9 +735,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     protected String generateOutput(
         @SuppressWarnings("unused") @Nullable final String header,
         @NotNull final C context,
-        final boolean relevantOnly,
-        final boolean debug)
-      throws InvalidTemplateException
+        final boolean relevantOnly)
+      throws InvalidTemplateException,
+             DevelopmentModeException
     {
         @Nullable String result = null;
 
@@ -772,7 +786,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 {
                     try
                     {
-                        if (debug)
+                        result = t_Template.render();
+
+                        if (isInDevMode(t_Group))
                         {
                             try
                             {
@@ -782,8 +798,12 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                             {
                                 e.printStackTrace();
                             }
+                            throw new DevelopmentModeException(t_Group);
                         }
-                        result = t_Template.render();
+                    }
+                    catch (@NotNull final DevelopmentModeException debugging)
+                    {
+                        throw debugging;
                     }
                     catch (@NotNull final Throwable throwable)
                     {
@@ -796,11 +816,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                             t_Log.error(
                                 "Error in template " + getTemplateName(), throwable);
                         }
-
-//                        if (System.getProperty("queryj.debug") != null)
-//                        {
-                            t_Template.inspect();
-//                        }
     /*                    @Nullable final STTreeView debugTool =
                             new StringTemplateTreeView("Debugging " + getTemplateName(), t_Template);
 
@@ -829,6 +844,25 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 throw new CannotFindTemplateInGroupException(t_Group, TEMPLATE_NAME);
             }
         }
+
+        return result;
+    }
+
+    /**
+     * Checks whether we're in dev mode.
+     * @param template the {@link STGroup template group}.
+     * @return {@code true} in such case.
+     */
+    protected boolean isInDevMode(@NotNull final STGroup template)
+    {
+        final boolean result;
+
+        final boolean debug =
+            ManagementFactory.getRuntimeMXBean(). getInputArguments().toString().contains("-Xrunjdwp:transport");
+
+        result =
+            (   (debug)
+             && (!template.getFileName().startsWith("org/acmsl/queryj/templates/packaging")));
 
         return result;
     }

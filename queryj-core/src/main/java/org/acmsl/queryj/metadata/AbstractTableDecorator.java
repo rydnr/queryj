@@ -216,6 +216,9 @@ public abstract class AbstractTableDecorator
         immutableSetReadOnlyAttributes(
             new TableAttributesListDecorator<Attribute<DecoratedString>>(
                 filterReadOnlyAttributes(decorateAttributes(attributes, metadataManager, decoratorFactory)), this));
+        immutableSetExternallyManagedAttributes(
+            new TableAttributesListDecorator<Attribute<DecoratedString>>(
+                filterExternallyManagedAttributes(decorateAttributes(attributes, metadataManager, decoratorFactory)), this));
         immutableSetForeignKeys(
             decorate(foreignKeys, metadataManager, decoratorFactory, customSqlProvider));
         immutableSetMetadataManager(metadataManager);
@@ -430,6 +433,16 @@ public abstract class AbstractTableDecorator
     }
 
     /**
+     * Alias to make the templates more readable.
+     * @return the read-only attributes.
+     */
+    @NotNull
+    public ListDecorator<Attribute<DecoratedString>> getReadOnly()
+    {
+        return getReadOnlyAttributes();
+    }
+
+    /**
      * Specifies the externally-managed attributes.
      * @param attrs such attributes.
      */
@@ -462,6 +475,17 @@ public abstract class AbstractTableDecorator
     }
 
     /**
+     * Alias to make templates more readable.
+     * @return the externally-managed attributes.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public ListDecorator<Attribute<DecoratedString>> getExternallyManaged()
+    {
+        return getExternallyManagedAttributes();
+    }
+
+    /**
      * Specifies the child attributes.
      * @param childAttributes the child attributes.
      */
@@ -490,6 +514,28 @@ public abstract class AbstractTableDecorator
     public ListDecorator<Attribute<DecoratedString>> getChildAttributes()
     {
         return m__lChildAttributes;
+    }
+
+    /**
+     * Alias to make templates more readable.
+     * @return the child attributes.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    public ListDecorator<Attribute<DecoratedString>> getChild()
+    {
+        return getChildAttributes();
+    }
+
+    /**
+     * Alias to make templates more readable.
+     * @return the table's own attributes.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    public ListDecorator<Attribute<DecoratedString>> getOwn()
+    {
+        return getAttributes();
     }
 
     /**
@@ -1372,6 +1418,32 @@ public abstract class AbstractTableDecorator
         {
             if (   (t_Attribute != null)
                 && (t_Attribute.isReadOnly()))
+            {
+                result.add(t_Attribute);
+            }
+        }
+
+        Collections.sort(result);
+
+        return result;
+    }
+
+    /**
+     * Retrieves the read-only attributes from given list.
+     * @param attributes the attribute list.
+     * @return the read-only subset.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    protected List<Attribute<DecoratedString>> filterExternallyManagedAttributes(
+        @NotNull final List<Attribute<DecoratedString>> attributes)
+    {
+        @NotNull final List<Attribute<DecoratedString>> result =  new ArrayList<Attribute<DecoratedString>>(attributes.size());
+
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
+        {
+            if (   (t_Attribute != null)
+                && (t_Attribute.isExternallyManaged()))
             {
                 result.add(t_Attribute);
             }

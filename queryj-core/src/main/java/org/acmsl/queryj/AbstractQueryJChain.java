@@ -36,6 +36,7 @@ package org.acmsl.queryj;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
@@ -180,48 +181,59 @@ public abstract class AbstractQueryJChain
 
         final boolean t_bLoggingEnabled = (t_Log != null);
 
-        try 
+        boolean restart = false;
+
+        do
         {
-            @Nullable CH t_CurrentCommandHandler = null;
-
-            do
+            try
             {
-                t_CurrentCommandHandler =
-                    getNextChainLink(chain, t_CurrentCommandHandler);
+                @Nullable CH t_CurrentCommandHandler = null;
 
-                if (t_bLoggingEnabled)
+                do
                 {
-                    t_Log.debug("Next handler: " + t_CurrentCommandHandler);
-                }
-
-                if  (t_CurrentCommandHandler != null)
-                {
-                    result = t_CurrentCommandHandler.handle(command);
+                    t_CurrentCommandHandler =
+                        getNextChainLink(chain, t_CurrentCommandHandler);
 
                     if (t_bLoggingEnabled)
                     {
-                        t_Log.debug(
-                              t_CurrentCommandHandler + "#handle(QueryJCommand) returned "
-                            + result);
+                        t_Log.debug("Next handler: " + t_CurrentCommandHandler);
+                    }
+
+                    if  (t_CurrentCommandHandler != null)
+                    {
+                        result = t_CurrentCommandHandler.handle(command);
+
+                        if (t_bLoggingEnabled)
+                        {
+                            t_Log.debug(
+                                  t_CurrentCommandHandler + "#handle(QueryJCommand) returned "
+                                + result);
+                        }
                     }
                 }
+                while  (   (!result)
+                        && (t_CurrentCommandHandler != null)
+                        && (!restart));
             }
-            while  (   (!result)
-                    && (t_CurrentCommandHandler != null));
-        }
-        catch  (@NotNull final QueryJBuildException buildException)
-        {
-            cleanUpOnError(buildException, command);
-
-            if (t_bLoggingEnabled)
+            catch  (@NotNull final DevelopmentModeException devMode)
             {
-                t_Log.error(
-                    "QueryJ could not generate sources correctly.",
-                    buildException);
-	        }
+                restart = true;
+            }
+            catch  (@NotNull final QueryJBuildException buildException)
+            {
+                cleanUpOnError(buildException, command);
 
-            throw buildException;
+                if (t_bLoggingEnabled)
+                {
+                    t_Log.error(
+                        "QueryJ could not generate sources correctly.",
+                        buildException);
+                }
+
+                throw buildException;
+            }
         }
+        while (restart);
 
         return result;
     }

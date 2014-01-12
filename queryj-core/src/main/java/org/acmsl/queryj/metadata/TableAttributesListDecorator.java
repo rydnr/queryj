@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,8 +27,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
- *
+ * Description:  ListDecorator wrapping the list of attributes of a given
+ *               table.
  * Date: 2013/12/30
  * Time: 11:18
  *
@@ -62,7 +62,8 @@ import org.checkthread.annotations.ThreadSafe;
 import java.util.List;
 
 /**
- *
+ * {@link ListDecorator} wrapping the list of {@link Attribute attributes} of
+ * a given {@link TableDecorator table}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/12/30 11:18
@@ -149,13 +150,6 @@ public class TableAttributesListDecorator<T>
     public ListDecorator<Attribute<DecoratedString>> getPrimaryKey()
     {
         return getTable().getPrimaryKey();
-    }
-
-    @NotNull
-    @Override
-    public ListDecorator<Attribute<DecoratedString>> getAttributes()
-    {
-        return getTable().getAttributes();
     }
 
     @NotNull
