@@ -77,6 +77,7 @@ public abstract class AbstractField
      * @param comment the field comment.
      * @param keyword the keyword used to retrieve the value, if any.
      * @param retrievalQuery the query used to retrieve the value, if any.
+     * @param sequence the sequence (for Oracle engines).
      * @param allowsNull whether it allows null or not.
      * @param value the concrete value, if any.
      * @param readOnly whether it's read-only.
@@ -97,6 +98,7 @@ public abstract class AbstractField
         final int precision,
         @Nullable final String keyword,
         @Nullable final String retrievalQuery,
+        @Nullable final String sequence,
         final boolean allowsNull,
         @Nullable final String value,
         final boolean readOnly,
@@ -118,6 +120,7 @@ public abstract class AbstractField
             precision,
             keyword,
             retrievalQuery,
+            sequence,
             allowsNull,
             value,
             readOnly,

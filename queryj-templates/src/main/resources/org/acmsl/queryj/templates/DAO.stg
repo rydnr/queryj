@@ -1218,35 +1218,33 @@ if  (found)
 }
 >>
 
-em_attribute_value_retrieval(
-  query,
-  nativeType,
-  nameLowercased,
-  nameCapitalized,
-  type,
-  table) ::= <<
+em_attribute_value_retrieval(attr, table) ::= <<
 <!
   Writes the sentence to retrieve an externally-managed value.
-  @param query the query to retrieve the externally-managed value.
-  @param nativeType the native type of the attribute (Java-specific).
-  @param nameLowercased the attribute name, in lower-case.
-  @param nameCapitalized the name, capitalized.
-  @param type the type.
+  @param attr the attribute.
   @param table the table.
 !>
 map =
    (Map)
        transactionTemplate.execute(
            new QueryTransactionCallback(
-               "<query>",
-               new <nameCapitalized><table.name.voName>ResultSetExtractor(
-               "<nameLowercased>",
+<if(attr.sequence)>
+               "select <attr.sequence>.nextval <attr.name.lowercased> from dual",
+<else>
+<if(attr.query)>
+               "<attr.query>",
+<else>
+               "select <attr.keyword> <attr.name.lowercased> from dual",
+<endif>
+<endif>
+               new <attr.name.capitalized><table.name.voName>ResultSetExtractor(
+               "<attr.name.lowercased>",
                getSql(),
                getDAOListener()),
                this));
 
-<nativeType> <nameLowercased> =
-    ((<type>) map.get("<nameLowercased>")).<nativeType>Value();
+<attr.nativeType> <attr.name.uncapitalized> =
+    ((<attr.type>) map.get("<attr.name.lowercased>")).<attr.nativeType>Value();
 >>
 
 fk_dao_delete_call(foreignKey, pkAttributes) ::= <<
@@ -1493,16 +1491,10 @@ protected void insert(
     <attr.fieldType> <attr.name.uncapitalized> = <parent.name.lowercased>.get<attr.name.capitalized>();}; separator="\n">
 
 <else>
-<if(table.externallyManagedAttributes)>
+<if(table.externallyManaged.minus.readOnlyAttributes)>
     Map map = null;
 
-    <table.externallyManagedAttributes:{ attr | <em_attribute_value_retrieval(
-      query=attr.query,
-      nativeType=attr.nativeType,
-      nameLowercased=attr.name.lowercased,
-      nameCapitalized=attr.name.capitalized,
-      type=attr.objectType,
-      table=table)>}; separator="\n">
+    <table.externallyManaged.minus.readOnlyAttributes:{ attr |<em_attribute_value_retrieval(attr=attr, table=table)>}; separator="\n">
 
 <endif>
 <endif>
@@ -1747,16 +1739,11 @@ protected <table.name.voName> create(
     <attr.fieldType> <attr.name.uncapitalized> = <parent.name.lowercased>.get<attr.name.capitalized>();}; separator="\n">
 
 <else>
-<if(table.externallyManagedAttributes)>
+<if(table.externallyManaged.minus.readOnlyAttributes)>
     Map map = null;
 
-    <table.externallyManagedAttributes:{ attr | <em_attribute_value_retrieval(
-      query=attr.query,
-      nativeType=attr.nativeType,
-      nameLowercased=attr.name.lowercased,
-      nameCapitalized=attr.name.capitalized,
-      type=attr.objectType,
-      table=table)>}; separator="\n">
+    <table.externallyManaged.minus.readOnlyAttributes:{ attr | <em_attribute_value_retrieval(attr=attr, table=table)>}; separator="\n">
+
 <endif>
 <endif>
 
@@ -1982,16 +1969,10 @@ protected <table.name.voName> create(
     <table.name.voName> result = null;
 <endif>
 
-<if(table.externallyManagedAttributes)>
+<if(table.externallyManaged.minus.readOnlyAttributes)>
     Map map = null;
 
-    <table.externallyManagedAttributes:em_attribute_value_retrieval(
-      query=attr.query,
-      nativeType=attr.nativeType,
-      nameLowercased=attr.name.lowercased,
-      nameCapitalized=attr.name.capitalized,
-      type=attr.objectType,
-      table=table); separator="\n">
+    <table.externallyManaged.minus.readOnlyAttributes:{ attr | <em_attribute_value_retrieval(attr=attr, table=table)>}; separator="\n">
 
 <endif>
     transactionTemplate.execute(

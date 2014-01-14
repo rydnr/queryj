@@ -649,6 +649,7 @@ public class DAOTemplateUtils
                                     t_Attribute.getPrecision(),
                                     t_Attribute.getKeyword(),
                                     t_Attribute.getRetrievalQuery(),
+                                    t_Attribute.getSequence(),
                                     t_Attribute.isNullable(),
                                     t_astrColumnValues[t_iIndex],
                                     t_Attribute.isReadOnly(),

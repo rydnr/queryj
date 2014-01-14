@@ -60,6 +60,7 @@ public final class AttributeValueObject
      * @param precision the precision if the data is numeric.
      * @param keyword the keyword used to retrieve the value, if any.
      * @param retrievalQuery the query used to retrieve the value, if any.
+     * @param sequence the sequence (for Oracle engines).
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
      * @param readOnly if the attribute is read-only.
@@ -79,6 +80,7 @@ public final class AttributeValueObject
         final int precision,
         @Nullable final String keyword,
         @Nullable final String retrievalQuery,
+        @Nullable final String sequence,
         final boolean allowsNull,
         @Nullable final String value,
         final boolean readOnly,
@@ -98,6 +100,7 @@ public final class AttributeValueObject
             precision,
             keyword,
             retrievalQuery,
+            sequence,
             allowsNull,
             value,
             readOnly,

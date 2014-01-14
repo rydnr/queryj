@@ -143,6 +143,11 @@ public abstract class AbstractAttribute<T>
     private int m__iColumnPrecision;
 
     /**
+     * The sequence associated to the column.
+     */
+    private T m__strSequence;
+
+    /**
      * The stack trace to know who created me.
      */
     private final StackTraceElement[] m__aStackTrace =
@@ -214,6 +219,7 @@ public abstract class AbstractAttribute<T>
      * @param precision the precision if the data is numeric.
      * @param keyword the keyword used to retrieve the value, if any.
      * @param retrievalQuery the query used to retrieve the value, if any.
+     * @param sequence the sequence name (for Oracle engines).
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
      * @param readOnly whether the attribute is marked as read-only.
@@ -233,6 +239,7 @@ public abstract class AbstractAttribute<T>
         final int precision,
         @Nullable final T keyword,
         @Nullable final T retrievalQuery,
+        @Nullable final T sequence,
         final boolean allowsNull,
         @Nullable final T value,
         final boolean readOnly,
@@ -260,6 +267,10 @@ public abstract class AbstractAttribute<T>
         if (retrievalQuery != null)
         {
             immutableSetRetrievalQuery(retrievalQuery);
+        }
+        if (sequence != null)
+        {
+            immutableSetSequence(sequence);
         }
         immutableSetReadOnly(readOnly);
         immutableSetBoolean(isBool);
@@ -481,19 +492,25 @@ public abstract class AbstractAttribute<T>
     @Override
     public boolean isExternallyManaged()
     {
-        return isExternallyManaged(getRetrievalQuery(), getKeyword());
+        return isExternallyManaged(getRetrievalQuery(), getKeyword(), getSequence());
     }
 
     /**
-     * {@inheritDoc}
+     * Checks whether the attribute is externally-managed or not.
+     * @param retrievalQuery the retrieval query.
+     * @param keyword the keyword.
+     * @param sequence the sequence.
+     * @return {@code true} if any of the properties is {@code null} or empty.
      */
     protected boolean isExternallyManaged(
         @Nullable final T retrievalQuery,
-        @Nullable final T keyword)
+        @Nullable final T keyword,
+        @Nullable final T sequence)
     {
         return
             (   (!isNullOrEmpty(retrievalQuery))
-             || (!isNullOrEmpty(keyword)));
+             || (!isNullOrEmpty(keyword))
+             || (!isNullOrEmpty(sequence)));
     }
 
     /**
@@ -827,6 +844,36 @@ public abstract class AbstractAttribute<T>
     public int getPrecision()
     {
         return m__iColumnPrecision;
+    }
+
+    /**
+     * Specifies the sequence name (if any), for Oracle engines.
+     * @param sequence such name.
+     */
+    protected final void immutableSetSequence(@NotNull final T sequence)
+    {
+        this.m__strSequence = sequence;
+    }
+
+    /**
+     * Specifies the sequence name (if any), for Oracle engines.
+     * @param sequence such name.
+     */
+    @SuppressWarnings("unused")
+    protected void setSequence(@NotNull final T sequence)
+    {
+        immutableSetSequence(sequence);
+    }
+
+    /**
+     * Retrieves the sequence name.
+     * @return such name.
+     */
+    @Override
+    @Nullable
+    public T getSequence()
+    {
+        return this.m__strSequence;
     }
 
     /**

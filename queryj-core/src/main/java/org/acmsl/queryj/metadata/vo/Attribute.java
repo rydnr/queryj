@@ -171,5 +171,11 @@ public interface Attribute<V>
      */
     int getPrecision();
 
+    /**
+     * Retrieves the name of the sequence (for Oracle engines), optional.
+     * @return the sequence name, if any.
+     */
+    @Nullable
+    V getSequence();
 }
 

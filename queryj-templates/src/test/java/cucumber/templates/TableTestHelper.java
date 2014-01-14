@@ -204,6 +204,7 @@ public class TableTestHelper
                             precision,
                             columnEntry.get(AntFieldElement.KEYWORD_LITERAL),
                             columnEntry.get("query"),
+                            columnEntry.get("sequence"),
                             Boolean.valueOf(columnEntry.get("allows null")),
                             columnEntry.get("value"),
                             Boolean.valueOf(columnEntry.get("readonly")),

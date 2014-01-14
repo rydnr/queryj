@@ -101,6 +101,7 @@ public abstract class AbstractAttributeDecorator
             attribute.getPrecision(),
             attribute.getKeyword(),
             attribute.getRetrievalQuery(),
+            attribute.getSequence(),
             attribute.isNullable(),
             attribute.getValue(),
             attribute.isReadOnly(),
@@ -123,6 +124,7 @@ public abstract class AbstractAttributeDecorator
      * @param comment the attribute comment.
      * @param keyword the keyword used to retrieve the value, if any.
      * @param retrievalQuery the query used to retrieve the value, if any.
+     * @param sequence the sequence (for Oracle engines).
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional attribute value.
      * @param readOnly whether the attribute is marked as read-only.
@@ -145,6 +147,7 @@ public abstract class AbstractAttributeDecorator
         final int precision,
         @Nullable final String keyword,
         @Nullable final String retrievalQuery,
+        @Nullable final String sequence,
         final boolean allowsNull,
         @Nullable final String value,
         final boolean readOnly,
@@ -167,6 +170,7 @@ public abstract class AbstractAttributeDecorator
             precision,
             keyword != null ? new DecoratedString(keyword) : null,
             retrievalQuery != null ? new DecoratedString(retrievalQuery) : null,
+            sequence != null ? new DecoratedString(sequence) : null,
             allowsNull,
             value != null ? new DecoratedString(value) : null,
             readOnly,
