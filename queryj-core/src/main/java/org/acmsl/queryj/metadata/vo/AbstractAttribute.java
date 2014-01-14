@@ -518,7 +518,7 @@ public abstract class AbstractAttribute<T>
      * @param value the value.
      * @return {@code true} in such case.
      */
-    protected boolean isNullOrEmpty(@Nullable final T value)
+    protected static final <V> boolean isNullOrEmpty(@Nullable final V value)
     {
         final boolean result;
 

@@ -972,7 +972,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <C.engine_name><table.nam
         extends  <repository.capitalized>ResultSetExtractor
     {
         /**
-         * Constructs a new {@link <table.name.voName>ResultSetExtractor}.
+         * Constructs a new {@link <table.name.voName>PkResultSetExtractor}.
          * @param sql the original sql used.
          * @param daoListener the dao listener.
          */
@@ -1225,7 +1225,7 @@ em_attribute_value_retrieval(attr, table) ::= <<
   @param table the table.
 !>
 map =
-   (Map)
+   (Map\<String, ?>)
        transactionTemplate.execute(
            new QueryTransactionCallback(
 <if(attr.sequence)>
@@ -1237,14 +1237,14 @@ map =
                "select <attr.keyword> <attr.name.lowercased> from dual",
 <endif>
 <endif>
-               new <attr.name.capitalized><table.name.voName>ResultSetExtractor(
-               "<attr.name.lowercased>",
-               getSql(),
-               getDAOListener()),
+               new <table.name.voName>SingleFieldResultSetExtractor(
+                   "<attr.name.lowercased>",
+                   getSql(),
+                   getDAOListener()),
                this));
 
-<attr.nativeType> <attr.name.uncapitalized> =
-    ((<attr.type>) map.get("<attr.name.lowercased>")).<attr.nativeType>Value();
+<attr.javaType> <attr.name.uncapitalized> =
+    (<attr.objectType>) map.get("<attr.name.lowercased>");
 >>
 
 fk_dao_delete_call(foreignKey, pkAttributes) ::= <<
@@ -1406,9 +1406,9 @@ jdbcInsert3(table, parent) ::= <<
 /**
  * Persists {@link <table.name.voName>} information.
 <if(parent)>
- <table.allAttributes.minus.externallyManaged.minus.readOnlyAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
+ <table.all.minus.externallyManaged.minus.readOnlyAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
 <else>
- <table.attributes.minus.readOnlyAttributes.plus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
+ <table.own.minus.externallyManaged.minus.readOnlyAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
 <endif>
  * @param query the query to insert the values.
 <if(parent)>
@@ -1420,9 +1420,9 @@ jdbcInsert3(table, parent) ::= <<
  */
 protected void insert(
 <if(parent)>
-    <table.allAttributes.minus.externallyManaged.minus.readOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr, C=C)>}; separator=",\n">,
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
 <else>
-    <table.attributes.minus.readOnlyAttributes.plus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
 <endif>
     <notnull(C=C)>final String query,
 <if(parent)>
@@ -1432,9 +1432,9 @@ protected void insert(
 {
     insert(
 <if(parent)>
-        <table.allAttributes.minus.externallyManaged.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
+        <table.all.minus.externallyManaged.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
 <else>
-        <table.attributes.minus.readOnlyAttributes.plus.externallyManagedAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
+        <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
 <endif>
         query,
         new TransactionTemplate(transactionManager),
@@ -1455,9 +1455,9 @@ jdbcInsert4(table, parent) ::= <<
 /**
  * Persists {@link <table.name.voName>} information.
 <if(parent)>
- <table.all.minus.readOnlyAttributes.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
+ <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
 <else>
- <table.own.minus.readOnlyAttributes.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
+ <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
 <endif>
  * @param query the query to insert the values.
  * @param transactionTemplate the {@link TransactionTemplate}
@@ -1471,9 +1471,9 @@ jdbcInsert4(table, parent) ::= <<
 @SuppressWarnings("unchecked")
 protected void insert(
 <if(parent)>
-    <table.all.minus.readOnlyAttributes.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
 <else>
-    <table.own.minus.readOnlyAttributes.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
 <endif>
     <notnull(C=C)>final String query,
     <notnull(C=C)>final TransactionTemplate transactionTemplate,
@@ -1485,19 +1485,18 @@ protected void insert(
 <if(parent)>
     <parent.name.voName> <parent.name.lowercased> =
         <parent.name.lowercased>DAO.create(
-            <parent.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">);
+            <parent.all.minus.externallyManaged.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">);
 
 <table.primaryKey:{attr |
-    <attr.fieldType> <attr.name.uncapitalized> = <parent.name.lowercased>.get<attr.name.capitalized>();}; separator="\n">
-
-<else>
-<if(table.externallyManaged.minus.readOnlyAttributes)>
-    Map map = null;
-
-    <table.externallyManaged.minus.readOnlyAttributes:{ attr |<em_attribute_value_retrieval(attr=attr, table=table)>}; separator="\n">
+    final <attr.fieldType> <attr.name.uncapitalized> = <parent.name.lowercased>.get<attr.name.capitalized>();}; separator="\n">
 
 <endif>
+<if(table.own.only.externallyManaged.minus.readOnlyAttributes)>
+    Map\<String, ?> map = null;
+
+    <table.own.only.externallyManaged.minus.readOnlyAttributes:{ attr |<em_attribute_value_retrieval(attr=attr, table=table)>}; separator="\n">
 <endif>
+
     transactionTemplate.execute(
         new UpdateTransactionCallback(
             new <repository.capitalized>PreparedStatementCreator(
@@ -1528,9 +1527,9 @@ create(table, parent) ::= <<
  * {@link <table.name.voName>} instance.
 <endif>
 <if(parent)>
- <table.all.minus.readOnlyAttributes.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
+ <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
 <else>
- <table.own.minus.readOnlyAttributes.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
+ <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
 <endif>
  * @throws DataAccessException if the operation fails.
  */
@@ -1540,9 +1539,9 @@ public <table.name.voName>Decorator create(
 public <table.name.voName> create(
 <endif>
 <if(parent)>
-    <table.all.minus.readOnlyAttributes.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
 <else>
-    <table.own.minus.readOnlyAttributes.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
 <endif>
 {
     return
@@ -1738,11 +1737,17 @@ protected <table.name.voName> create(
 <table.primaryKey:{attr |
     <attr.fieldType> <attr.name.uncapitalized> = <parent.name.lowercased>.get<attr.name.capitalized>();}; separator="\n">
 
-<else>
-<if(table.externallyManaged.minus.readOnlyAttributes)>
-    Map map = null;
+<if(table.all.externallyManaged.minus.readOnlyAttributes)>
+    Map\<String, ?> map = null;
 
-    <table.externallyManaged.minus.readOnlyAttributes:{ attr | <em_attribute_value_retrieval(attr=attr, table=table)>}; separator="\n">
+    <table.all.externallyManaged.minus.readOnlyAttributes:{ attr | <em_attribute_value_retrieval(attr=attr, table=table)>}; separator="\n">
+
+<endif>
+<else>
+<if(table.own.externallyManaged.minus.readOnlyAttributes)>
+    Map\<String, ?> map = null;
+
+    <table.own.externallyManaged.minus.readOnlyAttributes:{ attr | <em_attribute_value_retrieval(attr=attr, table=table)>}; separator="\n">
 
 <endif>
 <endif>
@@ -1970,7 +1975,7 @@ protected <table.name.voName> create(
 <endif>
 
 <if(table.externallyManaged.minus.readOnlyAttributes)>
-    Map map = null;
+    Map\<String, ?> map = null;
 
     <table.externallyManaged.minus.readOnlyAttributes:{ attr | <em_attribute_value_retrieval(attr=attr, table=table)>}; separator="\n">
 
@@ -2133,18 +2138,18 @@ attribute_resultset_extractor_class(
 class_common_javadoc(template="org/acmsl/queryj/templates/DAO.stg", C=C)>
  * Extracts \<i><table.name.voName>\</i> value objects from result sets.
  */
-public static class <nameCapitalized><table.name.voName>ResultSetExtractor
+public static class <table.name.voName>SingleColumnResultSetExtractor
     extends  <trNameCapitalized>ResultSetExtractor
 {
     private String fieldName;
 
     /**
-     * Constructs a new {@link <nameCapitalized><table.name.voName>ResultSetExtractor}.
+     * Constructs a new {@code <table.name.voName>SingleColumnResultSetExtractor}.
      * @param fieldName the field name.
      * @param sql the original SQL.
      * @param daoListener the dao listener.
      */
-    public <nameCapitalized><table.name.voName>ResultSetExtractor(
+    public <table.name.voName>SingleColumnResultSetExtractor(
         <notnull(C=C)>final String fieldName,
         <notnull(C=C)>final String sql,
         <notnull(C=C)>final <trNameCapitalized>DAOListener daoListener)

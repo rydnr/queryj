@@ -164,20 +164,20 @@ public abstract class AbstractAttributeDecorator
             typeId,
             new DecoratedString(type),
             new DecoratedString(tableName),
-            comment != null ? new DecoratedString(comment) : null,
+            isNullOrEmpty(comment) ? null : new DecoratedString(comment),
             ordinalPosition,
             length,
             precision,
-            keyword != null ? new DecoratedString(keyword) : null,
-            retrievalQuery != null ? new DecoratedString(retrievalQuery) : null,
-            sequence != null ? new DecoratedString(sequence) : null,
+            isNullOrEmpty(keyword) ? null : new DecoratedString(keyword),
+            isNullOrEmpty(retrievalQuery) ? null : new DecoratedString(retrievalQuery),
+            isNullOrEmpty(sequence) ? null : new DecoratedString(sequence),
             allowsNull,
-            value != null ? new DecoratedString(value) : null,
+            isNullOrEmpty(value) ? null : new DecoratedString(value),
             readOnly,
             isBool,
-            booleanTrue != null ? new DecoratedString(booleanTrue) : null,
-            booleanFalse != null ? new DecoratedString(booleanFalse) : null,
-            booleanNull != null ? new DecoratedString(booleanNull) : null);
+            isNullOrEmpty(booleanTrue) ? null : new DecoratedString(booleanTrue),
+            isNullOrEmpty(booleanFalse) ? null : new DecoratedString(booleanFalse),
+            isNullOrEmpty(booleanNull) ? null : new DecoratedString(booleanNull));
 
         immutableSetAttribute(attribute);
         immutableSetMetadataManager(metadataManager);
