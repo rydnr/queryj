@@ -37,11 +37,12 @@
 //
 group callbacks;
 
-inner_transaction_callbacks(daoName, voName, C) ::= <<
+import "type_checkers.stg"
+
+inner_transaction_callbacks(table, parent, repository, C) ::= <<
 <!
  Generates the inner classes for transaction callbacks.
- @param daoName the DAO name.
- @param voName the value object for select-for-update operations.
+ @param table the table.
  @param C the context.
 !>
 /**
@@ -62,24 +63,24 @@ protected static class AbstractTransactionCallback
     private PreparedStatementSetter m__PreparedStatementSetter;
 
     /**
-     * The {@link <daoName>DAO}.
+     * The {@link <C.engine_name><table.name.voName>DAO}.
      */
-    private <daoName>DAO m__<daoName>DAO;
+    private <C.engine_name><table.name.voName>DAO m__<C.engine_name><table.name.voName>DAO;
 
     /**
      * Creates a transaction callback.
      * @param creator the {@link PreparedStatementCreator} instance.
      * @param setter the {@link PreparedStatementSetter} instance.
-     * @param dao the {@link <daoName>DAO} instance.
+     * @param dao the {@link <C.engine_name><table.name.voName>DAO} instance.
      */
     public AbstractTransactionCallback(
         <notnull(C=C)>final PreparedStatementCreator creator,
         <notnull(C=C)>final PreparedStatementSetter setter,
-        <notnull(C=C)>final <daoName>DAO dao)
+        <notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
         immutableSetPreparedStatementCreator(creator);
         immutableSetPreparedStatementSetter(setter);
-        immutableSet<daoName>DAO(dao);
+        immutableSet<C.engine_name><table.name.voName>DAO(dao);
     }
 
     /**
@@ -143,32 +144,32 @@ protected static class AbstractTransactionCallback
     }
 
     /**
-     * Specifies the {@link <daoName>DAO} instance.
+     * Specifies the {@link <C.engine_name><table.name.voName>DAO} instance.
      * @param dao the DAO instance.
      */
-    private void immutableSet<daoName>DAO(<notnull(C=C)>final <daoName>DAO dao)
+    private void immutableSet<C.engine_name><table.name.voName>DAO(<notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
-        m__<daoName>DAO = dao;
+        m__<C.engine_name><table.name.voName>DAO = dao;
     }
 
     /**
-     * Specifies the {@link <daoName>DAO} instance.
+     * Specifies the {@link <C.engine_name><table.name.voName>DAO} instance.
      * @param dao the DAO instance.
      */
     @SuppressWarnings("unused")
-    protected void set<daoName>DAO(<notnull(C=C)>final <daoName>DAO dao)
+    protected void set<C.engine_name><table.name.voName>DAO(<notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
-        immutableSet<daoName>DAO(dao);
+        immutableSet<C.engine_name><table.name.voName>DAO(dao);
     }
 
     /**
-     * Retrieves the {@link <daoName>DAO} instance.
+     * Retrieves the {@link <C.engine_name><table.name.voName>DAO} instance.
      * @return such DAO.
      */
     <notnull(C=C)>
-    public <daoName>DAO get<daoName>DAO()
+    public <C.engine_name><table.name.voName>DAO get<C.engine_name><table.name.voName>DAO()
     {
-        return m__<daoName>DAO;
+        return m__<C.engine_name><table.name.voName>DAO;
     }
 
     /**
@@ -184,7 +185,7 @@ protected static class AbstractTransactionCallback
                 status,
                 getPreparedStatementCreator(),
                 getPreparedStatementSetter(),
-                get<daoName>DAO());
+                get<C.engine_name><table.name.voName>DAO());
     }
 
     /**
@@ -192,7 +193,7 @@ protected static class AbstractTransactionCallback
      * @param status the transaction status.
      * @param creator the {@link PreparedStatementCreator} instance.
      * @param setter the {@link PreparedStatementSetter} instance.
-     * @param dao the {@link <daoName>DAO} instance.
+     * @param dao the {@link <C.engine_name><table.name.voName>DAO} instance.
      * @return {@link null} in either case (this method is meant
      * to be overridden by subclasses, but cannot be defined \<i>abstract\</i>
      * since the inner class is \<i>static\</i>.
@@ -202,7 +203,7 @@ protected static class AbstractTransactionCallback
         <notnull(C=C)>final TransactionStatus status,
         <notnull(C=C)>final PreparedStatementCreator creator,
         <notnull(C=C)>final PreparedStatementSetter setter,
-        <notnull(C=C)>final <daoName>DAO dao)
+        <notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
         return null;
     }
@@ -219,12 +220,12 @@ protected static class UpdateTransactionCallback
      * Creates a transaction callback.
      * @param creator the {@link PreparedStatementCreator} instance.
      * @param setter the {@link PreparedStatementSetter} instance.
-     * @param dao the {@link <daoName>DAO} instance.
+     * @param dao the {@link <C.engine_name><table.name.voName>DAO} instance.
      */
     public UpdateTransactionCallback(
         <notnull(C=C)>final PreparedStatementCreator creator,
         <notnull(C=C)>final PreparedStatementSetter setter,
-        <notnull(C=C)>final <daoName>DAO dao)
+        <notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
         super(creator, setter, dao);
     }
@@ -234,7 +235,7 @@ protected static class UpdateTransactionCallback
      * @param status the transaction status.
      * @param creator the {@link PreparedStatementCreator} instance.
      * @param setter the {@link PreparedStatementSetter} instance.
-     * @param dao the {@link <daoName>DAO} instance.
+     * @param dao the {@link <C.engine_name><table.name.voName>DAO} instance.
      * @return the transaction result.
      */
     @Override
@@ -243,7 +244,7 @@ protected static class UpdateTransactionCallback
         <notnull(C=C)>final TransactionStatus status,
         <notnull(C=C)>final PreparedStatementCreator creator,
         <notnull(C=C)>final PreparedStatementSetter setter,
-        <notnull(C=C)>final <daoName>DAO dao)
+        <notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
         return Integer.valueOf(dao.update(creator, setter));
     }
@@ -272,12 +273,12 @@ protected static class QueryTransactionCallback
      * Creates a transaction callback.
      * @param sql the SQL sentence.
      * @param extractor the {@link ResultSetExtractor} instance.
-     * @param dao the {@link <daoName>DAO} instance.
+     * @param dao the {@link <C.engine_name><table.name.voName>DAO} instance.
      */
     public QueryTransactionCallback(
         <nullable(C=C)>final String sql,
         <notnull(C=C)>final ResultSetExtractor extractor,
-        <notnull(C=C)>final <daoName>DAO dao)
+        <notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
         super(null, null, dao);
         immutableSetSQL(sql);
@@ -289,13 +290,13 @@ protected static class QueryTransactionCallback
      * @param creator the {@link PreparedStatementCreator} instance.
      * @param setter the {@link PreparedStatementSetter} instance.
      * @param extractor the {@link ResultSetExtractor} instance.
-     * @param dao the {@link <daoName>DAO} instance.
+     * @param dao the {@link <C.engine_name><table.name.voName>DAO} instance.
      */
     public QueryTransactionCallback(
         <notnull(C=C)>final PreparedStatementCreator creator,
         <notnull(C=C)>final PreparedStatementSetter setter,
         <notnull(C=C)>final ResultSetExtractor extractor,
-        <notnull(C=C)>final <daoName>DAO dao)
+        <notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
         super(creator, setter, dao);
         immutableSetResultSetExtractor(extractor);
@@ -366,7 +367,7 @@ protected static class QueryTransactionCallback
      * @param status the transaction status.
      * @param creator the {@link PreparedStatementCreator} instance.
      * @param setter the {@link PreparedStatementSetter} instance.
-     * @param dao the {@link <daoName>DAO} instance.
+     * @param dao the {@link <C.engine_name><table.name.voName>DAO} instance.
      * @return the transaction result.
      */
     @Override
@@ -375,7 +376,7 @@ protected static class QueryTransactionCallback
         <notnull(C=C)>final TransactionStatus status,
         <notnull(C=C)>final PreparedStatementCreator creator,
         <notnull(C=C)>final PreparedStatementSetter setter,
-        <notnull(C=C)>final <daoName>DAO dao)
+        <notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
         return
             doInTransaction(
@@ -394,7 +395,7 @@ protected static class QueryTransactionCallback
      * @param setter the {@link PreparedStatementSetter} instance.
      * @param sql the sql (optional).
      * @param extractor the {@link ResultSetExtractor} instance.
-     * @param dao the {@link <daoName>DAO} instance.
+     * @param dao the {@link <C.engine_name><table.name.voName>DAO} instance.
      * @result the transaction result.
      */
     <nullable(C=C)>
@@ -404,7 +405,7 @@ protected static class QueryTransactionCallback
         <notnull(C=C)>final PreparedStatementSetter setter,
         <nullable(C=C)>final String sql,
         <notnull(C=C)>final ResultSetExtractor extractor,
-        <notnull(C=C)>final <daoName>DAO dao)
+        <notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
         Object result = null;
 
@@ -443,13 +444,13 @@ protected static class SelectForUpdateTransactionCallback
      * @param creator the {@link PreparedStatementCreator} instance.
      * @param setter the {@link PreparedStatementSetter} instance.
      * @param extractor the {@link ResultSetExtractor} instance.
-     * @param dao the {@link <daoName>DAO} instance.
+     * @param dao the {@link <C.engine_name><table.name.voName>DAO} instance.
      */
     public SelectForUpdateTransactionCallback(
         <notnull(C=C)>final PreparedStatementCreator creator,
         <notnull(C=C)>final PreparedStatementSetter setter,
         <notnull(C=C)>final ResultSetExtractor extractor,
-        <notnull(C=C)>final <daoName>DAO dao)
+        <notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
         super(creator, setter, extractor, dao);
     }
@@ -498,21 +499,21 @@ protected static class SelectForUpdateTransactionCallback
             doInTransaction(
                 status,
                 getPreparedStatementCreator(),
-                get<daoName>DAO());
+                get<C.engine_name><table.name.voName>DAO());
     }
 
     /**
      * Executes the transactional operation.
      * @param status the transaction status.
      * @param creator the {@link PreparedStatementCreator} instance.
-     * @param dao the {@link <daoName>DAO} instance.
+     * @param dao the {@link <C.engine_name><table.name.voName>DAO} instance.
      * @return the transaction result.
      */
     <nullable(C=C)>
     protected Object doInTransaction(
         <notnull(C=C)>final TransactionStatus status,
         <notnull(C=C)>final PreparedStatementCreator creator,
-        <notnull(C=C)>final <daoName>DAO dao)
+        <notnull(C=C)>final <C.engine_name><table.name.voName>DAO dao)
     {
         return dao.execute(creator, (PreparedStatementCallback) this);
     }

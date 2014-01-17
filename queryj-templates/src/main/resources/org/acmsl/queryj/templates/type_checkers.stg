@@ -40,7 +40,7 @@ group type_checkers;
 notnull(C) ::= <<
 <!
  Conditionally add @NotNull annotations.
- !><if(C.notnull_annotations_enabled)>@NotNull <else> <endif>
+ !><if(C.notnull_annotations_enabled)>@NotNull <endif>
 >>
 
 notnull_arg_single_line(C) ::= <<
