@@ -88,7 +88,7 @@ import java.util.List;
 public abstract class AbstractTableDecorator
     extends     AbstractTable<
                     DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>
-    implements  TableDecorator<Attribute<DecoratedString>>
+    implements  TableDecorator
 {
     /**
      * The decorated table.
@@ -208,16 +208,16 @@ public abstract class AbstractTableDecorator
 
         immutableSetTable(table);
         immutableSetPrimaryKey(
-            new TableAttributesListDecorator<Attribute<DecoratedString>>(
+            new TableAttributesListDecorator(
                 decorateAttributes(primaryKey, metadataManager, decoratorFactory), this));
         immutableSetAttributes(
-            new TableAttributesListDecorator<Attribute<DecoratedString>>(
+            new TableAttributesListDecorator(
                 decorateAttributes(attributes, metadataManager, decoratorFactory), this));
         immutableSetReadOnlyAttributes(
-            new TableAttributesListDecorator<Attribute<DecoratedString>>(
+            new TableAttributesListDecorator(
                 filterReadOnlyAttributes(decorateAttributes(attributes, metadataManager, decoratorFactory)), this));
         immutableSetExternallyManagedAttributes(
-            new TableAttributesListDecorator<Attribute<DecoratedString>>(
+            new TableAttributesListDecorator(
                 filterExternallyManagedAttributes(decorateAttributes(attributes, metadataManager, decoratorFactory)), this));
         immutableSetForeignKeys(
             decorate(foreignKeys, metadataManager, decoratorFactory, customSqlProvider));
@@ -436,6 +436,7 @@ public abstract class AbstractTableDecorator
      * Alias to make the templates more readable.
      * @return the read-only attributes.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public ListDecorator<Attribute<DecoratedString>> getReadOnly()
     {
@@ -917,7 +918,7 @@ public abstract class AbstractTableDecorator
             result = new ArrayList<Attribute<DecoratedString>>(0);
         }
 
-        return new TableAttributesListDecorator<Attribute<DecoratedString>>(result, this);
+        return new TableAttributesListDecorator(result, this);
     }
 
     /**
@@ -1085,7 +1086,7 @@ public abstract class AbstractTableDecorator
 
         Collections.sort(result);
 
-        return new TableAttributesListDecorator<Attribute<DecoratedString>>(result, this);
+        return new TableAttributesListDecorator(result, this);
     }
 
     /**
@@ -1129,7 +1130,7 @@ public abstract class AbstractTableDecorator
                 metadataManager,
                 decoratorFactory);
 
-        return new TableAttributesListDecorator<Attribute<DecoratedString>>(result, this);
+        return new TableAttributesListDecorator(result, this);
     }
 
     /**
@@ -1150,7 +1151,7 @@ public abstract class AbstractTableDecorator
             tableDecoratorHelper.sumUpParentAndChildAttributes(
                 attributes, childAttributes);
 
-        return new TableAttributesListDecorator<Attribute<DecoratedString>>(result, this);
+        return new TableAttributesListDecorator(result, this);
     }
 
     /**
@@ -1215,7 +1216,7 @@ public abstract class AbstractTableDecorator
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
         return
-            new TableAttributesListDecorator<Attribute<DecoratedString>>(
+            new TableAttributesListDecorator(
                 tableDecoratorHelper.removeReadOnly(attributes), this);
     }
 

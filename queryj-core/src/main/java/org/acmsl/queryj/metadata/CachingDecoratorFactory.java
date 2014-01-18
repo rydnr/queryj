@@ -234,12 +234,12 @@ public class CachingDecoratorFactory
      */
     @Override
     @Nullable
-    public TableDecorator<Attribute<DecoratedString>> createTableDecorator(
+    public TableDecorator createTableDecorator(
         @NotNull final String table,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @Nullable TableDecorator<Attribute<DecoratedString>> result = null;
+        @Nullable TableDecorator result = null;
 
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
             metadataManager.getTableDAO().findByName(table);
@@ -247,35 +247,6 @@ public class CachingDecoratorFactory
         if (t_Table != null)
         {
             result = new CachingTableDecorator(t_Table, metadataManager, this, customSqlProvider);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the decorated list of attributes of given table.
-     * @param table the table.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return the attribute list
-     */
-    @NotNull
-    @Override
-    public List<Attribute<DecoratedString>> decorateAttributes(
-        @NotNull final String table, @NotNull final MetadataManager metadataManager)
-    {
-        @Nullable List<Attribute<DecoratedString>> result = null;
-
-        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
-            metadataManager.getTableDAO().findByName(table);
-
-        if (t_Table != null)
-        {
-            result = decorateAttributes(t_Table.getAttributes(), metadataManager);
-        }
-
-        if (result == null)
-        {
-            result = new ArrayList<Attribute<DecoratedString>>(0);
         }
 
         return result;
@@ -310,6 +281,35 @@ public class CachingDecoratorFactory
                     result.add((Attribute<DecoratedString>) t_Attribute);
                 }
             }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the decorated list of attributes of given table.
+     * @param table the table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the attribute list
+     */
+    @NotNull
+    @Override
+    public List<Attribute<DecoratedString>> decorateAttributes(
+        @NotNull final String table, @NotNull final MetadataManager metadataManager)
+    {
+        @Nullable List<Attribute<DecoratedString>> result = null;
+
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+            metadataManager.getTableDAO().findByName(table);
+
+        if (t_Table != null)
+        {
+            result = decorateAttributes(t_Table.getAttributes(), metadataManager);
+        }
+
+        if (result == null)
+        {
+            result = new ArrayList<Attribute<DecoratedString>>(0);
         }
 
         return result;

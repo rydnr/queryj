@@ -67,10 +67,22 @@ type_checker(attribute, C) ::= <<
 !><if(attribute.nullable)><nullable(C=C)><else><if(!attribute.primitive)><notnull(C=C)><endif><endif>
 >>
 
-checkers_import() ::= <<
+checkers_import(C) ::= <<
+<!
+ Generates the import group for NotNull/Nullable annotations.
+ @param C the context.
+ !>
+<if(C.notnull_annotations_enabled)>
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+<endif>
 >>
 
-checkers_import_enabled() ::= <<
+checkers_import_jsr() ::= <<
 /*
  * Importing JSR-308 (http://types.cs.washington.edu/checker-framework/) annotations.
  */

@@ -724,7 +724,7 @@ public class CachingTableDecorator
             if (result == null)
             {
                 result =
-                    new TableAttributesListDecorator<Attribute<DecoratedString>>(
+                    new TableAttributesListDecorator(
                         new ArrayList<Attribute<DecoratedString>>(0), this);
             }
 

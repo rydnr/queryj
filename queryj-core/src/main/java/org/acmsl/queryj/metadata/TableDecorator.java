@@ -63,7 +63,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface TableDecorator<T>
+public interface TableDecorator
     extends  Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>
 {
     /**
@@ -71,7 +71,7 @@ public interface TableDecorator<T>
      * @return such attributes.
      */
     @NotNull
-    ListDecorator<T> getReadOnlyAttributes();
+    ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes();
 
     /**
      * Retrieves all parent tables.
@@ -85,7 +85,7 @@ public interface TableDecorator<T>
      * @return such attributes.
      */
     @NotNull
-    ListDecorator<T> getExternallyManagedAttributes();
+    ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes();
 
     /**
      * Retrieves the list of dynamic queries.

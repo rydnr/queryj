@@ -69,14 +69,14 @@ import java.util.List;
  * Created: 2013/12/30 11:00
  */
 @ThreadSafe
-public abstract class AbstractTableAttributesListDecorator<T>
-    extends AbstractListDecorator<T>
-    implements TableDecorator<T>
+public abstract class AbstractTableAttributesListDecorator
+    extends AbstractListDecorator<Attribute<DecoratedString>>
+    implements TableDecorator
 {
     /**
      * The table decorator.
      */
-    private TableDecorator<T> m__Table;
+    private TableDecorator m__Table;
 
     /**
      * Creates a new instance.
@@ -84,8 +84,8 @@ public abstract class AbstractTableAttributesListDecorator<T>
      * @param table the {@link TableDecorator}.
      */
     public AbstractTableAttributesListDecorator(
-        @NotNull final List<T> list,
-        @NotNull final TableDecorator<T> table)
+        @NotNull final List<Attribute<DecoratedString>> list,
+        @NotNull final TableDecorator table)
     {
         super(list);
         immutableSetTable(table);
@@ -95,7 +95,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
      * Specifies the table.
      * @param table the table.
      */
-    protected final void immutableSetTable(@NotNull final TableDecorator<T> table)
+    protected final void immutableSetTable(@NotNull final TableDecorator table)
     {
         this.m__Table = table;
     }
@@ -105,7 +105,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
      * @param table the table.
      */
     @SuppressWarnings("unused")
-    protected void setTable(@NotNull final TableDecorator<T> table)
+    protected void setTable(@NotNull final TableDecorator table)
     {
         immutableSetTable(table);
     }
@@ -115,7 +115,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
      * @return such instance.
      */
     @NotNull
-    public TableDecorator<T> getTable()
+    public TableDecorator getTable()
     {
         return this.m__Table;
     }
@@ -125,7 +125,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
     public PartialListDecorator getPlus()
     {
         return
-            new TableAttributesPartialListDecorator<T>(
+            new TableAttributesPartialListDecorator(
                 this, getTable(), Operation.PLUS);
     }
 
@@ -134,7 +134,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
     public PartialListDecorator getMinus()
     {
         return
-            new TableAttributesPartialListDecorator<T>(
+            new TableAttributesPartialListDecorator(
                 this, getTable(), Operation.MINUS);
     }
 
@@ -143,7 +143,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
     public PartialListDecorator getOnly()
     {
         return
-            new TableAttributesPartialListDecorator<T>(
+            new TableAttributesPartialListDecorator(
                 this, getTable(), Operation.ONLY);
     }
 
@@ -151,7 +151,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
 
     @NotNull
     @Override
-    public ListDecorator<T> getReadOnlyAttributes()
+    public ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes()
     {
         throw new RuntimeException("Invalid operation");
     }
@@ -162,7 +162,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
      */
     @SuppressWarnings("unused")
     @NotNull
-    public ListDecorator<T> getReadOnly()
+    public ListDecorator<Attribute<DecoratedString>> getReadOnly()
     {
         return getReadOnlyAttributes();
     }
@@ -177,7 +177,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
 
     @NotNull
     @Override
-    public ListDecorator<T> getExternallyManagedAttributes()
+    public ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes()
     {
         throw new RuntimeException("Invalid operation");
     }
@@ -188,7 +188,7 @@ public abstract class AbstractTableAttributesListDecorator<T>
      */
     @SuppressWarnings("unused")
     @NotNull
-    public ListDecorator<T> getExternallyManaged()
+    public ListDecorator<Attribute<DecoratedString>> getExternallyManaged()
     {
         return getExternallyManagedAttributes();
     }

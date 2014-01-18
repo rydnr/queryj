@@ -69,12 +69,12 @@ import java.util.List;
  * Created: 2013/12/30 11:18
  */
 @ThreadSafe
-public class TableAttributesListDecorator<T>
-    extends AbstractTableAttributesListDecorator<T>
+public class TableAttributesListDecorator
+    extends AbstractTableAttributesListDecorator
 {
     public TableAttributesListDecorator(
-        @NotNull final List<T> list,
-        @NotNull final TableDecorator<T> table)
+        @NotNull final List<Attribute<DecoratedString>> list,
+        @NotNull final TableDecorator table)
     {
         super(list, table);
     }
@@ -82,7 +82,7 @@ public class TableAttributesListDecorator<T>
 
     @NotNull
     @Override
-    public ListDecorator<T> getReadOnlyAttributes()
+    public ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes()
     {
         throw new RuntimeException("Invalid operation");
     }
@@ -97,7 +97,7 @@ public class TableAttributesListDecorator<T>
 
     @NotNull
     @Override
-    public ListDecorator<T> getExternallyManagedAttributes()
+    public ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes()
     {
         throw new RuntimeException("Invalid operation");
     }
@@ -152,6 +152,12 @@ public class TableAttributesListDecorator<T>
         return getTable().getPrimaryKey();
     }
 
+    // TODO: remove me
+    public List<Attribute<DecoratedString>> getPrimaryKey1()
+    {
+        return getPrimaryKey();
+    }
+
     @NotNull
     @Override
     public List<ForeignKey<DecoratedString>> getForeignKeys()
@@ -184,5 +190,4 @@ public class TableAttributesListDecorator<T>
     {
         return getTable().compareTo(table);
     }
-
 }

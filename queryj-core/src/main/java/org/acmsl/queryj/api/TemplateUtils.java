@@ -46,7 +46,6 @@ import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
-import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlDAO;
@@ -566,7 +565,7 @@ public class TemplateUtils
 
         if (table != null)
         {
-            @Nullable final TableDecorator<Attribute<DecoratedString>> tableDecorator =
+            @Nullable final TableDecorator tableDecorator =
                 decoratorFactory.createTableDecorator(table.getName(), metadataManager, customSqlProvider);
 
             @Nullable final String classValue =

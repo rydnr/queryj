@@ -137,12 +137,12 @@ import java.util.Map;
  * Importing some JDK extension classes
  */
 import javax.sql.DataSource;
+<checkers_import(C=C)>
 
 /*
- * Importing Jakarta Commons Logging classes
+ * Importing checkthread.org annotations.
  */
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.checkthread.annotations.ThreadSafe;
 
 <class(foreign_keys=table.foreignKeys, table=table, C=C)>
 >>
@@ -182,7 +182,7 @@ third_line_description(tableName, engineName, engineVersion) ::= <<
   @param engineName the engine name.
   @param engineVersion the engine version.
 !>
-(<engineVersion>) persistence layers.
+<if(engineVersion)>(<engineVersion>) <endif>persistence layers.
 >>
 
 project_imports(
@@ -324,6 +324,7 @@ classImpl(foreign_keys, table, parent, repository, C) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/DAO.stg", C=C)>
  */
+@ThreadSafe
 public <if(table.dynamicQueries)>abstract <endif>class <C.engine_name><table.name.voName>DAO
   extends     <repository.capitalized>JdbcTemplate
   implements  <table.name.voName>DAO
@@ -331,8 +332,8 @@ public <if(table.dynamicQueries)>abstract <endif>class <C.engine_name><table.nam
 {
 <if(table.primaryKey)>
     <find_by_primary_key_sql(table=table, parent=parent, repository=repository, C=C)>
-<endif>
 
+<endif>
     <insert_sql(table=table, parent=parent, repository=repository, C=C)>
 
     <update_sql(table=table, parent=parent, repository=repository, C=C)>
@@ -362,7 +363,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <C.engine_name><table.nam
     <find_constant_by_pk(primaryKey=table.primaryKey, table=table, C=C)>
 <endif>
 
-    <table.own.minus.primaryKey.minus.readOnlyAttributes:{ attr | <find_constant_methods(attribute=attr, table=table, C=C)>}; separator="\n">
+    <table.own.minus.primaryKey1.minus.readOnlyAttributes:{ attr | <find_constant_methods(attribute=attr, table=table, C=C)>}; separator="\n">
 <endif>
 
     <find_by_primary_key(table=table, parent=parent, repository=repository, C=C)>
@@ -419,47 +420,6 @@ public static final String _FIND_BY_PK_SQL =
 <endif>
 >>
 
-update_sql(table, parent, repository, C) ::= <<
-/**
- * The SQL to update.
- */
-public static final String _UPDATE_SQL =
-      "UPDATE <table.name.uppercased> "
-    + "SET "
-<if(table.nonPrimaryKeyNonReadOnlyAttributes)>
-<table.nonPrimaryKeyNonReadOnlyAttributes:{attr|
-    +   " <attr.name.uppercased> = ?}; separator=", \"\n"> "
-<else>
-<table.primaryKey:{attr|
-    +   " <attr.name.uppercased> = ?}; separator=", \"\n"> "
-<endif>
-    + "WHERE "
-<if(table.primaryKey)>
-<table.primaryKey:{attr |
-    +   " <attr.name.uppercased> = ?}; separator=" AND \"\n">";
-<else>
-<table.attributes:{attr |
-    +   " <attr.name.uppercased> = ?}; separator=" AND \"\n">";
-<endif>
->>
-
-delete_sql(table, parent, repository, C) ::= <<
-/**
- * The SQL to delete.
- */
-public static final String _DELETE_SQL =
-      "DELETE "
-    + "FROM <table.name.uppercased> "
-    + "WHERE "
-<if(table.primaryKey)>
-<table.primaryKey:{attr |
-    +   " <attr.name.uppercased> = ?}; separator=" AND \"\n">";
-<else>
-<table.attributes:{attr |
-    +   " <attr.name.uppercased> = ?}; separator=" AND \"\n">";
-<endif>
->>
-
 insert_sql(table, parent, repository, C) ::= <<
 /**
  * The SQL to insert.
@@ -480,12 +440,53 @@ public static final String _INSERT_SQL =
     + "( "
 <if(table.attributes.minus.readOnlyAttributes)>
 <table.attributes.minus.readOnlyAttributes:{attr|
-    +   /* <attr.name.uppercased> */ "?}; separator=", \"\n"> "
+    +   /* :<attr.name> */ "?}; separator=", \"\n"> "
 <else>
 <table.attributes:{attr|
-    +   /* <attr.name.uppercased> */ "?}; separator=", \"\n"> "
+    +   /* :<attr.name> */ "?}; separator=", \"\n"> "
 <endif>
     + ")";
+>>
+
+update_sql(table, parent, repository, C) ::= <<
+/**
+ * The SQL to update.
+ */
+public static final String _UPDATE_SQL =
+       "UPDATE <table.name.uppercased> "
+    +  "SET "
+<if(table.own.minus.primaryKey.minus.readOnlyAttributes)>
+<table.own.minus.primaryKey.minus.readOnlyAttributes:{attr|
+    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=", \"\n"> "
+<else>
+<table.primaryKey:{attr|
+    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=", \"\n"> "
+<endif>
+    + " WHERE "
+<if(table.primaryKey)>
+<table.primaryKey:{attr |
+    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=" AND \"\n">";
+<else>
+<table.attributes:{attr |
+    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=" AND \"\n">";
+<endif>
+>>
+
+delete_sql(table, parent, repository, C) ::= <<
+/**
+ * The SQL to delete.
+ */
+public static final String _DELETE_SQL =
+      "DELETE "
+    + "FROM <table.name.uppercased> "
+    + "WHERE "
+<if(table.primaryKey)>
+<table.primaryKey:{attr |
+    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=" AND \"\n">";
+<else>
+<table.attributes:{attr |
+    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=" AND \"\n">";
+<endif>
 >>
 
 custom_selects_sql(table, repository, C) ::= <<
@@ -539,13 +540,12 @@ constructor(table, repository, C) ::= <<
 /**
  * Builds a {@link <C.engine_name><table.name.voName>DAO} instance
  * with given data source.
- * @param dataSource the required data source.
+ * @param dataSource the required {@link javax.sql.DataSource data source}.
  * @param daoListener the {@link <repository.capitalized>DAOListener}
  * instance.
  */
 public <C.engine_name><table.name.voName>DAO(
-    final DataSource dataSource,
-    final <repository.capitalized>DAOListener daoListener)
+    final DataSource dataSource, final <repository.capitalized>DAOListener daoListener)
 {
     super(dataSource, daoListener);
 }
@@ -714,12 +714,11 @@ find_by_primary_key4(table, parent, repository, C) ::= <<
  * primary key.
  * @throws DataAccessException if the operation fails.
  */
-<nullable(C=C)>
 @SuppressWarnings("unchecked")
 <if(table.voDecorated)>
-protected <table.name.voName>Decorator findByPrimaryKey(
+<nullable(C=C)>protected <table.name.voName>Decorator findByPrimaryKey(
 <else>
-protected <table.name.voName> findByPrimaryKey(
+<nullable(C=C)>protected <table.name.voName> findByPrimaryKey(
 <endif>
     <table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
@@ -743,17 +742,6 @@ protected <table.name.voName> findByPrimaryKey(
 >>
 
 insert(table, parent, repository, C) ::= <<
-<!
- Generates the default insert logic.
- @param table the table.
- @param parent the parent.
- @param repository the repository.
- @param C the context.
-!>
-<jdbcInsert(table=table, parent=parent, repository=repository, C=C)>
->>
-
-jdbcInsert(table, parent, repository, C) ::= <<
 <!
  Generates the JDBC insert logic.
  @param table the table.
@@ -787,12 +775,16 @@ public void insert(
         getDataSource());
 }
 
-<jdbcInsert2(table=table, parent=parent, repository=repository, C=C)>
-<jdbcInsert3(table=table, parent=parent, repository=repository, C=C)>
-<jdbcInsert4(table=table, parent=parent, repository=repository, C=C)>
+<insert2(table=table, parent=parent, repository=repository, C=C)>
+
+<insert3(table=table, parent=parent, repository=repository, C=C)>
+
+<insert4(table=table, parent=parent, repository=repository, C=C)>
+
+<insert5(table=table, parent=parent, repository=repository, C=C)>
 >>
 
-jdbcInsert2(table, parent, repository, C) ::= <<
+insert3(table, parent, repository, C) ::= <<
 <!
  Generates the JDBC insert logic overloaded 2.
  @param table the table.
@@ -832,10 +824,9 @@ protected void insert(
 <endif>
         new DataSourceTransactionManager(dataSource));
 }
-
 >>
 
-jdbcInsert3(table, parent, repository, C) ::= <<
+insert4(table, parent, repository, C) ::= <<
 <!
  Generates the JDBC insert logic overloaded 3.
  @param table the table.
@@ -882,10 +873,9 @@ protected void insert(
 <endif>
         getDAOListener());
 }
-
 >>
 
-jdbcInsert4(table, parent, repository, C) ::= <<
+insert5(table, parent, repository, C) ::= <<
 <!
  Generates the JDBC insert logic overloaded 4.
  @param table the table.
@@ -973,6 +963,7 @@ create(table, parent, repository, C) ::= <<
 <endif>
  * @throws DataAccessException if the operation fails.
  */
+<notnull(C=C)>
 <if(table.voDecorated)>
 public <table.name.voName>Decorator create(
 <else>
@@ -1028,6 +1019,7 @@ create2(table, parent, repository, C) ::= <<
  * instance.
  * @throws DataAccessException if the operation fails.
  */
+<notnull(C=C)>
 <if(table.voDecorated)>
 protected <table.name.voName>Decorator create(
 <else>
@@ -1088,6 +1080,7 @@ create3(table, parent, repository, C) ::= <<
  * instance.
  * @throws DataAccessException if the operation fails.
  */
+<notnull(C=C)>
 <if(table.voDecorated)>
 protected <table.name.voName>Decorator create(
 <else>
@@ -1122,7 +1115,6 @@ protected <table.name.voName> create(
 <endif>
             getDAOListener());
 }
-
 >>
 
 create4(table, parent, repository, C) ::= <<
@@ -1157,6 +1149,7 @@ create4(table, parent, repository, C) ::= <<
  * @throws DataAccessException if the operation fails.
  */
 @SuppressWarnings("unchecked")
+<notnull(C=C)>
 <if(table.voDecorated)>
 protected <table.name.voName>Decorator create(
 <else>
@@ -1176,9 +1169,9 @@ protected <table.name.voName> create(
     <notnull(C=C)>final <repository.capitalized>DAOListener daoListener)
 {
 <if(table.voDecorated)>
-    <table.name.voName>Decorator result = null;
+    <notnull(C=C)>final <table.name.voName>Decorator result;
 <else>
-    <table.name.voName> result = null;
+    <notnull(C=C)>final <table.name.voName> result;
 <endif>
 <if(parent)>
 
@@ -1215,12 +1208,22 @@ protected <table.name.voName> create(
 
 <if(table.readOnlyAttributes)>
     result = findByPrimaryKey(<table.primaryKey:{ attr | <attr.name.uncapitalized>}; separator=", ">);
+
 <else>
     result =
         factory.create(
             <table.attributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">);
+
 <endif>
 
+    if (result == null)
+    {
+        throw
+            new RuntimeException(
+                  "Just inserted a new <table.name.voName> ("
+                + "<table.primaryKey:{ attr |<attr.name> -> " + <attr.name.uncapitalized>}; separator="\"\n+ \", ">
+                + "), but it's not retrievable afterwards");
+    }
 
     return result;
 }
@@ -1441,13 +1444,13 @@ public void delete(
 
 <endif>
     deleteNoFk(<table.primaryKey:{ attr | <attr.name.uncapitalized>}; separator=", ">);
+}
 
 <delete2(table=table, parent=parent, repository=repository, C=C)>
 
 <delete3(table=table, parent=parent, repository=repository, C=C)>
 
 <delete4(table=table, parent=parent, repository=repository, C=C)>
-}
 >>
 
 delete2(table, parent, repository, C) ::= <<
@@ -1730,18 +1733,17 @@ find_constant_methods(attribute, table, C) ::= <<
  * @return the {@link <table.name.voName>} instance.
  */
 <nullable(C=C)>
-public <table.name.voName> findConstantBy<attribute.name.capitalized>(
+public List\<<table.name.voName>\> findConstantsBy<attribute.name.capitalized>(
     <type_checker(attribute=attribute, C=C)>final <attribute.javaType> <attribute.name.lowercased>)
 {
-        <nullable(C=C)><table.name.voName> result = null;
+    <notnull(C=C)>final List\<<table.name.voName>\> result = new ArrayList\<<table.name.voName>\>(FIXED_CONSTANTS.length);
 
     for  (<nullable(C=C)>final <table.name.voName> item : FIXED_CONSTANTS)
     {
         if  (   (item != null)
              <find_constant_check_attribute(attribute=attribute); separator="\n">)
         {
-            result = item;
-            break;
+            result.add(item);
         }
     }
 
@@ -1815,8 +1817,7 @@ em_attribute_value_retrieval(attr, table, C) ::= <<
                new <attr.name.capitalized>ResultSetExtractor(getSql(), getDAOListener()),
                this));
 
-final <attr.javaType> <attr.name.uncapitalized> =
-    <attr.name.uncapitalized>Map.get("<attr.name.lowercased>");
+final <attr.javaType> <attr.name.uncapitalized> = <attr.name.uncapitalized>Map.get("<attr.name.lowercased>");
 >>
 
 fk_dao_delete_call(foreignKey, pkAttributes) ::= <<

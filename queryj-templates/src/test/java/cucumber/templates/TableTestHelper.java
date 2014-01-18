@@ -151,11 +151,23 @@ public class TableTestHelper
                     table,
                     tableEntry.get(COMMENT),
                     tableEntry.get(PARENT_TABLE),
-                    tableEntry.get(STATIC) != null,
-                    tableEntry.get(DECORATED) != null);
+                    !isNullOrBlank(tableEntry.get(STATIC)),
+                    !isNullOrBlank(tableEntry.get(DECORATED)));
         }
 
         return result;
+    }
+
+    /**
+     * Checks whether given value is null or blank.
+     * @param value the value to check.
+     * @return {@code true} in such case.
+     */
+    protected boolean isNullOrBlank(@Nullable final String value)
+    {
+        return
+            (   (value == null)
+             || ("".equals(value.trim())));
     }
 
     /**
@@ -381,38 +393,41 @@ public class TableTestHelper
         @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables,
         @NotNull final List<ForeignKey<String>> foreignKeys)
     {
-        String sourceTable;
-        String sourceColumnsField;
-        String[] sourceColumns;
-        String targetTable;
-
         ForeignKey<String> foreignKey;
 
         for (@NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table : tables.values())
         {
             for (@NotNull final Map<String, String> fkEntry: fkInfo.asMaps())
             {
+                @Nullable final String sourceTable;
+                @Nullable final String sourceColumnsField;
+                @Nullable final String[] sourceColumns;
+                @Nullable final String targetTable;
+
                 sourceTable = fkEntry.get("source table");
 
                 if (table.getName().equalsIgnoreCase(sourceTable.trim()))
                 {
                     sourceColumnsField = fkEntry.get("source columns");
-                    sourceColumns = null;
+
                     if (sourceColumnsField != null)
                     {
                         sourceColumns = sourceColumnsField.split(",");
+
+                        targetTable = fkEntry.get("target table");
+
+                        if (targetTable != null)
+                        {
+                            foreignKey =
+                                new ForeignKeyValueObject(
+                                    sourceTable,
+                                    filterAttributes(table, sourceColumns),
+                                    targetTable,
+                                    Boolean.valueOf(fkEntry.get("allows null")));
+
+                            foreignKeys.add(foreignKey);
+                        }
                     }
-
-                    targetTable = fkEntry.get("target table");
-
-                    foreignKey =
-                        new ForeignKeyValueObject(
-                            sourceTable,
-                            filterAttributes(table, sourceColumns),
-                            targetTable,
-                            Boolean.valueOf(fkEntry.get("allows null")));
-
-                    foreignKeys.add(foreignKey);
                 }
             }
         }

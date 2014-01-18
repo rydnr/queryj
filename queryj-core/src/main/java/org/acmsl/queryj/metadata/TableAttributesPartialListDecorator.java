@@ -69,19 +69,19 @@ import java.util.List;
  * Created: 2013/12/30 10:25
  */
 @ThreadSafe
-public class TableAttributesPartialListDecorator<T>
+public class TableAttributesPartialListDecorator
     implements PartialListDecorator,
-               TableDecorator<T>
+               TableDecorator
 {
     /**
      * The table decorator.
      */
-    private TableDecorator<T> m__Table;
+    private TableDecorator m__Table;
 
     /**
      * The list decorator.
      */
-    private ListDecorator<T> m__ListDecorator;
+    private ListDecorator<Attribute<DecoratedString>> m__ListDecorator;
 
     /**
      * The operation types.
@@ -105,8 +105,8 @@ public class TableAttributesPartialListDecorator<T>
      * @param operation the {@link Operation}.
      */
     public TableAttributesPartialListDecorator(
-        @NotNull final ListDecorator<T> listDecorator,
-        @NotNull final TableDecorator<T> table,
+        @NotNull final ListDecorator<Attribute<DecoratedString>> listDecorator,
+        @NotNull final TableDecorator table,
         @NotNull final Operation operation)
     {
         immutableSetListDecorator(listDecorator);
@@ -118,7 +118,7 @@ public class TableAttributesPartialListDecorator<T>
      * Specifies the list decorator.
      * @param listDecorator such instance.
      */
-    protected final void immutableSetListDecorator(@NotNull final ListDecorator<T> listDecorator)
+    protected final void immutableSetListDecorator(@NotNull final ListDecorator<Attribute<DecoratedString>> listDecorator)
     {
         this.m__ListDecorator = listDecorator;
     }
@@ -128,7 +128,7 @@ public class TableAttributesPartialListDecorator<T>
      * @param listDecorator such instance.
      */
     @SuppressWarnings("unused")
-    protected void setListDecorator(@NotNull final ListDecorator<T> listDecorator)
+    protected void setListDecorator(@NotNull final ListDecorator<Attribute<DecoratedString>> listDecorator)
     {
         immutableSetListDecorator(listDecorator);
     }
@@ -138,7 +138,7 @@ public class TableAttributesPartialListDecorator<T>
      * @return such instance.
      */
     @SuppressWarnings("unused")
-    public ListDecorator<T> getListDecorator()
+    public ListDecorator<Attribute<DecoratedString>> getListDecorator()
     {
         return this.m__ListDecorator;
     }
@@ -147,7 +147,7 @@ public class TableAttributesPartialListDecorator<T>
      * Specifies the table.
      * @param table the table.
      */
-    protected final void immutableSetTable(@NotNull final TableDecorator<T> table)
+    protected final void immutableSetTable(@NotNull final TableDecorator table)
     {
         this.m__Table = table;
     }
@@ -157,7 +157,7 @@ public class TableAttributesPartialListDecorator<T>
      * @param table the table.
      */
     @SuppressWarnings("unused")
-    protected void setTable(@NotNull final TableDecorator<T> table)
+    protected void setTable(@NotNull final TableDecorator table)
     {
         immutableSetTable(table);
     }
@@ -167,7 +167,7 @@ public class TableAttributesPartialListDecorator<T>
      * @return such instance.
      */
     @NotNull
-    public TableDecorator<T> getTable()
+    public TableDecorator getTable()
     {
         return this.m__Table;
     }
@@ -202,7 +202,7 @@ public class TableAttributesPartialListDecorator<T>
 
     // ListDecorator implementation
     @NotNull
-    public List<T> getItems()
+    public List<Attribute<DecoratedString>> getItems()
     {
         throw new RuntimeException("Invalid operation");
     }
@@ -223,7 +223,7 @@ public class TableAttributesPartialListDecorator<T>
 
     @NotNull
     @Override
-    public ListDecorator<T> getReadOnlyAttributes()
+    public ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes()
     {
         return getReadOnlyAttributes(getListDecorator(), getTable(), getOperation());
     }
@@ -234,9 +234,9 @@ public class TableAttributesPartialListDecorator<T>
      */
     @SuppressWarnings("unused")
     @NotNull
-    public ListDecorator<T> getReadOnly()
+    public ListDecorator<Attribute<DecoratedString>> getReadOnly()
     {
-        @NotNull final ListDecorator<T> result = getReadOnlyAttributes();
+        @NotNull final ListDecorator<Attribute<DecoratedString>> result = getReadOnlyAttributes();
 
         return result;
     }
@@ -249,14 +249,14 @@ public class TableAttributesPartialListDecorator<T>
      * @return the resulting attributes.
      */
     @NotNull
-    protected ListDecorator<T> getReadOnlyAttributes(
-        @NotNull final ListDecorator<T> list,
-        @NotNull final TableDecorator<T> table,
+    protected ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes(
+        @NotNull final ListDecorator<Attribute<DecoratedString>> list,
+        @NotNull final TableDecorator table,
         @NotNull final Operation operation)
     {
-        @NotNull final ListDecorator<T> result;
+        @NotNull final ListDecorator<Attribute<DecoratedString>> result;
 
-        @NotNull final List<T> aux = new ArrayList<T>(list);
+        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<Attribute<DecoratedString>>(list);
 
         if (operation.equals(Operation.MINUS))
         {
@@ -271,7 +271,7 @@ public class TableAttributesPartialListDecorator<T>
             aux.retainAll(table.getReadOnlyAttributes());
         }
 
-        result = new TableAttributesListDecorator<T>(aux, table);
+        result = new TableAttributesListDecorator(aux, table);
 
         return result;
     }
@@ -290,16 +290,16 @@ public class TableAttributesPartialListDecorator<T>
      */
     @SuppressWarnings("unused")
     @NotNull
-    public ListDecorator<T> getExternallyManaged()
+    public ListDecorator<Attribute<DecoratedString>> getExternallyManaged()
     {
-        @NotNull final ListDecorator<T> result = getExternallyManagedAttributes();
+        @NotNull final ListDecorator<Attribute<DecoratedString>> result = getExternallyManagedAttributes();
 
         return result;
     }
 
     @NotNull
     @Override
-    public ListDecorator<T> getExternallyManagedAttributes()
+    public ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes()
     {
         return getExternallyManagedAttributes(getListDecorator(), getTable(), getOperation());
     }
@@ -312,14 +312,14 @@ public class TableAttributesPartialListDecorator<T>
      * @return the resulting attributes.
      */
     @NotNull
-    protected ListDecorator<T> getExternallyManagedAttributes(
-        @NotNull final ListDecorator<T> list,
-        @NotNull final TableDecorator<T> table,
+    protected ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes(
+        @NotNull final ListDecorator<Attribute<DecoratedString>> list,
+        @NotNull final TableDecorator table,
         @NotNull final Operation operation)
     {
-        @NotNull final ListDecorator<T> result;
+        @NotNull final ListDecorator<Attribute<DecoratedString>> result;
 
-        @NotNull final List<T> aux = new ArrayList<T>(list);
+        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<Attribute<DecoratedString>>(list);
 
         if (operation.equals(Operation.MINUS))
         {
@@ -334,7 +334,7 @@ public class TableAttributesPartialListDecorator<T>
             aux.retainAll(table.getExternallyManagedAttributes());
         }
 
-        result = new TableAttributesListDecorator<T>(aux, table);
+        result = new TableAttributesListDecorator(aux, table);
 
         return result;
     }
@@ -345,9 +345,12 @@ public class TableAttributesPartialListDecorator<T>
      * @param source the source.
      * @param destination the destination.
      */
-    protected void addAll(@NotNull final List<T> source, @NotNull final List<T> destination)
+    @SuppressWarnings("unchecked")
+    protected void addAll(
+        @NotNull final ListDecorator<Attribute<DecoratedString>> source,
+        @NotNull final List<Attribute<DecoratedString>> destination)
     {
-        for (@Nullable final T item : source)
+        for (@Nullable final Attribute<DecoratedString> item : source)
         {
             if (   (item != null)
                 && (!destination.contains(item)))
@@ -363,9 +366,12 @@ public class TableAttributesPartialListDecorator<T>
      * @param source the source.
      * @param destination the destination.
      */
-    protected void removeAll(@NotNull final List<T> source, @NotNull final List<T> destination)
+    @SuppressWarnings("unused")
+    protected void removeAll(
+        @NotNull final List<Attribute<DecoratedString>> source,
+        @NotNull final List<Attribute<DecoratedString>> destination)
     {
-        for (@Nullable final T item : source)
+        for (@Nullable final Attribute<DecoratedString> item : source)
         {
             if (   (item != null)
                 && (destination.contains(item)))
@@ -426,14 +432,90 @@ public class TableAttributesPartialListDecorator<T>
     @Override
     public ListDecorator<Attribute<DecoratedString>> getPrimaryKey()
     {
-        return getTable().getPrimaryKey();
+        return getPrimaryKey(getListDecorator(), getTable(), getOperation());
+    }
+
+    // TODO: remove me
+    public ListDecorator<Attribute<DecoratedString>> getPrimaryKey1()
+    {
+        return getPrimaryKey();
+    }
+
+    /**
+     * Retrieves the result of adding or removing the primary key from the wrapped list.
+     * @param list the list.
+     * @param table the table.
+     * @param operation the operation.
+     * @return the resulting attributes.
+     */
+    @NotNull
+    protected ListDecorator<Attribute<DecoratedString>> getPrimaryKey(
+        @NotNull final ListDecorator<Attribute<DecoratedString>> list,
+        @NotNull final TableDecorator table,
+        @NotNull final Operation operation)
+    {
+        @NotNull final ListDecorator<Attribute<DecoratedString>> result;
+
+        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<Attribute<DecoratedString>>(list);
+
+        if (operation.equals(Operation.MINUS))
+        {
+            aux.removeAll(table.getPrimaryKey());
+        }
+        else if (operation.equals(Operation.PLUS))
+        {
+            addAll(table.getPrimaryKey(), aux);
+        }
+        else
+        {
+            aux.retainAll(table.getPrimaryKey());
+        }
+
+        result = new TableAttributesListDecorator(aux, table);
+
+        return result;
     }
 
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getAttributes()
     {
-        return getTable().getAttributes();
+        return getAttributes(getListDecorator(), getTable(), getOperation());
+    }
+
+    /**
+     * Retrieves the result of adding or removing the primary key from the wrapped list.
+     * @param list the list.
+     * @param table the table.
+     * @param operation the operation.
+     * @return the resulting attributes.
+     */
+    @NotNull
+    protected ListDecorator<Attribute<DecoratedString>> getAttributes(
+        @NotNull final ListDecorator<Attribute<DecoratedString>> list,
+        @NotNull final TableDecorator table,
+        @NotNull final Operation operation)
+    {
+        @NotNull final ListDecorator<Attribute<DecoratedString>> result;
+
+        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<Attribute<DecoratedString>>(list);
+
+        if (operation.equals(Operation.MINUS))
+        {
+            aux.removeAll(table.getAttributes());
+        }
+        else if (operation.equals(Operation.PLUS))
+        {
+            addAll(table.getAttributes(), aux);
+        }
+        else
+        {
+            aux.retainAll(table.getAttributes());
+        }
+
+        result = new TableAttributesListDecorator(aux, table);
+
+        return result;
     }
 
     @NotNull

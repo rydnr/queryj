@@ -421,9 +421,9 @@ protected static class QueryTransactionCallback
         return result;
     }
 }
-
 <if(C.lob_handling_required)>
 <if(voName)>
+
 /**
  * Transaction callback implementation to perform a
  * \<i>select for update\</i>.
