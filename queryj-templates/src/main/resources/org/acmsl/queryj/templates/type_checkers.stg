@@ -39,25 +39,28 @@ group type_checkers;
 
 notnull(C) ::= <<
 <!
- Conditionally add @NotNull annotations.
+ Conditionally adds @NotNull annotations.
  !><if(C.notnull_annotations_enabled)>@NotNull <endif>
 >>
 
 notnull_arg_single_line(C) ::= <<
 <!
- Conditionally add @NotNull annotations.
+ Conditionally adds @NotNull annotations.
  !><if(C.notnull_annotations_enabled)>@NotNull <endif>
 >>
 
 notnull_method(C) ::= <<
 <!
- Conditionally add @NotNull annotations.
+ Conditionally adds @NotNull annotations.
  !><if(C.notnull_annotations_enabled)> @NotNull <else>
 <endif>
 >>
 
 nullable(C) ::= <<
-<if(C.notnull_annotations_enabled)>@Nullable <endif>
+<!
+ Conditionally adds @Nullable annotations.
+ @param C the context.
+ !><if(C.notnull_annotations_enabled)>@Nullable <endif>
 >>
 
 type_checker(attribute, C) ::= <<
@@ -83,9 +86,24 @@ import org.jetbrains.annotations.Nullable;
 >>
 
 checkers_import_jsr() ::= <<
+<!
+ Generates the JSR-based checkers import group.
+ @param C the context.
+ !>
 /*
  * Importing JSR-308 (http://types.cs.washington.edu/checker-framework/) annotations.
  */
 import checkers.nullness.quals.NonNull;
 import checkers.nullness.quals.Nullable;
+>>
+
+checkthread_import(C) ::= <<
+<!
+ Generates the checkthread.org import group.
+ @param C the context.
+ !>
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 >>

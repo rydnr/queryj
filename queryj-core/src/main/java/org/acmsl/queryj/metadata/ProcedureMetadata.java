@@ -186,7 +186,7 @@ public class ProcedureMetadata
                 .appendSuper(super.toString())
                 .append("name", getName())
                 .append("type", getType())
-                .append("comment", getComment())
+                .append(Literals.COMMENT, getComment())
                 .toString();
     }
 

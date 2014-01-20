@@ -36,6 +36,7 @@ package org.acmsl.queryj.customsql.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CustomResultWithInvalidNumberOfColumnsException;
 import org.acmsl.queryj.api.exceptions.CustomResultWithNoPropertiesException;
@@ -50,7 +51,6 @@ import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -85,6 +85,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /*
  * Importing some Apache Commons Logging classes.
@@ -428,7 +429,7 @@ public class CustomSqlValidationHandler
             {
                 t_Method = null;
 
-                t_cSetterParams = new ArrayList<Class<?>>();
+                t_cSetterParams = new ArrayList<>();
 
                 t_cSetterParams.add(Integer.TYPE);
 
@@ -471,7 +472,7 @@ public class CustomSqlValidationHandler
                     @Nullable final Method t_ParameterMethod;
 
                     if  (   (   ("Date".equals(t_strType))
-                             || (JdbcMetadataTypeManager.TIMESTAMP.equals(t_strType)))
+                             || (Literals.TIMESTAMP_U.equals(t_strType.toUpperCase(new Locale("US")))))
                          && (t_Parameter.getValidationValue() != null))
                     {
                         t_ParameterValue = new Timestamp(new Date().getTime());
@@ -681,7 +682,7 @@ public class CustomSqlValidationHandler
     protected List<Parameter> retrieveParameterElements(
         @NotNull final Sql sql, @NotNull final SqlParameterDAO parameterDAO)
     {
-        @NotNull final List<Parameter> result = new ArrayList<Parameter>();
+        @NotNull final List<Parameter> result = new ArrayList<>();
 
         Parameter t_Parameter;
 
@@ -747,9 +748,9 @@ public class CustomSqlValidationHandler
         @NotNull String result = prefix;
 
         if  (   ("Date".equals(type))
-             || (JdbcMetadataTypeManager.TIMESTAMP.equals(type)))
+             || (Literals.TIMESTAMP.equals(type.toUpperCase(new Locale("US")))))
         {
-            result += JdbcMetadataTypeManager.TIMESTAMP;
+            result += Literals.TIMESTAMP_U;
         }
         else
         {
@@ -896,7 +897,7 @@ public class CustomSqlValidationHandler
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
     {
-        @NotNull final List<Property> result = new ArrayList<Property>();
+        @NotNull final List<Property> result = new ArrayList<>();
 
         Property t_Property;
 
@@ -962,7 +963,7 @@ public class CustomSqlValidationHandler
         @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
     {
-        @NotNull final Collection<Property> result = new ArrayList<Property>();
+        @NotNull final Collection<Property> result = new ArrayList<>();
 
         @Nullable final String t_strTable =
             customResultUtils.retrieveTable(

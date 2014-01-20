@@ -49,17 +49,21 @@ Feature: Per-table templates
   Scenario Outline: Per-table templates compile for a type 1 table
 
     Given the following tables:
-    | table | parent table | decorated | relationship | static |
-    | users |              |           |              |        |
+    |   table   | parent table | decorated | relationship | static |
+    | users     |              |           |              |        |
+    | companies |              |           |              |        |
 
     And the following columns:
-    | table | column        | type      | pk    | allows null | readonly | sequence  | keyword | boolean | length | precision |
-    | users | user_id       | number    | true  | false       | false    | seq_users |         |         |     10 |         0 |
-    | users | company_id    | number    | false | true        | false    |           |         |         |     10 |         0 |
-    | users | name          | varchar   | false | false       | false    |           |         |         |     30 |           |
-    | users | email         | varchar   | false | false       | false    |           |         |         |     30 |         0 |
-    | users | registered    | number    | false | false       | false    |           |         | 0,1     |      1 |         1 |
-    | users | creation_date | timestamp | false | false       | true     |           | sysdate |         |        |           |
+    |   table   | column        | type      | pk    | allows null | readonly |   sequence    |   keyword    | boolean | length | precision |
+    | users     | user_id       | number    | true  | false       | false    | seq_users     |              |         |     10 |         0 |
+    | users     | company_id    | number    | false | true        | false    |               |              |         |     10 |         0 |
+    | users     | name          | varchar   | false | false       | false    |               |              |         |     30 |           |
+    | users     | email         | varchar   | false | false       | false    |               |              |         |     30 |           |
+    | users     | registered    | number    | false | false       | false    |               |              | 0,1     |      1 |         1 |
+    | users     | creation_date | timestamp | false | false       | true     |               | systimestamp |         |        |           |
+    | companies | company_id    | number    | true  | false       | false    | seq_companies |              |         |     10 |         0 |
+    | companies | memo          | clob      | false | true        | false    |               |              |         |  10000 |           |
+    | companies | creation_date | date      | false | false       | true     |               | sysdate      |         |        |           |
 
     And the following foreign keys:
     | source table | source columns | target table | allows null |

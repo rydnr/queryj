@@ -79,10 +79,19 @@ import java.util.Map;
  */
 public class TableTestHelper
 {
-    private static final String COMMENT = "comment";
+    private static final String TEST_COMMENT = "test comment";
+    private static final String COLUMN = "column";
     private static final String PARENT_TABLE = "parent table";
     private static final String STATIC = "static";
     private static final String DECORATED = "decorated";
+    private static final String PRECISION = "precision";
+    private static final String QUERY = "query";
+    private static final String ALLOWS_NULL = "allows null";
+    private static final String SOURCE_TABLE = "source table";
+    private static final String TARGET_TABLE = "target table";
+    private static final String SOURCE_COLUMNS = "source columns";
+    private static final String VALUE = "value";
+    private static final String READONLY = "readonly";
 
     /**
      * Singleton implementation to avoid double-locking check.
@@ -149,7 +158,7 @@ public class TableTestHelper
             result =
                 convertToTable(
                     table,
-                    tableEntry.get(COMMENT),
+                    tableEntry.get(Literals.COMMENT),
                     tableEntry.get(PARENT_TABLE),
                     !isNullOrBlank(tableEntry.get(STATIC)),
                     !isNullOrBlank(tableEntry.get(DECORATED)));
@@ -180,7 +189,7 @@ public class TableTestHelper
         @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> result =
-            new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(tables.size());
+            new ArrayList<>(tables.size());
 
         for (@NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table : tables.values())
         {
@@ -194,6 +203,7 @@ public class TableTestHelper
 
             int index = 1;
 
+            int length;
             int precision;
             String[] booleanInfo;
 
@@ -201,25 +211,26 @@ public class TableTestHelper
             {
                 if (table.getName().equals(columnEntry.get(AntTablesElement.TABLE)))
                 {
+                    length = retrieveLength(columnEntry);
                     precision = retrievePrecision(columnEntry);
                     booleanInfo = retrieveBooleanInfo(columnEntry);
 
                     attribute =
                         new AttributeValueObject(
-                            columnEntry.get("column"),
-                            retrieveAttributeTypeId(columnEntry.get("type"), precision),
+                            columnEntry.get(COLUMN),
+                            retrieveAttributeTypeId(columnEntry.get("type"), length, precision),
                             columnEntry.get("type"),
                             table.getName(),
-                            "test comment",
+                            TableTestHelper.TEST_COMMENT,
                             index++,
                             retrieveLength(columnEntry),
                             precision,
                             columnEntry.get(AntFieldElement.KEYWORD_LITERAL),
-                            columnEntry.get("query"),
+                            columnEntry.get(TableTestHelper.QUERY),
                             columnEntry.get("sequence"),
-                            Boolean.valueOf(columnEntry.get("allows null")),
-                            columnEntry.get("value"),
-                            Boolean.valueOf(columnEntry.get("readonly")),
+                            Boolean.valueOf(columnEntry.get(TableTestHelper.ALLOWS_NULL)),
+                            columnEntry.get(VALUE),
+                            Boolean.valueOf(columnEntry.get(READONLY)),
                             booleanInfo[0] != null,
                             booleanInfo[0],
                             booleanInfo[1],
@@ -296,7 +307,7 @@ public class TableTestHelper
      */
     public int retrieveLength(@NotNull final Map<String, String> row)
     {
-        return retrieveInt(row, "length");
+        return retrieveInt(row, Literals.LENGTH);
     }
 
     /**
@@ -306,7 +317,7 @@ public class TableTestHelper
      */
     public int retrievePrecision(@NotNull final Map<String, String> row)
     {
-        return retrieveInt(row, "precision");
+        return retrieveInt(row, PRECISION);
     }
 
     /**
@@ -354,7 +365,7 @@ public class TableTestHelper
     public List<Attribute<String>> filterAttributes(
         final Table<String, Attribute<String>, List<Attribute<String>>> table, final String[] columns)
     {
-        @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>();
+        @NotNull final List<Attribute<String>> result = new ArrayList<>();
 
         for (@NotNull final Attribute<String> attribute : table.getAttributes())
         {
@@ -374,12 +385,13 @@ public class TableTestHelper
     /**
      * Retrieves the id of the attribute type.
      * @param type the type.
+     * @param length the length.
      * @param precision the precision.
      * @return the concrete type in {@link java.sql.Types}.
      */
-    protected int retrieveAttributeTypeId(@NotNull final String type, final int precision)
+    protected int retrieveAttributeTypeId(@NotNull final String type, final int length, final int precision)
     {
-        return new JdbcMetadataTypeManager().getJavaType(type, precision);
+        return new JdbcMetadataTypeManager().toJdbcType(type, length, precision);
     }
 
     /**
@@ -404,17 +416,17 @@ public class TableTestHelper
                 @Nullable final String[] sourceColumns;
                 @Nullable final String targetTable;
 
-                sourceTable = fkEntry.get("source table");
+                sourceTable = fkEntry.get(SOURCE_TABLE);
 
                 if (table.getName().equalsIgnoreCase(sourceTable.trim()))
                 {
-                    sourceColumnsField = fkEntry.get("source columns");
+                    sourceColumnsField = fkEntry.get(SOURCE_COLUMNS);
 
                     if (sourceColumnsField != null)
                     {
                         sourceColumns = sourceColumnsField.split(",");
 
-                        targetTable = fkEntry.get("target table");
+                        targetTable = fkEntry.get(TARGET_TABLE);
 
                         if (targetTable != null)
                         {
@@ -423,7 +435,9 @@ public class TableTestHelper
                                     sourceTable,
                                     filterAttributes(table, sourceColumns),
                                     targetTable,
-                                    Boolean.valueOf(fkEntry.get("allows null")));
+                                    Boolean.valueOf(fkEntry.get(ALLOWS_NULL)));
+
+                            table.getForeignKeys().add(foreignKey);
 
                             foreignKeys.add(foreignKey);
                         }
@@ -461,7 +475,7 @@ public class TableTestHelper
     @NotNull
     public List<Sql> defineSql(@NotNull final DataTable sqlInfo)
     {
-        @NotNull final List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql> result = new ArrayList<>();
 
         for (@NotNull final Map<String, String> sqlRow: sqlInfo.asMaps())
         {
@@ -469,7 +483,7 @@ public class TableTestHelper
             @NotNull final String name = sqlRow.get("name");
             @NotNull final String dao = sqlRow.get("dao");
             @NotNull final String type = sqlRow.get("type");
-            @NotNull final String value = sqlRow.get("value");
+            @NotNull final String value = sqlRow.get(VALUE);
 
             @NotNull final SqlElement sql = new SqlElement(id, dao, name, type, "all", false, false);
             sql.setValue(value);
@@ -488,13 +502,13 @@ public class TableTestHelper
     @NotNull
     public Map<String, List<Parameter>> defineParameters(@NotNull final DataTable parameterInfo)
     {
-        @NotNull final Map<String, List<Parameter>> result = new HashMap<String, List<Parameter>>();
+        @NotNull final Map<String, List<Parameter>> result = new HashMap<>();
 
         for (@NotNull final Map<String, String> sqlRow: parameterInfo.asMaps())
         {
             @NotNull final String id = sqlRow.get("id");
             @NotNull final String sql = sqlRow.get("sql");
-            @NotNull final String index = sqlRow.get("index");
+            @NotNull final String index = sqlRow.get(Literals.INDEX);
             @NotNull final String name = sqlRow.get("name");
             @NotNull final String type = sqlRow.get("type");
 
@@ -503,7 +517,7 @@ public class TableTestHelper
             @Nullable List<Parameter> parameters = result.get(sql);
             if (parameters == null)
             {
-                parameters = new ArrayList<Parameter>();
+                parameters = new ArrayList<>();
                 result.put(sql, parameters);
             }
             parameters.add(parameter);

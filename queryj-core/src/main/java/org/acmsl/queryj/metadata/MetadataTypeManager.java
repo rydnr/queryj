@@ -439,4 +439,14 @@ public interface MetadataTypeManager
      */
     @Nullable
     public String getImport(final int dataType);
+
+    /**
+     * Retrieves the JDBC type.
+     * @param type the type.
+     * @param length the length.
+     * @param precision the precision.
+     * @return the associated {@link java.sql.Types} constant.
+     */
+    public int toJdbcType(@NotNull final String type, final int length, final int precision);
+
 }

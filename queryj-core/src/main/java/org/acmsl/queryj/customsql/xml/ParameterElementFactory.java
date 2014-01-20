@@ -37,6 +37,7 @@ package org.acmsl.queryj.customsql.xml;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.ParameterElement;
 
 /*
@@ -95,7 +96,7 @@ public class ParameterElementFactory
         String t_strId = attributes.getValue("id");
 
         int t_iIndex =
-            conversionUtils.toInt(attributes.getValue("index"));
+            conversionUtils.toInt(attributes.getValue(Literals.INDEX));
 
         String t_strName = attributes.getValue("name");
 

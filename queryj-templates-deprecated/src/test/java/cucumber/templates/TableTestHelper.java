@@ -76,6 +76,12 @@ import java.util.Map;
  */
 public class TableTestHelper
 {
+    public static final String COLUMN = "column";
+    public static final String TEST_COMMENT = "test comment";
+    public static final String QUERY = "query";
+    public static final String ALLOWS_NULL = ALLOWS_NULL;
+    public static final String ALLOWS_NULL = "allows null";
+
     /**
      * Singleton implementation to avoid double-locking check.
      */
@@ -182,17 +188,17 @@ public class TableTestHelper
 
                     attribute =
                         new AttributeValueObject(
-                            columnEntry.get("column"),
+                            columnEntry.get(COLUMN),
                             retrieveAttributeTypeId(columnEntry.get("type"), precision),
                             columnEntry.get("type"),
                             table.getName(),
-                            "test comment",
+                            TEST_COMMENT,
                             index++,
                             retrieveLength(columnEntry),
                             precision,
                             columnEntry.get(AntFieldElement.KEYWORD_LITERAL),
-                            columnEntry.get("query"),
-                            Boolean.valueOf(columnEntry.get("allows null")),
+                            columnEntry.get(QUERY),
+                            Boolean.valueOf(columnEntry.get(ALLOWS_NULL)),
                             columnEntry.get("value"),
                             Boolean.valueOf(columnEntry.get("readonly")),
                             booleanInfo[0] != null,
@@ -396,7 +402,7 @@ public class TableTestHelper
                             sourceTable,
                             filterAttributes(table, sourceColumns),
                             targetTable,
-                            Boolean.valueOf(fkEntry.get("allows null")));
+                            Boolean.valueOf(fkEntry.get(ALLOWS_NULL)));
 
                     foreignKeys.add(foreignKey);
                 }

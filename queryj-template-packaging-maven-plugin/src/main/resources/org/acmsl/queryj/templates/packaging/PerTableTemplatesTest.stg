@@ -392,75 +392,77 @@ public class PerTableTemplatesTest
 
         Assert.assertNotNull("No template generator found for " + templateName, generator);
 
-        for (@NotNull final Table\<String, Attribute\<String>, List\<Attribute\<String>\>> table : tables.values())
+        boolean firstTime = true;
+        boolean restart = false;
+
+        @Nullable String failCause = null;
+
+        while (   (firstTime)
+               || (restart))
         {
-            @Nullable final PerTableTemplateFactory\<? extends PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext> templateFactory =
-                retrieveTemplateFactory(templateName);
+            firstTime = false;
 
-            Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
-
-            @NotNull final String packageName = resolvePackage(PACKAGE_MAPPINGS.get(templateName), engine);
-
-            @Nullable final PerTableTemplate\<PerTableTemplateContext> template =
-                templateFactory.createTemplate(
-                    retrieveMetadataManager(engine, table),
-                    sqlProvider,
-                    retrieveDecoratorFactory(generator),
-                    packageName,
-                    BASE_PACKAGE_NAME,
-                    "acme", // repository
-                    "", // header
-                    false, // marker
-                    false, // jmx
-                    "java:comp/env/db",
-                    false, // disable generation timestamps
-                    false, // disable NotNull annotations
-                    true, // disable checkThread.org annotations
-                    table.getName(),
-                    new ArrayList\<Row\<String\>>(0));
-
-            Assert.assertNotNull("No template found for " + templateName, template);
-
-            File outputDir = null;
-
-            try
+            for (@NotNull final Table\<String, Attribute\<String>, List\<Attribute\<String>\>> table : tables.values())
             {
-                rootFolder.create();
+                @Nullable final PerTableTemplateFactory\<? extends PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext> templateFactory =
+                    retrieveTemplateFactory(templateName);
 
-                @NotNull final String[] packages = packageName.split("\\\.");
-                @NotNull final StringBuilder folder = new StringBuilder();
+                Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
-                for (@NotNull final String pkg : packages)
+                @NotNull final String packageName = resolvePackage(PACKAGE_MAPPINGS.get(templateName), engine);
+
+                @Nullable final PerTableTemplate\<PerTableTemplateContext> template =
+                    templateFactory.createTemplate(
+                        retrieveMetadataManager(engine, table),
+                        sqlProvider,
+                        retrieveDecoratorFactory(generator),
+                        packageName,
+                        BASE_PACKAGE_NAME,
+                        "acme", // repository
+                        "", // header
+                        false, // marker
+                        false, // jmx
+                        "java:comp/env/db",
+                        false, // disable generation timestamps
+                        false, // disable NotNull annotations
+                        true, // disable checkThread.org annotations
+                        table.getName(),
+                        new ArrayList\<Row\<String\>>(0));
+
+                Assert.assertNotNull("No template found for " + templateName, template);
+
+                File outputDir = null;
+
+                try
                 {
-                    folder.append(File.separator);
-                    folder.append(pkg);
+                    rootFolder.create();
+
+                    @NotNull final String[] packages = packageName.split("\\\.");
+                    @NotNull final StringBuilder folder = new StringBuilder();
+
+                    for (@NotNull final String pkg : packages)
+                    {
+                        folder.append(File.separator);
+                        folder.append(pkg);
+                    }
+
+                    outputDir = new File(rootFolder.getRoot().getAbsolutePath().concat(folder.toString()));
+
+                    outputDir.mkdirs();
+                }
+                catch (@NotNull final IOException ioException)
+                {
+                    Assert.fail(ioException.getMessage());
                 }
 
-                outputDir = new File(rootFolder.getRoot().getAbsolutePath().concat(folder.toString()));
+                if (!outputDir.exists())
+                {
+                    Assert.fail("Cannot create folder: " + outputDir.getAbsolutePath());
+                }
 
-                outputDir.mkdirs();
-            }
-            catch (@NotNull final IOException ioException)
-            {
-                Assert.fail(ioException.getMessage());
-            }
+                UniqueLogFactory.initializeInstance(LogFactory.getLog(PerTableTemplatesTest.class));
 
-            if (!outputDir.exists())
-            {
-                Assert.fail("Cannot create folder: " + outputDir.getAbsolutePath());
-            }
-
-            UniqueLogFactory.initializeInstance(LogFactory.getLog(PerTableTemplatesTest.class));
-
-            ((AbstractTemplate) template).setDebugMode(true);
-
-            boolean firstTime = true;
-            boolean restart = false;
-
-            while (   (firstTime)
-                   || (restart))
-            {
-                firstTime = false;
+                ((AbstractTemplate) template).setDebugMode(true);
 
                 try
                 {
@@ -472,7 +474,10 @@ public class PerTableTemplatesTest
                 }
                 catch (@NotNull final IOException ioException)
                 {
-                    Assert.fail(ioException.getMessage());
+                    if (failCause == null)
+                    {
+                        failCause = ioException.getMessage();
+                    }
                     restart = false;
                 }
                 catch (@NotNull final DevelopmentModeException debugging)
@@ -481,14 +486,22 @@ public class PerTableTemplatesTest
                 }
                 catch (@NotNull final QueryJBuildException queryjBuildException)
                 {
-                    Assert.fail(queryjBuildException.getMessage());
+                    if (failCause == null)
+                    {
+                        failCause = queryjBuildException.getMessage();
+                    }
                     restart = false;
                 }
-            }
 
-            outputFiles.put(
-                table.getName(),
-                new File(outputDir, template.getTemplateContext().getTemplateName()));
+                outputFiles.put(
+                    table.getName(),
+                    new File(outputDir, template.getTemplateContext().getTemplateName()));
+            }
+        }
+
+        if (failCause != null)
+        {
+            Assert.fail(failCause);
         }
     }
 

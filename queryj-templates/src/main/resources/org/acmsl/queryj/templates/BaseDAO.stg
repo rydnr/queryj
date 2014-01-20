@@ -76,7 +76,7 @@ sourceImpl(table, C) ::= <<
   basePackageName=C.package,
   voName=table.name.voName)>
 
-<checkers_import()>
+<checkers_import(C=C)>
 
 /*
  * Importing Spring classes.

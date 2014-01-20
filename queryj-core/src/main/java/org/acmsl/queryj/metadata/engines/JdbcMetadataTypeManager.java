@@ -82,8 +82,6 @@ public class JdbcMetadataTypeManager
                 Serializable
 {
     private static final long serialVersionUID = 560475071137483642L;
-    public static final String TIMESTAMP = Literals.TIMESTAMP;
-    public static final String BINARY_U = "BINARY";
 
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -140,6 +138,7 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated native type.
      */
+    @Override
     @Nullable
     public String getNativeType(final int dataType)
     {
@@ -152,6 +151,7 @@ public class JdbcMetadataTypeManager
      * @param allowsNull whether to allow null or not.
      * @return the associated native type.
      */
+    @Override
     @Nullable
     public String getNativeType(
         final int dataType, final boolean allowsNull)
@@ -218,6 +218,7 @@ public class JdbcMetadataTypeManager
      * @param isBool whether the attribute is marked as boolean.
      * @return the associated native type.
      */
+    @Override
     public String getNativeType(
         final int dataType, final boolean allowsNull, final boolean isBool)
     {
@@ -265,16 +266,19 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated native type.
      */
+    @Override
     public int getJavaType(@Nullable final String dataType)
     {
         return getJavaType(dataType, -1);
     }
+
     /**
      * Retrieves the native type of given data type.
      * @param dataType the data type.
      * @param precision the expected precision.
      * @return the associated native type.
      */
+    @Override
     public int getJavaType(@Nullable final String dataType, final int precision)
     {
         // TODO: Implement precision.
@@ -328,7 +332,7 @@ public class JdbcMetadataTypeManager
     @SuppressWarnings("unchecked")
     protected Map<String, Integer> buildNative2JavaTypeMap()
     {
-        @NotNull final HashMap<String, Integer> result = new HashMap<String, Integer>();
+        @NotNull final HashMap<String, Integer> result = new HashMap<>();
 
         @NotNull final Integer t_Numeric = Types.NUMERIC;
         @NotNull final Integer t_Integer = Types.INTEGER;
@@ -341,7 +345,7 @@ public class JdbcMetadataTypeManager
         result.put(Literals.DECIMAL, t_Numeric);
         result.put(Literals.BIG_DECIMAL, t_Numeric);
         result.put("BIT"        , t_Integer);
-        result.put(Literals.TINYINT, t_Integer);
+        result.put(Literals.TINYINT_U, t_Integer);
         result.put(Literals.SMALLINT, t_Integer);
         result.put("int"        , t_Long);
         result.put(Literals.INTEGER, t_Long);
@@ -349,7 +353,7 @@ public class JdbcMetadataTypeManager
         result.put(Literals.NUMERIC_U, t_Long);
         result.put("Number"     , t_Long);
         result.put("number"     , t_Long);
-        result.put("NUMBER"     , t_Long);
+        result.put(Literals.NUMBER_U, t_Long);
         result.put(Literals.BIGINT_U, t_Long);
         result.put("Long"       , t_Long);
         result.put("long"       , t_Long);
@@ -362,14 +366,15 @@ public class JdbcMetadataTypeManager
         result.put("DATE"       , t_TimeStamp);
         result.put("Date"       , t_TimeStamp);
         result.put(Literals.TIMESTAMP_U, t_TimeStamp);
-        result.put(TIMESTAMP, t_TimeStamp);
+        result.put(Literals.TIMESTAMP, t_TimeStamp);
         result.put("CHAR"       , t_Text);
         result.put(Literals.VARCHAR_U, t_Text);
         result.put("VARCHAR2"   , t_Text);
         result.put(Literals.LONGVARCHAR_U, t_Text);
-        result.put(BINARY_U, t_Text);
+        result.put(Literals.BINARY_U, t_Text);
         result.put(Literals.VARBINARY_U, t_Text);
         result.put(Literals.STRING, t_Text);
+        result.put("CLOB", t_Text);
 
         return result;
     }
@@ -750,7 +755,7 @@ public class JdbcMetadataTypeManager
                     break;
 
                 case Types.TIMESTAMP:
-                    result = TIMESTAMP;
+                    result = Literals.TIMESTAMP;
                     break;
 
                 case Types.CHAR:
@@ -777,7 +782,7 @@ public class JdbcMetadataTypeManager
     @Override
     public String getImport(final int dataType)
     {
-        @NotNull final String result;
+        @Nullable final String result;
 
         switch (dataType)
         {
@@ -950,7 +955,7 @@ public class JdbcMetadataTypeManager
                 case Types.DATE:
                 case Types.TIMESTAMP:
                 case 11:
-                    result = TIMESTAMP;
+                    result = Literals.TIMESTAMP;
                     break;
 
                 case Types.CHAR:
@@ -1093,7 +1098,7 @@ public class JdbcMetadataTypeManager
                     break;
 
             case Types.TINYINT:
-                    result = Literals.TINYINT;
+                    result = Literals.TINYINT_U;
                     break;
 
             case Types.SMALLINT:
@@ -1153,7 +1158,7 @@ public class JdbcMetadataTypeManager
                     break;
 
             case Types.BINARY:
-                    result = BINARY_U;
+                    result = Literals.BINARY_U;
                     break;
 
             case Types.VARBINARY:
@@ -1161,7 +1166,7 @@ public class JdbcMetadataTypeManager
                     break;
 
             case Types.LONGVARBINARY:
-                    result = "LONGVARBINARY";
+                    result = Literals.LONGVARBINARY_U;
                     break;
 
             default:
@@ -1651,12 +1656,142 @@ public class JdbcMetadataTypeManager
         return result;
     }
 
+    /**
+     * Retrieves the JDBC type.
+     * @param type the type.
+     * @return the associated {@link java.sql.Types} constant.
+     */
+    @Override
+    public int toJdbcType(@NotNull final String type, final int length, final int precision)
+    {
+        final int result;
+
+        switch (type.toUpperCase(new Locale("US")))
+        {
+            case "ARRAY":
+                result = Types.ARRAY;
+                break;
+            case Literals.BIGINT_U:
+                result = Types.BIGINT;
+                break;
+            case Literals.BINARY_U:
+                result = Types.BINARY;
+                break;
+            case "BIT":
+                result = Types.BIT;
+                break;
+            case "BLOB":
+                result = Types.BLOB;
+                break;
+            case "BOOLEAN":
+                result = Types.BOOLEAN;
+                break;
+            case "CHAR":
+                result = Types.CHAR;
+                break;
+            case "CLOB":
+                result = Types.CLOB;
+                break;
+            case "DATALINK":
+                result = Types.DATALINK;
+                break;
+            case "DATE":
+                result = Types.DATE;
+                break;
+            case Literals.DECIMAL:
+                result = Types.DECIMAL;
+                break;
+            case "DISTINCT":
+                result = Types.DISTINCT;
+                break;
+            case Literals.DOUBLE_U:
+                result = Types.DOUBLE;
+                break;
+            case Literals.FLOAT_U:
+                result = Types.FLOAT;
+                break;
+            case Literals.INTEGER_U:
+                result = Types.INTEGER;
+                break;
+            case "JAVA_OBJECT":
+                result = Types.JAVA_OBJECT;
+                break;
+            case "LONGNVARCHAR":
+                result = Types.LONGNVARCHAR;
+                break;
+            case Literals.LONGVARBINARY_U:
+                result = Types.LONGVARBINARY;
+                break;
+            case Literals.LONGVARCHAR_U:
+                result = Types.LONGVARCHAR;
+                break;
+            case "NCHAR":
+                result = Types.NCHAR;
+                break;
+            case "NCLOB":
+                result = Types.NCLOB;
+                break;
+            case "NULL":
+                result = Types.NULL;
+                break;
+            case Literals.NUMBER_U:
+                if (precision > 0)
+                {
+                    result = Types.DECIMAL;
+                }
+                else
+                {
+                    result = Types.BIGINT;
+                }
+                break;
+            case Literals.NUMERIC_U:
+                result = Types.NUMERIC;
+                break;
+            case "NVARCHAR":
+                result = Types.NVARCHAR;
+                break;
+            case "ROWID":
+                result = Types.ROWID;
+                break;
+            case Literals.SMALLINT_U:
+                result = Types.SMALLINT;
+                break;
+            case "SQLXML":
+                result = Types.SQLXML;
+                break;
+            case "STRUCT":
+                result = Types.STRUCT;
+                break;
+            case "TIME":
+                result = Types.TIME;
+                break;
+            case Literals.TIMESTAMP_U:
+                result = Types.TIMESTAMP;
+                break;
+            case Literals.TINYINT_U:
+                result = Types.TINYINT;
+                break;
+            case Literals.VARBINARY_U:
+                result = Types.VARBINARY;
+                break;
+            case Literals.VARCHAR_U:
+                result = Types.VARCHAR;
+                break;
+            default:
+                result = Types.OTHER;
+                break;
+        }
+
+        return result;
+    }
+
     @Override
     @NotNull
     public String toString()
     {
-        return "JdbcMetadataTypeManager{" +
-               "native2JavaTypeMapping=" + m__mNative2JavaTypeMapping +
-               '}';
+        return
+              "{ \"class\": \"" + JdbcMetadataTypeManager.class.getName() + '"'
+            + ", \"native2JavaTypeMapping\": " + m__mNative2JavaTypeMapping
+            + " }";
     }
 }

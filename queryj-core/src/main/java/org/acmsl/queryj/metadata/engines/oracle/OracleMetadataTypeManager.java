@@ -104,7 +104,7 @@ public class OracleMetadataTypeManager
      */
     public boolean isClob(final int dataType)
     {
-        boolean result;
+        final boolean result;
 
         switch (dataType)
         {
@@ -130,7 +130,7 @@ public class OracleMetadataTypeManager
     public String getNativeType(
         final int dataType, final boolean allowsNull)
     {
-        @Nullable String result;
+        @Nullable final String result;
 
         switch  (dataType)
         {
@@ -156,7 +156,7 @@ public class OracleMetadataTypeManager
     @NotNull
     public String getFieldType(final int dataType, final boolean allowsNull, final boolean isBool)
     {
-        String result;
+        @NotNull final String result;
 
         switch  (dataType)
         {
@@ -180,7 +180,7 @@ public class OracleMetadataTypeManager
     @NotNull
     public String getStatementSetterFieldType(final int dataType)
     {
-        @Nullable String result;
+        @NotNull final String result;
 
         switch (dataType)
         {
@@ -188,7 +188,7 @@ public class OracleMetadataTypeManager
             case Types.DATE:
             case Types.TIMESTAMP:
             case 11:
-                result = TIMESTAMP;
+                result = Literals.TIMESTAMP;
                 break;
 
             default:

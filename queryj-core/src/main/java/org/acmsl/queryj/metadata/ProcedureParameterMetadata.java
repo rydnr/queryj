@@ -40,6 +40,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing Commons-Logging classes.
  */
+import org.acmsl.queryj.Literals;
 import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -223,7 +224,7 @@ public class ProcedureParameterMetadata
             new org.apache.commons.lang.builder.ToStringBuilder(this)
                 .appendSuper(super.toString())
                 .append("dataType", getDataType())
-                .append("length", getLength())
+                .append(Literals.LENGTH, getLength())
                 .append("nullable", getNullable())
                 .toString();
     }

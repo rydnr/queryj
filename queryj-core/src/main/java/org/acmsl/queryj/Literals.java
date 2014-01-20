@@ -74,12 +74,11 @@ public interface Literals
     String BOOLEAN = "boolean";
     String DECIMAL = "DECIMAL";
     String BIG_DECIMAL = "BigDecimal";
-    String TINYINT = "TINYINT";
+    String TINYINT_U = "TINYINT";
     String SMALLINT = "SMALLINT";
     String INTEGER = "Integer";
     String INTEGER_U = "INTEGER";
     String NUMERIC_U = "NUMERIC";
-    String BIGINT_U = "BIGINT";
     String FLOAT_U = "FLOAT";
     String DOUBLE_U = "DOUBLE";
     String FLOAT = "float";
@@ -102,4 +101,13 @@ public interface Literals
     String POSITION_U = "POSITION";
     String USER_CONSTRAINTS_U = "USER_CONSTRAINTS";
     String CONSTRAINT_NAME_U = "CONSTRAINT_NAME";
+    String BIGINT_U = "BIGINT";
+    String BINARY_U = "BINARY";
+    String BIGINT = BIGINT_U;
+    String LONGVARBINARY_U = "LONGVARBINARY";
+    String SMALLINT_U = SMALLINT;
+    String NUMBER_U = "NUMBER";
+    String COMMENT = "comment";
+    String LENGTH = "length";
+    String INDEX = "index";
 }

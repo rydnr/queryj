@@ -109,7 +109,7 @@ public class PropertyElementFactory
             attributes.getValue("column_name");
 
         int t_iIndex =
-            conversionUtils.toInt(attributes.getValue("index"));
+            conversionUtils.toInt(attributes.getValue(Literals.INDEX));
 
         String t_strType = attributes.getValue("type");
 

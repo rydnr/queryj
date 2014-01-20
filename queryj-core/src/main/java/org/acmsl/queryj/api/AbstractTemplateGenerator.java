@@ -544,8 +544,8 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     public String toString()
     {
         return
-              "{ \"class\': \"" + AbstractTemplateGenerator.class.getName() + "\""
-            + "\", \"caching\": " + m__bCaching
+              "{ \"class\": \"" + AbstractTemplateGenerator.class.getName() + '"'
+            + ", \"caching\": " + m__bCaching
             + ", \"threadCount\": " + m__iThreadCount
             + " }";
     }
