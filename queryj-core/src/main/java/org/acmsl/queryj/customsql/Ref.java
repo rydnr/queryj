@@ -38,6 +38,6 @@ package org.acmsl.queryj.customsql;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface Ref
-    extends  IdentifiableElement
+    extends  IdentifiableElement<String>
 {
 }

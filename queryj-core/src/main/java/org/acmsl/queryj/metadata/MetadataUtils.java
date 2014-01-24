@@ -94,7 +94,7 @@ public class MetadataUtils
      * singular and plural forms for tables, and to cache other
      * other data if needed.
      */
-    private static final Map<String,String> CACHE = new HashMap<String,String>();
+    private static final Map<String,String> CACHE = new HashMap<>();
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -132,7 +132,7 @@ public class MetadataUtils
         }
         else
         {
-            result = new ArrayList<Attribute<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -160,7 +160,7 @@ public class MetadataUtils
 
             @NotNull final List<Attribute<String>> t_lPrimaryKey = t_Table.getPrimaryKey();
 
-            result = new ArrayList<Attribute<String>>(Math.max(t_lAttributes.size() - t_lPrimaryKey.size(), 0));
+            result = new ArrayList<>(Math.max(t_lAttributes.size() - t_lPrimaryKey.size(), 0));
 
             result.addAll(t_lAttributes);
             result.removeAll(t_lPrimaryKey);
@@ -168,7 +168,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<Attribute<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -196,7 +196,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<ForeignKey<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -224,7 +224,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<Attribute<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -257,7 +257,7 @@ public class MetadataUtils
                 {
                     if (result == null)
                     {
-                        result = new ArrayList<Attribute<String>>(t_lAttributes.size());
+                        result = new ArrayList<>(t_lAttributes.size());
                     }
                     result.add(t_Attribute);
                 }
@@ -266,7 +266,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<Attribute<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -300,7 +300,7 @@ public class MetadataUtils
                 {
                     if (result == null)
                     {
-                        result = new ArrayList<Attribute<String>>(t_lAttributes.size());
+                        result = new ArrayList<>(t_lAttributes.size());
                     }
                     result.add(t_Attribute);
                 }
@@ -309,7 +309,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<Attribute<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -328,7 +328,7 @@ public class MetadataUtils
     public Map<String,List<ForeignKey<String>>> retrieveReferringKeys(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final Map<String,List<ForeignKey<String>>> result = new HashMap<String,List<ForeignKey<String>>>(2);
+        @NotNull final Map<String,List<ForeignKey<String>>> result = new HashMap<>(2);
 
         for (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : metadataManager.getTableDAO().findAllTables())
         {
@@ -346,7 +346,7 @@ public class MetadataUtils
 
                         if (t_lReferringForeignKeys == null)
                         {
-                            t_lReferringForeignKeys = new ArrayList<ForeignKey<String>>(1);
+                            t_lReferringForeignKeys = new ArrayList<>(1);
                         }
                         t_lReferringForeignKeys.add(t_ForeignKey);
 
@@ -446,7 +446,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<ForeignKey<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -479,7 +479,7 @@ public class MetadataUtils
                 {
                     if (result == null)
                     {
-                        result = new ArrayList<ForeignKey<String>>(1);
+                        result = new ArrayList<>(1);
                     }
                     result.add(t_ForeignKey);
                 }
@@ -488,7 +488,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<ForeignKey<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -579,7 +579,7 @@ public class MetadataUtils
                 {
                     if (result == null)
                     {
-                        result = new ArrayList<Attribute<String>>(1);
+                        result = new ArrayList<>(1);
                     }
                     result.add(t_Attribute);
                 }
@@ -588,7 +588,7 @@ public class MetadataUtils
 
         if (result == null)
         {
-            result = new ArrayList<Attribute<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -601,30 +601,18 @@ public class MetadataUtils
      * @return such collection.
      */
     @NotNull
-    public List<Property> filterLobProperties(
-        @Nullable final Collection<Property> properties,
+    public <T> List<Property<T>> filterLobProperties(
+        @Nullable final Collection<Property<T>> properties,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
-        @NotNull final List<Property> result = new ArrayList<Property>();
+        @NotNull final List<Property<T>> result = new ArrayList<>();
 
-        @NotNull final Iterator<Property> t_itPropertyIterator =
-            (properties != null)
-            ? properties.iterator() : new ArrayList<Property>().iterator();
-
-        Property t_Property;
-
-        boolean t_bLob;
-
-        while  (t_itPropertyIterator.hasNext())
+        if (properties != null)
         {
-            t_Property = t_itPropertyIterator.next();
-
-            if  (t_Property != null)
+            for (@Nullable final Property<T> t_Property : properties)
             {
-                t_bLob =
-                    metadataTypeManager.isClob(t_Property.getType());
-
-                if  (t_bLob)
+                if  (   (t_Property != null)
+                     && (metadataTypeManager.isClob(t_Property.getType())))
                 {
                     result.add(t_Property);
                 }

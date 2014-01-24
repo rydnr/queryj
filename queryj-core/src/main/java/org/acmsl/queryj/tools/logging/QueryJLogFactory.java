@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -32,10 +32,6 @@
  * Description: *LogFactory* implementation that uses a
  * cached Ant-based *Log* instance if pre-cached.
  *
- * Version: $Revision$ ($Author$ at $Date$)
- *
- * $Id$
- *
  * Important Note: This class implements Apache Commons-Logging's Log
  * interface. License details are copied verbatim below.
  *
@@ -48,6 +44,10 @@ package org.acmsl.queryj.tools.logging;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogConfigurationException;
 import org.apache.commons.logging.LogFactory;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,6 +62,7 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
+@SuppressWarnings("unused")
 public class QueryJLogFactory
     extends  LogFactory
 {
@@ -74,8 +75,7 @@ public class QueryJLogFactory
      * Specifies the <code>QueryJLog</code> instance.
      * @param log the log instance.
      */
-    protected static final void immutableSetLog(
-        final Log log)
+    protected static final void immutableSetLog(@Nullable final Log log)
     {
         m__Log = log;
     }
@@ -84,7 +84,7 @@ public class QueryJLogFactory
      * Specifies the <code>QueryJLog</code> instance.
      * @param log the log instance.
      */
-    protected static void setLog(final Log log)
+    protected static void setLog(@Nullable final Log log)
     {
         immutableSetLog(log);
     }
@@ -93,6 +93,7 @@ public class QueryJLogFactory
      * Retrieves the <code>QueryJLog</code> instance.
      * @return the long instance.
      */
+    @Nullable
     public static Log getLog()
     {
         return m__Log;
@@ -102,9 +103,9 @@ public class QueryJLogFactory
      * Creates a <code>QueryJLogFactory</code> instance with
      * given log instance.
      * @param log the log instance.
-     * @precondition log != null
      */
-    protected QueryJLogFactory(final Log log)
+    @SuppressWarnings("unused")
+    protected QueryJLogFactory(@NotNull final Log log)
     {
         immutableSetLog(log);
     }
@@ -115,7 +116,8 @@ public class QueryJLogFactory
      * @param name Name of the attribute to return.
      */
     @Nullable
-    public Object getAttribute(final String name)
+    @Override
+    public Object getAttribute(@Nullable final String name)
     {
         return null;
     }
@@ -125,6 +127,7 @@ public class QueryJLogFactory
      * configuration attributes.  If there are no such attributes, a zero
      * length array is returned.
      */
+    @Override
     @NotNull
     public String[] getAttributeNames()
     {
@@ -138,7 +141,9 @@ public class QueryJLogFactory
      * @throws LogConfigurationException if a suitable <code>Log</code>
      * instance cannot be returned
      */
-    public Log getInstance(final Class clazz)
+    @Nullable
+    @Override
+    public Log getInstance(@NotNull final Class clazz)
         throws LogConfigurationException
     {
         return getInstance(clazz, getLog());
@@ -152,12 +157,13 @@ public class QueryJLogFactory
      * @throws LogConfigurationException if a suitable <code>Log</code>
      * instance cannot be returned
      */
-    protected Log getInstance(final Class clazz, final Log log)
+    @Nullable
+    protected Log getInstance(@NotNull final Class clazz, @Nullable final Log log)
         throws LogConfigurationException
     {
-        Log result = log;
+        @Nullable Log result = log;
         
-        LogFactory t_LogFactory = LogFactory.getFactory();
+        @Nullable final LogFactory t_LogFactory = LogFactory.getFactory();
         
         if  (t_LogFactory != null)
         {
@@ -181,7 +187,9 @@ public class QueryJLogFactory
      * @throws LogConfigurationException if a suitable <code>Log</code>
      * instance cannot be returned
      */
-    public Log getInstance(final String name)
+    @Override
+    @Nullable
+    public Log getInstance(@NotNull final String name)
         throws LogConfigurationException
     {
         return getInstance(name, getLog());
@@ -202,14 +210,15 @@ public class QueryJLogFactory
      * @throws LogConfigurationException if a suitable <code>Log</code>
      * instance cannot be returned
      */
-    public Log getInstance(final String name, final Log log)
+    @Nullable
+    public Log getInstance(@NotNull final String name, @Nullable final Log log)
         throws LogConfigurationException
     {
-        Log result = log;
+        @Nullable Log result = log;
         
         if  (result == null)
         {
-            LogFactory t_LogFactory = LogFactory.getFactory();
+            @Nullable final LogFactory t_LogFactory = LogFactory.getFactory();
         
             if  (t_LogFactory != null)
             {

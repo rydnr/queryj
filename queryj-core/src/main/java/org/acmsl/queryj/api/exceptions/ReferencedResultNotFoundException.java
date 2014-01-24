@@ -67,7 +67,7 @@ public class ReferencedResultNotFoundException
      * @param resultRef the {@link ResultRef}.
      * @param sql the {@link Sql}.
      */
-    public ReferencedResultNotFoundException(@NotNull final ResultRef resultRef, @NotNull final Sql sql)
+    public ReferencedResultNotFoundException(@NotNull final ResultRef resultRef, @NotNull final Sql<?> sql)
     {
         super("referenced.result.not.found", new Object[] { resultRef.getId(), sql.getId() } );
     }

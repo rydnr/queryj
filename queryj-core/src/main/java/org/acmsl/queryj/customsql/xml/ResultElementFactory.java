@@ -84,22 +84,32 @@ public class ResultElementFactory
      * @return the &lt;result&gt; information.
      * @throws SAXException if the attributes are not valid.
      */
+    @Override
     @Nullable
     public Object createObject(
         @NotNull final Attributes attributes,
-        final Digester digester,
-        final ConversionUtils conversionUtils)
+        @NotNull final Digester digester,
+        @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable ResultElement result;
+        @Nullable final ResultElement<String> result;
 
-        String t_strId = attributes.getValue("id");
+        @Nullable final String t_strId = attributes.getValue("id");
 
-        String t_strClass = attributes.getValue("class");
+        @Nullable final String t_strClass = attributes.getValue("class");
 
-        String t_strMatches = attributes.getValue("matches");
+        @Nullable final String t_strMatches = attributes.getValue("matches");
 
-        result = new ResultElement(t_strId, t_strClass, t_strMatches);
+        if (   (t_strId != null)
+            && (t_strClass != null)
+            && (t_strMatches != null))
+        {
+            result = new ResultElement<>(t_strId, t_strClass, t_strMatches);
+        }
+        else
+        {
+            result = null;
+        }
 
         return result;
     }

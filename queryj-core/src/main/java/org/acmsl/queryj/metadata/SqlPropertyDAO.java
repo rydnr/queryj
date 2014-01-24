@@ -70,7 +70,7 @@ public interface SqlPropertyDAO
      * @return the {@link org.acmsl.queryj.customsql.Property}, or <code>null</code> if not found.
      */
     @Nullable
-    Property findByPrimaryKey(@NotNull final String id);
+    Property<String> findByPrimaryKey(@NotNull final String id);
 
     /**
      * Retrieves all {@link org.acmsl.queryj.customsql.Parameter parameters} used in given
@@ -80,7 +80,7 @@ public interface SqlPropertyDAO
      */
     @SuppressWarnings("unused")
     @NotNull
-    List<Property> findByResult(@NotNull final String resultId);
+    List<Property<String>> findByResult(@NotNull final String resultId);
 
     /**
      * Inserts a new property.

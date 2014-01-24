@@ -48,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 2012/07/06
  */
 public interface StatementFlags
-    extends IdentifiableElement
+    extends IdentifiableElement<String>
 {
     /**
      * The <b>NO_GENERATED_KEYS</b> value for

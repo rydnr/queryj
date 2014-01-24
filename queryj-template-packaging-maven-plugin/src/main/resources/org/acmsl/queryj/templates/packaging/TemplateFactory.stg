@@ -57,7 +57,7 @@ sourceImpl(def, C) ::= <<
   description=[ "Factory for ", def.name.capitalized, "Templates." ],
   description_oneline=true,
   filename=C.class_name,
-  template="org/acmsl/templates/packaging/TemplateFactory.stg",
+  template="org/acmsl/queryj/templates/packaging/TemplateFactory.stg",
    C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates")>
 
@@ -67,8 +67,10 @@ sourceImpl(def, C) ::= <<
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateFactory;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Row;
 
@@ -105,7 +107,7 @@ class(def, C) ::= <<
 /**
  * Factory for {@link <def.name.capitalized>Template}s.
 <class_common_javadoc(
-  template="org/acmsl/templates/packaging/TemplateFactory.stg",
+  template="org/acmsl/queryj/templates/packaging/TemplateFactory.stg",
   timestamp=C.timestamp)>
  */
 @ThreadSafe
@@ -193,9 +195,8 @@ public class <C.class_name>
         @NotNull final ST template =
             new ST("<def.filenameBuilder>");
 
-        template.add("tableName", new DecoratedString(tableName));
-        template.add("engineName", new DecoratedString(metadataManager.getEngineName()));
-        template.add("engineVersion", new DecoratedString(metadataManager.getEngineVersion()));
+        template.add(Literals.TABLE_NAME, new DecoratedString(tableName));
+        template.add(Literals.ENGINE, new EngineDecorator(metadataManager.getEngine()));
 
         result = template.render();
 

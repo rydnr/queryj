@@ -72,6 +72,8 @@ import java.util.List;
 public class TableAttributesListDecorator
     extends AbstractTableAttributesListDecorator
 {
+    private static final long serialVersionUID = -4692044880067201567L;
+
     public TableAttributesListDecorator(
         @NotNull final List<Attribute<DecoratedString>> list,
         @NotNull final TableDecorator table)
@@ -104,7 +106,7 @@ public class TableAttributesListDecorator
 
     @NotNull
     @Override
-    public List<Sql> getDynamicQueries()
+    public List<Sql<DecoratedString>> getDynamicQueries()
     {
         throw new RuntimeException("Invalid operation");
     }
@@ -118,7 +120,7 @@ public class TableAttributesListDecorator
 
     @NotNull
     @Override
-    public List<Result> getDifferentCustomResults()
+    public List<Result<DecoratedString>> getDifferentCustomResults()
     {
         throw new RuntimeException("Invalid operation");
     }

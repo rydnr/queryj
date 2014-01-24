@@ -116,7 +116,7 @@ public class CustomResultTypeImportsHandler
      */
     @NotNull
     protected List<String> retrieveImports(
-        @NotNull final Result customResult,
+        @NotNull final Result<String> customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
@@ -140,11 +140,11 @@ public class CustomResultTypeImportsHandler
         @NotNull final SqlPropertyDAO sqlPropertyDAO,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
-        @NotNull final List<String> result = new ArrayList<String>();
+        @NotNull final List<String> result = new ArrayList<>();
 
         String t_strImport;
 
-        Property t_Property;
+        Property<String> t_Property;
 
         for (@Nullable final PropertyRef t_PropertyRef : propertyRefs)
         {

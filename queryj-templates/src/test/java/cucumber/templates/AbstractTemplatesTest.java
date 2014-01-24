@@ -41,6 +41,7 @@ package cucumber.templates;
 import cucumber.templates.sql.CucumberSqlDAO;
 import cucumber.templates.sql.CucumberSqlParameterDAO;
 import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.templates.antlr.JavaLexer;
 import org.acmsl.queryj.templates.antlr.JavaPackageVisitor;
@@ -57,7 +58,7 @@ import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 
 /*
- * Importing ACMSL-Commons classes.
+ * Importing Java-Commons classes.
  */
 import org.acmsl.commons.utils.io.FileUtils;
 
@@ -112,22 +113,25 @@ import java.util.Properties;
  * @author <a href="chous@acm-sl.org">Jose San Leandro</a>
  * @since 2013/05/05
  */
+@SuppressWarnings("unused")
 public abstract class AbstractTemplatesTest<G, F>
 {
+    public static final String PARSER_ERROR = "Parser error: ";
+    public static final String CANNOT_READ_FILE = "Cannot read file: ";
     /**
      * A simple mapping between template names and generators.
      */
-    @NotNull protected final Map<String, G> GENERATOR_MAPPINGS = new HashMap<String, G>();
+    @NotNull protected final Map<String, G> GENERATOR_MAPPINGS = new HashMap<>();
 
     /**
      * A simple mapping between template names and factories.
      */
-    @NotNull protected final Map<String, F> FACTORY_MAPPINGS = new HashMap<String, F>();
+    @NotNull protected final Map<String, F> FACTORY_MAPPINGS = new HashMap<>();
 
     /**
      * A simple mapping between template names and packages.
      */
-    @NotNull protected final Map<String, String> PACKAGE_MAPPINGS = new HashMap<String, String>();
+    @NotNull protected final Map<String, String> PACKAGE_MAPPINGS = new HashMap<>();
 
     /**
      * The package name.
@@ -158,12 +162,12 @@ public abstract class AbstractTemplatesTest<G, F>
     /**
      * The list of SQL queries.
      */
-    private List<Sql> m__lSql;
+    private List<Sql<String>> m__lSql;
 
     /**
      * The SQL query parameters.
      */
-    private Map<String, List<Parameter>> m__mParameters;
+    private Map<String, List<Parameter<String>>> m__mParameters;
 
     /**
      * Creates an empty instance.
@@ -173,8 +177,8 @@ public abstract class AbstractTemplatesTest<G, F>
         immutableSetOutputFiles(new HashMap<String, File>());
         immutableSetTables(new HashMap<String, Table<String, Attribute<String>, List<Attribute<String>>>>());
         immutableSetForeignKeys(new ArrayList<ForeignKey<String>>());
-        immutableSetSqlList(new ArrayList<Sql>());
-        immutableSetParameters(new HashMap<String, List<Parameter>>());
+        immutableSetSqlList(new ArrayList<Sql<String>>());
+        immutableSetParameters(new HashMap<String, List<Parameter<String>>>());
     }
 
     /**
@@ -264,7 +268,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * Specifies the {@link Sql} list.
      * @param sqlList such list.
      */
-    protected final void immutableSetSqlList(@NotNull final List<Sql> sqlList)
+    protected final void immutableSetSqlList(@NotNull final List<Sql<String>> sqlList)
     {
         this.m__lSql = sqlList;
     }
@@ -274,7 +278,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param sqlList such list.
      */
     @SuppressWarnings("unused")
-    protected void setSqlList(@NotNull final List<Sql> sqlList)
+    protected void setSqlList(@NotNull final List<Sql<String>> sqlList)
     {
         immutableSetSqlList(sqlList);
     }
@@ -284,7 +288,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @return such table.
      */
     @SuppressWarnings("unused")
-    protected List<Sql> getSqlList()
+    protected List<Sql<String>> getSqlList()
     {
         return this.m__lSql;
     }
@@ -293,7 +297,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * Specifies the SQL queries' parameters.
      * @param parameters such map.
      */
-    protected final void immutableSetParameters(@NotNull final Map<String, List<Parameter>> parameters)
+    protected final void immutableSetParameters(@NotNull final Map<String, List<Parameter<String>>> parameters)
     {
         this.m__mParameters = parameters;
     }
@@ -302,7 +306,8 @@ public abstract class AbstractTemplatesTest<G, F>
      * Specifies the SQL queries' parameters.
      * @param parameters such map.
      */
-    protected void setParameters(@NotNull final Map<String, List<Parameter>> parameters)
+    @SuppressWarnings("unused")
+    protected void setParameters(@NotNull final Map<String, List<Parameter<String>>> parameters)
     {
         immutableSetParameters(parameters);
     }
@@ -312,7 +317,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @return such parameters.
      */
     @SuppressWarnings("unused")
-    protected final Map<String, List<Parameter>> getParameters()
+    protected final Map<String, List<Parameter<String>>> getParameters()
     {
         return m__mParameters;
     }
@@ -325,8 +330,8 @@ public abstract class AbstractTemplatesTest<G, F>
      */
     @NotNull
     protected CustomSqlProvider retrieveCustomSqlProvider(
-        @NotNull final List<Sql> sqlList,
-        @NotNull final Map<String, List<Parameter>> parameters)
+        @NotNull final List<Sql<String>> sqlList,
+        @NotNull final Map<String, List<Parameter<String>>> parameters)
     {
         return
             new SqlXmlParserImpl(new ByteArrayInputStream("".getBytes()))
@@ -412,7 +417,7 @@ public abstract class AbstractTemplatesTest<G, F>
                 }
                 catch (@NotNull final Throwable invalidClass)
                 {
-                    Assert.fail("Parser error: " + invalidClass.getMessage());
+                    Assert.fail(PARSER_ERROR + invalidClass.getMessage());
                 }
 
                 @NotNull final JavaPackageVisitor packageVisitor = new JavaPackageVisitor();
@@ -427,7 +432,7 @@ public abstract class AbstractTemplatesTest<G, F>
                 }
                 catch (@NotNull final Throwable invalidClass)
                 {
-                    Assert.fail("Parser error: " + invalidClass.getMessage());
+                    Assert.fail(PARSER_ERROR + invalidClass.getMessage());
                 }
 
                 Assert.assertNotNull(
@@ -449,7 +454,7 @@ public abstract class AbstractTemplatesTest<G, F>
                 }
                 catch (@NotNull final Throwable invalidClass)
                 {
-                    Assert.fail("Parser error: " + invalidClass.getMessage());
+                    Assert.fail(PARSER_ERROR + invalidClass.getMessage());
                 }
 
                 Assert.assertNotNull("Missing class in file " + outputFile.getAbsolutePath(), rootClass);
@@ -535,8 +540,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @return such generator.
      */
     @Nullable
-    protected G retrieveTemplateGenerator(
-        @NotNull final String template)
+    protected G retrieveTemplateGenerator(@NotNull final String template)
     {
         return GENERATOR_MAPPINGS.get(template);
     }
@@ -569,12 +573,12 @@ public abstract class AbstractTemplatesTest<G, F>
     @NotNull
     protected MetadataManager retrieveMetadataManager(
         @NotNull final String engineName,
-	@NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table)
+	    @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table)
     {
-        @NotNull final List<String> tableNames = new ArrayList<String>(1);
+        @NotNull final List<String> tableNames = new ArrayList<>(1);
         tableNames.add(table.getName());
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables =
-	    new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(1);
+	        new ArrayList<>(1);
         tables.add(table);
 
         return retrieveMetadataManager(engineName, tableNames, tables);
@@ -590,10 +594,10 @@ public abstract class AbstractTemplatesTest<G, F>
     @NotNull
     protected MetadataManager retrieveMetadataManager(@NotNull final String engineName, @NotNull final String table)
     {
-        @NotNull final List<String> tableNames = new ArrayList<String>(1);
+        @NotNull final List<String> tableNames = new ArrayList<>(1);
         tableNames.add(table);
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables =
-	    new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(0);
+	    new ArrayList<>(0);
 
         return retrieveMetadataManager(engineName, tableNames, tables);
     }
@@ -607,9 +611,9 @@ public abstract class AbstractTemplatesTest<G, F>
     @NotNull
     protected MetadataManager retrieveMetadataManager(@NotNull final String engineName)
     {
-        @NotNull final List<String> tableNames = new ArrayList<String>(0);
+        @NotNull final List<String> tableNames = new ArrayList<>(0);
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables =
-	    new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(0);
+	    new ArrayList<>(0);
 
         return retrieveMetadataManager(engineName, tableNames, tables);
     }
@@ -638,9 +642,7 @@ public abstract class AbstractTemplatesTest<G, F>
                 true, // disable table extraction
                 true, // lazy table extraction
                 false, // case sensitive
-                engineName, // engine
-                "11", // engine version
-                "'"); // quote
+                new UndefinedJdbcEngine(engineName, "11")); // engine version
     }
 
     /**
@@ -670,7 +672,7 @@ public abstract class AbstractTemplatesTest<G, F>
                 }
                 catch (final IOException e)
                 {
-                    Assert.fail("Cannot read file: " + e.getMessage());
+                    Assert.fail(CANNOT_READ_FILE + e.getMessage());
                 }
                 finally
                 {
@@ -682,7 +684,7 @@ public abstract class AbstractTemplatesTest<G, F>
                         }
                         catch (IOException e)
                         {
-                            Assert.fail("Cannot read file: " +  e.getMessage());
+                            Assert.fail(CANNOT_READ_FILE +  e.getMessage());
                         }
                     }
                 }
@@ -733,7 +735,7 @@ public abstract class AbstractTemplatesTest<G, F>
         }
         catch (final IOException e)
         {
-            Assert.fail("Cannot read file: " + e.getMessage());
+            Assert.fail(CANNOT_READ_FILE + e.getMessage());
         }
         finally
         {
@@ -745,7 +747,7 @@ public abstract class AbstractTemplatesTest<G, F>
                 }
                 catch (IOException e)
                 {
-                    Assert.fail("Cannot read file: " +  e.getMessage());
+                    Assert.fail(CANNOT_READ_FILE +  e.getMessage());
                 }
             }
         }

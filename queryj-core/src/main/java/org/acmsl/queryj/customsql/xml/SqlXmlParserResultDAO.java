@@ -81,8 +81,8 @@ public class SqlXmlParserResultDAO
     /**
      * The map of results by table/DAO.
      */
-    private static final Map<String,List<Result>> CACHED_RESULTS_BY_TABLE = new HashMap<String, List<Result>>();
-    private static final Map<String, Boolean> UNMATCHED_TABLES = new HashMap<String, Boolean>(1);
+    private static final Map<String,List<Result<String>>> CACHED_RESULTS_BY_TABLE = new HashMap<>();
+    private static final Map<String, Boolean> UNMATCHED_TABLES = new HashMap<>(1);
 
     /**
      * Creates a new {@link SqlXmlParserResultDAO} with given {@link SqlXmlParser}.
@@ -100,7 +100,7 @@ public class SqlXmlParserResultDAO
      */
     @Override
     @Nullable
-    public Result findByPrimaryKey(@NotNull final String id)
+    public Result<String> findByPrimaryKey(@NotNull final String id)
     {
         return findByPrimaryKey(id, getSqlXmlParser());
     }
@@ -112,7 +112,7 @@ public class SqlXmlParserResultDAO
      * @return the associated {@link org.acmsl.queryj.customsql.Result result}.
      */
     @Nullable
-    protected Result findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
+    protected Result<String> findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
     {
         return findById(id, Result.class, parser.getResults());
     }
@@ -124,7 +124,7 @@ public class SqlXmlParserResultDAO
      */
     @Override
     @Nullable
-    public Result findSingleMatch(@NotNull final String table)
+    public Result<String> findSingleMatch(@NotNull final String table)
     {
         return findMatch(table, Result.SINGLE, EnglishGrammarUtils.getInstance());
     }
@@ -136,7 +136,7 @@ public class SqlXmlParserResultDAO
      */
     @Override
     @Nullable
-    public Result findMultipleMatch(@NotNull final String table)
+    public Result<String> findMultipleMatch(@NotNull final String table)
     {
         return findMatch(table, Result.MULTIPLE, EnglishGrammarUtils.getInstance());
     }
@@ -147,14 +147,14 @@ public class SqlXmlParserResultDAO
      * @return the multiple-match {@link Result result}.
      */
     @Nullable
-    public Result findMatch(
+    public Result<String> findMatch(
         @NotNull final String table,
         @NotNull final String type,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
-        @Nullable Result result = null;
+        @Nullable Result<String> result = null;
 
-        @Nullable final List<Result> t_lCachedResults = getCachedResults(table);
+        @Nullable final List<Result<String>> t_lCachedResults = getCachedResults(table);
 
         if (t_lCachedResults != null)
         {
@@ -164,12 +164,12 @@ public class SqlXmlParserResultDAO
         if (   (result == null)
             && (!knownToBeNotFound(table)))
         {
-            @Nullable List<Sql> t_lSql;
+            @Nullable List<Sql<String>> t_lSql;
             @Nullable String t_strDAO = null;
 
             boolean t_bBreak = false;
 
-            for (@Nullable final Result t_Result : findAll())
+            for (@Nullable final Result<String> t_Result : findAll())
             {
                 if (t_Result != null)
                 {
@@ -177,7 +177,7 @@ public class SqlXmlParserResultDAO
                     {
                         t_lSql = findSqlByResultId(t_Result.getId());
 
-                        for (@Nullable final Sql t_Sql : t_lSql)
+                        for (@Nullable final Sql<String> t_Sql : t_lSql)
                         {
                             if (t_Sql != null)
                             {
@@ -246,11 +246,11 @@ public class SqlXmlParserResultDAO
      * @return the first match, or <code>null</code> otherwise.
      */
     @Nullable
-    protected Result filterByType(@NotNull final List<Result> results, @NotNull final String type)
+    protected Result<String> filterByType(@NotNull final List<Result<String>> results, @NotNull final String type)
     {
-        @Nullable Result result = null;
+        @Nullable Result<String> result = null;
 
-        for (@Nullable final Result t_Result : results)
+        for (@Nullable final Result<String> t_Result : results)
         {
             if (   (t_Result != null)
                 && (type.equalsIgnoreCase(t_Result.getMatches())))
@@ -270,7 +270,7 @@ public class SqlXmlParserResultDAO
      * @return the cached results.
      */
     @Nullable
-    protected synchronized List<Result> getCachedResults(@NotNull final String table)
+    protected synchronized List<Result<String>> getCachedResults(@NotNull final String table)
     {
         return CACHED_RESULTS_BY_TABLE.get(table.toLowerCase(Locale.US));
     }
@@ -280,12 +280,12 @@ public class SqlXmlParserResultDAO
      * @param table the table.
      * @param result the result.
      */
-    protected synchronized void cacheResult(@NotNull final String table, @NotNull final Result result)
+    protected synchronized void cacheResult(@NotNull final String table, @NotNull final Result<String> result)
     {
-        List<Result> t_lCurrentMatches = CACHED_RESULTS_BY_TABLE.get(table.toLowerCase(Locale.US));
+        List<Result<String>> t_lCurrentMatches = CACHED_RESULTS_BY_TABLE.get(table.toLowerCase(Locale.US));
         if (t_lCurrentMatches == null)
         {
-            t_lCurrentMatches = new ArrayList<Result>(2);
+            t_lCurrentMatches = new ArrayList<>(2);
             CACHED_RESULTS_BY_TABLE.put(table.toLowerCase(Locale.US), t_lCurrentMatches);
         }
         if (!t_lCurrentMatches.contains(result))
@@ -300,7 +300,7 @@ public class SqlXmlParserResultDAO
      * @return the associated {@link Sql}.
      */
     @NotNull
-    protected List<Sql> findSqlByResultId(@NotNull final String id)
+    protected List<Sql<String>> findSqlByResultId(@NotNull final String id)
     {
         return findSqlByResultId(id, getSqlXmlParser());
     }
@@ -312,16 +312,16 @@ public class SqlXmlParserResultDAO
      * @return the associated {@link Sql}.
      */
     @NotNull
-    protected List<Sql> findSqlByResultId(@NotNull final String id, @NotNull final SqlXmlParser sqlXmlParser)
+    protected List<Sql<String>> findSqlByResultId(@NotNull final String id, @NotNull final SqlXmlParser sqlXmlParser)
     {
-        @Nullable final List<Sql> result = new ArrayList<Sql>(2);
+        @Nullable final List<Sql<String>> result = new ArrayList<>(2);
 
-        @Nullable final Result t_CustomResult = findByPrimaryKey(id);
+        @Nullable final Result<String> t_CustomResult = findByPrimaryKey(id);
         @Nullable ResultRef t_ResultRef;
 
         if (t_CustomResult != null)
         {
-            for (@Nullable final Sql t_Sql : sqlXmlParser.getQueries())
+            for (@Nullable final Sql<String> t_Sql : sqlXmlParser.getQueries())
             {
                 if (t_Sql != null)
                 {
@@ -346,7 +346,7 @@ public class SqlXmlParserResultDAO
      */
     @Override
     @Nullable
-    public Result findBySqlId(@NotNull final String sqlId)
+    public Result<String> findBySqlId(@NotNull final String sqlId)
     {
         return findBySqlId(sqlId, getSqlXmlParser());
     }
@@ -358,13 +358,13 @@ public class SqlXmlParserResultDAO
      * @return the associated {@link Result}, or <code>null</code> if not found.
      */
     @Nullable
-    protected Result findBySqlId(@NotNull final String sqlId, @NotNull final SqlXmlParser sqlXmlParser)
+    protected Result<String> findBySqlId(@NotNull final String sqlId, @NotNull final SqlXmlParser sqlXmlParser)
     {
-        @Nullable Result result = null;
+        @Nullable Result<String> result = null;
 
         @Nullable ResultRef t_ResultRef;
 
-        for (@Nullable final Sql t_Sql : sqlXmlParser.getQueries())
+        for (@Nullable final Sql<String> t_Sql : sqlXmlParser.getQueries())
         {
             if (t_Sql != null)
             {
@@ -428,7 +428,7 @@ public class SqlXmlParserResultDAO
      */
     @Override
     @NotNull
-    public List<Result> findAll()
+    public List<Result<String>> findAll()
     {
         return findAll(getSqlXmlParser());
 
@@ -440,7 +440,7 @@ public class SqlXmlParserResultDAO
      * @return such list.
      */
     @NotNull
-    protected List<Result> findAll(@NotNull final SqlXmlParser parser)
+    protected List<Result<String>> findAll(@NotNull final SqlXmlParser parser)
     {
         return parser.getResults();
 
@@ -454,7 +454,7 @@ public class SqlXmlParserResultDAO
      */
     @NotNull
     @Override
-    public List<Result> findByType(@NotNull final String type)
+    public List<Result<String>> findByType(@NotNull final String type)
     {
         return filterItems(findAll(), Result.class, type);
     }

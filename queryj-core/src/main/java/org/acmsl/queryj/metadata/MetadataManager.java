@@ -43,6 +43,7 @@ package org.acmsl.queryj.metadata;
  * Importing some JetBrains annotations.
  */
 import org.acmsl.queryj.api.exceptions.QueryJException;
+import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
@@ -109,35 +110,13 @@ public interface MetadataManager
      * Retrieves the engine name.
      * @return such information.
      */
-    @NotNull
-    String getEngineName();
-
-    /**
-     * Retrieves the engine version.
-     * @return such information.
-     */
-    @NotNull
-    String getEngineVersion();
-
-    /**
-     * Retrieves the identifier quote string.
-     * @return such information.
-     */
-    @NotNull
-    @SuppressWarnings("unused")
-    String getQuote();
+    @NotNull Engine<String> getEngine();
 
     /**
      * Retrieves the type manager.
      * @return such instance.
      */
     public MetadataTypeManager getMetadataTypeManager();
-
-    /**
-     * Checks whether the engine requires specific CLOB handling.
-     * @return <code>true</code> in such case.
-     */
-    public boolean requiresCustomClobHandling();
 
     /**
      * Retrieves the metadata.

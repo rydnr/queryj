@@ -71,7 +71,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CustomResultsHandler
-    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Result>>
+    extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Result<String>>>
 {
     private static final long serialVersionUID = 6281653014442667192L;
 
@@ -94,7 +94,7 @@ public class CustomResultsHandler
      */
     @NotNull
     @Override
-    protected List<Result> getValue(@NotNull final PerTableTemplateContext context)
+    protected List<Result<String>> getValue(@NotNull final PerTableTemplateContext context)
         throws QueryJBuildException
     {
         return
@@ -131,7 +131,7 @@ public class CustomResultsHandler
      * model.
      */
     @NotNull
-    protected List<Result> retrieveCustomResults(
+    protected List<Result<String>> retrieveCustomResults(
         @NotNull final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,

@@ -223,15 +223,15 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
         @NotNull final PerCustomSqlTemplateFactory<T, C> templateFactory,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final List<Sql> sqlElements,
+        @NotNull final List<Sql<String>> sqlElements,
         @Nullable final String header)
       throws  QueryJBuildException
     {
-        @NotNull final List<T> t_lTemplates = new ArrayList<T>(sqlElements.size());
+        @NotNull final List<T> t_lTemplates = new ArrayList<>(sqlElements.size());
 
-        @Nullable final SqlElement t_SqlElement = null;
+        @Nullable final SqlElement<String> t_SqlElement = null;
 
-        for (@Nullable final Sql t_Sql : sqlElements)
+        for (@Nullable final Sql<String> t_Sql : sqlElements)
         {
             if (t_Sql != null)
             {
@@ -261,7 +261,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      */
     @NotNull
     protected String retrievePackage(
-        @NotNull final Sql customSql,
+        @NotNull final Sql<String> customSql,
         @NotNull final String engineName,
         @NotNull final QueryJCommand parameters)
     {
@@ -283,7 +283,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      */
     @NotNull
     protected abstract String retrievePackage(
-        @NotNull final Sql customSql,
+        @NotNull final Sql<String> customSql,
         @NotNull final String engineName,
         @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils);
@@ -305,19 +305,18 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      */
     @SuppressWarnings("unchecked")
     @NotNull
-    protected List<Sql> retrieveCustomSql(
+    protected List<Sql<String>> retrieveCustomSql(
         @NotNull final QueryJCommand parameters,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final List<Sql> result;
+        @NotNull final List<Sql<String>> result;
 
-        @Nullable final List< Sql > aux = new QueryJCommandWrapper<List<Sql>>(parameters).getSetting(CUSTOM_SQL);
+        @Nullable final List<Sql<String>> aux = new QueryJCommandWrapper<List<Sql<String>>>(parameters).getSetting(CUSTOM_SQL);
 
         if  (aux == null)
         {
-            result =
-                retrieveCustomSqlElements(customSqlProvider.getSqlDAO(), metadataManager);
+            result = retrieveCustomSqlElements(customSqlProvider.getSqlDAO(), metadataManager);
         }
         else
         {
@@ -335,7 +334,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected List<Sql> retrieveCustomSqlElements(
+    protected List<Sql<String>> retrieveCustomSqlElements(
         @NotNull final SqlDAO sqlDAO,
         @NotNull final MetadataManager metadataManager)
     {

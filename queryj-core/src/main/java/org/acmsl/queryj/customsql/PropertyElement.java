@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -57,16 +57,16 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class PropertyElement
-    extends  AbstractParameterElement
-    implements  Property
+public class PropertyElement<T>
+    extends  AbstractParameterElement<T>
+    implements  Property<T>
 {
     private static final long serialVersionUID = -6387934586093006533L;
 
     /**
      * The column name.
      */
-    private String m__strColumnName;
+    private T m__strColumnName;
 
     /**
      * Whether the property allows nulls or not.
@@ -81,10 +81,10 @@ public class PropertyElement
      * @param nullable the <i>nullable</i> attribute.
      */
     public PropertyElement(
-        @NotNull final String id,
-        @NotNull final String columnName,
+        @NotNull final T id,
+        @NotNull final T columnName,
         final int index,
-        @NotNull final String type,
+        @NotNull final T type,
         final boolean nullable)
     {
         super(id, index, type);
@@ -97,7 +97,7 @@ public class PropertyElement
      * Specifies the column name.
      * @param name such name.
      */
-    protected final void immutableSetColumnName(@NotNull final String name)
+    protected final void immutableSetColumnName(@NotNull final T name)
     {
         m__strColumnName = name;
     }
@@ -107,7 +107,7 @@ public class PropertyElement
      * @param name such name.
      */
     @SuppressWarnings("unused")
-    protected void setColumnName(@NotNull final String name)
+    protected void setColumnName(@NotNull final T name)
     {
         immutableSetColumnName(name);
     }
@@ -118,7 +118,7 @@ public class PropertyElement
      */
     @Override
     @NotNull
-    public String getColumnName()
+    public T getColumnName()
     {
         return m__strColumnName;
     }
@@ -153,37 +153,18 @@ public class PropertyElement
     }
 
     /**
-     * Retrieves the validation value.
-     *
-     * @return such value.
-     */
-    public String getValidationValue()
-    {
-        return null;
-    }
-
-    /**
      * Provides a text representation of the information
      * contained in this instance.
+     *
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {
-        StringBuilder result = new StringBuilder(getClass().getName());
-        result.append("{id:\"");
-        result.append(getId());
-        result.append("\"; columnName:\"");
-        result.append(getColumnName());
-        result.append("\"; type:\"");
-        result.append(getType());
-        result.append("\"; index:");
-        result.append(getIndex());
-        result.append("; validationValue:\"");
-        result.append(getValidationValue());
-        result.append("}");
-
-        return result.toString();
+        return
+              "{ \"nullable\": " + m__bNullable
+            + ", \"columnName\": \"" + m__strColumnName + "\" }";
     }
 
     /**
@@ -204,13 +185,15 @@ public class PropertyElement
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
+    @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(final Object object)
     {
         boolean result = false;
 
         if  (object instanceof Property)
         {
-            @NotNull final Property t_OtherInstance = (Property) object;
+            @NotNull final Property<String> t_OtherInstance = (Property<String>) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -224,36 +207,9 @@ public class PropertyElement
         return result;
     }
 
-    /**
-     * Compares given object with this instance.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
-     * object prevents it from being compared to this Object.
-     */
     @Override
-    public int compareTo(@Nullable final Property object)
-        throws  ClassCastException
+    public int compareTo(@Nullable final Property<T> property)
     {
-        int result = 1;
-
-        if  (object != null)
-        {
-            result = compareThem(this, object);
-        }
-
-        return result;
-    }
-
-    /**
-     * Compares given {@link Property properties}.
-     * @param first the first.
-     * @param second the second.
-     * @return the outcome of comparing <code>first.getIndex()</code> vs
-     * <code>second.getIndex()</code>
-     */
-    protected int compareThem(@NotNull final Property first, @NotNull final Property second)
-    {
-        return first.getIndex() - second.getIndex();
+        return super.compareTo(property);
     }
 }

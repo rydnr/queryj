@@ -66,46 +66,17 @@ import org.checkthread.annotations.ThreadSafe;
 public class CachingSqlDecorator
     extends  AbstractSqlDecorator
 {
-    /**
-     * A cached empty String array.
-     */
-    public static final String[] EMPTY_STRING_ARRAY = new String[0];
     private static final long serialVersionUID = 4468587636043277021L;
-
-    /**
-     * The cached splitted quoted value.
-     */
-    private String[] m__astrCachedSplittedQuotedValue;
-
-    /**
-     * The cached id formatted as constant.
-     */
-    private String m__strCachedIdAsConstant;
-
-    /**
-     * The cached capitalized id.
-     */
-    private String m__strCachedIdCapitalized;
-
-    /**
-     * The cached uncapitalized name.
-     */
-    private String m__strCachedNameUncapitalized;
 
     /**
      * The cached parameters.
      */
-    private List<Parameter> m__cCachedParameters;
+    private List<Parameter<DecoratedString>> m__cCachedParameters;
 
     /**
      * The cached result class.
      */
     private String m__strCachedResultClass;
-
-    /**
-     * The cached result id as constant.
-     */
-    private String m__strCachedResultIdAsConstant;
 
     /**
      * Creates a <code>CachingSqlDecorator</code> with given information.
@@ -115,7 +86,7 @@ public class CachingSqlDecorator
      * @param metadataManager the metadata manager.
      */
     public CachingSqlDecorator(
-        @NotNull final Sql sql,
+        @NotNull final Sql<String> sql,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
@@ -123,207 +94,11 @@ public class CachingSqlDecorator
     }
 
     /**
-     * Specifies the cached split quoted value.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedSplittedQuotedValue(
-        @NotNull final String[] value)
-    {
-        m__astrCachedSplittedQuotedValue = value;
-    }
-
-    /**
-     * Specifies the cached split quoted value.
-     * @param value the value to cache.
-     */
-    protected void setCachedSplittedQuotedValue(final String[] value)
-    {
-        immutableSetCachedSplittedQuotedValue(value);
-    }
-
-    /**
-     * Retrieves the cached split quoted value.
-     * @return such value.
-     */
-    @Nullable
-    protected final String[] immutableGetCachedSplittedQuotedValue()
-    {
-        return m__astrCachedSplittedQuotedValue;
-    }
-
-    /**
-     * Retrieves the cached splitted quoted value.
-     * @return such value.
-     */
-    @Nullable
-    public String[] getCachedSplittedQuotedValue()
-    {
-        return clone(immutableGetCachedSplittedQuotedValue());
-    }
-
-    /**
-     * Retrieves the value, in multiple lines.
-     * @return such output.
-     */
-    @NotNull
-    public String[] getSplittedQuotedValue()
-    {
-        String[] result = getCachedSplittedQuotedValue();
-
-        if  (   (result == null)
-             || (result.length == 0))
-        {
-            result = super.getSplittedQuotedValue();
-            setCachedSplittedQuotedValue(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the cached id formatted as constant.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedIdAsConstant(
-        @NotNull final String value)
-    {
-        m__strCachedIdAsConstant = value;
-    }
-
-    /**
-     * Specifies the cached id formatted as constant.
-     * @param value the value to cache.
-     */
-    protected void setCachedIdAsConstant(final String value)
-    {
-        immutableSetCachedIdAsConstant(value);
-    }
-
-    /**
-     * Retrieves the cached id formatted as constant.
-     * @return such value.
-     */
-    public String getCachedIdAsConstant()
-    {
-        return m__strCachedIdAsConstant;
-    }
-
-    /**
-     * Retrieves the id formatted as constant.
-     * @return such information.
-     */
-    @NotNull
-    public String getIdAsConstant()
-    {
-        String result = getCachedIdAsConstant();
-
-        if  (result == null)
-        {
-            result = super.getIdAsConstant();
-            setCachedIdAsConstant(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the cached capitalized id.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedIdCapitalized(
-        final String value)
-    {
-        m__strCachedIdCapitalized = value;
-    }
-
-    /**
-     * Specifies the cached capitalized id.
-     * @param value the value to cache.
-     */
-    protected void setCachedIdCapitalized(final String value)
-    {
-        immutableSetCachedIdCapitalized(value);
-    }
-
-    /**
-     * Retrieves the cached capitalized id.
-     * @return such value.
-     */
-    public String getCachedIdCapitalized()
-    {
-        return m__strCachedIdCapitalized;
-    }
-
-    /**
-     * Retrieves the id capitalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getIdCapitalized()
-    {
-        String result = getCachedIdCapitalized();
-
-        if  (result == null)
-        {
-            result = super.getIdCapitalized();
-            setCachedIdCapitalized(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the cached uncapitalized name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameUncapitalized(
-        final String value)
-    {
-        m__strCachedNameUncapitalized = value;
-    }
-
-    /**
-     * Specifies the cached uncapitalized name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameUncapitalized(final String value)
-    {
-        immutableSetCachedNameUncapitalized(value);
-    }
-
-    /**
-     * Retrieves the cached uncapitalized name.
-     * @return such value.
-     */
-    public String getCachedNameUncapitalized()
-    {
-        return m__strCachedNameUncapitalized;
-    }
-
-    /**
-     * Retrieves the name, (un)capitalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getNameUncapitalized()
-    {
-        String result = getCachedNameUncapitalized();
-
-        if  (result == null)
-        {
-            result = super.getNameUncapitalized();
-            setCachedNameUncapitalized(result);
-        }
-
-        return result;
-    }
-
-    /**
      * Specifies the cached parameters.
      * @param value the value to cache.
      */
     protected final void immutableSetCachedParameters(
-        @NotNull final List<Parameter> value)
+        @NotNull final List<Parameter<DecoratedString>> value)
     {
         m__cCachedParameters = value;
     }
@@ -332,7 +107,7 @@ public class CachingSqlDecorator
      * Specifies the cached parameters.
      * @param value the value to cache.
      */
-    protected void setCachedParameters(@NotNull final List<Parameter> value)
+    protected void setCachedParameters(@NotNull final List<Parameter<DecoratedString>> value)
     {
         immutableSetCachedParameters(value);
     }
@@ -342,7 +117,7 @@ public class CachingSqlDecorator
      * @return such value.
      */
     @Nullable
-    public List<Parameter> getCachedParameters()
+    public List<Parameter<DecoratedString>> getCachedParameters()
     {
         return m__cCachedParameters;
     }
@@ -352,9 +127,9 @@ public class CachingSqlDecorator
      * @return such information.
      */
     @NotNull
-    public List<Parameter> getParameters()
+    public List<Parameter<DecoratedString>> getParameters()
     {
-        List<Parameter> result = getCachedParameters();
+        List<Parameter<DecoratedString>> result = getCachedParameters();
 
         if  (result == null)
         {
@@ -397,6 +172,8 @@ public class CachingSqlDecorator
      * Retrieves the result class.
      * @return such information.
      */
+    @Override
+    @Nullable
     public String getResultClass()
     {
         @Nullable String result = getCachedResultClass();
@@ -405,71 +182,6 @@ public class CachingSqlDecorator
         {
             result = super.getResultClass();
             setCachedResultClass(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the cached result id as constant.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedResultIdAsConstant(
-        final String value)
-    {
-        m__strCachedResultIdAsConstant = value;
-    }
-
-    /**
-     * Specifies the cached result id as constant.
-     * @param value the value to cache.
-     */
-    protected void setCachedResultIdAsConstant(final String value)
-    {
-        immutableSetCachedResultIdAsConstant(value);
-    }
-
-    /**
-     * Retrieves the cached result id as constant.
-     * @return such value.
-     */
-    public String getCachedResultIdAsConstant()
-    {
-        return m__strCachedResultIdAsConstant;
-    }
-
-    /**
-     * Retrieves the result id as constant.
-     * @return such information.
-     */
-    public String getResultIdAsConstant()
-    {
-        @Nullable String result = getCachedResultIdAsConstant();
-
-        if  (result == null)
-        {
-            result = super.getResultIdAsConstant();
-            setCachedResultIdAsConstant(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Clones given String array.
-     * @param array the array to clone.
-     * @return the cloned array.
-     */
-    @NotNull
-    protected String[] clone(@Nullable final String[] array)
-    {
-        @NotNull String[] result = EMPTY_STRING_ARRAY;
-
-        if (array != null)
-        {
-            result = new String[array.length];
-
-            System.arraycopy(array, 0, result, 0, array.length);
         }
 
         return result;

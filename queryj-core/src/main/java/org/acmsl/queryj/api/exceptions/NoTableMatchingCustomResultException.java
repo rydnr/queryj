@@ -65,7 +65,7 @@ public class NoTableMatchingCustomResultException
      * Creates an instance with valid context.
      * @param result the {@link Result} instance.
      */
-    public NoTableMatchingCustomResultException(@NotNull final Result result)
+    public NoTableMatchingCustomResultException(@NotNull final Result<?> result)
     {
         super("no.table.matching.custom-result", new Object[] { result.getId() });
     }

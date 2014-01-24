@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.handlers.mysql;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.exceptions.MySQLNotSupportedYetException;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
@@ -122,9 +123,7 @@ public class MySQL4xMetaDataRetrievalHandler
         @Nullable final String catalog,
         @Nullable final String schema,
         final boolean caseSensitive,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote)
+        @NotNull final Engine<String> engine)
         throws  QueryJBuildException
     {
         throw new MySQLNotSupportedYetException();

@@ -61,14 +61,14 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class ResultElement
-    extends  AbstractResult
+public class ResultElement<T>
+    extends  AbstractResult<T>
 {
     private static final long serialVersionUID = -1123144871258452499L;
     /**
      * The <i>class</i> attribute.
      */
-    public String m__strClass;
+    public T m__strClass;
 
     /**
      * Creates a <code>ResultElement</code> with given information.
@@ -77,9 +77,9 @@ public class ResultElement
      * @param matches the <i>matches</i> attribute.
      */
     public ResultElement(
-        @NotNull final String id,
-        @Nullable final String classValue,
-        @NotNull final String matches)
+        @NotNull final T id,
+        @Nullable final T classValue,
+        @NotNull final T matches)
     {
         super(id, matches);
 
@@ -95,7 +95,7 @@ public class ResultElement
      * Specifies the <i>class</i> attribute.
      * @param classValue such value.
      */
-    protected final void immutableSetClassValue(@NotNull final String classValue)
+    protected final void immutableSetClassValue(@NotNull final T classValue)
     {
         m__strClass = classValue;
     }
@@ -105,7 +105,7 @@ public class ResultElement
      * @param classValue such value.
      */
     @SuppressWarnings("unused")
-    protected void setClassValue(@NotNull final String classValue)
+    protected void setClassValue(@NotNull final T classValue)
     {
         immutableSetClassValue(classValue);
     }
@@ -116,7 +116,7 @@ public class ResultElement
      */
     @Override
     @Nullable
-    public String getClassValue()
+    public T getClassValue()
     {
         return m__strClass;
     }
@@ -142,12 +142,12 @@ public class ResultElement
      */
     @SuppressWarnings("unused")
     protected int hashCode(
-        @NotNull final String id,
-        @NotNull final String classValue,
-        @NotNull final String matches,
+        @NotNull final T id,
+        @NotNull final T classValue,
+        @NotNull final T matches,
         @NotNull final Collection<PropertyRef> propertyRefs)
     {
-        return id.toLowerCase(Locale.US).hashCode() + Result.class.hashCode();
+        return ("" + id).toLowerCase(Locale.US).hashCode() + Result.class.hashCode();
     }
 
     /**
@@ -155,6 +155,8 @@ public class ResultElement
      * @param instance the instance.
      * @return <code>true</code> in such case.
      */
+    @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(@Nullable final Object instance)
     {
         boolean result = false;
@@ -163,7 +165,7 @@ public class ResultElement
         {
             result =
                 equals(
-                    (Result) instance,
+                    (Result<T>) instance,
                     getId(),
                     getClassValue(),
                     getMatches(),
@@ -183,13 +185,13 @@ public class ResultElement
      */
     @SuppressWarnings("unused")
     protected boolean equals(
-        @NotNull final Result candidate,
-        @NotNull final String id,
-        @Nullable final String classValue,
-        @NotNull final String matches,
+        @NotNull final Result<T> candidate,
+        @NotNull final T id,
+        @Nullable final T classValue,
+        @NotNull final T matches,
         @NotNull final Collection<PropertyRef> propertyRefs)
     {
-        return id.equalsIgnoreCase(candidate.getId());
+        return ("" + id).equalsIgnoreCase("" + candidate.getId());
     }
 
     /**
@@ -217,9 +219,9 @@ public class ResultElement
      */
     @NotNull
     protected String toString(
-        @NotNull final String id,
-        @NotNull final String classValue,
-        @NotNull final String matches,
+        @NotNull final T id,
+        @Nullable final T classValue,
+        @NotNull final T matches,
         @NotNull final Collection<PropertyRef> propertyRefs)
     {
         return

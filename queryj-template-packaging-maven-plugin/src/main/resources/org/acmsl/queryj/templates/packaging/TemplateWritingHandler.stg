@@ -58,17 +58,18 @@ sourceImpl(def, C) ::= <<
   description=[ "Writing handler for ", def.name.capitalized, "Templates." ],
   description_oneline=true,
   filename=C.class_name,
-  template="org/acmsl/templates/packaging/TemplateWritingHandler.stg",
+  template="org/acmsl/queryj/templates/packaging/TemplateWritingHandler.stg",
    C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
 
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateWritingHandler;
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
@@ -162,7 +163,7 @@ public class <C.class_name>
         @NotNull final String projectPackage,
         final boolean useSubfolders,
         @NotNull final String tableName,
-        @NotNull final String engineName,
+        @NotNull final Engine\<String> engine,
         @NotNull final QueryJCommand parameters,
         @NotNull final PackageUtils packageUtils)
     {
@@ -170,7 +171,7 @@ public class <C.class_name>
 
         @NotNull final String packageName =
             <def.name.capitalized>TemplateBuildHandler.buildPackageName(
-                tableName, engineName, projectPackage);
+                tableName, engine, projectPackage);
 
         @NotNull final String[] pieces = packageName.split("\\\.");
 

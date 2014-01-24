@@ -70,7 +70,7 @@ public class InvalidPerCustomResultTemplateException
      */
     public InvalidPerCustomResultTemplateException(
         @NotNull final String name,
-        @NotNull final Result result,
+        @NotNull final Result<?> result,
         @NotNull final String repository,
         @NotNull final Throwable cause)
     {

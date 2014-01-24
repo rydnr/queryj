@@ -50,14 +50,14 @@ import java.util.Locale;
  * Commons logic for all &lt;result&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractResult
-    extends  AbstractIdElement
-    implements  Result
+public abstract class AbstractResult<T>
+    extends  AbstractIdElement<T>
+    implements  Result<T>
 {
     /**
      * The <i>matches</i> attribute.
      */
-    private String m__strMatches;
+    private T m__strMatches;
 
     /**
      * The <i>property-ref> elements.
@@ -69,7 +69,7 @@ public abstract class AbstractResult
      * @param id the <i>id</i> attribute.
      * @param matches the <i>matches</i> attribute.
      */
-    public AbstractResult(@NotNull final String id, @NotNull final String matches)
+    public AbstractResult(@NotNull final T id, @NotNull final T matches)
     {
         super(id);
         immutableSetMatches(matches);
@@ -79,7 +79,7 @@ public abstract class AbstractResult
      * Specifies the <i>matches</i> attribute.
      * @param matches such value.
      */
-    protected final void immutableSetMatches(@NotNull final String matches)
+    protected final void immutableSetMatches(@NotNull final T matches)
     {
         m__strMatches = matches;
     }
@@ -89,7 +89,7 @@ public abstract class AbstractResult
      * @param matches such value.
      */
     @SuppressWarnings("unused")
-    protected void setMatches(@NotNull final String matches)
+    protected void setMatches(@NotNull final T matches)
     {
         immutableSetMatches(matches);
     }
@@ -99,7 +99,7 @@ public abstract class AbstractResult
      * @return such value.
      */
     @NotNull
-    public String getMatches()
+    public T getMatches()
     {
         return m__strMatches;
     }
@@ -145,7 +145,7 @@ public abstract class AbstractResult
 
         if (result == null)
         {
-            result = new ArrayList<PropertyRef>(0);
+            result = new ArrayList<>(0);
             setPropertyRefs(result);
         }
 
@@ -191,8 +191,8 @@ public abstract class AbstractResult
      * @return such value.
      */
     protected int hashCode(
-        final String id,
-        final String matches,
+        final T id,
+        final T matches,
         final Collection<PropertyRef> propertyRefs)
     {
         return
@@ -205,6 +205,8 @@ public abstract class AbstractResult
      * @param instance the instance.
      * @return <code>true</code> in such case.
      */
+    @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(@Nullable final Object instance)
     {
         boolean result = false;
@@ -213,7 +215,7 @@ public abstract class AbstractResult
         {
             result =
                 equals(
-                    (Result) instance,
+                    (Result<T>) instance,
                     getId(),
                     getMatches(),
                     getPropertyRefs());
@@ -230,14 +232,14 @@ public abstract class AbstractResult
      * @return <code>true</code> in such case.
      */
     public boolean equals(
-        @NotNull final Result candidate,
-        @NotNull final String id,
-        @NotNull final String matches,
+        @NotNull final Result<T> candidate,
+        @NotNull final T id,
+        @NotNull final T matches,
         final Collection<PropertyRef> propertyRefs)
     {
         return
-            (   (id.equalsIgnoreCase(candidate.getId())
-             && (matches.equalsIgnoreCase(candidate.getMatches()))
+            (   (("" + id).equalsIgnoreCase("" + candidate.getId())
+             && (("" + matches).equalsIgnoreCase("" + candidate.getMatches()))
              && ("" + propertyRefs).equals(
                      "" + candidate.getPropertyRefs())));
     }
@@ -265,8 +267,8 @@ public abstract class AbstractResult
      */
     @NotNull
     protected String toString(
-        final String id,
-        final String matches,
+        final T id,
+        final T matches,
         final Collection<PropertyRef> propertyRefs)
     {
         return
@@ -284,7 +286,7 @@ public abstract class AbstractResult
      * object prevents it from being compared to this Object.
      */
     @Override
-    public int compareTo(@Nullable final Result object)
+    public int compareTo(@Nullable final Result<T> object)
         throws  ClassCastException
     {
         int result = -1;

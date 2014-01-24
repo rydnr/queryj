@@ -119,7 +119,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     @NotNull
     @SuppressWarnings("unchecked")
     protected File retrieveOutputDir(
-        @NotNull final Result resultElement,
+        @NotNull final Result<String> resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final QueryJCommand parameters)
@@ -155,7 +155,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      */
     @NotNull
     protected abstract File retrieveOutputDir(
-        @NotNull final Result resultElement,
+        @NotNull final Result<String> resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final File projectFolder,

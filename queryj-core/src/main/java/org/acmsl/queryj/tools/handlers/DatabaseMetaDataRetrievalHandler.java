@@ -35,11 +35,15 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseMetadataException;
 import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseInformationException;
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
+import org.acmsl.queryj.metadata.engines.oracle.OracleEngine;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
@@ -79,6 +83,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -270,7 +275,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                  && (t_cTableElements.size() > 0))
             {
                 result =
-                    new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(
+                    new ArrayList<>(
                         t_cTableElements.size());
 
                 t_itTableElements = t_cTableElements.iterator();
@@ -288,7 +293,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         if (result == null)
         {
-            result = new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -311,7 +316,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         if (t_lFields != null)
         {
             @NotNull final List<Attribute<String>> t_lAttributes =
-                new ArrayList<Attribute<String>>(t_lFields.size());
+                new ArrayList<>(t_lFields.size());
 
             for (@Nullable final AntFieldElement t_Field : t_lFields)
             {
@@ -417,7 +422,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                 if  (t_lTables == null)
                 {
-                    t_lTables = new ArrayList<String>();
+                    t_lTables = new ArrayList<>();
                     tableNameMap.put(buildTableKey(), t_lTables);
                 }
 
@@ -434,7 +439,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                     if (t_lFields == null)
                     {
-                        t_lFields = new ArrayList<Attribute<String>>(4);
+                        t_lFields = new ArrayList<>(4);
 
                         attributeMap.put(buildTableFieldsKey(t_Table.getName()), t_lFields);
                     }
@@ -444,7 +449,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                     if (t_lPks == null)
                     {
-                        t_lPks = new ArrayList<Attribute<String>>(1);
+                        t_lPks = new ArrayList<>(1);
                         attributeMap.put(buildPkKey(t_Table.getName()), t_lPks);
                     }
 
@@ -468,7 +473,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                             if (t_lFieldFks == null)
                             {
-                                t_lFieldFks = new ArrayList<AntFieldFkElement>(0);
+                                t_lFieldFks = new ArrayList<>(0);
                             }
                             fieldFkMap.put(
                                 buildFkKey(t_Table.getName(), t_Field.getName()),
@@ -564,7 +569,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                                 final Iterator<AntFieldFkElement> t_itFieldFks = t_lFieldFks.iterator();
 
-                                @NotNull final List<Attribute<String>> t_lFk = new ArrayList<Attribute<String>>(1);
+                                @NotNull final List<Attribute<String>> t_lFk = new ArrayList<>(1);
 
                                 while (t_itFieldFks.hasNext())
                                 {
@@ -654,7 +659,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         if (result == null)
         {
-            result = new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -673,7 +678,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         final int t_iLength = (tables != null) ? tables.size() : 0;
 
-        result = new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(t_iLength);
+        result = new ArrayList<>(t_iLength);
 
         if (tables != null)
         {
@@ -918,7 +923,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         if (t_lTables == null)
         {
-            t_lTables = new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(0);
+            t_lTables = new ArrayList<>(0);
         }
 
         if  (result == null)
@@ -931,9 +936,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     retrieveCatalog(parameters),
                     retrieveSchema(parameters),
                     retrieveCaseSensitive(parameters),
-                    retrieveProductName(metaData),
-                    retrieveProductVersion(metaData),
-                    retrieveProductQuote(metaData));
+                    buildEngine(
+                        retrieveProductName(metaData),
+                        retrieveProductVersion(metaData)));
 
 
         }
@@ -956,6 +961,29 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             throw
                 new CannotRetrieveDatabaseMetadataException(queryjException);
+        }
+
+        return result;
+    }
+
+    /**
+     * Creates the {@link Engine} with given information.
+     * @param name the name.
+     * @param version the version.
+     * @return the engine.
+     */
+    @NotNull
+    protected Engine<String> buildEngine(final String name, final String version)
+    {
+        @NotNull final Engine<String> result;
+
+        if (name.toLowerCase(Locale.US).equalsIgnoreCase(Literals.ORACLE.toLowerCase(Locale.US)))
+        {
+            result = new OracleEngine(version);
+        }
+        else
+        {
+            result = new UndefinedJdbcEngine(name, version);
         }
 
         return result;
@@ -1001,9 +1029,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param catalog the database catalog.
      * @param schema the database schema.
      * @param caseSensitive whether the engine is case sensitive or not.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
+     * @param engine the engine.
      * @return the metadata manager instance.
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
@@ -1016,9 +1042,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @Nullable final String catalog,
         @Nullable final String schema,
         final boolean caseSensitive,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote)
+        @NotNull final Engine<String> engine)
       throws  QueryJBuildException
     {
         @NotNull final MetadataManager result;
@@ -1037,9 +1061,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     false,
                     false,
                     caseSensitive,
-                    engineName,
-                    engineVersion,
-                    quote);
+                    engine);
         }
         catch  (@NotNull final RuntimeException exception)
         {
@@ -1302,6 +1324,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the quote string.
      * @throws QueryJBuildException if the check fails.
      */
+    @SuppressWarnings("unused")
     protected String retrieveProductQuote(@NotNull final DatabaseMetaData metaData)
         throws  QueryJBuildException
     {

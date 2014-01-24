@@ -57,21 +57,22 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class ParameterElement
-    extends  AbstractParameterElement
-    implements Parameter
+public class ParameterElement<T>
+    extends  AbstractParameterElement<T>
+    implements Parameter<T>,
+               Comparable<Parameter<T>>
 {
     private static final long serialVersionUID = 106725100966627608L;
 
     /**
      * The parameter name.
      */
-    private String m__strName;
+    private T m__strName;
 
     /**
      * The validation value.
      */
-    private String m__strValidationValue;
+    private T m__strValidationValue;
 
     /**
      * Creates a ParameterElement with given information.
@@ -82,11 +83,11 @@ public class ParameterElement
      * @param validationValue the <i>validation-value</i> attribute.
      */
     public ParameterElement(
-        @NotNull final String id,
+        @NotNull final T id,
         final int index,
-        @NotNull final String name,
-        @NotNull final String type,
-        @Nullable final String validationValue)
+        @NotNull final T name,
+        @NotNull final T type,
+        @Nullable final T validationValue)
     {
         super(id, index, type);
 
@@ -102,7 +103,7 @@ public class ParameterElement
      * Specifies the <i>name</i> attribute.
      * @param name such value.
      */
-    protected final void immutableSetName(@NotNull final String name)
+    protected final void immutableSetName(@NotNull final T name)
     {
         m__strName = name;
     }
@@ -111,7 +112,7 @@ public class ParameterElement
      * Specifies the <i>name</i> attribute.
      * @param name such value.
      */
-    protected void setName(@NotNull final String name)
+    protected void setName(@NotNull final T name)
     {
         immutableSetName(name);
     }
@@ -120,8 +121,9 @@ public class ParameterElement
      * Retrieves the <i>name</i> attribute.
      * @return such value.
      */
+    @Override
     @NotNull
-    public String getName()
+    public T getName()
     {
         return m__strName;
     }
@@ -131,7 +133,7 @@ public class ParameterElement
      * @param validationValue the validation value.
      */
     protected final void immutableSetValidationValue(
-        @NotNull final String validationValue)
+        @NotNull final T validationValue)
     {
         m__strValidationValue = validationValue;
     }
@@ -142,17 +144,24 @@ public class ParameterElement
      */
     @SuppressWarnings("unused")
     protected void setValidationValue(
-        @NotNull final String validationValue)
+        @NotNull final T validationValue)
     {
         immutableSetValidationValue(validationValue);
+    }
+
+    @Override
+    public int compareTo(final Parameter<T> parameter)
+    {
+        return super.<IdentifiableElement<T>>compareTo((IdentifiableElement<T>) parameter);
     }
 
     /**
      * Retrieves the validation value.
      * @return such value.
      */
+    @Override
     @Nullable
-    public String getValidationValue()
+    public T getValidationValue()
     {
         return m__strValidationValue;
     }
@@ -162,6 +171,7 @@ public class ParameterElement
      * contained in this instance.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {

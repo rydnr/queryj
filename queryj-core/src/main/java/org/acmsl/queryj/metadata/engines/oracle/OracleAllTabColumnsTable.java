@@ -100,14 +100,14 @@ public class OracleAllTabColumnsTable
      */
     @NotNull
     public StringField DATA_TYPE =
-        new StringField("DATA_TYPE", this);
+        new StringField(Literals.DATA_TYPE1, this);
 
     /**
      * The all_tab_columns table column_id field.
      */
     @NotNull
     public LongField COLUMN_ID =
-        new LongField("COLUMN_ID", this);
+        new LongField(Literals.COLUMN_ID1, this);
 
     /**
      * Protected constructor to avoid accidental instantiation.

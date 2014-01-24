@@ -41,6 +41,6 @@ package org.acmsl.queryj.customsql;
  * @since 2012/07/17
  */
 public interface PropertyRef
-    extends IdentifiableElement
+    extends IdentifiableElement<String>
 {
 }

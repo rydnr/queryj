@@ -40,6 +40,7 @@ import org.acmsl.queryj.customsql.IdentifiableElement;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.customsql.Sql;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -105,10 +106,12 @@ public abstract class AbstractSqlXmlParserDAO
      * @return such collection.
      */
     @NotNull
-    protected List<IdentifiableElement> getCollection(@NotNull final SqlXmlParser parser)
+    protected List<IdentifiableElement<String>> getCollection(@NotNull final SqlXmlParser parser)
     {
-        @NotNull final List<IdentifiableElement> result =
-            new ArrayList<IdentifiableElement>(parser.getQueries());
+        @NotNull final List<Sql<String>> queries = parser.getQueries();
+
+        @NotNull final List<IdentifiableElement<String>> result =
+            new ArrayList<>(toIdentifiable(queries));
 
         result.addAll(parser.getResults());
         result.addAll(parser.getProperties());
@@ -120,15 +123,36 @@ public abstract class AbstractSqlXmlParserDAO
     }
 
     /**
+     * Converts given list to its base type.
+     * @param queries the queries.
+     * @return the base list.
+     */
+    @NotNull
+    protected List<IdentifiableElement<String>> toIdentifiable(@NotNull final List<Sql<String>> queries)
+    {
+        @NotNull final List<IdentifiableElement<String>> result = new ArrayList<>(queries.size());
+
+        for (@Nullable final Sql<String> query : queries)
+        {
+            if (query != null)
+            {
+                result.add(query);
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the element matching given id.
      * @param id the id.
      * @return the element, if any.
      */
     @SuppressWarnings("unchecked")
     @Nullable
-    protected <T extends IdentifiableElement> T findById(
+    protected <T extends IdentifiableElement<String>> T findById(
         @NotNull final String id,
-        @NotNull final Class<T> type,
+        @NotNull final Class<?> type,
         @NotNull final List<T> collection)
     {
         @Nullable T result = null;
@@ -156,7 +180,7 @@ public abstract class AbstractSqlXmlParserDAO
      */
     @SuppressWarnings("unchecked")
     @NotNull
-    protected <T> List<T> findAll(@NotNull final SqlXmlParser parser, @NotNull final Class<T> type)
+    protected <T> List<T> findAll(@NotNull final SqlXmlParser parser, @NotNull final Class<?> type)
     {
         return findAll(type, getCollection(parser));
     }
@@ -170,13 +194,13 @@ public abstract class AbstractSqlXmlParserDAO
     @SuppressWarnings("unchecked")
     @NotNull
     protected <T> List<T> findAll(
-        @NotNull final Class<T> type,
-        @NotNull final List<IdentifiableElement> collection)
+        @NotNull final Class<?> type,
+        @NotNull final List<IdentifiableElement<String>> collection)
     {
 
-        @NotNull final List<T> result = new ArrayList<T>();
+        @NotNull final List<T> result = new ArrayList<>();
 
-        for (@Nullable final IdentifiableElement t_Item : collection)
+        for (@Nullable final IdentifiableElement<String> t_Item : collection)
         {
             if  (   (t_Item != null)
                  && (type.isAssignableFrom(t_Item.getClass())))
@@ -197,14 +221,14 @@ public abstract class AbstractSqlXmlParserDAO
      */
     @SuppressWarnings("unchecked")
     @NotNull
-    protected <I extends IdentifiableElement> List<I> filterItems(
-        @NotNull final List<? extends IdentifiableElement> contents,
-        @NotNull final Class<I> itemClass,
+    protected <I extends IdentifiableElement<String>> List<I> filterItems(
+        @NotNull final List<? extends IdentifiableElement<String>> contents,
+        @NotNull final Class<?> itemClass,
         @Nullable final String idFilter)
     {
-        @NotNull final List<I> result = new ArrayList<I>(contents.size());
+        @NotNull final List<I> result = new ArrayList<>(contents.size());
 
-        for (@Nullable final IdentifiableElement t_CurrentItem : contents)
+        for (@Nullable final IdentifiableElement<String> t_CurrentItem : contents)
         {
             if (   (t_CurrentItem != null)
                 && (itemClass.isAssignableFrom(t_CurrentItem.getClass())))
@@ -227,7 +251,7 @@ public abstract class AbstractSqlXmlParserDAO
      * @return <code>true</code> if both identifiers match.
      */
     protected boolean filterById(
-        @NotNull final IdentifiableElement element, @NotNull final String idFilter)
+        @NotNull final IdentifiableElement<String> element, @NotNull final String idFilter)
     {
         return idFilter.equalsIgnoreCase(element.getId());
     }

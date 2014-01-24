@@ -85,7 +85,7 @@ public class SqlXmlParserParameterDAO
      */
     @Override
     @Nullable
-    public Parameter findByPrimaryKey(@NotNull final String id)
+    public Parameter<String> findByPrimaryKey(@NotNull final String id)
     {
         return findByPrimaryKey(id, getSqlXmlParser());
     }
@@ -97,7 +97,7 @@ public class SqlXmlParserParameterDAO
      * @return the {@link org.acmsl.queryj.customsql.Parameter}, or <code>null</code> if not found.
      */
     @Nullable
-    protected Parameter findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
+    protected Parameter<String> findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
     {
         return findById(id, Parameter.class, parser.getParameters());
     }
@@ -110,10 +110,10 @@ public class SqlXmlParserParameterDAO
      */
     @NotNull
     @Override
-    public List<Parameter> findBySql(@NotNull final String sqlId)
+    public List<Parameter<String>> findBySql(@NotNull final String sqlId)
     {
         // TODO: I need a SqlDAO instance.
-        return new ArrayList<Parameter>(0);
+        return new ArrayList<>(0);
     }
 
 
@@ -122,7 +122,7 @@ public class SqlXmlParserParameterDAO
      * @return such list.
      */
     @NotNull
-    public List<Parameter> findAll()
+    public List<Parameter<String>> findAll()
     {
         return findAll(getSqlXmlParser(), Parameter.class);
     }

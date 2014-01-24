@@ -47,7 +47,7 @@ import java.io.Serializable;
  * Represents <i>identifiable</i> elements.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface IdentifiableElement
+public interface IdentifiableElement<T>
     extends Serializable
 {
     /**
@@ -55,5 +55,5 @@ public interface IdentifiableElement
      * @return such information.
      */
     @NotNull
-    String getId();
+    T getId();
 }

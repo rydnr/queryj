@@ -50,6 +50,7 @@ import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
@@ -126,7 +127,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                 t_MetadataManager,
                 retrieveCustomSqlProvider(parameters),
                 retrieveTemplateFactory(),
-                retrievePackage(t_MetadataManager.getEngineName(), projectPackage, PackageUtils.getInstance()),
+                retrievePackage(t_MetadataManager.getEngine(), projectPackage, PackageUtils.getInstance()),
                 projectPackage,
                 retrieveTableRepositoryName(parameters),
                 retrieveHeader(parameters),
@@ -278,14 +279,14 @@ public abstract class BasePerRepositoryTemplateBuildHandler
 
     /**
      * Retrieves the package name.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      */
     @NotNull
     protected abstract String retrievePackage(
-        @NotNull final String engineName,
+        @NotNull final Engine<String> engine,
         @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils);
 
@@ -326,7 +327,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
 
         if  (!result)
         {
-            for (@Nullable final Sql t_Sql : sqlDAO.findAll())
+            for (@Nullable final Sql<String> t_Sql : sqlDAO.findAll())
             {
                 if (   (t_Sql != null)
                     && (t_Sql.getRepositoryScope() != null))

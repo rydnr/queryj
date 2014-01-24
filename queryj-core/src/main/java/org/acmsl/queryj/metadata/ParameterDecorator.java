@@ -50,14 +50,14 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface ParameterDecorator
-    extends  Parameter,
+    extends  Parameter<DecoratedString>,
              Decorator
 {
     /**
      * Retrieves the decorated parameter.
      * @return such instance.
      */
-    public Parameter getParameter();
+    public Parameter<String> getParameter();
 
     /**
      * Retrieves the sql type of the parameter.
@@ -65,14 +65,14 @@ public interface ParameterDecorator
      * @see java.sql.Types
      */
     @Nullable
-    public String getSqlType();
+    public DecoratedString getSqlType();
 
     /**
      * Retrieves the object type of the parameter.
      * @return such information.
      */
     @Nullable
-    public String getObjectType();
+    public DecoratedString getObjectType();
 
     /**
      * Retrieves whether the parameter type is a class or not.
@@ -91,5 +91,5 @@ public interface ParameterDecorator
      * @return such information.
      */
     @NotNull
-    public String getFieldType();
+    public DecoratedString getFieldType();
 }

@@ -44,15 +44,17 @@ package org.acmsl.queryj.templates.packaging.handlers;
 /*
  * Importing QueryJ-API classes.
  */
+import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.metadata.DecoratedString;
 
 /*
  * Importing QueryJ Template Packaging classes.
  */
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
-import org.acmsl.queryj.templates.packaging.Literals;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.PerTableTemplatesFeatureTemplate;
 import org.acmsl.queryj.templates.packaging.PerTableTemplatesFeatureTemplateFactory;
@@ -151,7 +153,7 @@ public class PerTableTemplatesFeatureTemplateBuildHandler
     @Override
     protected String retrieveOutputPackage(@NotNull final QueryJCommand parameters)
     {
-        return Literals.CUCUMBER_TEMPLATES;
+        return org.acmsl.queryj.templates.packaging.Literals.CUCUMBER_TEMPLATES;
     }
 
     /**
@@ -163,26 +165,27 @@ public class PerTableTemplatesFeatureTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return Literals.PER_TABLE_TEMPLATES_FEATURE;
+        return org.acmsl.queryj.templates.packaging.Literals.PER_TABLE_TEMPLATES_FEATURE;
     }
 
     /**
      * Builds the actual package name.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @param projectPackage the project package.
      * @return the package name.
      */
+    @SuppressWarnings("unused")
     @NotNull
     static String buildPackageName(
-        @NotNull final String engineName,
+        @NotNull final Engine<String> engine,
         @NotNull final String projectPackage)
     {
         @NotNull final String result;
 
-        @NotNull final ST packageTemplate = new ST(Literals.CUCUMBER_TEMPLATES);
+        @NotNull final ST packageTemplate = new ST(org.acmsl.queryj.templates.packaging.Literals.CUCUMBER_TEMPLATES);
 
-        packageTemplate.add(Literals.PACKAGE_NAME1, new DecoratedString(projectPackage));
-        packageTemplate.add(Literals.ENGINE_NAME, new DecoratedString(engineName));
+        packageTemplate.add(Literals.PACKAGE_NAME, new DecoratedString(projectPackage));
+        packageTemplate.add(Literals.ENGINE, new EngineDecorator(engine));
 
         result = packageTemplate.render();
 

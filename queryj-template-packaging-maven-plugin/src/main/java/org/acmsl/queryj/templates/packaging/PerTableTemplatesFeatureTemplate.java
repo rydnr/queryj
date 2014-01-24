@@ -57,12 +57,12 @@ import org.jetbrains.annotations.Nullable;
  */
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupString;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.stringtemplate.v4.STGroupString;
 
 /*
  * Importing JDK classes.
@@ -104,7 +104,7 @@ public class PerTableTemplatesFeatureTemplate
         return
             retrieveGroup(
                 "org/acmsl/queryj/templates/packaging/PerTableTemplatesFeature.stg",
-                Arrays.asList(Literals.ORG_ACMSL_QUERYJ_TEMPLATES));
+                Arrays.asList(org.acmsl.queryj.Literals.ORG_ACMSL_QUERYJ_TEMPLATES));
     }
 
     /**
@@ -124,7 +124,7 @@ public class PerTableTemplatesFeatureTemplate
             {
                 @NotNull final String ruleBody =
                       def.getFilenameRule()
-                    + "(engineName, fileName) ::= <<\n" + def.getFilenameBuilder() + ">>\n";
+                    + "(engine, fileName) ::= <<\n" + def.getFilenameBuilder() + ">>\n";
 
                 group.importTemplates(new STGroupString(def.getName() + "_filename", ruleBody));
             }

@@ -50,7 +50,7 @@ import org.checkthread.annotations.ThreadSafe;
 public interface Literals
 {
     String TABLE_NAME = org.acmsl.queryj.Literals.TABLE_NAME;
-    String PACKAGE_NAME = org.acmsl.queryj.templates.packaging.Literals.PACKAGE_NAME1;
-    String ENGINE_NAME = org.acmsl.queryj.templates.packaging.Literals.ENGINE_NAME;
+    String PACKAGE_NAME = org.acmsl.queryj.Literals.PACKAGE_NAME;
+    String ENGINE = org.acmsl.queryj.Literals.ENGINE;
     String PACKAGE_NAME_DAO = "<packageName>.dao";
 }

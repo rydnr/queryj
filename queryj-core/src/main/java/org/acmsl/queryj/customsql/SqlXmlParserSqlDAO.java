@@ -75,27 +75,27 @@ public class SqlXmlParserSqlDAO
     /**
      * A cache of id -> Sql
      */
-    private static final Map<String, Sql> FIND_BY_PRIMARY_KEY_CACHE = new HashMap<String, Sql>();
+    private static final Map<String, Sql<String>> FIND_BY_PRIMARY_KEY_CACHE = new HashMap<>();
 
     /**
      * The cache misses.
      */
-    private static final Map<String, Boolean> PRIMARY_KEY_MISS_CACHE = new HashMap<String, Boolean>();
+    private static final Map<String, Boolean> PRIMARY_KEY_MISS_CACHE = new HashMap<>();
 
     /**
-     * The cache of resultId -> List<Sql>
+     * The cache of resultId -> List<Sql<String>>
      */
-    private static final Map<String, List<Sql>> FIND_BY_RESULTID_CACHE = new HashMap<String, List<Sql>>();
+    private static final Map<String, List<Sql<String>>> FIND_BY_RESULTID_CACHE = new HashMap<>();
 
     /**
-     * The cache of type -> List<Sql>
+     * The cache of type -> List<Sql<String>>
      */
-    private static final Map<String, List<Sql>> FIND_BY_TYPE_CACHE = new HashMap<String, List<Sql>>();
+    private static final Map<String, List<Sql<String>>> FIND_BY_TYPE_CACHE = new HashMap<>();
 
     /**
      * The cached repository-scoped Sql.
      */
-    private static List<Sql> m__lCachedRepositoryScopedSql;
+    private static List<Sql<String>> m__lCachedRepositoryScopedSql;
 
     /**
      * Creates a new {@link SqlXmlParser} with given {@link SqlXmlParser}.
@@ -111,7 +111,7 @@ public class SqlXmlParserSqlDAO
      * @param id the id.
      * @return the {@link Sql}, or <code>null</code> if not found in the cache.
      */
-    protected synchronized Sql getFromPrimaryKeyCache(@NotNull final String id)
+    protected synchronized Sql<String> getFromPrimaryKeyCache(@NotNull final String id)
     {
         return FIND_BY_PRIMARY_KEY_CACHE.get(id);
     }
@@ -121,7 +121,7 @@ public class SqlXmlParserSqlDAO
      * @param id the id.
      * @param sql the {@link Sql} to cache.
      */
-    protected synchronized void cachePrimaryKey(@NotNull final String id, @NotNull final Sql sql)
+    protected synchronized void cachePrimaryKey(@NotNull final String id, @NotNull final Sql<String> sql)
     {
         FIND_BY_PRIMARY_KEY_CACHE.put(id, sql);
     }
@@ -143,7 +143,7 @@ public class SqlXmlParserSqlDAO
     {
         boolean result = false;
 
-        Boolean miss = PRIMARY_KEY_MISS_CACHE.get(id);
+        final Boolean miss = PRIMARY_KEY_MISS_CACHE.get(id);
 
         if (miss != null)
         {
@@ -159,9 +159,9 @@ public class SqlXmlParserSqlDAO
      */
     @Override
     @Nullable
-    public Sql findByPrimaryKey(@NotNull final String id)
+    public Sql<String> findByPrimaryKey(@NotNull final String id)
     {
-        Sql result = getFromPrimaryKeyCache(id);
+        Sql<String> result = getFromPrimaryKeyCache(id);
 
         if (   (result == null)
             && (!isPrimaryKeyAlreadyRetrieved(id)))
@@ -187,7 +187,7 @@ public class SqlXmlParserSqlDAO
      * @return such list.
      */
     @Nullable
-    protected Sql findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
+    protected Sql<String> findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
     {
         return findById(id, Sql.class, parser.getQueries());
     }
@@ -200,7 +200,7 @@ public class SqlXmlParserSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findByDAO(@NotNull final String table)
+    public List<Sql<String>> findByDAO(@NotNull final String table)
     {
         return filterTable(table, findAll(), MetadataUtils.getInstance());
     }
@@ -212,13 +212,13 @@ public class SqlXmlParserSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findSelects(@NotNull final String table)
+    public List<Sql<String>> findSelects(@NotNull final String table)
     {
         return filterSelects(findByDAO(table));
     }
 
     @Override
-    public List<Sql> findDynamic(@NotNull final String tableName)
+    public List<Sql<String>> findDynamic(@NotNull final String tableName)
     {
         return filterDynamic(findByDAO(tableName));
     }
@@ -229,11 +229,11 @@ public class SqlXmlParserSqlDAO
      * @return the dynamic ones.
      */
     @NotNull
-    protected List<Sql> filterDynamic(@NotNull final List<Sql> queries)
+    protected List<Sql<String>> filterDynamic(@NotNull final List<Sql<String>> queries)
     {
-        @NotNull List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql<String>> result = new ArrayList<>();
 
-        for (@Nullable Sql t_Sql : queries)
+        for (@Nullable final Sql<String> t_Sql : queries)
         {
             if (   (t_Sql != null)
                 && (t_Sql.isDynamic()))
@@ -252,65 +252,65 @@ public class SqlXmlParserSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findSelectsForUpdate(@NotNull final String table)
+    public List<Sql<String>> findSelectsForUpdate(@NotNull final String table)
     {
         return filterSelectsForUpdate(findByDAO(table));
     }
 
     /**
-     * Retrieves all <i>insert</i> {@link Sql sentences} for a given DAO (table).
+     * Retrieves all <i>insert</i> {@link Sql<String> sentences} for a given DAO (table).
      * @param table the table.
      * @return all matching <i>insert</i> sentences.
      */
     @NotNull
     @Override
-    public List<Sql> findInserts(@NotNull final String table)
+    public List<Sql<String>> findInserts(@NotNull final String table)
     {
         return filterInserts(findByDAO(table));
     }
 
     /**
-     * Retrieves all <i>update</i> {@link Sql sentences} for a given DAO (table).
+     * Retrieves all <i>update</i> {@link Sql<String> sentences} for a given DAO (table).
      * @param table the table.
      * @return all matching <i>update</i> sentences.
      */
     @NotNull
     @Override
-    public List<Sql> findUpdates(@NotNull final String table)
+    public List<Sql<String>> findUpdates(@NotNull final String table)
     {
         return filterUpdates(findByDAO(table));
     }
 
     /**
-     * Retrieves all <i>delete</i> {@link Sql sentences} for a given DAO (table).
+     * Retrieves all <i>delete</i> {@link Sql<String> sentences} for a given DAO (table).
      * @param table the table.
      * @return all matching <i>delete</i> sentences.
      */
     @NotNull
     @Override
-    public List<Sql> findDeletes(@NotNull final String table)
+    public List<Sql<String>> findDeletes(@NotNull final String table)
     {
         return filterDeletes(findByDAO(table));
     }
 
     /**
-     * Retrieves all <i>delete</i> {@link Sql sentences} for a given DAO (table).
+     * Retrieves all <i>delete</i> {@link Sql<String> sentences} for a given DAO (table).
      * @param table the table.
      * @param queries the complete list of queries.
      * @param metadataUtils the {@link MetadataUtils} instance.
      * @return all matching <i>delete</i> sentences.
      */
     @NotNull
-    protected List<Sql> filterTable(
+    protected List<Sql<String>> filterTable(
         @NotNull final String table,
-        @NotNull final List<Sql> queries,
+        @NotNull final List<Sql<String>> queries,
         @NotNull final MetadataUtils metadataUtils)
     {
-        @NotNull List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql<String>> result = new ArrayList<>();
 
         String t_strDAO;
 
-        for (@Nullable Sql t_Sql : queries)
+        for (@Nullable final Sql<String> t_Sql : queries)
         {
             if  (t_Sql != null)
             {
@@ -333,7 +333,7 @@ public class SqlXmlParserSqlDAO
      * @return the delete-only ones.
      */
     @NotNull
-    protected List<Sql> filterDeletes(@NotNull final List<Sql> list)
+    protected List<Sql<String>> filterDeletes(@NotNull final List<Sql<String>> list)
     {
         return filterByType(list, Sql.DELETE);
     }
@@ -344,7 +344,7 @@ public class SqlXmlParserSqlDAO
      * @return the update-only ones.
      */
     @NotNull
-    protected List<Sql> filterUpdates(@NotNull final List<Sql> list)
+    protected List<Sql<String>> filterUpdates(@NotNull final List<Sql<String>> list)
     {
         return filterByType(list, Sql.UPDATE);
     }
@@ -355,7 +355,7 @@ public class SqlXmlParserSqlDAO
      * @return the insert-only ones.
      */
     @NotNull
-    protected List<Sql> filterInserts(@NotNull final List<Sql> list)
+    protected List<Sql<String>> filterInserts(@NotNull final List<Sql<String>> list)
     {
         return filterByType(list, Sql.INSERT);
     }
@@ -367,7 +367,7 @@ public class SqlXmlParserSqlDAO
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected List<Sql> filterSelects(@NotNull final List<Sql> list)
+    protected List<Sql<String>> filterSelects(@NotNull final List<Sql<String>> list)
     {
         return filterByType(list, Sql.SELECT);
     }
@@ -378,7 +378,7 @@ public class SqlXmlParserSqlDAO
      * @return the select-for-update-only ones.
      */
     @NotNull
-    protected List<Sql> filterSelectsForUpdate(@NotNull final List<Sql> list)
+    protected List<Sql<String>> filterSelectsForUpdate(@NotNull final List<Sql<String>> list)
     {
         return filterByType(list, Sql.SELECT_FOR_UPDATE);
     }
@@ -389,11 +389,11 @@ public class SqlXmlParserSqlDAO
      * @return the matching ones.
      */
     @NotNull
-    protected List<Sql> filterByType(@NotNull final List<Sql> list, @NotNull final String type)
+    protected List<Sql<String>> filterByType(@NotNull final List<Sql<String>> list, @NotNull final String type)
     {
-        @NotNull List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql<String>> result = new ArrayList<>();
 
-        for (@Nullable Sql t_Sql : list)
+        for (@Nullable final Sql<String> t_Sql : list)
         {
             if  (   (t_Sql != null)
                  && (type.equalsIgnoreCase(t_Sql.getType())))
@@ -410,7 +410,7 @@ public class SqlXmlParserSqlDAO
      */
     @Override
     @NotNull
-    public List<Sql> findAll()
+    public List<Sql<String>> findAll()
     {
         return findAll(getSqlXmlParser());
     }
@@ -421,7 +421,7 @@ public class SqlXmlParserSqlDAO
      * @return such list.
      */
     @NotNull
-    protected List<Sql> findAll(@NotNull final SqlXmlParser parser)
+    protected List<Sql<String>> findAll(@NotNull final SqlXmlParser parser)
     {
         return parser.getQueries();
     }
@@ -432,7 +432,7 @@ public class SqlXmlParserSqlDAO
      * @return the list of matching {@link Sql}, or <code>null</code> if not found in the cache.
      */
     @Nullable
-    protected synchronized List<Sql> getFromResultIdCache(@NotNull final String resultId)
+    protected synchronized List<Sql<String>> getFromResultIdCache(@NotNull final String resultId)
     {
         return FIND_BY_RESULTID_CACHE.get(resultId);
     }
@@ -442,7 +442,7 @@ public class SqlXmlParserSqlDAO
      * @param resultId the result id.
      * @param list the {@link Sql} list.
      */
-    protected synchronized void cacheResultId(@NotNull final String resultId, @NotNull final List<Sql> list)
+    protected synchronized void cacheResultId(@NotNull final String resultId, @NotNull final List<Sql<String>> list)
     {
         FIND_BY_RESULTID_CACHE.put(resultId, list);
     }
@@ -455,9 +455,9 @@ public class SqlXmlParserSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findByResultId(@NotNull final String resultId)
+    public List<Sql<String>> findByResultId(@NotNull final String resultId)
     {
-        List<Sql> result = getFromResultIdCache(resultId);
+        List<Sql<String>> result = getFromResultIdCache(resultId);
 
         if (result == null)
         {
@@ -475,14 +475,14 @@ public class SqlXmlParserSqlDAO
      * @return the list of matching {@link org.acmsl.queryj.customsql.Sql}.
      */
     @NotNull
-    public List<Sql> findByResultId(@NotNull final String resultId, @NotNull final List<Sql> list)
+    public List<Sql<String>> findByResultId(@NotNull final String resultId, @NotNull final List<Sql<String>> list)
     {
 
-        @NotNull List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql<String>> result = new ArrayList<>();
 
-        for (@Nullable Sql t_CurrentSql : list)
+        for (@Nullable final Sql<String> t_CurrentSql : list)
         {
-            @Nullable ResultRef t_ResultRef;
+            @Nullable final ResultRef t_ResultRef;
 
             if  (t_CurrentSql != null)
             {
@@ -504,7 +504,7 @@ public class SqlXmlParserSqlDAO
      * @param type the type.
      * @return the cached list of matching {@link Sql} items.
      */
-    protected synchronized List<Sql> getFromTypeCache(@NotNull final String type)
+    protected synchronized List<Sql<String>> getFromTypeCache(@NotNull final String type)
     {
         return FIND_BY_TYPE_CACHE.get(type);
     }
@@ -514,7 +514,7 @@ public class SqlXmlParserSqlDAO
      * @param type the type.
      * @param list the matching {@link Sql} list.
      */
-    protected synchronized void cacheType(@NotNull final String type, @NotNull final List<Sql> list)
+    protected synchronized void cacheType(@NotNull final String type, @NotNull final List<Sql<String>> list)
     {
         FIND_BY_TYPE_CACHE.put(type, list);
     }
@@ -527,9 +527,9 @@ public class SqlXmlParserSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findByType(@NotNull final String type)
+    public List<Sql<String>> findByType(@NotNull final String type)
     {
-        List<Sql> result = getFromTypeCache(type);
+        List<Sql<String>> result = getFromTypeCache(type);
 
         if (result == null)
         {
@@ -547,7 +547,7 @@ public class SqlXmlParserSqlDAO
      * @return the list of matching {@link org.acmsl.queryj.customsql.Sql}.
      */
     @NotNull
-    public List<Sql> findByType(@NotNull final String type, @NotNull final List<Sql> list)
+    public List<Sql<String>> findByType(@NotNull final String type, @NotNull final List<Sql<String>> list)
     {
         return filterByType(list, type);
     }
@@ -556,7 +556,7 @@ public class SqlXmlParserSqlDAO
      * Specifies the cached repository-scoped {@link Sql} items.
      * @param list such list.
      */
-    protected synchronized static void setCachedRepositoryScopedSql(@NotNull final List<Sql> list)
+    protected synchronized static void setCachedRepositoryScopedSql(@NotNull final List<Sql<String>> list)
     {
         m__lCachedRepositoryScopedSql = list;
     }
@@ -566,7 +566,7 @@ public class SqlXmlParserSqlDAO
      * @return such list.
      */
     @Nullable
-    protected synchronized static List<Sql> getCachedRepositoryScopedSql()
+    protected synchronized static List<Sql<String>> getCachedRepositoryScopedSql()
     {
         return m__lCachedRepositoryScopedSql;
     }
@@ -577,9 +577,9 @@ public class SqlXmlParserSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findAllRepositoryScopedSql()
+    public List<Sql<String>> findAllRepositoryScopedSql()
     {
-        List<Sql> result = getCachedRepositoryScopedSql();
+        List<Sql<String>> result = getCachedRepositoryScopedSql();
 
         if (result == null)
         {
@@ -595,11 +595,11 @@ public class SqlXmlParserSqlDAO
      * @return such list.
      */
     @NotNull
-    protected List<Sql> findAllRepositoryScopedSql(final boolean breakAtFirstOccurrence)
+    protected List<Sql<String>> findAllRepositoryScopedSql(final boolean breakAtFirstOccurrence)
     {
-        @NotNull List<Sql> result = new ArrayList<Sql>(0);
+        @NotNull final List<Sql<String>> result = new ArrayList<>(0);
 
-        for (@Nullable Sql t_Sql : findAll())
+        for (@Nullable final Sql<String> t_Sql : findAll())
         {
             if (t_Sql != null)
             {
@@ -624,7 +624,7 @@ public class SqlXmlParserSqlDAO
     @Override
     public boolean containsRepositoryScopedSql()
     {
-        @NotNull List<Sql> result = findAllRepositoryScopedSql();
+        @NotNull final List<Sql<String>> result = findAllRepositoryScopedSql();
 
         return result.size() > 0;
     }

@@ -66,13 +66,13 @@ public class CucumberSqlParameterDAO
     /**
      * The map of sqlId -> parameters.
      */
-    private Map<String, List<Parameter>> m__mParameters;
+    private Map<String, List<Parameter<String>>> m__mParameters;
 
     /**
      * Creates a DAO instance wrapping given map.
      * @param parameters such map.
      */
-    public CucumberSqlParameterDAO(@NotNull final Map<String, List<Parameter>> parameters)
+    public CucumberSqlParameterDAO(@NotNull final Map<String, List<Parameter<String>>> parameters)
     {
         immutableSetParameters(parameters);
     }
@@ -81,7 +81,7 @@ public class CucumberSqlParameterDAO
      * Specifies the SQL queries' parameters.
      * @param parameters such map.
      */
-    protected final void immutableSetParameters(@NotNull final Map<String, List<Parameter>> parameters)
+    protected final void immutableSetParameters(@NotNull final Map<String, List<Parameter<String>>> parameters)
     {
         this.m__mParameters = parameters;
     }
@@ -91,7 +91,7 @@ public class CucumberSqlParameterDAO
      * @param parameters such map.
      */
     @SuppressWarnings("unused")
-    protected void setParameters(@NotNull final Map<String, List<Parameter>> parameters)
+    protected void setParameters(@NotNull final Map<String, List<Parameter<String>>> parameters)
     {
         immutableSetParameters(parameters);
     }
@@ -100,7 +100,7 @@ public class CucumberSqlParameterDAO
      * Retrieves the SQL queries parameters.
      * @return such parameters.
      */
-    protected final Map<String, List<Parameter>> getParameters()
+    protected final Map<String, List<Parameter<String>>> getParameters()
     {
         return m__mParameters;
     }
@@ -112,7 +112,7 @@ public class CucumberSqlParameterDAO
      */
     @Nullable
     @Override
-    public Parameter findByPrimaryKey(@NotNull final String id)
+    public Parameter<String> findByPrimaryKey(@NotNull final String id)
     {
         return findByPrimaryKey(id, getParameters());
     }
@@ -124,13 +124,14 @@ public class CucumberSqlParameterDAO
      * @return the {@link Parameter}, or <code>null</code> if not found.
      */
     @Nullable
-    protected Parameter findByPrimaryKey(@NotNull final String id, @NotNull final Map<String, List<Parameter>> parameters)
+    protected Parameter<String> findByPrimaryKey(
+        @NotNull final String id, @NotNull final Map<String, List<Parameter<String>>> parameters)
     {
-        @Nullable Parameter result = null;
+        @Nullable Parameter<String> result = null;
 
-        for (@NotNull final Entry<String, List<Parameter>> entry : parameters.entrySet())
+        for (@NotNull final Entry<String, List<Parameter<String>>> entry : parameters.entrySet())
         {
-            for (@Nullable final Parameter parameter : entry.getValue())
+            for (@Nullable final Parameter<String> parameter : entry.getValue())
             {
                 if (   (parameter != null)
                     && (parameter.getId().equals(id)))
@@ -152,7 +153,7 @@ public class CucumberSqlParameterDAO
      */
     @NotNull
     @Override
-    public List<Parameter> findBySql(@NotNull final String sqlId)
+    public List<Parameter<String>> findBySql(@NotNull final String sqlId)
     {
         return findBySql(sqlId, getParameters());
     }
@@ -165,11 +166,12 @@ public class CucumberSqlParameterDAO
      * @return the list of parameters required by given {@link org.acmsl.queryj.customsql.Sql}.
      */
     @NotNull
-    protected List<Parameter> findBySql(@NotNull final String sqlId, final Map<String, List<Parameter>> parameters)
+    protected List<Parameter<String>> findBySql(
+        @NotNull final String sqlId, final Map<String, List<Parameter<String>>> parameters)
     {
-        @Nullable List<Parameter> result = null;
+        @Nullable List<Parameter<String>> result = null;
 
-        for (@NotNull final Entry<String, List<Parameter>> entry : parameters.entrySet())
+        for (@NotNull final Entry<String, List<Parameter<String>>> entry : parameters.entrySet())
         {
             @NotNull final String key = entry.getKey();
 
@@ -182,7 +184,7 @@ public class CucumberSqlParameterDAO
 
         if (result == null)
         {
-            result = new ArrayList<Parameter>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;

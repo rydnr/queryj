@@ -110,4 +110,14 @@ public interface Literals
     String COMMENT = "comment";
     String LENGTH = "length";
     String INDEX = "index";
+    String QUERY_J = "QueryJ";
+    String CANNOT_READ_THE_CONFIGURATION_PROPERTIES_FILE = "Cannot read the configuration properties file.";
+    String ORACLE = "Oracle";
+    String NULLABLE = "NULLABLE";
+    String DATA_TYPE1 = "DATA_TYPE";
+    String COLUMN_ID1 = "COLUMN_ID";
+    String ORG_ACMSL_QUERYJ_TEMPLATES = "org/acmsl/queryj/templates";
+    String ENGINE = "engine";
+    String PACKAGE_NAME = "packageName";
+    String UNKNOWN = "unknown";
 }

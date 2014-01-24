@@ -91,7 +91,7 @@ extends TestCase
 {
   // JUnitDoclet begin class
   @Nullable
-  org.acmsl.queryj.customsql.PropertyElement propertyelement = null;
+  org.acmsl.queryj.customsql.PropertyElement<String> propertyelement = null;
   // JUnitDoclet end class
   
   /**
@@ -111,12 +111,12 @@ extends TestCase
   
   */
   @NotNull
-  public org.acmsl.queryj.customsql.PropertyElement createInstance()
+  public org.acmsl.queryj.customsql.PropertyElement<String> createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
     return
-        new org.acmsl.queryj.customsql.PropertyElement(
+        new org.acmsl.queryj.customsql.PropertyElement<>(
             "pp1", "column_name", 1, "int", true);
     // JUnitDoclet end method testcase.createInstance
   }

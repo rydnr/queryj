@@ -55,6 +55,8 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing StringTemplate classes.
  */
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.stringtemplate.v4.ST;
 
 /*
@@ -123,14 +125,26 @@ public class PerTableTemplatesFeatureTemplateFactory
     public String retrieveTemplateFileName(
         @NotNull final String repository, @NotNull final MetadataManager metadataManager)
     {
+        return retrieveTemplateFileName(repository, metadataManager.getEngine());
+    }
+
+    /**
+     * Retrieves the file name of the template.
+     * @param repository the repository name.
+     * @param engine the {@link Engine} instance.
+     * @return the file name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(
+        @NotNull final String repository, @NotNull final Engine<String> engine)
+    {
         @NotNull final String result;
 
         @NotNull final ST template =
             new ST("PerTableTemplates.feature");
 
         template.add(Literals.REPOSITORY, new DecoratedString(repository));
-        template.add(Literals.ENGINE_NAME, new DecoratedString(metadataManager.getEngineName()));
-        template.add(Literals.ENGINE_VERSION, new DecoratedString(metadataManager.getEngineVersion()));
+        template.add(org.acmsl.queryj.Literals.ENGINE, new EngineDecorator(engine));
 
         result = template.render();
 

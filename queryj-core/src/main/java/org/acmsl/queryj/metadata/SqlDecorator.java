@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -59,7 +59,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface SqlDecorator
-    extends  Sql,
+    extends  Sql<DecoratedString>,
              Decorator
 {
     /**
@@ -71,12 +71,12 @@ public interface SqlDecorator
      * Retrieves the <i>sql</i> element.
      * @return such instance.
      */
-    Sql getSql();
+    Sql<String> getSql();
 
     /**
      * Retrieves the parameters.
      * @return such information.
      */
     @NotNull
-    List<Parameter> getParameters();
+    List<Parameter<DecoratedString>> getParameters();
 }

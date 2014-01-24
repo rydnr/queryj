@@ -11,7 +11,7 @@ type : per-table;
 output: Java;
 
 // The filename builder.
-filename  builder : <engineName><tableName.capitalized>DAO.java;
+filename  builder : <engine.name><tableName.capitalized>DAO.java;
 
 // The package.
-package: <packageName>.dao.rdb.<engineName.lowercased>;
+package: <packageName>.dao.rdb.<engine.name.lowercased>;

@@ -65,13 +65,13 @@ public class CucumberSqlDAO
     /**
      * The data table.
      */
-    private List<Sql> m__lSql;
+    private List<Sql<String>> m__lSql;
 
     /**
      * Creates an instance with given information.
      * @param sqlList such information.
      */
-    public CucumberSqlDAO(@NotNull final List<Sql> sqlList)
+    public CucumberSqlDAO(@NotNull final List<Sql<String>> sqlList)
     {
         immutableSetSqlList(sqlList);
     }
@@ -80,7 +80,7 @@ public class CucumberSqlDAO
      * Specifies the {@link Sql} list.
      * @param sqlList such list.
      */
-    protected final void immutableSetSqlList(@NotNull final List<Sql> sqlList)
+    protected final void immutableSetSqlList(@NotNull final List<Sql<String>> sqlList)
     {
         this.m__lSql = sqlList;
     }
@@ -90,7 +90,7 @@ public class CucumberSqlDAO
      * @param sqlList such list.
      */
     @SuppressWarnings("unused")
-    protected void setSqlList(@NotNull final List<Sql> sqlList)
+    protected void setSqlList(@NotNull final List<Sql<String>> sqlList)
     {
         immutableSetSqlList(sqlList);
     }
@@ -99,7 +99,7 @@ public class CucumberSqlDAO
      * Retrieves the list of {@link Sql}.
      * @return such table.
      */
-    protected List<Sql> getSqlList()
+    protected List<Sql<String>> getSqlList()
     {
         return this.m__lSql;
     }
@@ -119,11 +119,11 @@ public class CucumberSqlDAO
      * @param sqlList the list of {@link Sql} queries.
      * @return <code>true</code> in such case.
      */
-    protected boolean containsRepositoryScopedSql(@NotNull final List<Sql> sqlList)
+    protected boolean containsRepositoryScopedSql(@NotNull final List<Sql<String>> sqlList)
     {
         boolean result = false;
 
-        for (@NotNull final Sql sql : sqlList)
+        for (@NotNull final Sql<String> sql : sqlList)
         {
             if (sql.getDao() == null)
             {
@@ -142,7 +142,7 @@ public class CucumberSqlDAO
      */
     @Nullable
     @Override
-    public Sql findByPrimaryKey(@NotNull final String id)
+    public Sql<String> findByPrimaryKey(@NotNull final String id)
     {
         return findByPrimaryKey(id, getSqlList());
     }
@@ -154,11 +154,11 @@ public class CucumberSqlDAO
      * @return the associated {@link Sql}, or <code>null</code> if not found.
      */
     @Nullable
-    public Sql findByPrimaryKey(@NotNull final String id, @NotNull final List<Sql> sqlList)
+    public Sql<String> findByPrimaryKey(@NotNull final String id, @NotNull final List<Sql<String>> sqlList)
     {
-        @Nullable Sql result = null;
+        @Nullable Sql<String> result = null;
 
-        for (@NotNull final Sql sql : sqlList)
+        for (@NotNull final Sql<String> sql : sqlList)
         {
             if (id.equals(sql.getId()))
             {
@@ -178,7 +178,7 @@ public class CucumberSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findByDAO(@NotNull final String table)
+    public List<Sql<String>> findByDAO(@NotNull final String table)
     {
         return findByDAO(table, getSqlList());
     }
@@ -190,11 +190,11 @@ public class CucumberSqlDAO
      * @return the associated {@link Sql} instances.
      */
     @NotNull
-    protected List<Sql> findByDAO(@NotNull final String table, @NotNull final List<Sql> sqlList)
+    protected List<Sql<String>> findByDAO(@NotNull final String table, @NotNull final List<Sql<String>> sqlList)
     {
-        @NotNull final List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql<String>> result = new ArrayList<>();
 
-        for (@NotNull final Sql sql : sqlList)
+        for (@NotNull final Sql<String> sql : sqlList)
         {
             if (table.equals(sql.getDao()))
             {
@@ -212,7 +212,7 @@ public class CucumberSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findSelectsForUpdate(@NotNull final String table)
+    public List<Sql<String>> findSelectsForUpdate(@NotNull final String table)
     {
         return findByDAO(table, findByType(Sql.SELECT_FOR_UPDATE));
     }
@@ -225,7 +225,7 @@ public class CucumberSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findInserts(@NotNull final String table)
+    public List<Sql<String>> findInserts(@NotNull final String table)
     {
         return findByDAO(table, findByType(Sql.INSERT));
     }
@@ -238,7 +238,7 @@ public class CucumberSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findUpdates(@NotNull final String table)
+    public List<Sql<String>> findUpdates(@NotNull final String table)
     {
         return findByDAO(table, findByType(Sql.UPDATE));
     }
@@ -251,7 +251,7 @@ public class CucumberSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findDeletes(@NotNull final String table)
+    public List<Sql<String>> findDeletes(@NotNull final String table)
     {
         return findByDAO(table, findByType(Sql.DELETE));
     }
@@ -263,7 +263,7 @@ public class CucumberSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findAll()
+    public List<Sql<String>> findAll()
     {
         return getSqlList();
     }
@@ -275,7 +275,7 @@ public class CucumberSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findByResultId(@NotNull final String resultId)
+    public List<Sql<String>> findByResultId(@NotNull final String resultId)
     {
         return findByResultId(resultId, getSqlList());
     }
@@ -286,11 +286,12 @@ public class CucumberSqlDAO
      * @return the list of matching {@link Sql}.
      */
     @NotNull
-    protected List<Sql> findByResultId(@NotNull final String resultId, @NotNull final List<Sql> sqlList)
+    protected List<Sql<String>> findByResultId(
+        @NotNull final String resultId, @NotNull final List<Sql<String>> sqlList)
     {
-        @NotNull final List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql<String>> result = new ArrayList<>();
 
-        for (@NotNull final Sql sql : sqlList)
+        for (@NotNull final Sql<String> sql : sqlList)
         {
             @Nullable final ResultRef resultRef = sql.getResultRef();
 
@@ -311,7 +312,7 @@ public class CucumberSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findByType(@NotNull final String type)
+    public List<Sql<String>> findByType(@NotNull final String type)
     {
         return findByType(type, getSqlList());
     }
@@ -323,11 +324,11 @@ public class CucumberSqlDAO
      * @return the list of matching {@link Sql}.
      */
     @NotNull
-    protected List<Sql> findByType(@NotNull final String type, @NotNull final List<Sql> sqlList)
+    protected List<Sql<String>> findByType(@NotNull final String type, @NotNull final List<Sql<String>> sqlList)
     {
-        @NotNull final List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql<String>> result = new ArrayList<>();
 
-        for (@NotNull final Sql sql : sqlList)
+        for (@NotNull final Sql<String> sql : sqlList)
         {
             if (type.equals(sql.getType()))
             {
@@ -344,7 +345,7 @@ public class CucumberSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findAllRepositoryScopedSql()
+    public List<Sql<String>> findAllRepositoryScopedSql()
     {
         return findAllRepositoryScopedSql(getSqlList());
     }
@@ -355,11 +356,11 @@ public class CucumberSqlDAO
      * @return such list.
      */
     @NotNull
-    protected List<Sql> findAllRepositoryScopedSql(@NotNull final List<Sql> sqlList)
+    protected List<Sql<String>> findAllRepositoryScopedSql(@NotNull final List<Sql<String>> sqlList)
     {
-        @NotNull final List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql<String>> result = new ArrayList<>();
 
-        for (@NotNull final Sql sql : sqlList)
+        for (@NotNull final Sql<String> sql : sqlList)
         {
             if (sql.getDao() == null)
             {
@@ -377,7 +378,7 @@ public class CucumberSqlDAO
      */
     @NotNull
     @Override
-    public List<Sql> findSelects(@NotNull final String table)
+    public List<Sql<String>> findSelects(@NotNull final String table)
     {
         return findByDAO(table, findByType(Sql.SELECT));
     }
@@ -389,7 +390,7 @@ public class CucumberSqlDAO
      */
     @Override
     @NotNull
-    public List<Sql> findDynamic(@NotNull final String tableName)
+    public List<Sql<String>> findDynamic(@NotNull final String tableName)
     {
         return findByDAO(tableName, findDynamic(getSqlList()));
     }
@@ -399,11 +400,11 @@ public class CucumberSqlDAO
      * @param sqlList the list of {@link Sql} queries.
      * @return such list.
      */
-    protected List<Sql> findDynamic(@NotNull final List<Sql> sqlList)
+    protected List<Sql<String>> findDynamic(@NotNull final List<Sql<String>> sqlList)
     {
-        @NotNull final List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql<String>> result = new ArrayList<>();
 
-        for (@NotNull final Sql sql : sqlList)
+        for (@NotNull final Sql<String> sql : sqlList)
         {
             if (sql.isDynamic())
             {

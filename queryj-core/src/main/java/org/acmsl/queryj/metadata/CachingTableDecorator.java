@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                         chous@acm-sl.org
@@ -106,17 +106,17 @@ public class CachingTableDecorator
     /**
      * The cached dynamic queries.
      */
-    private List<Sql> m__lCachedDynamicQueries;
+    private List<Sql<DecoratedString>> m__lCachedDynamicQueries;
 
     /**
      * The cached custom selects.
      */
-    private List<Sql> m__lCachedCustomSelects;
+    private List<Sql<DecoratedString>> m__lCachedCustomSelects;
 
     /**
      * The cached custom updates or inserts.
      */
-    private List<Sql> m__lCachedCustomUpdatesOrInserts;
+    private List<Sql<DecoratedString>> m__lCachedCustomUpdatesOrInserts;
 
     /**
      * The cached custom results.
@@ -146,7 +146,7 @@ public class CachingTableDecorator
     /**
      * The cached list of different results.
      */
-    private List<Result> m__lCachedDifferentCustomResults;
+    private List<Result<DecoratedString>> m__lCachedDifferentCustomResults;
 
     /**
      * The cached list of read-only attributes.
@@ -494,7 +494,7 @@ public class CachingTableDecorator
      * Specifies the cached dynamic queries.
      * @param list such list.
      */
-    protected final void immutableSetCachedDynamicQueries(@NotNull final List<Sql> list)
+    protected final void immutableSetCachedDynamicQueries(@NotNull final List<Sql<DecoratedString>> list)
     {
         m__lCachedDynamicQueries = list;
     }
@@ -503,7 +503,7 @@ public class CachingTableDecorator
      * Specifies the cached dynamic queries.
      * @param list such list.
      */
-    protected void setCachedDynamicQueries(@NotNull final List<Sql> list)
+    protected void setCachedDynamicQueries(@NotNull final List<Sql<DecoratedString>> list)
     {
         immutableSetCachedDynamicQueries(list);
     }
@@ -513,7 +513,7 @@ public class CachingTableDecorator
      * @return such information.
      */
     @Nullable
-    protected List<Sql> getCachedDynamicQueries()
+    protected List<Sql<DecoratedString>> getCachedDynamicQueries()
     {
         return m__lCachedDynamicQueries;
     }
@@ -523,9 +523,9 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Sql> getDynamicQueries()
+    public List<Sql<DecoratedString>> getDynamicQueries()
     {
-        @Nullable List<Sql> result = getCachedDynamicQueries();
+        @Nullable List<Sql<DecoratedString>> result = getCachedDynamicQueries();
 
         if (result == null)
         {
@@ -540,7 +540,7 @@ public class CachingTableDecorator
      * Specifies the cached custom selects.
      * @param selects such information.
      */
-    protected final void immutableSetCachedCustomSelects(@NotNull final List<Sql> selects)
+    protected final void immutableSetCachedCustomSelects(@NotNull final List<Sql<DecoratedString>> selects)
     {
         this.m__lCachedCustomSelects =  selects;
     }
@@ -549,7 +549,7 @@ public class CachingTableDecorator
      * Specifies the cached custom selects.
      * @param selects such information.
      */
-    protected void setCachedCustomSelects(@NotNull final List<Sql> selects)
+    protected void setCachedCustomSelects(@NotNull final List<Sql<DecoratedString>> selects)
     {
         immutableSetCachedCustomSelects(selects);
     }
@@ -559,7 +559,7 @@ public class CachingTableDecorator
      * @return such information.
      */
     @Nullable
-    protected List<Sql> getCachedCustomSelects()
+    protected List<Sql<DecoratedString>> getCachedCustomSelects()
     {
         return m__lCachedCustomSelects;
     }
@@ -570,9 +570,9 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Sql> getCustomSelects()
+    public List<Sql<DecoratedString>> getCustomSelects()
     {
-        List<Sql> result = getCachedCustomSelects();
+        List<Sql<DecoratedString>> result = getCachedCustomSelects();
 
         if (result == null)
         {
@@ -588,7 +588,7 @@ public class CachingTableDecorator
      * Specifies the cached custom updates or inserts.
      * @param queries such information.
      */
-    protected final void immutableSetCachedCustomUpdatesOrInserts(@NotNull final List<Sql> queries)
+    protected final void immutableSetCachedCustomUpdatesOrInserts(@NotNull final List<Sql<DecoratedString>> queries)
     {
         this.m__lCachedCustomUpdatesOrInserts = queries;
     }
@@ -597,7 +597,7 @@ public class CachingTableDecorator
      * Specifies the cached custom updates or inserts.
      * @param queries such information.
      */
-    protected void setCachedCustomUpdatesOrInserts(@NotNull final List<Sql> queries)
+    protected void setCachedCustomUpdatesOrInserts(@NotNull final List<Sql<DecoratedString>> queries)
     {
         immutableSetCachedCustomUpdatesOrInserts(queries);
     }
@@ -607,7 +607,7 @@ public class CachingTableDecorator
      * @return such information.
      */
     @Nullable
-    protected List<Sql> getCachedCustomUpdatesOrInserts()
+    protected List<Sql<DecoratedString>> getCachedCustomUpdatesOrInserts()
     {
         return m__lCachedCustomUpdatesOrInserts;
     }
@@ -618,9 +618,9 @@ public class CachingTableDecorator
      */
     @Override
     @NotNull
-    public List<Sql> getCustomUpdatesOrInserts()
+    public List<Sql<DecoratedString>> getCustomUpdatesOrInserts()
     {
-        List<Sql> result = getCachedCustomUpdatesOrInserts();
+        List<Sql<DecoratedString>> result = getCachedCustomUpdatesOrInserts();
 
         if (result == null)
         {
@@ -924,7 +924,7 @@ public class CachingTableDecorator
      */
     @NotNull
     @Override
-    public List<Sql> getCustomSelectsForUpdate()
+    public List<Sql<DecoratedString>> getCustomSelectsForUpdate()
     {
         return super.getCustomSelectsForUpdate();
     }
@@ -982,7 +982,7 @@ public class CachingTableDecorator
      * Specifies the cached different custom results.
      * @param results such results.
      */
-    protected final void immutableSetCachedDifferentCustomResults(@NotNull final List<Result> results)
+    protected final void immutableSetCachedDifferentCustomResults(@NotNull final List<Result<DecoratedString>> results)
     {
         this.m__lCachedDifferentCustomResults = results;
     }
@@ -991,7 +991,7 @@ public class CachingTableDecorator
      * Specifies the cached different custom results.
      * @param results such results.
      */
-    protected void setCachedDifferentCustomResults(@NotNull final List<Result> results)
+    protected void setCachedDifferentCustomResults(@NotNull final List<Result<DecoratedString>> results)
     {
         immutableSetCachedDifferentCustomResults(results);
     }
@@ -1001,7 +1001,7 @@ public class CachingTableDecorator
      * @return such results.
      A*/
     @Nullable
-    public List<Result> getCachedDifferentCustomResults()
+    public List<Result<DecoratedString>> getCachedDifferentCustomResults()
     {
         return this.m__lCachedDifferentCustomResults;
     }
@@ -1012,9 +1012,9 @@ public class CachingTableDecorator
      */
     @NotNull
     @Override
-    public List<Result> getDifferentCustomResults()
+    public List<Result<DecoratedString>> getDifferentCustomResults()
     {
-        List<Result> result = getCachedDifferentCustomResults();
+        List<Result<DecoratedString>> result = getCachedDifferentCustomResults();
 
         if (result == null)
         {

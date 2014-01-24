@@ -44,19 +44,19 @@ import org.jetbrains.annotations.Nullable;
  * attributes.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractIdElement
-    implements IdentifiableElement
+public abstract class AbstractIdElement<T>
+    implements IdentifiableElement<T>
 {
     /**
      * The <i>id</i> attribute.
      */
-    private String m__strId;
+    private T m__strId;
 
     /**
      * Builds an AbstractIdElement with given <i>id</i>.
      * @param id the id.
      */
-    protected AbstractIdElement(@NotNull final String id)
+    protected AbstractIdElement(@NotNull final T id)
     {
         immutableSetId(id);
     }
@@ -65,7 +65,7 @@ public abstract class AbstractIdElement
      * Specifies the <i>id</i> value.
      * @param id the id.
      */
-    protected final void immutableSetId(@NotNull final String id)
+    protected final void immutableSetId(@NotNull final T id)
     {
         m__strId = id;
     }
@@ -75,7 +75,7 @@ public abstract class AbstractIdElement
      * @param id the id.
      */
     @SuppressWarnings("unused")
-    protected void setId(@NotNull final String id)
+    protected void setId(@NotNull final T id)
     {
         immutableSetId(id);
     }
@@ -85,7 +85,7 @@ public abstract class AbstractIdElement
      * @return such information.
      */
     @NotNull
-    public String getId()
+    public T getId()
     {
         return m__strId;
     }
@@ -107,7 +107,7 @@ public abstract class AbstractIdElement
      * @return such information.
      */
     @NotNull
-    protected String toString(@NotNull final String id)
+    protected String toString(@NotNull final T id)
     {
         return
               getClass().getName()
@@ -139,7 +139,7 @@ public abstract class AbstractIdElement
 
         if  (object instanceof IdentifiableElement)
         {
-            @NotNull final IdentifiableElement t_OtherInstance =
+            @NotNull final IdentifiableElement<?> t_OtherInstance =
                 (IdentifiableElement) object;
 
             result =
@@ -160,7 +160,7 @@ public abstract class AbstractIdElement
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(@Nullable final IdentifiableElement object)
+    public int compareTo(@Nullable final IdentifiableElement<T> object)
         throws  ClassCastException
     {
         int result = -1;

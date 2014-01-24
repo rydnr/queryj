@@ -34,8 +34,9 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing JetBrains annotations.
  */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -53,7 +54,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class PropertyRefElement
-    extends  AbstractIdElement
+    extends  AbstractIdElement<String>
     implements PropertyRef
 {
     private static final long serialVersionUID = -944778567031371562L;
@@ -61,9 +62,8 @@ public class PropertyRefElement
     /**
      * Creates a PropertyRefElement with given information.
      * @param id the <i>id</i> attribute.
-     * @precondition id != null
      */
-    public PropertyRefElement(final String id)
+    public PropertyRefElement(@NotNull final String id)
     {
         super(id);
     }

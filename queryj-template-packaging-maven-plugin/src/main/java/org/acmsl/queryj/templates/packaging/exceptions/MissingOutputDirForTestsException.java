@@ -56,6 +56,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class MissingOutputDirForTestsException
     extends QueryJNonCheckedException
 {
+    private static final long serialVersionUID = 752770316506222245L;
+
     /**
      * Creates a new instance.
      */

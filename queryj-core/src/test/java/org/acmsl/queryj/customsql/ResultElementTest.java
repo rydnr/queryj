@@ -88,7 +88,7 @@ extends TestCase
 {
   // JUnitDoclet begin class
   @Nullable
-  org.acmsl.queryj.customsql.ResultElement resultelement = null;
+  org.acmsl.queryj.customsql.ResultElement<String> resultelement = null;
   // JUnitDoclet end class
   
   /**
@@ -108,11 +108,11 @@ extends TestCase
   
   */
   @NotNull
-  public org.acmsl.queryj.customsql.ResultElement createInstance()
+  public org.acmsl.queryj.customsql.ResultElement<String> createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.customsql.ResultElement("r1", "class", "single");
+    return new org.acmsl.queryj.customsql.ResultElement<>("r1", "class", "single");
     // JUnitDoclet end method testcase.createInstance
   }
   

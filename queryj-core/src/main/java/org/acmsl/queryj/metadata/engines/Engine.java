@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,22 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: MissingProjectPackageAtRuntimeException.java
+ * Filename: Engine.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The project package information is missing.
+ * Description: Represents engine vendors.
  *
- * Date: 2013/12/08
- * Time: 10:33
+ * Date: 2014/01/24
+ * Time: 07:08
  *
  */
-package org.acmsl.queryj.tools.exceptions;
+package org.acmsl.queryj.metadata.engines;
 
 /*
- * Importing QueryJ-API classes.
+ * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -46,23 +46,37 @@ import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The project package information is missing.
+ * Represents engine vendors.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/12/08 10:33
+ * Created: 2014/01/24 07:08
  */
 @ThreadSafe
-public class MissingProjectPackageAtRuntimeException
-    extends QueryJNonCheckedException
+public interface Engine<T>
 {
-
-    private static final long serialVersionUID = -3817993083243973821L;
+    /**
+     * Retrieves the name.
+     * @return such name.
+     */
+    @NotNull
+    T getName();
 
     /**
-     * Creates a new instance.
+     * Retrieves the version.
+     * @return such version.
      */
-    public MissingProjectPackageAtRuntimeException()
-    {
-        super("missing.project.package.at.runtime");
-    }
+    @NotNull
+    T getVersion();
+
+    /**
+     * Indicates if it requires custom LOB handling or not.
+     * @return such information.
+     */
+    boolean requiresCustomLobHandling();
+
+    /**
+     * Indicates if it supports sequences or not.
+     * @return such information.
+     */
+    boolean supportsSequences();
 }

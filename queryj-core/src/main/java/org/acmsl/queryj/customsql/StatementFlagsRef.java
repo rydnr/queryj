@@ -41,6 +41,6 @@ package org.acmsl.queryj.customsql;
  * @since 2012/07/18
  */
 public interface StatementFlagsRef
-    extends IdentifiableElement
+    extends IdentifiableElement<String>
 {
 }

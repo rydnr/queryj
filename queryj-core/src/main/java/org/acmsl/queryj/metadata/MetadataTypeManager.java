@@ -130,6 +130,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the QueryJ type.
      */
+    @NotNull
     public String getFieldType(final int dataType);
 
     /**
@@ -139,6 +140,7 @@ public interface MetadataTypeManager
      * @param isBool whether the attribute is marked as boolean.
      * @return the QueryJ type.
      */
+    @NotNull
     public String getFieldType(
         final int dataType, final boolean allowsNull, final boolean isBool);
 
@@ -150,6 +152,7 @@ public interface MetadataTypeManager
      * @return the associated setter method name.
      */
     @SuppressWarnings("unused")
+    @NotNull
     public String getSetterMethod(
         final int dataType, final int paramIndex, final String paramName);
 
@@ -160,6 +163,7 @@ public interface MetadataTypeManager
      * @return the associated getter method name.
      */
     @SuppressWarnings("unused")
+    @NotNull
     public String getGetterMethod(final int dataType, final int paramIndex);
 
     /**
@@ -167,6 +171,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the associated getter method name.
      */
+    @NotNull
     public String getGetterMethod(final int dataType);
 
     /**
@@ -175,6 +180,7 @@ public interface MetadataTypeManager
      * @param param the parameter.
      * @return the associated getter method name.
      */
+    @NotNull
     public String getGetterMethod(final int dataType, final String param);
 
     /**
@@ -184,6 +190,7 @@ public interface MetadataTypeManager
      * @return the associated result type.
      */
     @SuppressWarnings("unused")
+    @NotNull
     public String getProcedureResultType(final int dataType, final boolean isBool);
 
     /**
@@ -193,6 +200,7 @@ public interface MetadataTypeManager
      * @return the associated default value.
      */
     @SuppressWarnings("unused")
+    @NotNull
     public String getProcedureDefaultValue(final int dataType, final boolean isBool);
 
     /**
@@ -210,6 +218,7 @@ public interface MetadataTypeManager
      * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
+    @NotNull
     public String getObjectType(final String dataType, final boolean isBool);
 
     /**
@@ -218,6 +227,7 @@ public interface MetadataTypeManager
      * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
+    @NotNull
     public String getSmartObjectType(final int dataType, final boolean isBool);
 
     /**
@@ -227,6 +237,7 @@ public interface MetadataTypeManager
      * @return the associated object type.
      */
     @SuppressWarnings("unused")
+    @NotNull
     public String getSmartObjectRetrievalType(final int dataType, final boolean isBool);
 
     /**
@@ -236,6 +247,7 @@ public interface MetadataTypeManager
      * @return the associated default value.
      */
     @SuppressWarnings("unused")
+    @NotNull
     public String getDefaultValue(final int dataType, final boolean isBool);
 
     /**
@@ -243,6 +255,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the associated constant name.
      */
+    @NotNull
     public String getConstantName(final int dataType);
 
     /**
@@ -350,7 +363,7 @@ public interface MetadataTypeManager
      * @return <code>true</code> if such data type can be managed as a
      * clob.
      */
-    public boolean isClob(final String dataType);
+    public <T> boolean isClob(@NotNull final T dataType);
 
     /**
      * Checks if given data type represents blobs.
@@ -366,7 +379,7 @@ public interface MetadataTypeManager
      * @return <code>true</code> if such data type can be managed as a
      * blob.
      */
-    public boolean isBlob(final String dataType);
+    public boolean isBlob(@NotNull final String dataType);
 
     /**
      * Checks if given data type represents numbers smaller than int.
@@ -379,10 +392,10 @@ public interface MetadataTypeManager
     /**
      * Checks if given data type represents numbers smaller than int.
      * @param dataType the data type.
-     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * @return <code>true</code> is such data type is smallint, tinyint
      * or similar.
      */
-    public boolean isNumberSmallerThanInt(final String dataType);
+    public boolean isNumberSmallerThanInt(@NotNull final String dataType);
 
     /**
      * Checks if given data type represents numbers.
@@ -396,7 +409,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return <code>true</code> in such case.
      */
-    public boolean isNumeric(final String dataType);
+    public boolean isNumeric(@NotNull final String dataType);
 
     /**
      * Checks if given data type represents large objects of any kind.
@@ -414,7 +427,7 @@ public interface MetadataTypeManager
      * Lob.
      */
     @SuppressWarnings("unused")
-    boolean isLob(final String dataType);
+    boolean isLob(@NotNull final String dataType);
 
     /**
      * Retrieves the object type of given data type when retrieving information.

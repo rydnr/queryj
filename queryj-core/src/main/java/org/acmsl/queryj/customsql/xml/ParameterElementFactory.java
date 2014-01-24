@@ -80,38 +80,45 @@ public class ParameterElementFactory
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;parameter&gt; information.
      * @throws SAXException if the attributes are not valid.
-     * @precondition attributes != null
-     * @precondition digester != null
-     * @precondition conversionUtils != null
      */
+    @Override
     @Nullable
     public Object createObject(
         @NotNull final Attributes attributes,
-        final Digester digester,
+        @NotNull final Digester digester,
         @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable ParameterElement result = null;
+        @Nullable final ParameterElement<String> result;
 
-        String t_strId = attributes.getValue("id");
+        @Nullable final String t_strId = attributes.getValue("id");
 
-        int t_iIndex =
+        final int t_iIndex =
             conversionUtils.toInt(attributes.getValue(Literals.INDEX));
 
-        String t_strName = attributes.getValue("name");
+        @Nullable final String t_strName = attributes.getValue("name");
 
-        String t_strType = attributes.getValue("type");
+        @Nullable final String t_strType = attributes.getValue("type");
 
-        String t_strValidationValue =
+        @Nullable final String t_strValidationValue =
             attributes.getValue("validation-value");
 
-        result =
-            new ParameterElement(
-                t_strId,
-                t_iIndex,
-                t_strName,
-                t_strType,
-                t_strValidationValue);
+        if (   (t_strId != null)
+            && (t_strName != null)
+            && (t_strType != null))
+        {
+            result =
+                new ParameterElement<>(
+                    t_strId,
+                    t_iIndex,
+                    t_strName,
+                    t_strType,
+                    t_strValidationValue);
+        }
+        else
+        {
+            result = null;
+        }
 
         return result;
     }

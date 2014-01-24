@@ -93,7 +93,7 @@ public interface TableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    List<Sql> getDynamicQueries();
+    List<Sql<DecoratedString>> getDynamicQueries();
 
     /**
      * Retrieves the static contents, if any.
@@ -107,7 +107,7 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    List<Result> getDifferentCustomResults();
+    List<Result<DecoratedString>> getDifferentCustomResults();
 
     /**
      * Retrieves the ordered list of the fully-qualified attribute types.

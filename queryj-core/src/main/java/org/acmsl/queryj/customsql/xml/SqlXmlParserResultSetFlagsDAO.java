@@ -124,7 +124,7 @@ public class SqlXmlParserResultSetFlagsDAO
      */
     @NotNull
     protected List<ResultSetFlags> filterResultSetFlags(
-        @NotNull final List<? extends IdentifiableElement> contents, @NotNull final String idFilter)
+        @NotNull final List<? extends IdentifiableElement<String>> contents, @NotNull final String idFilter)
     {
         return this.filterItems(contents, ResultSetFlags.class, idFilter);
     }

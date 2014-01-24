@@ -73,6 +73,8 @@ public class TableAttributesPartialListDecorator
     implements PartialListDecorator,
                TableDecorator
 {
+    private static final long serialVersionUID = 3942968754043772227L;
+
     /**
      * The table decorator.
      */
@@ -387,7 +389,7 @@ public class TableAttributesPartialListDecorator
      */
     @NotNull
     @Override
-    public List<Sql> getDynamicQueries()
+    public List<Sql<DecoratedString>> getDynamicQueries()
     {
         return getTable().getDynamicQueries();
     }
@@ -401,7 +403,7 @@ public class TableAttributesPartialListDecorator
 
     @NotNull
     @Override
-    public List<Result> getDifferentCustomResults()
+    public List<Result<DecoratedString>> getDifferentCustomResults()
     {
         return getTable().getDifferentCustomResults();
     }

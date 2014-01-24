@@ -70,7 +70,7 @@ public class InvalidPerCustomSqlTemplateException
      */
     public InvalidPerCustomSqlTemplateException(
         @NotNull final String name,
-        @NotNull final Sql sql,
+        @NotNull final Sql<?> sql,
         @NotNull final String repository,
         @NotNull final Throwable cause)
     {

@@ -195,7 +195,7 @@ public abstract class AbstractTableAttributesListDecorator
 
     @NotNull
     @Override
-    public List<Sql> getDynamicQueries()
+    public List<Sql<DecoratedString>> getDynamicQueries()
     {
         throw new RuntimeException("Invalid operation");
     }
@@ -209,7 +209,7 @@ public abstract class AbstractTableAttributesListDecorator
 
     @NotNull
     @Override
-    public List<Result> getDifferentCustomResults()
+    public List<Result<DecoratedString>> getDifferentCustomResults()
     {
         throw new RuntimeException("Invalid operation");
     }

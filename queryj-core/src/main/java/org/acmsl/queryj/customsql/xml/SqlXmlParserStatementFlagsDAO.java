@@ -126,7 +126,7 @@ public class SqlXmlParserStatementFlagsDAO
     @SuppressWarnings("unchecked")
     @NotNull
     protected List<StatementFlags> filterStatementFlags(
-        @NotNull final List<? extends IdentifiableElement> contents, @NotNull final String idFilter)
+        @NotNull final List<? extends IdentifiableElement<String>> contents, @NotNull final String idFilter)
     {
         return this.filterItems(contents, StatementFlags.class, idFilter);
     }

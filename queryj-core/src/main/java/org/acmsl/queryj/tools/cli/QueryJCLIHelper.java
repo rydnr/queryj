@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.cli;
 /*
  * Importing some Apache Commons CLI classes.
  */
+import org.acmsl.queryj.Literals;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
@@ -124,12 +125,11 @@ public class QueryJCLIHelper
      */
     public Option createConfigurationOption()
     {
-        return
-            OptionBuilder
-                .withArgName("file")
-                .hasArg()
-                .withDescription(CONFIGURATION_PROPERTIES_OPTION_DESCRIPTION)
-                .create(CONFIGURATION_PROPERTIES_OPTION);
+        OptionBuilder.withArgName("file");
+        OptionBuilder.hasArg();
+        OptionBuilder.withDescription(CONFIGURATION_PROPERTIES_OPTION_DESCRIPTION);
+
+        return OptionBuilder.create(CONFIGURATION_PROPERTIES_OPTION);
     }
 
     /**
@@ -139,12 +139,10 @@ public class QueryJCLIHelper
      */
     public Option createConfigurationLongOption()
     {
-        return
-            OptionBuilder
-                .withArgName("file")
-                .hasArg()
-                .withDescription(CONFIGURATION_PROPERTIES_OPTION_DESCRIPTION)
-                .create(CONFIGURATION_PROPERTIES_LONG_OPTION);
+        OptionBuilder.withArgName("file");
+        OptionBuilder.hasArg();
+        OptionBuilder.withDescription(CONFIGURATION_PROPERTIES_OPTION_DESCRIPTION);
+        return OptionBuilder.create(CONFIGURATION_PROPERTIES_LONG_OPTION);
     }
 
     /**
@@ -153,16 +151,12 @@ public class QueryJCLIHelper
      */
     public Option createCustomSqlOption()
     {
-        Option result =
-            OptionBuilder
-                .withArgName("file")
-                .hasArg()
-                .withDescription(CUSTOM_SQL_OPTION_DESCRIPTION)
-                .withLongOpt(CUSTOM_SQL_LONG_OPTION)
-                .isRequired(false)
-                .create(CUSTOM_SQL_OPTION);
-
-        return result;
+        OptionBuilder.withArgName("file");
+        OptionBuilder.hasArg();
+        OptionBuilder.withDescription(CUSTOM_SQL_OPTION_DESCRIPTION);
+        OptionBuilder.withLongOpt(CUSTOM_SQL_LONG_OPTION);
+        OptionBuilder.isRequired(false);
+        return OptionBuilder.create(CUSTOM_SQL_OPTION);
     }
 
     /**
@@ -171,15 +165,11 @@ public class QueryJCLIHelper
      */
     public Option createCustomSqlLongOption()
     {
-        Option result =
-            OptionBuilder
-                .withArgName("file")
-                .hasArg()
-                .withDescription(CUSTOM_SQL_OPTION_DESCRIPTION)
-                .isRequired(false)
-                .create(CUSTOM_SQL_LONG_OPTION);
-
-        return result;
+        OptionBuilder.withArgName("file");
+        OptionBuilder.hasArg();
+        OptionBuilder.withDescription(CUSTOM_SQL_OPTION_DESCRIPTION);
+        OptionBuilder.isRequired(false);
+        return OptionBuilder.create(CUSTOM_SQL_LONG_OPTION);
     }
 
     /**
@@ -189,31 +179,25 @@ public class QueryJCLIHelper
     @NotNull
     public Option[] createVerbosityOptions()
     {
-        @NotNull final Collection<Option> t_cResult = new ArrayList<Option>();
+        @NotNull final Collection<Option> t_cResult = new ArrayList<>();
 
-        Option t_Option =
-            OptionBuilder
-                .withArgName("v")
-                .withDescription(INFO_VERBOSITY_OPTION_DESCRIPTION)
-                .isRequired(false)
-                .create(INFO_VERBOSITY_OPTION);
+        OptionBuilder.withArgName("v");
+        OptionBuilder.withDescription(INFO_VERBOSITY_OPTION_DESCRIPTION);
+        OptionBuilder.isRequired(false);
+        @NotNull Option t_Option = OptionBuilder.create(INFO_VERBOSITY_OPTION);
         t_cResult.add(t_Option);
 
-        t_Option =
-            OptionBuilder
-                .withArgName("vv")
-                .withDescription(DEBUG_VERBOSITY_OPTION_DESCRIPTION)
-                .isRequired(false)
-                .create(DEBUG_VERBOSITY_OPTION);
+        OptionBuilder.withArgName("vv");
+        OptionBuilder.withDescription(DEBUG_VERBOSITY_OPTION_DESCRIPTION);
+        OptionBuilder.isRequired(false);
+        t_Option = OptionBuilder.create(DEBUG_VERBOSITY_OPTION);;
 
         t_cResult.add(t_Option);
 
-        t_Option =
-            OptionBuilder
-                .withArgName("vvv")
-                .withDescription(TRACE_VERBOSITY_OPTION_DESCRIPTION)
-                .isRequired(false)
-                .create(TRACE_VERBOSITY_OPTION);
+        OptionBuilder.withArgName("vvv");
+        OptionBuilder.withDescription(TRACE_VERBOSITY_OPTION_DESCRIPTION);
+        OptionBuilder.isRequired(false);
+        t_Option = OptionBuilder.create(TRACE_VERBOSITY_OPTION);
         t_cResult.add(t_Option);
 
         return t_cResult.toArray(EMPTY_OPTION_ARRAY);
@@ -223,31 +207,25 @@ public class QueryJCLIHelper
      * Creates the command-line option for the <i>help</i>.
      * @return such <code>Option</code> instance.
      */
+    @NotNull
     public Option createHelpOption()
     {
-        Option result =
-            OptionBuilder
-                .withDescription(HELP_OPTION_DESCRIPTION)
-                .isRequired(false)
-                .create(HELP_OPTION);
-
-        return result;
+        OptionBuilder.withDescription(HELP_OPTION_DESCRIPTION);
+        OptionBuilder.isRequired(false);
+        return OptionBuilder.create(HELP_OPTION);
     }
 
     /**
      * Creates the command-line long option for the <i>help</i>.
      * @return such <code>Option</code> instance.
      */
+    @NotNull
     public Option createHelpLongOption()
     {
-        Option result =
-            OptionBuilder
-                .withDescription(HELP_OPTION_DESCRIPTION)
-                .withLongOpt(HELP_LONG_OPTION)
-                .isRequired(false)
-                .create(HELP_LONG_OPTION);
-
-        return result;
+        OptionBuilder.withDescription(HELP_OPTION_DESCRIPTION);
+        OptionBuilder.withLongOpt(HELP_LONG_OPTION);
+        OptionBuilder.isRequired(false);
+        return OptionBuilder.create(HELP_LONG_OPTION);
     }
 
     /**
@@ -315,7 +293,7 @@ public class QueryJCLIHelper
      * @param message the message.
      * @param printStream where to print the message to.
      */
-    public void printError(final String message, @NotNull final PrintStream printStream)
+    public void printError(@NotNull final String message, @NotNull final PrintStream printStream)
     {
         printStream.println("Error: " + message);
     }
@@ -327,9 +305,9 @@ public class QueryJCLIHelper
      */
     @SuppressWarnings("unused")
     public void printUsage(
-        final Options options, final PrintStream printStream)
+        @NotNull final Options options, @NotNull final PrintStream printStream)
     {
-        new HelpFormatter().printHelp("QueryJ", options, true);
+        new HelpFormatter().printHelp(Literals.QUERY_J, options, true);
     }
 
     /**
@@ -348,14 +326,14 @@ public class QueryJCLIHelper
      */
     @SuppressWarnings("unused")
     public void printUsage(
-        final Option configurationOption,
-        final Option configurationLongOption,
-        final Option customSqlOption,
-        final Option customSqlLongOption,
-        final Option[] verbosityOptions,
-        final Option helpOption,
-        final Option helpLongOption,
-        final PrintStream printStream)
+        @NotNull final Option configurationOption,
+        @NotNull final Option configurationLongOption,
+        @NotNull final Option customSqlOption,
+        @NotNull final Option customSqlLongOption,
+        @NotNull final Option[] verbosityOptions,
+        @NotNull final Option helpOption,
+        @NotNull final Option helpLongOption,
+        @NotNull final PrintStream printStream)
     {
         @NotNull final Options t_Options = new Options();
 
@@ -373,7 +351,7 @@ public class QueryJCLIHelper
             verbosityOptions,
             helpLongOption);
 
-        new HelpFormatter().printHelp("QueryJ", t_Options);
+        new HelpFormatter().printHelp(Literals.QUERY_J, t_Options);
     }
 
     /**
@@ -383,6 +361,7 @@ public class QueryJCLIHelper
      * @return the <code>Properties</code> instance with the configuration
      * settings.
      */
+    @SuppressWarnings("unused")
     @Nullable
     public Properties readConfigurationSettings(
         @Nullable final String configurationFile)
@@ -432,7 +411,7 @@ public class QueryJCLIHelper
                 if  (t_Log != null)
                 {
                     t_Log.info(
-                        "Cannot read the configuration properties file.",
+                        Literals.CANNOT_READ_THE_CONFIGURATION_PROPERTIES_FILE,
                         ioException);
                 }
             }
@@ -494,7 +473,7 @@ public class QueryJCLIHelper
                 if  (t_Log != null)
                 {
                     t_Log.error(
-                        "Cannot read the configuration properties file.",
+                        Literals.CANNOT_READ_THE_CONFIGURATION_PROPERTIES_FILE,
                         ioException);
                 }
             }

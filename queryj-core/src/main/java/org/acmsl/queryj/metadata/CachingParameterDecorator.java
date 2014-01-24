@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,6 +37,10 @@ package org.acmsl.queryj.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.customsql.Parameter;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,12 +62,12 @@ public class CachingParameterDecorator
     /**
      * The cached SQL type.
      */
-    private String m__strCachedSqlType;
+    private DecoratedString m__strCachedSqlType;
 
     /**
      * The cached object type.
      */
-    private String m__strCachedObjectType;
+    private DecoratedString m__strCachedObjectType;
 
     /**
      * The cached <code>isObject</code> value.
@@ -73,12 +77,7 @@ public class CachingParameterDecorator
     /**
      * The cached field type.
      */
-    private String m__strCachedFieldType;
-
-    /**
-     * The cached lowercased name.
-     */
-    private String m__strCachedNameLowercased;
+    private DecoratedString m__strCachedFieldType;
 
     /**
      * The cached <code>isClob</code> value.
@@ -89,12 +88,10 @@ public class CachingParameterDecorator
      * Creates a <code>CachingParameterDecorator</code> with given parameter.
      * @param parameter the parameter to decorate.
      * @param metadataTypeManager the metadata type manager.
-     * @precondition parameter != null
-     * @precondition metadataTypeManager != null
      */
     public CachingParameterDecorator(
-        @NotNull final Parameter parameter,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final Parameter<String> parameter,
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         super(parameter, metadataTypeManager);
     }
@@ -104,7 +101,7 @@ public class CachingParameterDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedSqlType(
-        final String value)
+        final DecoratedString value)
     {
         m__strCachedSqlType = value;
     }
@@ -113,7 +110,7 @@ public class CachingParameterDecorator
      * Specifies the cached SQL type.
      * @param value the value to cache.
      */
-    protected void setCachedSqlType(final String value)
+    protected void setCachedSqlType(final DecoratedString value)
     {
         immutableSetCachedSqlType(value);
     }
@@ -122,7 +119,7 @@ public class CachingParameterDecorator
      * Retrieves the cached SQL type.
      * @return such value.
      */
-    public String getCachedSqlType()
+    public DecoratedString getCachedSqlType()
     {
         return m__strCachedSqlType;
     }
@@ -132,9 +129,9 @@ public class CachingParameterDecorator
      * @return such information.
      * @see java.sql.Types
      */
-    public String getSqlType()
+    public DecoratedString getSqlType()
     {
-        @Nullable String result = getCachedSqlType();
+        @Nullable DecoratedString result = getCachedSqlType();
         
         if  (result == null)
         {
@@ -150,7 +147,7 @@ public class CachingParameterDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedObjectType(
-        final String value)
+        final DecoratedString value)
     {
         m__strCachedObjectType = value;
     }
@@ -159,7 +156,7 @@ public class CachingParameterDecorator
      * Specifies the cached object type.
      * @param value the value to cache.
      */
-    protected void setCachedObjectType(final String value)
+    protected void setCachedObjectType(final DecoratedString value)
     {
         immutableSetCachedObjectType(value);
     }
@@ -168,7 +165,7 @@ public class CachingParameterDecorator
      * Retrieves the cached object type.
      * @return such value.
      */
-    public String getCachedObjectType()
+    public DecoratedString getCachedObjectType()
     {
         return m__strCachedObjectType;
     }
@@ -177,9 +174,9 @@ public class CachingParameterDecorator
      * Retrieves the object type of the parameter.
      * @return such information.
      */
-    public String getObjectType()
+    public DecoratedString getObjectType()
     {
-        @Nullable String result = getCachedObjectType();
+        @Nullable DecoratedString result = getCachedObjectType();
         
         if  (result == null)
         {
@@ -239,7 +236,7 @@ public class CachingParameterDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedFieldType(
-        final String value)
+        final DecoratedString value)
     {
         m__strCachedFieldType = value;
     }
@@ -248,7 +245,7 @@ public class CachingParameterDecorator
      * Specifies the cached field type.
      * @param value the value to cache.
      */
-    protected void setCachedFieldType(final String value)
+    protected void setCachedFieldType(final DecoratedString value)
     {
         immutableSetCachedFieldType(value);
     }
@@ -257,7 +254,7 @@ public class CachingParameterDecorator
      * Retrieves the cached field type.
      * @return such value.
      */
-    public String getCachedFieldType()
+    public DecoratedString getCachedFieldType()
     {
         return m__strCachedFieldType;
     }
@@ -267,59 +264,14 @@ public class CachingParameterDecorator
      * @return such information.
      */
     @NotNull
-    public String getFieldType()
+    public DecoratedString getFieldType()
     {
-        String result = getCachedFieldType();
+        DecoratedString result = getCachedFieldType();
         
         if  (result == null)
         {
             result = super.getFieldType();
             setCachedFieldType(result);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Specifies the cached lowercased name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedNameLowercased(
-        final String value)
-    {
-        m__strCachedNameLowercased = value;
-    }
-    
-    /**
-     * Specifies the cached lowercased name.
-     * @param value the value to cache.
-     */
-    protected void setCachedNameLowercased(final String value)
-    {
-        immutableSetCachedNameLowercased(value);
-    }
-
-    /**
-     * Retrieves the cached lowercased name.
-     * @return such value.
-     */
-    public String getCachedNameLowercased()
-    {
-        return m__strCachedNameLowercased;
-    }
-
-    /**
-     * Retrieves the name, in lower case.
-     * @return such value.
-     */
-    public String getNameLowercased()
-    {
-        String result = getCachedNameLowercased();
-        
-        if  (result == null)
-        {
-            result = super.getNameLowercased();
-            setCachedNameLowercased(result);
         }
         
         return result;
@@ -368,5 +320,18 @@ public class CachingParameterDecorator
         }
         
         return result.booleanValue();
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "CachingParameterDecorator{" +
+               "m__bCachedIsClob=" + m__bCachedIsClob +
+               ", m__strCachedSqlType=" + m__strCachedSqlType +
+               ", m__strCachedObjectType=" + m__strCachedObjectType +
+               ", m__bCachedIsObject=" + m__bCachedIsObject +
+               ", m__strCachedFieldType=" + m__strCachedFieldType +
+               '}';
     }
 }

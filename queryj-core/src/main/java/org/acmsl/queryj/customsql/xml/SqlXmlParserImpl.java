@@ -101,47 +101,47 @@ public class SqlXmlParserImpl
     /**
      * The queries.
      */
-    private List<Sql> m__lQueries = new ArrayList<Sql>();
+    private List<Sql<String>> m__lQueries = new ArrayList<>();
 
     /**
      * The results.
      */
-    private List<Result> m__lResults = new ArrayList<Result>();
+    private List<Result<String>> m__lResults = new ArrayList<>();
 
     /**
      * The parameters.
      */
-    private List<Parameter> m__lParameters = new ArrayList<Parameter>();
+    private List<Parameter<String>> m__lParameters = new ArrayList<>();
 
     /**
      * The parameter refs.
      */
-    private List<ParameterRef> m__lParameterRefs = new ArrayList<ParameterRef>();
+    private List<ParameterRef> m__lParameterRefs = new ArrayList<>();
 
     /**
      * The properties.
      */
-    private List<Property> m__lProperties = new ArrayList<Property>();
+    private List<Property<String>> m__lProperties = new ArrayList<>();
 
     /**
      * The property refs.
      */
-    private List<PropertyRef> m__lPropertyRefs = new ArrayList<PropertyRef>();
+    private List<PropertyRef> m__lPropertyRefs = new ArrayList<>();
 
     /**
      * The connection flags.
      */
-    private List<ConnectionFlags> m__lConnectionFlags = new ArrayList<ConnectionFlags>();
+    private List<ConnectionFlags> m__lConnectionFlags = new ArrayList<>();
 
     /**
      * The statement flags.
      */
-    private List<StatementFlags> m__lStatementFlags = new ArrayList<StatementFlags>();
+    private List<StatementFlags> m__lStatementFlags = new ArrayList<>();
 
     /**
      * The result set flags.
      */
-    private List<ResultSetFlags> m__lResultSetFlags = new ArrayList<ResultSetFlags>();
+    private List<ResultSetFlags> m__lResultSetFlags = new ArrayList<>();
 
     /**
      * Creates a SqlXmlParserImpl with given input stream.
@@ -200,29 +200,30 @@ public class SqlXmlParserImpl
      * Processes given collection.
      * @param collection the collection to process.
      */
-    protected void processCollection(@NotNull final List<? extends IdentifiableElement> collection)
+    @SuppressWarnings("unchecked")
+    protected void processCollection(@NotNull final List<? extends IdentifiableElement<String>> collection)
     {
-        for (@Nullable final IdentifiableElement t_Item : collection)
+        for (@Nullable final IdentifiableElement<String> t_Item : collection)
         {
-            if (t_Item instanceof Sql)
+            if (t_Item instanceof Sql<?>)
             {
-                addQuery((Sql) t_Item);
+                addQuery((Sql<String>) t_Item);
             }
-            else if (t_Item instanceof Result)
+            else if (t_Item instanceof Result<?>)
             {
-                addResult((Result) t_Item);
+                addResult((Result<String>) t_Item);
             }
-            else if (t_Item instanceof Property)
+            else if (t_Item instanceof Property<?>)
             {
-                addProperty((Property) t_Item);
+                addProperty((Property<String>) t_Item);
             }
             else if (t_Item instanceof PropertyRef)
             {
                 addPropertyRef((PropertyRef) t_Item);
             }
-            else if (t_Item instanceof Parameter)
+            else if (t_Item instanceof Parameter<?>)
             {
-                addParameter((Parameter) t_Item);
+                addParameter((Parameter<String>) t_Item);
             }
             else if (t_Item instanceof ParameterRef)
             {
@@ -256,7 +257,7 @@ public class SqlXmlParserImpl
      * Adds given query, if not already annotated.
      * @param sql the query.
      */
-    protected void addQuery(@NotNull final Sql sql)
+    protected void addQuery(@NotNull final Sql<String> sql)
     {
         this.add(sql, getQueries());
     }
@@ -265,7 +266,7 @@ public class SqlXmlParserImpl
      * Adds given result, if not already annotated.
      * @param result the result.
      */
-    protected void addResult(@NotNull final Result result)
+    protected void addResult(@NotNull final Result<String> result)
     {
         add(result, getResults());
     }
@@ -274,7 +275,7 @@ public class SqlXmlParserImpl
      * Adds given parameter, if not already annotated.
      * @param parameter the parameter.
      */
-    protected void addParameter(@NotNull final Parameter parameter)
+    protected void addParameter(@NotNull final Parameter<String> parameter)
     {
         add(parameter, getParameters());
     }
@@ -292,7 +293,7 @@ public class SqlXmlParserImpl
      * Adds given property, if not already annotated.
      * @param property the property.
      */
-    protected void addProperty(@NotNull final Property property)
+    protected void addProperty(@NotNull final Property<String> property)
     {
         add(property, getProperties());
     }
@@ -350,7 +351,7 @@ public class SqlXmlParserImpl
      * Specifies the queries.
      * @param queries such information.
      */
-    protected final void immutableSetQueries(@NotNull final List<Sql> queries)
+    protected final void immutableSetQueries(@NotNull final List<Sql<String>> queries)
     {
         m__lQueries = queries;
     }
@@ -359,7 +360,7 @@ public class SqlXmlParserImpl
      * Specifies the queries.
      * @param queries such information.
      */
-    protected void setQueries(@NotNull final List<Sql> queries)
+    protected void setQueries(@NotNull final List<Sql<String>> queries)
     {
         immutableSetQueries(queries);
     }
@@ -370,7 +371,7 @@ public class SqlXmlParserImpl
      */
     @NotNull
     @Override
-    public List<Sql> getQueries()
+    public List<Sql<String>> getQueries()
     {
         return m__lQueries;
     }
@@ -379,7 +380,7 @@ public class SqlXmlParserImpl
      * Specifies the {@link Result}s.
      * @param results the results.
      */
-    protected final void immutableSetResults(@NotNull final List<Result> results)
+    protected final void immutableSetResults(@NotNull final List<Result<String>> results)
     {
         this.m__lResults = results;
     }
@@ -388,7 +389,7 @@ public class SqlXmlParserImpl
      * Specifies the {@link Result}s.
      * @param results the results.
      */
-    protected void setResults(@NotNull final List<Result> results)
+    protected void setResults(@NotNull final List<Result<String>> results)
     {
         immutableSetResults(results);
     }
@@ -399,7 +400,7 @@ public class SqlXmlParserImpl
      */
     @NotNull
     @Override
-    public List<Result> getResults()
+    public List<Result<String>> getResults()
     {
         return m__lResults;
     }
@@ -408,7 +409,7 @@ public class SqlXmlParserImpl
      * Specifies the {@link Parameter}s.
      * @param parameters such information.
      */
-    protected final void immutableSetParameters(@NotNull final List<Parameter> parameters)
+    protected final void immutableSetParameters(@NotNull final List<Parameter<String>> parameters)
     {
         this.m__lParameters = parameters;
     }
@@ -417,7 +418,7 @@ public class SqlXmlParserImpl
      * Specifies the {@link Parameter}s.
      * @param parameters such information.
      */
-    protected void setParameters(@NotNull final List<Parameter> parameters)
+    protected void setParameters(@NotNull final List<Parameter<String>> parameters)
     {
         immutableSetParameters(parameters);
     }
@@ -428,7 +429,7 @@ public class SqlXmlParserImpl
      */
     @NotNull
     @Override
-    public List<Parameter> getParameters()
+    public List<Parameter<String>> getParameters()
     {
         return m__lParameters;
     }
@@ -448,7 +449,7 @@ public class SqlXmlParserImpl
      * Specifies the {@link Property properties}.
      * @param properties the properties.
      */
-    protected final void immutableSetProperties(@NotNull final List<Property> properties)
+    protected final void immutableSetProperties(@NotNull final List<Property<String>> properties)
     {
         this.m__lProperties = properties;
     }
@@ -457,7 +458,7 @@ public class SqlXmlParserImpl
      * Specifies the {@link Property properties}.
      * @param properties the properties.
      */
-    protected void setProperties(@NotNull final List<Property> properties)
+    protected void setProperties(@NotNull final List<Property<String>> properties)
     {
         immutableSetProperties(properties);
     }
@@ -468,7 +469,7 @@ public class SqlXmlParserImpl
      */
     @NotNull
     @Override
-    public List<Property> getProperties()
+    public List<Property<String>> getProperties()
     {
         return m__lProperties;
     }
@@ -651,7 +652,7 @@ public class SqlXmlParserImpl
     {
         if  (digester != null)
         {
-            @NotNull final List<? extends IdentifiableElement> collection = new ArrayList<IdentifiableElement>();
+            @NotNull final List<? extends IdentifiableElement<String>> collection = new ArrayList<>();
 
             digester.push(collection);
 
@@ -848,7 +849,7 @@ public class SqlXmlParserImpl
     public void parse()
         throws  QueryJBuildException
     {
-        @Nullable final List<Sql> queries = getQueries();
+        @Nullable final List<Sql<String>> queries = getQueries();
 
         if  (queries.size() == 0)
         {
@@ -878,14 +879,14 @@ public class SqlXmlParserImpl
      * @return the processed items.
      */
     @NotNull
-    protected <T extends IdentifiableElement> List<T> postProcess(@NotNull final List<T> items)
+    protected <T extends IdentifiableElement<String>> List<T> postProcess(@NotNull final List<T> items)
     {
         final List<T> result;
 
-        final HashSet<T> aux = new HashSet<T>(items.size());
+        final HashSet<T> aux = new HashSet<>(items.size());
         aux.addAll(items);
 
-        result = new ArrayList<T>(aux.size());
+        result = new ArrayList<>(aux.size());
         result.addAll(aux);
 
         return result;
@@ -897,7 +898,7 @@ public class SqlXmlParserImpl
      * @param result the <code>Result</code> instance.
      */
     @Override
-    public void addResult(@NotNull final String id, @NotNull final Result result)
+    public void addResult(@NotNull final String id, @NotNull final Result<String> result)
     {
         addResult(id, result, getResults());
     }
@@ -906,9 +907,10 @@ public class SqlXmlParserImpl
      * Adds a new result.
      * @param id the result id.
      * @param result the <code>Result</code> instance.
+     * @param results the results.
      */
     protected void addResult(
-        @NotNull final String id, @NotNull final Result result, @NotNull final List<Result> results)
+        @NotNull final String id, @NotNull final Result<String> result, @NotNull final List<Result<String>> results)
     {
         if (results.contains(result))
         {
@@ -941,7 +943,7 @@ public class SqlXmlParserImpl
         @NotNull final String type,
         final boolean nullable)
     {
-        getProperties().add(new PropertyElement(id, columnName, index, type, nullable));
+        getProperties().add(new PropertyElement<>(id, columnName, index, type, nullable));
     }
 
     /**

@@ -69,7 +69,7 @@ public class CustomResultWithNoPropertiesDoesNotMatchAnyTableException
      * @param customResult the custom result.
      */
     public CustomResultWithNoPropertiesDoesNotMatchAnyTableException(
-        @NotNull final Result customResult)
+        @NotNull final Result<?> customResult)
     {
         super(
             "custom-result.with.no.properties.does.not.match.any.table",

@@ -38,15 +38,14 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.AbstractTemplate;
 import org.acmsl.queryj.api.STTemplate;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
+import org.acmsl.queryj.templates.packaging.exceptions.InvalidTemplatePackagingTemplateException;
 
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.templates.packaging.exceptions.InvalidTemplatePackagingTemplateException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,6 +60,9 @@ import org.checkthread.annotations.ThreadSafe;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.Arrays;
 
 /**
@@ -108,7 +110,7 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
         return
             retrieveGroup(
                 TEMPLATE_PACKAGING_GROUP + getTemplateName() + ".stg",
-                Arrays.asList(org.acmsl.queryj.templates.packaging.Literals.ORG_ACMSL_QUERYJ_TEMPLATES_PACKAGING));
+                Arrays.asList(Literals.ORG_ACMSL_QUERYJ_TEMPLATES_PACKAGING));
     }
 
     /**
@@ -130,7 +132,7 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
     @NotNull
     protected String buildHeader(@NotNull final String templateName)
     {
-        return Literals.GENERATING + templateName;
+        return org.acmsl.queryj.Literals.GENERATING + templateName;
     }
 
     /**

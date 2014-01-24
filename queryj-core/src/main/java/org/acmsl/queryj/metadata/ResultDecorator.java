@@ -59,7 +59,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface ResultDecorator
-    extends  Result,
+    extends  Result<DecoratedString>,
              Decorator
 {
     /**
@@ -67,7 +67,7 @@ public interface ResultDecorator
      * @return such element.
      */
     @NotNull
-    Result getResult();
+    Result<String> getResult();
 
     /**
      * Retrieves whether the result matches a single entity or expects
@@ -81,25 +81,18 @@ public interface ResultDecorator
      * @return such information.
      */
     @NotNull
-    List<Property> getProperties();
+    List<Property<DecoratedString>> getProperties();
 
     /**
      * Retrieves the large-object-block properties.
      * @return such collection.
      */
     @NotNull
-    List<Property> getLobProperties();
+    List<Property<DecoratedString>> getLobProperties();
 
     /**
      * Retrieves whether this {@link Result} is wrapping a single {@link Property}.
      * @return <code>true</code> in such case.
      */
     boolean isWrappingASingleProperty();
-
-    /**
-     * Retrieves the value-object name.
-     * @return such value.
-     */
-    @NotNull
-    String getVoName();
 }

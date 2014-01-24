@@ -55,6 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class MissingExternallyManagedFieldsAtRuntimeException
     extends QueryJNonCheckedException
 {
+    private static final long serialVersionUID = 1013356625326193140L;
+
     /**
      * Creates a new instance.
      */

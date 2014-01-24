@@ -96,7 +96,7 @@ public class CustomResultUtils
      * singular and plural forms for tables, and to cache other
      * other data if needed.
      */
-    private static final Map<String,String> CACHE = new HashMap<String,String>();
+    private static final Map<String,String> CACHE = new HashMap<>();
 
     /**
      * Checks whether given {@link Result} is implicit or not.
@@ -104,7 +104,7 @@ public class CustomResultUtils
      * @return <code>true</code> in such case.
      */
     public boolean isImplicit(
-        @NotNull final Result customResult,
+        @NotNull final Result<String> customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
@@ -131,7 +131,7 @@ public class CustomResultUtils
      */
     @NotNull
     public ResultDecorator decorate(
-        @NotNull final Result customResult,
+        @NotNull final Result<String> customResult,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -289,8 +289,8 @@ public class CustomResultUtils
      * @return the table name.
      */
     @Nullable
-    public String retrieveTable(
-        @NotNull final Result resultElement,
+    public <T> String retrieveTable(
+        @NotNull final Result<T> resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
@@ -309,12 +309,12 @@ public class CustomResultUtils
      * @return the table name.
      */
     @Nullable
-    public String retrieveTable(
-        @NotNull final String resultId,
+    public <T> String retrieveTable(
+        @NotNull final T resultId,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable String result = retrieveCachedEntry(resultId);
+        @Nullable String result = retrieveCachedEntry("" + resultId);
 
         if (result == null)
         {
@@ -325,7 +325,7 @@ public class CustomResultUtils
 
             String t_strDao;
 
-            for (@Nullable final Sql t_Sql : retrieveSqlElementsByResultId(customSqlProvider, resultId))
+            for (@Nullable final Sql<String> t_Sql : retrieveSqlElementsByResultId(customSqlProvider, "" + resultId))
             {
                 if (t_Sql != null)
                 {
@@ -339,7 +339,7 @@ public class CustomResultUtils
                         if  (t_Table != null)
                         {
                             result = t_Table.getName();
-                            cacheEntry(resultId, result);
+                            cacheEntry("" + resultId, result);
                             break;
                         }
                     }
@@ -365,7 +365,7 @@ public class CustomResultUtils
      * @return <code>true</code> if it should be included.
      */
     public boolean matches(
-        @NotNull final Result resultElement,
+        @NotNull final Result<String> resultElement,
         @NotNull final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
@@ -381,17 +381,17 @@ public class CustomResultUtils
      * @param metadataUtils the {@link MetadataUtils} instance.
      * @return <code>true</code> if it should be included.
      */
-    protected boolean matches(
-        @NotNull final Result resultElement,
+    protected <T> boolean matches(
+        @NotNull final Result<T> resultElement,
         @NotNull final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataUtils metadataUtils)
     {
         boolean result = false;
 
-        String t_strDao = null;
+        @Nullable String t_strDao = null;
 
-        for (@Nullable final Sql t_Sql : findSqlElementsByResultId(resultElement.getId(), customSqlProvider))
+        for (@Nullable final Sql<String> t_Sql : findSqlElementsByResultId("" + resultElement.getId(), customSqlProvider))
         {
             if (t_Sql != null)
             {
@@ -430,7 +430,7 @@ public class CustomResultUtils
      * @return such elements.
      */
     @NotNull
-    public List<Sql> retrieveSqlElementsByResultId(
+    public List<Sql<String>> retrieveSqlElementsByResultId(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String resultId)
     {
@@ -445,7 +445,7 @@ public class CustomResultUtils
      * @return such elements.
      */
     @NotNull
-    protected List<Sql> retrieveSqlElementsByResultId(
+    protected List<Sql<String>> retrieveSqlElementsByResultId(
         @NotNull final SqlDAO sqlDAO,
         @NotNull final String resultId)
     {
@@ -459,7 +459,7 @@ public class CustomResultUtils
      * @return such elements.
      */
     @NotNull
-    public List<Result> retrieveResultsByType(
+    public List<Result<String>> retrieveResultsByType(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String type)
     {
@@ -473,7 +473,7 @@ public class CustomResultUtils
      * @return such elements.
      */
     @NotNull
-    public List<Result> retrieveResultsByType(
+    public List<Result<String>> retrieveResultsByType(
         @NotNull final SqlResultDAO resultDAO,
         @NotNull final String type)
     {
@@ -487,7 +487,7 @@ public class CustomResultUtils
      * @return such elements.
      */
     @NotNull
-    public List<Sql> retrieveSqlElementsByType(
+    public List<Sql<String>> retrieveSqlElementsByType(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String type)
     {
@@ -501,7 +501,7 @@ public class CustomResultUtils
      * @return such elements.
      */
     @NotNull
-    public List<Sql> retrieveSqlElementsByType(
+    public List<Sql<String>> retrieveSqlElementsByType(
         @NotNull final SqlDAO sqlDAO,
         @NotNull final String type)
     {
@@ -516,7 +516,7 @@ public class CustomResultUtils
      * @return all such entities.
      */
     @NotNull
-    public List<Sql> findSqlElementsByResultId(
+    public List<Sql<String>> findSqlElementsByResultId(
         @NotNull final String resultId,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
@@ -531,7 +531,7 @@ public class CustomResultUtils
      * @return all such entities.
      */
     @NotNull
-    public List<Sql> findSqlElementsByResultId(
+    public List<Sql<String>> findSqlElementsByResultId(
         @NotNull final String resultId,
         @NotNull final SqlDAO sqlDAO)
     {
@@ -606,20 +606,28 @@ public class CustomResultUtils
      * @return such class name, or <code>null</code> if it has no declared value.
      */
     @Nullable
-    protected String extractVoName(@NotNull final Result customResult)
+    protected <T> String extractVoName(@NotNull final Result<T> customResult)
     {
-        @Nullable String result = customResult.getClassValue();
+        @Nullable final String result;
 
-        if (result != null)
+        @Nullable final T classValue = customResult.getClassValue();
+
+        if (classValue != null)
         {
-            @NotNull final String[] t_astrParts = result.split("\\.");
+            @NotNull String aux = "" + classValue;
+
+            @NotNull final String[] t_astrParts = aux.split("\\.");
 
             if (t_astrParts.length > 0)
             {
-                result = t_astrParts[t_astrParts.length - 1];
+                aux = t_astrParts[t_astrParts.length - 1];
             }
 
-            result = extractVoName(result);
+            result = extractVoName(aux);
+        }
+        else
+        {
+            result = null;
         }
 
         return result;

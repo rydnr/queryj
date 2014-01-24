@@ -92,7 +92,7 @@ public interface DecoratorFactory
     @SuppressWarnings("unused")
     @NotNull
     public ParameterDecorator createDecorator(
-        @NotNull final Parameter parameter, @NotNull final MetadataManager metadataManager);
+        @NotNull final Parameter<String> parameter, @NotNull final MetadataManager metadataManager);
 
     /**
      * Creates a <code>PropertyDecorator</code> for given
@@ -105,8 +105,8 @@ public interface DecoratorFactory
      */
     @NotNull
     public PropertyDecorator createDecorator(
-        @NotNull final Property property,
-        @NotNull final Result result,
+        @NotNull final Property<String> property,
+        @NotNull final Result<String> result,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager);
 
@@ -121,7 +121,7 @@ public interface DecoratorFactory
     @SuppressWarnings("unused")
     @NotNull
     public ResultDecorator createDecorator(
-        @NotNull final Result result,
+        @NotNull final Result<String> result,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager);
 
@@ -134,7 +134,7 @@ public interface DecoratorFactory
      */
     @NotNull
     public SqlDecorator createDecorator(
-        @NotNull final Sql sql,
+        @NotNull final Sql<String> sql,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager);
 

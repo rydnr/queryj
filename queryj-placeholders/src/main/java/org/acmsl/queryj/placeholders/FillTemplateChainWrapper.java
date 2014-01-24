@@ -88,28 +88,25 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
     @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final C context)
     {
-        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(22);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<>(22);
 
         result.add(new AreTimestampsAllowedHandler(context));
-        result.add(new ClassNameHandler<C>(context));
+        result.add(new ClassNameHandler<>(context));
         result.add(new CopyrightYearsHandler());
         result.add(new CurrentYearHandler());
         result.add(new DAOChooserPropertiesFileNameHandler(context));
         result.add(new DAOSubpackageNameHandler(context));
-        result.add(new DatabaseEngineNameHandler(context));
-        result.add(new DatabaseEngineVersionHandler(context));
-        result.add(new FileNameHandler<C>(context));
+        result.add(new EngineHandler(context));
+        result.add(new FileNameHandler<>(context));
         result.add(new HeaderHandler(context));
         result.add(new IsRepositoryDAOHandler(context));
         result.add(new JndiLocationFillHandler(context));
-        result.add(new LobHandlingFlavorHandler(context));
-        result.add(new LobHandlingRepositoryCheckHandler(context));
-        result.add(new PackageNameHandler<C>(context));
+        result.add(new PackageNameHandler<>(context));
         result.add(new ProjectPackageHandler(context));
         result.add(new RepositoryNameHandler(context));
-        result.add(new SerialVersionUIDHandler<C>(context));
+        result.add(new SerialVersionUIDHandler<>(context));
         result.add(new TimestampHandler());
-        result.add(new TemplateNameHandler<C>(context));
+        result.add(new TemplateNameHandler<>(context));
         result.add(new UseCheckthreadAnnotationsHandler(context));
         result.add(new UseNotNullAnnotationsHandler(context));
 

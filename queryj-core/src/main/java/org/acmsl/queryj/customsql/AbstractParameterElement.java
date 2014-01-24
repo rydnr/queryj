@@ -51,8 +51,8 @@ import org.jetbrains.annotations.Nullable;
  *    type CDATA #REQUIRED>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractParameterElement
-    extends  AbstractIdElement
+public abstract class AbstractParameterElement<T>
+    extends  AbstractIdElement<T>
 {
     /**
      * The <i>index</i> attribute.
@@ -62,7 +62,7 @@ public abstract class AbstractParameterElement
     /**
      * The <i>type</i> attribute.
      */
-    private String m__strType;
+    private T m__strType;
 
     /**
      * Creates an AbstractParameterElement with given information.
@@ -71,9 +71,9 @@ public abstract class AbstractParameterElement
      * @param type the <i>type</i> attribute.
      */
     protected AbstractParameterElement(
-        @NotNull final String id,
+        @NotNull final T id,
         final int index,
-        @NotNull final String type)
+        @NotNull final T type)
     {
         super(id);
         immutableSetIndex(index);
@@ -112,7 +112,7 @@ public abstract class AbstractParameterElement
      * Specifies the <i>type</i> attribute.
      * @param type such value.
      */
-    protected final void immutableSetType(@NotNull final String type)
+    protected final void immutableSetType(@NotNull final T type)
     {
         m__strType = type;
     }
@@ -122,7 +122,7 @@ public abstract class AbstractParameterElement
      * @param type such value.
      */
     @SuppressWarnings("unused")
-    protected void setType(@NotNull final String type)
+    protected void setType(@NotNull final T type)
     {
         immutableSetType(type);
     }
@@ -132,7 +132,7 @@ public abstract class AbstractParameterElement
      * @return such value.
      */
     @NotNull
-    public String getType()
+    public T getType()
     {
         return m__strType;
     }
@@ -141,6 +141,7 @@ public abstract class AbstractParameterElement
      * Provides a text information about this instance.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {
@@ -160,9 +161,9 @@ public abstract class AbstractParameterElement
      */
     @NotNull
     protected String toString(
-        final String id,
+        final T id,
         final int index,
-        final String type)
+        final T type)
     {
         return
               getClass().getName()
@@ -176,6 +177,7 @@ public abstract class AbstractParameterElement
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -191,13 +193,15 @@ public abstract class AbstractParameterElement
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 
         if  (object instanceof Parameter)
         {
-            @NotNull final Parameter t_OtherInstance = (Parameter) object;
+            @NotNull final Parameter<String> t_OtherInstance = (Parameter<String>) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -220,7 +224,7 @@ public abstract class AbstractParameterElement
      * @return the result of such comparison.
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(@Nullable final Parameter object)
+    protected int compare(@Nullable final Parameter<T> object)
     {
         int result = 0;
 

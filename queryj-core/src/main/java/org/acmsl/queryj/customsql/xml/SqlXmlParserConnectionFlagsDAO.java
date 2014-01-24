@@ -121,7 +121,7 @@ public class SqlXmlParserConnectionFlagsDAO
      */
     @NotNull
     protected List<ConnectionFlags> filterConnectionFlags(
-        @NotNull final List<? extends IdentifiableElement> contents, @NotNull final String idFilter)
+        @NotNull final List<? extends IdentifiableElement<String>> contents, @NotNull final String idFilter)
     {
         return this.filterItems(contents, ConnectionFlags.class, idFilter);
     }

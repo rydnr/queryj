@@ -75,7 +75,7 @@ public class PerCustomSqlTemplateContext
     /**
      * The Sql.
      */
-    private Sql m__Sql;
+    private Sql<String> m__Sql;
 
     /**
      * Creates a {@link PerCustomSqlTemplateContext} with given information.
@@ -110,7 +110,7 @@ public class PerCustomSqlTemplateContext
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
         @NotNull final String fileName,
-        @NotNull final Sql sql)
+        @NotNull final Sql<String> sql)
     {
         super(
             metadataManager,
@@ -135,7 +135,7 @@ public class PerCustomSqlTemplateContext
      * Specifies the {@link Sql}.
      * @param sql the Sql.
      */
-    protected final void immutableSetSql(@NotNull final Sql sql)
+    protected final void immutableSetSql(@NotNull final Sql<String> sql)
     {
         m__Sql = sql;
     }
@@ -145,7 +145,7 @@ public class PerCustomSqlTemplateContext
      * @param sql the sql.
      */
     @SuppressWarnings("unused")
-    protected void setSql(@NotNull final Sql sql)
+    protected void setSql(@NotNull final Sql<String> sql)
     {
         immutableSetSql(sql);
     }
@@ -155,7 +155,7 @@ public class PerCustomSqlTemplateContext
      * @return such information.
      */
     @NotNull
-    public Sql getSql()
+    public Sql<String> getSql()
     {
         return m__Sql;
     }

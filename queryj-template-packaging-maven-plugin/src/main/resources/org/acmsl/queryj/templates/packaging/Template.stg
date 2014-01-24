@@ -57,7 +57,7 @@ sourceImpl(def, C) ::= <<
   description=[ "Used to generate sources using ", def.rawName ],
   description_oneline=true,
   filename=C.class_name,
-  template="org/acmsl/templates/packaging/Template.stg",
+  template="org/acmsl/queryj/templates/packaging/Template.stg",
    C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates")>
 
@@ -95,7 +95,7 @@ class(def, C) ::= <<
 /**
  * Used to generate sources using <def.rawName>.
 <class_common_javadoc(
-  template="org/acmsl/templates/packaging/Template.stg",
+  template="org/acmsl/queryj/templates/packaging/Template.stg",
   timestamp=C.timestamp)>
  */
 @ThreadSafe
@@ -127,7 +127,7 @@ public class <C.class_name>
         return
             retrieveGroup(
                 "org/acmsl/queryj/templates/<def.rawName>",
-                Arrays.asList("org/acmsl/queryj/templates"));
+                Arrays.asList(org.acmsl.queryj.Literals.ORG_ACMSL_QUERYJ_TEMPLATES));
     }
 
     /**

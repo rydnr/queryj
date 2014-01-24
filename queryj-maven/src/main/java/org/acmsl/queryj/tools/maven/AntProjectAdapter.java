@@ -471,7 +471,7 @@ public class AntProjectAdapter
         return getBuildListeners(getProject());
     }
 
-    /**                                         9=
+    /**
      * Retrieves the build listeners.
      * @param project the {@link Project} instance.
      * @return such listeners.

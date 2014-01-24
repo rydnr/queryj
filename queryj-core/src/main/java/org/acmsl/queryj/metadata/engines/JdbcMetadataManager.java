@@ -85,6 +85,9 @@ public class JdbcMetadataManager
 {
 
     private static final long serialVersionUID = -3287133509095459164L;
+    public static final String REMARKS = "REMARKS";
+    public static final String DISCARDING = "Discarding ";
+    public static final String KEY_SEQ = "KEY_SEQ";
 
     /**
      * Creates a {@link JdbcMetadataManager} with given name.
@@ -95,8 +98,6 @@ public class JdbcMetadataManager
     {
         super(name);
     }
-
-
 
     /**
      * Creates a {@link AbstractJdbcMetadataManager} with given information.
@@ -110,9 +111,7 @@ public class JdbcMetadataManager
      * @param disableTableExtraction whether to disable table extraction or not.
      * @param lazyTableExtraction whether to retrieve table information on demand.
      * @param caseSensitive whether it's case sensitive.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
+     * @param engine the engine.
      */
     public JdbcMetadataManager(
         @NotNull final String name,
@@ -125,9 +124,7 @@ public class JdbcMetadataManager
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean caseSensitive,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote)
+        @NotNull final Engine<String> engine)
     {
         super(
             name,
@@ -140,9 +137,7 @@ public class JdbcMetadataManager
             disableTableExtraction,
             lazyTableExtraction,
             caseSensitive,
-            engineName,
-            engineVersion,
-            quote);
+            engine);
     }
 
     /**
@@ -167,7 +162,7 @@ public class JdbcMetadataManager
         throws  SQLException,
                 QueryJException
     {
-        @NotNull final List<TableIncompleteValueObject> result = new ArrayList<TableIncompleteValueObject>();
+        @NotNull final List<TableIncompleteValueObject> result = new ArrayList<>();
 
         ResultSet t_rsTables = null;
 
@@ -195,7 +190,7 @@ public class JdbcMetadataManager
             while (t_rsTables.next())
             {
                 t_strTableName = t_rsTables.getString(Literals.TABLE_NAME_U);
-                t_strTableComment = t_rsTables.getString("REMARKS");
+                t_strTableComment = t_rsTables.getString(REMARKS);
 
                 if (passesFilter(t_strTableName, caseSensitiveness, tableNames))
                 {
@@ -249,7 +244,7 @@ public class JdbcMetadataManager
                QueryJException
     {
         final Map<String,List<AttributeIncompleteValueObject>> t_mAux =
-            new HashMap<String,List<AttributeIncompleteValueObject>>(tables.size());
+            new HashMap<>(tables.size());
 
         final ResultSet t_rsColumns;
         String t_strTableName;
@@ -286,7 +281,7 @@ public class JdbcMetadataManager
 
                     if (t_lColumns == null)
                     {
-                        t_lColumns = new ArrayList<AttributeIncompleteValueObject>(9);
+                        t_lColumns = new ArrayList<>(9);
                         t_mAux.put(t_strTableName, t_lColumns);
                     }
 
@@ -295,8 +290,8 @@ public class JdbcMetadataManager
                     t_strTypeName = t_rsColumns.getString("TYPE_NAME");
                     t_iColumnSize = t_rsColumns.getInt("COLUMN_SIZE");
                     t_iDecimalDigits = t_rsColumns.getInt("DECIMAL_DIGITS");
-                    t_iNullable = t_rsColumns.getInt("NULLABLE");
-                    t_strColumnComment = t_rsColumns.getString("REMARKS");
+                    t_iNullable = t_rsColumns.getInt(Literals.NULLABLE);
+                    t_strColumnComment = t_rsColumns.getString(REMARKS);
                     t_strDefaultValue = t_rsColumns.getString("COLUMN_DEF");
                     //t_iMaxStringBytes = t_rsColumns.getInt("CHAR_OCTET_LENGTH");
                     t_iOrdinalPosition = t_rsColumns.getInt("ORDINAL_POSITION");
@@ -318,7 +313,7 @@ public class JdbcMetadataManager
                 }
                 else
                 {
-                    logVerbose("Discarding " + t_strTableName);
+                    logVerbose(DISCARDING + t_strTableName);
                 }
             }
 
@@ -358,7 +353,7 @@ public class JdbcMetadataManager
                 QueryJException
     {
         @NotNull final Map<String, List<Attribute<String>>> t_mAux =
-            new HashMap<String,List<Attribute<String>>>(tables.size());
+            new HashMap<>(tables.size());
 
         final ResultSet t_rsPrimaryKeys;
         String t_strTableName;
@@ -391,12 +386,12 @@ public class JdbcMetadataManager
 
                     if (t_lPrimaryKeys == null)
                     {
-                        t_lPrimaryKeys = new ArrayList<Attribute<String>>(9);
+                        t_lPrimaryKeys = new ArrayList<>(9);
                         t_mAux.put(t_strTableName, t_lPrimaryKeys);
                     }
 
                     t_strColumnName = t_rsPrimaryKeys.getString(Literals.COLUMN_NAME_U);
-                    t_iOrdinalPosition = t_rsPrimaryKeys.getInt("KEY_SEQ");
+                    t_iOrdinalPosition = t_rsPrimaryKeys.getInt(KEY_SEQ);
 
                     t_Attribute = findAttribute(t_strColumnName, t_Table.getAttributes(), caseSensitiveness);
 
@@ -409,7 +404,7 @@ public class JdbcMetadataManager
                 }
                 else
                 {
-                    logVerbose("Discarding " + t_strTableName);
+                    logVerbose(DISCARDING + t_strTableName);
                 }
             }
 
@@ -440,7 +435,7 @@ public class JdbcMetadataManager
                 t_lParentTablePrimaryKey = t_ParentTable.getAttributes();
 
                 t_lCompletePrimaryKey =
-                    new ArrayList<Attribute<String>>(t_lParentTablePrimaryKey.size() + t_lChildTablePrimaryKey.size());
+                    new ArrayList<>(t_lParentTablePrimaryKey.size() + t_lChildTablePrimaryKey.size());
 
                 t_lCompletePrimaryKey.addAll(t_lParentTablePrimaryKey);
                 t_lCompletePrimaryKey.addAll(t_lChildTablePrimaryKey);
@@ -475,7 +470,7 @@ public class JdbcMetadataManager
                 QueryJException
     {
         @NotNull final Map<String,List<ForeignKey<String>>> t_mAux =
-            new HashMap<String,List<ForeignKey<String>>>(tables.size());
+            new HashMap<>(tables.size());
 
         final ResultSet t_rsForeignKeys;
         String t_strSourceTableName;
@@ -516,12 +511,12 @@ public class JdbcMetadataManager
 
                     if (t_lForeignKeys == null)
                     {
-                        t_lForeignKeys = new ArrayList<ForeignKey<String>>(1);
+                        t_lForeignKeys = new ArrayList<>(1);
                         t_mAux.put(t_strSourceTableName, t_lForeignKeys);
                     }
 
                     t_strSourceColumnName = t_rsForeignKeys.getString("FKCOLUMN_NAME");
-                    t_iOrdinalPosition = t_rsForeignKeys.getInt("KEY_SEQ");
+                    t_iOrdinalPosition = t_rsForeignKeys.getInt(KEY_SEQ);
 
                     t_Attribute =
                         findAttribute(t_strSourceColumnName, t_SourceTable.getAttributes(), caseSensitiveness);
@@ -530,7 +525,7 @@ public class JdbcMetadataManager
                     {
                         if (t_lFkAttributes == null)
                         {
-                            t_lFkAttributes = new ArrayList<Attribute<String>>(1);
+                            t_lFkAttributes = new ArrayList<>(1);
                             t_ForeignKey =
                                 new ForeignKeyValueObject(
                                     t_strSourceTableName,
@@ -545,7 +540,7 @@ public class JdbcMetadataManager
                 }
                 else
                 {
-                    logVerbose("Discarding " + t_strSourceTableName);
+                    logVerbose(DISCARDING + t_strSourceTableName);
                 }
             }
 
@@ -576,7 +571,7 @@ public class JdbcMetadataManager
                 t_lParentForeignKeys = t_ParentTable.getForeignKeys();
 
                 t_lCompleteForeignKey =
-                    new ArrayList<ForeignKey<String>>(t_lParentForeignKeys.size() + t_lChildForeignKeys.size());
+                    new ArrayList<>(t_lParentForeignKeys.size() + t_lChildForeignKeys.size());
 
                 t_lCompleteForeignKey.addAll(t_lParentForeignKeys);
                 t_lCompleteForeignKey.addAll(t_lChildForeignKeys);
@@ -598,16 +593,6 @@ public class JdbcMetadataManager
     public MetadataTypeManager getMetadataTypeManager()
     {
         return JdbcMetadataTypeManager.getInstance();
-    }
-
-    /**
-     * Checks whether the engine requires specific CLOB handling.
-     * @return <code>true</code> in such case.
-     */
-    @Override
-    public boolean requiresCustomClobHandling()
-    {
-        return false;
     }
 
     /**

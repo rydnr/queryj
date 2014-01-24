@@ -57,7 +57,7 @@ sourceImpl(def, C) ::= <<
   description=[ "Generator for ", def.name.capitalized, "Templates." ],
   description_oneline=true,
   filename=C.class_name,
-  template="org/acmsl/templates/packaging/TemplateGenerator.stg",
+  template="org/acmsl/queryj/templates/packaging/TemplateGenerator.stg",
    C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates")>
 
@@ -87,7 +87,7 @@ class(def, C) ::= <<
 /**
  * Generator for {@link <def.name.capitalized>Template}s.
 <class_common_javadoc(
-  template="org/acmsl/templates/packaging/TemplateGenerator.stg",
+  template="org/acmsl/queryj/templates/packaging/TemplateGenerator.stg",
   timestamp=C.timestamp)>
  */
 @ThreadSafe

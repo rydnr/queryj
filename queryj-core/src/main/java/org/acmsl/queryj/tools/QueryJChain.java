@@ -158,7 +158,7 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
             @NotNull final TemplateChainProvider provider = loader.iterator().next();
 
             // Don't know how to fix the generics warnings
-            for (@Nullable final TemplateHandler handler : (List<TemplateHandler>) provider.getHandlers())
+            for (@Nullable final TemplateHandler<?> handler : (List<TemplateHandler<?>>) provider.getHandlers())
             {
                 if (handler != null)
                 {

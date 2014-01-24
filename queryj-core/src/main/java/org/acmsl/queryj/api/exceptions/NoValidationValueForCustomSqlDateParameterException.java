@@ -70,7 +70,7 @@ public class NoValidationValueForCustomSqlDateParameterException
      * @param sql the Sql.
      */
     public NoValidationValueForCustomSqlDateParameterException(
-        @NotNull final Parameter parameter, @NotNull final Sql sql)
+        @NotNull final Parameter<?> parameter, @NotNull final Sql<?> sql)
     {
         super(
             "no.validation.value.specified.for.date.parameter.in.custom-sql",

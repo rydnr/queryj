@@ -91,7 +91,7 @@ extends TestCase
 {
   // JUnitDoclet begin class
   @Nullable
-  org.acmsl.queryj.customsql.ParameterElement parameterelement = null;
+  org.acmsl.queryj.customsql.ParameterElement<String> parameterelement = null;
   // JUnitDoclet end class
   
   /**
@@ -111,11 +111,11 @@ extends TestCase
   
   */
   @NotNull
-  public org.acmsl.queryj.customsql.ParameterElement createInstance()
+  public org.acmsl.queryj.customsql.ParameterElement<String> createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.customsql.ParameterElement("p1", 1, "id", "long", "default");
+    return new org.acmsl.queryj.customsql.ParameterElement<>("p1", 1, "id", "long", "default");
     // JUnitDoclet end method testcase.createInstance
   }
   

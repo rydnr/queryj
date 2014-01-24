@@ -62,25 +62,28 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2013/06/25
  */
+@SuppressWarnings("unused")
 public class CucumberSqlPropertyDAO
     implements SqlPropertyDAO
 {
     /**
      * The list of properties.
      */
-    private List<Property> m__Properties;
+    private List<Property<String>> m__Properties;
 
     /**
      * The custom result.
      */
-    private Result m__CustomResult;
+    private Result<String> m__CustomResult;
 
     /**
      * Creates an instance with given properties and result.
      * @param properties the properties.
      * @param result the result.
      */
-    public CucumberSqlPropertyDAO(@NotNull final List<Property> properties, @NotNull final Result result)
+    @SuppressWarnings("unused")
+    public CucumberSqlPropertyDAO(
+        @NotNull final List<Property<String>> properties, @NotNull final Result<String> result)
     {
         immutableSetProperties(properties);
         immutableSetResult(result);
@@ -90,7 +93,7 @@ public class CucumberSqlPropertyDAO
      * Specifies the list of {@link Property properties}.
      * @param properties such list.
      */
-    protected final void immutableSetProperties(@NotNull final List<Property> properties)
+    protected final void immutableSetProperties(@NotNull final List<Property<String>> properties)
     {
         this.m__Properties = properties;
     }
@@ -100,7 +103,7 @@ public class CucumberSqlPropertyDAO
      * @param properties such list.
      */
     @SuppressWarnings("unused")
-    protected final void setProperties(@NotNull final List<Property> properties)
+    protected final void setProperties(@NotNull final List<Property<String>> properties)
     {
         immutableSetProperties(properties);
     }
@@ -110,7 +113,7 @@ public class CucumberSqlPropertyDAO
      * @return such list.
      */
     @NotNull
-    protected List<Property> getProperties()
+    protected List<Property<String>> getProperties()
     {
         return this.m__Properties;
     }
@@ -119,7 +122,7 @@ public class CucumberSqlPropertyDAO
      * Specifies the custom result.
      * @param result such result.
      */
-    protected final void immutableSetResult(@NotNull final Result result)
+    protected final void immutableSetResult(@NotNull final Result<String> result)
     {
         this.m__CustomResult = result;
     }
@@ -129,7 +132,7 @@ public class CucumberSqlPropertyDAO
      * @param result such result.
      */
     @SuppressWarnings("unused")
-    protected void setResult(@NotNull final Result result)
+    protected void setResult(@NotNull final Result<String> result)
     {
         immutableSetResult(result);
     }
@@ -139,7 +142,7 @@ public class CucumberSqlPropertyDAO
      * @return such result.
      */
     @NotNull
-    protected Result getResult()
+    protected Result<String> getResult()
     {
         return m__CustomResult;
     }
@@ -152,7 +155,7 @@ public class CucumberSqlPropertyDAO
      */
     @Nullable
     @Override
-    public Property findByPrimaryKey(@NotNull final String id)
+    public Property<String> findByPrimaryKey(@NotNull final String id)
     {
         return findByPrimaryKey(id, getProperties());
     }
@@ -165,11 +168,12 @@ public class CucumberSqlPropertyDAO
      * not found.
      */
     @Nullable
-    protected Property findByPrimaryKey(@NotNull final String id, @NotNull final List<Property> properties)
+    protected Property<String> findByPrimaryKey(
+        @NotNull final String id, @NotNull final List<Property<String>> properties)
     {
-        @Nullable Property result = null;
+        @Nullable Property<String> result = null;
 
-        for (@NotNull final Property property : properties)
+        for (@NotNull final Property<String> property : properties)
         {
             if (id.equals(property.getId()))
             {
@@ -189,7 +193,7 @@ public class CucumberSqlPropertyDAO
      */
     @NotNull
     @Override
-    public List<Property> findByResult(@NotNull final String resultId)
+    public List<Property<String>> findByResult(@NotNull final String resultId)
     {
         return findByResult(resultId, getProperties(), getResult());
     }
@@ -201,14 +205,16 @@ public class CucumberSqlPropertyDAO
      * @return the list of properties associated to given {@link Result}.
      */
     @NotNull
-    protected List<Property> findByResult(
-        @NotNull final String resultId, @NotNull final List<Property> properties, @NotNull final Result customResult)
+    protected List<Property<String>> findByResult(
+        @NotNull final String resultId,
+        @NotNull final List<Property<String>> properties,
+        @NotNull final Result<String> customResult)
     {
-        @NotNull List<Property> result = properties;
+        @NotNull List<Property<String>> result = properties;
 
         if (!resultId.equals(customResult.getId()))
         {
-            result = new ArrayList<Property>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -247,9 +253,9 @@ public class CucumberSqlPropertyDAO
         final int index,
         @NotNull final String type,
         final boolean nullable,
-        @NotNull final List<Property> properties)
+        @NotNull final List<Property<String>> properties)
     {
-        properties.add(new PropertyElement(id, columnName, index, type, nullable));
+        properties.add(new PropertyElement<>(id, columnName, index, type, nullable));
     }
 
     @Override

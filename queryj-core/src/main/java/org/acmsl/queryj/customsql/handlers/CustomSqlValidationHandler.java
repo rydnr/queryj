@@ -182,7 +182,7 @@ public class CustomSqlValidationHandler
         @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
-        for (@Nullable final Sql t_Sql : sqlDAO.findAll())
+        for (@Nullable final Sql<String> t_Sql : sqlDAO.findAll())
         {
             if (   (t_Sql != null)
                 && (t_Sql.isValidate()))
@@ -207,7 +207,7 @@ public class CustomSqlValidationHandler
      * @throws QueryJBuildException if the sql is not valid.
      */
     protected void validate(
-        @NotNull final Sql sql,
+        @NotNull final Sql<String> sql,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final Connection connection,
         @NotNull final MetadataManager metadataManager,
@@ -395,7 +395,7 @@ public class CustomSqlValidationHandler
      * @throws QueryJBuildException if some problem occurs.
      */
     protected void bindParameters(
-        @NotNull final Sql sql,
+        @NotNull final Sql<String> sql,
         @NotNull final PreparedStatement statement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataTypeManager metadataTypeManager,
@@ -417,7 +417,8 @@ public class CustomSqlValidationHandler
 
         int t_iParameterIndex = 0;
 
-        for (@Nullable final Parameter t_Parameter : retrieveParameterElements(sql, customSqlProvider.getSqlParameterDAO()))
+        for (@Nullable final Parameter<String> t_Parameter :
+                retrieveParameterElements(sql, customSqlProvider.getSqlParameterDAO()))
         {
             if  (t_Parameter == null)
             {
@@ -679,12 +680,12 @@ public class CustomSqlValidationHandler
      * @param parameterDAO the {@link SqlParameterDAO} instance.
      * @return the parameter elements.
      */
-    protected List<Parameter> retrieveParameterElements(
-        @NotNull final Sql sql, @NotNull final SqlParameterDAO parameterDAO)
+    protected List<Parameter<String>> retrieveParameterElements(
+        @NotNull final Sql<String> sql, @NotNull final SqlParameterDAO parameterDAO)
     {
-        @NotNull final List<Parameter> result = new ArrayList<>();
+        @NotNull final List<Parameter<String>> result = new ArrayList<>();
 
-        Parameter t_Parameter;
+        Parameter<String> t_Parameter;
 
         for (@Nullable final ParameterRef t_ParameterRef : sql.getParameterRefs())
         {
@@ -776,8 +777,8 @@ public class CustomSqlValidationHandler
      */
     protected void validateResultSet(
         @NotNull final ResultSet resultSet,
-        @NotNull final Sql sql,
-        final Result sqlResult,
+        @NotNull final Sql<String> sql,
+        final Result<String> sqlResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager)
@@ -786,7 +787,7 @@ public class CustomSqlValidationHandler
     {
         @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
-        @NotNull final Collection<Property> t_cProperties =
+        @NotNull final Collection<Property<String>> t_cProperties =
             retrieveProperties(
                 sql,
                 sqlResult,
@@ -804,7 +805,7 @@ public class CustomSqlValidationHandler
             {
                 Method t_Method;
 
-                for (@Nullable final Property t_Property : t_cProperties)
+                for (@Nullable final Property<String> t_Property : t_cProperties)
                 {
                     if (t_Property != null)
                     {
@@ -889,17 +890,17 @@ public class CustomSqlValidationHandler
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected List<Property> retrieveProperties(
-        @NotNull final Sql sql,
-        @NotNull final Result sqlResult,
+    protected List<Property<String>> retrieveProperties(
+        @NotNull final Sql<String> sql,
+        @NotNull final Result<String> sqlResult,
         @NotNull final SqlPropertyDAO propertyDAO,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
     {
-        @NotNull final List<Property> result = new ArrayList<>();
+        @NotNull final List<Property<String>> result = new ArrayList<>();
 
-        Property t_Property;
+        Property<String> t_Property;
 
         for (@Nullable final PropertyRef t_PropertyRef : sqlResult.getPropertyRefs())
         {
@@ -928,8 +929,8 @@ public class CustomSqlValidationHandler
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected Collection<Property> retrieveImplicitProperties(
-        @NotNull final Result sqlResult,
+    protected Collection<Property<String>> retrieveImplicitProperties(
+        @NotNull final Result<String> sqlResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager)
@@ -955,15 +956,15 @@ public class CustomSqlValidationHandler
      * @throws QueryJBuildException if the properties cannot be retrieved..
      */
     @NotNull
-    protected Collection<Property> retrieveImplicitProperties(
-        @NotNull final Result sqlResult,
+    protected Collection<Property<String>> retrieveImplicitProperties(
+        @NotNull final Result<String> sqlResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
     {
-        @NotNull final Collection<Property> result = new ArrayList<>();
+        @NotNull final Collection<Property<String>> result = new ArrayList<>();
 
         @Nullable final String t_strTable =
             customResultUtils.retrieveTable(
@@ -994,7 +995,7 @@ public class CustomSqlValidationHandler
                         metadataTypeManager.getNativeType(t_Column.getTypeId());
 
                     result.add(
-                        new PropertyElement(
+                        new PropertyElement<>(
                             t_strId,
                             t_Column.getName(),
                             t_iIndex + 1,
@@ -1034,9 +1035,9 @@ public class CustomSqlValidationHandler
     protected void invokeResultSetGetter(
         @NotNull final Method method,
         @NotNull final ResultSet resultSet,
-        @NotNull final Property property,
-        @NotNull final Result sqlResult,
-        @NotNull final Sql sql)
+        @NotNull final Property<String> property,
+        @NotNull final Result<String> sqlResult,
+        @NotNull final Sql<String> sql)
       throws QueryJBuildException
     {
         @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
@@ -1213,14 +1214,14 @@ public class CustomSqlValidationHandler
         @NotNull final String name,
         final int type,
         final int index,
-        @NotNull final Collection<Property> properties,
+        @NotNull final Collection<Property<String>> properties,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
         boolean result = false;
 
         int t_iPropertyIndex = 0;
 
-        for (@Nullable final Property t_Property : properties)
+        for (@Nullable final Property<String> t_Property : properties)
         {
             if (t_Property != null)
             {
@@ -1256,7 +1257,7 @@ public class CustomSqlValidationHandler
         @Nullable final String name,
         final int type,
         final int index,
-        @NotNull final Property property,
+        @NotNull final Property<String> property,
         final int propertyIndex,
         final MetadataTypeManager metadataTypeManager)
     {

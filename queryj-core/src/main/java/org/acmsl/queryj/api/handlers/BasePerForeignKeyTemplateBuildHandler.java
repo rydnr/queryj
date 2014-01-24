@@ -46,6 +46,7 @@ import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
@@ -194,7 +195,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
     {
-        @NotNull final List<T> t_lTemplates = new ArrayList<T>();
+        @NotNull final List<T> t_lTemplates = new ArrayList<>();
 
         for  (@Nullable final ForeignKey<String> t_ForeignKey : foreignKeys)
         {
@@ -208,7 +209,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                         decoratorFactory,
                         retrievePackage(
                             t_ForeignKey.getSourceTableName(),
-                            metadataManager.getEngineName(),
+                            metadataManager.getEngine(),
                             parameters),
                         projectPackage,
                         repository,
@@ -229,20 +230,20 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     /**
      * Retrieves the package name from the attribute map.
      * @param tableName the table name.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @param parameters the parameter map.
      * @return the package name.
      */
     @NotNull
     protected String retrievePackage(
         @NotNull final String tableName,
-        @NotNull final String engineName,
+        @NotNull final Engine<String> engine,
         @NotNull final QueryJCommand parameters)
     {
         return
             retrievePackage(
                 tableName,
-                engineName,
+                engine.getName(),
                 retrieveProjectPackage(parameters),
                 PackageUtils.getInstance());
     }
@@ -318,7 +319,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             {
                 if (result == null)
                 {
-                    result = new ArrayList<ForeignKey<String>>();
+                    result = new ArrayList<>();
                 }
 
                 result.addAll(t_Table.getForeignKeys());
@@ -327,7 +328,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
         if (result == null)
         {
-            result = new ArrayList<ForeignKey<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;

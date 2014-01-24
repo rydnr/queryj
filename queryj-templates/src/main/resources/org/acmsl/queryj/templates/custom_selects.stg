@@ -37,7 +37,10 @@
 //
 group custom_selects;
 
-custom_select(cs, table) ::= <<
+import "javadoc.stg"
+import "type_checkers.stg"
+
+custom_select(cs, table, C) ::= <<
 <!
  Writes the code for a custom select query.
  @param cs the custom select.
@@ -47,25 +50,25 @@ custom_select(cs, table) ::= <<
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator="\n">
+ <cs.parameters:{ p | <attribute_javadoc(attr=p)>}; separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-public <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
-    <cs.parameters:{ p | <attribute_declaration(attr=p)>}; separator=",\n">)
+public <custom_select_return(table=table, result=cs.result)> <cs.name.uncapitalized>(
+    <cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=",\n">)
   throws DataAccessException
 {
-    <notnull()>final String t_strSql = auditSql(<cs.idAsConstant>_SQL);
+    <notnull(C=C)>final String t_strSql = auditSql(<cs.id.normalized.uppercased>_SQL);
 
     return
         <cs.nameUncapitalized>(
-            <cs.parameters:{p | <p.nameLowercased>,}; separator="\n">
+            <cs.parameters:{p | <p.name.lowercased>,}; separator="\n">
             t_strSql,
             new PreparedStatementCreatorFactory(t_strSql),
             new Object[]
             {
                 <cs.parameters:{ p | <custom_select_parameter_value(
-                  name=p.nameLowercased,
+                  name=p.name.lowercased,
                   objectType=p.objectType,
                   object=p.object)>}; separator=",\n">
             },
@@ -75,7 +78,7 @@ public <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitaliz
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator="\n">
+ <cs.parameters:{ p | <attribute_javadoc(attr=p)>}; separator="\n">
  * @param sql the SQL.
  * @param preparedStatementCreatorFactory the
  * {@link PreparedStatementCreatorFactory} instance
@@ -85,17 +88,17 @@ public <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitaliz
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
-    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p)>}; separator="\n">
-    <notnull()>final String sql,
-    <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+protected <custom_select_return(table=table, result=cs.result)> <cs.name.uncapitalized>(
+    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p, C=C)>}; separator="\n">
+    <notnull(C=C)>final String sql,
+    <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
-    <notnull()>final DataSource dataSource)
+    <notnull(C=C)>final DataSource dataSource)
   throws DataAccessException
 {
     return
         <cs.nameUncapitalized>(
-            <cs.parameters:{ p | <p.nameLowercased>,}; separator="\n">
+            <cs.parameters:{ p | <p.name.lowercased>,}; separator="\n">
             sql,
             preparedStatementCreatorFactory,
             params,
@@ -105,7 +108,7 @@ protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapita
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator="\n">
+ <cs.parameters:{ p | <attribute_javadoc(attr=p)>}; separator="\n">
  * @param sql the SQL.
  * @param preparedStatementCreatorFactory the
  * {@link PreparedStatementCreatorFactory} instance
@@ -116,19 +119,19 @@ protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapita
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
-    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p)>}; separator="\n">
-    <notnull()>final String sql,
-    <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+protected <custom_select_return(table=table, result=cs.result)> <cs.name.uncapitalized>(
+    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p, C=C)>}; separator="\n">
+    <notnull(C=C)>final String sql,
+    <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
-    <notnull()>final PlatformTransactionManager transactionManager)
+    <notnull(C=C)>final PlatformTransactionManager transactionManager)
   throws DataAccessException
 {
     <custom_select_result_declaration(sql=cs, result=cs.result, table=table)>
 
     result =
-        <cs.nameUncapitalized>(
-            <cs.parameters:{ p | <p.nameLowercased>,}; separator="\n">
+        <cs.name.uncapitalized>(
+            <cs.parameters:{ p | <p.name.lowercased>,}; separator="\n">
             sql,
             preparedStatementCreatorFactory,
             params,
@@ -140,7 +143,7 @@ protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapita
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator="\n">
+ <cs.parameters:{ p | <attribute_javadoc(attr=p)>}; separator="\n">
  * @param sql the SQL.
  * @param preparedStatementCreatorFactory the
  * {@link PreparedStatementCreatorFactory} instance
@@ -151,12 +154,12 @@ protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapita
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
-    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p)>}; separator="\n">
-    <notnull()>final String sql,
-    <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+protected <custom_select_return(table=table, result=cs.result)> <cs.name.uncapitalized>(
+    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p, C=C)>}; separator="\n">
+    <notnull(C=C)>final String sql,
+    <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
-    <notnull()>final TransactionTemplate transactionTemplate)
+    <notnull(C=C)>final TransactionTemplate transactionTemplate)
   throws DataAccessException
 {
     <custom_select_result_declaration(sql=cs, result=cs.result, table=table)>
@@ -216,7 +219,7 @@ custom_update_or_insert(cs) ::= <<
  * @throws DataAccessException if the operation fails.
  */
 public int <cs.nameUncapitalized>(
-    <cs.parameters:{ p | <attribute_declaration(attr=p)>}; separator=",\n">)
+    <cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=",\n">)
   throws DataAccessException
 {
     int result = -10;
@@ -295,22 +298,22 @@ custom_select_for_update(cs, table) ::= <<
  */
 <if(cs.resultClass)>
 <cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
-public <cs.resultClass> <cs.nameUncapitalized>(
+public <cs.resultClass> <cs.name.uncapitalized>(
 <else>
 <if(rs.multiple)>
-public <cs.resultClass> <cs.nameUncapitalized>(
+public <cs.resultClass> <cs.name.uncapitalized>(
 <else>
-public <cs.resultClass>Decorator <cs.nameUncapitalized>(
+public <cs.resultClass>Decorator <cs.name.uncapitalized>(
 <endif>
 <endif>
 <else>
-public <cs.resultClass> <cs.nameUncapitalized>(
+public <cs.resultClass> <cs.name.uncapitalized>(
 <endif>}>
 <else>
-public void <cs.nameUncapitalized>(
+public void <cs.name.uncapitalized>(
 <endif>
 
-    <cs.parameters:{ p | <attribute_declaration(attr=p)>}; separator=",\n">)
+    <cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=",\n">)
   throws DataAccessException
 {
 <if(cs.resultClass)>
@@ -328,7 +331,7 @@ public void <cs.nameUncapitalized>(
 
     SqlQuery t_Query =
         new SqlQuery(
-            getDataSource(), <cs.idAsConstant>_SQL);
+            getDataSource(), <cs.normalized.uppercased>_SQL);
 
 <if(cs.resultClass)>
     List\<<cs.resultClass>\> t_lResult = (List\<<cs.resultClass>\>) t_Query.execute();
@@ -449,12 +452,12 @@ custom_select_return_nondecorated_single(result) ::= <<
 >>
 
 custom_select_return_property_multiple(result) ::= <<
-<notnull()>
+<notnull(C=C)>
 List\<<result.properties:{property|<property.objectType>}>\>
 >>
 
 custom_select_return_property_single(select, result) ::= <<
-<result.properties:{property|<if(!property.primitive)><if(property.nullable)><nullable()><else><notnull()><endif><endif><property.type>}>
+<result.properties:{property|<if(!property.primitive)><if(property.nullable)><nullable()><else><notnull(C=C)><endif><endif><property.type>}>
 >>
 
 
@@ -496,4 +499,36 @@ custom_select_return_cast_nondecorated_single(result) ::= <<
 
 custom_select_return_cast_property_single(select, result) ::= <<
 <result.properties:{property|<property.objectType>}>
+>>
+
+attribute_declaration(attr, C) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute.
+  @param attr the attribute.
+!>
+<type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.uncapitalized>
+>>
+
+attribute_declaration_impl(attr, C) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute.
+  @param attr the attribute.
+!>
+<type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.uncapitalized>
+>>
+
+attribute_isolated_declaration(attr, C) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute, isolated.
+  @param attr the attribute.
+!>
+<attribute_declaration(attr=attr, C=C)>,
+>>
+
+attribute_isolated_declaration_impl(attr, C) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute.
+  @param attr the attribute.
+!>
+<type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.lowercased>,
 >>

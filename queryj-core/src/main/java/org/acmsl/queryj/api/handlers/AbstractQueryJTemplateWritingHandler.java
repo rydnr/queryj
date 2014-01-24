@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -39,6 +39,7 @@ package org.acmsl.queryj.api.handlers;
  * Importing QueryJ-Core classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.QueryJTemplate;
 import org.acmsl.queryj.api.QueryJTemplateContext;
@@ -49,6 +50,9 @@ import org.acmsl.queryj.api.TemplateGenerator;
  * Importing JetBrains annotations.
  */
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
+import org.acmsl.queryj.metadata.engines.oracle.OracleEngine;
 import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -105,7 +109,7 @@ public abstract class AbstractQueryJTemplateWritingHandler
         @NotNull final QueryJCommand parameters)
     {
         return
-            new TemplateGeneratorThread<T, C, TG>(
+            new TemplateGeneratorThread<>(
                 generator, template, outputDir, rootDir, charset, threadIndex + 1, barrier);
     }
 
@@ -157,14 +161,15 @@ public abstract class AbstractQueryJTemplateWritingHandler
     public String retrieveProductName(
         @NotNull final QueryJCommand parameters, @Nullable final DatabaseMetaData metadata)
     {
-        @Nullable String result = parameters.getSetting(PRODUCT_NAME);
+        @NotNull final String result;
+        @Nullable String aux = parameters.getSetting(PRODUCT_NAME);
 
-        if (   (result == null)
-               && (metadata != null))
+        if (   (aux == null)
+            && (metadata != null))
         {
             try
             {
-                result = metadata.getDatabaseProductName();
+                aux = metadata.getDatabaseProductName();
             }
             catch  (@NotNull final SQLException sqlException)
             {
@@ -180,13 +185,89 @@ public abstract class AbstractQueryJTemplateWritingHandler
             }
         }
 
-        if (result == null)
+        if (aux == null)
         {
-            result = "";
+            result = Literals.UNKNOWN;
+        }
+        else
+        {
+            result = aux;
         }
 
         parameters.setSetting(PRODUCT_NAME, result);
 
         return result;
     }
+
+
+    /**
+     * Retrieves the database product version.
+     * @param metadata the database metadata.
+     * @return the product version.
+     */
+    @NotNull
+    public String retrieveProductVersion(@Nullable final DatabaseMetaData metadata)
+    {
+        @NotNull final String result;
+
+        @Nullable String aux = null;
+
+        if (metadata != null)
+        {
+            try
+            {
+                aux = metadata.getDatabaseProductVersion();
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class);
+
+                if (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Cannot retrieve database product version",
+                        sqlException);
+                }
+            }
+        }
+
+        if (aux == null)
+        {
+            result = Literals.UNKNOWN;
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the database engine.
+     * @param parameters the parameter map.
+     * @param metadata the database metadata.
+     * @return the product.
+     */
+    @NotNull
+    public Engine<String> retrieveEngine(
+        @NotNull final QueryJCommand parameters, @Nullable final DatabaseMetaData metadata)
+    {
+        @NotNull final Engine<String> result;
+
+        @NotNull final String name = retrieveProductName(parameters, metadata);
+        @NotNull final String version = retrieveProductVersion(metadata);
+
+        if (name.equals(Literals.ORACLE))
+        {
+            result = new OracleEngine(version);
+        }
+        else
+        {
+            result = new UndefinedJdbcEngine(name, version);
+        }
+
+        return result;
+    }
+
 }

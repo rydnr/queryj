@@ -102,8 +102,8 @@ public class DebugUtils
      * @param resultId the id of the result.
      * @return <code>true</code> in such case.
      */
-    public boolean debugEnabledForResultId(@NotNull final String resultId)
+    public <T> boolean debugEnabledForResultId(@NotNull final T resultId)
     {
-        return resultId.equalsIgnoreCase(System.getProperty("queryj.customresult.debug"));
+        return ("" + resultId).equalsIgnoreCase(System.getProperty("queryj.customresult.debug"));
     }
 }

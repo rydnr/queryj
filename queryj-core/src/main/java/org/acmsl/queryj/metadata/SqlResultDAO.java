@@ -67,7 +67,7 @@ public interface SqlResultDAO
      * @return the associated {@link Result result}.
      */
     @Nullable
-    Result findByPrimaryKey(@NotNull final String id);
+    Result<String> findByPrimaryKey(@NotNull final String id);
 
     /**
      * Retrieves the {@link Result} for single matches of a given VO (table).
@@ -75,7 +75,7 @@ public interface SqlResultDAO
      * @return the single-match {@link Result result}.
      */
     @Nullable
-    Result findSingleMatch(@NotNull final String table);
+    Result<String> findSingleMatch(@NotNull final String table);
 
     /**
      * Retrieves the {@link Result} for multiple matches of a given VO (table).
@@ -83,7 +83,7 @@ public interface SqlResultDAO
      * @return the multiple-match {@link Result result}.
      */
     @Nullable
-    Result findMultipleMatch(@NotNull final String table);
+    Result<String> findMultipleMatch(@NotNull final String table);
 
     /**
      * Retrieves the {@link Result} for given {@link org.acmsl.queryj.customsql.Sql sql} id.
@@ -91,7 +91,7 @@ public interface SqlResultDAO
      * @return the associated {@link Result}, or <code>null</code> if not found.
      */
     @Nullable
-    Result findBySqlId(@NotNull final String sqlId);
+    Result<String> findBySqlId(@NotNull final String sqlId);
 
     /**
      * Retrieves the {@link Result results} matching given type.
@@ -99,12 +99,12 @@ public interface SqlResultDAO
      * @return the list of matching {@link Result} instances.
      */
     @NotNull
-    List<Result> findByType(@NotNull final String type);
+    List<Result<String>> findByType(@NotNull final String type);
 
     /**
      * Retrieves all {@link Result results}.
      * @return such list.
      */
     @NotNull
-    List<Result> findAll();
+    List<Result<String>> findAll();
 }

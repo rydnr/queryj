@@ -45,7 +45,6 @@ import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.Literals;
-import org.acmsl.queryj.metadata.CachingResultDecorator;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlDAO;
@@ -123,25 +122,19 @@ public class TemplateUtils
     /**
      * Retrieves the custom selects.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom selects.
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Sql> retrieveCustomSelects(
+    public List<Sql<String>> retrieveCustomSelects(
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
             retrieveCustomSelects(
                 null,
                 customSqlProvider,
-                metadataManager,
-                decoratorFactory,
                 daoTemplateUtils);
     }
 
@@ -150,17 +143,13 @@ public class TemplateUtils
      * @param tableName the table name, or <code>null</code> for
      * repository-wide results.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom selects.
      */
     @NotNull
-    public List<Sql> retrieveCustomSelects(
+    public List<Sql<String>> retrieveCustomSelects(
         @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
@@ -170,35 +159,26 @@ public class TemplateUtils
                     Sql.SELECT,
                 },
                 tableName,
-                customSqlProvider,
                 customSqlProvider.getSqlDAO(),
-                metadataManager,
-                decoratorFactory,
                 daoTemplateUtils);
     }
 
     /**
      * Retrieves the custom updates or inserts.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom sql.
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Sql> retrieveCustomUpdatesOrInserts(
+    public List<Sql<String>> retrieveCustomUpdatesOrInserts(
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
             retrieveCustomUpdatesOrInserts(
                 null,
                 customSqlProvider,
-                metadataManager,
-                decoratorFactory,
                 daoTemplateUtils);
     }
 
@@ -206,17 +186,13 @@ public class TemplateUtils
      * Retrieves the custom updates or inserts.
      * @param tableName the table name.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom sql.
      */
     @NotNull
-    public List<Sql> retrieveCustomUpdatesOrInserts(
+    public List<Sql<String>> retrieveCustomUpdatesOrInserts(
         @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
@@ -228,10 +204,7 @@ public class TemplateUtils
                     Sql.DELETE
                 },
                 tableName,
-                customSqlProvider,
                 customSqlProvider.getSqlDAO(),
-                metadataManager,
-                decoratorFactory,
                 daoTemplateUtils);
     }
 
@@ -245,7 +218,7 @@ public class TemplateUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Sql> retrieveCustomSelectsForUpdate(
+    public List<Sql<String>> retrieveCustomSelectsForUpdate(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -255,8 +228,6 @@ public class TemplateUtils
             retrieveCustomSelectsForUpdate(
                 null,
                 customSqlProvider,
-                metadataManager,
-                decoratorFactory,
                 daoTemplateUtils);
     }
 
@@ -264,17 +235,13 @@ public class TemplateUtils
      * Retrieves the custom selects.
      * @param tableName the table name.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom selects.
      */
     @NotNull
-    public List<Sql> retrieveCustomSelectsForUpdate(
+    public List<Sql<String>> retrieveCustomSelectsForUpdate(
         @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
@@ -284,10 +251,7 @@ public class TemplateUtils
                     Sql.SELECT_FOR_UPDATE,
                 },
                 tableName,
-                customSqlProvider,
                 customSqlProvider.getSqlDAO(),
-                metadataManager,
-                decoratorFactory,
                 daoTemplateUtils);
     }
 
@@ -296,29 +260,23 @@ public class TemplateUtils
      * @param types the sql types.
      * @param tableName the table name, or <code>null</code> for
      * repository-wide results.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param sqlDAO the {@link SqlDAO} instance.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom sql.
      */
     @NotNull
-    public List<Sql> retrieveCustomSql(
+    public List<Sql<String>> retrieveCustomSql(
         @NotNull final String[] types,
         @Nullable final String tableName,
-        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final SqlDAO sqlDAO,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
-        @NotNull final List<Sql> result = new ArrayList<Sql>();
+        @NotNull final List<Sql<String>> result = new ArrayList<>();
 
         boolean t_bMatches;
         String t_strDao;
 
-        for (@Nullable final Sql t_Sql : sqlDAO.findAll())
+        for (@Nullable final Sql<String> t_Sql : sqlDAO.findAll())
         {
             if (t_Sql != null)
             {
@@ -350,11 +308,7 @@ public class TemplateUtils
 
                     if  (t_bAdd)
                     {
-                        result.add(
-                            decoratorFactory.createDecorator(
-                                t_Sql,
-                                    customSqlProvider,
-                                    metadataManager));
+                        result.add(t_Sql);
                     }
                 }
             }
@@ -375,7 +329,7 @@ public class TemplateUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Result> retrieveCustomResults(
+    public List<Result<String>> retrieveCustomResults(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -406,7 +360,7 @@ public class TemplateUtils
      * model.
      */
     @NotNull
-    public List<Result> retrieveCustomResults(
+    public List<Result<String>> retrieveCustomResults(
         @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -440,7 +394,7 @@ public class TemplateUtils
      * model.
      */
     @NotNull
-    public List<Result> retrieveCustomResults(
+    public List<Result<String>> retrieveCustomResults(
         @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final SqlDAO sqlDAO,
@@ -450,10 +404,10 @@ public class TemplateUtils
         @NotNull final DAOTemplateUtils daoTemplateUtils)
       throws QueryJBuildException
     {
-        @NotNull final List<Result> result = new ArrayList<Result>();
+        @NotNull final List<Result<String>> result = new ArrayList<>();
 
         @Nullable ResultRef t_ResultRef;
-        @Nullable Result t_ResultElement;
+        @Nullable Result<String> t_ResultElement;
         @Nullable String t_strDao;
         boolean t_bMatches;
 
@@ -468,7 +422,7 @@ public class TemplateUtils
                     decoratorFactory));
         }
 
-        for (@Nullable final Sql t_Sql : sqlDAO.findAll())
+        for (@Nullable final Sql<String> t_Sql : sqlDAO.findAll())
         {
             if  (t_Sql != null)
             {
@@ -503,12 +457,7 @@ public class TemplateUtils
                         {
                             if  (!result.contains(t_ResultElement))
                             {
-                                result.add(
-                                    new CachingResultDecorator(
-                                        t_ResultElement,
-                                        customSqlProvider,
-                                        metadataManager,
-                                        decoratorFactory));
+                                result.add(t_ResultElement);
                             }
                         }
                         else
@@ -551,14 +500,14 @@ public class TemplateUtils
      * @return the implicit results.
      */
     @NotNull
-    protected List<Result> buildImplicitResults(
+    protected List<Result<String>> buildImplicitResults(
         @NotNull final String tableName,
         @NotNull final TableDAO tableDAO,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @NotNull final List<Result> result = new ArrayList<Result>(2);
+        @NotNull final List<Result<String>> result = new ArrayList<>(2);
 
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> table =
             tableDAO.findByName(tableName);
@@ -571,15 +520,15 @@ public class TemplateUtils
             @Nullable final String classValue =
                 (tableDecorator != null) ? tableDecorator.getName().getVoName().getValue() : null;
 
-            @NotNull final Result singleResult =
-                new ResultElement(
+            @NotNull final Result<String> singleResult =
+                new ResultElement<>(
                     "_single." + tableName.toLowerCase(Locale.getDefault()) + Literals.RESULT_SUFFIX,
                     classValue,
                     Result.SINGLE);
             result.add(singleResult);
 
-            @NotNull final Result multipleResult =
-                new ResultElement(
+            @NotNull final Result<String> multipleResult =
+                new ResultElement<>(
                     "_multiple." + tableName.toLowerCase(Locale.getDefault()) + Literals.RESULT_SUFFIX,
                     classValue,
                     Result.MULTIPLE);

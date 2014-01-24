@@ -70,7 +70,7 @@ public interface SqlDAO
      * @return the associated {@link Sql}, or <code>null</code> if not found.
      */
     @Nullable
-    Sql findByPrimaryKey(@NotNull final String id);
+    Sql<String> findByPrimaryKey(@NotNull final String id);
 
     /**
      * Retrieves all {@link Sql} associated to a given DAO (table).
@@ -78,7 +78,7 @@ public interface SqlDAO
      * @return the associated {@link Sql} instances.
      */
     @NotNull
-    List<Sql> findByDAO(@NotNull final String table);
+    List<Sql<String>> findByDAO(@NotNull final String table);
 
     /**
      * Retrieves all <i>selects-for-update</i> for a given DAO (table).
@@ -86,7 +86,7 @@ public interface SqlDAO
      * @return all matching <i>selects-for-update</i> queries.
      */
     @NotNull
-    List<Sql> findSelectsForUpdate(@NotNull final String table);
+    List<Sql<String>> findSelectsForUpdate(@NotNull final String table);
 
     /**
      * Retrieves all <i>insert</i> {@link Sql sentences} for a given DAO (table).
@@ -94,7 +94,7 @@ public interface SqlDAO
      * @return all matching <i>insert</i> sentences.
      */
     @NotNull
-    List<Sql> findInserts(@NotNull final String table);
+    List<Sql<String>> findInserts(@NotNull final String table);
 
     /**
      * Retrieves all <i>update</i> {@link Sql sentences} for a given DAO (table).
@@ -102,7 +102,7 @@ public interface SqlDAO
      * @return all matching <i>update</i> sentences.
      */
     @NotNull
-    List<Sql> findUpdates(@NotNull final String table);
+    List<Sql<String>> findUpdates(@NotNull final String table);
 
     /**
      * Retrieves all <i>delete</i> {@link Sql sentences} for a given DAO (table).
@@ -110,14 +110,14 @@ public interface SqlDAO
      * @return all matching <i>delete</i> sentences.
      */
     @NotNull
-    List<Sql> findDeletes(@NotNull final String table);
+    List<Sql<String>> findDeletes(@NotNull final String table);
 
     /**
      * Retrieves all custom SQL.
      * @return such list.
      */
     @NotNull
-    List<Sql> findAll();
+    List<Sql<String>> findAll();
 
     /**
      * Retrieves all SQL matching given result id.
@@ -125,7 +125,7 @@ public interface SqlDAO
      * @return the list of matching {@link Sql}.
      */
     @NotNull
-    List<Sql> findByResultId(@NotNull final String resultId);
+    List<Sql<String>> findByResultId(@NotNull final String resultId);
 
     /**
      * Retrieves all SQL matching given type.
@@ -133,14 +133,14 @@ public interface SqlDAO
      * @return the list of matching {@link Sql}.
      */
     @NotNull
-    List<Sql> findByType(@NotNull final String type);
+    List<Sql<String>> findByType(@NotNull final String type);
 
     /**
      * Retrieves all repository-scoped SQL.
      * @return such list.
      */
     @NotNull
-    List<Sql> findAllRepositoryScopedSql();
+    List<Sql<String>> findAllRepositoryScopedSql();
 
     /**
      * Checks whether it contains repository-scoped SQL or not.
@@ -154,12 +154,12 @@ public interface SqlDAO
      * @return such list.
      */
     @NotNull
-    List<Sql> findSelects(@NotNull final String table);
+    List<Sql<String>> findSelects(@NotNull final String table);
 
     /**
      * Retrieves all dynamic queries.
      * @param tableName the name of the table.
      * @return such list.
      */
-    List<Sql> findDynamic(@NotNull final String tableName);
+    List<Sql<String>> findDynamic(@NotNull final String tableName);
 }

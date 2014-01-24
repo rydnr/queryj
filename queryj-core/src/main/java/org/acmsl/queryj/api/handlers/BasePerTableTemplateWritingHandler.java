@@ -40,6 +40,7 @@ import org.acmsl.queryj.api.PerTableTemplate;
 import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.PerTableTemplateGenerator;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
@@ -84,14 +85,19 @@ public abstract class BasePerTableTemplateWritingHandler
         @NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
-        return retrieveOutputDir(context.getTableName(), rootDir, retrieveProductName(parameters), parameters);
+        return
+            retrieveOutputDir(
+                context.getTableName(),
+                rootDir,
+                retrieveEngine(parameters, retrieveDatabaseMetaData(parameters)),
+                parameters);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
      * @param tableName the table name.
      * @param rootDir the root dir.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @param parameters the parameter map.
      * @return such folder.
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
@@ -100,7 +106,7 @@ public abstract class BasePerTableTemplateWritingHandler
     protected File retrieveOutputDir(
         @NotNull final String tableName,
         @NotNull final File rootDir,
-        @NotNull final String engineName,
+        @NotNull final Engine<String> engine,
         @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
@@ -110,7 +116,7 @@ public abstract class BasePerTableTemplateWritingHandler
                 retrieveProjectPackage(parameters),
                 retrieveUseSubfoldersFlag(parameters),
                 tableName,
-                engineName,
+                engine,
                 parameters,
                 PackageUtils.getInstance());
     }
@@ -122,7 +128,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @param useSubFolders whether to use sub-folders for tests, or
      * using a different package naming scheme.
      * @param tableName the table name.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
@@ -134,7 +140,7 @@ public abstract class BasePerTableTemplateWritingHandler
         @NotNull final String projectPackage,
         final boolean useSubFolders,
         @NotNull final String tableName,
-        @NotNull final String engineName,
+        @NotNull final Engine<String> engine,
         @NotNull final QueryJCommand parameters,
         @NotNull final PackageUtils packageUtils)
       throws  QueryJBuildException;

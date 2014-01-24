@@ -37,7 +37,7 @@ package org.acmsl.queryj.customsql;/*
 import org.jetbrains.annotations.Nullable;
 
 public interface ResultSetFlags
-    extends IdentifiableElement
+    extends IdentifiableElement<String>
 {
     /**
      * The <b>TYPE_FORWARD_ONLY</b> value for

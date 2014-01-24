@@ -35,10 +35,12 @@ package org.acmsl.queryj.tools.handlers.oracle;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.MetadataExtractionLogger;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
@@ -94,7 +96,7 @@ public class OracleMetaDataRetrievalHandler
         final int majorVersion,
         final int minorVersion)
     {
-        return (productName.contains("Oracle"));
+        return (productName.contains(Literals.ORACLE));
 
 //        if  (result)
 //        {
@@ -127,9 +129,7 @@ public class OracleMetaDataRetrievalHandler
         @Nullable final String catalog,
         @Nullable final String schema,
         final boolean caseSensitive,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote)
+        @NotNull final Engine<String> engine)
         throws QueryJBuildException
     {
         @Nullable final MetadataManager result;
@@ -147,9 +147,7 @@ public class OracleMetaDataRetrievalHandler
                     false, // disable table extraction.
                     false, // lazy table extraction
                     caseSensitive,
-                    engineName,
-                    engineVersion,
-                    quote);
+                    engine);
 
             result.eagerlyFetchMetadata();
 

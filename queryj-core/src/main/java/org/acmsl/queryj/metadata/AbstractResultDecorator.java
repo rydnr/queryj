@@ -35,8 +35,6 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.SingularPluralFormConverter;
-import org.acmsl.queryj.api.exceptions.CustomResultWithNoPropertiesDoesNotMatchAnyTableException;
 import org.acmsl.queryj.api.exceptions.NullAttributeWhenConvertingToPropertyException;
 import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
@@ -47,11 +45,6 @@ import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
  * Importing Apache Commons Logging classes.
@@ -76,7 +69,6 @@ import org.checkthread.annotations.ThreadSafe;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Decorates &lt;result&gt; elements in <i>custom-sql</i> models.
@@ -84,13 +76,13 @@ import java.util.Locale;
  */
 @ThreadSafe
 public abstract class AbstractResultDecorator
-    extends  ResultElement
+    extends  ResultElement<DecoratedString>
     implements  ResultDecorator
 {
     /**
      * The result element.
      */
-    private Result m__Result;
+    private Result<String> m__Result;
 
     /**
      * The custom sql provider.
@@ -116,15 +108,15 @@ public abstract class AbstractResultDecorator
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      */
     public AbstractResultDecorator(
-        @NotNull final Result result,
+        @NotNull final Result<String> result,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
         super(
-            result.getId(),
-            result.getClassValue(),
-            result.getMatches());
+            new DecoratedString(result.getId()),
+            result.getClassValue() != null ? new DecoratedString(result.getClassValue()) : null,
+            new DecoratedString(result.getMatches()));
         immutableSetResult(result);
         immutableSetPropertyRefs(result.getPropertyRefs());
         immutableSetCustomSqlProvider(customSqlProvider);
@@ -136,7 +128,7 @@ public abstract class AbstractResultDecorator
      * Specifies the result.
      * @param result the result.
      */
-    protected final void immutableSetResult(@NotNull final Result result)
+    protected final void immutableSetResult(@NotNull final Result<String> result)
     {
         m__Result = result;
     }
@@ -146,7 +138,7 @@ public abstract class AbstractResultDecorator
      * @param result the result.
      */
     @SuppressWarnings("unused")
-    protected void setResult(@NotNull final Result result)
+    protected void setResult(@NotNull final Result<String> result)
     {
         immutableSetResult(result);
     }
@@ -156,7 +148,7 @@ public abstract class AbstractResultDecorator
      * @return such element.
      */
     @NotNull
-    public Result getResult()
+    public Result<String> getResult()
     {
         return m__Result;
     }
@@ -272,75 +264,6 @@ public abstract class AbstractResultDecorator
     }
 
     /**
-     * Retrieves the id, normalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getIdNormalized()
-    {
-        return normalize(getId(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the id capitalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getIdCapitalized()
-    {
-        return capitalize(getId(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the value, after being processed.
-     */
-    @NotNull
-    protected String capitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(value);
-    }
-
-    /**
-     * Normalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return such information.
-     */
-    @NotNull
-    protected String normalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalize(value);
-    }
-
-    /**
-     * Retrieves the id, normalized and upper-cased.
-     * @return such information.
-     */
-    @NotNull
-    public String getIdNormalizedUppercased()
-    {
-        return normalizeUppercase(getId(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Normalizes given value, in upper-case.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return such information.
-     */
-    @NotNull
-    protected String normalizeUppercase(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalizeUppercase(value);
-    }
-
-    /**
      * Retrieves whether the result matches a single entity or expects
      * a set of them.
      * @return such information.
@@ -356,7 +279,7 @@ public abstract class AbstractResultDecorator
      * @param result the result element.
      * @return such information.
      */
-    protected boolean isMultiple(@NotNull final Result result)
+    protected boolean isMultiple(@NotNull final Result<String> result)
     {
         return Result.MULTIPLE.equalsIgnoreCase(result.getMatches());
     }
@@ -367,7 +290,7 @@ public abstract class AbstractResultDecorator
      */
     @Override
     @NotNull
-    public List<Property> getProperties()
+    public List<Property<DecoratedString>> getProperties()
     {
         return
             getProperties(
@@ -390,9 +313,9 @@ public abstract class AbstractResultDecorator
      * @return such information.
      */
     @NotNull
-    public List<Property> getProperties(
+    public List<Property<DecoratedString>> getProperties(
         @NotNull final List<PropertyRef> propertyRefs,
-        @NotNull final Result resultElement,
+        @NotNull final Result<String> resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -421,9 +344,9 @@ public abstract class AbstractResultDecorator
      * @return such information.
      */
     @NotNull
-    public List<Property> getProperties(
+    public List<Property<DecoratedString>> getProperties(
         @NotNull final List<PropertyRef> propertyRefs,
-        @NotNull final Result resultElement,
+        @NotNull final Result<String> resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final SqlPropertyDAO sqlPropertyDAO,
         @NotNull final MetadataManager metadataManager,
@@ -431,9 +354,9 @@ public abstract class AbstractResultDecorator
         @NotNull final CustomResultUtils customResultUtils)
     {
 
-        @NotNull final List<Property> result = new ArrayList<Property>();
+        @NotNull final List<Property<DecoratedString>> result = new ArrayList<>();
 
-        @Nullable Property t_Property ;
+        @Nullable Property<String> t_Property ;
 
         for (@Nullable final PropertyRef t_PropertyRef : propertyRefs)
         {
@@ -480,7 +403,7 @@ public abstract class AbstractResultDecorator
                         {
                             result.add(
                                 decoratorFactory.createDecorator(
-                                    new PropertyElement(
+                                    new PropertyElement<>(
                                         t_strTable + "." + t_Attribute.getName(),
                                         t_Attribute.getName(),
                                         t_Attribute.getOrdinalPosition(),
@@ -502,8 +425,9 @@ public abstract class AbstractResultDecorator
      * Retrieves the large-object-block properties.
      * @return such collection.
      */
+    @Override
     @NotNull
-    public List<Property> getLobProperties()
+    public List<Property<DecoratedString>> getLobProperties()
     {
         return
             filterLobProperties(
@@ -520,14 +444,12 @@ public abstract class AbstractResultDecorator
      * @return such collection.
      */
     @NotNull
-    protected List<Property> filterLobProperties(
-        final List<Property> properties,
+    protected List<Property<DecoratedString>> filterLobProperties(
+        final List<Property<DecoratedString>> properties,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final MetadataUtils metadataUtils)
     {
-        return
-            metadataUtils.filterLobProperties(
-                properties, metadataTypeManager);
+        return metadataUtils.filterLobProperties(properties, metadataTypeManager);
     }
 
     /**
@@ -561,7 +483,7 @@ public abstract class AbstractResultDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Property> getImplicitProperties()
+    public List<Property<DecoratedString>> getImplicitProperties()
     {
         return
             getImplicitProperties(
@@ -582,14 +504,14 @@ public abstract class AbstractResultDecorator
      * @return such information.
      */
     @NotNull
-    public List<Property> getImplicitProperties(
-        @NotNull final Result sqlResult,
+    public List<Property<DecoratedString>> getImplicitProperties(
+        @NotNull final Result<String> sqlResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomResultUtils customResultUtils)
     {
-        @Nullable List<Property> result = null;
+        @Nullable List<Property<DecoratedString>> result = null;
 
         @Nullable final String t_strTable =
             customResultUtils.retrieveTable(sqlResult, customSqlProvider, metadataManager);
@@ -613,7 +535,7 @@ public abstract class AbstractResultDecorator
 
         if (result == null)
         {
-            result = new ArrayList<Property>(0);
+            result = new ArrayList<>(0);
         }
         else
         {
@@ -633,14 +555,14 @@ public abstract class AbstractResultDecorator
      * @return the resulting properties.
      */
     @NotNull
-    protected List<Property> convert(
+    protected List<Property<DecoratedString>> convert(
         @NotNull final List<Attribute<String>> attributes,
-        @NotNull final Result sqlResult,
+        @NotNull final Result<String> sqlResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @NotNull final List<Property> result = new ArrayList<Property>(attributes.size());
+        @NotNull final List<Property<DecoratedString>> result = new ArrayList<>(attributes.size());
 
         for (@Nullable final Attribute<String> t_Attribute : attributes)
         {
@@ -648,7 +570,7 @@ public abstract class AbstractResultDecorator
             {
                 result.add(
                     decoratorFactory.createDecorator(
-                        new PropertyElement(
+                        new PropertyElement<>(
                             "implicit." + t_Attribute.getTableName() + "." + t_Attribute.getName(),
                             t_Attribute.getName(),
                             t_Attribute.getOrdinalPosition(),
@@ -670,92 +592,6 @@ public abstract class AbstractResultDecorator
     }
 
     /**
-     * Retrieves the value-object name.
-     * @return such value.
-     */
-    @NotNull
-    @Override
-    public String getVoName()
-    {
-        return getVoName(getResult(), getMetadataManager(), getCustomSqlProvider(), CustomResultUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the value-object name.
-     * @param customResult the custom result.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param customResultUtils the {@link CustomResultUtils} instance.
-     * @return such value.
-     */
-    @NotNull
-    protected String getVoName(
-        @NotNull final Result customResult,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final CustomResultUtils customResultUtils)
-    {
-        @Nullable String result = customResult.getClassValue();
-
-        if (customResult.getPropertyRefs().size() == 0)
-        {
-            @Nullable final String t_strTable =
-                customResultUtils.retrieveTable(
-                    customResult, customSqlProvider, metadataManager);
-
-            if (t_strTable != null)
-            {
-                result =
-                    capitalize(
-                        getSingular(t_strTable.toLowerCase(Locale.US)),
-                        DecorationUtils.getInstance());
-            }
-        }
-        else if (result != null)
-        {
-            @NotNull final String[] tokens = result.split("\\.");
-
-            if (tokens.length > 0)
-            {
-                result = tokens[tokens.length - 1];
-            }
-        }
-
-        if (result == null)
-        {
-            throw new CustomResultWithNoPropertiesDoesNotMatchAnyTableException(customResult);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the singular of given word.
-     * @param word the word.
-     * @return the singular.
-     */
-    @NotNull
-    protected String getSingular(@NotNull final String word)
-    {
-        return getSingular(word, SingularPluralFormConverter.getInstance());
-    }
-
-    /**
-     * Retrieves the singular of given word.
-     * @param word the word.
-     * @param singularPluralFormConverter the
-     * <code>SingularPluralFormConverter</code> instance.
-     * @return the singular.
-     */
-    @NotNull
-    protected String getSingular(
-        @NotNull final String word,
-        @NotNull final EnglishGrammarUtils singularPluralFormConverter)
-    {
-        return singularPluralFormConverter.getSingular(word);
-    }
-
-    /**
      * Retrieves whether this {@link Result} is wrapping a single {@link Property}.
      * @return <code>true</code> in such case.
      */
@@ -770,7 +606,7 @@ public abstract class AbstractResultDecorator
      * @param properties the list of {@link Property properties}.
      * @return <code>true</code> in such case.
      */
-    protected boolean isWrappingASingleProperty(@NotNull final List<Property> properties)
+    protected boolean isWrappingASingleProperty(@NotNull final List<Property<DecoratedString>> properties)
     {
         return properties.size() == 1;
     }
@@ -807,7 +643,7 @@ public abstract class AbstractResultDecorator
      * @param result the decoreated result.
      * @return such value.
      */
-    protected final int hashCode(@NotNull final Result result)
+    protected final int hashCode(@NotNull final Result<String> result)
     {
         return result.hashCode();
     }
@@ -835,7 +671,7 @@ public abstract class AbstractResultDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    protected boolean equals(@NotNull final Result result, @Nullable final Object object)
+    protected boolean equals(@NotNull final Result<String> result, @Nullable final Object object)
     {
         return result.equals(object);
     }
@@ -848,7 +684,7 @@ public abstract class AbstractResultDecorator
      * object prevents it from being compared to this Object.
      */
     @Override
-    public int compareTo(@Nullable final Result object)
+    public int compareTo(@Nullable final Result<DecoratedString> object)
         throws  ClassCastException
     {
         return compareTo(getResult(), object);
@@ -856,16 +692,32 @@ public abstract class AbstractResultDecorator
 
     /**
      * Compares given object with given instance.
-     * @param result the decorated result.
+     * @param resultElement the decorated result.
      * @param object the object to compare to.
      * @return the result of such comparison.
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
     @SuppressWarnings("unchecked")
-    protected int compareTo(@NotNull final Result result, @Nullable final Result object)
+    protected int compareTo(@NotNull final Result<String> resultElement, @Nullable final Result<DecoratedString> object)
         throws  ClassCastException
     {
-        return result.compareTo(object);
+        final int result;
+
+        if (object == null)
+        {
+            result = 1;
+        }
+        else
+        {
+            result =
+                resultElement.compareTo(
+                    new ResultElement<>(
+                        object.getId().getValue(),
+                        (object.getClassValue() != null ? object.getClassValue().getValue() : null),
+                        object.getMatches().getValue()));
+        }
+
+        return result;
     }
 }

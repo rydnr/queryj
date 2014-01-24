@@ -70,7 +70,7 @@ public class CustomResultWithNoPropertiesException
      * @param result the custom result.
      * @param sql the Sql.
      */
-    public CustomResultWithNoPropertiesException(@NotNull final Result result, @NotNull final Sql sql)
+    public CustomResultWithNoPropertiesException(@NotNull final Result<?> result, @NotNull final Sql<?> sql)
     {
         super(
             "custom-result.with.no.properties",

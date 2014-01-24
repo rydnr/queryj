@@ -53,7 +53,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ConnectionFlagsRefElement
-    extends  AbstractIdElement
+    extends  AbstractIdElement<String>
     implements ConnectionFlagsRef
 {
     private static final long serialVersionUID = 3311191419084681233L;
@@ -61,9 +61,8 @@ public class ConnectionFlagsRefElement
     /**
      * Creates a ConnectionFlagsRefElement with given information.
      * @param id the <i>id</i> attribute.
-     * @precondition id != null
      */
-    public ConnectionFlagsRefElement(final String id)
+    public ConnectionFlagsRefElement(@NotNull final String id)
     {
         super(id);
     }
@@ -73,6 +72,7 @@ public class ConnectionFlagsRefElement
      * contained in this instance.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {

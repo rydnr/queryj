@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -52,8 +52,8 @@ import org.jetbrains.annotations.Nullable;
  *    type CDATA #REQUIRED>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface Parameter
-    extends  IdentifiableElement
+public interface Parameter<T>
+    extends  IdentifiableElement<T>
 {
     /**
      * Retrieves the <i>index</i> attribute.
@@ -66,19 +66,19 @@ public interface Parameter
      * @return such value.
      */
     @NotNull
-    String getName();
+    T getName();
 
     /**
      * Retrieves the <i>type</i> attribute.
      * @return such value.
      */
     @NotNull
-    String getType();
+    T getType();
 
     /**
      * Retrieves the validation value.
      * @return such value.
      */
     @Nullable
-    String getValidationValue();
+    T getValidationValue();
 }

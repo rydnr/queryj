@@ -49,12 +49,8 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public interface Literals
 {
-    String ORG_ACMSL_QUERYJ_TEMPLATES = "org/acmsl/queryj/templates";
     String REPOSITORY = org.acmsl.queryj.Literals.REPOSITORY;
-    String ENGINE_NAME = "engineName";
-    String ENGINE_VERSION = "engineVersion";
     String CUCUMBER_TEMPLATES = "cucumber.templates";
-    String PACKAGE_NAME1 = "packageName";
     String PER_TABLE_TEMPLATES_TEST = "PerTableTemplatesTest";
     String TEMPLATE_BUILD_HANDLER = "TemplateBuildHandler";
     String DOT_HANDLERS = ".handlers";

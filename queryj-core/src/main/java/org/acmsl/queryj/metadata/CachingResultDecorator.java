@@ -36,7 +36,6 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
@@ -44,7 +43,6 @@ import org.acmsl.queryj.customsql.Result;
 /*
  * Importing some JetBrains annotations.
  */
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,15 +66,6 @@ public class CachingResultDecorator
     extends  AbstractResultDecorator
 {
     private static final long serialVersionUID = -381471036464860260L;
-    /**
-     * The cached normalized id.
-     */
-    private String m__strCachedIdNormalized;
-
-    /**
-     * The cached capitalized id.
-     */
-    private String m__strCachedIdCapitalized;
 
     /**
      * The cached <i>multiple</i> information.
@@ -84,19 +73,14 @@ public class CachingResultDecorator
     private Boolean m__bCachedMultiple;
 
     /**
-     * The cached normalized uppercased id.
-     */
-    private String m__strCachedIdNormalizedUppercased;
-
-    /**
      * The cached properties.
      */
-    private List<Property> m__lCachedProperties;
+    private List<Property<DecoratedString>> m__lCachedProperties;
 
     /**
      * The cached LOB properties.
      */
-    private List<Property> m__lCachedLobProperties;
+    private List<Property<DecoratedString>> m__lCachedLobProperties;
 
     /**
      * The cached 'implicit' flag.
@@ -106,12 +90,7 @@ public class CachingResultDecorator
     /**
      * The cached implicit properties.
      */
-    private List<Property> m__lCachedImplicitProperties;
-
-    /**
-     * The cached ValueObject-formatted name.
-     */
-    private String m__strCachedVoName;
+    private List<Property<DecoratedString>> m__lCachedImplicitProperties;
 
     /**
      * The cached information about whether the result is wrapping a single property.
@@ -126,7 +105,7 @@ public class CachingResultDecorator
      * @param metadataManager the <code>MetadataManager</code> instance.
      */
     public CachingResultDecorator(
-        @NotNull final Result result,
+        @NotNull final Result<String> result,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -135,153 +114,10 @@ public class CachingResultDecorator
     }
 
     /**
-     * Specifies the cached normalized id.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedIdNormalized(
-        @NotNull final String value)
-    {
-        m__strCachedIdNormalized = value;
-    }
-
-    /**
-     * Specifies the cached normalized id.
-     * @param value the value to cache.
-     */
-    @SuppressWarnings("unused")
-    protected void setCachedIdNormalized(@NotNull final String value)
-    {
-        immutableSetCachedIdNormalized(value);
-    }
-
-    /**
-     * Retrieves the cached normalized id.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedIdNormalized()
-    {
-        return m__strCachedIdNormalized;
-    }
-    /**
-     * Retrieves the id, normalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getIdNormalized()
-    {
-        @Nullable String result = getCachedIdNormalized();
-
-        if  (result == null)
-        {
-            result = super.getIdNormalized();
-            setCachedIdNormalized(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the cached capitalized id.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedIdCapitalized(
-        @NotNull final String value)
-    {
-        m__strCachedIdCapitalized = value;
-    }
-
-    /**
-     * Specifies the cached capitalized id.
-     * @param value the value to cache.
-     */
-    @SuppressWarnings("unused")
-    protected void setCachedIdCapitalized(@NotNull final String value)
-    {
-        immutableSetCachedIdCapitalized(value);
-    }
-
-    /**
-     * Retrieves the cached capitalized id.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedIdCapitalized()
-    {
-        return m__strCachedIdCapitalized;
-    }
-
-    /**
-     * Retrieves the id capitalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getIdCapitalized()
-    {
-        @Nullable String result = getCachedIdCapitalized();
-
-        if  (result == null)
-        {
-            result = super.getIdCapitalized();
-            setCachedIdCapitalized(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the cached normalized uppercased id.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedIdNormalizedUppercased(
-        @NotNull final String value)
-    {
-        m__strCachedIdNormalizedUppercased = value;
-    }
-
-    /**
-     * Specifies the cached normalized uppercased id.
-     * @param value the value to cache.
-     */
-    @SuppressWarnings("unused")
-    protected void setCachedIdNormalizedUppercased(@NotNull final String value)
-    {
-        immutableSetCachedIdNormalizedUppercased(value);
-    }
-
-    /**
-     * Retrieves the cached normalized uppercased id.
-     * @return such value.
-     */
-    @Nullable
-    public String getCachedIdNormalizedUppercased()
-    {
-        return m__strCachedIdNormalizedUppercased;
-    }
-
-    /**
-     * Retrieves the id, normalized and upper-cased.
-     * @return such information.
-     */
-    @NotNull
-    public String getIdNormalizedUppercased()
-    {
-        @Nullable String result = getCachedIdNormalizedUppercased();
-
-        if  (result == null)
-        {
-            result = super.getIdNormalizedUppercased();
-            setCachedIdNormalizedUppercased(result);
-        }
-
-        return result;
-    }
-
-    /**
      * Specifies the cached <i>multiple</i> info.
      * @param multiple such information.
      */
-    protected final void immutableSetCachedMultiple(@NotNull final Boolean multiple)
+    protected final void immutableSetCachedMultiple(final boolean multiple)
     {
         m__bCachedMultiple = multiple;
     }
@@ -291,7 +127,7 @@ public class CachingResultDecorator
      * @param multiple such information.
      */
     @SuppressWarnings("unused")
-    protected void setCachedMultiple(@NotNull final Boolean multiple)
+    protected void setCachedMultiple(final boolean multiple)
     {
         immutableSetCachedMultiple(multiple);
     }
@@ -313,7 +149,7 @@ public class CachingResultDecorator
      */
     public boolean isMultiple()
     {
-        Boolean result = getCachedMultiple();
+        @Nullable Boolean result = getCachedMultiple();
 
         if  (result == null)
         {
@@ -329,7 +165,7 @@ public class CachingResultDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedProperties(
-        @NotNull final List<Property> value)
+        @NotNull final List<Property<DecoratedString>> value)
     {
         m__lCachedProperties = value;
     }
@@ -338,7 +174,7 @@ public class CachingResultDecorator
      * Specifies the cached properties.
      * @param value the value to cache.
      */
-    protected void setCachedProperties(@NotNull final List<Property> value)
+    protected void setCachedProperties(@NotNull final List<Property<DecoratedString>> value)
     {
         immutableSetCachedProperties(value);
     }
@@ -348,7 +184,7 @@ public class CachingResultDecorator
      * @return such value.
      */
     @Nullable
-    public List<Property> getCachedProperties()
+    public List<Property<DecoratedString>> getCachedProperties()
     {
         return m__lCachedProperties;
     }
@@ -359,9 +195,9 @@ public class CachingResultDecorator
      */
     @NotNull
     @Override
-    public List<Property> getProperties()
+    public List<Property<DecoratedString>> getProperties()
     {
-        List<Property> result = getCachedProperties();
+        List<Property<DecoratedString>> result = getCachedProperties();
 
         if  (result == null)
         {
@@ -377,7 +213,7 @@ public class CachingResultDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedLobProperties(
-        @NotNull final List<Property> value)
+        @NotNull final List<Property<DecoratedString>> value)
     {
         m__lCachedLobProperties = value;
     }
@@ -386,7 +222,7 @@ public class CachingResultDecorator
      * Specifies the cached properties.
      * @param value the value to cache.
      */
-    protected void setCachedLobProperties(@NotNull final List<Property> value)
+    protected void setCachedLobProperties(@NotNull final List<Property<DecoratedString>> value)
     {
         immutableSetCachedLobProperties(value);
     }
@@ -396,7 +232,7 @@ public class CachingResultDecorator
      * @return such value.
      */
     @Nullable
-    public List<Property> getCachedLobProperties()
+    public List<Property<DecoratedString>> getCachedLobProperties()
     {
         return m__lCachedLobProperties;
     }
@@ -406,9 +242,9 @@ public class CachingResultDecorator
      * @return such information.
      */
     @NotNull
-    public List<Property> getLobProperties()
+    public List<Property<DecoratedString>> getLobProperties()
     {
-        List<Property> result = getCachedLobProperties();
+        List<Property<DecoratedString>> result = getCachedLobProperties();
 
         if  (result == null)
         {
@@ -423,7 +259,7 @@ public class CachingResultDecorator
      * Specifies whether the result is implicit or not.
      * @param flag such condition.
      */
-    protected final void immutableSetCachedImplicit(@NotNull final Boolean flag)
+    protected final void immutableSetCachedImplicit(final boolean flag)
     {
         m__bCachedImplicit = flag;
     }
@@ -432,7 +268,7 @@ public class CachingResultDecorator
      * Specifies whether the result is implicit or not.
      * @param flag such condition.
      */
-    protected void setCachedImplicit(@NotNull final Boolean flag)
+    protected void setCachedImplicit(final boolean flag)
     {
         immutableSetCachedImplicit(flag);
     }
@@ -454,12 +290,12 @@ public class CachingResultDecorator
     @SuppressWarnings("unused")
     public boolean isImplicit()
     {
-        Boolean result = getCachedImplicit();
+        @Nullable Boolean result = getCachedImplicit();
 
         if (result == null)
         {
             result = super.isImplicit();
-            setCachedImplicit(result);
+            setCachedImplicit(result.booleanValue());
         }
 
         return result;
@@ -470,7 +306,7 @@ public class CachingResultDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedImplicitProperties(
-        @NotNull final List<Property> value)
+        @NotNull final List<Property<DecoratedString>> value)
     {
         m__lCachedImplicitProperties = value;
     }
@@ -479,7 +315,7 @@ public class CachingResultDecorator
      * Specifies the cached properties.
      * @param value the value to cache.
      */
-    protected void setCachedImplicitProperties(@NotNull final List<Property> value)
+    protected void setCachedImplicitProperties(@NotNull final List<Property<DecoratedString>> value)
     {
         immutableSetCachedImplicitProperties(value);
     }
@@ -489,7 +325,7 @@ public class CachingResultDecorator
      * @return such value.
      */
     @Nullable
-    public List<Property> getCachedImplicitProperties()
+    public List<Property<DecoratedString>> getCachedImplicitProperties()
     {
         return m__lCachedImplicitProperties;
     }
@@ -499,74 +335,14 @@ public class CachingResultDecorator
      * @return such information.
      */
     @NotNull
-    public List<Property> getImplicitProperties()
+    public List<Property<DecoratedString>> getImplicitProperties()
     {
-        List<Property> result = getCachedImplicitProperties();
+        List<Property<DecoratedString>> result = getCachedImplicitProperties();
 
         if  (result == null)
         {
             result = super.getImplicitProperties();
             setCachedImplicitProperties(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Specifies the cached ValueObject-formatted name.
-     * @param name the name.
-     */
-    protected final void immutableSetCachedVoName(@NotNull final String name)
-    {
-        this.m__strCachedVoName = name;
-    }
-
-    /**
-     * Specifies the cached ValueObject-formatted name.
-     * @param name the name.
-     */
-    protected void setCachedVoName(@NotNull final String name)
-    {
-        immutableSetCachedVoName(name);
-    }
-
-    /**
-     * Retrieves the cached ValueObject-formatted name.
-     * @return such information.
-     */
-    @Nullable
-    protected String getCachedVoName()
-    {
-        return this.m__strCachedVoName;
-    }
-
-    /**
-     * Retrieves the value-object name.
-     * @return such value.
-     */
-    @NotNull
-    @Override
-    public String getVoName()
-    {
-        String result = getCachedVoName();
-
-        if (result == null)
-        {
-            try
-            {
-                result = super.getVoName();
-            }
-            catch (final Throwable throwable)
-            {
-                @Nullable final Log t_Log = UniqueLogFactory.getLog(CachingResultDecorator.class);
-
-                if (t_Log != null)
-                {
-                    t_Log.fatal(
-                        "Error in Result.getVoName()", throwable);
-                }
-            }
-            setCachedVoName(result);
         }
 
         return result;
@@ -606,7 +382,7 @@ public class CachingResultDecorator
     @Override
     public boolean isWrappingASingleProperty()
     {
-        Boolean result = getCachedWrappingASingleProperty();
+        @Nullable Boolean result = getCachedWrappingASingleProperty();
 
         if (result == null)
         {

@@ -41,16 +41,16 @@ import org.jetbrains.annotations.NotNull;
  * Models &lt;property&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface Property
-    extends  IdentifiableElement,
-             Comparable<Property>
+public interface Property<T>
+    extends  IdentifiableElement<T>,
+             Comparable<Property<T>>
 {
     /**
      * Retrieves the <i>column_name</i> attribute.
      * @return such information.
      */
     @NotNull
-    String getColumnName();
+    T getColumnName();
 
     /**
      * Retrieves the <i>index</i> attribute.
@@ -63,7 +63,7 @@ public interface Property
      * @return such information.
      */
     @NotNull
-    String getType();
+    T getType();
 
     /**
      * Retrieves whether the property is nullable or not.

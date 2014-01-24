@@ -37,6 +37,7 @@ package org.acmsl.queryj.customsql;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -56,14 +57,14 @@ import org.jetbrains.annotations.Nullable;
  */
 @ThreadSafe
 @SuppressWarnings("unused")
-public class ImplicitDAOResult
-    extends  AbstractResult
+public class ImplicitDAOResult<T>
+    extends  AbstractResult<T>
 {
     private static final long serialVersionUID = -8715430319121603602L;
     /**
      * The <i>DAO</i> attribute.
      */
-    public String m__strDAORef;
+    public T m__strDAORef;
 
     /**
      * Creates a <code>ImplicitDAOResult</code> with given information.
@@ -73,7 +74,7 @@ public class ImplicitDAOResult
      */
     @SuppressWarnings("unused")
     public ImplicitDAOResult(
-        @NotNull final String id, @NotNull final String matches, @NotNull final String daoRef)
+        @NotNull T id, @NotNull final T matches, @NotNull final T daoRef)
     {
         super(id, matches);
         immutableSetDaoRef(daoRef);
@@ -83,7 +84,7 @@ public class ImplicitDAOResult
      * Specifies the <i>daoRef</i> attribute.
      * @param daoRef such value.
      */
-    protected final void immutableSetDaoRef(@NotNull final String daoRef)
+    protected final void immutableSetDaoRef(@NotNull final T daoRef)
     {
         m__strDAORef = daoRef;
     }
@@ -93,7 +94,7 @@ public class ImplicitDAOResult
      * @param daoRef such value.
      */
     @SuppressWarnings("unused")
-    protected void setDaoRef(@NotNull final String daoRef)
+    protected void setDaoRef(@NotNull final T daoRef)
     {
         immutableSetDaoRef(daoRef);
     }
@@ -102,7 +103,7 @@ public class ImplicitDAOResult
      * Retrieves the <i>daoRef</i> attribute.
      * @return such value.
      */
-    public String getDaoRef()
+    public T getDaoRef()
     {
         return m__strDAORef;
     }
@@ -111,8 +112,9 @@ public class ImplicitDAOResult
      * Retrieves the <i>class</i> attribute.
      * @return such value.
      */
+    @Override
     @NotNull
-    public String getClassValue()
+    public T getClassValue()
     {
         throw
             new IllegalArgumentException(
@@ -123,11 +125,10 @@ public class ImplicitDAOResult
      * Retrieves the hashcode.
      * @return such value.
      */
+    @Override
     public int hashCode()
     {
-        return
-            hashCode(
-                getId(), getMatches(), getDaoRef(), getPropertyRefs());
+        return hashCode(getId(), getMatches(), getDaoRef(), getPropertyRefs());
     }
 
     /**
@@ -139,9 +140,9 @@ public class ImplicitDAOResult
      * @return such value.
      */
     protected int hashCode(
-        final String id,
-        final String matches,
-        final String daoRef,
+        final T id,
+        final T matches,
+        final T daoRef,
         final Collection<PropertyRef> propertyRefs)
     {
         return
@@ -173,25 +174,25 @@ public class ImplicitDAOResult
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return <code>true</code> in such case.
      */
+    @SuppressWarnings("unchecked")
     public boolean equals(
         final Object instance,
-        @NotNull final String id,
-        @NotNull final String matches,
-        @NotNull final String daoRef,
-        final Collection propertyRefs)
+        @NotNull final T id,
+        @NotNull final T matches,
+        @NotNull final T daoRef,
+        final Collection<PropertyRef> propertyRefs)
     {
         boolean result = false;
 
         if  (instance instanceof ImplicitDAOResult)
         {
-            @NotNull final ImplicitDAOResult candidate = (ImplicitDAOResult) instance;
+            @NotNull final ImplicitDAOResult<T> candidate = (ImplicitDAOResult<T>) instance;
 
             result =
-                (   (id.equalsIgnoreCase(candidate.getId())
-                 && (matches.equalsIgnoreCase(candidate.getMatches()))
-                 && (daoRef.equalsIgnoreCase(candidate.getDaoRef()))
-                 && ("" + propertyRefs).equals(
-                         "" + candidate.getPropertyRefs())));
+                (   (("" + id).equalsIgnoreCase("" + candidate.getId())
+                 && (("" + matches).equalsIgnoreCase("" + candidate.getMatches()))
+                 && (("" + daoRef).equalsIgnoreCase("" + candidate.getDaoRef()))
+                 && ("" + propertyRefs).equals("" + candidate.getPropertyRefs())));
         }
 
         return result;
@@ -201,6 +202,7 @@ public class ImplicitDAOResult
      * Provides a text information about this instance.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {
@@ -222,10 +224,10 @@ public class ImplicitDAOResult
      */
     @NotNull
     protected String toString(
-        final String id,
-        final String matches,
-        final String daoRef,
-        final Collection propertyRefs)
+        final T id,
+        final T matches,
+        final T daoRef,
+        final Collection<PropertyRef> propertyRefs)
     {
         return
               getClass().getName()
@@ -242,16 +244,17 @@ public class ImplicitDAOResult
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public int compareTo(@Nullable final Result object)
+    public int compareTo(@Nullable final Result<T> object)
         throws  ClassCastException
     {
         final int result;
 
         if  (object instanceof ImplicitDAOResult)
         {
-            @NotNull final ImplicitDAOResult t_OtherInstance =
-                (ImplicitDAOResult) object;
+            @NotNull final ImplicitDAOResult<T> t_OtherInstance =
+                (ImplicitDAOResult<T>) object;
 
             result =
                 new org.apache.commons.lang.builder.CompareToBuilder()

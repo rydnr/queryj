@@ -59,7 +59,7 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class SqlHandler
-    extends AbstractTemplateContextFillHandler<PerCustomSqlTemplateContext,Sql>
+    extends AbstractTemplateContextFillHandler<PerCustomSqlTemplateContext, Sql<String>>
 {
     private static final long serialVersionUID = -481624324619973502L;
 
@@ -89,7 +89,7 @@ public class SqlHandler
      */
     @NotNull
     @Override
-    protected Sql getValue(@NotNull final PerCustomSqlTemplateContext context)
+    protected Sql<String> getValue(@NotNull final PerCustomSqlTemplateContext context)
     {
         return context.getSql();
     }

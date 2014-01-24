@@ -23,27 +23,30 @@
 
  ******************************************************************************
  *
- * Filename: LobHandlingCheckHandler.java
+ * Filename: DatabaseEngineNameHandler.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Resolves "lob_handling_required" placeholders.
+ * Description: Resolves the "engine_name" placeholder in templates.
  *
- * Date: 7/19/12
- * Time: 10:50 AM
+ * Date: 5/19/12
+ * Time: 7:04 PM
  *
  */
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing some project classes.
+ * Importing some project-specific classes.
  */
 import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -52,54 +55,54 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Resolves "lob_handling_required" placeholders.
+ * Resolves the "engine_name" placeholder in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/07/19
+ * @since 2012/05/19
  */
 @ThreadSafe
-@SuppressWarnings("unused")
-public class LobHandlingRepositoryCheckHandler
-    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, Boolean>
+public class EngineHandler
+    extends AbstractTemplateContextFillHandler<QueryJTemplateContext, EngineDecorator>
 {
-    private static final long serialVersionUID = -5971998558261921698L;
+    private static final long serialVersionUID = -3471879288390673346L;
 
     /**
-     * Creates a {@link LobHandlingRepositoryCheckHandler} instance.
-     * @param context the context.
+     * Creates a {@link EngineHandler} for given {@link org.acmsl.queryj.api.QueryJTemplateContext}.
+     * @param context the template context.
      */
-    public LobHandlingRepositoryCheckHandler(@NotNull final QueryJTemplateContext context)
+    public EngineHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Returns "lob_handling_required".
+     * Returns "engine_name".
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return Literals.LOB_HANDLING_REQUIRED;
+        return "engine";
     }
 
     /**
-     * Retrieves the template value for this placeholder.
-     * @return such value.
+     * Retrieves the engine name.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @return such information.
      */
     @NotNull
-    @Override
-    protected Boolean getValue(@NotNull final QueryJTemplateContext context)
+    protected EngineDecorator getValue(@NotNull final QueryJTemplateContext context)
     {
-        return isLobHandlingRequired(context.getMetadataManager());
+        return new EngineDecorator(getEngine(context.getMetadataManager()));
     }
 
     /**
-     * Checks whether processing current table requires taking care of clobs/blobs.
+     * Retrieves the engine name.
      * @param metadataManager the {@link MetadataManager} instance.
      */
-    protected boolean isLobHandlingRequired(@NotNull final MetadataManager metadataManager)
+    @NotNull
+    protected Engine<String> getEngine(@NotNull final MetadataManager metadataManager)
     {
-        return metadataManager.requiresCustomClobHandling();
+        return metadataManager.getEngine();
     }
 }

@@ -161,12 +161,12 @@ public class QueryJCommandWrapper<T>
         }
         else if (List.class.isAssignableFrom(single.getClass()))
         {
-            result = new ArrayList<T>();
+            result = new ArrayList<>();
             result.addAll((List<T>) single);
         }
         else
         {
-            result = new ArrayList<T>(1);
+            result = new ArrayList<>(1);
             result.add((T) single);
         }
 

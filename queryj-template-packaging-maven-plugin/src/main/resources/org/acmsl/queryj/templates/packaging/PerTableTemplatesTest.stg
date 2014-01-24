@@ -300,7 +300,7 @@ public class PerTableTemplatesTest
      * @return the list of SQL items.
      */
     @NotNull
-    protected List\<Sql> defineSql(@NotNull final DataTable values, @NotNull final TableTestHelper helper)
+    protected List\<Sql\<String\>> defineSql(@NotNull final DataTable values, @NotNull final TableTestHelper helper)
     {
         return helper.defineSql(values);
     }
@@ -313,20 +313,22 @@ public class PerTableTemplatesTest
     @And("^the following query parameters:$")
     public void defineParameters(@NotNull final DataTable values)
     {
-        setParameters(defineParameters(values, TableTestHelper.getInstance()));
+        setParameters(defineParameters(values, getSqlList(), TableTestHelper.getInstance()));
     }
 
     /**
      * Defines SQL parameters via cucumber features.
      * @param values the SQL parameters in Cucumber table format.
+     * @param sqlList the list of {@link Sql queries}.
      * @param helper the {@link TableTestHelper} instance.
      */
     @NotNull
-    protected Map\<String, List\<Parameter>\> defineParameters(
+    protected Map\<String, List\<Parameter\<String>\>> defineParameters(
         @NotNull final DataTable values,
+        @NotNull final List\<Sql\<String>\> sqlList,
         @NotNull final TableTestHelper helper)
     {
-        return helper.defineParameters(values);
+        return helper.defineParameters(values, sqlList);
     }
 
     /**

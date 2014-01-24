@@ -65,13 +65,13 @@ public class CucumberSqlResultDAO
     /**
      * The wrapped result.
      */
-    private Result m__CustomResult;
+    private Result<String> m__CustomResult;
 
     /**
      * Creates a DAO wrapping given result.
      * @param result such result.
      */
-    public CucumberSqlResultDAO(@NotNull final Result result)
+    public CucumberSqlResultDAO(@NotNull final Result<String> result)
     {
         immutableSetResult(result);
     }
@@ -80,7 +80,7 @@ public class CucumberSqlResultDAO
      * Specifies the custom result.
      * @param result such result.
      */
-    protected final void immutableSetResult(@NotNull final Result result)
+    protected final void immutableSetResult(@NotNull final Result<String> result)
     {
         this.m__CustomResult = result;
     }
@@ -90,7 +90,7 @@ public class CucumberSqlResultDAO
      * @param result such result.
      */
     @SuppressWarnings("unused")
-    protected void setResult(@NotNull final Result result)
+    protected void setResult(@NotNull final Result<String> result)
     {
         immutableSetResult(result);
     }
@@ -100,7 +100,7 @@ public class CucumberSqlResultDAO
      * @return such result.
      */
     @NotNull
-    protected Result getResult()
+    protected Result<String> getResult()
     {
         return m__CustomResult;
     }
@@ -112,7 +112,7 @@ public class CucumberSqlResultDAO
      */
     @Nullable
     @Override
-    public Result findByPrimaryKey(@NotNull final String id)
+    public Result<String> findByPrimaryKey(@NotNull final String id)
     {
         return findByPrimaryKey(id, getResult());
     }
@@ -124,9 +124,9 @@ public class CucumberSqlResultDAO
      * @return such result.
      */
     @Nullable
-    protected Result findByPrimaryKey(@NotNull final String id, @NotNull final Result customResult)
+    protected Result<String> findByPrimaryKey(@NotNull final String id, @NotNull final Result<String> customResult)
     {
-        @Nullable Result result = null;
+        @Nullable Result<String> result = null;
 
         if (id.equals(customResult.getId()))
         {
@@ -138,21 +138,21 @@ public class CucumberSqlResultDAO
 
     @Nullable
     @Override
-    public Result findSingleMatch(@NotNull final String table)
+    public Result<String> findSingleMatch(@NotNull final String table)
     {
         return null;
     }
 
     @Nullable
     @Override
-    public Result findMultipleMatch(@NotNull final String table)
+    public Result<String> findMultipleMatch(@NotNull final String table)
     {
         return null;
     }
 
     @Nullable
     @Override
-    public Result findBySqlId(@NotNull final String sqlId)
+    public Result<String> findBySqlId(@NotNull final String sqlId)
     {
         return null;
     }
@@ -164,7 +164,7 @@ public class CucumberSqlResultDAO
      */
     @NotNull
     @Override
-    public List<Result> findByType(@NotNull final String type)
+    public List<Result<String>> findByType(@NotNull final String type)
     {
         return findByType(type, getResult());
     }
@@ -176,9 +176,9 @@ public class CucumberSqlResultDAO
      * @return the list of results.
      */
     @NotNull
-    protected List<Result> findByType(@NotNull final String type, @NotNull final Result customResult)
+    protected List<Result<String>> findByType(@NotNull final String type, @NotNull final Result<String> customResult)
     {
-        @NotNull final List<Result> result = new ArrayList<Result>(1);
+        @NotNull final List<Result<String>> result = new ArrayList<>(1);
 
         if (type.equals(customResult.getClassValue()))
         {
@@ -193,7 +193,7 @@ public class CucumberSqlResultDAO
      */
     @NotNull
     @Override
-    public List<Result> findAll()
+    public List<Result<String>> findAll()
     {
         return findAll(getResult());
     }
@@ -204,9 +204,9 @@ public class CucumberSqlResultDAO
      * @return a list of just that element.
      */
     @NotNull
-    protected List<Result> findAll(@NotNull final Result customResult)
+    protected List<Result<String>> findAll(@NotNull final Result<String> customResult)
     {
-        @NotNull final List<Result> result = new ArrayList<Result>(1);
+        @NotNull final List<Result<String>> result = new ArrayList<>(1);
 
         result.add(customResult);
 

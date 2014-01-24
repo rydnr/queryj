@@ -67,11 +67,6 @@ public class DecorationUtils
                 Utils
 {
     /**
-     * An empty cached String array.
-     */
-    public static final String[] EMPTY_STRING_ARRAY = new String[0];
-
-    /**
      * Singleton implemented to avoid the double-checked locking.
      */
     private static class DecorationUtilsSingletonContainer
@@ -102,6 +97,7 @@ public class DecorationUtils
      * @param value the value.
      * @return the alternate version of the value.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String upperCase(@NotNull final String value)
     {
@@ -167,39 +163,6 @@ public class DecorationUtils
         return stringUtils.capitalize(value.toLowerCase(Locale.US));
     }
 
-    /**
-     * Normalizes given value.
-     * @param value the value.
-     * @return the normalized value.
-     */
-    @NotNull
-    public String normalizeLowercase(@NotNull final String value)
-    {
-        return normalize(value).toLowerCase(Locale.US);
-    }
-    
-    /**
-     * Normalizes given value, in upper case.
-     * @param value the value.
-     * @return the normalized value.
-     */
-    @NotNull
-    public String normalizeUppercase(@NotNull final String value)
-    {
-        return normalize(value).toUpperCase(Locale.US);
-    }
-    
-    /**
-     * Normalizes given value, in upper case.
-     * @param value the value.
-     * @return the normalized value.
-     */
-    @NotNull
-    public String softNormalizeUppercase(@NotNull final String value)
-    {
-        return softNormalize(value).toUpperCase(Locale.US);
-    }
-    
     /**
      * Normalizes given value.
      * @param value the value.

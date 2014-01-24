@@ -54,9 +54,9 @@ import java.util.List;
  *    matches (single | multiple) #REQUIRED>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface Sql
-    extends  IdentifiableElement,
-             Comparable<Sql>
+public interface Sql<T>
+    extends  IdentifiableElement<T>,
+             Comparable<Sql<T>>
 {
     /**
      * The <b>select</b> value for <i>type</i> attribute.
@@ -135,42 +135,42 @@ public interface Sql
      * @return such value.
      */
     @NotNull
-    String getDescription();
+    T getDescription();
 
     /**
      * Retrieves the <i>dao</i> attribute.
      * @return such value.
      */
     @Nullable
-    String getDao();
+    T getDao();
 
     /**
      * Retrieves the <i>repositoryScope</i> attribute.
      * @return such value.
      */
     @Nullable
-    String getRepositoryScope();
+    T getRepositoryScope();
 
     /**
      * Retrieves the <i>name</i> attribute.
      * @return such value.
      */
     @NotNull
-    String getName();
+    T getName();
 
     /**
      * Retrieves the <i>type</i> attribute.
      * @return such value.
      */
     @NotNull
-    String getType();
+    T getType();
 
     /**
      * Retrieves the <i>implementation</i> attribute.
      * @return such value.
      */
     @Nullable
-    String getImplementation();
+    T getImplementation();
 
     /**
      * Retrieves the <i>validate</i> attribute.
@@ -196,7 +196,7 @@ public interface Sql
      * @return such value.
      */
     @NotNull
-    String getValue();
+    T getValue();
 
     /**
      * Retrieves the &lt;parameter-ref&gt; elements.

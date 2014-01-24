@@ -53,7 +53,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class StatementFlagsRefElement
-    extends  AbstractIdElement
+    extends  AbstractIdElement<String>
     implements StatementFlagsRef
 {
     private static final long serialVersionUID = 4902641145472579846L;
@@ -61,7 +61,6 @@ public class StatementFlagsRefElement
     /**
      * Creates a StatementFlagsRefElement with given information.
      * @param id the <i>id</i> attribute.
-     * @precondition id != null
      */
     public StatementFlagsRefElement(@NotNull final String id)
     {

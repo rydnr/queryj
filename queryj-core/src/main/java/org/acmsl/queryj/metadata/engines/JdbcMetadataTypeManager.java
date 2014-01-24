@@ -1476,7 +1476,7 @@ public class JdbcMetadataTypeManager
      * Clob.
      */
     @Override
-    public boolean isClob(@NotNull final String dataType)
+    public <T> boolean isClob(@NotNull final T dataType)
     {
         return "Clob".equals(dataType);
     }

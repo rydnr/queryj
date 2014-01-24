@@ -113,6 +113,6 @@ public class DAOSubpackageNameHandler
         @NotNull final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveDAOPackage(context.getBasePackageName(), metadataManager.getEngineName());
+            packageUtils.retrieveDAOPackage(context.getBasePackageName(), metadataManager.getEngine().getName());
     }
 }

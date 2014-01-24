@@ -56,7 +56,7 @@ package org.acmsl.queryj.customsql;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface ConnectionFlags
-    extends  IdentifiableElement,
+    extends  IdentifiableElement<String>,
              java.lang.Comparable<ConnectionFlags>
 {
     /**

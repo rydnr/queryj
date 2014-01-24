@@ -86,7 +86,7 @@ public class SqlXmlParserPropertyDAO
      */
     @Override
     @Nullable
-    public Property findByPrimaryKey(@NotNull final String id)
+    public Property<String> findByPrimaryKey(@NotNull final String id)
     {
         return findByPrimaryKey(id, getSqlXmlParser());
     }
@@ -98,7 +98,7 @@ public class SqlXmlParserPropertyDAO
      * @return the {@link Property}, or <code>null</code> if not found.
      */
     @Nullable
-    public Property findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
+    public Property<String> findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
     {
         return findById(id, Property.class, parser.getProperties());
     }
@@ -111,7 +111,7 @@ public class SqlXmlParserPropertyDAO
      */
     @NotNull
     @Override
-    public List<Property> findByResult(@NotNull final String resultId)
+    public List<Property<String>> findByResult(@NotNull final String resultId)
     {
         return findByResult(resultId, getSqlXmlParser());
     }
@@ -124,16 +124,16 @@ public class SqlXmlParserPropertyDAO
      * @return the list of properties associated to given {@link org.acmsl.queryj.customsql.Result}.
      */
     @NotNull
-    protected List<Property> findByResult(@NotNull final String resultId, @NotNull final SqlXmlParser parser)
+    protected List<Property<String>> findByResult(@NotNull final String resultId, @NotNull final SqlXmlParser parser)
     {
-        List<Property> result = new ArrayList<Property>(8);
+        @NotNull final List<Property<String>> result = new ArrayList<>(8);
 
-        for (@Nullable Result t_Result : parser.getResults())
+        for (@Nullable final Result<String> t_Result : parser.getResults())
         {
             if (   (t_Result != null)
                 && (resultId.equalsIgnoreCase(t_Result.getId())))
             {
-                for (@Nullable PropertyRef t_PropertyRef : t_Result.getPropertyRefs())
+                for (@Nullable final PropertyRef t_PropertyRef : t_Result.getPropertyRefs())
                 {
                     if (t_PropertyRef != null)
                     {
@@ -151,9 +151,9 @@ public class SqlXmlParserPropertyDAO
      * @return such list.
      */
     @NotNull
-    public List<Property> findAll()
+    public List<Property<String>> findAll()
     {
-        return this.findAll(getSqlXmlParser(), Property.class);
+        return super.findAll(getSqlXmlParser(), Property.class);
     }
 
     /**

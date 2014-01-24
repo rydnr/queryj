@@ -52,7 +52,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface PropertyDecorator
-    extends  Property,
+    extends  Property<DecoratedString>,
              Decorator
 {
     /**
@@ -60,15 +60,9 @@ public interface PropertyDecorator
      * @return such instance.
      */
     @NotNull
-    Property getProperty();
+    Property<String> getProperty();
 
     /**
-     * Retrieves the name, in lower case.
-     * @return such information.
-     */
-    @NotNull
-    String getNameLowercased();
-
     /**
      * Retrieves whether the type means the attribute is a
      * number smaller than an int.
@@ -81,12 +75,13 @@ public interface PropertyDecorator
      * @return such information.
      */
     @NotNull
-    public String getObjectType();
+    public DecoratedString getObjectType();
 
     /**
      * Retrieves the Java type.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     @NotNull
-    public String getJavaType();
+    public DecoratedString getJavaType();
 }

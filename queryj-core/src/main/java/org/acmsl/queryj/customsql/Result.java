@@ -47,9 +47,9 @@ import java.util.List;
  * Models &lt;result&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface Result
-    extends  IdentifiableElement,
-             java.lang.Comparable<Result>
+public interface Result<T>
+    extends  IdentifiableElement<T>,
+             java.lang.Comparable<Result<T>>
 {
     /**
      * The <b>none</b> value for <i>matches</i> attribute.
@@ -73,14 +73,14 @@ public interface Result
      * @return such value.
      */
     @Nullable
-    String getClassValue();
+    T getClassValue();
 
     /**
      * Retrieves the <i>matches</i> attribute.
      * @return such value.
      */
     @NotNull
-    String getMatches();
+    T getMatches();
 
     /**
      * Retrieves the &lt;property-ref&gt; elements.

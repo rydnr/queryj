@@ -46,6 +46,7 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -202,7 +203,7 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final DAOTemplateUtils daoTemplateUtils)
       throws  QueryJBuildException
     {
-        @NotNull final List<T> t_lTemplates = new ArrayList<T>();
+        @NotNull final List<T> t_lTemplates = new ArrayList<>();
 
         @Nullable T t_Template;
 
@@ -239,7 +240,7 @@ public abstract class BasePerTableTemplateBuildHandler
                         }
                         if (t_lStaticContent == null)
                         {
-                            t_lStaticContent = new ArrayList<Row<String>>(0);
+                            t_lStaticContent = new ArrayList<>(0);
                         }
                         storeCachedStaticContent(t_lStaticContent, parameters, t_Table.getName());
                     }
@@ -251,7 +252,7 @@ public abstract class BasePerTableTemplateBuildHandler
                             customSqlProvider,
                             decoratorFactory,
                             retrievePackage(
-                                t_Table.getName(), metadataManager.getEngineName(), parameters),
+                                t_Table.getName(), metadataManager.getEngine(), parameters),
                             projectPackage,
                             repository,
                             header,
@@ -279,19 +280,19 @@ public abstract class BasePerTableTemplateBuildHandler
     /**
      * Retrieves the package name from the attribute map.
      * @param tableName the table name.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @param parameters the parameter map.
      * @return the package name.
      * @throws QueryJBuildException if the package retrieval process if faulty.
      */
     protected String retrievePackage(
-        @NotNull final String tableName, @NotNull final String engineName, @NotNull final QueryJCommand parameters)
+        @NotNull final String tableName, @NotNull final Engine<String> engine, @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         return
             retrievePackage(
                 tableName,
-                engineName,
+                engine,
                 retrieveProjectPackage(parameters),
                 PackageUtils.getInstance());
     }
@@ -299,14 +300,14 @@ public abstract class BasePerTableTemplateBuildHandler
     /**
      * Retrieves the package name.
      * @param tableName the table name.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @param projectPackage the project package.
      * @param packageUtils the {@link PackageUtils} instance.
      * @return the package name.
      */
     protected abstract String retrievePackage(
         @NotNull final String tableName,
-        @NotNull final String engineName,
+        @NotNull final Engine<String> engine,
         @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils) throws QueryJBuildException;
 
@@ -441,7 +442,7 @@ public abstract class BasePerTableTemplateBuildHandler
 
                 if (result == null)
                 {
-                    result = new ArrayList<Row<String>>(0);
+                    result = new ArrayList<>(0);
                 }
                 storeCachedStaticContent(result, parameters, tableName);
             }

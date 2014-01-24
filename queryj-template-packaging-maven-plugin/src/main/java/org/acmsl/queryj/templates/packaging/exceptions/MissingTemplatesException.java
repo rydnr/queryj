@@ -60,6 +60,8 @@ import org.checkthread.annotations.ThreadSafe;
 public class MissingTemplatesException
     extends QueryJNonCheckedException
 {
+    private static final long serialVersionUID = -9045757439117602937L;
+
     /**
      * Creates a new instance.
      * @param templateType the type of template.

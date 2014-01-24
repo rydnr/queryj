@@ -46,6 +46,8 @@ import cucumber.api.DataTable;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.ParameterElement;
+import org.acmsl.queryj.customsql.ParameterRef;
+import org.acmsl.queryj.customsql.ParameterRefElement;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
@@ -63,6 +65,7 @@ import org.acmsl.queryj.tools.ant.AntTablesElement;
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.junit.Assert;
 
 /*
  * Importing JDK classes.
@@ -473,9 +476,9 @@ public class TableTestHelper
      * @return a Map of DAO-name, Sql pairs.
      */
     @NotNull
-    public List<Sql> defineSql(@NotNull final DataTable sqlInfo)
+    public List<Sql<String>> defineSql(@NotNull final DataTable sqlInfo)
     {
-        @NotNull final List<Sql> result = new ArrayList<>();
+        @NotNull final List<Sql<String>> result = new ArrayList<>();
 
         for (@NotNull final Map<String, String> sqlRow: sqlInfo.asMaps())
         {
@@ -485,7 +488,7 @@ public class TableTestHelper
             @NotNull final String type = sqlRow.get("type");
             @NotNull final String value = sqlRow.get(VALUE);
 
-            @NotNull final SqlElement sql = new SqlElement(id, dao, name, type, "all", false, false);
+            @NotNull final SqlElement<String> sql = new SqlElement<>(id, dao, name, type, "all", false, false, "Test " + id);
             sql.setValue(value);
 
             result.add(sql);
@@ -500,27 +503,62 @@ public class TableTestHelper
      * @return a Map of DAO-name, Sql pairs.
      */
     @NotNull
-    public Map<String, List<Parameter>> defineParameters(@NotNull final DataTable parameterInfo)
+    public Map<String, List<Parameter<String>>> defineParameters(
+        @NotNull final DataTable parameterInfo, @NotNull final List<Sql<String>> sqlList)
     {
-        @NotNull final Map<String, List<Parameter>> result = new HashMap<>();
+        @NotNull final Map<String, List<Parameter<String>>> result = new HashMap<>();
 
         for (@NotNull final Map<String, String> sqlRow: parameterInfo.asMaps())
         {
             @NotNull final String id = sqlRow.get("id");
-            @NotNull final String sql = sqlRow.get("sql");
+            @NotNull final String sqlRef = sqlRow.get("sql");
             @NotNull final String index = sqlRow.get(Literals.INDEX);
             @NotNull final String name = sqlRow.get("name");
             @NotNull final String type = sqlRow.get("type");
 
-            @NotNull final ParameterElement parameter = new ParameterElement(id, Integer.parseInt(index), name, type, null);
+            @NotNull final ParameterElement<String> parameter =
+                new ParameterElement<>(id, Integer.parseInt(index), name, type, null);
 
-            @Nullable List<Parameter> parameters = result.get(sql);
+            @Nullable List<Parameter<String>> parameters = result.get(sqlRef);
             if (parameters == null)
             {
                 parameters = new ArrayList<>();
-                result.put(sql, parameters);
+                result.put(sqlRef, parameters);
             }
             parameters.add(parameter);
+            @Nullable final Sql<String> sql = retrieveSql(sqlList, sqlRef);
+            if (sql != null)
+            {
+                @NotNull final List<ParameterRef> parameterRefs = sql.getParameterRefs();
+                parameterRefs.add(new ParameterRefElement(parameter.getId()));
+            }
+            else
+            {
+                Assert.fail("SQL with id " + sqlRef + " not found");
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the SQL matching given id.
+     * @param sqlList the list of {@link Sql}.
+     * @param sqlRef the SQL reference.
+     * @return the {@link Sql} matching given reference.
+     */
+    @Nullable Sql<String> retrieveSql(@NotNull final List<Sql<String>> sqlList, @NotNull final String sqlRef)
+    {
+        @Nullable Sql<String> result = null;
+
+        for (@Nullable final Sql<String> sql : sqlList)
+        {
+            if (   (sql != null)
+                && (sqlRef.equalsIgnoreCase(sqlRef)))
+            {
+                result = sql;
+                break;
+            }
         }
 
         return result;

@@ -89,6 +89,6 @@ public class TemplateFactoryTemplateFactory
     public TemplateFactoryTemplate<DefaultTemplatePackagingContext> createTemplate(
         @NotNull final DefaultTemplatePackagingContext context)
     {
-        return new TemplateFactoryTemplate<DefaultTemplatePackagingContext>(context);
+        return new TemplateFactoryTemplate<>(context);
     }
 }

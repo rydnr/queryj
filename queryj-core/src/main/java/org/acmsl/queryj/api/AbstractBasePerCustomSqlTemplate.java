@@ -103,7 +103,7 @@ public abstract class AbstractBasePerCustomSqlTemplate<C extends PerCustomSqlTem
      */
     @NotNull
     protected String buildHeader(
-        final String templateName, @NotNull final Sql sql)
+        final String templateName, @NotNull final Sql<String> sql)
     {
         return Literals.GENERATING + templateName + " for " + sql.getName();
     }
@@ -123,7 +123,7 @@ public abstract class AbstractBasePerCustomSqlTemplate<C extends PerCustomSqlTem
     {
         @NotNull final InvalidTemplateException result;
 
-        @NotNull final Sql sql = context.getSql();
+        @NotNull final Sql<String> sql = context.getSql();
 
         @Nullable final String aux = sql.getDao();
 

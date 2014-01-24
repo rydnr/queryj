@@ -66,7 +66,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class StatementFlagsElement
-    extends  AbstractIdElement
+    extends  AbstractIdElement<String>
     implements StatementFlags
 {
     private static final long serialVersionUID = 746837714725279600L;

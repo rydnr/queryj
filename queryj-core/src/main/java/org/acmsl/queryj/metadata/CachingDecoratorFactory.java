@@ -143,7 +143,7 @@ public class CachingDecoratorFactory
     @SuppressWarnings("unused")
     @NotNull
     public PropertyDecorator createDecorator(
-        @NotNull final Property property, @NotNull final MetadataManager metadataManager)
+        @NotNull final Property<String> property, @NotNull final MetadataManager metadataManager)
     {
         return new CachingPropertyDecorator(property, metadataManager);
     }
@@ -159,7 +159,7 @@ public class CachingDecoratorFactory
     @NotNull
     @Override
     public ResultDecorator createDecorator(
-        @NotNull final Result result,
+        @NotNull final Result<String> result,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
@@ -178,7 +178,7 @@ public class CachingDecoratorFactory
     @NotNull
     @Override
     public SqlDecorator createDecorator(
-        @NotNull final Sql sql,
+        @NotNull final Sql<String> sql,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
@@ -198,7 +198,7 @@ public class CachingDecoratorFactory
     @NotNull
     @Override
     public ParameterDecorator createDecorator(
-        @NotNull final Parameter parameter, @NotNull final MetadataManager metadataManager)
+        @NotNull final Parameter<String> parameter, @NotNull final MetadataManager metadataManager)
     {
         return new CachingParameterDecorator(parameter, metadataManager.getMetadataTypeManager());
     }
@@ -216,8 +216,8 @@ public class CachingDecoratorFactory
     @NotNull
     @Override
     public PropertyDecorator createDecorator(
-        @NotNull final Property property,
-        @NotNull final Result result,
+        @NotNull final Property<String> property,
+        @NotNull final Result<String> result,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {

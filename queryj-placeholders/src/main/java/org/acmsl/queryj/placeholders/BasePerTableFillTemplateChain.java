@@ -108,67 +108,51 @@ public class BasePerTableFillTemplateChain
     @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final PerTableTemplateContext context)
     {
-        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(12);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<>(12);
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, CustomResultsHandler, List<Result>>(
-                    new CustomResultsHandler(context)));
+            new TemplateContextFillAdapterHandler<>(
+                new CustomResultsHandler(context)));
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, DAOClassNameHandler, DecoratedString>(
+            new TemplateContextFillAdapterHandler<>(
                     new DAOClassNameHandler(context)));
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, DAOImplementationClassNameHandler, DecoratedString>(
+            new TemplateContextFillAdapterHandler<>(
                     new DAOImplementationClassNameHandler(context)));
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, DAOFactoryClassNameHandler, DecoratedString>(
+            new TemplateContextFillAdapterHandler<>(
                     new DAOFactoryClassNameHandler(context)));
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, ForeignKeyListHandler,List<ForeignKey<String>>>(
+            new TemplateContextFillAdapterHandler<>(
                     new ForeignKeyListHandler(context)));
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, LobHandlingTableCheckHandler,Boolean>(
-                    new LobHandlingTableCheckHandler(context)));
-
-        result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, NonPrimaryKeyAttributesHandler,List<Attribute<String>>>(
+            new TemplateContextFillAdapterHandler<>(
                     new NonPrimaryKeyAttributesHandler(context)));
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, PrimaryKeyHandler,List<Attribute<String>>>(
+            new TemplateContextFillAdapterHandler<>(
                     new PrimaryKeyHandler(context)));
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, TableHandler,TableDecorator>(
+            new TemplateContextFillAdapterHandler<>(
                     new TableHandler(context)));
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, TableNameHandler, DecoratedString>(
+            new TemplateContextFillAdapterHandler<>(
                     new TableNameHandler(context)));
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, ValueObjectNameHandler, DecoratedString>(
+            new TemplateContextFillAdapterHandler<>(
                     new ValueObjectNameHandler(context)));
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerTableTemplateContext, TableAttributeTypeImportsHandler,List<String>>(
-                    new TableAttributeTypeImportsHandler(context)));
+            new TemplateContextFillAdapterHandler<>(
+                new TableAttributeTypeImportsHandler(context)));
 
         return result;
     }

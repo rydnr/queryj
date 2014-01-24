@@ -58,7 +58,7 @@ sourceImpl(defs, C) ::= <<
   description=[ "Implements {@link TemplateChainProvider} to generate", "the default templates." ],
   description_oneline=false,
   filename=C.class_name,
-  template="org/acmsl/templates/packaging/DefaultTemplateChainProvider.stg",
+  template="org/acmsl/queryj/templates/packaging/DefaultTemplateChainProvider.stg",
   C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates")>
 
@@ -102,7 +102,7 @@ class(defs, C) ::= <<
 /**
  * Generator for {@link DefaultTemplateChainProvider}s.
 <class_common_javadoc(
-  template="org/acmsl/templates/packaging/DefaultTemplateChainProvider.stg",
+  template="org/acmsl/queryj/templates/packaging/DefaultTemplateChainProvider.stg",
   timestamp=C.timestamp)>
  */
 @ThreadSafe

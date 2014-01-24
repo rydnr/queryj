@@ -101,21 +101,21 @@ public class PropertyElementFactory
         @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable PropertyElement result;
+        @Nullable final PropertyElement<String> result;
 
-        String t_strId = attributes.getValue("id");
+        @Nullable final String t_strId = attributes.getValue("id");
 
-        String t_strColumnName =
+        @Nullable final String t_strColumnName =
             attributes.getValue("column_name");
 
-        int t_iIndex =
+        final int t_iIndex =
             conversionUtils.toInt(attributes.getValue(Literals.INDEX));
 
         String t_strType = attributes.getValue("type");
 
-        String t_strNullable = attributes.getValue("nullable");
+        @Nullable final String t_strNullable = attributes.getValue("nullable");
 
-        boolean t_bNullable;
+        final boolean t_bNullable;
 
         if (t_strNullable != null)
         {
@@ -134,7 +134,7 @@ public class PropertyElementFactory
         }
 
         result =
-            new PropertyElement(
+            new PropertyElement<>(
                 t_strId,
                 t_strColumnName,
                 t_iIndex,
@@ -153,7 +153,7 @@ public class PropertyElementFactory
 
         if (type.length() > 0)
         {
-            String t_strInitialCharacter = type.substring(0, 1);
+            @NotNull final String t_strInitialCharacter = type.substring(0, 1);
 
             result =
                 t_strInitialCharacter.equals(t_strInitialCharacter.toUpperCase(Locale.US));

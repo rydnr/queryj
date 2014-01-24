@@ -68,7 +68,7 @@ public class CannotCreateCustomResultTemplateException
      * @param result the custom result.
      * @param cause the cause.
      */
-    public CannotCreateCustomResultTemplateException(@NotNull final Result result, @NotNull final Throwable cause)
+    public CannotCreateCustomResultTemplateException(@NotNull final Result<?> result, @NotNull final Throwable cause)
     {
         super("cannot.create.custom-result.template", new Object[] { result.getId() }, cause);
     }

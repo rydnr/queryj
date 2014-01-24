@@ -70,21 +70,21 @@ public interface SqlXmlParser
      * @return such collection.
      */
     @NotNull
-    List<Sql> getQueries();
+    List<Sql<String>> getQueries();
 
     /**
      * Retrieves the sql.xml {@link Result} collection.
      * @return such collection.
      */
     @NotNull
-    List<Result> getResults();
+    List<Result<String>> getResults();
 
     /**
      * Retrieves the sql.xml {@link Parameter} collection.
      * @return such collection.
      */
     @NotNull
-    List<Parameter> getParameters();
+    List<Parameter<String>> getParameters();
 
     /**
      * Retrieves the sql.xml {@link Parameter} collection.
@@ -98,7 +98,7 @@ public interface SqlXmlParser
      * @return such collection.
      */
     @NotNull
-    List<Property> getProperties();
+    List<Property<String>> getProperties();
 
     /**
      * Retrieves the sql.xml {@link PropertyRef} collection.
@@ -141,7 +141,7 @@ public interface SqlXmlParser
      * @param result the <code>Result</code> instance.
      */
     @SuppressWarnings("unused")
-    void addResult(@NotNull final String id, @NotNull final Result result);
+    void addResult(@NotNull final String id, @NotNull final Result<String> result);
 
     /**
      * Adds a new property.

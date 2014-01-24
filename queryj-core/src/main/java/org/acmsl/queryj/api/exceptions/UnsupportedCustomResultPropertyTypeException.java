@@ -73,9 +73,9 @@ public class UnsupportedCustomResultPropertyTypeException
      * @param cause the cause.
      */
     public UnsupportedCustomResultPropertyTypeException(
-        @NotNull final Property property,
-        @NotNull final Result result,
-        @NotNull final Sql sql,
+        @NotNull final Property<?> property,
+        @NotNull final Result<?> result,
+        @NotNull final Sql<?> sql,
         @NotNull final Throwable cause)
     {
         super(

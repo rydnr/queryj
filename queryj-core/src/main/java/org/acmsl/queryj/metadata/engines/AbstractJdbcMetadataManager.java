@@ -155,18 +155,7 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * The engine name.
      */
-    private String m__strEngineName;
-
-    /**
-     * The engine version.
-     */
-    private String m__strEngineVersion;
-
-    /**
-     * The identifier quote string.
-     */
-    private String m__strQuote;
-
+    private Engine<String> m__Engine;
 
     /**
      * Creates a new {@link AbstractJdbcMetadataManager} with given information.
@@ -190,9 +179,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param disableTableExtraction whether to disable table extraction or not.
      * @param lazyTableExtraction whether to retrieve table information on demand.
      * @param caseSensitive whether it's case sensitive.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
+     * @param engine the engine.
      */
     protected AbstractJdbcMetadataManager(
         @NotNull final String name,
@@ -205,9 +192,7 @@ public abstract class AbstractJdbcMetadataManager
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean caseSensitive,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote)
+        @NotNull final Engine<String> engine)
     {
         this(name);
         immutableSetMetaData(metadata);
@@ -219,9 +204,7 @@ public abstract class AbstractJdbcMetadataManager
         immutableSetDisableTableExtraction(disableTableExtraction);
         immutableSetLazyTableExtraction(lazyTableExtraction);
         immutableSetCaseSensitive(caseSensitive);
-        immutableSetEngineName(engineName);
-        immutableSetEngineVersion(engineVersion);
-        immutableSetQuote(quote);
+        immutableSetEngine(engine);
     }
 
     /**
@@ -286,6 +269,7 @@ public abstract class AbstractJdbcMetadataManager
      * Retrieves the table names.
      * @return such names.
      */
+    @Override
     @NotNull
     public List<String> getTableNames()
     {
@@ -343,7 +327,7 @@ public abstract class AbstractJdbcMetadataManager
 
         if (result == null)
         {
-            result = new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>();
+            result = new ArrayList<>();
             setTables(result);
         }
 
@@ -390,7 +374,7 @@ public abstract class AbstractJdbcMetadataManager
 
         if (result == null)
         {
-            result = new HashMap<String, List<Attribute<String>>>(0);
+            result = new HashMap<>(0);
             setColumns(result);
         }
 
@@ -586,22 +570,22 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
+     * Specifies the engine.
+     * @param engine the new engine.
      */
-    protected final void immutableSetEngineName(@NotNull final String engineName)
+    protected final void immutableSetEngine(@NotNull final Engine<String> engine)
     {
-        m__strEngineName = engineName;
+        m__Engine = engine;
     }
 
     /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
+     * Specifies the engine.
+     * @param engine the new engine.
      */
     @SuppressWarnings("unused")
-    protected void setEngineName(@NotNull final String engineName)
+    protected void setEngineName(@NotNull final Engine<String> engine)
     {
-        immutableSetEngineName(engineName);
+        immutableSetEngine(engine);
     }
 
     /**
@@ -609,69 +593,9 @@ public abstract class AbstractJdbcMetadataManager
      * @return such information.
      */
     @NotNull
-    public String getEngineName()
+    public Engine<String> getEngine()
     {
-        return m__strEngineName;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    private void immutableSetEngineVersion(@NotNull final String engineVersion)
-    {
-        m__strEngineVersion = engineVersion;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    @SuppressWarnings("unused")
-    protected void setEngineVersion(@NotNull final String engineVersion)
-    {
-        immutableSetEngineVersion(engineVersion);
-    }
-
-    /**
-     * Retrieves the engine version.
-     * @return such information.
-     */
-    @NotNull
-    @SuppressWarnings("unused")
-    public String getEngineVersion()
-    {
-        return m__strEngineVersion;
-    }
-
-    /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    protected void immutableSetQuote(@NotNull final String quote)
-    {
-        m__strQuote = quote;
-    }
-
-    /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    @SuppressWarnings("unused")
-    protected void setQuote(@NotNull final String quote)
-    {
-        immutableSetQuote(quote);
-    }
-
-    /**
-     * Retrieves the identifier quote string.
-     * @return such identifier.
-     */
-    @NotNull
-    @SuppressWarnings("unused")
-    public String getQuote()
-    {
-        return m__strQuote;
+        return m__Engine;
     }
 
     /**
@@ -851,7 +775,7 @@ public abstract class AbstractJdbcMetadataManager
 
         if (t_lTableNames == null)
         {
-            t_lTableNames = new ArrayList<String>();
+            t_lTableNames = new ArrayList<>();
         }
 
         @NotNull final List<TableIncompleteValueObject> t_lTables =
@@ -907,7 +831,7 @@ public abstract class AbstractJdbcMetadataManager
     @NotNull
     protected List<Attribute<String>> toAttributeList(@NotNull final List<AttributeIncompleteValueObject> list)
     {
-        @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>(list.size());
+        @NotNull final List<Attribute<String>> result = new ArrayList<>(list.size());
 
         for (@Nullable final AttributeIncompleteValueObject t_Attribute : list)
         {
@@ -924,7 +848,7 @@ public abstract class AbstractJdbcMetadataManager
     @NotNull
     protected List<ForeignKey<String>> toForeignKeyList(@NotNull final List<ForeignKeyIncompleteValueObject> list)
     {
-        @NotNull final List<ForeignKey<String>> result = new ArrayList<ForeignKey<String>>(list.size());
+        @NotNull final List<ForeignKey<String>> result = new ArrayList<>(list.size());
 
         for (@Nullable final ForeignKey<String> t_Item : list)
         {
@@ -943,7 +867,7 @@ public abstract class AbstractJdbcMetadataManager
         @NotNull final Collection<TableIncompleteValueObject> tables)
     {
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> result =
-            new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(tables.size());
+            new ArrayList<>(tables.size());
 
         for (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : tables)
         {
@@ -1001,7 +925,7 @@ public abstract class AbstractJdbcMetadataManager
     @NotNull
     protected List<Attribute<String>> cloneAttributes(@NotNull final List<Attribute<String>> attributes)
     {
-        @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>(attributes.size());
+        @NotNull final List<Attribute<String>> result = new ArrayList<>(attributes.size());
 
         for (@Nullable final Attribute<String> t_Attribute : attributes)
         {
@@ -1042,7 +966,7 @@ public abstract class AbstractJdbcMetadataManager
     protected List<ForeignKey<String>> cloneForeignKeys(
         @NotNull final List<ForeignKey<String>> foreignKeys)
     {
-        @NotNull final List<ForeignKey<String>> result = new ArrayList<ForeignKey<String>>(foreignKeys.size());
+        @NotNull final List<ForeignKey<String>> result = new ArrayList<>(foreignKeys.size());
 
         for (@Nullable final ForeignKey<String> t_ForeignKey : foreignKeys)
         {
@@ -1084,7 +1008,7 @@ public abstract class AbstractJdbcMetadataManager
                 t_lParentTableAttributes = t_ParentTable.getAttributes();
 
                 t_lCompleteAttributes =
-                    new ArrayList<Attribute<String>>(t_lParentTableAttributes.size() + t_lChildTableAttributes.size());
+                    new ArrayList<>(t_lParentTableAttributes.size() + t_lChildTableAttributes.size());
 
                 t_lCompleteAttributes.addAll(t_lParentTableAttributes);
                 t_lCompleteAttributes.addAll(t_lChildTableAttributes);
@@ -1201,7 +1125,7 @@ public abstract class AbstractJdbcMetadataManager
     protected List<String> retrieveTableNames(
         @NotNull final List<? extends Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
-        @NotNull final List<String> result = new ArrayList<String>(tables.size());
+        @NotNull final List<String> result = new ArrayList<>(tables.size());
 
         for (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : tables)
         {
@@ -1816,7 +1740,7 @@ public abstract class AbstractJdbcMetadataManager
     protected List<String> extractTableNames(
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
-        @NotNull final List<String> result = new ArrayList<String>(tables.size());
+        @NotNull final List<String> result = new ArrayList<>(tables.size());
 
         for (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : tables)
         {
@@ -1846,8 +1770,7 @@ public abstract class AbstractJdbcMetadataManager
             + ", \"columns\": \"" + m__mColumns + "\""
             + ", \"disableTableExtraction\": \"" + m__bDisableTableExtraction + "\""
             + ", \"lazyTableExtraction\": \"" + m__bLazyTableExtraction + "\""
-            + ", \"engineName\": \"" + m__strEngineName + "\""
-            + ", \"engineVersion\": \"" + m__strEngineVersion + "\""
-            + ", \"quote\": \"" + m__strQuote + "\" }";
+            + ", \"engine\": " + m__Engine
+            + " }";
     }
 }

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        Queryj-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,22 +23,28 @@
 
  ******************************************************************************
  *
- * Filename: MissingProjectPackageAtRuntimeException.java
+ * Filename: OracleEngine.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The project package information is missing.
+ * Description: Represents Oracle engines.
  *
- * Date: 2013/12/08
- * Time: 10:33
+ * Date: 2014/01/24
+ * Time: 07:20
  *
  */
-package org.acmsl.queryj.tools.exceptions;
+package org.acmsl.queryj.metadata.engines.oracle;
 
 /*
- * Importing QueryJ-API classes.
+ * Importing QueryJ-Core classses.
  */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
+import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.engines.AbstractEngine;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -46,23 +52,21 @@ import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The project package information is missing.
+ * Represents Oracle engines.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/12/08 10:33
+ * Created: 2014/01/24 07:20
  */
 @ThreadSafe
-public class MissingProjectPackageAtRuntimeException
-    extends QueryJNonCheckedException
+public class OracleEngine
+    extends AbstractEngine<String>
 {
-
-    private static final long serialVersionUID = -3817993083243973821L;
-
     /**
-     * Creates a new instance.
+     * Creates a new engine instance.
+     * @param version the version.
      */
-    public MissingProjectPackageAtRuntimeException()
+    public OracleEngine(@NotNull final String version)
     {
-        super("missing.project.package.at.runtime");
+        super(Literals.ORACLE, version, true, true);
     }
 }

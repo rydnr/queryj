@@ -57,7 +57,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ResultSetFlagsElement
-    extends  AbstractIdElement
+    extends  AbstractIdElement<String>
     implements ResultSetFlags
 {
     private static final long serialVersionUID = 864474291474631746L;

@@ -90,7 +90,7 @@ public class SqlElementFactory
         @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable final SqlElement result;
+        @Nullable final SqlElement<String> result;
 
         @NotNull final String t_strId = attributes.getValue("id");
 
@@ -125,26 +125,28 @@ public class SqlElementFactory
         if  (t_strRepositoryScope == null)
         {
             result =
-                new SqlElement(
+                new SqlElement<>(
                     t_strId,
                     t_strDAO,
                     t_strName,
                     t_strType,
                     t_strImplementation,
                     t_bValidate,
-                    t_bDynamic);
+                    t_bDynamic,
+                    "");
         }
         else
         {
             result =
-                new SqlElement(
+                new SqlElement<>(
                     t_strId,
                     t_strName,
                     t_strType,
                     t_strImplementation,
                     t_bValidate,
                     t_bDynamic,
-                    t_strRepositoryScope);
+                    t_strRepositoryScope,
+                    "");
         }
 
         return result;

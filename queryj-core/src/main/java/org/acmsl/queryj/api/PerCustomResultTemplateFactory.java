@@ -93,5 +93,5 @@ public interface PerCustomResultTemplateFactory
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final Result customResult);
+        @NotNull final Result<String> customResult);
 }

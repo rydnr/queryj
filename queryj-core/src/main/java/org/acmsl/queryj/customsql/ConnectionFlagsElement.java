@@ -61,7 +61,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ConnectionFlagsElement
-    extends  AbstractIdElement
+    extends  AbstractIdElement<String>
     implements  ConnectionFlags
 {
     private static final long serialVersionUID = 7483005190203528643L;

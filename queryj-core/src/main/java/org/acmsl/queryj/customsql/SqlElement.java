@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -62,35 +62,35 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class SqlElement
-    extends  AbstractIdElement
-    implements Sql
+public class SqlElement<T>
+    extends  AbstractIdElement<T>
+    implements Sql<T>
 {
     private static final long serialVersionUID = -7884918833943291505L;
     /**
      * The <i>dao</i> attribute.
      */
-    private String m__strDAO;
+    private T m__strDAO;
 
     /**
      * The <i>repositoryScope</i> attribute.
      */
-    private String m__strRepositoryScope;
+    private T m__strRepositoryScope;
 
     /**
      * The <i>name</i> attribute.
      */
-    private String m__strName;
+    private T m__strName;
 
     /**
      * The <i>type</i> attribute.
      */
-    private String m__strType;
+    private T m__strType;
 
     /**
      * The <i>implementation</i> attribute.
      */
-    private String m__strImplementation;
+    private T m__strImplementation;
 
     /**
      * The <i>validate</i> attribute.
@@ -105,17 +105,17 @@ public class SqlElement
     /**
      * The <i>description</i> attribute.
      */
-    private String m__strDescription;
+    private T m__strDescription;
 
     /**
      * The <i>value</i> element.
      */
-    private String m__strValue;
+    private T m__strValue;
 
     /**
      * The <i>parameter-ref</i> elements.
      */
-    private List<ParameterRef> m__lParameterRefs = new ArrayList<ParameterRef>();
+    private List<ParameterRef> m__lParameterRefs = new ArrayList<>();
 
     /**
      * The <i>result-ref</i> element.
@@ -146,18 +146,20 @@ public class SqlElement
      * @param implementation the <i>implementation</i> attribute.
      * @param validate the <i>validate</i> attribute.
      * @param dynamic the <i>dynamic</i> attribute.
+     * @param description the <i>description</i>.
      */
     @SuppressWarnings("unused")
     public SqlElement(
-        @NotNull final String id,
-        @Nullable final String dao,
-        @NotNull final String name,
-        @NotNull final String type,
-        @Nullable final String implementation,
+        @NotNull final T id,
+        @Nullable final T dao,
+        @NotNull final T name,
+        @NotNull final T type,
+        @Nullable final T implementation,
         final boolean validate,
-        final boolean dynamic)
+        final boolean dynamic,
+        @NotNull final T description)
     {
-        this(id, dao, null, name, type, implementation, validate, dynamic);
+        this(id, dao, null, name, type, implementation, validate, dynamic, description);
     }
 
     /**
@@ -169,18 +171,20 @@ public class SqlElement
      * @param validate the <i>validate</i> attribute.
      * @param dynamic the <i>dynamic</i> attribute.
      * @param repositoryScope the <i>repositoryScope</i> attribute.
+     * @param description the <i>description</i>.
      */
     @SuppressWarnings("unused")
     public SqlElement(
-        @NotNull final String id,
-        @NotNull final String name,
-        @NotNull final String type,
-        @Nullable final String implementation,
+        @NotNull final T id,
+        @NotNull final T name,
+        @NotNull final T type,
+        @Nullable final T implementation,
         final boolean validate,
         final boolean dynamic,
-        @NotNull final String repositoryScope)
+        @NotNull final T repositoryScope,
+        @NotNull final T description)
     {
-        this(id, null, repositoryScope, name, type, implementation, validate, dynamic);
+        this(id, null, repositoryScope, name, type, implementation, validate, dynamic, description);
     }
 
     /**
@@ -193,16 +197,18 @@ public class SqlElement
      * @param implementation the <i>implementation</i> attribute.
      * @param validate the <i>validate</i> attribute.
      * @param dynamic the <i>dynamic</i> attribute.
+     * @param description the <i>description</i>.
      */
     protected SqlElement(
-        @NotNull final String id,
-        @Nullable final String dao,
-        @Nullable final String repositoryScope,
-        @NotNull final String name,
-        @NotNull final String type,
-        @Nullable final String implementation,
+        @NotNull final T id,
+        @Nullable final T dao,
+        @Nullable final T repositoryScope,
+        @NotNull final T name,
+        @NotNull final T type,
+        @Nullable final T implementation,
         final boolean validate,
-        final boolean dynamic)
+        final boolean dynamic,
+        @NotNull final T description)
     {
         super(id);
         immutableSetDAO(dao);
@@ -215,13 +221,14 @@ public class SqlElement
         }
         immutableSetValidate(validate);
         immutableSetDynamic(dynamic);
+        immutableSetDescription(description);
     }
 
     /**
      * Specifies the <i>dao</i> attribute.
      * @param dao such value.
      */
-    protected final void immutableSetDAO(final String dao)
+    protected final void immutableSetDAO(final T dao)
     {
         m__strDAO = dao;
     }
@@ -231,7 +238,7 @@ public class SqlElement
      * @param dao such value.
      */
     @SuppressWarnings("unused")
-    protected void setDao(final String dao)
+    protected void setDao(final T dao)
     {
         immutableSetDAO(dao);
     }
@@ -242,7 +249,7 @@ public class SqlElement
      */
     @Override
     @NotNull
-    public String getDao()
+    public T getDao()
     {
         return m__strDAO;
     }
@@ -252,7 +259,7 @@ public class SqlElement
      * @param repositoryScope such attribute.
      */
     protected final void immutableSetRepositoryScope(
-        final String repositoryScope)
+        final T repositoryScope)
     {
         m__strRepositoryScope = repositoryScope;
     }
@@ -262,7 +269,7 @@ public class SqlElement
      * @param repositoryScope such attribute.
      */
     @SuppressWarnings("unused")
-    protected void setRepositoryScope(final String repositoryScope)
+    protected void setRepositoryScope(final T repositoryScope)
     {
         immutableSetRepositoryScope(repositoryScope);
     }
@@ -273,7 +280,7 @@ public class SqlElement
      */
     @Override
     @Nullable
-    public String getRepositoryScope()
+    public T getRepositoryScope()
     {
         return m__strRepositoryScope;
     }
@@ -282,7 +289,7 @@ public class SqlElement
      * Specifies the <i>name</i> attribute.
      * @param name such value.
      */
-    protected final void immutableSetName(@NotNull final String name)
+    protected final void immutableSetName(@NotNull final T name)
     {
         m__strName = name;
     }
@@ -292,7 +299,7 @@ public class SqlElement
      * @param name such value.
      */
     @SuppressWarnings("unused")
-    protected void setName(@NotNull final String name)
+    protected void setName(@NotNull final T name)
     {
         immutableSetName(name);
     }
@@ -303,7 +310,7 @@ public class SqlElement
      */
     @Override
     @NotNull
-    public String getName()
+    public T getName()
     {
         return m__strName;
     }
@@ -312,7 +319,7 @@ public class SqlElement
      * Specifies the <i>type</i> attribute.
      * @param type such value.
      */
-    protected final void immutableSetType(@NotNull final String type)
+    protected final void immutableSetType(@NotNull final T type)
     {
         m__strType = type;
     }
@@ -322,7 +329,7 @@ public class SqlElement
      * @param type such value.
      */
     @SuppressWarnings("unused")
-    protected void setType(@NotNull final String type)
+    protected void setType(@NotNull final T type)
     {
         immutableSetType(type);
     }
@@ -333,7 +340,7 @@ public class SqlElement
      */
     @Override
     @NotNull
-    public String getType()
+    public T getType()
     {
         return m__strType;
     }
@@ -342,7 +349,7 @@ public class SqlElement
      * Specifies the <i>implementation</i> attribute.
      * @param implementation such value.
      */
-    protected final void immutableSetImplementation(@NotNull final String implementation)
+    protected final void immutableSetImplementation(@NotNull final T implementation)
     {
         m__strImplementation = implementation;
     }
@@ -352,7 +359,7 @@ public class SqlElement
      * @param implementation such value.
      */
     @SuppressWarnings("unused")
-    protected void setImplementation(@NotNull final String implementation)
+    protected void setImplementation(@NotNull final T implementation)
     {
         immutableSetImplementation(implementation);
     }
@@ -363,7 +370,7 @@ public class SqlElement
      */
     @Override
     @Nullable
-    public String getImplementation()
+    public T getImplementation()
     {
         return m__strImplementation;
     }
@@ -449,7 +456,7 @@ public class SqlElement
      * Specifies the <i>description</i> attribute.
      * @param description such value.
      */
-    protected final void immutableSetDescription(@NotNull final String description)
+    protected final void immutableSetDescription(@NotNull final T description)
     {
         m__strDescription = description;
     }
@@ -459,7 +466,7 @@ public class SqlElement
      * @param description such value.
      */
     @SuppressWarnings("unused")
-    public void setDescription(@NotNull final String description)
+    public void setDescription(@NotNull final T description)
     {
         immutableSetDescription(description);
     }
@@ -470,7 +477,7 @@ public class SqlElement
      */
     @Override
     @NotNull
-    public String getDescription()
+    public T getDescription()
     {
         return m__strDescription;
     }
@@ -479,7 +486,7 @@ public class SqlElement
      * Specifies the &lt;value&gt; element.
      * @param value such value.
      */
-    protected final void immutableSetValue(@NotNull final String value)
+    protected final void immutableSetValue(@NotNull final T value)
     {
         m__strValue = value;
     }
@@ -489,7 +496,7 @@ public class SqlElement
      * @param value such value.
      */
     @SuppressWarnings("unused")
-    public void setValue(@NotNull final String value)
+    public void setValue(@NotNull final T value)
     {
         immutableSetValue(value);
     }
@@ -500,7 +507,7 @@ public class SqlElement
      */
     @Override
     @NotNull
-    public String getValue()
+    public T getValue()
     {
         return m__strValue;
     }
@@ -670,6 +677,7 @@ public class SqlElement
      * Retrieves the &lt;resultset-flags-ref&gt; element.
      * @return such element.
      */
+    @Override
     @Nullable
     public ResultSetFlagsRef getResultSetFlagsRef()
     {
@@ -680,6 +688,7 @@ public class SqlElement
      * Provides a text information about this instance.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {
@@ -721,14 +730,14 @@ public class SqlElement
      */
     @NotNull
     protected String toString(
-        final String id,
-        final String description,
-        final String dao,
-        final String repositoryScope,
-        final String name,
-        final String type,
-        final String implementation,
-        final String value,
+        final T id,
+        final T description,
+        final T dao,
+        final T repositoryScope,
+        final T name,
+        final T type,
+        final T implementation,
+        final T value,
         final boolean validate,
         final boolean dynamic,
         final Collection<ParameterRef> parameterRefs,
@@ -794,7 +803,7 @@ public class SqlElement
      *                            from being compared to this object.
      */
     @Override
-    public int compareTo(final Sql o)
+    public int compareTo(final Sql<T> o)
     {
         return compareThem(this, o);
     }
@@ -806,8 +815,8 @@ public class SqlElement
      * @return a positive number if the first is considered 'greater' than
      * the second; 0 if they're equal; a negative number otherwise.
      */
-    protected int compareThem(@NotNull final Sql first, @NotNull final Sql second)
+    protected int compareThem(@NotNull final Sql<T> first, @NotNull final Sql<T> second)
     {
-        return first.getId().compareTo(second.getId());
+        return ("" + first.getId()).compareTo(("" + second.getId()));
     }
 }

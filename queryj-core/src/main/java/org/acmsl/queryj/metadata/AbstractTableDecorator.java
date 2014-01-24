@@ -42,7 +42,6 @@ package org.acmsl.queryj.metadata;
  * Importing project classes.
  */
 import org.acmsl.commons.utils.ToStringUtils;
-import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
@@ -641,7 +640,7 @@ public abstract class AbstractTableDecorator
         }
         else
         {
-            result = new ArrayList<ForeignKey<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -915,7 +914,7 @@ public abstract class AbstractTableDecorator
 
         if (result == null)
         {
-            result = new ArrayList<Attribute<DecoratedString>>(0);
+            result = new ArrayList<>(0);
         }
 
         return new TableAttributesListDecorator(result, this);
@@ -1242,7 +1241,7 @@ public abstract class AbstractTableDecorator
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
         @NotNull final List<Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>> result =
-            new ArrayList<Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>>(0);
+            new ArrayList<>(0);
 
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
             metadataManager.getTableDAO().findByName(tableName);
@@ -1306,7 +1305,7 @@ public abstract class AbstractTableDecorator
 
         if (result == null)
         {
-            result = new ArrayList<Row<DecoratedString>>(0);
+            result = new ArrayList<>(0);
         }
         else
         {
@@ -1352,7 +1351,7 @@ public abstract class AbstractTableDecorator
 
         if (aux == null)
         {
-            result = new ArrayList<Row<DecoratedString>>(0);
+            result = new ArrayList<>(0);
         }
         else
         {
@@ -1367,23 +1366,30 @@ public abstract class AbstractTableDecorator
      */
     @Override
     @NotNull
-    public List<Sql> getDynamicQueries()
+    public List<Sql<DecoratedString>> getDynamicQueries()
     {
-        return getDynamicQueries(getTable(), getCustomSqlProvider());
+        return getDynamicQueries(getTable(), getCustomSqlProvider(), getMetadataManager());
     }
 
     /**
      * Retrieves the dynamic queries.
      * @param table the table.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the list of dynamic queries.
      */
     @NotNull
-    protected List<Sql> getDynamicQueries(
+    protected List<Sql<DecoratedString>> getDynamicQueries(
         @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table,
-        @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
     {
-        return getDynamicQueries(table.getName(), customSqlProvider.getSqlDAO());
+        return
+            getDynamicQueries(
+                table.getName(),
+                customSqlProvider.getSqlDAO(),
+                customSqlProvider,
+                metadataManager);
     }
 
     /**
@@ -1393,14 +1399,17 @@ public abstract class AbstractTableDecorator
      * @return the list of dynamic queries.
      */
     @NotNull
-    protected List<Sql> getDynamicQueries(
-        @NotNull final String tableName, @NotNull final SqlDAO sqlDAO)
+    protected List<Sql<DecoratedString>> getDynamicQueries(
+        @NotNull final String tableName,
+        @NotNull final SqlDAO sqlDAO,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final List<Sql> result = sqlDAO.findDynamic(tableName);
+        @NotNull final List<Sql<String>> result = sqlDAO.findDynamic(tableName);
 
         Collections.sort(result);
 
-        return result;
+        return decorate(result, customSqlProvider, metadataManager);
     }
 
     /**
@@ -1413,7 +1422,7 @@ public abstract class AbstractTableDecorator
     protected List<Attribute<DecoratedString>> filterReadOnlyAttributes(
         @NotNull final List<Attribute<DecoratedString>> attributes)
     {
-        @NotNull final List<Attribute<DecoratedString>> result =  new ArrayList<Attribute<DecoratedString>>(0);
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<>(0);
 
         for (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
         {
@@ -1439,7 +1448,7 @@ public abstract class AbstractTableDecorator
     protected List<Attribute<DecoratedString>> filterExternallyManagedAttributes(
         @NotNull final List<Attribute<DecoratedString>> attributes)
     {
-        @NotNull final List<Attribute<DecoratedString>> result =  new ArrayList<Attribute<DecoratedString>>(attributes.size());
+        @NotNull final List<Attribute<DecoratedString>> result =  new ArrayList<>(attributes.size());
 
         for (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
         {
@@ -1467,7 +1476,7 @@ public abstract class AbstractTableDecorator
         @NotNull final List<Attribute<K>> attributes,
         @NotNull final List<Attribute<K>> toExclude)
     {
-        @NotNull final List<Attribute<K>> result = new ArrayList<Attribute<K>>(attributes);
+        @NotNull final List<Attribute<K>> result = new ArrayList<>(attributes);
 
         result.removeAll(toExclude);
 
@@ -1482,9 +1491,9 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Sql> getCustomSelects()
+    public List<Sql<DecoratedString>> getCustomSelects()
     {
-        return decorate(getCustomSelects(getTable(), getCustomSqlProvider()));
+        return decorateSql(getCustomSelects(getTable(), getCustomSqlProvider()));
     }
 
     /**
@@ -1494,7 +1503,7 @@ public abstract class AbstractTableDecorator
      * @return such list of {@link Sql} elements.
      */
     @NotNull
-    protected List<Sql> getCustomSelects(
+    protected List<Sql<String>> getCustomSelects(
         @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
@@ -1508,11 +1517,11 @@ public abstract class AbstractTableDecorator
      * @return such list of {@link Sql} elements.
      */
     @NotNull
-    protected List<Sql> getCustomSelects(
+    protected List<Sql<String>> getCustomSelects(
         @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table,
         @NotNull final SqlDAO sqlDAO)
     {
-        @NotNull final List<Sql> result = sqlDAO.findSelects(table.getName());
+        @NotNull final List<Sql<String>> result = sqlDAO.findSelects(table.getName());
 
         Collections.sort(result);
 
@@ -1525,9 +1534,9 @@ public abstract class AbstractTableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    public List<Sql> getCustomSelectsForUpdate()
+    public List<Sql<DecoratedString>> getCustomSelectsForUpdate()
     {
-        return decorate(getCustomSelectsForUpdate(getTable(), getCustomSqlProvider()));
+        return decorateSql(getCustomSelectsForUpdate(getTable(), getCustomSqlProvider()));
     }
 
     /**
@@ -1537,7 +1546,7 @@ public abstract class AbstractTableDecorator
      * @return such list of {@link Sql} elements.
      */
     @NotNull
-    protected List<Sql> getCustomSelectsForUpdate(
+    protected List<Sql<String>> getCustomSelectsForUpdate(
         @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
@@ -1551,11 +1560,11 @@ public abstract class AbstractTableDecorator
      * @return such list of {@link Sql} elements.
      */
     @NotNull
-    protected List<Sql> getCustomSelectsForUpdate(
+    protected List<Sql<String>> getCustomSelectsForUpdate(
         @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table,
         @NotNull final SqlDAO sqlDAO)
     {
-        @NotNull final List<Sql> result = sqlDAO.findSelectsForUpdate(table.getName());
+        @NotNull final List<Sql<String>> result = sqlDAO.findSelectsForUpdate(table.getName());
 
         Collections.sort(result);
 
@@ -1568,7 +1577,7 @@ public abstract class AbstractTableDecorator
      * @return the decorated queries.
      */
     @NotNull
-    protected List<Sql> decorate(@NotNull final List<Sql> queries)
+    protected List<Sql<DecoratedString>> decorateSql(@NotNull final List<Sql<String>> queries)
     {
         return decorate(queries, getCustomSqlProvider(), getMetadataManager());
     }
@@ -1581,14 +1590,14 @@ public abstract class AbstractTableDecorator
      * @return the decorated queries.
      */
     @NotNull
-    protected List<Sql> decorate(
-        @NotNull final List<Sql> queries,
+    protected List<Sql<DecoratedString>> decorate(
+        @NotNull final List<Sql<String>> queries,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final List<Sql> result = new ArrayList<Sql>(queries.size());
+        @NotNull final List<Sql<DecoratedString>> result = new ArrayList<>(queries.size());
 
-        for (@Nullable final Sql t_Sql : queries)
+        for (@Nullable final Sql<String> t_Sql : queries)
         {
             if (t_Sql != null)
             {
@@ -1607,8 +1616,8 @@ public abstract class AbstractTableDecorator
      * @return the decorated query.
      */
     @NotNull
-    protected Sql decorate(
-        @NotNull final Sql query,
+    protected Sql<DecoratedString> decorate(
+        @NotNull final Sql<String> query,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
@@ -1616,13 +1625,42 @@ public abstract class AbstractTableDecorator
     }
 
     /**
-     * Retrieves the custom updates or inserts.
-     * @return such information.
+     * Decorates given {@link Result results}.
+     * @param results the results to decorate.
+     * @return the decorated results.
      */
     @NotNull
-    public List<Sql> getCustomUpdatesOrInserts()
+    protected List<Result<DecoratedString>> decorate(@NotNull final List<Result<String>> results)
     {
-        return decorate(getCustomUpdatesOrInserts(getTable(), getCustomSqlProvider()));
+        return decorate(results, getCustomSqlProvider(), getMetadataManager(), getDecoratorFactory());
+    }
+
+    /**
+     * Decorates given {@link Result results}.
+     * @param results the results to decorate.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return the decorated results.
+     */
+    @NotNull
+    protected List<Result<DecoratedString>> decorate(
+        @NotNull final List<Result<String>> results,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        @NotNull final List<Result<DecoratedString>> result = new ArrayList<>(results.size());
+
+        for (@Nullable final Result<String> t_Result : results)
+        {
+            if (t_Result != null)
+            {
+                result.add(decorate(t_Result, customSqlProvider, metadataManager, decoratorFactory));
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -1630,7 +1668,17 @@ public abstract class AbstractTableDecorator
      * @return such information.
      */
     @NotNull
-    protected List<Sql> getCustomUpdatesOrInserts(
+    public List<Sql<DecoratedString>> getCustomUpdatesOrInserts()
+    {
+        return decorateSql(getCustomUpdatesOrInserts(getTable(), getCustomSqlProvider()));
+    }
+
+    /**
+     * Retrieves the custom updates or inserts.
+     * @return such information.
+     */
+    @NotNull
+    protected List<Sql<String>> getCustomUpdatesOrInserts(
         @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
@@ -1644,12 +1692,10 @@ public abstract class AbstractTableDecorator
      * @return such information.
      */
     @NotNull
-    protected List<Sql> getCustomUpdatesOrInserts(
+    protected List<Sql<String>> getCustomUpdatesOrInserts(
         @NotNull final String tableName, @NotNull final SqlDAO sqlDAO)
     {
-        @NotNull final List<Sql> result = new ArrayList<Sql>(sqlDAO.findInserts(tableName));
-
-        result.addAll(sqlDAO.findUpdates(tableName));
+        @NotNull final List<Sql<String>> result = sqlDAO.findInserts(tableName);
 
         Collections.sort(result);
 
@@ -1714,22 +1760,22 @@ public abstract class AbstractTableDecorator
     {
         @NotNull final List<ResultDecorator> result;
 
-        @NotNull final List<Result> aux = new ArrayList<Result>(2);
+        @NotNull final List<Result<String>> aux = new ArrayList<>(2);
 
-        @Nullable Result singleResult = resultDAO.findSingleMatch(tableName);
+        @Nullable Result<String> singleResult = resultDAO.findSingleMatch(tableName);
 
         if (singleResult != null)
         {
             aux.add(singleResult);
         }
 
-        @Nullable Result multipleResult = resultDAO.findMultipleMatch(tableName);
+        @Nullable Result<String> multipleResult = resultDAO.findMultipleMatch(tableName);
 
         if (   (multipleResult == null)
             && (singleResult != null))
         {
             multipleResult =
-                new ResultElement(
+                new ResultElement<>(
                     singleResult.getId().replaceFirst("single\\.", "multiple\\."),
                     singleResult.getClassValue(),
                     Result.MULTIPLE);
@@ -1740,7 +1786,7 @@ public abstract class AbstractTableDecorator
                  && (singleResult == null))
         {
             singleResult =
-                new ResultElement(
+                new ResultElement<>(
                     multipleResult.getId().replaceFirst("multiple\\.", "single\\."),
                     multipleResult.getClassValue(),
                     Result.MULTIPLE);
@@ -1748,11 +1794,11 @@ public abstract class AbstractTableDecorator
             aux.add(singleResult);
         }
 
-        @Nullable Result customResult;
+        @Nullable Result<String> customResult;
 
-        List<Sql> sqlList = sqlDAO.findSelects(tableName);
+        List<Sql<String>> sqlList = sqlDAO.findSelects(tableName);
 
-        for (@Nullable final Sql t_Sql : sqlList)
+        for (@Nullable final Sql<String> t_Sql : sqlList)
         {
             if (t_Sql != null)
             {
@@ -1768,7 +1814,7 @@ public abstract class AbstractTableDecorator
 
         sqlList = sqlDAO.findSelectsForUpdate(tableName);
 
-        for (@Nullable final Sql t_Sql : sqlList)
+        for (@Nullable final Sql<String> t_Sql : sqlList)
         {
             if (t_Sql != null)
             {
@@ -1782,9 +1828,9 @@ public abstract class AbstractTableDecorator
             }
         }
 
-        result = new ArrayList<ResultDecorator>(aux.size());
+        result = new ArrayList<>(aux.size());
 
-        for (@NotNull final Result t_Result : aux)
+        for (@NotNull final Result<String> t_Result : aux)
         {
             result.add(decorate(t_Result, customSqlProvider, metadataManager, decoratorFactory));
         }
@@ -1804,7 +1850,7 @@ public abstract class AbstractTableDecorator
      */
     @NotNull
     protected ResultDecorator decorate(
-        @NotNull final Result customResult,
+        @NotNull final Result<String> customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -1828,7 +1874,7 @@ public abstract class AbstractTableDecorator
         @NotNull final CustomSqlProvider customSqlProvider)
     {
         @NotNull final List<ForeignKey<DecoratedString>> result =
-            new ArrayList<ForeignKey<DecoratedString>>(foreignKeys.size());
+            new ArrayList<>(foreignKeys.size());
 
         for (@Nullable final ForeignKey<String> t_ForeignKey : foreignKeys)
         {
@@ -1879,9 +1925,9 @@ public abstract class AbstractTableDecorator
     @SuppressWarnings("unused")
     @NotNull
     @Override
-    public List<Result> getDifferentCustomResults()
+    public List<Result<DecoratedString>> getDifferentCustomResults()
     {
-        return getDifferentCustomResults(getTable(), getCustomSqlProvider());
+        return decorate(getDifferentCustomResults(getTable(), getCustomSqlProvider()));
     }
 
     /**
@@ -1889,7 +1935,7 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Result> getDifferentCustomResults(
+    protected List<Result<String>> getDifferentCustomResults(
         @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
@@ -1898,11 +1944,7 @@ public abstract class AbstractTableDecorator
                 table.getName(),
                 getName().getVoName().getValue(),
                 customSqlProvider.getSqlDAO(),
-                customSqlProvider.getSqlResultDAO(),
-                getMetadataManager(),
-                customSqlProvider,
-                getDecoratorFactory(),
-                CustomResultUtils.getInstance());
+                customSqlProvider.getSqlResultDAO());
     }
 
     /**
@@ -1911,29 +1953,21 @@ public abstract class AbstractTableDecorator
      * @param voName the ValueObject name.
      * @param sqlDAO the {@link SqlDAO} instance.
      * @param resultDAO the {@link SqlResultDAO} instance.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} implementation.
-     * @param customResultUtils the {@link CustomResultUtils} instance.
      * @return such list.
      */
     @NotNull
-    protected List<Result> getDifferentCustomResults(
+    protected List<Result<String>> getDifferentCustomResults(
         @NotNull final String table,
         @NotNull final String voName,
         @NotNull final SqlDAO sqlDAO,
-        @NotNull final SqlResultDAO resultDAO,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final CustomResultUtils customResultUtils)
+        @NotNull final SqlResultDAO resultDAO)
     {
-        @NotNull final List<Result> result = new ArrayList<Result>();
+        @NotNull final List<Result<String>> result = new ArrayList<>();
 
-        @NotNull final List<Sql> t_lSql = sqlDAO.findSelects(table);
+        @NotNull final List<Sql<String>> t_lSql = sqlDAO.findSelects(table);
         t_lSql.addAll(sqlDAO.findSelectsForUpdate(table));
 
-        for (@Nullable final Sql t_Sql : t_lSql)
+        for (@Nullable final Sql<String> t_Sql : t_lSql)
         {
             if (t_Sql != null)
             {
@@ -1941,14 +1975,13 @@ public abstract class AbstractTableDecorator
 
                 if (t_ResultRef != null)
                 {
-                    @Nullable final Result t_Result = resultDAO.findByPrimaryKey(t_ResultRef.getId());
+                    @Nullable final Result<String> t_Result = resultDAO.findByPrimaryKey(t_ResultRef.getId());
+
                     if (   (t_Result != null)
                         && (!matches(t_Result.getClassValue(), voName))
                         && (!result.contains(t_Result)))
                     {
-                        result.add(
-                            customResultUtils.decorate(
-                                t_Result, metadataManager, customSqlProvider, decoratorFactory));
+                        result.add(t_Result);
                     }
                 }
             }
@@ -1994,7 +2027,7 @@ public abstract class AbstractTableDecorator
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @NotNull final List<Row<DecoratedString>> result = new ArrayList<Row<DecoratedString>>(rows.size());
+        @NotNull final List<Row<DecoratedString>> result = new ArrayList<>(rows.size());
 
         for (@Nullable final Row<String> row : rows)
         {
@@ -2027,7 +2060,7 @@ public abstract class AbstractTableDecorator
         @NotNull final List<Attribute<DecoratedString>> attrs,
         @NotNull final MetadataTypeManager typeManager)
     {
-        @NotNull final List<DecoratedString> result = new ArrayList<DecoratedString>(attrs.size());
+        @NotNull final List<DecoratedString> result = new ArrayList<>(attrs.size());
 
         for (@Nullable final Attribute<DecoratedString> attr: attrs)
         {

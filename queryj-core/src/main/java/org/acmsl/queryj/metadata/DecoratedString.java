@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -315,6 +315,108 @@ public class DecoratedString
         @NotNull final String value, @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return englishGrammarUtils.getSingular(value);
+    }
+
+    /**
+     * Splits the value.
+     * @return the value, split in lines.
+     */
+    @NotNull
+    public DecoratedString[] getSplit()
+    {
+        return split(getValue(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Splits the value.
+     * @param value the value.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return the value, split in lines.
+     */
+    protected DecoratedString[] split(@NotNull final String value, @NotNull final DecorationUtils decorationUtils)
+    {
+        return toDecoratedString(decorationUtils.split(value));
+    }
+
+    /**
+     * Escapes the double quotes in given value.
+     * @return the escaped value.
+     */
+    @NotNull
+    public DecoratedString getEscapeDoubleQuotes()
+    {
+        return escape(getValue(), '"', DecorationUtils.getInstance());
+    }
+
+    /**
+     * Escapes the single quotes in given value.
+     * @return the escaped value.
+     */
+    @NotNull
+    public DecoratedString getEscapeSingleQuotes()
+    {
+        return escape(getValue(), '\'', DecorationUtils.getInstance());
+    }
+
+    /**
+     * Splits the value.
+     * @param value the value.
+     * @param toEscape the value to escape.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return the value, replacing occurrences for its escaped variants.
+     */
+    protected DecoratedString escape(
+        @NotNull final String value,
+        final char toEscape,
+        @NotNull final DecorationUtils decorationUtils)
+    {
+        return new DecoratedString(decorationUtils.escape(value, toEscape));
+    }
+
+    @NotNull
+    public DecoratedString[] getSplitAndSurroundByDoubleQuotes()
+    {
+        return surroundBy(getValue(), "\"", DecorationUtils.getInstance());
+    }
+
+    @NotNull
+    public DecoratedString[] getSplitAndSurroundBySingleQuotes()
+    {
+        return surroundBy(getValue(), "'", DecorationUtils.getInstance());
+    }
+
+    @NotNull
+    protected DecoratedString[] surroundBy(
+        @NotNull final String value, final String delimiter, @NotNull final DecorationUtils decorationUtils)
+    {
+        return
+            toDecoratedString(
+                decorationUtils.surround(
+                    decorationUtils.trim(
+                        decorationUtils.split(
+                            decorationUtils.escape(value, '\"'))),
+                    "\"",
+                    " \""));
+    }
+
+    /**
+     * Transforms given texts into an array of {@code DecoratedString}s.
+     * @param values the values.
+     * @return the decorated array.
+     */
+    @NotNull
+    protected DecoratedString[] toDecoratedString(@NotNull final String[] values)
+    {
+        @NotNull final DecoratedString[] result;
+
+        result = new DecoratedString[values.length];
+
+        for (int index = 0; index < values.length; index++)
+        {
+            result[index] = new DecoratedString(values[index]);
+        }
+
+        return result;
     }
 
     @Override

@@ -95,7 +95,7 @@ extends TestCase
   * Creates a CompositeQueryJCommandHandlerTest with given name.
   * @param name such name.
   */
-  public CompositeQueryJCommandHandlerTest(String name)
+  public CompositeQueryJCommandHandlerTest(@NotNull final String name)
   {
     // JUnitDoclet begin method CompositeQueryJCommandHandlerTest
     super(name);

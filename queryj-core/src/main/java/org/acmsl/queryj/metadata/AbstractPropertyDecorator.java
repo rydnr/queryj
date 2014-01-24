@@ -35,6 +35,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.customsql.IdentifiableElement;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
 
@@ -44,20 +45,19 @@ import org.acmsl.queryj.customsql.PropertyElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Locale;
-
 /**
  * Decorates &lt;property&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractPropertyDecorator
-    extends  PropertyElement
-    implements  PropertyDecorator
+    extends  PropertyElement<DecoratedString>
+    implements  PropertyDecorator,
+                Comparable<Property<DecoratedString>>
 {
     /**
      * The property element.
      */
-    private Property m__Property;
+    private Property<String> m__Property;
 
     /**
      * The metadata manager.
@@ -74,13 +74,13 @@ public abstract class AbstractPropertyDecorator
      * @param property the property to decorate.
      */
     public AbstractPropertyDecorator(
-        @NotNull final Property property, @NotNull final MetadataManager metadataManager)
+        @NotNull final Property<String> property, @NotNull final MetadataManager metadataManager)
     {
         super(
-            property.getId(),
-            property.getColumnName(),
+            new DecoratedString(property.getId()),
+            new DecoratedString(property.getColumnName()),
             property.getIndex(),
-            property.getType(),
+            new DecoratedString(property.getType()),
             property.isNullable());
 
         immutableSetProperty(property);
@@ -93,7 +93,7 @@ public abstract class AbstractPropertyDecorator
      * Specifies the <code>Property</code> to decorate.
      * @param property such property.
      */
-    protected final void immutableSetProperty(final Property property)
+    protected final void immutableSetProperty(final Property<String> property)
     {
         m__Property = property;
     }
@@ -103,7 +103,7 @@ public abstract class AbstractPropertyDecorator
      * @param property such property.
      */
     @SuppressWarnings("unused")
-    protected void setProperty(@NotNull final Property property)
+    protected void setProperty(@NotNull final Property<String> property)
     {
         immutableSetProperty(property);
     }
@@ -113,7 +113,7 @@ public abstract class AbstractPropertyDecorator
      * @return such property.
      */
     @NotNull
-    public Property getProperty()
+    public Property<String> getProperty()
     {
         return m__Property;
     }
@@ -186,9 +186,9 @@ public abstract class AbstractPropertyDecorator
      */
     @NotNull
     @Override
-    public String getType()
+    public DecoratedString getType()
     {
-        return retrieveType(super.getType(), getMetadataTypeManager());
+        return new DecoratedString(retrieveType(super.getType().getValue(), getMetadataTypeManager()));
     }
 
     /**
@@ -216,7 +216,7 @@ public abstract class AbstractPropertyDecorator
     @SuppressWarnings("unused")
     @NotNull
     @Override
-    public String getJavaType()
+    public DecoratedString getJavaType()
     {
         return getType();
     }
@@ -227,11 +227,12 @@ public abstract class AbstractPropertyDecorator
      */
     @NotNull
     @Override
-    public String getObjectType()
+    public DecoratedString getObjectType()
     {
         return
-            retrieveObjectType(
-                getType(), getMetadataManager(), isNullable());
+            new DecoratedString(
+                retrieveObjectType(
+                    getType().getValue(), getMetadataManager(), isNullable()));
     }
 
     /**
@@ -273,116 +274,13 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
-     * Retrieves the name, in lower case.
-     * @return such information.
-     */
-    @NotNull
-    public String getNameLowercased()
-    {
-        return lowercase(getColumnName());
-    }
-
-    /**
-     * Retrieves the name, in upper case.
-     * @return such information.
-     */
-    @NotNull
-    public String getNameUppercased()
-    {
-        return uppercase(getColumnName());
-    }
-
-    /**
-     * Retrieves the name, capitalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getNameCapitalized()
-    {
-        return capitalize(getColumnName());
-    }
-
-    /**
-     * Lowers the case of given value.
-     * @param value the value.
-     * @return the value, after being processed.
-     */
-    @NotNull
-    protected String lowercase(@NotNull final String value)
-    {
-        return value.toLowerCase(Locale.US);
-    }
-
-    /**
-     * Uppers the case of given value.
-     * @param value the value.
-     * @return the value, after being processed.
-     */
-    @NotNull
-    protected String uppercase(@NotNull final String value)
-    {
-        return value.toUpperCase(Locale.US);
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String capitalize(@NotNull final String value)
-    {
-        return capitalize(value, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String capitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(value);
-    }
-
-    /**
-     * Normalizes and capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String normalizeCapitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(decorationUtils.normalize(value));
-    }
-
-    /**
-     * Normalizes and uncapitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String normalizeUncapitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.uncapitalize(decorationUtils.normalize(value));
-    }
-
-    /**
      * Retrieves whether this attribute can be modelled as a primitive or not.
      * @return <code>false</code> if no primitive matches.
      */
     @SuppressWarnings("unused")
-    @NotNull
-    public Boolean isPrimitive()
+    public boolean isPrimitive()
     {
-        return isPrimitive(getType(), getMetadataTypeManager());
+        return isPrimitive(getType().getValue(), getMetadataTypeManager());
     }
 
     /**
@@ -391,8 +289,7 @@ public abstract class AbstractPropertyDecorator
      * @param metadataTypeManager the metadata type manager.
      * @return <code>false</code> if no primitive matches.
      */
-    @NotNull
-    protected Boolean isPrimitive(
+    protected boolean isPrimitive(
         @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.isPrimitive(type);
@@ -403,9 +300,10 @@ public abstract class AbstractPropertyDecorator
      * number smaller than an int.
      * @return such condition.
      */
+    @Override
     public boolean isNumberSmallerThanInt()
     {
-        return isNumberSmallerThanInt(getType(), getMetadataManager());
+        return isNumberSmallerThanInt(getType().getValue(), getMetadataManager());
     }
 
     /**
@@ -437,48 +335,12 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
-     * Retrieves the capitalized column name.
-     * @return such name.
-     */
-    @NotNull
-    public String getColumnNameCapitalized()
-    {
-        return
-            capitalize(
-                getColumnName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the capitalized normalized column name.
-     * @return such name.
-     */
-    @NotNull
-    public String getColumnNameNormalizedCapitalized()
-    {
-        return
-            normalizeCapitalize(
-                getColumnName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the uncapitalized normalized column name.
-     * @return such name.
-     */
-    @NotNull
-    public String getColumnNameNormalizedUncapitalized()
-    {
-        return
-            normalizeUncapitalize(
-                getColumnName(), DecorationUtils.getInstance());
-    }
-
-    /**
      * Retrieves whether the attribute is a date or not.
      * @return such information.
      */
     public boolean isDate()
     {
-        return isDate(getType(), getMetadataTypeManager());
+        return isDate(getType().getValue(), getMetadataTypeManager());
     }
 
     /**
@@ -503,7 +365,7 @@ public abstract class AbstractPropertyDecorator
     @SuppressWarnings("unused")
     public boolean isTimestamp()
     {
-        return isTimestamp(getType(), getMetadataTypeManager());
+        return isTimestamp(getType().getValue(), getMetadataTypeManager());
     }
 
     /**
@@ -528,7 +390,7 @@ public abstract class AbstractPropertyDecorator
     @SuppressWarnings("unused")
     public boolean isBoolean()
     {
-        return isBoolean(getType(), getMetadataTypeManager());
+        return isBoolean(getType().getValue(), getMetadataTypeManager());
     }
 
     /**
@@ -559,7 +421,7 @@ public abstract class AbstractPropertyDecorator
     @SuppressWarnings("unused")
     public boolean isBlob()
     {
-        return isBlob(getType(), getMetadataTypeManager());
+        return isBlob(getType().getValue(), getMetadataTypeManager());
     }
 
     /**
@@ -581,7 +443,7 @@ public abstract class AbstractPropertyDecorator
     @SuppressWarnings("unused")
     public boolean isClob()
     {
-        return isClob(getType(), getMetadataTypeManager());
+        return isClob(getType().getValue(), getMetadataTypeManager());
     }
 
     /**
@@ -603,7 +465,7 @@ public abstract class AbstractPropertyDecorator
     @SuppressWarnings("unused")
     public boolean isNumeric()
     {
-        return isNumeric(getType(), getMetadataTypeManager());
+        return isNumeric(getType().getValue(), getMetadataTypeManager());
     }
 
     /**
@@ -643,7 +505,7 @@ public abstract class AbstractPropertyDecorator
      * @param property the property.
      * @return such information.
      */
-    protected final int hashCode(@NotNull final Property property)
+    protected final int hashCode(@NotNull final Property<String> property)
     {
         return property.hashCode();
     }
@@ -660,7 +522,7 @@ public abstract class AbstractPropertyDecorator
 
         if (object instanceof Property)
         {
-            result = equals(getProperty(), (Property) object);
+            result = equals(getProperty(), (Property<?>) object);
         }
 
         return result;
@@ -672,8 +534,14 @@ public abstract class AbstractPropertyDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    protected boolean equals(@NotNull final Property property, @NotNull final Property object)
+    protected boolean equals(@NotNull final Property<String> property, @NotNull final Property<?> object)
     {
         return property.equals(object);
+    }
+
+    @Override
+    public int compareTo(final Property<DecoratedString> property)
+    {
+        return super.compareTo((IdentifiableElement<DecoratedString>) property);
     }
 }

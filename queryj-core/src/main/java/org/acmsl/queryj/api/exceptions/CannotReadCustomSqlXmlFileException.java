@@ -40,6 +40,7 @@ package org.acmsl.queryj.api.exceptions;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -67,9 +68,9 @@ public class CannotReadCustomSqlXmlFileException
      * Creates an instance with given context.
      * @param file the file.
      */
-    public CannotReadCustomSqlXmlFileException(@NotNull final File file)
+    public CannotReadCustomSqlXmlFileException(@Nullable final File file)
     {
-        super("cannot.read.custom-sql.xml.file", new Object[] { file.getAbsolutePath() });
+        super("cannot.read.custom-sql.xml.file", new Object[] { file != null ? file.getAbsolutePath() : "(null)" });
     }
 
     /**

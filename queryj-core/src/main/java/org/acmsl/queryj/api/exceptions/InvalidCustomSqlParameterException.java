@@ -68,7 +68,7 @@ public class InvalidCustomSqlParameterException
      * @param parameterIndex the parameter index.
      * @param sql the Sql.
      */
-    public InvalidCustomSqlParameterException(final int parameterIndex, @NotNull final Sql sql)
+    public InvalidCustomSqlParameterException(final int parameterIndex, @NotNull final Sql<?> sql)
     {
         super("invalid.parameter.in.custom-sql", new Object[] { parameterIndex, sql.getId() });
     }

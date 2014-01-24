@@ -51,6 +51,7 @@ import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlResultDAO;
+import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.tools.DebugUtils;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -220,15 +221,15 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         final boolean disableGenerationTimestamps,
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
-        @NotNull final List<Result> resultElements,
+        @NotNull final List<Result<String>> resultElements,
         @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
     {
-        @NotNull final List<T> t_lTemplates = new ArrayList<T>();
+        @NotNull final List<T> t_lTemplates = new ArrayList<>();
 
         @Nullable T t_Template;
 
-        for  (@Nullable final Result t_ResultElement: resultElements)
+        for  (@Nullable final Result<String> t_ResultElement: resultElements)
         {
             if (   (t_ResultElement != null)
                 && (isGenerationAllowedForResult(
@@ -245,7 +246,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                                 t_ResultElement,
                                 customSqlProvider,
                                 metadataManager,
-                                metadataManager.getEngineName(),
+                                metadataManager.getEngine(),
                                 parameters),
                             projectPackage,
                             repository,
@@ -285,7 +286,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     @ThreadSafe
     protected boolean isGenerationAllowedForResult(
-        @NotNull final Result customResult,
+        @NotNull final Result<String> customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomResultUtils customResultUtils)
@@ -314,17 +315,17 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customResult the custom RESULT.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param metadataManager the database metadata manager.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @param parameters the parameter map.
      * @return the package name.
      * @throws QueryJBuildException if the package retrieval process if faulty.
      */
     @ThreadSafe
     protected String retrievePackage(
-        @NotNull final Result customResult,
+        @NotNull final Result<String> customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final String engineName,
+        @NotNull final Engine<String> engine,
         @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
@@ -333,7 +334,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 customResult,
                 customSqlProvider,
                 metadataManager,
-                engineName,
+                engine.getName(),
                 retrieveProjectPackage(parameters),
                 PackageUtils.getInstance());
     }
@@ -350,7 +351,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     @ThreadSafe
     protected abstract String retrievePackage(
-        @NotNull final Result customResult,
+        @NotNull final Result<String> customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final String engineName,
@@ -375,7 +376,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * reason.
      */
     @NotNull
-    protected List<Result> retrieveCustomResults(
+    protected List<Result<String>> retrieveCustomResults(
         @NotNull final QueryJCommand parameters,
         @NotNull final CustomSqlProvider customSqlProvider,
         final boolean allowDuplicates)
@@ -388,7 +389,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
             t_strKey = CUSTOM_RESULTS_NO_DUPLICATES;
         }
 
-        @Nullable List<Result> result = new QueryJCommandWrapper<List<Result>>(parameters).getSetting(t_strKey);
+        @Nullable List<Result<String>> result =
+            new QueryJCommandWrapper<List<Result<String>>>(parameters).getSetting(t_strKey);
 
         if  (result == null)
         {
@@ -412,11 +414,11 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     @ThreadSafe
     @NotNull
-    protected List<Result> fixDuplicated(@NotNull final List<Result> results)
+    protected List<Result<String>> fixDuplicated(@NotNull final List<Result<String>> results)
     {
-        @NotNull final List<Result> result = new ArrayList<Result>(results.size());
+        @NotNull final List<Result<String>> result = new ArrayList<>(results.size());
 
-        @NotNull final HashSet<Result> t_Aux = new HashSet<Result>(results.size());
+        @NotNull final HashSet<Result<String>> t_Aux = new HashSet<>(results.size());
 
         t_Aux.addAll(results);
 
@@ -432,7 +434,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     @ThreadSafe
     @NotNull
-    protected List<Result> retrieveCustomResultElements(
+    protected List<Result<String>> retrieveCustomResultElements(
         @NotNull final CustomSqlProvider customSqlProvider)
     {
         return retrieveCustomResultElements(customSqlProvider.getSqlResultDAO());
@@ -445,7 +447,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     @ThreadSafe
     @NotNull
-    protected List<Result> retrieveCustomResultElements(
+    protected List<Result<String>> retrieveCustomResultElements(
         @NotNull final SqlResultDAO resultDAO)
     {
         return resultDAO.findAll();

@@ -41,6 +41,7 @@ package org.acmsl.queryj.customsql;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Models &lt;parameter-ref&gt; elements in <i>custom-sql</i> models, which
@@ -53,7 +54,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class ParameterRefElement
-    extends  AbstractIdElement
+    extends  AbstractIdElement<String>
     implements ParameterRef
 {
     private static final long serialVersionUID = 6158747761881841323L;
@@ -61,9 +62,8 @@ public class ParameterRefElement
     /**
      * Creates a ParameterRefElement with given information.
      * @param id the <i>id</i> attribute.
-     * @precondition id != null
      */
-    public ParameterRefElement(final String id)
+    public ParameterRefElement(@NotNull final String id)
     {
         super(id);
     }

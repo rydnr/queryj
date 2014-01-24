@@ -71,13 +71,13 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractSqlDecorator
-    extends SqlElement
+    extends SqlElement<DecoratedString>
     implements  SqlDecorator
 {
     /**
      * The wrapped sql element.
      */
-    private Sql m__Sql;
+    private Sql<String> m__Sql;
 
     /**
      * The custom sql provider.
@@ -96,20 +96,20 @@ public abstract class AbstractSqlDecorator
      * to decorate referred parameters.
      */
     public AbstractSqlDecorator(
-        @NotNull final Sql sql,
+        @NotNull final Sql<String> sql,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
         super(
-            sql.getId(),
-            sql.getDao(),
-            sql.getName(),
-            sql.getType(),
-            sql.getImplementation(),
+            new DecoratedString(sql.getId()),
+            sql.getDao() != null ? new DecoratedString(sql.getDao()) : null,
+            new DecoratedString(sql.getName()),
+            new DecoratedString(sql.getType()),
+            sql.getImplementation() != null ? new DecoratedString(sql.getImplementation()) : null,
             sql.getValidate(),
-            sql.isDynamic());
-        immutableSetDescription(sql.getDescription());
-        immutableSetValue(sql.getValue());
+            sql.isDynamic(),
+            new DecoratedString(sql.getDescription()));
+        immutableSetValue(new DecoratedString(sql.getValue()));
         immutableSetParameterRefs(sql.getParameterRefs());
 
         @Nullable final ResultRef t_ResultRef = sql.getResultRef();
@@ -145,7 +145,7 @@ public abstract class AbstractSqlDecorator
      * Specifies the wrapped <i>sql</i> element.
      * @param sql such instance.
      */
-    protected final void immutableSetSql(final Sql sql)
+    protected final void immutableSetSql(final Sql<String> sql)
     {
         m__Sql = sql;
     }
@@ -155,7 +155,7 @@ public abstract class AbstractSqlDecorator
      * @param sql such instance.
      */
     @SuppressWarnings("unused")
-    protected void setSql(@NotNull final Sql sql)
+    protected void setSql(@NotNull final Sql<String> sql)
     {
         immutableSetSql(sql);
     }
@@ -165,7 +165,7 @@ public abstract class AbstractSqlDecorator
      * @return such instance.
      */
     @NotNull
-    public Sql getSql()
+    public Sql<String> getSql()
     {
         return m__Sql;
     }
@@ -255,121 +255,12 @@ public abstract class AbstractSqlDecorator
     }
 
     /**
-     * Retrieves the value, in multiple lines.
-     * @return such output.
-     */
-    @NotNull
-    public String[] getSplittedQuotedValue()
-    {
-        return splitAndQuote(getValue(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Splits given value into several lines, quoting each one.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the splitted value.
-     */
-    @NotNull
-    protected String[] splitAndQuote(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return
-            decorationUtils.surround(
-                decorationUtils.trim(
-                    decorationUtils.split(
-                        decorationUtils.escape(value, '\"'))),
-                "\"",
-                " \"");
-    }
-
-    /**
-     * Retrieves the id formatted as a constant.
-     * @return such information.
-     */
-    @NotNull
-    public String getIdAsConstant()
-    {
-        return uppercase(normalize(getId(), DecorationUtils.getInstance()));
-    }
-
-    /**
-     * Normalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the value, after being processed.
-     */
-    @NotNull
-    protected String normalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalize(value);
-    }
-
-    /**
-     * Retrieves the id capitalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getIdCapitalized()
-    {
-        return capitalize(getId(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Transforms given value to upper case.
-     * @param value the value.
-     * @return <code>value.toUpperCase()</code>.
-     */
-    @NotNull
-    protected String uppercase(@NotNull final String value)
-    {
-        return value.toUpperCase();
-    }
-
-    /**
-     * Retrieves the name, (un)capitalized.
-     * @return such information.
-     */
-    @NotNull
-    public String getNameUncapitalized()
-    {
-        return uncapitalize(getName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * (Un)capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the value, after being processed.
-     */
-    @NotNull
-    protected String uncapitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.uncapitalize(value);
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the value, after being processed.
-     */
-    @NotNull
-    protected String capitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(value);
-    }
-
-    /**
      * Retrieves the parameters.
      * @return such information.
      */
     @Override
     @NotNull
-    public List<Parameter> getParameters()
+    public List<Parameter<DecoratedString>> getParameters()
     {
         return
             getParameters(
@@ -386,7 +277,7 @@ public abstract class AbstractSqlDecorator
      * @return such information.
      */
     @NotNull
-    protected List<Parameter> getParameters(
+    protected List<Parameter<DecoratedString>> getParameters(
         @NotNull final List<ParameterRef> parameterRefs,
         @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataTypeManager metadataTypeManager)
@@ -402,16 +293,16 @@ public abstract class AbstractSqlDecorator
      * @return such information.
      */
     @NotNull
-    protected List<Parameter> getParameters(
+    protected List<Parameter<DecoratedString>> getParameters(
         @NotNull final List<ParameterRef> parameterRefs,
         @NotNull final SqlParameterDAO sqlParameterDAO,
         final MetadataTypeManager metadataTypeManager)
     {
-        @NotNull final List<Parameter> result = new ArrayList<Parameter>();
+        @NotNull final List<Parameter<DecoratedString>> result = new ArrayList<>();
 
         for (@Nullable final ParameterRef t_ParameterRef : parameterRefs)
         {
-            @Nullable final Parameter t_Parameter;
+            @Nullable final Parameter<String> t_Parameter;
 
             if  (t_ParameterRef != null)
             {
@@ -485,7 +376,7 @@ public abstract class AbstractSqlDecorator
 
         if  (resultRef != null)
         {
-            @Nullable final Result t_Result = resultDAO.findByPrimaryKey(resultRef.getId());
+            @Nullable final Result<String> t_Result = resultDAO.findByPrimaryKey(resultRef.getId());
 
             if  (t_Result != null)
             {
@@ -523,23 +414,12 @@ public abstract class AbstractSqlDecorator
     }
 
     /**
-     * Retrieves the result id.
-     * @return such information.
-     */
-    @SuppressWarnings("unused")
-    @Nullable
-    public String getResultId()
-    {
-        return getResultIdAsConstant();
-    }
-
-    /**
      * Retrieves the result.
      * @return such information.
      */
     @SuppressWarnings("unused")
     @Nullable
-    public Result getResult()
+    public Result<DecoratedString> getResult()
     {
         return getResult(getResultRef(), getCustomSqlProvider());
     }
@@ -551,7 +431,7 @@ public abstract class AbstractSqlDecorator
      * @return such information.
      */
     @Nullable
-    protected Result getResult(
+    protected Result<DecoratedString> getResult(
         @Nullable final ResultRef resultRef,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
@@ -565,15 +445,15 @@ public abstract class AbstractSqlDecorator
      * @return such information.
      */
     @Nullable
-    protected Result getResult(
+    protected Result<DecoratedString> getResult(
         @Nullable final ResultRef resultRef,
         @NotNull final SqlResultDAO sqlResultDAO)
     {
-        @Nullable Result result = null;
+        @Nullable Result<DecoratedString> result = null;
 
         if  (resultRef != null)
         {
-            @Nullable final Result t_Result = sqlResultDAO.findByPrimaryKey(resultRef.getId());
+            @Nullable final Result<String> t_Result = sqlResultDAO.findByPrimaryKey(resultRef.getId());
 
             if  (t_Result != null)
             {
@@ -608,7 +488,7 @@ public abstract class AbstractSqlDecorator
      * @return the decorated instance.
      */
     @NotNull
-    protected ResultDecorator decorate(@NotNull final Result result)
+    protected ResultDecorator decorate(@NotNull final Result<String> result)
     {
         return decorate(result, getCustomSqlProvider(), getMetadataManager(), CachingDecoratorFactory.getInstance());
     }
@@ -623,98 +503,12 @@ public abstract class AbstractSqlDecorator
      */
     @NotNull
     protected ResultDecorator decorate(
-        @NotNull final Result result,
+        @NotNull final Result<String> result,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
         return new CachingResultDecorator(result, customSqlProvider, metadataManager, decoratorFactory);
-    }
-
-    /**
-     * Retrieves the result id as constant.
-     * @return such information.
-     */
-    @Nullable
-    public String getResultIdAsConstant()
-    {
-        return
-            getResultIdAsConstant(
-                getResultRef(),
-                getCustomSqlProvider(),
-                DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the result id as constant.
-     * @param resultRef the result ref.
-     * @param customSqlProvider the custom sql provider.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return such information.
-     */
-    @Nullable
-    protected String getResultIdAsConstant(
-        @Nullable final ResultRef resultRef,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final DecorationUtils decorationUtils)
-    {
-        return getResultIdAsConstant(resultRef, customSqlProvider.getSqlResultDAO(), decorationUtils);
-    }
-
-    /**
-     * Retrieves the result id as constant.
-     * @param resultRef the result ref.
-     * @param resultDAO the {@link SqlResultDAO} instance.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return such information.
-     */
-    @Nullable
-    protected String getResultIdAsConstant(
-        @Nullable final ResultRef resultRef,
-        @NotNull final SqlResultDAO resultDAO,
-        @NotNull final DecorationUtils decorationUtils)
-    {
-        @Nullable String result = null;
-
-        @Nullable final Result t_Result = getResult(resultRef, resultDAO);
-
-        if (t_Result != null)
-        {
-            result = uppercase(normalize(t_Result.getId(), decorationUtils));
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the capitalized version of the result identifier.
-     * @return such id.
-     */
-    @Nullable
-    @SuppressWarnings("unused")
-    public String getResultIdCapitalized()
-    {
-        return getResultIdCapitalized(DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the capitalized version of the result identifier.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such id.
-     */
-    @Nullable
-    public String getResultIdCapitalized(@NotNull final DecorationUtils decorationUtils)
-    {
-        @Nullable String result = null;
-
-        @Nullable final Result t_Result = getResult();
-
-        if (t_Result != null)
-        {
-            result = capitalize(t_Result.getId(), decorationUtils);
-        }
-
-        return result;
     }
 
     /**
@@ -750,7 +544,7 @@ public abstract class AbstractSqlDecorator
      * @param sql the sql.
      * @return such information.
      */
-    protected int hashCode(@NotNull final Sql sql)
+    protected int hashCode(@NotNull final Sql<String> sql)
     {
         return sql.hashCode();
     }
@@ -786,26 +580,11 @@ public abstract class AbstractSqlDecorator
                         getMetadataTypeManager(),
                         t_OtherInstance.getMetadataTypeManager())
                     .append(
-                        getSplittedQuotedValue(),
-                        t_OtherInstance.getSplittedQuotedValue())
-                    .append(
-                        getIdAsConstant(),
-                        t_OtherInstance.getIdAsConstant())
-                    .append(
-                        getIdCapitalized(),
-                        t_OtherInstance.getIdCapitalized())
-                    .append(
-                        getNameUncapitalized(),
-                        t_OtherInstance.getNameUncapitalized())
-                    .append(
                         getParameters(),
                         t_OtherInstance.getParameters())
                     .append(
                         getResultClass(),
                         t_OtherInstance.getResultClass())
-                    .append(
-                        getResultIdAsConstant(),
-                        t_OtherInstance.getResultIdAsConstant())
                 .isEquals();
         }
         else if  (object instanceof Sql)
@@ -828,7 +607,7 @@ public abstract class AbstractSqlDecorator
      * object prevents it from being compared to this Object.
      */
     @Override
-    public int compareTo(@Nullable final IdentifiableElement object)
+    public int compareTo(@Nullable final IdentifiableElement<DecoratedString> object)
         throws  ClassCastException
     {
         final int result;
@@ -853,26 +632,11 @@ public abstract class AbstractSqlDecorator
                     getMetadataTypeManager(),
                     t_OtherInstance.getMetadataTypeManager())
                 .append(
-                    getSplittedQuotedValue(),
-                    t_OtherInstance.getSplittedQuotedValue())
-                .append(
-                    getIdAsConstant(),
-                    t_OtherInstance.getIdAsConstant())
-                .append(
-                    getIdCapitalized(),
-                    t_OtherInstance.getIdCapitalized())
-                .append(
-                    getNameUncapitalized(),
-                    t_OtherInstance.getNameUncapitalized())
-                .append(
                     getParameters(),
                     t_OtherInstance.getParameters())
                 .append(
                     getResultClass(),
                     t_OtherInstance.getResultClass())
-                .append(
-                    getResultIdAsConstant(),
-                    t_OtherInstance.getResultIdAsConstant())
                 .toComparison();
         }
         else

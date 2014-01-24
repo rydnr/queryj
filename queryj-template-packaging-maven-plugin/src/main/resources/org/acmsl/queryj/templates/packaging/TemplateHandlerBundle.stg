@@ -57,7 +57,7 @@ sourceImpl(def, C) ::= <<
   description=[ "Handler bundle for ", def.name.capitalized, "Templates." ],
   description_oneline=true,
   filename=C.class_name,
-  template="org/acmsl/templates/packaging/TemplateHandlerBundle.stg",
+  template="org/acmsl/queryj/templates/packaging/TemplateHandlerBundle.stg",
    C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
 
@@ -83,7 +83,7 @@ class(def, C) ::= <<
 /**
  * Handler bundle for {@link <def.name.capitalized>Template}s.
 <class_common_javadoc(
-  template="org/acmsl/templates/packaging/TemplateHandlerBundle.stg",
+  template="org/acmsl/queryj/templates/packaging/TemplateHandlerBundle.stg",
   timestamp=C.timestamp)>
  */
 @ThreadSafe

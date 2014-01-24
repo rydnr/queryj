@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,22 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: MissingProjectPackageAtRuntimeException.java
+ * Filename: UndefinedJdbcEngine.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The project package information is missing.
+ * Description: Represents undefined JDBC engines.
  *
- * Date: 2013/12/08
- * Time: 10:33
+ * Date: 2014/01/24
+ * Time: 08:31
  *
  */
-package org.acmsl.queryj.tools.exceptions;
+package org.acmsl.queryj.metadata.engines;
 
 /*
- * Importing QueryJ-API classes.
+ * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -46,23 +46,38 @@ import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The project package information is missing.
+ * Represents undefined JDBC engines.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/12/08 10:33
+ * Created: 2014/01/24 08:31
  */
 @ThreadSafe
-public class MissingProjectPackageAtRuntimeException
-    extends QueryJNonCheckedException
+public class UndefinedJdbcEngine
+    extends AbstractEngine<String>
 {
-
-    private static final long serialVersionUID = -3817993083243973821L;
+    /**
+     * Creates an undefined JDBC engine.
+     * @param name the name.
+     * @param version the version.
+     * @param lobHandling whether it requires custom LOB handling.
+     * @param supportsSequences whether it supports sequences.
+     */
+    public UndefinedJdbcEngine(
+        @NotNull final String name,
+        @NotNull final String version,
+        final boolean lobHandling,
+        final boolean supportsSequences)
+    {
+        super(name, version, lobHandling, supportsSequences);
+    }
 
     /**
-     * Creates a new instance.
+     * Creates an undefined JDBC engine.
+     * @param name the name.
+     * @param version the version.
      */
-    public MissingProjectPackageAtRuntimeException()
+    public UndefinedJdbcEngine(@NotNull final String name, @NotNull final String version)
     {
-        super("missing.project.package.at.runtime");
+        this(name, version, false, false);
     }
 }

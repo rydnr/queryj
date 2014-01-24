@@ -76,7 +76,7 @@ public class PerCustomResultTemplateContext
     /**
      * The result.
      */
-    private Result m__Result;
+    private Result<String> m__Result;
 
     /**
      * Creates a {@link PerCustomResultTemplateContext} with given information.
@@ -111,7 +111,7 @@ public class PerCustomResultTemplateContext
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations,
         @NotNull final String fileName,
-        @NotNull final Result result)
+        @NotNull final Result<String> result)
     {
         super(
             metadataManager,
@@ -136,7 +136,7 @@ public class PerCustomResultTemplateContext
      * Specifies the result.
      * @param result the custom result.
      */
-    protected final void immutableSetResult(@NotNull final Result result)
+    protected final void immutableSetResult(@NotNull final Result<String> result)
     {
         m__Result = result;
     }
@@ -146,7 +146,7 @@ public class PerCustomResultTemplateContext
      * @param result the custom result.
      */
     @SuppressWarnings("unused")
-    protected void setResult(@NotNull final Result result)
+    protected void setResult(@NotNull final Result<String> result)
     {
         immutableSetResult(result);
     }
@@ -156,7 +156,7 @@ public class PerCustomResultTemplateContext
      * @return such information.
      */
     @NotNull
-    public Result getResult()
+    public Result<String> getResult()
     {
         return m__Result;
     }
@@ -177,7 +177,7 @@ public class PerCustomResultTemplateContext
      * @return the template name.
      */
     @NotNull
-    public String getTemplateName(@NotNull final Result customResult)
+    public String getTemplateName(@NotNull final Result<String> customResult)
     {
         String result = customResult.getClassValue();
 

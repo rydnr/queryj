@@ -310,21 +310,21 @@ extends TestCase
           new SqlXmlParserImpl(new ByteArrayInputStream(TEST_INPUT.getBytes()));
       assertNotNull(t_Parser);
       t_Parser.parse();
-      final List<Sql> t_lQueries = t_Parser.getQueries();
+      final List<Sql<String>> t_lQueries = t_Parser.getQueries();
       assertNotNull(t_lQueries);
       System.out.println(t_lQueries);
       assertEquals(4, t_lQueries.size());
 
-      final List<Result> t_lResults = t_Parser.getResults();
+      final List<Result<String>> t_lResults = t_Parser.getResults();
       assertEquals(3, t_lResults.size());
 
-      final List<Parameter> t_lParameters = t_Parser.getParameters();
+      final List<Parameter<String>> t_lParameters = t_Parser.getParameters();
       assertEquals(1, t_lParameters.size());
 
       final List<ParameterRef> t_lParameterRefs = t_Parser.getParameterRefs();
       assertEquals(0, t_lParameterRefs.size());
 
-      final List<Property> t_lProperties = t_Parser.getProperties();
+      final List<Property<String>> t_lProperties = t_Parser.getProperties();
       assertEquals(6, t_lProperties.size());
 
       final List<PropertyRef> t_lPropertyRefs = t_Parser.getPropertyRefs();

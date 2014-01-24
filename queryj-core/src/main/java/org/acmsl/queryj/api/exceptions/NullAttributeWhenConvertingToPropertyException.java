@@ -68,7 +68,7 @@ public class NullAttributeWhenConvertingToPropertyException
      * Creates the exception with the {@link Result}.
      * @param customResult the custom SQL result.
      */
-    public NullAttributeWhenConvertingToPropertyException(@NotNull final Result customResult)
+    public NullAttributeWhenConvertingToPropertyException(@NotNull final Result<?> customResult)
     {
         super("null.attribute.when.converting.to.property", new Object[] { customResult.getId() });
     }

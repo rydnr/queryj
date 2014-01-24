@@ -66,7 +66,7 @@ public class InvalidCustomSqlException
      * @param sql the Sql.
      * @param cause the cause.
      */
-    public InvalidCustomSqlException(@NotNull final Sql sql, @NotNull final Throwable cause)
+    public InvalidCustomSqlException(@NotNull final Sql<?> sql, @NotNull final Throwable cause)
     {
         super("invalid.custom-sql", new Object[] { sql.getId(), sql.getValue() }, cause);
     }

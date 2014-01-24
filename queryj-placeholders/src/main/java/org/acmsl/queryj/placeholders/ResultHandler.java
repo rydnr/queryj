@@ -60,7 +60,7 @@ import org.checkthread.annotations.ThreadSafe;
 @SuppressWarnings("unused")
 @ThreadSafe
 public class ResultHandler
-    extends AbstractTemplateContextFillHandler<PerCustomResultTemplateContext, Result>
+    extends AbstractTemplateContextFillHandler<PerCustomResultTemplateContext, Result<String>>
 {
     private static final long serialVersionUID = 366716893509078380L;
 
@@ -90,7 +90,7 @@ public class ResultHandler
      */
     @NotNull
     @Override
-    protected Result getValue(@NotNull final PerCustomResultTemplateContext context)
+    protected Result<String> getValue(@NotNull final PerCustomResultTemplateContext context)
     {
         return context.getResult();
     }

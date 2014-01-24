@@ -72,7 +72,7 @@ public class UnsupportedCustomSqlParameterTypeException
     public UnsupportedCustomSqlParameterTypeException(
         @NotNull final String type,
         final int parameterIndex,
-        @NotNull final Sql sql)
+        @NotNull final Sql<?> sql)
     {
         super(
             "unsupported.parameter.type.in.custom-sql",
@@ -90,7 +90,7 @@ public class UnsupportedCustomSqlParameterTypeException
     public UnsupportedCustomSqlParameterTypeException(
         @NotNull final String type,
         final int parameterIndex,
-        @NotNull final Sql sql,
+        @NotNull final Sql<?> sql,
         @NotNull final Throwable cause)
     {
         super(

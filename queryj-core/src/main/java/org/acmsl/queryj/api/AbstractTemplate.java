@@ -164,6 +164,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 }
             }
         };
+    public static final String XRUNJDWP_TRANSPORT = "-Xrunjdwp:transport";
 
     /**
      * The template context.
@@ -227,8 +228,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         immutableSetTemplateContext(context);
         immutableSetPlaceholderPackage(placeholderPackage);
         setSTCache(new HashMap<String, Object>());
-        immutableSetDebugMode(
-            ManagementFactory.getRuntimeMXBean(). getInputArguments().toString().contains("-Xrunjdwp:transport"));
+        immutableSetDebugMode(false);
+            //ManagementFactory.getRuntimeMXBean(). getInputArguments().toString().contains(XRUNJDWP_TRANSPORT));
     }
 
     /**
@@ -407,6 +408,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
             {
                 cache.put(t_Key, result);
             }
+        }
+        else
+        {
+            result = cached;
         }
 
         return result;
@@ -759,7 +764,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
             {
                 try
                 {
-                    @NotNull final Map<String, Object> placeHolders = new HashMap<String, Object>();
+                    @NotNull final Map<String, Object> placeHolders = new HashMap<>();
 
                     @NotNull final List<FillTemplateChain<? extends FillHandler<?>>> fillChains =
                         buildFillTemplateChains(context);
@@ -858,7 +863,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         final boolean result;
 
         final boolean debug =
-            ManagementFactory.getRuntimeMXBean(). getInputArguments().toString().contains("-Xrunjdwp:transport");
+            ManagementFactory.getRuntimeMXBean(). getInputArguments().toString().contains(XRUNJDWP_TRANSPORT);
 
         result =
             (   (debug)
@@ -878,8 +883,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     public List<FillTemplateChain<? extends FillHandler<?>>> buildFillTemplateChains(@NotNull final C context)
         throws QueryJBuildException
     {
-        @NotNull final List<FillTemplateChain<? extends FillHandler<?>>> result =
-            new ArrayList<FillTemplateChain<? extends FillHandler<?>>>();
+        @NotNull final List<FillTemplateChain<? extends FillHandler<?>>> result = new ArrayList<>();
 
         @Nullable final Class<FillTemplateChainFactory<C>> factoryClass =
             retrieveFillTemplateChainFactoryClass(context, getPlaceholderPackage());
