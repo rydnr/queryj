@@ -51,27 +51,36 @@ custom_select(cs, table, C) ::= <<
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
  <cs.parameters:{ p | <attribute_javadoc(attr=p)>}; separator="\n">
- * @return the \<i><cs.resultClass>\</i> information retrieved.
+<if(cs.resultRef)>
+ * @return the {@link <cs.resultClass>} information retrieved.
+<else>
+ * @return the {@link <cs.dao.voName>} information retrieved.
+<endif>
  * @throws DataAccessException if the operation fails.
  */
-public <custom_select_return(table=table, result=cs.result)> <cs.name.uncapitalized>(
-    <cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=",\n">)
+<custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
+public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(<if(!cs.parametersShouldBeWrapped)><cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=", ">)
+<else>
+    <cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=",\n">)    <endif>
+<if(cs.parametersShouldBeWrapped)>
   throws DataAccessException
+<else>
+    throws DataAccessException
+<endif>
 {
     <notnull(C=C)>final String t_strSql = auditSql(<cs.id.normalized.uppercased>_SQL);
 
     return
-        <cs.nameUncapitalized>(
+        <cs.name.uncapitalized>(
             <cs.parameters:{p | <p.name.lowercased>,}; separator="\n">
             t_strSql,
             new PreparedStatementCreatorFactory(t_strSql),
-            new Object[]
+            new Object[<if(!cs.parameters)>0],
+            <else>]
             {
-                <cs.parameters:{ p | <custom_select_parameter_value(
-                  name=p.name.lowercased,
-                  objectType=p.objectType,
-                  object=p.object)>}; separator=",\n">
+                <cs.parameters:{ p | <custom_select_parameter_value(p=p)>}; separator=",\n">
             },
+            <endif>
             getDataSource());
 }
 
@@ -85,19 +94,24 @@ public <custom_select_return(table=table, result=cs.result)> <cs.name.uncapitali
  * specific for this operation.
  * @param params the query parameters.
  * @param dataSource the {@link DataSource{@link  instance.
- * @return the \<i><cs.resultClass>\</i> information retrieved.
+<if(cs.resultRef)>
+ * @return the {@link <cs.resultClass>} information retrieved.
+<else>
+ * @return the {@link <cs.dao.voName>} information retrieved.
+<endif>
  * @throws DataAccessException if the operation fails.
  */
-protected <custom_select_return(table=table, result=cs.result)> <cs.name.uncapitalized>(
+<custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
+protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(
     <cs.parameters:{ p | <attribute_isolated_declaration(attr=p, C=C)>}; separator="\n">
     <notnull(C=C)>final String sql,
     <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
-    <nullable()>final Object[] params,
+    <nullable(C=C)>final Object[] params,
     <notnull(C=C)>final DataSource dataSource)
   throws DataAccessException
 {
     return
-        <cs.nameUncapitalized>(
+        <cs.name.uncapitalized>(
             <cs.parameters:{ p | <p.name.lowercased>,}; separator="\n">
             sql,
             preparedStatementCreatorFactory,
@@ -116,28 +130,30 @@ protected <custom_select_return(table=table, result=cs.result)> <cs.name.uncapit
  * @param params the query parameters.
  * @param transactionManager the {@link PlatformTransactionManager{@link
  * instance.
- * @return the \<i><cs.resultClass>\</i> information retrieved.
+<if(cs.resultRef)>
+ * @return the {@link <cs.resultClass>} information retrieved.
+<else>
+ * @return the {@link <cs.dao.voName>} information retrieved.
+<endif>
  * @throws DataAccessException if the operation fails.
  */
-protected <custom_select_return(table=table, result=cs.result)> <cs.name.uncapitalized>(
+<custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
+protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(
     <cs.parameters:{ p | <attribute_isolated_declaration(attr=p, C=C)>}; separator="\n">
     <notnull(C=C)>final String sql,
     <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
-    <nullable()>final Object[] params,
+    <nullable(C=C)>final Object[] params,
     <notnull(C=C)>final PlatformTransactionManager transactionManager)
   throws DataAccessException
 {
-    <custom_select_result_declaration(sql=cs, result=cs.result, table=table)>
-
-    result =
+    return
         <cs.name.uncapitalized>(
             <cs.parameters:{ p | <p.name.lowercased>,}; separator="\n">
             sql,
             preparedStatementCreatorFactory,
             params,
-            new TransactionTemplate(transactionManager));
-
-    return result;
+            new TransactionTemplate(transactionManager),
+            getDAOListener());
 }
 
 /**
@@ -151,18 +167,24 @@ protected <custom_select_return(table=table, result=cs.result)> <cs.name.uncapit
  * @param params the query parameters.
  * @param transactionTemplate the {@link TransactionTemplate{@link
  * instance.
- * @return the \<i><cs.resultClass>\</i> information retrieved.
+<if(cs.resultRef)>
+ * @return the {@link <cs.resultClass>} information retrieved.
+<else>
+ * @return the {@link <cs.dao.voName>} information retrieved.
+<endif>
  * @throws DataAccessException if the operation fails.
  */
-protected <custom_select_return(table=table, result=cs.result)> <cs.name.uncapitalized>(
+<custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
+protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(
     <cs.parameters:{ p | <attribute_isolated_declaration(attr=p, C=C)>}; separator="\n">
     <notnull(C=C)>final String sql,
     <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
-    <nullable()>final Object[] params,
-    <notnull(C=C)>final TransactionTemplate transactionTemplate)
+    <nullable(C=C)>final Object[] params,
+    <notnull(C=C)>final TransactionTemplate transactionTemplate,
+    <nullable(C=C)>final DAOListener)
   throws DataAccessException
 {
-    <custom_select_result_declaration(sql=cs, result=cs.result, table=table)>
+    <custom_select_result_declaration(sql=cs, result=cs.result, table=table, C=C)>
 
     /*
     preparedStatementCreatorFactory.setResultSetType(..);
@@ -175,7 +197,7 @@ protected <custom_select_return(table=table, result=cs.result)> <cs.name.uncapit
       type=p.sqlType)>}; separator="\n">
 
     result =
-        <custom_select_template_call(sql=cs, result=cs.result, table=table)>
+        <custom_select_template_call(sql=cs, result=cs.result, table=table, C=C)>
 
     return result;
 }
@@ -191,18 +213,12 @@ preparedStatementCreatorFactory.addParameter(
     new SqlParameter(Types.<type>));
 >>
 
-custom_select_parameter_value(name, objectType, object) ::= <<
+custom_select_parameter_value(p) ::= <<
 <!
   Writes the value for a parameter of a custom select.
-  @param name the parameter name.
-  @param objectType the object type of the parameter.
-  @param object whether the parameter type is a class or a primitive.
+  @param p the parameter.
 !>
-<if(object)>
-<name>
-<else>
-new <objectType>(<name>)
-<endif>
+<if(p.object)><p.name><else><if(p.primitive)><p.objectType>.valueOf(<p.name>)<else><if(p.string)><p.name><else>new <p.objectType>(<p.name>)<endif><endif><endif>
 >>
 
 custom_update_or_insert(cs) ::= <<
@@ -214,11 +230,11 @@ custom_update_or_insert(cs) ::= <<
 /**
  * Custom sql \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator="\n">
+ <cs.parameters:{ p | <attribute_javadoc(name=p.name.lowercased)>}; separator="\n">
  * @return the number of entities updated.
  * @throws DataAccessException if the operation fails.
  */
-public int <cs.nameUncapitalized>(
+public int <cs.name.uncapitalized>(
     <cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=",\n">)
   throws DataAccessException
 {
@@ -239,21 +255,18 @@ public int <cs.nameUncapitalized>(
     <cs.parameters:{ p | <custom_select_parameter_type_specification(
       type=p.sqlType)>}; separator="\n">
 
-    final Object[] params =
+    <notnull(C=C)>final Object[] params =
        new Object[]
        {
-           <cs.parameters:{ p | <custom_select_parameter_value(
-             name=p.nameLowercased,
-             objectType=p.objectType,
-             object=p.object)>}; separator=",\n">
+           <cs.parameters:{ p | <custom_select_parameter_value(p=p)>}; separator=",\n">
         };
 
-    final DataSourceTransactionManager transactionManager =
+    <notnull(C=C)>final DataSourceTransactionManager transactionManager =
         new DataSourceTransactionManager(getDataSource());
-    final TransactionTemplate transactionTemplate =
+    <notnull(C=C)>final TransactionTemplate transactionTemplate =
         new TransactionTemplate(transactionManager);
 
-    final Object t_Result =
+    <notnull(C=C)>final Object t_Result =
         transactionTemplate.execute(
             new UpdateTransactionCallback(
                 preparedStatementCreatorFactory
@@ -292,21 +305,28 @@ custom_select_for_update(cs, table) ::= <<
 /**
  * Custom select for update \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(name=p.nameLowercased)>}; separator=",\n">
- * @return the \<i><cs.resultClass>\</i> information retrieved.
+ <cs.parameters:{ p | <attribute_javadoc(name=p.name)>}; separator=",\n">
+<if(cs.resultRef)>
+ * @return the {@link <cs.resultClass>} information retrieved.
+<else>
+ * @return the {@link <cs.dao.voName>} information retrieved.
+<endif>
  * @throws DataAccessException if the operation fails.
  */
 <if(cs.resultClass)>
 <cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
 public <cs.resultClass> <cs.name.uncapitalized>(
 <else>
-<if(rs.multiple)>
+<if(cs.multiple)>
+<notnull(C=C)>
 public <cs.resultClass> <cs.name.uncapitalized>(
 <else>
+<nullable(C=C)>
 public <cs.resultClass>Decorator <cs.name.uncapitalized>(
 <endif>
 <endif>
 <else>
+<nullable(C=C)>
 public <cs.resultClass> <cs.name.uncapitalized>(
 <endif>}>
 <else>
@@ -318,23 +338,23 @@ public void <cs.name.uncapitalized>(
 {
 <if(cs.resultClass)>
 <cs.result:{rs|<if(table.voDecorated)><if(!rs.implicitProperties)><if(rs.multiple)>
-    <cs.resultClass> result = null;
+    <nullable(C=C)><cs.resultClass> result = null;
 <else>
-    <cs.resultClass>Decorator result = null;
+    <nullable(C=C)><cs.resultClass>Decorator result = null;
 <endif>
 <endif>
 <else>
-    <cs.resultClass> result = null;
+    <nullable(C=C)><cs.resultClass> result = null;
 <endif>}>
 <else>
 <endif>
 
-    SqlQuery t_Query =
+    <notnull(C=C)>final SqlQuery t_Query =
         new SqlQuery(
             getDataSource(), <cs.normalized.uppercased>_SQL);
 
 <if(cs.resultClass)>
-    List\<<cs.resultClass>\> t_lResult = (List\<<cs.resultClass>\>) t_Query.execute();
+    @Nullable final List\<<cs.resultClass>\> t_lResult = (List\<<cs.resultClass>\>) t_Query.execute();
 
     if  (   (t_lResult != null)
          && (t_lResult.size() > 0))
@@ -351,14 +371,14 @@ public void <cs.name.uncapitalized>(
 <endif>
 >>
 
-custom_select_result_declaration(sql, result, table) ::= <<
+custom_select_result_declaration(sql, result, table, C) ::= <<
 <!
  Generates code to declare the custom-select result.
  @param sql the custom select.
  @param result the sql result.
  @param table the table.
  !>
-<custom_select_return(table=table, result=result)> result;
+<custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>final <custom_select_return(cs=sql, table=table, result=result, C=C)> result;
 >>
 
 implicit_custom_select_attribute_declaration(sql, attr) ::= <<
@@ -368,24 +388,25 @@ implicit_custom_select_attribute_declaration(sql, attr) ::= <<
  @param attr the implicit property.
 !>
 <if(attr.nullable)>
-<sql.resultClass> result = null;
+@Nullable <sql.resultClass> result = null;
 <else>
 <attr.javaType> result = null;
 <endif>
 
 >>
 
-custom_select_template_call(sql, result, table) ::= <<
+custom_select_template_call(sql, result, table, C) ::= <<
 <!
  Generates the call to execute the custom select.
  @param sql the custom select.
  @param result the sql result.
  @param table the table.
  !>
-(/* */<custom_select_return_cast(table=table, result=result)>/* */) <actual_custom_select_template_call(sql=sql, result=result)>;
+<custom_select_return_cast(cs=sql, table=table, result=result, C=C)>
+    <actual_custom_select_template_call(sql=sql, result=result, C=C)>;
 >>
 
-actual_custom_select_template_call(sql, result) ::= <<
+actual_custom_select_template_call(sql, result, C) ::= <<
 <!
  Generates the actual call to the template for the custom select.
  @param sql the custom select.
@@ -398,107 +419,129 @@ transactionTemplate.execute(
         null,
         // calls setXXX twice
         // preparedStatementCreatorFactory
-        //     .newPreparedStatementSetter(t_aParams),
-        new <sql.resultIdCapitalized>Extractor(sql, getDAOListener()),
+        //     .newPreparedStatementSetter(params),
+<if(sql.resultRef)>
+        new <sql.result.id.voName>Extractor(sql, daoListener),
+<else>
+        new <sql.dao.voName>Extractor(sql, daoListener),
+<endif>
         this))
 >>
 
-custom_select_return(table, result) ::= <<
+custom_select_return(cs, table, result, C) ::= <<
 <if(table.voDecorated)>
-<custom_select_return_decorated(result=result)>
+<custom_select_return_decorated(cs=cs, result=result, C=C)>
+<else><custom_select_return_nondecorated(cs=cs, result=result, C=C)><endif>
+>>
+
+custom_select_return_decorated(cs, result, C) ::= <<
+<if(cs.resultRef)>
+<custom_select_return_decorated_explicit(cs=cs, result=result, C=C)>
 <else>
-<custom_select_return_nondecorated(result=result)>
+<custom_select_return_decorated_implicit(cs=cs, result=result, C=C)>
 <endif>
 >>
 
-custom_select_return_decorated(result) ::= <<
-<if(result.multiple)>
-<custom_select_return_decorated_multiple(result=result)>
+custom_select_decorated_explicit(cs, result, C) ::= <<
+<if(cs.multiple)>
+<custom_select_return_decorated_explicit_multiple(cs=cs, result=result, C=C)>
 <else>
-<custom_select_return_decorated_single(result=result)>
+<custom_select_return_decorated_explicit_single(cs=cs, result=result, C=C)>
 <endif>
 >>
 
-custom_select_return_decorated_multiple(result) ::= <<
-List\<<result.voName>Decorator\>
+custom_select_return_decorated_explicit_multiple(cs, result, C) ::= <<
+List\<<result.classValue>Decorator\>
 >>
 
-custom_select_return_decorated_single(result) ::= <<
-<result.voName>Decorator
+custom_select_return_decorated_explicit_single(cs, result, C) ::= <<
+<result.classValue>Decorator
 >>
 
-custom_select_return_nondecorated(result) ::= <<
-<if(result.multiple)>
-<custom_select_return_nondecorated_multiple(result=result)>
+custom_select_return_nondecorated(cs, result, C) ::= <<
+<if(cs.resultRef)>
+<custom_select_return_nondecorated_explicit(cs=cs, result=result, C=C)>
+<else><custom_select_return_nondecorated_implicit(cs=cs, result=result, C=C)><endif>
+>>
+
+custom_select_return_nondecorated_explicit(cs, result, C) ::= <<
+<if(cs.multiple)>
+<custom_select_return_nondecorated_explicit_multiple(cs=cs, result=result, C=C)>
 <else>
-<custom_select_return_nondecorated_single(result=result)>
+<custom_select_return_nondecorated_explicit_single(cs=cs, result=result, C=C)>
 <endif>
 >>
 
-custom_select_return_nondecorated_multiple(result) ::= <<
+custom_select_return_nondecorated_explicit_multiple(cs, result, C) ::= <<
 <if(result.wrappingASingleProperty)>
-<custom_select_return_property_multiple(result=result)>
+<custom_select_return_property_explicit_multiple(cs=cs, result=result, C=C)>
 <else>
-List\<<result.voName>\>
+List\<<result.classValue>\>
 <endif>
 >>
 
-custom_select_return_nondecorated_single(result) ::= <<
+custom_select_return_nondecorated_explicit_single(cs, result, C) ::= <<
 <if(result.wrappingASingleProperty)>
-<custom_select_return_property_single(result=result)>
+<custom_select_return_explicit_property_single(cs=cs, result=result, C=C)>
 <else>
-<result.voName>
+<result.classValue>
 <endif>
 >>
 
-custom_select_return_property_multiple(result) ::= <<
+custom_select_return_explicit_property_multiple(cs, result, C) ::= <<
 <notnull(C=C)>
 List\<<result.properties:{property|<property.objectType>}>\>
 >>
 
-custom_select_return_property_single(select, result) ::= <<
-<result.properties:{property|<if(!property.primitive)><if(property.nullable)><nullable()><else><notnull(C=C)><endif><endif><property.type>}>
+custom_select_return_explicit_property_single(select, result, C) ::= <<
+<result.properties:{property|<if(!property.primitive)><if(property.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif><property.type>}>
 >>
 
+custom_select_return_decorated_implicit(cs, result, C) ::= <<
+<if(cs.multiple)>
+<custom_select_return_decorated_implicit_multiple(cs=cs, result=result, C=C)>
+<else>
+<custom_select_return_decorated_implicit_single(cs=cs, result=result, C=C)><endif>
+>>
 
-custom_select_return_import(table, result, package) ::= <<
+custom_select_return_decorated_implicit_multiple(cs, result, C) ::= <<
+List\<<cs.dao.voName>Decorator\>
+>>
+
+custom_select_return_decorated_implicit_single(cs, result, C) ::= <<
+<cs.dao.voName>Decorator
+>>
+
+custom_select_return_nondecorated_implicit(cs, result, C) ::= <<
+<if(cs.multiple)><custom_select_return_nondecorated_implicit_multiple(cs=cs, result=result, C=C)><else><custom_select_return_nondecorated_implicit_single(cs=cs, result=result, C=C)><endif>
+>>
+
+custom_select_return_nondecorated_implicit_multiple(cs, result, C) ::= <<
+List\<<cs.dao.voName>\>
+>>
+
+custom_select_return_nondecorated_implicit_single(cs, result, C) ::= <<
+<cs.dao.voName>
+>>
+
+custom_select_return_import(cs, table, result, package, C) ::= <<
 <if(result.wrappingASingleProperty)>
 <custom_select_return_import_property_single(result=result, package=package)>
-<else><if(result.voName)>
+<else><if(result.classValue)>
 import <package>.<typeInitMap.voSubpackageName>.<result.voName>;
 <endif><endif>
 >>
 
-custom_select_return_import_property_single(select, result, package) ::= <<
+custom_select_return_import_property_single(select, result, package, C) ::= <<
 <!<result.properties:{property|<if(!property.primitive)>import <property.type>;<endif>}>!>
 >>
 
-custom_select_return_cast(table, result) ::= <<
-<if(table.voDecorated)>
-<custom_select_return_decorated(result=result)>
-<else>
-<custom_select_return_cast_nondecorated(result=result)>
-<endif>
+custom_select_return_cast(cs, table, result, C) ::= <<
+(<custom_select_return(cs=cs, table=table, result=result, C=C)>)
 >>
 
-custom_select_return_cast_nondecorated(result) ::= <<
-<if(result.multiple)>
-<custom_select_return_nondecorated_multiple(result=result)>
-<else>
-<custom_select_return_cast_nondecorated_single(result=result)>
-<endif>
->>
-
-custom_select_return_cast_nondecorated_single(result) ::= <<
-<if(result.wrappingASingleProperty)>
-<custom_select_return_cast_property_single(result=result)>
-<else>
-<result.voName>
-<endif>
->>
-
-custom_select_return_cast_property_single(select, result) ::= <<
-<result.properties:{property|<property.objectType>}>
+custom_select_return_nullable_maybe(cs, result, C) ::= <<
+<if(cs.multiple)><notnull(C=C)><else><if(cs.resultRef)><if(result.wrappingASingleProperty)><result.properties:{property|<if(property.object)><nullable(C=C)><endif>}><else><if(cs.multiple)><notnull(C=C)><else>7<nullable(C=C)><endif><endif><else><nullable(C=C)><endif><endif>
 >>
 
 attribute_declaration(attr, C) ::= <<

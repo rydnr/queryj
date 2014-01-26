@@ -81,8 +81,13 @@ import org.acmsl.queryj.api.PerTableTemplateGenerator;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.engines.EngineDecorator;
+import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
+import org.acmsl.queryj.metadata.engines.oracle.OracleEngine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
@@ -332,6 +337,33 @@ public class PerTableTemplatesTest
     }
 
     /**
+     * Defines constant rows via cucumber features.
+     * @param values such information.
+     */
+    @SuppressWarnings("unused")
+    @And("^the following contents:$")
+    public void defineRows(@NotNull final DataTable values)
+    {
+        setRows(defineRows(values, getTables(), TableTestHelper.getInstance()));
+    }
+
+    /**
+     * Retrieves the list of {@link Row}s from a Cucumber table.
+     * @param values the Cucumber table.
+     * @param tables the tables.
+     * @param helper the {@link TableTestHelper} instance.
+     * @return the list of rows.
+     */
+    @NotNull
+    protected Map\<String, List\<Row\<String>\>> defineRows(
+        @NotNull final DataTable values,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables,
+        @NotNull final TableTestHelper helper)
+    {
+        return helper.defineRows(values, tables);
+    }
+
+    /**
      * Checks the generated file compiles.
      * @param outputName the name of the output file.
      */
@@ -411,7 +443,8 @@ public class PerTableTemplatesTest
 
                 Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
-                @NotNull final String packageName = resolvePackage(PACKAGE_MAPPINGS.get(templateName), engine);
+                @NotNull final String packageName =
+                    resolvePackage(PACKAGE_MAPPINGS.get(templateName), resolveEngine(engine));
 
                 @Nullable final PerTableTemplate\<PerTableTemplateContext> template =
                     templateFactory.createTemplate(
@@ -508,19 +541,41 @@ public class PerTableTemplatesTest
     }
 
     /**
+     * Resolves the engine.
+     * @param name the engine name.
+     * @return the {@link Engine}.
+     */
+    @NotNull
+    protected Engine\<String> resolveEngine(@NotNull final String name)
+    {
+        @NotNull final Engine\<String> result;
+
+        if (name.equalsIgnoreCase(Literals.ORACLE))
+        {
+            result = new OracleEngine("unknown");
+        }
+        else
+        {
+            result = new UndefinedJdbcEngine(name, "unknown");
+        }
+
+        return result;
+    }
+
+    /**
      * Resolves the package.
      * @param packageTemplate the package template.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @return the actual package.
      */
     @NotNull
-    protected String resolvePackage(@NotNull final String packageTemplate, @NotNull final String engineName)
+    protected String resolvePackage(@NotNull final String packageTemplate, @NotNull final Engine\<String> engine)
     {
         @NotNull final String result;
 
         @NotNull final ST template = new ST(packageTemplate);
-        template.add("packageName", new DecoratedString(BASE_PACKAGE_NAME));
-        template.add("engineName", new DecoratedString(engineName));
+        template.add(Literals.PACKAGE_NAME, new DecoratedString(BASE_PACKAGE_NAME));
+        template.add(Literals.ENGINE, new EngineDecorator(engine));
 
         result = template.render();
 

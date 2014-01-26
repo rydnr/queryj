@@ -105,6 +105,7 @@ public abstract class AbstractSqlDecorator
             sql.getDao() != null ? new DecoratedString(sql.getDao()) : null,
             new DecoratedString(sql.getName()),
             new DecoratedString(sql.getType()),
+            sql.getCardinality(),
             sql.getImplementation() != null ? new DecoratedString(sql.getImplementation()) : null,
             sql.getValidate(),
             sql.isDynamic(),
@@ -164,6 +165,7 @@ public abstract class AbstractSqlDecorator
      * Retrieves the wrapped <i>sql</i> element.
      * @return such instance.
      */
+    @Override
     @NotNull
     public Sql<String> getSql()
     {
@@ -344,50 +346,75 @@ public abstract class AbstractSqlDecorator
     @Nullable
     public String getResultClass()
     {
-        return getResultClass(getResultRef(), getCustomSqlProvider());
+        return getResultClass(getDao(), getCardinality(), getResultRef(), getCustomSqlProvider());
     }
 
     /**
      * Retrieves the result class.
+     * @param cardinality the cardinality.
      * @param resultRef the result ref.
      * @param customSqlProvider the custom sql provider.
      * @return such information.
      */
     @Nullable
     protected String getResultClass(
+        @NotNull final DecoratedString dao,
+        @NotNull final Cardinality cardinality,
         @Nullable final ResultRef resultRef,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        return getResultClass(resultRef, customSqlProvider.getSqlResultDAO());
+        return getResultClass(dao, cardinality, resultRef, customSqlProvider.getSqlResultDAO());
     }
 
     /**
      * Retrieves the result class.
+     * @param cardinality the cardinality.
      * @param resultRef the result ref.
      * @param resultDAO the {@link SqlResultDAO} instance.
      * @return such information.
      */
     @Nullable
     protected String getResultClass(
+        @NotNull final DecoratedString dao,
+        @NotNull final Cardinality cardinality,
         @Nullable final ResultRef resultRef,
         @NotNull final SqlResultDAO resultDAO)
     {
-        @Nullable String result = null;
+        @NotNull final StringBuilder result = new StringBuilder();
 
-        if  (resultRef != null)
+        final boolean multiple = cardinality.equals(Cardinality.MULTIPLE);
+
+        if (multiple)
+        {
+            result.append(MULTIPLE_RESULT_CLASS);
+        }
+
+        if  (resultRef == null)
+        {
+            if (multiple)
+            {
+                result.append('<');
+            }
+            result.append(dao.getVoName());
+            if (multiple)
+            {
+                result.append('>');
+            }
+        }
+        else
         {
             @Nullable final Result<String> t_Result = resultDAO.findByPrimaryKey(resultRef.getId());
 
             if  (t_Result != null)
             {
-                if  (Result.MULTIPLE.equalsIgnoreCase(
-                         t_Result.getMatches()))
+                if (multiple)
                 {
-                    result = MULTIPLE_RESULT_CLASS;
+                    result.append('<');
                 }
-                else
+                result.append(t_Result.getClassValue());
+                if (multiple)
                 {
-                    result = t_Result.getClassValue();
+                    result.append('>');
                 }
             }
             else
@@ -410,7 +437,7 @@ public abstract class AbstractSqlDecorator
             }
         }
 
-        return result;
+        return result.toString();
     }
 
     /**
@@ -509,6 +536,41 @@ public abstract class AbstractSqlDecorator
         @NotNull final DecoratorFactory decoratorFactory)
     {
         return new CachingResultDecorator(result, customSqlProvider, metadataManager, decoratorFactory);
+    }
+
+    /**
+     * Checks whether the parameter list would take too much space and should be wrapped.
+     * @return such information.
+     */
+    @Override
+    public boolean getParametersShouldBeWrapped()
+    {
+        return getParametersShouldBeWrapped(getParameters());
+    }
+
+    /**
+     * Checks whether the parameter list would take too much space and should be wrapped.
+     * @param parameters the parameters.
+     * @return such information.
+     */
+    protected boolean getParametersShouldBeWrapped(@NotNull final List<Parameter<DecoratedString>> parameters)
+    {
+        final boolean result;
+
+        int weight = 0;
+
+        for (@Nullable final Parameter<DecoratedString> parameter : parameters)
+        {
+            if (parameter != null)
+            {
+                weight += parameter.getType().getValue().length();
+                weight += parameter.getName().getValue().length();
+            }
+        }
+
+        result = weight > 50;
+
+        return result;
     }
 
     /**

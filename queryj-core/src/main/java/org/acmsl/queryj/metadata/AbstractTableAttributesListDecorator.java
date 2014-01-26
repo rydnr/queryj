@@ -73,6 +73,7 @@ public abstract class AbstractTableAttributesListDecorator
     extends AbstractListDecorator<Attribute<DecoratedString>>
     implements TableDecorator
 {
+    public static final String INVALID_OPERATION = "Invalid operation";
     /**
      * The table decorator.
      */
@@ -153,7 +154,7 @@ public abstract class AbstractTableAttributesListDecorator
     @Override
     public ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     /**
@@ -172,14 +173,14 @@ public abstract class AbstractTableAttributesListDecorator
     public List<Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>>
     getAllParentTables()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     /**
@@ -197,28 +198,28 @@ public abstract class AbstractTableAttributesListDecorator
     @Override
     public List<Sql<DecoratedString>> getDynamicQueries()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     @NotNull
     @Override
     public List<Row<DecoratedString>> getStaticContent()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     @NotNull
     @Override
     public List<Result<DecoratedString>> getDifferentCustomResults()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     @NotNull
     @Override
     public List<DecoratedString> getAttributeTypes()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     // Table implementation

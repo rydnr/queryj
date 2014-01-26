@@ -45,10 +45,10 @@ source(C) ::= <<
 <!
   Generates a DAO database implementation source file.
 !>
-<sourceImpl(table=C.table, C=C)>
+<sourceImpl(table=C.table, engine=C.engine, C=C)>
 >>
 
-sourceImpl(table, C) ::= <<
+sourceImpl(table, engine, C) ::= <<
 <!
   Generates a DAO database implementation source file.
   @param table the table.
@@ -61,18 +61,9 @@ sourceImpl(table, C) ::= <<
   year=C.current_year,
   description=
   [
-    first_line_description(
-      tableName=table.name,
-      engineName=C.engine_name,
-      engineVersion=C.engine_version),
-    second_line_description(
-      tableName=table.name,
-      engineName=C.engine_name,
-      engineVersion=C.engine_version),
-    third_line_description(
-      tableName=table.name,
-      engineName=C.engine_name,
-      engineVersion=C.engine_version)
+    first_line_description(tableName=table.name, engine=engine),
+    second_line_description(tableName=table.name, engine=engine),
+    third_line_description(tableName=table.name, engine=engine)
   ],
   timestamp=C.timestamp)><endif>
 <if(C.generation_timestamps_enabled)>
@@ -141,7 +132,7 @@ import javax.sql.DataSource;
 <checkers_import(C=C)>
 <checkthread_import(C=C)>
 
-<class(foreign_keys=table.foreignKeys, table=table, C=C)>
+<class(foreign_keys=table.foreignKeys, table=table, engine=engine, C=C)>
 >>
 
 imports(table) ::= <<
@@ -152,34 +143,32 @@ imports(table) ::= <<
 <table.attributeTypes:{ t | import <t>;} ; separator="\n">
 >>
 
-first_line_description(tableName, engineName, engineVersion) ::= <<
+first_line_description(tableName, engine) ::= <<
 <!
   Generates a description for the generated file.
   @param tableName the table name.
-  @param engineName the engine name.
-  @param engineVersion the engine version.
+  @param engine the engine.
 !>
 DAO implementation responsible of managing the access to
 >>
 
-second_line_description(tableName, engineName, engineVersion) ::= <<
+second_line_description(tableName, engine) ::= <<
 <!
   Generates a description for the generated file.
   @param tableName the table name.
   @param engineName the engine name.
   @param engineVersion the engine version.
 !>
- <tableName> entities from <engineName>
+ <tableName> entities from <engine.name>
 >>
 
-third_line_description(tableName, engineName, engineVersion) ::= <<
+third_line_description(tableName, engine) ::= <<
 <!
   Generates a description for the generated file.
   @param tableName the table name.
-  @param engineName the engine name.
-  @param engineVersion the engine version.
+  @param engine the engine.
 !>
-<if(engineVersion)>(<engineVersion>) <endif>persistence layers.
+<if(engine.version)>(<engine.version>) <endif>persistence layers.
 >>
 
 project_imports(
@@ -281,7 +270,7 @@ foreignkey_dao_import(
 import <basePackageName>.<baseDAOSubpackageName>.<referredVOName>DAO;
 >>
 
-class(foreign_keys, table, C) ::= <<
+class(foreign_keys, table, engine, C) ::= <<
 <!
  Generates the class body.
  @param engine_name the engine name.
@@ -291,10 +280,11 @@ class(foreign_keys, table, C) ::= <<
  @param repository the table repository name.
  @param table the table.
 !>
-<classImpl(foreign_keys=table.foreignKeys, table=table, parent=table.parentTable, repository=C.repository, C=C)>
+<classImpl(
+    foreign_keys=table.foreignKeys, table=table, parent=table.parentTable, repository=C.repository, engine=engine, C=C)>
 >>
 
-classImpl(foreign_keys, table, parent, repository, C) ::= <<
+classImpl(foreign_keys, table, parent, repository, engine, C) ::= <<
 <!
  Generates the class body.
  @param engine_name the engine name.
@@ -306,23 +296,14 @@ classImpl(foreign_keys, table, parent, repository, C) ::= <<
 !>
 /**
  * <[
-      first_line_description(
-        tableName=table.name,
-        engineName=C.engine_name,
-        engineVersion=C.engine_version),
-      second_line_description(
-        tableName=table.name,
-        engineName=C.engine_name,
-        engineVersion=C.engine_version),
-      third_line_description(
-        tableName=table.name,
-        engineName=C.engine_name,
-        engineVersion=C.engine_version)
+      first_line_description(tableName=table.name, engine=engine),
+      second_line_description(tableName=table.name, engine=engine),
+      third_line_description(tableName=table.name, engine=engine)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/DAO.stg", C=C)>
  */
 @ThreadSafe
-public <if(table.dynamicQueries)>abstract <endif>class <C.engine_name><table.name.voName>DAO
+public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.voName>DAO
   extends     <repository.capitalized>JdbcTemplate
   implements  <table.name.voName>DAO
 <!//              <repository.capitalized>TableRepository!>
@@ -350,7 +331,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <C.engine_name><table.nam
 
     <custom_updates_or_inserts_sql(table=table, repository=repository, C=C)>
 <endif>
-    <constructor(table=table, repository=repository, C=C)>
+    <constructor(table=table, repository=repository, engine=engine, C=C)>
 <if(table.static)>
 <if(table.primaryKey)>
 
@@ -359,9 +340,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <C.engine_name><table.nam
 
     <table.own.minus.primaryKey1.minus.readOnlyAttributes:{ attr | <find_constant_methods(attribute=attr, table=table, C=C)>}; separator="\n">
 <endif>
-
-    <find_by_primary_key(table=table, parent=parent, repository=repository, C=C)>
-
+    <!
     <insert(table=table, parent=parent, repository=repository, C=C)>
 
     <create(table=table, parent=parent, repository=repository, C=C)>
@@ -371,6 +350,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <C.engine_name><table.nam
     <delete(table=table, parent=parent, repository=repository, C=C)>
 
     <table.foreignKeys:{ fk | <fk_delete_method(foreignKey=fk, table=table)>}; separator="\n">
+    !>
 <if(table.customSelects)>
 
     <table.customSelects:{ cs | <custom_select(cs=cs, table=table, C=C)>}; separator="\n">
@@ -429,7 +409,6 @@ insert_sql(table, parent, repository, C) ::= <<
  @param repository the repository.
  @param C the context.
  !>
-
 /**
  * The SQL to insert.
  */
@@ -474,18 +453,18 @@ public static final String _UPDATE_SQL =
     +  "SET "
 <if(table.own.minus.primaryKey.minus.readOnlyAttributes)>
 <table.own.minus.primaryKey.minus.readOnlyAttributes:{attr|
-    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=", \"\n"> "
+    + "<attr.name.uppercased> = ?" /* :<attr.name> */ }; separator=" + \", \"\n">
 <else>
 <table.primaryKey:{attr|
-    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=", \"\n"> "
+    + "<attr.name.uppercased> = ?" /* :<attr.name> */ }; separator=" + \", \"\n">
 <endif>
     + " WHERE "
 <if(table.primaryKey)>
 <table.primaryKey:{attr |
-    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=" AND \"\n">";
+    + "<attr.name.uppercased> = ?" /* :<attr.name> */ }; separator=" + \" AND \"\n">;
 <else>
 <table.attributes:{attr |
-    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=" AND \"\n">";
+    + "<attr.name.uppercased> = ?" /* :<attr.name> */ }; separator=" + \" AND \"\n">;
 <endif>
 >>
 
@@ -507,23 +486,23 @@ public static final String _DELETE_SQL =
     + "WHERE "
 <if(table.primaryKey)>
 <table.primaryKey:{attr |
-    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=" AND \"\n">";
+    + "<attr.name.uppercased> = ?" /* :<attr.name> */ }; separator=" + \" AND \"\n">;
 <else>
 <table.attributes:{attr |
-    + /* :<attr.name> */ "<attr.name.uppercased> = ?}; separator=" AND \"\n">";
+    + "<attr.name.uppercased> = ?" /* :<attr.name> */ }; separator=" + \" AND \"\n">;
 <endif>
 >>
 
 custom_selects_sql(table, repository, C) ::= <<
 <table.customSelects:{sql|
 <if(!sql.dynamic)>
-<if(sql.splittedQuotedValue)>
+<if(sql.value.splitAndSurroundByDoubleQuotes)>
 
 /**
  * The <sql.id> SQL.
  */
-public static final String <sql.idAsConstant>_SQL =
-    <sql.splittedQuotedValue; separator=" +\n">;
+public static final String <sql.id.normalized.uppercased>_SQL =
+    <sql.value.splitAndSurroundByDoubleQuotes; separator=" +\n">;
 <endif>
 <endif>
 }; separator="\n">
@@ -537,27 +516,27 @@ custom_selects_for_update_sql(table, repository, C) ::= <<
 /**
  * The <sql.id> SQL.
  */
-public static final String <sql.idAsConstant>_SQL =
-    <sql.splittedQuotedValue; separator=" +\n"><endif>;}; separator="\n">
+public static final String <sql.id.normalized.uppercased>_SQL =
+    <sql.splitAndSurroundByDoubleQuotes; separator=" +\n"><endif>;}; separator="\n">
 >>
 
 custom_updates_or_inserts_sql(table, repository, C) ::= <<
 // custom updates or inserts
 <table.customUpdatesOrInserts:{sql|
 <if(!sql.dynamic)>
-<if(sql.splittedQuotedValue)>
+<if(sql.splitAndSurroundByDoubleQuotes)>
 
 /**
  * The <sql.id> SQL.
  */
-public static final String <sql.idAsConstant>_SQL =
-    <sql.splittedQuotedValue; separator=" +\n">;
+public static final String <sql.id.normalized.uppercased>_SQL =
+    <sql.value.splitAndSurroundByDoubleQuotes; separator=" +\n">;
 <endif>
 <endif>
 }; separator="\n">
 >>
 
-constructor(table, repository, C) ::= <<
+constructor(table, repository, engine, C) ::= <<
 <!
  Creates the constructor.
  @param table the table.
@@ -565,13 +544,13 @@ constructor(table, repository, C) ::= <<
  @param C the context.
  !>
 /**
- * Builds a {@link <C.engine_name><table.name.voName>DAO} instance
+ * Builds a {@link <engine.name><table.name.voName>DAO} instance
  * with given data source.
  * @param dataSource the required {@link javax.sql.DataSource data source}.
  * @param daoListener the {@link <repository.capitalized>DAOListener}
  * instance.
  */
-public <C.engine_name><table.name.voName>DAO(
+public <engine.name><table.name.voName>DAO(
     final DataSource dataSource, final <repository.capitalized>DAOListener daoListener)
 {
     super(dataSource, daoListener);
@@ -1543,7 +1522,7 @@ public static class <table.name.voName>PkResultSetExtractor
     throws  SQLException,
             DataAccessException
     {
-        final Map result = new HashMap();
+        <notnull(C=C)>final Map\<String, ?> result = new HashMap\<String, Object>();
 
         int t_iRowCount = 0;
 
@@ -1630,7 +1609,7 @@ public <table.name.voName> findConstantByPrimaryKey(
 
     boolean found = false;
 
-    for (final <nullable(C=C)><table.name.voName> item : FIXED_CONSTANTS)
+    for (<nullable(C=C)>final <table.name.voName> item : FIXED_CONSTANTS)
     {
         if  (item != null)
         {
@@ -1638,7 +1617,6 @@ public <table.name.voName> findConstantByPrimaryKey(
 
             <primaryKey:{ attr | <static_attribute_check(attr=attr)>};
               separator="\n">
-
             if  (found)
             {
                 result = item;
@@ -1664,7 +1642,7 @@ find_constant_methods(attribute, table, C) ::= <<
  * to filter.
  * @return the {@link <table.name.voName>} instance.
  */
-<nullable(C=C)>
+<notnull(C=C)>
 public List\<<table.name.voName>\> findConstantsBy<attribute.name.capitalized>(
     <type_checker(attribute=attribute, C=C)>final <attribute.javaType> <attribute.name.lowercased>)
 {
@@ -1713,7 +1691,7 @@ static_object_attribute_check(attr) ::= <<
 !>
 if  (found)
 {
-    Object t_<attr.name.capitalized> =
+    <nullable(C=C)>final Object t_<attr.name.capitalized> =
         t_CurrentItem.get<attr.name.capitalized>();
 
     if  (t_<attr.name.capitalized> == null)
@@ -1923,7 +1901,7 @@ public static class <attr.name.capitalized>ResultSetExtractor
     throws  SQLException,
             DataAccessException
     {
-        <notnull(C=C)>final Map result = new HashMap();
+        <notnull(C=C)>final Map\<String, ?> result = new HashMap\<String, Object>();
 
         int t_iRowCount = 0;
 

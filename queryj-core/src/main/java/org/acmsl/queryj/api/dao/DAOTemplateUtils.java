@@ -350,40 +350,6 @@ public class DAOTemplateUtils
     }
 
     /**
-     * Retrieves all <code>Result</code> instances of given type.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param type the type.
-     * @return such elements.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    public List<Result<String>> retrieveResultsByType(
-        @NotNull final CustomSqlProvider customSqlProvider, @NotNull final String type)
-    {
-        return
-            retrieveResultsByType(
-                customSqlProvider, type, CustomResultUtils.getInstance());
-    }
-
-    /**
-     * Retrieves all <code>Result</code> instances of given type.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param type the type.
-     * @param customResultUtils the <code>CustomResultUtils</code> instance.
-     * @return such elements.
-     */
-    @NotNull
-    protected List<Result<String>> retrieveResultsByType(
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String type,
-        @NotNull final CustomResultUtils customResultUtils)
-    {
-        return
-            customResultUtils.retrieveResultsByType(
-                customSqlProvider, type);
-    }
-
-    /**
      * Clones given String array.
      * @param array the array to clone.
      * @return the cloned array.

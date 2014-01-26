@@ -119,9 +119,9 @@ public class CachingTableDecorator
     private List<Sql<DecoratedString>> m__lCachedCustomUpdatesOrInserts;
 
     /**
-     * The cached custom results.
+     * The cached custom result.
      */
-    private List<ResultDecorator> m__lCachedCustomResults;
+    private Result<DecoratedString> m__CachedCustomResult;
 
     /**
      * The cached child attributes.
@@ -632,31 +632,31 @@ public class CachingTableDecorator
     }
 
     /**
-     * Specifies the cached custom results.
-     * @param results the results to cache.
+     * Specifies the cached custom result.
+     * @param result the result to cache.
      */
-    protected final void immutableSetCachedCustomResults(@NotNull final List<ResultDecorator> results)
+    protected final void immutableSetCachedCustomResult(@NotNull final Result<DecoratedString> result)
     {
-        m__lCachedCustomResults = results;
+        m__CachedCustomResult = result;
     }
 
     /**
-     * Specifies the cached custom results.
-     * @param results the results to cache.
+     * Specifies the cached custom result.
+     * @param result the result to cache.
      */
-    protected void setCachedCustomResults(@NotNull final List<ResultDecorator> results)
+    protected void setCachedCustomResult(@NotNull final Result<DecoratedString> result)
     {
-        immutableSetCachedCustomResults(results);
+        immutableSetCachedCustomResult(result);
     }
 
     /**
-     * Retrieves the cached custom results.
+     * Retrieves the cached custom result.
      * @return such information.
      */
     @Nullable
-    protected List<ResultDecorator> getCachedCustomResults()
+    protected Result<DecoratedString> getCachedCustomResult()
     {
-        return m__lCachedCustomResults;
+        return m__CachedCustomResult;
     }
 
     /**
@@ -664,15 +664,18 @@ public class CachingTableDecorator
      * @return such information.
      */
     @Override
-    @NotNull
-    public List<ResultDecorator> getCustomResults()
+    @Nullable
+    public Result<DecoratedString> getCustomResult()
     {
-        List<ResultDecorator> result = getCachedCustomResults();
+        @Nullable Result<DecoratedString> result = getCachedCustomResult();
 
         if (result == null)
         {
-            result = super.getCustomResults();
-            setCachedCustomResults(result);
+            result = super.getCustomResult();
+            if (result != null)
+            {
+                setCachedCustomResult(result);
+            }
         }
 
         return result;
@@ -1051,7 +1054,7 @@ public class CachingTableDecorator
             + ", \"cachedDynamicQueries\": " + ToStringUtils.getInstance().toJson(m__lCachedDynamicQueries)
             + ", \"cachedCustomSelects\": " + ToStringUtils.getInstance().toJson(m__lCachedCustomSelects)
             + ", \"cachedCustomUpdatesOrInserts\": " + ToStringUtils.getInstance().toJson(m__lCachedCustomUpdatesOrInserts)
-            + ", \"cachedCustomResults\": " + ToStringUtils.getInstance().toJson(m__lCachedCustomResults)
+            + ", \"cachedCustomResult\": " + m__CachedCustomResult
             + ", \"cachedChildAttributes\": " + ToStringUtils.getInstance().toJson(m__lCachedChildAttributes)
             + ", \"cachedForeignKeys\": " + ToStringUtils.getInstance().toJson(m__lCachedForeignKeys)
             + ", \"cachedParentForeignKey\": " + m__CachedParentForeignKey

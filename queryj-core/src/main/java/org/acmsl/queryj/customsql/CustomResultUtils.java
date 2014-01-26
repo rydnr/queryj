@@ -42,7 +42,6 @@ import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
 import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.metadata.SqlDAO;
-import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.tools.DebugUtils;
@@ -450,34 +449,6 @@ public class CustomResultUtils
         @NotNull final String resultId)
     {
         return sqlDAO.findByResultId(resultId);
-    }
-
-    /**
-     * Retrieves all {@link Result} instances of given type.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param type the type.
-     * @return such elements.
-     */
-    @NotNull
-    public List<Result<String>> retrieveResultsByType(
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String type)
-    {
-        return retrieveResultsByType(customSqlProvider.getSqlResultDAO(), type);
-    }
-
-    /**
-     * Retrieves all {@link Result} instances of given type.
-     * @param resultDAO the {@link SqlResultDAO} instance.
-     * @param type the type.
-     * @return such elements.
-     */
-    @NotNull
-    public List<Result<String>> retrieveResultsByType(
-        @NotNull final SqlResultDAO resultDAO,
-        @NotNull final String type)
-    {
-        return resultDAO.findByType(type);
     }
 
     /**

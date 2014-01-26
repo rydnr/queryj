@@ -55,11 +55,6 @@ public abstract class AbstractResult<T>
     implements  Result<T>
 {
     /**
-     * The <i>matches</i> attribute.
-     */
-    private T m__strMatches;
-
-    /**
      * The <i>property-ref> elements.
      */
     private List<PropertyRef> m__lPropertyRefs;
@@ -67,41 +62,10 @@ public abstract class AbstractResult<T>
     /**
      * Creates a <code>AbstractResult</code> with given information.
      * @param id the <i>id</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      */
-    public AbstractResult(@NotNull final T id, @NotNull final T matches)
+    public AbstractResult(@NotNull final T id)
     {
         super(id);
-        immutableSetMatches(matches);
-    }
-
-    /**
-     * Specifies the <i>matches</i> attribute.
-     * @param matches such value.
-     */
-    protected final void immutableSetMatches(@NotNull final T matches)
-    {
-        m__strMatches = matches;
-    }
-
-    /**
-     * Specifies the <i>matches</i> attribute.
-     * @param matches such value.
-     */
-    @SuppressWarnings("unused")
-    protected void setMatches(@NotNull final T matches)
-    {
-        immutableSetMatches(matches);
-    }
-
-    /**
-     * Retrieves the <i>matches</i> attribute.
-     * @return such value.
-     */
-    @NotNull
-    public T getMatches()
-    {
-        return m__strMatches;
     }
 
     /**
@@ -178,26 +142,19 @@ public abstract class AbstractResult<T>
      */
     public int hashCode()
     {
-        return
-            hashCode(
-                getId(), getMatches(), getPropertyRefs());
+        return hashCode(getId(), getPropertyRefs());
     }
 
     /**
      * Retrieves the hashcode.
      * @param id the <i>id</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such value.
      */
     protected int hashCode(
-        final T id,
-        final T matches,
-        final Collection<PropertyRef> propertyRefs)
+        final T id, final Collection<PropertyRef> propertyRefs)
     {
-        return
-            (id + "@#" + matches + "@#" + propertyRefs)
-                .toLowerCase(Locale.US).hashCode();
+        return (id + "@#" + propertyRefs).toLowerCase(Locale.US).hashCode();
     }
 
     /**
@@ -217,7 +174,6 @@ public abstract class AbstractResult<T>
                 equals(
                     (Result<T>) instance,
                     getId(),
-                    getMatches(),
                     getPropertyRefs());
         }
 
@@ -227,19 +183,16 @@ public abstract class AbstractResult<T>
     /**
      * Checks whether given instance is semantically equal to this one.
      * @param id the <i>id</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return <code>true</code> in such case.
      */
     public boolean equals(
         @NotNull final Result<T> candidate,
         @NotNull final T id,
-        @NotNull final T matches,
         final Collection<PropertyRef> propertyRefs)
     {
         return
             (   (("" + id).equalsIgnoreCase("" + candidate.getId())
-             && (("" + matches).equalsIgnoreCase("" + candidate.getMatches()))
              && ("" + propertyRefs).equals(
                      "" + candidate.getPropertyRefs())));
     }
@@ -249,32 +202,25 @@ public abstract class AbstractResult<T>
      * @return such information.
      */
     @NotNull
+    @Override
     public String toString()
     {
-        return
-            toString(
-                getId(),
-                getMatches(),
-                getPropertyRefs());
+        return toString( getId(), getPropertyRefs());
     }
 
     /**
      * Provides a text information about this instance.
      * @param id the <i>id</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such information.
      */
     @NotNull
     protected String toString(
-        final T id,
-        final T matches,
-        final Collection<PropertyRef> propertyRefs)
+        final T id, final Collection<PropertyRef> propertyRefs)
     {
         return
               getClass().getName()
             + "[" + "id=" + id + "]"
-            + "[" + "matches=" + matches + "]"
             + "[" + "property-refs=" + propertyRefs + "]";
     }
 

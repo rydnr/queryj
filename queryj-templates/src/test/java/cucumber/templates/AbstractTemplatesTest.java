@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Templates
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -43,6 +43,7 @@ import cucumber.templates.sql.CucumberSqlParameterDAO;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
 import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.templates.antlr.JavaLexer;
 import org.acmsl.queryj.templates.antlr.JavaPackageVisitor;
 import org.acmsl.queryj.templates.antlr.JavaParser;
@@ -170,6 +171,11 @@ public abstract class AbstractTemplatesTest<G, F>
     private Map<String, List<Parameter<String>>> m__mParameters;
 
     /**
+     * The static rows.
+     */
+    private Map<String, List<Row<String>>> m__mRows;
+
+    /**
      * Creates an empty instance.
      */
     protected AbstractTemplatesTest()
@@ -179,6 +185,7 @@ public abstract class AbstractTemplatesTest<G, F>
         immutableSetForeignKeys(new ArrayList<ForeignKey<String>>());
         immutableSetSqlList(new ArrayList<Sql<String>>());
         immutableSetParameters(new HashMap<String, List<Parameter<String>>>());
+        immutableSetRows(new HashMap<String, List<Row<String>>>());
     }
 
     /**
@@ -322,6 +329,33 @@ public abstract class AbstractTemplatesTest<G, F>
         return m__mParameters;
     }
 
+    /**
+     * Specifies the row map (table name > static rows.
+     * @param map such map.
+     */
+    protected final void immutableSetRows(@NotNull final Map<String, List<Row<String>>> map)
+    {
+        this.m__mRows = map;
+    }
+
+    /**
+     * Specifies the row map (table name > static rows.
+     * @param map such map.
+     */
+    @SuppressWarnings("unused")
+    protected void setRows(@NotNull final Map<String, List<Row<String>>> map)
+    {
+        immutableSetRows(map);
+    }
+
+    /**
+     * Retrieves the row map (table name > static rows.
+     * @return such map.
+     */
+    protected Map<String, List<Row<String>>> getRows()
+    {
+        return this.m__mRows;
+    }
     /**
      * Retrieves a {@link org.acmsl.queryj.customsql.CustomSqlProvider} instance adapted for given result.
      * @param sqlList the list of {@link Sql}.
@@ -764,6 +798,8 @@ public abstract class AbstractTemplatesTest<G, F>
         result.append(FACTORY_MAPPINGS);
         result.append(", GENERATOR_MAPPINGS=");
         result.append(GENERATOR_MAPPINGS);
+        result.append(", PACKAGE_MAPPINGS=");
+        result.append(PACKAGE_MAPPINGS);
         result.append(", rootFolder=");
         result.append(rootFolder);
         result.append(", outputFiles=");
@@ -776,6 +812,8 @@ public abstract class AbstractTemplatesTest<G, F>
         result.append(m__lSql);
         result.append(", sqlParameters=");
         result.append(m__mParameters);
+        result.append(", rows=");
+        result.append(m__mRows);
         result.append("}");
 
         return result.toString();

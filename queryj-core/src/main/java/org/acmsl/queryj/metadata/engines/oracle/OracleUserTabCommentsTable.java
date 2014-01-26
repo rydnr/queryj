@@ -35,17 +35,21 @@
 package org.acmsl.queryj.metadata.engines.oracle;
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing some QueryJ-Core classes.
  */
-import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.queryj.Literals;
 
 /*
  * Importing some ACM-SL QueryJ-SQL classes.
  */
-import org.acmsl.queryj.Field;
-import org.acmsl.queryj.Literals;
-import org.acmsl.queryj.StringField;
-import org.acmsl.queryj.Table;
+import org.acmsl.queryj.sql.Field;
+import org.acmsl.queryj.sql.StringField;
+import org.acmsl.queryj.sql.Table;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JetBrains annotations.
@@ -65,8 +69,10 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class OracleUserTabCommentsTable
     extends Table
-    implements  Singleton
+    implements Singleton
 {
+    public static final String USER_TAB_COMMENTS = "USER_TAB_COMMENTS";
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
@@ -106,7 +112,7 @@ public class OracleUserTabCommentsTable
      */
     protected OracleUserTabCommentsTable(final String alias)
     {
-        super("USER_TAB_COMMENTS", alias);
+        super(USER_TAB_COMMENTS, alias);
     }
 
     /**
@@ -114,7 +120,7 @@ public class OracleUserTabCommentsTable
      */
     protected OracleUserTabCommentsTable()
     {
-        this("USER_TAB_COMMENTS");
+        this(USER_TAB_COMMENTS);
     }
 
     /**
@@ -125,7 +131,7 @@ public class OracleUserTabCommentsTable
     @Nullable
     public static OracleUserTabCommentsTable getInstance(@Nullable final String alias)
     {
-        @Nullable OracleUserTabCommentsTable result;
+        @Nullable final OracleUserTabCommentsTable result;
 
         if  (alias != null)
         {
@@ -156,7 +162,7 @@ public class OracleUserTabCommentsTable
     @NotNull
     public String getTableName()
     {
-        return "USER_TAB_COMMENTS";
+        return USER_TAB_COMMENTS;
     }
 
     /**

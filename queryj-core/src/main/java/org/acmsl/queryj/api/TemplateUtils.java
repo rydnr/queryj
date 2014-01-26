@@ -522,17 +522,9 @@ public class TemplateUtils
 
             @NotNull final Result<String> singleResult =
                 new ResultElement<>(
-                    "_single." + tableName.toLowerCase(Locale.getDefault()) + Literals.RESULT_SUFFIX,
-                    classValue,
-                    Result.SINGLE);
+                    "_" + tableName.toLowerCase(Locale.getDefault()) + Literals.RESULT_SUFFIX,
+                    classValue);
             result.add(singleResult);
-
-            @NotNull final Result<String> multipleResult =
-                new ResultElement<>(
-                    "_multiple." + tableName.toLowerCase(Locale.getDefault()) + Literals.RESULT_SUFFIX,
-                    classValue,
-                    Result.MULTIPLE);
-            result.add(multipleResult);
         }
         else
         {

@@ -45,6 +45,7 @@ import org.acmsl.queryj.metadata.SqlResultDAO;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.templates.antlr.JavaParser.NonWildcardTypeArgumentsContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -138,51 +139,41 @@ public class CucumberSqlResultDAO
 
     @Nullable
     @Override
-    public Result<String> findSingleMatch(@NotNull final String table)
-    {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Result<String> findMultipleMatch(@NotNull final String table)
-    {
-        return null;
-    }
-
-    @Nullable
-    @Override
     public Result<String> findBySqlId(@NotNull final String sqlId)
     {
         return null;
     }
 
     /**
-     * Finds all {@link Result} of given type.
-     * @param type the type.
-     * @return the list of results.
+     * Finds the {@link Result} of given table.
+     * @param table the table.
+     * @return the result.
      */
     @NotNull
     @Override
-    public List<Result<String>> findByType(@NotNull final String type)
+    public Result<String> findByTable(@NotNull final String table)
     {
-        return findByType(type, getResult());
+        return findByTable(table, getResult());
     }
 
     /**
-     * Finds all {@link Result} of given type.
-     * @param type the type.
+     * Finds nte {@link Result} of given type.
+     * @param table the table name.
      * @param customResult the custom result.
-     * @return the list of results.
+     * @return the result.
      */
     @NotNull
-    protected List<Result<String>> findByType(@NotNull final String type, @NotNull final Result<String> customResult)
+    protected Result<String> findByTable(@NotNull final String table, @NotNull final Result<String> customResult)
     {
-        @NotNull final List<Result<String>> result = new ArrayList<>(1);
+        @Nullable final Result<String> result;
 
-        if (type.equals(customResult.getClassValue()))
+        if (table.equals(customResult.getClassValue()))
         {
-            result.add(customResult);
+            result = customResult;
+        }
+        else
+        {
+            result = null;
         }
 
         return result;

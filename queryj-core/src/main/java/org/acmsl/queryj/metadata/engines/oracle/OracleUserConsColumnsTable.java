@@ -35,18 +35,22 @@
 package org.acmsl.queryj.metadata.engines.oracle;
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing some QueryJ-Core classes.
  */
-import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.queryj.Literals;
 
 /*
  * Importing some QueryJ-SQL classes.
  */
-import org.acmsl.queryj.Field;
-import org.acmsl.queryj.IntField;
-import org.acmsl.queryj.Literals;
-import org.acmsl.queryj.StringField;
-import org.acmsl.queryj.Table;
+import org.acmsl.queryj.sql.Field;
+import org.acmsl.queryj.sql.IntField;
+import org.acmsl.queryj.sql.StringField;
+import org.acmsl.queryj.sql.Table;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JetBrains annotations.
@@ -66,8 +70,10 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class OracleUserConsColumnsTable
     extends Table
-    implements  Singleton
+    implements Singleton
 {
+    public static final String USER_CONS_COLUMNS = "USER_CONS_COLUMNS";
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
@@ -114,7 +120,7 @@ public class OracleUserConsColumnsTable
      */
     protected OracleUserConsColumnsTable(final String alias)
     {
-        super("USER_CONS_COLUMNS", alias);
+        super(USER_CONS_COLUMNS, alias);
     }
 
     /**
@@ -122,7 +128,7 @@ public class OracleUserConsColumnsTable
      */
     protected OracleUserConsColumnsTable()
     {
-        this("USER_CONS_COLUMNS");
+        this(USER_CONS_COLUMNS);
     }
 
     /**
@@ -133,7 +139,7 @@ public class OracleUserConsColumnsTable
     @Nullable
     public static OracleUserConsColumnsTable getInstance(@Nullable final String alias)
     {
-        @Nullable OracleUserConsColumnsTable result;
+        @Nullable final OracleUserConsColumnsTable result;
 
         if  (alias != null)
         {
@@ -164,7 +170,7 @@ public class OracleUserConsColumnsTable
     @NotNull
     public String getTableName()
     {
-        return "USER_CONS_COLUMNS";
+        return USER_CONS_COLUMNS;
     }
 
     /**

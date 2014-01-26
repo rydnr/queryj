@@ -910,7 +910,7 @@ public abstract class AbstractJdbcMetadataManager
                     cloneAttributes(table.getAttributes()),
                     cloneForeignKeys(table.getForeignKeys()),
                     t_Table,
-                    table.isStatic(),
+                    table.getStaticAttribute(),
                     table.isVoDecorated());
         }
 

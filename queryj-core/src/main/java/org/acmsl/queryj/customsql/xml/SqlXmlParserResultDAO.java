@@ -81,7 +81,7 @@ public class SqlXmlParserResultDAO
     /**
      * The map of results by table/DAO.
      */
-    private static final Map<String,List<Result<String>>> CACHED_RESULTS_BY_TABLE = new HashMap<>();
+    private static final Map<String, Result<String>> CACHED_RESULT_BY_TABLE = new HashMap<>();
     private static final Map<String, Boolean> UNMATCHED_TABLES = new HashMap<>(1);
 
     /**
@@ -118,62 +118,45 @@ public class SqlXmlParserResultDAO
     }
 
     /**
-     * Retrieves the {@link org.acmsl.queryj.customsql.Result} for single matches of a given VO (table).
-     * @param table the table.
-     * @return the single-match {@link Result result}.
-     */
-    @Override
-    @Nullable
-    public Result<String> findSingleMatch(@NotNull final String table)
-    {
-        return findMatch(table, Result.SINGLE, EnglishGrammarUtils.getInstance());
-    }
-
-    /**
      * Retrieves the {@link Result} for multiple matches of a given VO (table).
      * @param table the table.
      * @return the multiple-match {@link Result result}.
      */
     @Override
     @Nullable
-    public Result<String> findMultipleMatch(@NotNull final String table)
+    public Result<String> findByTable(@NotNull final String table)
     {
-        return findMatch(table, Result.MULTIPLE, EnglishGrammarUtils.getInstance());
+        return findByTable(table, EnglishGrammarUtils.getInstance());
     }
-
     /**
      * Retrieves the {@link Result} for multiple matches of a given VO (table).
      * @param table the table.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
      * @return the multiple-match {@link Result result}.
      */
     @Nullable
-    public Result<String> findMatch(
+    protected Result<String> findByTable(
         @NotNull final String table,
-        @NotNull final String type,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
-        @Nullable Result<String> result = null;
+        @Nullable final Result<String> result;
 
-        @Nullable final List<Result<String>> t_lCachedResults = getCachedResults(table);
+        @Nullable Result<String> aux = null;
 
-        if (t_lCachedResults != null)
+        if (!knownToBeNotFound(table))
         {
-            result = filterByType(t_lCachedResults, type);
-        }
+            @Nullable final Result<String> t_CachedResult = getCachedResult(table);
 
-        if (   (result == null)
-            && (!knownToBeNotFound(table)))
-        {
-            @Nullable List<Sql<String>> t_lSql;
-            @Nullable String t_strDAO = null;
-
-            boolean t_bBreak = false;
-
-            for (@Nullable final Result<String> t_Result : findAll())
+            if (t_CachedResult == null)
             {
-                if (t_Result != null)
+                @Nullable List<Sql<String>> t_lSql;
+                @Nullable String t_strDAO = null;
+
+                boolean t_bBreak = false;
+
+                for (@Nullable final Result<String> t_Result : findAll())
                 {
-                    if (t_Result.getMatches().equals(type))
+                    if (t_Result != null)
                     {
                         t_lSql = findSqlByResultId(t_Result.getId());
 
@@ -187,7 +170,7 @@ public class SqlXmlParserResultDAO
                             if (   (t_strDAO != null)
                                 && (matches(table, t_strDAO, englishGrammarUtils)))
                             {
-                                result = t_Result;
+                                aux = t_Result;
                                 t_bBreak = true;
                                 break;
                             }
@@ -200,7 +183,13 @@ public class SqlXmlParserResultDAO
                     }
                 }
             }
+            else
+            {
+                aux = t_CachedResult;
+            }
         }
+
+        result = aux;
 
         if (result != null)
         {
@@ -240,39 +229,14 @@ public class SqlXmlParserResultDAO
     }
 
     /**
-     * Filters given list to get the first {@link Result} matching given type.
-     * @param results the list of results to filter.
-     * @param type the type.
-     * @return the first match, or <code>null</code> otherwise.
-     */
-    @Nullable
-    protected Result<String> filterByType(@NotNull final List<Result<String>> results, @NotNull final String type)
-    {
-        @Nullable Result<String> result = null;
-
-        for (@Nullable final Result<String> t_Result : results)
-        {
-            if (   (t_Result != null)
-                && (type.equalsIgnoreCase(t_Result.getMatches())))
-            {
-                result = t_Result;
-                break;
-            }
-        }
-
-        return result;
-
-    }
-
-    /**
      * Retrieves the cached results for given table.
      * @param table the table.
      * @return the cached results.
      */
     @Nullable
-    protected synchronized List<Result<String>> getCachedResults(@NotNull final String table)
+    protected synchronized Result<String> getCachedResult(@NotNull final String table)
     {
-        return CACHED_RESULTS_BY_TABLE.get(table.toLowerCase(Locale.US));
+        return CACHED_RESULT_BY_TABLE.get(table.toLowerCase(Locale.US));
     }
 
     /**
@@ -282,15 +246,10 @@ public class SqlXmlParserResultDAO
      */
     protected synchronized void cacheResult(@NotNull final String table, @NotNull final Result<String> result)
     {
-        List<Result<String>> t_lCurrentMatches = CACHED_RESULTS_BY_TABLE.get(table.toLowerCase(Locale.US));
-        if (t_lCurrentMatches == null)
+        @Nullable final Result<String> t_CurrentMatch = CACHED_RESULT_BY_TABLE.get(table.toLowerCase(Locale.US));
+        if (t_CurrentMatch == null)
         {
-            t_lCurrentMatches = new ArrayList<>(2);
-            CACHED_RESULTS_BY_TABLE.put(table.toLowerCase(Locale.US), t_lCurrentMatches);
-        }
-        if (!t_lCurrentMatches.contains(result))
-        {
-            t_lCurrentMatches.add(result);
+            CACHED_RESULT_BY_TABLE.put(table.toLowerCase(Locale.US), t_CurrentMatch);
         }
     }
 
@@ -453,7 +412,6 @@ public class SqlXmlParserResultDAO
      * @return the list of matching {@link Result} instances.
      */
     @NotNull
-    @Override
     public List<Result<String>> findByType(@NotNull final String type)
     {
         return filterItems(findAll(), Result.class, type);

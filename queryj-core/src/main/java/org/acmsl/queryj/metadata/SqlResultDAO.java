@@ -70,22 +70,6 @@ public interface SqlResultDAO
     Result<String> findByPrimaryKey(@NotNull final String id);
 
     /**
-     * Retrieves the {@link Result} for single matches of a given VO (table).
-     * @param table the table.
-     * @return the single-match {@link Result result}.
-     */
-    @Nullable
-    Result<String> findSingleMatch(@NotNull final String table);
-
-    /**
-     * Retrieves the {@link Result} for multiple matches of a given VO (table).
-     * @param table the table.
-     * @return the multiple-match {@link Result result}.
-     */
-    @Nullable
-    Result<String> findMultipleMatch(@NotNull final String table);
-
-    /**
      * Retrieves the {@link Result} for given {@link org.acmsl.queryj.customsql.Sql sql} id.
      * @param sqlId the identifier.
      * @return the associated {@link Result}, or <code>null</code> if not found.
@@ -94,12 +78,12 @@ public interface SqlResultDAO
     Result<String> findBySqlId(@NotNull final String sqlId);
 
     /**
-     * Retrieves the {@link Result results} matching given type.
-     * @param type the type.
+     * Retrieves the {@link Result results} matching given table.
+     * @param table the table name.
      * @return the list of matching {@link Result} instances.
      */
-    @NotNull
-    List<Result<String>> findByType(@NotNull final String type);
+    @Nullable
+    Result<String> findByTable(@NotNull final String table);
 
     /**
      * Retrieves all {@link Result results}.

@@ -38,7 +38,9 @@ package org.acmsl.queryj.metadata.engines.oracle;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.Field;
+import org.acmsl.queryj.sql.Field;
+import org.acmsl.queryj.sql.QueryUtils;
+import org.acmsl.queryj.sql.StringField;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -48,8 +50,6 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.QueryUtils;
-import org.acmsl.queryj.StringField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

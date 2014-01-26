@@ -44,7 +44,6 @@ package org.acmsl.queryj.metadata;
 import org.acmsl.commons.utils.ToStringUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.AbstractTable;
@@ -162,7 +161,7 @@ public abstract class AbstractTableDecorator
             table.getAttributes(),
             table.getForeignKeys(),
             table.getParentTable(),
-            table.isStatic(),
+            table.getStaticAttribute(),
             table.isVoDecorated(),
             metadataManager,
             decoratorFactory,
@@ -177,7 +176,7 @@ public abstract class AbstractTableDecorator
      * @param attributes the attributes.
      * @param foreignKeys the foreign keys.
      * @param parentTable the parent table.
-     * @param isStatic whether the table is static.
+     * @param staticAttribute the attribute used to label static contents.
      * @param voDecorated whether the value-object should be decorated.
      * @param metadataManager the {@link MetadataManager metadata manager}.
      * @param decoratorFactory the {@link DecoratorFactory decorator factory}.
@@ -190,7 +189,7 @@ public abstract class AbstractTableDecorator
         @NotNull final List<Attribute<String>> attributes,
         @NotNull final List<ForeignKey<String>> foreignKeys,
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable,
-        final boolean isStatic,
+        @Nullable final Attribute<String> staticAttribute,
         final boolean voDecorated,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -198,11 +197,11 @@ public abstract class AbstractTableDecorator
     {
         super(
             new DecoratedString(name),
-            new DecoratedString((table.getComment() != null) ? table.getComment() : ""),
+            (table.getComment() != null) ? new DecoratedString(table.getComment()) : new DecoratedString(""),
             (parentTable != null)
             ? new CachingTableDecorator(parentTable, metadataManager, decoratorFactory, customSqlProvider)
             : null,
-            isStatic,
+            staticAttribute != null ? decorate(staticAttribute, metadataManager) : null,
             voDecorated);
 
         immutableSetTable(table);
@@ -1664,6 +1663,17 @@ public abstract class AbstractTableDecorator
     }
 
     /**
+     * Decorates given {@link Result result}.
+     * @param item the result to decorate.
+     * @return the decorated result.
+     */
+    @NotNull
+    protected Result<DecoratedString> decorate(@NotNull final Result<String> item)
+    {
+        return decorate(item, getCustomSqlProvider(), getMetadataManager(), getDecoratorFactory());
+    }
+
+    /**
      * Retrieves the custom updates or inserts.
      * @return such information.
      */
@@ -1703,36 +1713,35 @@ public abstract class AbstractTableDecorator
     }
 
     /**
-     * Retrieves the custom results.
-     * @return such list of {@link ResultDecorator} elements.
+     * Retrieves the custom result.
+     * @return such {@link ResultDecorator} element.
      */
     @SuppressWarnings("unused")
-    @NotNull
-    public List<ResultDecorator> getCustomResults()
+    @Nullable
+    public Result<DecoratedString> getCustomResult()
     {
-        return getCustomResults(getTable(), getCustomSqlProvider(), getMetadataManager(), getDecoratorFactory());
+        return getCustomResult(getTable(), getCustomSqlProvider(), getMetadataManager(), getDecoratorFactory());
     }
 
 
     /**
-     * Retrieves the custom results.
+     * Retrieves the custom result.
      * @param table the {@link Table} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @return such list of {@link Result} elements.
+     * @return such {@link Result} element.
      */
-    @NotNull
-    protected List<ResultDecorator> getCustomResults(
+    @Nullable
+    protected Result<DecoratedString> getCustomResult(
         @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
         return
-            getCustomResults(
+            getCustomResult(
                 table.getName(),
-                customSqlProvider.getSqlDAO(),
                 customSqlProvider.getSqlResultDAO(),
                 customSqlProvider,
                 metadataManager,
@@ -1740,102 +1749,34 @@ public abstract class AbstractTableDecorator
     }
 
     /**
-     * Retrieves the custom results.
+     * Retrieves the custom result.
      * @param tableName the table name.
-     * @param sqlDAO the {@link SqlDAO} instance.
      * @param resultDAO the {@link SqlResultDAO} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @return such list of {@link Result} elements.
+     * @return such {@link Result} element.
      */
-    @NotNull
-    protected List<ResultDecorator> getCustomResults(
+    @Nullable
+    protected Result<DecoratedString> getCustomResult(
         @NotNull final String tableName,
-        @NotNull final SqlDAO sqlDAO,
         @NotNull final SqlResultDAO resultDAO,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @NotNull final List<ResultDecorator> result;
+        @Nullable final Result<DecoratedString> result;
 
-        @NotNull final List<Result<String>> aux = new ArrayList<>(2);
+        @Nullable final Result<String> aux = resultDAO.findByTable(tableName);
 
-        @Nullable Result<String> singleResult = resultDAO.findSingleMatch(tableName);
-
-        if (singleResult != null)
+        if (aux != null)
         {
-            aux.add(singleResult);
+            result = decorate(aux, customSqlProvider, metadataManager, decoratorFactory);
         }
-
-        @Nullable Result<String> multipleResult = resultDAO.findMultipleMatch(tableName);
-
-        if (   (multipleResult == null)
-            && (singleResult != null))
+        else
         {
-            multipleResult =
-                new ResultElement<>(
-                    singleResult.getId().replaceFirst("single\\.", "multiple\\."),
-                    singleResult.getClassValue(),
-                    Result.MULTIPLE);
-
-            aux.add(multipleResult);
+            result = null;
         }
-        else if (   (multipleResult != null)
-                 && (singleResult == null))
-        {
-            singleResult =
-                new ResultElement<>(
-                    multipleResult.getId().replaceFirst("multiple\\.", "single\\."),
-                    multipleResult.getClassValue(),
-                    Result.MULTIPLE);
-
-            aux.add(singleResult);
-        }
-
-        @Nullable Result<String> customResult;
-
-        List<Sql<String>> sqlList = sqlDAO.findSelects(tableName);
-
-        for (@Nullable final Sql<String> t_Sql : sqlList)
-        {
-            if (t_Sql != null)
-            {
-                customResult = resultDAO.findBySqlId(t_Sql.getId());
-
-                if (   (customResult != null)
-                    && (!aux.contains(customResult)))
-                {
-                    aux.add(customResult);
-                }
-            }
-        }
-
-        sqlList = sqlDAO.findSelectsForUpdate(tableName);
-
-        for (@Nullable final Sql<String> t_Sql : sqlList)
-        {
-            if (t_Sql != null)
-            {
-                customResult = resultDAO.findBySqlId(t_Sql.getId());
-
-                if (   (customResult != null)
-                    && (!aux.contains(customResult)))
-                {
-                    aux.add(customResult);
-                }
-            }
-        }
-
-        result = new ArrayList<>(aux.size());
-
-        for (@NotNull final Result<String> t_Result : aux)
-        {
-            result.add(decorate(t_Result, customSqlProvider, metadataManager, decoratorFactory));
-        }
-
-        Collections.sort(result);
 
         return result;
     }
@@ -1912,7 +1853,7 @@ public abstract class AbstractTableDecorator
      * @return the decorated attribute.
      */
     @NotNull
-    protected Attribute<DecoratedString> decorate(
+    protected static Attribute<DecoratedString> decorate(
         @NotNull final Attribute<String> attribute, @NotNull final MetadataManager metadataManager)
     {
         return new CachingAttributeDecorator(attribute, metadataManager);

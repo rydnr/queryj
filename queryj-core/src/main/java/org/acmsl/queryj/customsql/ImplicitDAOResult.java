@@ -35,21 +35,20 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing project-specific classes.
- */
-import org.acmsl.queryj.metadata.DecoratedString;
-import org.jetbrains.annotations.NotNull;
-
-/*
  * Importing JDK classes.
  */
 import java.util.Collection;
 
 /*
+ * Importing Jetbrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Models pre-defined per-DAO &lt;result&gt; elements in <i>custom-sql</i> models.
@@ -69,14 +68,12 @@ public class ImplicitDAOResult<T>
     /**
      * Creates a <code>ImplicitDAOResult</code> with given information.
      * @param id the <i>id</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      * @param daoRef the <i>daoRef</i> attribute.
      */
     @SuppressWarnings("unused")
-    public ImplicitDAOResult(
-        @NotNull T id, @NotNull final T matches, @NotNull final T daoRef)
+    public ImplicitDAOResult(@NotNull final T id, @NotNull final T daoRef)
     {
-        super(id, matches);
+        super(id);
         immutableSetDaoRef(daoRef);
     }
 
@@ -128,25 +125,23 @@ public class ImplicitDAOResult<T>
     @Override
     public int hashCode()
     {
-        return hashCode(getId(), getMatches(), getDaoRef(), getPropertyRefs());
+        return hashCode(getId(), getDaoRef(), getPropertyRefs());
     }
 
     /**
      * Retrieves the hashcode.
      * @param id the <i>id</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      * @param daoRef the <i>daoRef</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such value.
      */
     protected int hashCode(
         final T id,
-        final T matches,
         final T daoRef,
         final Collection<PropertyRef> propertyRefs)
     {
         return
-            (id + "@#" + matches + "#@" + daoRef + "@#" + propertyRefs)
+            (id + "@#" + daoRef + "@#" + propertyRefs)
             .toLowerCase().hashCode();
     }
 
@@ -155,13 +150,13 @@ public class ImplicitDAOResult<T>
      * @param instance the instance.
      * @return <code>true</code> in such case.
      */
+    @Override
     public boolean equals(final Object instance)
     {
         return
             equals(
                 instance,
                 getId(),
-                getMatches(),
                 getDaoRef(),
                 getPropertyRefs());
     }
@@ -169,7 +164,6 @@ public class ImplicitDAOResult<T>
     /**
      * Checks whether given instance is semantically equal to this one.
      * @param id the <i>id</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      * @param daoRef the <i>daoRef</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return <code>true</code> in such case.
@@ -178,7 +172,6 @@ public class ImplicitDAOResult<T>
     public boolean equals(
         final Object instance,
         @NotNull final T id,
-        @NotNull final T matches,
         @NotNull final T daoRef,
         final Collection<PropertyRef> propertyRefs)
     {
@@ -190,7 +183,6 @@ public class ImplicitDAOResult<T>
 
             result =
                 (   (("" + id).equalsIgnoreCase("" + candidate.getId())
-                 && (("" + matches).equalsIgnoreCase("" + candidate.getMatches()))
                  && (("" + daoRef).equalsIgnoreCase("" + candidate.getDaoRef()))
                  && ("" + propertyRefs).equals("" + candidate.getPropertyRefs())));
         }
@@ -209,7 +201,6 @@ public class ImplicitDAOResult<T>
         return
             toString(
                 getId(),
-                getMatches(),
                 getDaoRef(),
                 getPropertyRefs());
     }
@@ -217,7 +208,6 @@ public class ImplicitDAOResult<T>
     /**
      * Provides a text information about this instance.
      * @param id the <i>id</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      * @param daoRef the <i>daoRef</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such information.
@@ -225,14 +215,12 @@ public class ImplicitDAOResult<T>
     @NotNull
     protected String toString(
         final T id,
-        final T matches,
         final T daoRef,
         final Collection<PropertyRef> propertyRefs)
     {
         return
               getClass().getName()
             + "[" + "id=" + id + "]"
-            + "[" + "matches=" + matches + "]"
             + "[" + "daoRef=" + daoRef + "]"
             + "[" + "property-refs=" + propertyRefs + "]";
     }

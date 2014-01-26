@@ -68,11 +68,6 @@ public class CachingResultDecorator
     private static final long serialVersionUID = -381471036464860260L;
 
     /**
-     * The cached <i>multiple</i> information.
-     */
-    private Boolean m__bCachedMultiple;
-
-    /**
      * The cached properties.
      */
     private List<Property<DecoratedString>> m__lCachedProperties;
@@ -111,53 +106,6 @@ public class CachingResultDecorator
         @NotNull final DecoratorFactory decoratorFactory)
     {
         super(result, customSqlProvider, metadataManager, decoratorFactory);
-    }
-
-    /**
-     * Specifies the cached <i>multiple</i> info.
-     * @param multiple such information.
-     */
-    protected final void immutableSetCachedMultiple(final boolean multiple)
-    {
-        m__bCachedMultiple = multiple;
-    }
-
-    /**
-     * Specifies the cached <i>multiple</i> info.
-     * @param multiple such information.
-     */
-    @SuppressWarnings("unused")
-    protected void setCachedMultiple(final boolean multiple)
-    {
-        immutableSetCachedMultiple(multiple);
-    }
-
-    /**
-     * Retrieves the cached <i>multiple</i> info.
-     * @return such information.
-     */
-    @Nullable
-    protected Boolean getCachedMultiple()
-    {
-        return m__bCachedMultiple;
-    }
-
-    /**
-     * Retrieves whether the result matches a single entity or expects
-     * a set of them.
-     * @return such information.
-     */
-    public boolean isMultiple()
-    {
-        @Nullable Boolean result = getCachedMultiple();
-
-        if  (result == null)
-        {
-            result = super.isMultiple();
-            setCachedMultiple(result);
-        }
-
-        return result;
     }
 
     /**

@@ -98,13 +98,10 @@ public class ResultElementFactory
 
         @Nullable final String t_strClass = attributes.getValue("class");
 
-        @Nullable final String t_strMatches = attributes.getValue("matches");
-
         if (   (t_strId != null)
-            && (t_strClass != null)
-            && (t_strMatches != null))
+            && (t_strClass != null))
         {
-            result = new ResultElement<>(t_strId, t_strClass, t_strMatches);
+            result = new ResultElement<>(t_strId, t_strClass);
         }
         else
         {

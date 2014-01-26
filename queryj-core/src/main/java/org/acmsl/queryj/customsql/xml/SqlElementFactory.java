@@ -36,6 +36,7 @@ package org.acmsl.queryj.customsql.xml;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.customsql.Sql.Cardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 
 /*
@@ -60,6 +61,8 @@ import org.xml.sax.SAXException;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+import java.util.Locale;
 
 /**
  * Is able to create sql.xml &lt;sql&gt; element instances from their
@@ -104,6 +107,18 @@ public class SqlElementFactory
 
         @NotNull final String t_strImplementation = attributes.getValue("implementation");
 
+        @Nullable final String t_strMatches = attributes.getValue("matches");
+
+        @NotNull final Cardinality t_Cardinality;
+        if (t_strMatches == null)
+        {
+            t_Cardinality = Cardinality.MULTIPLE;
+        }
+        else
+        {
+            t_Cardinality = Cardinality.fromString(t_strMatches.toLowerCase(Locale.US));
+        }
+
         boolean t_bValidate = false;
 
         @Nullable final String t_strValidate = attributes.getValue("validate");
@@ -130,6 +145,7 @@ public class SqlElementFactory
                     t_strDAO,
                     t_strName,
                     t_strType,
+                    t_Cardinality,
                     t_strImplementation,
                     t_bValidate,
                     t_bDynamic,
@@ -142,6 +158,7 @@ public class SqlElementFactory
                     t_strId,
                     t_strName,
                     t_strType,
+                    t_Cardinality,
                     t_strImplementation,
                     t_bValidate,
                     t_bDynamic,

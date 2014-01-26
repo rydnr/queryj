@@ -68,7 +68,7 @@ public final class TableValueObject
      * @param attributes the columns.
      * @param foreignKeys the foreign keys.
      * @param parentTable the parent table.
-     * @param isStatic whether the table is static.
+     * @param staticAttribute the attribute used to label static contents.
      * @param voDecorated whether the table is decorated.
      */
     public TableValueObject(
@@ -78,7 +78,7 @@ public final class TableValueObject
         @NotNull final List<Attribute<String>> attributes,
         @NotNull final List<ForeignKey<String>> foreignKeys,
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable,
-        final boolean isStatic,
+        @Nullable final Attribute<String> staticAttribute,
         final boolean voDecorated)
     {
         super(
@@ -88,7 +88,7 @@ public final class TableValueObject
             attributes,
             foreignKeys,
             parentTable,
-            isStatic,
+            staticAttribute,
             voDecorated);
     }
 }

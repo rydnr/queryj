@@ -70,13 +70,6 @@ public interface ResultDecorator
     Result<String> getResult();
 
     /**
-     * Retrieves whether the result matches a single entity or expects
-     * a set of them.
-     * @return such information.
-     */
-    boolean isMultiple();
-
-    /**
      * Retrieves the properties.
      * @return such information.
      */

@@ -115,8 +115,7 @@ public abstract class AbstractResultDecorator
     {
         super(
             new DecoratedString(result.getId()),
-            result.getClassValue() != null ? new DecoratedString(result.getClassValue()) : null,
-            new DecoratedString(result.getMatches()));
+            result.getClassValue() != null ? new DecoratedString(result.getClassValue()) : null);
         immutableSetResult(result);
         immutableSetPropertyRefs(result.getPropertyRefs());
         immutableSetCustomSqlProvider(customSqlProvider);
@@ -147,6 +146,7 @@ public abstract class AbstractResultDecorator
      * Retrieves the result.
      * @return such element.
      */
+    @Override
     @NotNull
     public Result<String> getResult()
     {
@@ -261,27 +261,6 @@ public abstract class AbstractResultDecorator
     public DecoratorFactory getDecoratorFactory()
     {
         return m__DecoratorFactory;
-    }
-
-    /**
-     * Retrieves whether the result matches a single entity or expects
-     * a set of them.
-     * @return such information.
-     */
-    public boolean isMultiple()
-    {
-        return isMultiple(getResult());
-    }
-
-    /**
-     * Retrieves whether the result matches a single entity or expects
-     * a set of them.
-     * @param result the result element.
-     * @return such information.
-     */
-    protected boolean isMultiple(@NotNull final Result<String> result)
-    {
-        return Result.MULTIPLE.equalsIgnoreCase(result.getMatches());
     }
 
     /**
@@ -714,8 +693,7 @@ public abstract class AbstractResultDecorator
                 resultElement.compareTo(
                     new ResultElement<>(
                         object.getId().getValue(),
-                        (object.getClassValue() != null ? object.getClassValue().getValue() : null),
-                        object.getMatches().getValue()));
+                        (object.getClassValue() != null ? object.getClassValue().getValue() : null)));
         }
 
         return result;

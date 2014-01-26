@@ -35,17 +35,21 @@
 package org.acmsl.queryj.metadata.engines.oracle;
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing some QueryJ-Core classes.
  */
-import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.queryj.Literals;
 
 /*
  * Importing some QueryJ-SQL classes.
  */
-import org.acmsl.queryj.Field;
-import org.acmsl.queryj.Literals;
-import org.acmsl.queryj.StringField;
-import org.acmsl.queryj.Table;
+import org.acmsl.queryj.sql.Field;
+import org.acmsl.queryj.sql.StringField;
+import org.acmsl.queryj.sql.Table;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JetBrains annotations.
@@ -65,7 +69,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class OracleUserColCommentsTable
     extends Table
-    implements  Singleton
+    implements Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

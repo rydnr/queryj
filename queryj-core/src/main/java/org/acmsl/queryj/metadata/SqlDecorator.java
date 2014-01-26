@@ -79,4 +79,10 @@ public interface SqlDecorator
      */
     @NotNull
     List<Parameter<DecoratedString>> getParameters();
+
+    /**
+     * Checks whether the parameters should be wrapped.
+     * @return such information.
+     */
+    boolean getParametersShouldBeWrapped();
 }

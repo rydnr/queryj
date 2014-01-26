@@ -203,22 +203,23 @@ public class TableAttributesPartialListDecorator
     }
 
     // ListDecorator implementation
+    @SuppressWarnings("unused")
     @NotNull
     public List<Attribute<DecoratedString>> getItems()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(AbstractTableAttributesListDecorator.INVALID_OPERATION);
     }
 
     @NotNull
     public PartialListDecorator plus()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(AbstractTableAttributesListDecorator.INVALID_OPERATION);
     }
 
     @NotNull
     public PartialListDecorator minus()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(AbstractTableAttributesListDecorator.INVALID_OPERATION);
     }
 
     // TableDecorator implementation
@@ -258,7 +259,7 @@ public class TableAttributesPartialListDecorator
     {
         @NotNull final ListDecorator<Attribute<DecoratedString>> result;
 
-        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<Attribute<DecoratedString>>(list);
+        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<>(list);
 
         if (operation.equals(Operation.MINUS))
         {
@@ -321,7 +322,7 @@ public class TableAttributesPartialListDecorator
     {
         @NotNull final ListDecorator<Attribute<DecoratedString>> result;
 
-        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<Attribute<DecoratedString>>(list);
+        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<>(list);
 
         if (operation.equals(Operation.MINUS))
         {
@@ -437,6 +438,7 @@ public class TableAttributesPartialListDecorator
         return getPrimaryKey(getListDecorator(), getTable(), getOperation());
     }
 
+    @SuppressWarnings("unused")
     // TODO: remove me
     public ListDecorator<Attribute<DecoratedString>> getPrimaryKey1()
     {
@@ -458,7 +460,7 @@ public class TableAttributesPartialListDecorator
     {
         @NotNull final ListDecorator<Attribute<DecoratedString>> result;
 
-        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<Attribute<DecoratedString>>(list);
+        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<>(list);
 
         if (operation.equals(Operation.MINUS))
         {
@@ -500,7 +502,7 @@ public class TableAttributesPartialListDecorator
     {
         @NotNull final ListDecorator<Attribute<DecoratedString>> result;
 
-        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<Attribute<DecoratedString>>(list);
+        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<>(list);
 
         if (operation.equals(Operation.MINUS))
         {
@@ -539,6 +541,12 @@ public class TableAttributesPartialListDecorator
     public boolean isStatic()
     {
         return getTable().isStatic();
+    }
+
+    @Override
+    public Attribute<DecoratedString> getStaticAttribute()
+    {
+        return getTable().getStaticAttribute();
     }
 
     @Override

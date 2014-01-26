@@ -74,14 +74,10 @@ public class ResultElement<T>
      * Creates a <code>ResultElement</code> with given information.
      * @param id the <i>id</i> attribute.
      * @param classValue the <i>class</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      */
-    public ResultElement(
-        @NotNull final T id,
-        @Nullable final T classValue,
-        @NotNull final T matches)
+    public ResultElement(@NotNull final T id, @Nullable final T classValue)
     {
-        super(id, matches);
+        super(id);
 
         if (classValue != null)
         {
@@ -127,16 +123,13 @@ public class ResultElement<T>
      */
     public int hashCode()
     {
-        return
-            hashCode(
-                getId(), getClassValue(), getMatches(), getPropertyRefs());
+        return hashCode(getId(), getClassValue(), getPropertyRefs());
     }
 
     /**
      * Retrieves the hashcode.
      * @param id the <i>id</i> attribute.
      * @param classValue the <i>class</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such value.
      */
@@ -144,7 +137,6 @@ public class ResultElement<T>
     protected int hashCode(
         @NotNull final T id,
         @NotNull final T classValue,
-        @NotNull final T matches,
         @NotNull final Collection<PropertyRef> propertyRefs)
     {
         return ("" + id).toLowerCase(Locale.US).hashCode() + Result.class.hashCode();
@@ -168,7 +160,6 @@ public class ResultElement<T>
                     (Result<T>) instance,
                     getId(),
                     getClassValue(),
-                    getMatches(),
                     getPropertyRefs());
         }
 
@@ -179,7 +170,6 @@ public class ResultElement<T>
      * Checks whether given instance is semantically equal to this one.
      * @param id the <i>id</i> attribute.
      * @param classValue the <i>class</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return <code>true</code> in such case.
      */
@@ -188,7 +178,6 @@ public class ResultElement<T>
         @NotNull final Result<T> candidate,
         @NotNull final T id,
         @Nullable final T classValue,
-        @NotNull final T matches,
         @NotNull final Collection<PropertyRef> propertyRefs)
     {
         return ("" + id).equalsIgnoreCase("" + candidate.getId());
@@ -198,6 +187,7 @@ public class ResultElement<T>
      * Provides a text information about this instance.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {
@@ -205,7 +195,6 @@ public class ResultElement<T>
             toString(
                 getId(),
                 getClassValue(),
-                getMatches(),
                 getPropertyRefs());
     }
 
@@ -213,7 +202,6 @@ public class ResultElement<T>
      * Provides a text information about this instance.
      * @param id the <i>id</i> attribute.
      * @param classValue the <i>class</i> attribute.
-     * @param matches the <i>matches</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such information.
      */
@@ -221,14 +209,12 @@ public class ResultElement<T>
     protected String toString(
         @NotNull final T id,
         @Nullable final T classValue,
-        @NotNull final T matches,
         @NotNull final Collection<PropertyRef> propertyRefs)
     {
         return
               getClass().getName()
             + "[" + "id=" + id + "]"
             + "[" + "class=" + classValue + "]"
-            + "[" + "matches=" + matches + "]"
             + "[" + "property-refs=" + propertyRefs + "]";
     }
 }

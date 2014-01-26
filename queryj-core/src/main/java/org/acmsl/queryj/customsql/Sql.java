@@ -131,6 +131,60 @@ public interface Sql<T>
     static final String ALL = "all";
 
     /**
+     * Defines the cardinality of the query.
+     */
+    public enum Cardinality
+    {
+        NONE("none"),
+        SINGLE("single"),
+        MULTIPLE("multiple");
+
+        @NotNull private final String name;
+
+        /**
+         * Creates a new enum value.
+         * @param value the value.
+         */
+        Cardinality(@NotNull final String value)
+        {
+            this.name = value;
+        }
+
+        /**
+         * Retrieves the name.
+         * @return such information.
+         */
+        @NotNull
+        public String getName()
+        {
+            return this.name;
+        }
+
+        /**
+         * Retrieves the cardinality associated to given text.
+         * @param text the text.
+         * @return the cardinality instance.
+         */
+        public static Cardinality fromString(@Nullable final String text)
+        {
+            @Nullable Cardinality result = null;
+
+            if (text != null)
+            {
+                for (@NotNull final Cardinality cardinality : Cardinality.values())
+                {
+                    if (text.equalsIgnoreCase(cardinality.getName()))
+                    {
+                        result = cardinality;
+                        break;
+                    }
+                }
+            }
+
+            return result;
+        }
+    }
+    /**
      * Retrieves the <i>description</i> attribute.
      * @return such value.
      */
@@ -166,6 +220,13 @@ public interface Sql<T>
     T getType();
 
     /**
+     * Retrieves the cardinality.
+     * @return such information.
+     */
+    @NotNull
+    Cardinality getCardinality();
+
+    /**
      * Retrieves the <i>implementation</i> attribute.
      * @return such value.
      */
@@ -185,11 +246,17 @@ public interface Sql<T>
     boolean isValidate();
 
     /**
-     * Retrieves whether  the query is dynamic or not.
+     * Retrieves whether the query is dynamic or not.
      * @return such information.
      */
     @SuppressWarnings("unused")
     boolean isDynamic();
+
+    /**
+     * Retrieves whether the query returns multiple results.
+     * @return such information.
+     */
+    boolean isMultiple();
 
     /**
      * Retrieves the &lt;value&gt; element.

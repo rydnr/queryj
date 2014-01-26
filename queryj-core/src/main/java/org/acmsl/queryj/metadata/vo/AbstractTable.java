@@ -32,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Abstract logicless implementation of Table interface.
+ * Description: Abstract logic-less implementation of Table interface.
  *
  */
 package org.acmsl.queryj.metadata.vo;
@@ -59,8 +59,7 @@ import java.util.List;
 
 /**
  * Abstract logic-less implementation of <code>Table</code> interface.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  */
 @ThreadSafe
 public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>>
@@ -97,9 +96,9 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     private List<ForeignKey<V>> m__lForeignKeys;
 
     /**
-     * Flag indicating whether the table is static.
+     * The attribute used to lamel static rows.
      */
-    private boolean m__bStatic;
+    private A m__Static;
 
     /**
      * Whether the value-object for the table is decorated.
@@ -125,7 +124,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
      * @param name the name.
      * @param comment the comment.
      * @param parentTable the parent table, if any.
-     * @param isStatic whether the table is static.
+     * @param staticAttribute the attribute used to label static rows.
      * @param voDecorated whether the value-object for the table
      * is decorated.
      */
@@ -133,13 +132,16 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
         @NotNull final V name,
         @Nullable final V comment,
         @Nullable final Table<V, A, L> parentTable,
-        final boolean isStatic,
+        @Nullable final A staticAttribute,
         final boolean voDecorated)
     {
         immutableSetName(name);
         immutableSetComment(comment);
         immutableSetParentTable(parentTable);
-        immutableSetStatic(isStatic);
+        if (staticAttribute != null)
+        {
+            immutableSetStaticAttribute(staticAttribute);
+        }
         immutableSetVoDecorated(voDecorated);
     }
 
@@ -151,7 +153,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
      * @param attributes the attributes.
      * @param foreignKeys the foreign keys.
      * @param parentTable the parent table.
-     * @param isStatic whether it's static.
+     * @param staticAttribute the attribute used to label static rows.
      * @param voDecorated whether it's decorated.
      */
     protected AbstractTable(
@@ -161,10 +163,10 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
         @NotNull final L attributes,
         @NotNull final List<ForeignKey<V>> foreignKeys,
         @Nullable final Table<V, A, L> parentTable,
-        final boolean isStatic,
+        @Nullable final A staticAttribute,
         final boolean voDecorated)
     {
-        this(name, comment, parentTable, isStatic, voDecorated);
+        this(name, comment, parentTable, staticAttribute, voDecorated);
         immutableSetPrimaryKey(primaryKey);
         immutableSetAttributes(attributes);
         immutableSetForeignKeys(foreignKeys);
@@ -366,22 +368,33 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     }
 
     /**
-     * Specifies whether the table is static or not.
-     * @param flag such flag.
+     * Specifies the attribute used to label static contents.
+     * @param attribute such attribute.
      */
-    protected final void immutableSetStatic(final boolean flag)
+    protected final void immutableSetStaticAttribute(@NotNull final A attribute)
     {
-        m__bStatic = flag;
+        m__Static = attribute;
     }
 
     /**
-     * Specifies whether the table is static or not.
-     * @param flag such flag.
+     * Specifies the attribute used to label static contents.
+     * @param attribute such attribute.
      */
     @SuppressWarnings("unused")
-    protected void setStatic(final boolean flag)
+    protected void setStaticAttribute(@NotNull final A attribute)
     {
-        immutableSetStatic(flag);
+        immutableSetStaticAttribute(attribute);
+    }
+
+    /**
+     * Retrievesthe attribute used to label static contents.
+     * @return such attribute.
+     */
+    @Override
+    @Nullable
+    public A getStaticAttribute()
+    {
+        return m__Static;
     }
 
     /**
@@ -392,7 +405,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     @Override
     public boolean isStatic()
     {
-        return m__bStatic;
+        return m__Static != null;
     }
 
     /**
@@ -517,7 +530,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
             + ", \"primaryKey\": " + ToStringUtils.getInstance().toJson(m__lPrimaryKey)
             + ", \"attributes\": " + ToStringUtils.getInstance().toJson(m__lAttributes)
             + ", \"foreignKeys\": " + ToStringUtils.getInstance().toJson(m__lForeignKeys)
-            + ", \"static\": " + m__bStatic
+            + ", \"static\": " + m__Static
             + ", \"voDecorated\": " + m__bVoDecorated +
             + '}';
     }

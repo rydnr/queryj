@@ -115,9 +115,9 @@ public class TableIncompleteValueObject
      * {@inheritDoc}
      */
     @Override
-    public void setStatic(final boolean flag)
+    public void setStaticAttribute(@NotNull final Attribute<String> staticAttribute)
     {
-        super.setStatic(flag);
+        super.setStaticAttribute(staticAttribute);
     }
 
     /**

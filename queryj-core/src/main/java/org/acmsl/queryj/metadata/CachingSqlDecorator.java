@@ -79,6 +79,11 @@ public class CachingSqlDecorator
     private String m__strCachedResultClass;
 
     /**
+     * The cached wrapped parameters check.
+     */
+    private Boolean m__bWrappedParametersCheck = null;
+
+    /**
      * Creates a <code>CachingSqlDecorator</code> with given information.
      * @param sql the <code>Sql</code> to decorate.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
@@ -127,6 +132,7 @@ public class CachingSqlDecorator
      * @return such information.
      */
     @NotNull
+    @Override
     public List<Parameter<DecoratedString>> getParameters()
     {
         List<Parameter<DecoratedString>> result = getCachedParameters();
@@ -182,6 +188,56 @@ public class CachingSqlDecorator
         {
             result = super.getResultClass();
             setCachedResultClass(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Caches the calculation for whether the parameter list would take too much space
+     * and should be wrapped.
+     * @param check such calculation.
+     */
+    protected final void immutableSetCachedParametersShouldBeWrapped(final boolean check)
+    {
+        this.m__bWrappedParametersCheck = check;
+    }
+
+    /**
+     * Caches the calculation for whether the parameter list would take too much space
+     * and should be wrapped.
+     * @param check such calculation.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedParametersShouldBeWrapped(final boolean check)
+    {
+        immutableSetCachedParametersShouldBeWrapped(check);
+    }
+
+    /**
+     * Retrieves the cached calculation for whether the parameter list would take too much space
+     * and should be wrapped.
+     * @return such information.
+     */
+    @Nullable
+    protected Boolean getCachedParametersShouldBeWrapped()
+    {
+        return this.m__bWrappedParametersCheck;
+    }
+
+    /**
+     * Checks whether the parameter list would take too much space and should be wrapped.
+     * @return such information.
+     */
+    @Override
+    public boolean getParametersShouldBeWrapped()
+    {
+        Boolean result = getCachedParametersShouldBeWrapped();
+
+        if (result == null)
+        {
+            result = super.getParametersShouldBeWrapped();
+            setCachedParametersShouldBeWrapped(result);
         }
 
         return result;

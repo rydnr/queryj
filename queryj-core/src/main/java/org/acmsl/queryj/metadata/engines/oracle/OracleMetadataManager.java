@@ -456,7 +456,16 @@ public class OracleMetadataManager
                 {
                     if (metaLanguageUtils.isStatic(t_strComment))
                     {
-                        t_Table.setStatic(true);
+                        @Nullable final Attribute<String> attribute =
+                            findAttribute(
+                                metaLanguageUtils.retrieveStaticAttribute(t_strComment),
+                                t_Table.getAttributes(),
+                                false);
+
+                        if (attribute != null)
+                        {
+                            t_Table.setStaticAttribute(attribute);
+                        }
                     }
                     if (metaLanguageUtils.retrieveTableDecorator(t_strComment))
                     {

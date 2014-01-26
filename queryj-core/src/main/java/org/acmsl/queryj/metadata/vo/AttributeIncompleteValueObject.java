@@ -59,7 +59,7 @@ public class AttributeIncompleteValueObject
     private static final long serialVersionUID = -8585509128283241379L;
 
     /**
-     * Creates an <code>AbstractAttribute</code> with the following
+     * Creates an <code>AttributeIncompleteValueObject</code> with the following
      * information.
      * @param name the name.
      * @param typeId the type id.

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -52,35 +52,11 @@ public interface Result<T>
              java.lang.Comparable<Result<T>>
 {
     /**
-     * The <b>none</b> value for <i>matches</i> attribute.
-     */
-    @SuppressWarnings("unused")
-    static final String NONE = "none";
-
-    /**
-     * The <b>single</b> value for <i>matches</i> attribute.
-     */
-    @SuppressWarnings("unused")
-    static final String SINGLE = "single";
-
-    /**
-     * The <b>multiple</b> value for <i>multiple</i> attribute.
-     */
-    static final String MULTIPLE = "multiple";
-
-    /**
      * Retrieves the <i>class</i> attribute.
      * @return such value.
      */
     @Nullable
     T getClassValue();
-
-    /**
-     * Retrieves the <i>matches</i> attribute.
-     * @return such value.
-     */
-    @NotNull
-    T getMatches();
 
     /**
      * Retrieves the &lt;property-ref&gt; elements.

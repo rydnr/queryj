@@ -86,7 +86,7 @@ public class TableAttributesListDecorator
     @Override
     public ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     @NotNull
@@ -94,42 +94,42 @@ public class TableAttributesListDecorator
     public List<Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>>
     getAllParentTables()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     @NotNull
     @Override
     public List<Sql<DecoratedString>> getDynamicQueries()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     @NotNull
     @Override
     public List<Row<DecoratedString>> getStaticContent()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     @NotNull
     @Override
     public List<Result<DecoratedString>> getDifferentCustomResults()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     @NotNull
     @Override
     public List<DecoratedString> getAttributeTypes()
     {
-        throw new RuntimeException("Invalid operation");
+        throw new RuntimeException(INVALID_OPERATION);
     }
 
     // Table implementation
@@ -179,6 +179,12 @@ public class TableAttributesListDecorator
     public boolean isStatic()
     {
         return getTable().isStatic();
+    }
+
+    @Override
+    public Attribute<DecoratedString> getStaticAttribute()
+    {
+        return getTable().getStaticAttribute();
     }
 
     @Override

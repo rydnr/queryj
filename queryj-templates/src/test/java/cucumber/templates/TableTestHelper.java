@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Templates
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -49,12 +49,16 @@ import org.acmsl.queryj.customsql.ParameterElement;
 import org.acmsl.queryj.customsql.ParameterRef;
 import org.acmsl.queryj.customsql.ParameterRefElement;
 import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.Sql.Cardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.AttributeIncompleteValueObject;
 import org.acmsl.queryj.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
+import org.acmsl.queryj.metadata.vo.Row;
+import org.acmsl.queryj.metadata.vo.RowValueObject;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableValueObject;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
@@ -73,6 +77,7 @@ import org.junit.Assert;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -95,6 +100,7 @@ public class TableTestHelper
     private static final String SOURCE_COLUMNS = "source columns";
     private static final String VALUE = "value";
     private static final String READONLY = "readonly";
+    public static final String SYNTAX_ERROR_IN_STATIC_CONTENT = "Syntax error in static content ";
 
     /**
      * Singleton implementation to avoid double-locking check.
@@ -163,8 +169,8 @@ public class TableTestHelper
                     table,
                     tableEntry.get(Literals.COMMENT),
                     tableEntry.get(PARENT_TABLE),
-                    !isNullOrBlank(tableEntry.get(STATIC)),
-                    !isNullOrBlank(tableEntry.get(DECORATED)));
+                    tableEntry.get(STATIC),
+                    isNullOrBlank(tableEntry.get(DECORATED)));
         }
 
         return result;
@@ -257,7 +263,7 @@ public class TableTestHelper
      * @param tableName the table name.
      * @param comment the comment.
      * @param parentTable the name of the parent table, if any.
-     * @param isStatic whether the table is static.
+     * @param staticAttribute the attribute used to label static contents.
      * @param isDecorated whether the table is decorated.
      * @return the {@link Table} instance.
      */
@@ -266,7 +272,7 @@ public class TableTestHelper
         @NotNull final String tableName,
         @Nullable final String comment,
         @SuppressWarnings("unused") @Nullable final String parentTable,
-        final boolean isStatic,
+        @Nullable final String staticAttribute,
         final boolean isDecorated)
     {
         return
@@ -279,7 +285,7 @@ public class TableTestHelper
                 // TODO: Decorate TableValueObject to retrieve the parent table via its name
                 // and the table collection.
                 null, //parentTable,
-                isStatic,
+                staticAttribute != null ? new _AttributeIncompleteValueObject(staticAttribute, tableName) : null,
                 isDecorated);
     }
 
@@ -486,9 +492,12 @@ public class TableTestHelper
             @NotNull final String name = sqlRow.get("name");
             @NotNull final String dao = sqlRow.get("dao");
             @NotNull final String type = sqlRow.get("type");
+            @NotNull final String matches = sqlRow.get("matches");
+            @NotNull final Cardinality cardinality = Cardinality.fromString(matches.toLowerCase(Locale.US));
             @NotNull final String value = sqlRow.get(VALUE);
 
-            @NotNull final SqlElement<String> sql = new SqlElement<>(id, dao, name, type, "all", false, false, "Test " + id);
+            @NotNull final SqlElement<String> sql =
+                new SqlElement<>(id, dao, name, type, cardinality, "all", false, false, "Test " + id);
             sql.setValue(value);
 
             result.add(sql);
@@ -500,6 +509,7 @@ public class TableTestHelper
     /**
      * Defines parameters in custom SQL sentences.
      * @param parameterInfo the SQL information in Cucumber table format.
+     * @param sqlList the list of {@link Sql queries}.
      * @return a Map of DAO-name, Sql pairs.
      */
     @NotNull
@@ -554,7 +564,7 @@ public class TableTestHelper
         for (@Nullable final Sql<String> sql : sqlList)
         {
             if (   (sql != null)
-                && (sqlRef.equalsIgnoreCase(sqlRef)))
+                && (sql.getId().equalsIgnoreCase(sqlRef)))
             {
                 result = sql;
                 break;
@@ -562,5 +572,158 @@ public class TableTestHelper
         }
 
         return result;
+    }
+
+    /**
+     * Defines the static contents defined in a Cucumber test.
+     * @param values the test values.
+     */
+    @NotNull
+    public Map<String, List<Row<String>>> defineRows(
+        @NotNull final DataTable values,
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
+    {
+        @NotNull final Map<String, List<Row<String>>> result = new HashMap<>();
+
+        for (@NotNull final Map<String, String> tableRow: values.asMaps())
+        {
+            @NotNull final String tableName = tableRow.get("table");
+            @Nullable List<Row<String>> rows = result.get(tableName);
+            if (rows == null)
+            {
+                rows = new ArrayList<>();
+                result.put(tableName, rows);
+            }
+            @NotNull final String contents = tableRow.get("row");
+            @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> table =
+                tables.get(tableName);
+
+            if (table == null)
+            {
+                Assert.fail("Unknown table for row: " + tableName);
+            }
+            else
+            {
+                @Nullable final String rowName = retrieveRowName(contents, table);
+
+                Assert.assertNotNull("Cannot retrieve the row name.", rowName);
+
+                @NotNull final Row<String> row =
+                    new RowValueObject(rowName, tableName, fillValues(contents, table.getAttributes()));
+
+                rows.add(row);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Fills the values from given contents, and returns a list of static attributes.
+     * @param contents the contents.
+     * @param attributes the attribute definitions.
+     * @return a list of cloned attributes, with the correct values.
+     */
+    protected List<Attribute<String>> fillValues(
+        @NotNull final String contents, @NotNull final List<Attribute<String>> attributes)
+    {
+        @NotNull final List<Attribute<String>> result = new ArrayList<>(attributes.size());
+
+        @NotNull final String[] parts = contents.split(",");
+
+        Assert.assertTrue(
+            SYNTAX_ERROR_IN_STATIC_CONTENT + contents
+            + ". Length of static columns does not match.",
+            attributes.size() == parts.length);
+
+        for (int index = 0; index < parts.length; index++)
+        {
+            @Nullable final Attribute<String> attribute = attributes.get(index);
+
+            Assert.assertNotNull("Unexpected null attribute found.", attribute);
+
+            @NotNull final Attribute<String> newAttribute =
+                new AttributeValueObject(
+                    attribute.getName(),
+                    attribute.getTypeId(),
+                    attribute.getType(),
+                    attribute.getTableName(),
+                    attribute.getComment(),
+                    attribute.getOrdinalPosition(),
+                    attribute.getLength(),
+                    attribute.getPrecision(),
+                    attribute.getKeyword(),
+                    attribute.getRetrievalQuery(),
+                    attribute.getSequence(),
+                    attribute.isNullable(),
+                    stripDoubleQuotes(parts[index].trim()),
+                    attribute.isReadOnly(),
+                    attribute.isBoolean(),
+                    attribute.getBooleanTrue(),
+                    attribute.getBooleanFalse(),
+                    attribute.getBooleanNull());
+
+            result.add(newAttribute);
+        }
+
+        return result;
+    }
+
+    /**
+     * Strips the double quotes at the beginning and end.
+     * @param value the value.
+     * @return the stripped value.
+     */
+    @NotNull
+    protected String stripDoubleQuotes(@NotNull final String value)
+    {
+        @NotNull final String result;
+
+        result = value.replace("^\"", "").replace("\"$", "");
+
+        return result;
+    }
+
+    /**
+     * Retrieves the row for given contents.
+     * @param contents the contents.
+     * @param table the table.
+     * @return the row.
+     */
+    @Nullable
+    protected String retrieveRowName(
+        @NotNull final String contents, @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table)
+    {
+        @NotNull final String result;
+
+        @Nullable final Attribute<String> attribute = table.getStaticAttribute();
+
+        Assert.assertNotNull(
+            SYNTAX_ERROR_IN_STATIC_CONTENT + contents
+            + ". Static column not found.",
+            attribute);
+
+        result = attribute.getName();
+
+        return result;
+    }
+
+    protected static class _AttributeIncompleteValueObject
+        extends AttributeIncompleteValueObject
+    {
+        public _AttributeIncompleteValueObject(final String staticAttribute, final String tableName)
+        {
+            super(
+                staticAttribute,
+                -1, // type
+                "", // type
+                tableName,
+                "", // comment
+                -1, // ordinalPosition
+                -1, // length
+                -1, // precision,
+                false, // allows null,
+                null); // value
+        }
     }
 }

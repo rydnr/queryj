@@ -112,7 +112,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.customsql.ResultElement<>("r1", "class", "single");
+    return new org.acmsl.queryj.customsql.ResultElement<>("r1", "class");
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -155,18 +155,6 @@ extends TestCase
   }
   
   /**
-  * Tests ResultElementTestgetMatches()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.ResultElement#getMatches()
-  */
-  public void testGetMatches()
-  throws Exception
-  {
-    // JUnitDoclet begin method getMatches
-    // JUnitDoclet end method getMatches
-  }
-  
-  /**
   * Tests ResultElementTestgetPropertyRefs()
   * @throws Exception if an unexpected situation occurs.
   * @see org.acmsl.queryj.customsql.ResultElement#getPropertyRefs()
@@ -181,7 +169,6 @@ extends TestCase
   /**
   * Tests ResultElementTestadd()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.customsql.ResultElement#add(org.acmsl.queryj.customsql.PropertyRefElement)
   */
   public void testAdd()
   throws Exception

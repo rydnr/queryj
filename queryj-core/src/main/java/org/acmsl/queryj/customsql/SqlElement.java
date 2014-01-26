@@ -88,6 +88,11 @@ public class SqlElement<T>
     private T m__strType;
 
     /**
+     * The cardinality.
+     */
+    private Cardinality cardinality;
+
+    /**
      * The <i>implementation</i> attribute.
      */
     private T m__strImplementation;
@@ -143,6 +148,7 @@ public class SqlElement<T>
      * @param dao the <i>dao</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
+     * @param cardinality the cardinality of the query.
      * @param implementation the <i>implementation</i> attribute.
      * @param validate the <i>validate</i> attribute.
      * @param dynamic the <i>dynamic</i> attribute.
@@ -154,12 +160,13 @@ public class SqlElement<T>
         @Nullable final T dao,
         @NotNull final T name,
         @NotNull final T type,
+        @NotNull final Cardinality cardinality,
         @Nullable final T implementation,
         final boolean validate,
         final boolean dynamic,
         @NotNull final T description)
     {
-        this(id, dao, null, name, type, implementation, validate, dynamic, description);
+        this(id, dao, null, name, type, cardinality, implementation, validate, dynamic, description);
     }
 
     /**
@@ -167,6 +174,7 @@ public class SqlElement<T>
      * @param id the <i>id</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
+     * @param cardinality the cardinality of the query.
      * @param implementation the <i>implementation</i> attribute.
      * @param validate the <i>validate</i> attribute.
      * @param dynamic the <i>dynamic</i> attribute.
@@ -178,13 +186,14 @@ public class SqlElement<T>
         @NotNull final T id,
         @NotNull final T name,
         @NotNull final T type,
+        @NotNull final Cardinality cardinality,
         @Nullable final T implementation,
         final boolean validate,
         final boolean dynamic,
         @NotNull final T repositoryScope,
         @NotNull final T description)
     {
-        this(id, null, repositoryScope, name, type, implementation, validate, dynamic, description);
+        this(id, null, repositoryScope, name, type, cardinality, implementation, validate, dynamic, description);
     }
 
     /**
@@ -194,6 +203,7 @@ public class SqlElement<T>
      * @param repositoryScope the <i>repositoryScope</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
+     * @param cardinality the cardinality of the query.
      * @param implementation the <i>implementation</i> attribute.
      * @param validate the <i>validate</i> attribute.
      * @param dynamic the <i>dynamic</i> attribute.
@@ -205,6 +215,7 @@ public class SqlElement<T>
         @Nullable final T repositoryScope,
         @NotNull final T name,
         @NotNull final T type,
+        @NotNull final Cardinality cardinality,
         @Nullable final T implementation,
         final boolean validate,
         final boolean dynamic,
@@ -215,6 +226,7 @@ public class SqlElement<T>
         immutableSetRepositoryScope(repositoryScope);
         immutableSetName(name);
         immutableSetType(type);
+        immutableSetCardinality(cardinality);
         if (implementation != null)
         {
             immutableSetImplementation(implementation);
@@ -346,6 +358,46 @@ public class SqlElement<T>
     }
 
     /**
+     * Specifies the cardinality.
+     * @param value such information.
+     */
+    protected final void immutableSetCardinality(@NotNull final Cardinality value)
+    {
+        this.cardinality = value;
+    }
+
+    /**
+     * Specifies the cardinality.
+     * @param cardinality such information.
+     */
+    @SuppressWarnings("unused")
+    protected void setCardinality(@NotNull final Cardinality cardinality)
+    {
+        immutableSetCardinality(cardinality);
+    }
+
+    /**
+     * Retrieves the cardinality.
+     * @return such information.
+     */
+    @Override
+    @NotNull
+    public Cardinality getCardinality()
+    {
+        return this.cardinality;
+    }
+
+    /**
+     * Checks whether the query returns multiple values or not.
+     * @return such information.
+     */
+    @Override
+    public boolean isMultiple()
+    {
+        return getCardinality().equals(Cardinality.MULTIPLE);
+    }
+
+    /**
      * Specifies the <i>implementation</i> attribute.
      * @param implementation such value.
      */
@@ -408,6 +460,7 @@ public class SqlElement<T>
      * Retrieves the <i>validate</i> attribute.
      * @return such information.
      */
+    @Override
     public boolean getValidate()
     {
         return m__bValidate;
@@ -547,6 +600,7 @@ public class SqlElement<T>
      * Adds a new &lt;parameter-ref&gt; element.
      * @param parameterRef such element.
      */
+    @NotNull
     public void add(@NotNull final ParameterRef parameterRef)
     {
         add(parameterRef, getParameterRefs());
@@ -587,6 +641,7 @@ public class SqlElement<T>
      * Retrieves the &lt;result-ref&gt; element.
      * @return such element.
      */
+    @Override
     @Nullable
     public ResultRef getResultRef()
     {
@@ -700,6 +755,7 @@ public class SqlElement<T>
                 getRepositoryScope(),
                 getName(),
                 getType(),
+                getCardinality(),
                 getImplementation(),
                 getValue(),
                 isValidate(),
@@ -736,6 +792,7 @@ public class SqlElement<T>
         final T repositoryScope,
         final T name,
         final T type,
+        @NotNull final Cardinality cardinality,
         final T implementation,
         final T value,
         final boolean validate,
@@ -753,6 +810,7 @@ public class SqlElement<T>
             + "[" + "dao=" + dao + "]"
             + "[" + "repositoryScope=" + repositoryScope + "]"
             + "[" + "name=" + name + "]"
+            + "[" + "cardinality=" + cardinality + "]"
             + "[" + "type=" + type + "]"
             + "[" + "value=" + value + "]"
             + "[" + "validate=" + validate + "]"

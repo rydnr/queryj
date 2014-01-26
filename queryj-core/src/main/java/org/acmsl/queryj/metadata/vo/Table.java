@@ -107,6 +107,12 @@ public interface Table<V, A extends Attribute<V>, L extends List<A>>
     boolean isStatic();
 
     /**
+     * Retrieves the attribute used to label the static rows in the table.
+     * @return such attribute.
+     */
+    A getStaticAttribute();
+
+    /**
      * Retrieves whether the value object for the table is
      * decorated or not.
      * @return such information.
