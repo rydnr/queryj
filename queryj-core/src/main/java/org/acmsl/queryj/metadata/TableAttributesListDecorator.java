@@ -59,6 +59,8 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -157,6 +159,11 @@ public class TableAttributesListDecorator
     // TODO: remove me
     public List<Attribute<DecoratedString>> getPrimaryKey1()
     {
+        List<Object> a = new ArrayList<>(2);
+
+        Object[] b = { 1, 2, 3};
+        a.addAll(Arrays.asList(b));
+
         return getPrimaryKey();
     }
 

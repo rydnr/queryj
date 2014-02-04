@@ -121,6 +121,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Types;
+<if(table.static)>
+import java.util.Arrays;
+<endif>
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -333,6 +336,20 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
 <endif>
     <constructor(table=table, repository=repository, engine=engine, C=C)>
 <if(table.static)>
+    /**
+     * Retrieves the static (pre-cached) values.
+     * @return such information.
+     */
+    <notnull(C=C)>
+    public List\<<table.name.voName\>> getStaticValues()
+    {
+        <notnull(C=C)> final result = new ArrayList\<<table.name.voName>\>(FIXED_CONSTANTS.length);
+
+        result.addAll(Arrays.asList(FIXED_CONSTANTS));
+
+        return result;
+    }
+
 <if(table.primaryKey)>
 
     <find_constant_by_pk(primaryKey=table.primaryKey, table=table, C=C)>
@@ -428,10 +445,10 @@ public static final String _INSERT_SQL =
     + "( "
 <if(table.attributes.minus.readOnlyAttributes)>
 <table.attributes.minus.readOnlyAttributes:{attr|
-    +   "?" /* :<attr.name> */}; separator=" + \", \"\n"> "
+    +   "?" /* :<attr.name> */}; separator=" + \", \"\n">
 <else>
 <table.attributes:{attr|
-    +   "?" /* :<attr.name> */}; separator=" + \", \"\n"> "
+    +   "?" /* :<attr.name> */}; separator=" + \", \"\n">
 <endif>
     + ")";
 >>
@@ -543,7 +560,6 @@ constructor(table, repository, engine, C) ::= <<
  @param repository the repository.
  @param C the context.
  !>
-/**
  * Builds a {@link <engine.name><table.name.voName>DAO} instance
  * with given data source.
  * @param dataSource the required {@link javax.sql.DataSource data source}.

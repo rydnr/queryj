@@ -153,14 +153,13 @@ public interface <table.name.voName>DAO
 
 {
 <if(table.static)>
-    <table.cachedRows:cached_constants(
-      row=it, voName=table.name.voName); separator="\n\n">
+    <table.staticContents:{r | <cached_constants(row=r, voName=table.name.voName)}; separator="\n\n">
 
     /**
      * Retrieves the static (pre-cached) values.
      * @return such information.
      */
-    public <table.name.voName>[] getStaticValues();
+    public List\<<table.name.voName\>> getStaticValues();
 
     <table.staticAttribute:find_constant_methods(
       attribute=it,

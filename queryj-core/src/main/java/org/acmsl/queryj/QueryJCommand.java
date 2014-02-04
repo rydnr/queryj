@@ -82,7 +82,15 @@ public interface QueryJCommand
      * @return the value for such key.
      */
     @Nullable
-    public String getSetting(@NotNull final String key);
+    public String getStringSetting(@NotNull final String key);
+
+    /**
+     * Retrieves the setting for given key.
+     * @param key the key.
+     * @return the value for such key.
+     */
+    @Nullable
+    public <T> T getSetting(@NotNull final String key);
 
     /**
      * Retrieves the setting for given key.

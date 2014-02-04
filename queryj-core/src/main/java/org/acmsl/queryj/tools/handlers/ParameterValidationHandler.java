@@ -192,20 +192,20 @@ public class ParameterValidationHandler
       throws  QueryJBuildException
     {
         validateParameters(
-            command.getSetting(JDBC_DRIVER),
-            command.getSetting(JDBC_URL),
-            command.getSetting(JDBC_USERNAME),
-            command.getSetting(JDBC_SCHEMA),
-            command.getSetting(REPOSITORY),
-            command.getSetting(PACKAGE),
+            command.getStringSetting(JDBC_DRIVER),
+            command.getStringSetting(JDBC_URL),
+            command.getStringSetting(JDBC_USERNAME),
+            command.getStringSetting(JDBC_SCHEMA),
+            command.getStringSetting(REPOSITORY),
+            command.getStringSetting(PACKAGE),
             command.getFileSetting(OUTPUT_FOLDER),
             command.getFileSetting(HEADER_FILE),
-            command.getSetting(JNDI_DATASOURCE),
+            command.getStringSetting(JNDI_DATASOURCE),
             command.getFileSetting(SQL_XML_FILE),
             command.getFileSetting(GRAMMAR_FOLDER),
-            command.getSetting(GRAMMAR_NAME),
-            command.getSetting(GRAMMAR_SUFFIX),
-            command.getSetting(ENCODING),
+            command.getStringSetting(GRAMMAR_NAME),
+            command.getStringSetting(GRAMMAR_SUFFIX),
+            command.getStringSetting(ENCODING),
             command.getIntSetting(THREAD_COUNT, Runtime.getRuntime().availableProcessors()),
             command);
 

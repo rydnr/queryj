@@ -366,7 +366,7 @@
             </execution>
           </executions>
         </plugin>
-        <!--plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-antrun-plugin</artifactId>
           <executions>
@@ -375,14 +375,12 @@
               <configuration>
                 <tasks>
                   <taskdef name="checkthread" classname="org.checkthread.anttask.CheckThreadTask" /> 
-                  <target name="analyze">
-                    <checkthread 
-                      targetpath="${classDir}/mypackage/" 
-                      classpath="${classDir}"
-                      verbose="true"/> 
-                  </target>
+                  <checkthread 
+                    targetpath="${project.build.outputDirectory}/" 
+                    classpath="${project.build.outputDirectory}/" 
+                    verbose="true"/> 
                 </tasks>
-                <sourceRoot>${project.build.directory}/classes</sourceRoot>
+                <sourceRoot>${basedir}/src/main/java</sourceRoot>
               </configuration>
               <goals>
                 <goal>run</goal>
@@ -394,10 +392,10 @@
               <groupId>org.checkthread</groupId>
               <artifactId>checkthread-analyzer</artifactId>
               <version>${version.checkthread}</version>
-              <scope>test</scope>
+              <scope>compile</scope>
             </dependency>
           </dependencies>
-        </plugin-->
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>

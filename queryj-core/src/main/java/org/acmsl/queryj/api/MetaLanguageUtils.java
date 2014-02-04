@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-2006  Jose San Leandro Armendariz
                              chous@acm-sl.org
@@ -407,13 +407,13 @@ public class MetaLanguageUtils
         {
             try
             {
-                @NotNull final  PerCommentParser t_Parser = setUpParser(tableComment);
+                @NotNull final PerCommentParser t_Parser = setUpParser(tableComment);
 
                 @NotNull final ParseTree tree = t_Parser.tableComment();
 
-                @NotNull final PerCommentVisitor<Boolean> visitor = new PerCommentTabDecoratorVisitor();
+                @NotNull final PerCommentVisitor<Boolean> t_Visitor = new PerCommentTabDecoratorVisitor();
 
-                result = visitor.visit(tree);
+                result = t_Visitor.visit(tree);
             }
             catch  (@NotNull final RecognitionException recognitionException)
             {

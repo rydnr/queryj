@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -171,9 +171,21 @@ public class ConfigurationQueryJCommandImpl
      * @param key the key.
      * @return the value for such key.
      */
-    @Nullable
     @Override
-    public String getSetting(@NotNull final String key)
+    @Nullable
+    public String getStringSetting(@NotNull final String key)
+    {
+        return getSetting(key, getConfiguration());
+    }
+
+    /**
+     * Retrieves the setting for given key.
+     * @param key the key.
+     * @return the value for such key.
+     */
+    @Override
+    @Nullable
+    public <T> T getSetting(@NotNull final String key)
     {
         return getSetting(key, getConfiguration());
     }
@@ -185,9 +197,10 @@ public class ConfigurationQueryJCommandImpl
      * @param configuration the {@link Configuration configuration} settings.
      */
     @Nullable
-    protected String getSetting(@NotNull final String key, @NotNull final Configuration configuration)
+    @SuppressWarnings("unchecked")
+    protected <T> T getSetting(@NotNull final String key, @NotNull final Configuration configuration)
     {
-        return configuration.getString(key);
+        return (T) configuration.getProperty(key);
     }
 
     /**
@@ -246,20 +259,7 @@ public class ConfigurationQueryJCommandImpl
     @Override
     public File getFileSetting(@NotNull final String key)
     {
-        @Nullable final File result;
-
-        @Nullable final String fileName = getSetting(key, getConfiguration());
-
-        if (fileName != null)
-        {
-            result = new File(fileName);
-        }
-        else
-        {
-            result = null;
-        }
-
-        return result;
+        return getSetting(key);
     }
 
     /**
