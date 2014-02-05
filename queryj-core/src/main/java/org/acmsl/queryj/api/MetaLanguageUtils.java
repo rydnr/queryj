@@ -409,11 +409,26 @@ public class MetaLanguageUtils
             {
                 @NotNull final PerCommentParser t_Parser = setUpParser(tableComment);
 
-                @NotNull final ParseTree tree = t_Parser.tableComment();
+                @Nullable final ParseTree t_Tree = t_Parser.tableComment();
 
-                @NotNull final PerCommentVisitor<Boolean> t_Visitor = new PerCommentTabDecoratorVisitor();
+                if (t_Tree != null)
+                {
+                    @NotNull final PerCommentVisitor<Boolean> t_Visitor = new PerCommentTabDecoratorVisitor();
 
-                result = t_Visitor.visit(tree);
+                    try
+                    {
+                        result = t_Visitor.visit(t_Tree);
+                    }
+                    catch (@NotNull final Throwable npe)
+                    {
+                        @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+                        if (t_Log != null)
+                        {
+                            t_Log.fatal(npe);
+                        }
+                    }
+                }
             }
             catch  (@NotNull final RecognitionException recognitionException)
             {
