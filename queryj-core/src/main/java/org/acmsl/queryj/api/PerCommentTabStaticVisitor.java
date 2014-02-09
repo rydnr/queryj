@@ -59,16 +59,21 @@ public class PerCommentTabStaticVisitor
      * @param context the parse context.
      * @return the name of the parent ISA table.
      */
+    @NotNull
     @Override
     public String visitTabStatic(@NotNull final PerCommentParser.TabStaticContext context)
     {
-        String result = "";
+        @NotNull final String result;
 
         final PerCommentParser.IdentContext identContext = context.ident();
 
         if (identContext != null)
         {
-            result = identContext.getText();
+            result = identContext.getText().trim();
+        }
+        else
+        {
+            result = "";
         }
 
         return result;

@@ -68,10 +68,11 @@ public class PerCommentColBoolVisitor
      * @return the list of boolean definitions. At position 0, the value representing {@code true}; 1 -> {@code false};
      * 2 -> {@code null}.
      */
+    @NotNull
     @Override
     public List<String> visitColBool(@NotNull final ColBoolContext context)
     {
-        @NotNull final List<String> result = new ArrayList<String>();
+        @NotNull final List<String> result = new ArrayList<>(3);
 
         @NotNull final List<IdentContext> identContexts = context.ident();
 
@@ -79,7 +80,7 @@ public class PerCommentColBoolVisitor
         {
             if (ident != null)
             {
-                result.add(ident.getText());
+                result.add(ident.getText().trim());
             }
         }
 

@@ -40,12 +40,7 @@ package org.acmsl.queryj.api;
  */
 import org.acmsl.queryj.tools.antlr.PerCommentBaseVisitor;
 import org.acmsl.queryj.tools.antlr.PerCommentParser.ColIsarefsContext;
-import org.acmsl.queryj.tools.antlr.PerCommentParser.TextOrIdContext;
-
-/*
- * Importing ANTLR classes.
- */
-import org.antlr.v4.runtime.tree.TerminalNode;
+import org.acmsl.queryj.tools.antlr.PerCommentParser.IdentContext;
 
 /*
  * Importing JetBrains annotations.
@@ -72,32 +67,34 @@ public class PerCommentColIsarefsVisitor
      * @param context the parse context.
      * @return the list of ISA column references.
      */
+    @NotNull
     @Override
     public List<List<String>> visitColIsarefs(@NotNull final ColIsarefsContext context)
     {
-        @NotNull final List<List<String>> result = new ArrayList<List<String>>();
+        @NotNull final List<List<String>> result = new ArrayList<>(3);
 
-        @NotNull final List<TextOrIdContext> textOrIdContexts = context.textOrId();
+        @NotNull final List<IdentContext> ids = context.ident();
 
-        @NotNull final List<TerminalNode> ids = context.ID();
+        @NotNull List<String> currentDuple = new ArrayList<>(2);
 
-        for (int index = 0; index < textOrIdContexts.size() ; index++)
+        for (int index = 0; index < ids.size() ; index++)
         {
-            @Nullable final List<String> currentDuple = new ArrayList<String>(2);
+            @Nullable final IdentContext id = ids.get(index);
 
-            @Nullable final TextOrIdContext textOrIdContext = textOrIdContexts.get(index);
-            @Nullable final TerminalNode id = ids.get(index);
-
-            if (textOrIdContext != null)
-            {
-                currentDuple.add(textOrIdContext.getText());
-            }
             if (id != null)
             {
-                currentDuple.add(id.getText());
+                currentDuple.add(id.getText().trim());
             }
 
-            result.add(currentDuple);
+            if ((index % 2) != 0)
+            {
+                result.add(currentDuple);
+
+                if (index < ids.size() - 1)
+                {
+                    currentDuple = new ArrayList<>(2);
+                }
+            }
         }
 
         return result;

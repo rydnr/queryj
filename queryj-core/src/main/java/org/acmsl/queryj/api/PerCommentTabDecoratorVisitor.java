@@ -59,16 +59,10 @@ public class PerCommentTabDecoratorVisitor
      * @param context the parse context.
      * @return {@code true} if the comment declares the table is decorated.
      */
+    @NotNull
     @Override
     public Boolean visitTabDecorator(@NotNull final TabDecoratorContext context)
     {
-        boolean result = false;
-
-        if (context.DECORATOR() != null)
-        {
-            result = true;
-        }
-
-        return result;
+        return context.DECORATOR() != null;
     }
 }

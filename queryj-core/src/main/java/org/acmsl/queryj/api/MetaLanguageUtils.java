@@ -44,8 +44,11 @@ import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.tools.antlr.PerCommentLoggingListener;
 import org.acmsl.queryj.tools.antlr.PerCommentLexer;
+import org.acmsl.queryj.tools.antlr.PerCommentListener;
 import org.acmsl.queryj.tools.antlr.PerCommentParser;
+import org.acmsl.queryj.tools.antlr.PerCommentVisitor;
 
 /*
  * Importing ACM-SL Commons classes.
@@ -58,7 +61,6 @@ import org.acmsl.commons.utils.StringValidator;
 /*
  * Importing some ANTLR classes.
  */
-import org.acmsl.queryj.tools.antlr.PerCommentVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -90,8 +92,7 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Provides insight about the meta-language used in model descriptions.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
 @ThreadSafe
 public class MetaLanguageUtils
@@ -101,7 +102,7 @@ public class MetaLanguageUtils
     /**
      * The cache of parsers.
      */
-    private final Map<String, PerCommentParser> PARSER_CACHE = new ConcurrentHashMap<String, PerCommentParser>();
+    private final Map<String, PerCommentParser> PARSER_CACHE = new ConcurrentHashMap<>();
 
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -154,11 +155,12 @@ public class MetaLanguageUtils
             try
             {
                 assert tableComment != null;
+
                 @NotNull final PerCommentParser t_Parser = setUpParser(tableComment);
 
-                final ParseTree tree = t_Parser.tableComment();
+                @NotNull final ParseTree tree = t_Parser.tableComment();
 
-                final PerCommentVisitor<String> visitor = new PerCommentTabStaticVisitor();
+                @NotNull final PerCommentVisitor<String> visitor = new PerCommentTabStaticVisitor();
 
                 result = visitor.visit(tree);
             }
@@ -180,7 +182,7 @@ public class MetaLanguageUtils
 
     /**
      * Retrieves the parent table in an ISA relationship, as
-     * declated by the table comment.
+     * declared by the table comment.
      * @param tableComment the table's comment.
      * @return the parent table, or <code>null</code> otherwise.
      */
@@ -194,8 +196,6 @@ public class MetaLanguageUtils
             try
             {
                 @NotNull final PerCommentParser t_Parser = setUpParser(tableComment);
-
-                t_Parser.tableComment();
 
                 @NotNull final ParseTree tree = t_Parser.tableComment();
 
@@ -271,7 +271,7 @@ public class MetaLanguageUtils
     @SuppressWarnings("unused")
     public String[] retrieveColumnBool(@NotNull final String columnComment)
     {
-        @Nullable String[] result = new String[3];
+        @Nullable String[] result = null;
 
         boolean done = false;
 
@@ -285,12 +285,13 @@ public class MetaLanguageUtils
 
                  @NotNull final PerCommentVisitor<List<String>> visitor = new PerCommentColBoolVisitor();
 
-                 @NotNull final List<String> boolDefs = visitor.visit(tree);
+                 @Nullable final List<String> boolDefs = visitor.visit(tree);
 
-                 if (boolDefs.size() > 1)
+                 if (   (boolDefs != null)
+                     && (boolDefs.size() > 1))
                  {
                      done = true;
-                     result = boolDefs.toArray(result);
+                     result = boolDefs.toArray(new String[boolDefs.size()]);
                  }
              }
              catch  (@NotNull final RecognitionException recognitionException)
@@ -306,7 +307,8 @@ public class MetaLanguageUtils
              }
         }
 
-        if (!done)
+        if (   (!done)
+            || (result == null))
         {
             result = new String[0];
         }
@@ -335,7 +337,12 @@ public class MetaLanguageUtils
 
                 @NotNull final PerCommentVisitor<Boolean> visitor = new PerCommentColReadonlyVisitor();
 
-                result = visitor.visit(tree);
+                @Nullable final Boolean resultValue = visitor.visit(tree);
+
+                if (resultValue != null)
+                {
+                    result = resultValue;
+                }
             }
             catch  (@NotNull final RecognitionException recognitionException)
             {
@@ -364,7 +371,7 @@ public class MetaLanguageUtils
     public List<List<String>> retrieveColumnDiscriminatedTables(
         @NotNull final String columnComment)
     {
-        @Nullable List<List<String>> result = new ArrayList<List<String>>();
+        @Nullable List<List<String>> result = null;
 
         if  (!isEmpty(columnComment))
         {
@@ -376,7 +383,12 @@ public class MetaLanguageUtils
 
                 @NotNull final PerCommentVisitor<List<List<String>>> visitor = new PerCommentColIsarefsVisitor();
 
-                result = visitor.visit(tree);
+                @Nullable final List<List<String>> resultValue = visitor.visit(tree);
+
+                if (resultValue != null)
+                {
+                    result = resultValue;
+                }
             }
             catch  (@NotNull final RecognitionException recognitionException)
             {
@@ -389,6 +401,11 @@ public class MetaLanguageUtils
                         recognitionException);
                 }
             }
+        }
+
+        if (result == null)
+        {
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -417,7 +434,12 @@ public class MetaLanguageUtils
 
                     try
                     {
-                        result = t_Visitor.visit(t_Tree);
+                        @Nullable final Boolean resultValue = t_Visitor.visit(t_Tree);
+
+                        if (resultValue != null)
+                        {
+                            result = resultValue;
+                        }
                     }
                     catch (@NotNull final Throwable npe)
                     {
@@ -427,6 +449,7 @@ public class MetaLanguageUtils
                         {
                             t_Log.fatal(npe);
                         }
+                        npe.printStackTrace(System.err);
                     }
                 }
             }
@@ -455,7 +478,7 @@ public class MetaLanguageUtils
     @NotNull
     public List<List<String>> retrieveTableRelationship(@NotNull final String tableComment)
     {
-        @NotNull List<List<String>> result = new ArrayList<List<String>>();
+        @Nullable List<List<String>> result = null;
 
         if  (!isEmpty(tableComment))
         {
@@ -467,11 +490,16 @@ public class MetaLanguageUtils
 
                 @NotNull final PerCommentVisitor<List<List<String>>> visitor = new PerCommentTabRelationshipVisitor();
 
-                result = visitor.visit(tree);
+                @Nullable final List<List<String>> resultValue = visitor.visit(tree);
+
+                if (resultValue != null)
+                {
+                    result = resultValue;
+                }
             }
             catch  (final RecognitionException recognitionException)
             {
-                @Nullable final  Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
                 if  (t_Log != null)
                 {
@@ -479,7 +507,14 @@ public class MetaLanguageUtils
                         Literals.INVALID_TABLE_COMMENT + tableComment,
                         recognitionException);
                 }
+
+                result = new ArrayList<>();
             }
+        }
+
+        if (result == null)
+        {
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -507,7 +542,7 @@ public class MetaLanguageUtils
                 t_Log.debug("Parsing '" + comment + "'");
             }
 
-            @NotNull final  PerCommentLexer t_Lexer =
+            @NotNull final PerCommentLexer t_Lexer =
                 new PerCommentLexer(
                     new ANTLRInputStream(comment));
             
@@ -515,6 +550,10 @@ public class MetaLanguageUtils
                 new CommonTokenStream(t_Lexer);
 
             result = new PerCommentParser(t_Tokens);
+
+            @NotNull final PerCommentListener listener = new PerCommentLoggingListener(comment);
+
+            result.addParseListener(listener);
 
             PARSER_CACHE.put(comment, result);
         }

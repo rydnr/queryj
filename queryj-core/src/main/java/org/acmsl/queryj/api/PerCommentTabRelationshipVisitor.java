@@ -39,13 +39,8 @@ package org.acmsl.queryj.api;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.antlr.PerCommentBaseVisitor;
+import org.acmsl.queryj.tools.antlr.PerCommentParser.IdentContext;
 import org.acmsl.queryj.tools.antlr.PerCommentParser.TabRelationshipContext;
-import org.acmsl.queryj.tools.antlr.PerCommentParser.TextOrIdContext;
-
-/*
- * Importing ANTLR classes.
- */
-import org.antlr.v4.runtime.tree.TerminalNode;
 
 /*
  * Importing JetBrains annotations.
@@ -72,29 +67,23 @@ public class PerCommentTabRelationshipVisitor
      * @param context the parse context.
      * @return the list of relationship columns.
      */
+    @NotNull
     @Override
     public List<List<String>> visitTabRelationship(@NotNull final TabRelationshipContext context)
     {
-        @NotNull final List<List<String>> result = new ArrayList<List<String>>();
+        @NotNull final List<List<String>> result = new ArrayList<>(2);
 
-        @NotNull final List<TextOrIdContext> textOrIdContexts = context.textOrId();
+        @NotNull final List<IdentContext> ids = context.ident();
 
-        @NotNull final List<TerminalNode> ids = context.ID();
-
-        for (int index = 0; index < textOrIdContexts.size() ; index++)
+        for (int index = 0; index < ids.size() ; index++)
         {
-            @Nullable final List<String> currentDuple = new ArrayList<String>(2);
+            @Nullable final List<String> currentDuple = new ArrayList<>(2);
 
-            @Nullable final TextOrIdContext textOrIdContext = textOrIdContexts.get(index);
-            @Nullable final TerminalNode id = ids.get(index);
+            @Nullable final IdentContext id = ids.get(index);
 
-            if (textOrIdContext != null)
-            {
-                currentDuple.add(textOrIdContext.getText());
-            }
             if (id != null)
             {
-                currentDuple.add(id.getText());
+                currentDuple.add(id.getText().trim());
             }
 
             result.add(currentDuple);

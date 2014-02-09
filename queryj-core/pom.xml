@@ -149,9 +149,9 @@
         </goals>
         <configuration>
           <encoding>UTF-8</encoding>
-          <!--listener>true</listener-->
+          <listener>true</listener>
           <visitor>true</visitor>
-          <outputDirectory>${project.build.directory}/generated-sources/org/acmsl/queryj/tools/antlr</outputDirectory>
+          <outputDirectory>${project.build.directory}/generated-sources/</outputDirectory>
         </configuration>
       </plugin>
       <!--plugin>

@@ -41,7 +41,7 @@ grammar PerComment;
 @parser::header
 {
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                         chous@acm-sl.org
@@ -77,13 +77,12 @@ grammar PerComment;
  * Description: ANTLR parser for PerComment.g4
  *
  */
-package org.acmsl.queryj.tools.antlr;
 }
 
 @lexer::header
 {
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                         chous@acm-sl.org
@@ -119,26 +118,16 @@ package org.acmsl.queryj.tools.antlr;
  * Description: ANTLR lexer for PerComment.g4
  *
  */
-package org.acmsl.queryj.tools.antlr;
 }
 
 /*------------------------------------------------------------------
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-tableComment : (text)? ( tabAnnotation )*;
+tableComment : (TEXT)? ( tabAnnotation )*;
         
-columnComment : (text)? ( colAnnotation )*;
+columnComment : (TEXT)? ( colAnnotation )*;
 
-text :
-    (  textOrId 
-     | COMMA 
-     | WS
-     | OPEN_PAREN
-     | CLOSE_PAREN
-     | QUOTE )+
-  ;
-        
 tabAnnotation
   : (
         tabStatic
@@ -150,34 +139,28 @@ tabAnnotation
   ;
 
 tabStatic 
-  : STATIC WS ident WS?
+  : STATIC ident
   ;
 
 tabIsa
-  : ISA WS ident WS?
+  : ISA ident
   ;
 
 tabIsatype
-  : ISATYPE WS ident WS?
+  : ISATYPE ident
   ;
 
-tabDecorator :  DECORATOR WS?;
+tabDecorator :  DECORATOR;
 
 tabRelationship
   :  RELATIONSHIP
-     WS
      (
-       OPEN_PAREN WS?
-       (  (SQUOTE textOrId SQUOTE)
-        | (DQUOTE textOrId DQUOTE)
-        | (textOrId)
-       )
-       WS? COMMA WS?
-       (  (SQUOTE ID SQUOTE)
-        | (DQUOTE ID DQUOTE)
-        | (ID)
-       )
-       WS? CLOSE_PAREN WS? COMMA?
+       OPEN_PAREN 
+       ident
+       COMMA 
+       ident
+       CLOSE_PAREN
+       COMMA?
      )+
   ;
 
@@ -189,65 +172,43 @@ colAnnotation
      |   colOraseq
     );
 
-colReadonly :  READONLY WS?;
+colReadonly :  READONLY;
 
 colBool
-  : BOOL WS
+  : BOOL
     ident
-    WS? COMMA WS?
+    COMMA
     ident
-    WS? (COMMA WS? ident WS?)?
+    (COMMA ident)?
   ;
 
-textOrId 
-    :    ID
-    |    TEXT
-    ;
-
 ident 
-    : (SQUOTE ID SQUOTE)
-    | (DQUOTE ID DQUOTE)
-    | ID
+    : (SQUOTE TEXT SQUOTE)
+    | (DQUOTE TEXT DQUOTE)
+    | TEXT
     ;
 
 colIsarefs
   :  ISAREFS
-     WS
      (
-       OPEN_PAREN WS?
-       (  (SQUOTE textOrId SQUOTE)
-        | (DQUOTE textOrId DQUOTE)
-        | (textOrId)
-       )
-       WS? COMMA WS?
-       (  (SQUOTE ID SQUOTE)
-        | (DQUOTE ID DQUOTE)
-        | (ID)
-       )
-       WS? CLOSE_PAREN WS? COMMA?
+       OPEN_PAREN
+       ident
+       COMMA
+       ident
+       CLOSE_PAREN
+       COMMA?
      )+
   ;
 
 colOraseq
-  : ORASEQ WS ident WS?
+  : ORASEQ ident
   ;
 
 /*------------------------------------------------------------------
  * LEXER RULES
  *------------------------------------------------------------------*/
 
-AT
-    :  (  STATIC
-        | ISA
-        | ISATYPE
-        | DECORATOR
-        | ISAREFS
-        | READONLY
-        | BOOL
-        | ORASEQ
-        | RELATIONSHIP
-        | '@')
-    ;
+WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip;
 
 SQUOTE : ('\'');
 DQUOTE : ('"');
@@ -260,29 +221,21 @@ COMMA : ',';
 
 // keywords
 STATIC : '@static';
-ISA : '@isa';
 ISATYPE : '@isatype';
-DECORATOR : '@decorator';
 ISAREFS : '@isarefs';
+ISA : '@isa';
+DECORATOR : '@decorator';
 READONLY : '@readonly';
 RELATIONSHIP : '@relationship';
 BOOL : '@bool';
 ORASEQ : '@oraseq';
 
-WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+;// {$channel = HIDDEN;};
-
-ID
-    : (LETTER | '_' | DIGIT ) (NAMECHAR)* WS?
-    ;
-
 TEXT
-   : (  ID
-      | WS
-      | OPEN_PAREN
+   : (  OPEN_PAREN
       | CLOSE_PAREN
       | COMMA
       | QUOTE
-      | AT
+      | '@'
       | (~('@'|','|'('|')'|'\''|'"')+))
    ;
 
@@ -297,4 +250,8 @@ fragment DIGIT
 fragment LETTER
     : 'a'..'z'
     | 'A'..'Z'
+    ;
+
+fragment DOT
+    : '.'
     ;

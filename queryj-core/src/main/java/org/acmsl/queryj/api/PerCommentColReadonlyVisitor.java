@@ -59,16 +59,10 @@ public class PerCommentColReadonlyVisitor
      * @param context the parse context.
      * @return {@code true} if the comment declares the column is read-only.
      */
+    @NotNull
     @Override
     public Boolean visitColReadonly(@NotNull final ColReadonlyContext context)
     {
-        boolean result = false;
-
-        if (context.READONLY() != null)
-        {
-            result = true;
-        }
-
-        return result;
+        return context.READONLY() != null;
     }
 }

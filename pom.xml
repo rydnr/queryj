@@ -28,7 +28,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <antlr4.visitor>true</antlr4.visitor>
     <antlr4.listener>true</antlr4.listener>
-    <version.antlr4>4.1</version.antlr4>
+    <version.antlr4>4.2</version.antlr4>
     <version.checkthread>1.0.9</version.checkthread>
   </properties>
 
@@ -172,7 +172,7 @@
       <dependency>
         <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>
-        <version>1.2.12</version>
+        <version>1.2.17</version>
       </dependency>
       <dependency>
         <groupId>org.apache.ant</groupId>
