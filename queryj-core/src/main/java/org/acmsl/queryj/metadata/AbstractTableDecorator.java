@@ -565,7 +565,7 @@ public abstract class AbstractTableDecorator
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        List<ForeignKey<DecoratedString>> result = immutableGetForeignKeys();
+        @Nullable List<ForeignKey<DecoratedString>> result = immutableGetForeignKeys();
 
         if  (   (result == null)
              || (!areDecorated(result)))

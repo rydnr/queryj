@@ -55,6 +55,7 @@ import org.checkthread.annotations.ThreadSafe;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -352,7 +353,8 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
      * Retrieves the foreign keys.
      * @return the foreign keys.
      */
-    protected List<ForeignKey<V>> immutableGetForeignKeys()
+    @Nullable
+    protected final List<ForeignKey<V>> immutableGetForeignKeys()
     {
         return this.m__lForeignKeys;
     }
@@ -364,7 +366,20 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     @NotNull
     public List<ForeignKey<V>> getForeignKeys()
     {
-        return immutableGetForeignKeys();
+        @NotNull final List<ForeignKey<V>> result;
+
+        @Nullable final List<ForeignKey<V>> aux = immutableGetForeignKeys();
+
+        if (aux == null)
+        {
+            result = new ArrayList<>(0);
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
     }
 
     /**
