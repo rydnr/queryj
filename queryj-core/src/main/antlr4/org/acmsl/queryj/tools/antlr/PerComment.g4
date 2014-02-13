@@ -124,9 +124,9 @@ grammar PerComment;
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-tableComment : (TEXT)? ( tabAnnotation )*;
+tableComment : freeText ( tabAnnotation )*;
         
-columnComment : (TEXT)? ( colAnnotation )*;
+columnComment : freeText ( colAnnotation )*;
 
 tabAnnotation
   : (
@@ -139,7 +139,7 @@ tabAnnotation
   ;
 
 tabStatic 
-  : STATIC ident
+  : STATIC ident 
   ;
 
 tabIsa
@@ -183,9 +183,9 @@ colBool
   ;
 
 ident 
-    : (SQUOTE TEXT SQUOTE)
-    | (DQUOTE TEXT DQUOTE)
-    | TEXT
+    : (SQUOTE (TEXT | IDENT)+ SQUOTE)
+    | (DQUOTE (TEXT | IDENT)+ DQUOTE)
+    | (IDENT | TEXT)
     ;
 
 colIsarefs
@@ -204,20 +204,15 @@ colOraseq
   : ORASEQ ident
   ;
 
+freeText
+    : (TEXT | IDENT | OPEN_PAREN | CLOSE_PAREN | COMMA | QUOTE | SQUOTE)+
+    ;
+
 /*------------------------------------------------------------------
  * LEXER RULES
  *------------------------------------------------------------------*/
 
 WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ -> skip;
-
-SQUOTE : ('\'');
-DQUOTE : ('"');
-QUOTE : (SQUOTE | DQUOTE);
-
-// literals
-OPEN_PAREN : '(';
-CLOSE_PAREN : ')';
-COMMA : ',';
 
 // keywords
 STATIC : '@static';
@@ -230,14 +225,25 @@ RELATIONSHIP : '@relationship';
 BOOL : '@bool';
 ORASEQ : '@oraseq';
 
-TEXT
-   : (  OPEN_PAREN
-      | CLOSE_PAREN
-      | COMMA
-      | QUOTE
-      | '@'
-      | (~('@'|','|'('|')'|'\''|'"')+))
+IDENT
+   : (  '@'
+      | NAMECHAR+)
    ;
+
+TEXT
+   : (  IDENT
+      | '@'
+      | (~('@'|'('|')'|'\''|'"'|',')+))
+   ;
+
+SQUOTE : ('\'');
+DQUOTE : ('"');
+QUOTE : (SQUOTE | DQUOTE);
+
+// literals
+OPEN_PAREN : '(';
+CLOSE_PAREN : ')';
+COMMA : ',';
 
 fragment NAMECHAR
     : LETTER | DIGIT | '.' | '-' | '_' | ':' | '$'

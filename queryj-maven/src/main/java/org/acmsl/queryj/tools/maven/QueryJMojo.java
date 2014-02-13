@@ -98,7 +98,7 @@ public class QueryJMojo
      * The location of pom.properties within the jar file.
      */
     protected static final String POM_PROPERTIES_LOCATION =
-        "META-INF/maven/org.acmsl/queryj-maven/pom.properties";
+        "META-INF/maven/org.acmsl.queryj/queryj-maven/pom.properties";
     protected static final String QUERYJ_PACKAGE = "queryj.package";
     public static final String UNKNOWN_LITERAL = "(unknown)";
     public static final String VERSION_LITERAL = "version";

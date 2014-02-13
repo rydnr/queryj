@@ -69,6 +69,7 @@ public class MetaLanguageUtilsTest
 {
     public static final String NULL_META_LANGUAGE_UTILS_INSTANCE = "Null MetaLanguageUtils instance";
     public static final String TABLE_BLA = "Table BLA.";
+    protected static final String IS_PARSED_AS_STATIC = "' is parsed as static";
 
     /**
      * Tests MetaLanguageUtils#retrieveStaticAttribute(String)
@@ -82,14 +83,27 @@ public class MetaLanguageUtilsTest
 
         Assert.assertFalse("'Table BLA.' is not static", metaLanguageUtils.retrieveStaticAttribute(TABLE_BLA) != null);
 
-        @NotNull final String tableComment = "Table @static name";
+        @NotNull final String staticTableComment = "Table @static name";
 
-        final String staticAttribute = metaLanguageUtils.retrieveStaticAttribute(tableComment);
+        final String staticAttribute = metaLanguageUtils.retrieveStaticAttribute(staticTableComment);
 
-        Assert.assertNotNull("'" + tableComment + "' is not parsed as static", staticAttribute);
+        Assert.assertNotNull("'" + staticTableComment + "' is not parsed as static", staticAttribute);
 
         Assert.assertNotNull(
-            "The static attribute of '" + tableComment + "' is not name", "name".equals(staticAttribute));
+            "The static attribute of '" + staticTableComment + "' is not name", "name".equals(staticAttribute));
+
+        @NotNull String commaComment = "The users, or customers.";
+
+        String comment = metaLanguageUtils.retrieveStaticAttribute(commaComment);
+
+        Assert.assertNull("'" + commaComment + IS_PARSED_AS_STATIC, comment);
+
+        commaComment = "The bettors, usually users (see um_users) or clubs.";
+
+        comment = metaLanguageUtils.retrieveStaticAttribute(commaComment);
+
+        Assert.assertNull("'" + commaComment + IS_PARSED_AS_STATIC, comment);
+
     }
 
     /**
@@ -172,7 +186,7 @@ public class MetaLanguageUtilsTest
 
         Assert.assertTrue("'Table BLA.' is parsed as relationship", nonRelationship.size() == 0);
 
-        @NotNull final String tableComment = "Table @relationship tab1.col1, tab2.col2";
+        @NotNull final String tableComment = "Table @relationship (tab1.col1, tab2.col2)";
 
         @Nullable final List<List<String>> relationship =
             metaLanguageUtils.retrieveTableRelationship(tableComment);

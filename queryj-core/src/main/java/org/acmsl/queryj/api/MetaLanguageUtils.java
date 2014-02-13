@@ -530,33 +530,28 @@ public class MetaLanguageUtils
     protected PerCommentParser setUpParser(@NotNull final String comment)
         throws  RecognitionException
     {
-        @Nullable PerCommentParser result = PARSER_CACHE.get(comment);
+        @NotNull final PerCommentParser result;
 
-        if  (result == null)
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+        if  (   (t_Log != null)
+             && (t_Log.isDebugEnabled()))
         {
-            @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
-
-            if  (   (t_Log != null)
-                 && (t_Log.isDebugEnabled()))
-            {
-                t_Log.debug("Parsing '" + comment + "'");
-            }
-
-            @NotNull final PerCommentLexer t_Lexer =
-                new PerCommentLexer(
-                    new ANTLRInputStream(comment));
-            
-            @NotNull final CommonTokenStream t_Tokens =
-                new CommonTokenStream(t_Lexer);
-
-            result = new PerCommentParser(t_Tokens);
-
-            @NotNull final PerCommentListener listener = new PerCommentLoggingListener(comment);
-
-            result.addParseListener(listener);
-
-            PARSER_CACHE.put(comment, result);
+            t_Log.debug("Parsing '" + comment + "'");
         }
+
+        @NotNull final PerCommentLexer t_Lexer =
+            new PerCommentLexer(
+                new ANTLRInputStream(comment));
+
+        @NotNull final CommonTokenStream t_Tokens =
+            new CommonTokenStream(t_Lexer);
+
+        result = new PerCommentParser(t_Tokens);
+
+        @NotNull final PerCommentListener listener = new PerCommentLoggingListener(comment);
+
+        result.addParseListener(listener);
 
         return result;
     }

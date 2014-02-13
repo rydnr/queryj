@@ -1,7 +1,7 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002-today Jose San Leandro Armendï¿½riz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
@@ -22,7 +22,7 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jsanleandro@yahoo.es
     Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabañas
+                    Urb. Valdecabaï¿½as
                     Boadilla del monte
                     28660 Madrid
                     Spain
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Prints out when a handler starts and finishes in the process
  *              flow.
@@ -62,8 +62,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Prints out when a handler starts and finishes in the process
  * flow.
- * @author <a href="mailto:jsanleandro@yahoo.es">Jose San Leandro</a>
- * @version $Revision$
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  */
 public aspect CommandHandlerLogging
 {
