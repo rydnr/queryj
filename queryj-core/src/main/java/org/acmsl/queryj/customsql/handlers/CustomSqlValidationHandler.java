@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -787,14 +787,20 @@ public class CustomSqlValidationHandler
     {
         @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
-        @NotNull final Collection<Property<String>> t_cProperties =
-            retrieveProperties(
+        @NotNull Collection<Property<String>> t_cProperties =
+            retrieveExplicitProperties(
                 sql,
                 sqlResult,
                 customSqlProvider.getSqlPropertyDAO(),
                 metadataManager,
                 metadataTypeManager);
-        
+
+        if  (t_cProperties.size() == 0)
+        {
+            t_cProperties =
+                retrieveImplicitProperties(sqlResult, customSqlProvider, metadataManager, metadataTypeManager);
+        }
+
         if  (t_cProperties.size() == 0)
         {
             throw new CustomResultWithNoPropertiesException(sqlResult, sql);
@@ -803,7 +809,7 @@ public class CustomSqlValidationHandler
         {
             if  (resultSet.next())
             {
-                Method t_Method;
+                @NotNull Method t_Method;
 
                 for (@Nullable final Property<String> t_Property : t_cProperties)
                 {
@@ -890,7 +896,7 @@ public class CustomSqlValidationHandler
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected List<Property<String>> retrieveProperties(
+    protected List<Property<String>> retrieveExplicitProperties(
         @NotNull final Sql<String> sql,
         @NotNull final Result<String> sqlResult,
         @NotNull final SqlPropertyDAO propertyDAO,
