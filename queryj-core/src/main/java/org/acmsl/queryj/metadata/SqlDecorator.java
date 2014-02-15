@@ -78,7 +78,7 @@ public interface SqlDecorator
      * @return such information.
      */
     @NotNull
-    List<Parameter<DecoratedString>> getParameters();
+    List<Parameter<DecoratedString, ?>> getParameters();
 
     /**
      * Checks whether the parameters should be wrapped.

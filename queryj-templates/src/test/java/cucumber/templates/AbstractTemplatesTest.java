@@ -168,7 +168,7 @@ public abstract class AbstractTemplatesTest<G, F>
     /**
      * The SQL query parameters.
      */
-    private Map<String, List<Parameter<String>>> m__mParameters;
+    private Map<String, List<Parameter<String, ?>>> m__mParameters;
 
     /**
      * The static rows.
@@ -184,7 +184,7 @@ public abstract class AbstractTemplatesTest<G, F>
         immutableSetTables(new HashMap<String, Table<String, Attribute<String>, List<Attribute<String>>>>());
         immutableSetForeignKeys(new ArrayList<ForeignKey<String>>());
         immutableSetSqlList(new ArrayList<Sql<String>>());
-        immutableSetParameters(new HashMap<String, List<Parameter<String>>>());
+        immutableSetParameters(new HashMap<String, List<Parameter<String, ?>>>());
         immutableSetRows(new HashMap<String, List<Row<String>>>());
     }
 
@@ -304,7 +304,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * Specifies the SQL queries' parameters.
      * @param parameters such map.
      */
-    protected final void immutableSetParameters(@NotNull final Map<String, List<Parameter<String>>> parameters)
+    protected final void immutableSetParameters(@NotNull final Map<String, List<Parameter<String, ?>>> parameters)
     {
         this.m__mParameters = parameters;
     }
@@ -314,7 +314,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param parameters such map.
      */
     @SuppressWarnings("unused")
-    protected void setParameters(@NotNull final Map<String, List<Parameter<String>>> parameters)
+    protected void setParameters(@NotNull final Map<String, List<Parameter<String, ?>>> parameters)
     {
         immutableSetParameters(parameters);
     }
@@ -324,7 +324,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @return such parameters.
      */
     @SuppressWarnings("unused")
-    protected final Map<String, List<Parameter<String>>> getParameters()
+    protected final Map<String, List<Parameter<String, ?>>> getParameters()
     {
         return m__mParameters;
     }
@@ -365,7 +365,7 @@ public abstract class AbstractTemplatesTest<G, F>
     @NotNull
     protected CustomSqlProvider retrieveCustomSqlProvider(
         @NotNull final List<Sql<String>> sqlList,
-        @NotNull final Map<String, List<Parameter<String>>> parameters)
+        @NotNull final Map<String, List<Parameter<String, ?>>> parameters)
     {
         return
             new SqlXmlParserImpl(new ByteArrayInputStream("".getBytes()))

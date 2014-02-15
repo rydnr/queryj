@@ -328,7 +328,7 @@ public class PerTableTemplatesTest
      * @param helper the {@link TableTestHelper} instance.
      */
     @NotNull
-    protected Map\<String, List\<Parameter\<String>\>> defineParameters(
+    protected Map\<String, List\<Parameter\<String, ?>\>> defineParameters(
         @NotNull final DataTable values,
         @NotNull final List\<Sql\<String>\> sqlList,
         @NotNull final TableTestHelper helper)

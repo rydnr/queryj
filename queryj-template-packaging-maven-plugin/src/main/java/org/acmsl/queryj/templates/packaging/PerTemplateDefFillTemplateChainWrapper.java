@@ -105,16 +105,16 @@ public class PerTemplateDefFillTemplateChainWrapper
     @Override
     protected List<?> getHandlers(@NotNull final DefaultTemplatePackagingContext context)
     {
-        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(9);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<>(9);
 
         result.add(new PerTemplateDefClassNameHandler(context));
         result.add(new CopyrightYearsHandler());
         result.add(new CurrentYearHandler());
-        result.add(new FileNameHandler<DefaultTemplatePackagingContext>(context));
-        result.add(new PackageNameHandler<DefaultTemplatePackagingContext>(context));
-        result.add(new SerialVersionUIDHandler<DefaultTemplatePackagingContext>(context));
+        result.add(new FileNameHandler<>(context));
+        result.add(new PackageNameHandler<>(context));
+        result.add(new SerialVersionUIDHandler<>(context));
         result.add(new TimestampHandler());
-        result.add(new TemplateNameHandler<DefaultTemplatePackagingContext>(context));
+        result.add(new TemplateNameHandler<>(context));
         result.add(new TemplateDefHandler(context));
 
         return result;

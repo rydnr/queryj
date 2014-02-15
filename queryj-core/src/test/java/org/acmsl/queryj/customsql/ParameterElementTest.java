@@ -91,14 +91,14 @@ extends TestCase
 {
   // JUnitDoclet begin class
   @Nullable
-  org.acmsl.queryj.customsql.ParameterElement<String> parameterelement = null;
+  org.acmsl.queryj.customsql.ParameterElement<String, ?> parameterelement = null;
   // JUnitDoclet end class
   
   /**
   * Creates a ParameterElementTest with given name.
   * @param name such name.
   */
-  public ParameterElementTest(String name)
+  public ParameterElementTest(final String name)
   {
     // JUnitDoclet begin method ParameterElementTest
     super(name);
@@ -111,7 +111,7 @@ extends TestCase
   
   */
   @NotNull
-  public org.acmsl.queryj.customsql.ParameterElement<String> createInstance()
+  public org.acmsl.queryj.customsql.ParameterElement<String, ?> createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
@@ -161,7 +161,7 @@ extends TestCase
     // JUnitDoclet end method testcase.testVault
   }
   
-  public static void main(String[] args)
+  public static void main(final String[] args)
   {
     // JUnitDoclet begin method testcase.main
     junit.textui.TestRunner.run(ParameterElementTest.class);

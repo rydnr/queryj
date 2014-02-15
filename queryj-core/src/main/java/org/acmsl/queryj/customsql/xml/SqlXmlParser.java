@@ -84,7 +84,7 @@ public interface SqlXmlParser
      * @return such collection.
      */
     @NotNull
-    List<Parameter<String>> getParameters();
+    List<Parameter<String, ?>> getParameters();
 
     /**
      * Retrieves the sql.xml {@link Parameter} collection.

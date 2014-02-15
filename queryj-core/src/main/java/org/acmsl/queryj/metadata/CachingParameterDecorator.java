@@ -55,8 +55,8 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class CachingParameterDecorator
-    extends  AbstractParameterDecorator
+public class CachingParameterDecorator<V>
+    extends  AbstractParameterDecorator<V>
 {
     private static final long serialVersionUID = -598058048217257284L;
     /**
@@ -90,7 +90,7 @@ public class CachingParameterDecorator
      * @param metadataTypeManager the metadata type manager.
      */
     public CachingParameterDecorator(
-        @NotNull final Parameter<String> parameter,
+        @NotNull final Parameter<String, V> parameter,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
         super(parameter, metadataTypeManager);
@@ -218,6 +218,7 @@ public class CachingParameterDecorator
      * Retrieves whether the parameter type is a class or not.
      * @return such information.
      */
+    @Override
     public boolean isObject()
     {
         Boolean result = getCachedIsObject();
@@ -263,6 +264,7 @@ public class CachingParameterDecorator
      * Retrieves the field type of the parameter.
      * @return such information.
      */
+    @Override
     @NotNull
     public DecoratedString getFieldType()
     {
@@ -309,6 +311,7 @@ public class CachingParameterDecorator
      * Retrieves whether the attribute is a clob or not.
      * return such information.
      */
+    @Override
     public boolean isClob()
     {
         Boolean result = getCachedIsClob();

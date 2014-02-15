@@ -262,7 +262,7 @@ public abstract class AbstractSqlDecorator
      */
     @Override
     @NotNull
-    public List<Parameter<DecoratedString>> getParameters()
+    public List<Parameter<DecoratedString, ?>> getParameters()
     {
         return
             getParameters(
@@ -279,7 +279,7 @@ public abstract class AbstractSqlDecorator
      * @return such information.
      */
     @NotNull
-    protected List<Parameter<DecoratedString>> getParameters(
+    protected List<Parameter<DecoratedString, ?>> getParameters(
         @NotNull final List<ParameterRef> parameterRefs,
         @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataTypeManager metadataTypeManager)
@@ -295,16 +295,16 @@ public abstract class AbstractSqlDecorator
      * @return such information.
      */
     @NotNull
-    protected List<Parameter<DecoratedString>> getParameters(
+    protected List<Parameter<DecoratedString, ?>> getParameters(
         @NotNull final List<ParameterRef> parameterRefs,
         @NotNull final SqlParameterDAO sqlParameterDAO,
         final MetadataTypeManager metadataTypeManager)
     {
-        @NotNull final List<Parameter<DecoratedString>> result = new ArrayList<>();
+        @NotNull final List<Parameter<DecoratedString, ?>> result = new ArrayList<>();
 
         for (@Nullable final ParameterRef t_ParameterRef : parameterRefs)
         {
-            @Nullable final Parameter<String> t_Parameter;
+            @Nullable final Parameter<String, ?> t_Parameter;
 
             if  (t_ParameterRef != null)
             {
@@ -313,7 +313,7 @@ public abstract class AbstractSqlDecorator
                 if  (t_Parameter != null)
                 {
                     result.add(
-                        new CachingParameterDecorator(t_Parameter, metadataTypeManager));
+                        new CachingParameterDecorator<>(t_Parameter, metadataTypeManager));
                 }
                 else
                 {
@@ -553,13 +553,13 @@ public abstract class AbstractSqlDecorator
      * @param parameters the parameters.
      * @return such information.
      */
-    protected boolean getParametersShouldBeWrapped(@NotNull final List<Parameter<DecoratedString>> parameters)
+    protected boolean getParametersShouldBeWrapped(@NotNull final List<Parameter<DecoratedString, ?>> parameters)
     {
         final boolean result;
 
         int weight = 0;
 
-        for (@Nullable final Parameter<DecoratedString> parameter : parameters)
+        for (@Nullable final Parameter<DecoratedString, ?> parameter : parameters)
         {
             if (parameter != null)
             {

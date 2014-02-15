@@ -46,11 +46,19 @@ import org.acmsl.queryj.customsql.ParameterElement;
 import org.acmsl.commons.utils.ConversionUtils;
 
 /*
- * Importing some additional classes.
+ * Importing Digester classes.
  */
 import org.apache.commons.digester.Digester;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing SAX classes.
+ */
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -58,6 +66,13 @@ import org.xml.sax.SAXException;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Is able to create sql.xml &lt;parameter&gt; element instances from their
@@ -68,6 +83,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class ParameterElementFactory
     extends  ElementFactory
 {
+    private static final String DATE_FORMAT_ES = "DD/MM/yyyy";
+    private static final String DATE_FORMAT_EN = "yyyy/DD/MM";
+
     /**
      * Creates a ParameterElementFactory instance.
      */
@@ -89,7 +107,7 @@ public class ParameterElementFactory
         @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable final ParameterElement<String> result;
+        @Nullable ParameterElement<String, ?> result = null;
 
         @Nullable final String t_strId = attributes.getValue("id");
 
@@ -107,13 +125,46 @@ public class ParameterElementFactory
             && (t_strName != null)
             && (t_strType != null))
         {
-            result =
-                new ParameterElement<>(
-                    t_strId,
-                    t_iIndex,
-                    t_strName,
-                    t_strType,
-                    t_strValidationValue);
+            if (t_strType.equals("Date"))
+            {
+                @Nullable Date date = null;
+
+                try
+                {
+                    date = new SimpleDateFormat(DATE_FORMAT_ES).parse(t_strValidationValue);
+                }
+                catch (@NotNull final ParseException invalidDate)
+                {
+                    try
+                    {
+                        date = new SimpleDateFormat(DATE_FORMAT_EN).parse(t_strValidationValue);
+                    }
+                    catch (@NotNull final ParseException invalidEnglishDate)
+                    {
+                        result = null;
+                    }
+                }
+                if (date != null)
+                {
+                    result =
+                        new ParameterElement<>(
+                            t_strId,
+                            t_iIndex,
+                            t_strName,
+                            t_strType,
+                            date);
+                }
+            }
+            else
+            {
+                result =
+                    new ParameterElement<>(
+                        t_strId,
+                        t_iIndex,
+                        t_strName,
+                        t_strType,
+                        t_strValidationValue);
+            }
         }
         else
         {

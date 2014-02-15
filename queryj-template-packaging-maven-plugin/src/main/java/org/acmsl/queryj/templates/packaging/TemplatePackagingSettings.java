@@ -118,4 +118,19 @@ public interface TemplatePackagingSettings
      * The key to access the DefaultTemplateChainProvider template.
      */
     String DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE = "default_template_chain_provider_template";
+
+    /**
+     * The jdbc url.
+     */
+    String JDBC_URL = "jdbc-url";
+
+    /**
+     * The jdbc user name.
+     */
+    String JDBC_USERNAME = "jdbc-username";
+
+    /**
+     * The jdbc password.
+     */
+    String JDBC_PASSWORD = "jdbc-password";
 }

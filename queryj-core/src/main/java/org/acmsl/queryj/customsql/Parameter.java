@@ -52,7 +52,7 @@ import org.jetbrains.annotations.Nullable;
  *    type CDATA #REQUIRED>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface Parameter<T>
+public interface Parameter<T, V>
     extends  IdentifiableElement<T>
 {
     /**
@@ -80,5 +80,5 @@ public interface Parameter<T>
      * @return such value.
      */
     @Nullable
-    T getValidationValue();
+    V getValidationValue();
 }

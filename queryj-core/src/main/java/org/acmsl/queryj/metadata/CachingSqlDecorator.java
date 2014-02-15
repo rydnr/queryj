@@ -71,7 +71,7 @@ public class CachingSqlDecorator
     /**
      * The cached parameters.
      */
-    private List<Parameter<DecoratedString>> m__cCachedParameters;
+    private List<Parameter<DecoratedString, ?>> m__cCachedParameters;
 
     /**
      * The cached result class.
@@ -103,7 +103,7 @@ public class CachingSqlDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedParameters(
-        @NotNull final List<Parameter<DecoratedString>> value)
+        @NotNull final List<Parameter<DecoratedString, ?>> value)
     {
         m__cCachedParameters = value;
     }
@@ -112,7 +112,7 @@ public class CachingSqlDecorator
      * Specifies the cached parameters.
      * @param value the value to cache.
      */
-    protected void setCachedParameters(@NotNull final List<Parameter<DecoratedString>> value)
+    protected void setCachedParameters(@NotNull final List<Parameter<DecoratedString, ?>> value)
     {
         immutableSetCachedParameters(value);
     }
@@ -122,7 +122,7 @@ public class CachingSqlDecorator
      * @return such value.
      */
     @Nullable
-    public List<Parameter<DecoratedString>> getCachedParameters()
+    public List<Parameter<DecoratedString, ?>> getCachedParameters()
     {
         return m__cCachedParameters;
     }
@@ -133,9 +133,9 @@ public class CachingSqlDecorator
      */
     @NotNull
     @Override
-    public List<Parameter<DecoratedString>> getParameters()
+    public List<Parameter<DecoratedString, ?>> getParameters()
     {
-        List<Parameter<DecoratedString>> result = getCachedParameters();
+        List<Parameter<DecoratedString, ?>> result = getCachedParameters();
 
         if  (result == null)
         {
@@ -241,5 +241,16 @@ public class CachingSqlDecorator
         }
 
         return result;
+    }
+
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "CachingSqlDecorator{" +
+               "m__bWrappedParametersCheck=" + m__bWrappedParametersCheck +
+               ", m__cCachedParameters=" + m__cCachedParameters +
+               ", m__strCachedResultClass='" + m__strCachedResultClass + '\'' +
+               '}';
     }
 }

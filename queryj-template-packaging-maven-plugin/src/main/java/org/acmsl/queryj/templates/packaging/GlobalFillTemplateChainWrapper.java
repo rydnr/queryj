@@ -103,17 +103,17 @@ public class GlobalFillTemplateChainWrapper
     @Override
     protected List<?> getHandlers(@NotNull final GlobalTemplateContext context)
     {
-        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(9);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<>(9);
 
         result.add(new GlobalClassNameHandler(context));
         result.add(new CopyrightYearsHandler());
         result.add(new CurrentYearHandler());
-        result.add(new FileNameHandler<GlobalTemplateContext>(context));
-        result.add(new PackageNameHandler<GlobalTemplateContext>(context));
-        result.add(new SerialVersionUIDHandler<GlobalTemplateContext>(context));
+        result.add(new FileNameHandler<>(context));
+        result.add(new PackageNameHandler<>(context));
+        result.add(new SerialVersionUIDHandler<>(context));
         result.add(new TimestampHandler());
-        result.add(new TemplateNameHandler<GlobalTemplateContext>(context));
-        result.add(new GlobalTemplateDefsHandler<GlobalTemplateContext>(context));
+        result.add(new TemplateNameHandler<>(context));
+        result.add(new GlobalTemplateDefsHandler<>(context));
 
         return result;
     }

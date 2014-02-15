@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ-Template-Packaging-Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Base context class.
  *
  * Date: 2013/09/15
  * Time: 06:53
@@ -50,7 +50,7 @@ import java.io.File;
 import java.io.Serializable;
 
 /**
- *
+ * Base context class.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/09/15 06:53
@@ -92,25 +92,52 @@ public class AbstractTemplatePackagingContext
     private File m__OutputDir;
 
     /**
+     * The JDBC url.
+     */
+    @NotNull
+    private String m__strJdbcUrl;
+
+    /**
+     * The JDBC username.
+     */
+    @NotNull
+    private String m__strJdbcUsername;
+
+    /**
+     * The JDBC password.
+     */
+    @NotNull
+    private String m__strJdbcPassword;
+
+    /**
      * Creates a new instance.
      * @param templateName the template name.
      * @param packageName the package name.
      * @param rootDir the root dir.
      * @param fileName the file name.
      * @param outputDir the output dir.
+     * @param jdbcUrl the JDBC url.
+     * @param jdbcUsername the JDBC username.
+     * @param jdbcPassword the JDBC password.
      */
     public AbstractTemplatePackagingContext(
         @NotNull final String templateName,
         @NotNull final String fileName,
         @NotNull final String packageName,
         @NotNull final File rootDir,
-        @NotNull final File outputDir)
+        @NotNull final File outputDir,
+        @NotNull final String jdbcUrl,
+        @NotNull final String jdbcUsername,
+        @NotNull final String jdbcPassword)
     {
         immutableSetTemplateName(templateName);
         immutableSetFileName(fileName);
         immutableSetPackageName(packageName);
         immutableSetRootDir(rootDir);
         immutableSetOutputDir(outputDir);
+        immutableSetJdbcUrl(jdbcUrl);
+        immutableSetJdbcUsername(jdbcUsername);
+        immutableSetJdbcPassword(jdbcPassword);
     }
 
     /**
@@ -165,6 +192,7 @@ public class AbstractTemplatePackagingContext
      * Retrieves the file name.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String getFileName()
     {
@@ -223,6 +251,7 @@ public class AbstractTemplatePackagingContext
      * Retrieves the root dir.
      * @return such folder.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File getRootDir()
     {
@@ -258,6 +287,96 @@ public class AbstractTemplatePackagingContext
         return this.m__OutputDir;
     }
 
+    /**
+     * Specifies the JDBC url.
+     * @param jdbcUrl the JDBC url.
+     */
+    protected final void immutableSetJdbcUrl(@NotNull final String jdbcUrl)
+    {
+        this.m__strJdbcUrl = jdbcUrl;
+    }
+
+    /**
+     * Specifies the JDBC url.
+     * @param jdbcUrl the JDBC url.
+     */
+    @SuppressWarnings("unused")
+    protected void setJdbcUrl(@NotNull final String jdbcUrl)
+    {
+        immutableSetJdbcUrl(jdbcUrl);
+    }
+
+    /**
+     * Retrieves the JDBC url.
+     * @return the JDBC url.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getJdbcUrl()
+    {
+        return this.m__strJdbcUrl;
+    }
+
+    /**
+     * Specifies the JDBC user name.
+     * @param jdbcUsername the JDBC user name.
+     */
+    protected final void immutableSetJdbcUsername(@NotNull final String jdbcUsername)
+    {
+        this.m__strJdbcUsername = jdbcUsername;
+    }
+
+    /**
+     * Specifies the JDBC user name.
+     * @param jdbcUsername the JDBC user name.
+     */
+    @SuppressWarnings("unused")
+    protected void setJdbcUsername(@NotNull final String jdbcUsername)
+    {
+        immutableSetJdbcUsername(jdbcUsername);
+    }
+
+    /**
+     * Retrieves the JDBC user name.
+     * @return the JDBC user name.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getJdbcUsername()
+    {
+        return this.m__strJdbcUsername;
+    }
+
+    /**
+     * Specifies the JDBC password.
+     * @param jdbcPassword the JDBC password.
+     */
+    protected final void immutableSetJdbcPassword(@NotNull final String jdbcPassword)
+    {
+        this.m__strJdbcPassword = jdbcPassword;
+    }
+
+    /**
+     * Specifies the JDBC url.
+     * @param jdbcPassword the JDBC password.
+     */
+    @SuppressWarnings("unused")
+    protected void setJdbcPassword(@NotNull final String jdbcPassword)
+    {
+        immutableSetJdbcPassword(jdbcPassword);
+    }
+
+    /**
+     * Retrieves the JDBC url.
+     * @return the JDBC url.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getJdbcPassword()
+    {
+        return this.m__strJdbcPassword;
+    }
+
     @NotNull
     @Override
     public String toString()
@@ -267,6 +386,9 @@ public class AbstractTemplatePackagingContext
                ", 'templateName': '" + m__strTemplateName + '\'' +
                Literals.PACKAGE_NAME + m__strPackageName + '\'' +
                ", 'rootDir': '" + m__RootDir.getAbsolutePath() + '\'' +
-               Literals.OUTPUT_DIR + m__OutputDir.getAbsolutePath() + "' }";
+               Literals.OUTPUT_DIR + m__OutputDir.getAbsolutePath() + '\'' +
+                ", 'jdbcUrl': '" + m__strJdbcUrl + '\'' +
+                ", 'jdbcUsername': '" + m__strJdbcUsername + '\'' +
+                ", 'jdbcPassword': '" + m__strJdbcPassword + "' }";
     }
 }

@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,22 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: GlobalTemplateContext.java
+ * Filename: MissingJdbcPasswordAtRuntimeException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Context for templates requiring global access to all information
- *              available.
+ * Description: The runtime information for the JDBC password is missing.
  *
- * Date: 2013/09/15
- * Time: 06:01
+ * Date: 2014/02/15
+ * Time: 21:12
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.tools.exceptions;
 
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -46,46 +46,23 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
-/*
- * Importing JDK classes.
- */
-import java.util.List;
-
 /**
- * Context for templates requiring global access to all information available.
+ * The runtime information for the JDBC password is missing.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/09/15 06:01
+ * Created: 2014/02/15 21:12
  */
 @ThreadSafe
-public interface GlobalTemplateContext
-    extends TemplatePackagingContext
+public class MissingJdbcPasswordAtRuntimeException
+    extends QueryJNonCheckedException
 {
-    /**
-     * Retrieves all {@link TemplateDef}s.
-     * @return such information.
-     */
-    @NotNull
-    List<TemplateDef<String>> getTemplateDefs();
+    private static final long serialVersionUID = -7059977794778627323L;
 
     /**
-     * Retrieves the jdbc url.
-     * @return such url.
+     * Creates a new instance.
      */
-    @NotNull
-    String getJdbcUrl();
-
-    /**
-     * Retrieves the jdbc username.
-     * @return such information.
-     */
-    @NotNull
-    String getJdbcUsername();
-
-    /**
-     * Retrieves the jdbc password.
-     * @return such information.
-     */
-    @NotNull
-    String getJdbcPassword();
+    public MissingJdbcPasswordAtRuntimeException()
+    {
+        super("missing.jdbc.password.at.runtime");
+    }
 }

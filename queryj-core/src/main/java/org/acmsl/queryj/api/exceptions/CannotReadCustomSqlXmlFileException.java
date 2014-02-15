@@ -63,6 +63,7 @@ public class CannotReadCustomSqlXmlFileException
     extends QueryJBuildException
 {
     private static final long serialVersionUID = -8064000429461780536L;
+    protected static final String CANNOT_READ_CUSTOM_SQL_XML_FILE = "cannot.read.custom-sql.xml.file";
 
     /**
      * Creates an instance with given context.
@@ -70,7 +71,7 @@ public class CannotReadCustomSqlXmlFileException
      */
     public CannotReadCustomSqlXmlFileException(@Nullable final File file)
     {
-        super("cannot.read.custom-sql.xml.file", new Object[] { file != null ? file.getAbsolutePath() : "(null)" });
+        super(CANNOT_READ_CUSTOM_SQL_XML_FILE, new Object[] { file != null ? file.getAbsolutePath() : "(null)" });
     }
 
     /**
@@ -79,8 +80,8 @@ public class CannotReadCustomSqlXmlFileException
      * @param cause the exception to wrap.
      */
     public CannotReadCustomSqlXmlFileException(
-        @NotNull final InputStream stream, @NotNull final Throwable cause)
+        @Nullable final InputStream stream, @NotNull final Throwable cause)
     {
-        super("cannot.read.custom-sql.xml.file", new Object[] { stream }, cause);
+        super(CANNOT_READ_CUSTOM_SQL_XML_FILE, new Object[] { stream }, cause);
     }
 }

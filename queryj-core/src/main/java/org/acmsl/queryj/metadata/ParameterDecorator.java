@@ -42,6 +42,10 @@ import org.acmsl.queryj.customsql.Parameter;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Decorator;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,15 +53,15 @@ import org.jetbrains.annotations.Nullable;
  * Decorates &lt;parameter&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface ParameterDecorator
-    extends  Parameter<DecoratedString>,
+public interface ParameterDecorator<V>
+    extends  Parameter<DecoratedString, V>,
              Decorator
 {
     /**
      * Retrieves the decorated parameter.
      * @return such instance.
      */
-    public Parameter<String> getParameter();
+    public Parameter<String, V> getParameter();
 
     /**
      * Retrieves the sql type of the parameter.

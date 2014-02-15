@@ -62,21 +62,25 @@ public class UnsupportedCustomSqlParameterTypeException
 {
     private static final long serialVersionUID = 5391865024131873532L;
 
+    protected static final String UNSUPPORTED_PARAMETER_TYPE_IN_CUSTOM_SQL = "unsupported.parameter.type.in.custom-sql";
+
     /**
      * Creates an instance, indicating the index of the parameter whose type is not supported, and
      * the enclosing {@link Sql}.
      * @param type the parameter type.
      * @param parameterIndex the parameter index.
+     * @param parameterName the parameter name.
      * @param sql the Sql.
      */
     public UnsupportedCustomSqlParameterTypeException(
         @NotNull final String type,
         final int parameterIndex,
+        @NotNull final String parameterName,
         @NotNull final Sql<?> sql)
     {
         super(
-            "unsupported.parameter.type.in.custom-sql",
-            new Object[] { type, parameterIndex, sql.getId() });
+            UNSUPPORTED_PARAMETER_TYPE_IN_CUSTOM_SQL,
+            new Object[] { type, parameterIndex, parameterName, sql.getId() });
     }
 
     /**
@@ -84,18 +88,20 @@ public class UnsupportedCustomSqlParameterTypeException
      * the enclosing {@link Sql}.
      * @param type the parameter type.
      * @param parameterIndex the parameter index.
+     * @param parameterName the parameter name.
      * @param sql the Sql.
      * @param cause the cause.
      */
     public UnsupportedCustomSqlParameterTypeException(
         @NotNull final String type,
         final int parameterIndex,
+        @NotNull final String parameterName,
         @NotNull final Sql<?> sql,
         @NotNull final Throwable cause)
     {
         super(
-            "unsupported.parameter.type.in.custom-sql",
-            new Object[] { type, parameterIndex, sql.getId() },
+            UNSUPPORTED_PARAMETER_TYPE_IN_CUSTOM_SQL,
+            new Object[] { type, parameterIndex, parameterName, sql.getId() },
             cause);
     }
 }

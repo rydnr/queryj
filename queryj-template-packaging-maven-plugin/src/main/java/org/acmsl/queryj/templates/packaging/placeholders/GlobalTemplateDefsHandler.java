@@ -105,7 +105,7 @@ public class GlobalTemplateDefsHandler<C extends GlobalTemplateContext>
 
         @NotNull final List<TemplateDef<String>> templateDefs = context.getTemplateDefs();
 
-        result = new ArrayList<TemplateDef<DecoratedString>>(templateDefs.size());
+        result = new ArrayList<>(templateDefs.size());
 
         for (@NotNull final TemplateDef<String> templateDef : templateDefs)
         {

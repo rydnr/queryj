@@ -1,19 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 grammar TemplateDef;
-
-@parser::header
-{
-package org.acmsl.queryj.templates.packaging.antlr;
-}
-
-@lexer::header
-{
-package org.acmsl.queryj.templates.packaging.antlr;
-}
 
 templateDef
 :   nameRule typeRule outputRule filenameBuilderRule packageRule disabledRule?

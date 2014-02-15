@@ -127,6 +127,7 @@ public class CustomSqlValidationHandler
      * The date format.
      */
     public final DateFormat DATE_FORMAT = new SimpleDateFormat("MM/DD/yyyy");
+    public final DateFormat DATE_FORMAT_EN = new SimpleDateFormat("yyyy/DD/MM/DD");
 
     /**
      * Creates a <code>CustomSqlValidationHandler</code> instance.
@@ -417,7 +418,7 @@ public class CustomSqlValidationHandler
 
         int t_iParameterIndex = 0;
 
-        for (@Nullable final Parameter<String> t_Parameter :
+        for (@Nullable final Parameter<String, ?> t_Parameter :
                 retrieveParameterElements(sql, customSqlProvider.getSqlParameterDAO()))
         {
             if  (t_Parameter == null)
@@ -463,7 +464,8 @@ public class CustomSqlValidationHandler
                     exceptionToThrow =
                         new UnsupportedCustomSqlParameterTypeException(
                             t_strType,
-                            t_iParameterIndex,
+                            t_iParameterIndex + 1,
+                            t_Parameter.getName(),
                             sql,
                             noSuchMethodException);
                 }
@@ -520,7 +522,7 @@ public class CustomSqlValidationHandler
                     {
                         boolean t_bInvalidValidationValue = false;
 
-                        String t_strValidationValue = 
+                        Object t_strValidationValue =
                             t_Parameter.getValidationValue();
 
                         if  (t_strValidationValue == null)
@@ -529,9 +531,23 @@ public class CustomSqlValidationHandler
                             t_bInvalidValidationValue = true;
                         }
 
-                        t_ParameterValue =
-                            DATE_FORMAT.parse(
-                                t_strValidationValue);
+                        try
+                        {
+                            t_ParameterValue =
+                                DATE_FORMAT.parse("" + t_strValidationValue);
+                        }
+                        catch (@NotNull final NumberFormatException invalidDate)
+                        {
+                            try
+                            {
+                                t_ParameterValue =
+                                    DATE_FORMAT_EN.parse("" + t_strValidationValue);
+                            }
+                            catch (@NotNull final NumberFormatException invalidEnglishDate)
+                            {
+                                // It doesn't need to be a date.
+                            }
+                        }
 
                         if  (t_bInvalidValidationValue)
                         {
@@ -560,7 +576,8 @@ public class CustomSqlValidationHandler
                             exceptionToThrow =
                                 new UnsupportedCustomSqlParameterTypeException(
                                     t_strType,
-                                    t_iParameterIndex,
+                                    t_iParameterIndex + 1,
+                                    t_Parameter.getName(),
                                     sql,
                                     noSuchMethod);
                         }
@@ -569,7 +586,8 @@ public class CustomSqlValidationHandler
                             exceptionToThrow =
                                 new UnsupportedCustomSqlParameterTypeException(
                                     t_strType,
-                                    t_iParameterIndex,
+                                    t_iParameterIndex + 1,
+                                    t_Parameter.getName(),
                                     sql,
                                     securityException);
                         }
@@ -578,7 +596,8 @@ public class CustomSqlValidationHandler
                             exceptionToThrow =
                                 new UnsupportedCustomSqlParameterTypeException(
                                     t_strType,
-                                    t_iParameterIndex,
+                                    t_iParameterIndex + 1,
+                                    t_Parameter.getName(),
                                     sql,
                                     illegalAccessException);
                         }
@@ -587,7 +606,8 @@ public class CustomSqlValidationHandler
                             exceptionToThrow =
                                 new UnsupportedCustomSqlParameterTypeException(
                                     t_strType,
-                                    t_iParameterIndex,
+                                    t_iParameterIndex + 1,
+                                    t_Parameter.getName(),
                                     sql,
                                     instantiationException);
                         }
@@ -596,7 +616,8 @@ public class CustomSqlValidationHandler
                             exceptionToThrow =
                                 new UnsupportedCustomSqlParameterTypeException(
                                     t_strType,
-                                    t_iParameterIndex,
+                                    t_iParameterIndex + 1,
+                                    t_Parameter.getName(),
                                     sql,
                                     invocationTargetException);
                         }
@@ -609,7 +630,8 @@ public class CustomSqlValidationHandler
                     exceptionToThrow =
                         new UnsupportedCustomSqlParameterTypeException(
                             t_strType,
-                            t_iParameterIndex,
+                            t_iParameterIndex + 1,
+                            t_Parameter.getName(),
                             sql);
                 }
 
@@ -637,7 +659,8 @@ public class CustomSqlValidationHandler
                         exceptionToThrow =
                             new UnsupportedCustomSqlParameterTypeException(
                                 t_strType,
-                                t_iParameterIndex,
+                                t_iParameterIndex + 1,
+                                t_Parameter.getName(),
                                 sql,
                                 illegalAccessException);
                     }
@@ -655,7 +678,8 @@ public class CustomSqlValidationHandler
                         exceptionToThrow =
                             new UnsupportedCustomSqlParameterTypeException(
                                 t_strType,
-                                t_iParameterIndex,
+                                t_iParameterIndex + 1,
+                                t_Parameter.getName(),
                                 sql,
                                 invocationTargetException);
                     }
@@ -680,12 +704,12 @@ public class CustomSqlValidationHandler
      * @param parameterDAO the {@link SqlParameterDAO} instance.
      * @return the parameter elements.
      */
-    protected List<Parameter<String>> retrieveParameterElements(
+    protected List<Parameter<String, ?>> retrieveParameterElements(
         @NotNull final Sql<String> sql, @NotNull final SqlParameterDAO parameterDAO)
     {
-        @NotNull final List<Parameter<String>> result = new ArrayList<>();
+        @NotNull final List<Parameter<String, ?>> result = new ArrayList<>();
 
-        Parameter<String> t_Parameter;
+        Parameter<String, ?> t_Parameter;
 
         for (@Nullable final ParameterRef t_ParameterRef : sql.getParameterRefs())
         {
@@ -1305,6 +1329,8 @@ public class CustomSqlValidationHandler
     @NotNull
     public String toString()
     {
-        return "{ 'class': 'CustomSqlValidationHandler', 'DATE_FORMAT': '" + DATE_FORMAT + "' }";
+        return
+              "{ 'class': 'CustomSqlValidationHandler', 'DATE_FORMAT': '" + DATE_FORMAT + "'"
+            + ", 'DATE_FORMAT_EN': '" + DATE_FORMAT_EN + "' }";
     }
 }

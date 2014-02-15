@@ -57,10 +57,10 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class ParameterElement<T>
+public class ParameterElement<T, V>
     extends  AbstractParameterElement<T>
-    implements Parameter<T>,
-               Comparable<Parameter<T>>
+    implements Parameter<T, V>,
+               Comparable<Parameter<T, V>>
 {
     private static final long serialVersionUID = 106725100966627608L;
 
@@ -72,7 +72,7 @@ public class ParameterElement<T>
     /**
      * The validation value.
      */
-    private T m__strValidationValue;
+    private V m__strValidationValue;
 
     /**
      * Creates a ParameterElement with given information.
@@ -87,7 +87,7 @@ public class ParameterElement<T>
         final int index,
         @NotNull final T name,
         @NotNull final T type,
-        @Nullable final T validationValue)
+        @Nullable final V validationValue)
     {
         super(id, index, type);
 
@@ -133,7 +133,7 @@ public class ParameterElement<T>
      * @param validationValue the validation value.
      */
     protected final void immutableSetValidationValue(
-        @NotNull final T validationValue)
+        @NotNull final V validationValue)
     {
         m__strValidationValue = validationValue;
     }
@@ -144,15 +144,15 @@ public class ParameterElement<T>
      */
     @SuppressWarnings("unused")
     protected void setValidationValue(
-        @NotNull final T validationValue)
+        @NotNull final V validationValue)
     {
         immutableSetValidationValue(validationValue);
     }
 
     @Override
-    public int compareTo(final Parameter<T> parameter)
+    public int compareTo(final Parameter<T, V> parameter)
     {
-        return super.<IdentifiableElement<T>>compareTo((IdentifiableElement<T>) parameter);
+        return super.<IdentifiableElement<T>>compareTo(parameter);
     }
 
     /**
@@ -161,7 +161,7 @@ public class ParameterElement<T>
      */
     @Override
     @Nullable
-    public T getValidationValue()
+    public V getValidationValue()
     {
         return m__strValidationValue;
     }
@@ -178,6 +178,7 @@ public class ParameterElement<T>
         return
             new org.apache.commons.lang.builder.ToStringBuilder(this)
                 .appendSuper(super.toString())
+                .append(getName())
                 .append(getValidationValue())
                 .toString();
     }

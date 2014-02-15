@@ -170,6 +170,9 @@
               <sources>
                 <source>${project.basedir}/src/main/resources</source>
               </sources>
+              <jdbcUrl>jdbc:oracle:bla</jdbcUrl>
+              <jdbcUsername>userName</jdbcUsername>
+              <jdbcPassword>password</jdbcPassword>
             </configuration>
           </execution>
         </executions>

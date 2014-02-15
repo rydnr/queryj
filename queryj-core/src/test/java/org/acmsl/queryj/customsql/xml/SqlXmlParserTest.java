@@ -317,7 +317,7 @@ extends TestCase
       final List<Result<String>> t_lResults = t_Parser.getResults();
       assertEquals(3, t_lResults.size());
 
-      final List<Parameter<String>> t_lParameters = t_Parser.getParameters();
+      final List<Parameter<String, ?>> t_lParameters = t_Parser.getParameters();
       assertEquals(1, t_lParameters.size());
 
       final List<ParameterRef> t_lParameterRefs = t_Parser.getParameterRefs();

@@ -70,7 +70,7 @@ public interface SqlParameterDAO
      * @return the {@link Parameter}, or <code>null</code> if not found.
      */
     @Nullable
-    Parameter<String> findByPrimaryKey(@NotNull final String id);
+    Parameter<String, ?> findByPrimaryKey(@NotNull final String id);
 
     /**
      * Retrieves all {@link Parameter parameters} used in given {@link org.acmsl.queryj.customsql.Sql}.
@@ -78,5 +78,5 @@ public interface SqlParameterDAO
      * @return the list of parameters required by given {@link org.acmsl.queryj.customsql.Sql}.
      */
     @NotNull
-    List<Parameter<String>> findBySql(@NotNull final String sqlId);
+    List<Parameter<String, ?>> findBySql(@NotNull final String sqlId);
 }

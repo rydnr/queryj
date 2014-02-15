@@ -201,7 +201,7 @@ public abstract class AbstractParameterElement<T>
 
         if  (object instanceof Parameter)
         {
-            @NotNull final Parameter<String> t_OtherInstance = (Parameter<String>) object;
+            @NotNull final Parameter<String, ?> t_OtherInstance = (Parameter<String, ?>) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -224,7 +224,7 @@ public abstract class AbstractParameterElement<T>
      * @return the result of such comparison.
      * object prevents it from being compared to this Object.
      */
-    protected int compare(@Nullable final Parameter<T> object)
+    protected int compare(@Nullable final Parameter<T, ?> object)
     {
         int result = 0;
 

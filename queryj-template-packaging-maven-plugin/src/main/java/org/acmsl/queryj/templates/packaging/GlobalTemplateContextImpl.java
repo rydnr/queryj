@@ -77,6 +77,10 @@ public class GlobalTemplateContextImpl
      * @param packageName the package name.
      * @param rootDir the root dir.
      * @param outputDir the output dir.
+     * @param jdbcUrl the JDBC url.
+     * @param jdbcUsername the JDBC username.
+     * @param jdbcPassword the JDBC password.
+     * @param templateDefs the template definitions.
      */
     public GlobalTemplateContextImpl(
         @NotNull final String templateName,
@@ -84,9 +88,12 @@ public class GlobalTemplateContextImpl
         @NotNull final String packageName,
         @NotNull final File rootDir,
         @NotNull final File outputDir,
+        @NotNull final String jdbcUrl,
+        @NotNull final String jdbcUsername,
+        @NotNull final String jdbcPassword,
         @NotNull final List<TemplateDef<String>> templateDefs)
     {
-        super(templateName, fileName, packageName, rootDir, outputDir);
+        super(templateName, fileName, packageName, rootDir, outputDir, jdbcUrl, jdbcUsername, jdbcPassword);
         immutableSetTemplateDefs(templateDefs);
     }
 

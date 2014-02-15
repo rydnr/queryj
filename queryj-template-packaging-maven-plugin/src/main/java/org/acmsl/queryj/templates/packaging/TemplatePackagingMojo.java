@@ -39,7 +39,6 @@ import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.tools.maven.QueryJMojo;
 
 /*
@@ -96,7 +95,7 @@ public class TemplatePackagingMojo
      * The location of pom.properties within the jar file.
      */
     protected static final String POM_PROPERTIES_LOCATION =
-        "META-INF/maven/org.acmsl/queryj-template-packaging-maven-plugin/pom.properties";
+        "META-INF/maven/org.acmsl.queryj/queryj-template-packaging-maven-plugin/pom.properties";
 
     /**
      * Additional source directories.
@@ -118,6 +117,27 @@ public class TemplatePackagingMojo
      */
     @Parameter( property = OUTPUT_DIR_FOR_TESTS, defaultValue = "${project.build.directory}/generated-test-sources")
     private File m__OutputDirForTests;
+
+    /**
+     * The JDBC url.
+     * @parameter property="jdbcUrl" @required
+     */
+    @Parameter( property = JDBC_URL)
+    private String m__strJdbcUrl;
+
+    /**
+     * The JDBC username.
+     * @parameter property="jdbcUsername" @required
+     */
+    @Parameter( property = JDBC_USERNAME)
+    private String m__strJdbcUsername;
+
+    /**
+     * The JDBC password.
+     * @parameter property="jdbcPassword" @required
+     */
+    @Parameter( property = JDBC_PASSWORD)
+    private String m__strJdbcPassword;
 
     /**
      * The <code>QueryJChain</code> delegee.
@@ -274,6 +294,96 @@ public class TemplatePackagingMojo
     }
 
     /**
+     * Specifies the JDBC url.
+     * @param jdbcUrl the JDBC url.
+     */
+    protected final void immutableSetJdbcUrl(@NotNull final String jdbcUrl)
+    {
+        this.m__strJdbcUrl = jdbcUrl;
+    }
+
+    /**
+     * Specifies the JDBC url.
+     * @param jdbcUrl the JDBC url.
+     */
+    @SuppressWarnings("unused")
+    public void setJdbcUrl(@NotNull final String jdbcUrl)
+    {
+        immutableSetJdbcUrl(jdbcUrl);
+    }
+
+    /**
+     * Retrieves the JDBC url.
+     * @return the JDBC url.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getJdbcUrl()
+    {
+        return this.m__strJdbcUrl;
+    }
+
+    /**
+     * Specifies the JDBC user name.
+     * @param jdbcUsername the JDBC user name.
+     */
+    protected final void immutableSetJdbcUsername(@NotNull final String jdbcUsername)
+    {
+        this.m__strJdbcUsername = jdbcUsername;
+    }
+
+    /**
+     * Specifies the JDBC user name.
+     * @param jdbcUsername the JDBC user name.
+     */
+    @SuppressWarnings("unused")
+    public void setJdbcUsername(@NotNull final String jdbcUsername)
+    {
+        immutableSetJdbcUsername(jdbcUsername);
+    }
+
+    /**
+     * Retrieves the JDBC user name.
+     * @return the JDBC user name.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getJdbcUsername()
+    {
+        return this.m__strJdbcUsername;
+    }
+
+    /**
+     * Specifies the JDBC password.
+     * @param jdbcPassword the JDBC password.
+     */
+    protected final void immutableSetJdbcPassword(@NotNull final String jdbcPassword)
+    {
+        this.m__strJdbcPassword = jdbcPassword;
+    }
+
+    /**
+     * Specifies the JDBC url.
+     * @param jdbcPassword the JDBC password.
+     */
+    @SuppressWarnings("unused")
+    public void setJdbcPassword(@NotNull final String jdbcPassword)
+    {
+        immutableSetJdbcPassword(jdbcPassword);
+    }
+
+    /**
+     * Retrieves the JDBC url.
+     * @return the JDBC url.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getJdbcPassword()
+    {
+        return this.m__strJdbcPassword;
+    }
+
+    /**
      * Executes Template Packaging via Maven2.
      * @throws MojoExecutionException if something goes wrong.
      */
@@ -360,8 +470,9 @@ public class TemplatePackagingMojo
             populateCommand(command, getSources());
             populateCommand(command, getOutputDir());
             populateCommandForTests(command, getOutputDirForTests());
+            populateCommand(command, getJdbcUrl(), getJdbcUsername(), getJdbcPassword());
 
-            new TemplatePackagingChain<QueryJCommandHandler<QueryJCommand>>().process(command);
+            new TemplatePackagingChain<>().process(command);
         }
         catch  (@NotNull final QueryJBuildException buildException)
         {
@@ -399,6 +510,24 @@ public class TemplatePackagingMojo
         new QueryJCommandWrapper<File>(command).setSetting(OUTPUT_DIR_FOR_TESTS, outputDir);
     }
 
+    /**
+     * Populates the JDBC information in the Mojo to be available in the command.
+     * @param command the command.
+     * @param jdbcUrl the JDBC url.
+     * @param jdbcUsername the JDBC user name.
+     * @param jdbcPassword the JDBC password.
+     */
+    protected void populateCommand(
+        @NotNull final QueryJCommand command,
+        @NotNull final String jdbcUrl,
+        @NotNull final String jdbcUsername,
+        @NotNull final String jdbcPassword)
+    {
+        new QueryJCommandWrapper<String>(command).setSetting(JDBC_URL, jdbcUrl);
+        new QueryJCommandWrapper<String>(command).setSetting(JDBC_USERNAME, jdbcUsername);
+        new QueryJCommandWrapper<String>(command).setSetting(JDBC_PASSWORD, jdbcPassword);
+    }
+
     @NotNull
     @Override
     public String toString()
@@ -409,6 +538,9 @@ public class TemplatePackagingMojo
             + ", \"sources\": \"" + Arrays.toString(this.m__aSources) + "\""
             + ", \"outputDir\": \"" + this.m__OutputDir.getAbsolutePath() + "\""
             + ", \"outputDirForTests\": \"" + this.m__OutputDirForTests.getAbsolutePath() + "\""
+            + ", \"jdbcUrl\": \"" + this.m__strJdbcUrl + "\""
+            + ", \"jdbcUsername\": \"" + this.m__strJdbcUsername + "\""
+            + ", \"jdbcPassword\": \"" + this.m__strJdbcPassword + "\""
             + " }";
     }
 }

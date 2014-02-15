@@ -87,6 +87,18 @@ public class SqlXmlParserImpl
                 SqlXmlParser
 {
     public static final long serialVersionUID = 4622172516611441363L;
+    protected static final String SQL_LIST_SQL_PARAMETER_REF = "sql-list/sql/parameter-ref";
+    protected static final String SQL_LIST_SQL_RESULT_REF = "sql-list/sql/result-ref";
+    protected static final String SQL_LIST_SQL_CONNECTION_FLAGS_REF = "sql-list/sql/connection-flags-ref";
+    protected static final String SQL_LIST_SQL_STATEMENT_FLAGS_REF = "sql-list/sql/statement-flags-ref";
+    protected static final String SQL_LIST_SQL_RESULTSET_FLAGS_REF = "sql-list/sql/resultset-flags-ref";
+    protected static final String SQL_LIST_PARAMETER_LIST_PARAMETER = "sql-list/parameter-list/parameter";
+    protected static final String SQL_LIST_RESULT_LIST_RESULT = "sql-list/result-list/result";
+    protected static final String SQL_LIST_RESULT_LIST_RESULT_PROPERTY_REF = "sql-list/result-list/result/property-ref";
+    protected static final String SQL_LIST_PROPERTY_LIST_PROPERTY = "sql-list/property-list/property";
+    protected static final String SQL_LIST_FLAG_LIST_CONNECTION_FLAGS = "sql-list/flag-list/connection-flags";
+    protected static final String SQL_LIST_FLAG_LIST_STATEMENT_FLAGS = "sql-list/flag-list/statement-flags";
+    protected static final String SQL_LIST_FLAG_LIST_RESULTSET_FLAGS = "sql-list/flag-list/resultset-flags";
 
     /**
      * The input stream.
@@ -111,7 +123,7 @@ public class SqlXmlParserImpl
     /**
      * The parameters.
      */
-    private List<Parameter<String>> m__lParameters = new ArrayList<>();
+    private List<Parameter<String, ?>> m__lParameters = new ArrayList<>();
 
     /**
      * The parameter refs.
@@ -221,9 +233,9 @@ public class SqlXmlParserImpl
             {
                 addPropertyRef((PropertyRef) t_Item);
             }
-            else if (t_Item instanceof Parameter<?>)
+            else if (t_Item instanceof Parameter<?, ?>)
             {
-                addParameter((Parameter<String>) t_Item);
+                addParameter((Parameter<String, ?>) t_Item);
             }
             else if (t_Item instanceof ParameterRef)
             {
@@ -275,7 +287,7 @@ public class SqlXmlParserImpl
      * Adds given parameter, if not already annotated.
      * @param parameter the parameter.
      */
-    protected void addParameter(@NotNull final Parameter<String> parameter)
+    protected void addParameter(@NotNull final Parameter<String, ?> parameter)
     {
         add(parameter, getParameters());
     }
@@ -409,7 +421,7 @@ public class SqlXmlParserImpl
      * Specifies the {@link Parameter}s.
      * @param parameters such information.
      */
-    protected final void immutableSetParameters(@NotNull final List<Parameter<String>> parameters)
+    protected final void immutableSetParameters(@NotNull final List<Parameter<String, ?>> parameters)
     {
         this.m__lParameters = parameters;
     }
@@ -418,7 +430,7 @@ public class SqlXmlParserImpl
      * Specifies the {@link Parameter}s.
      * @param parameters such information.
      */
-    protected void setParameters(@NotNull final List<Parameter<String>> parameters)
+    protected void setParameters(@NotNull final List<Parameter<String, ?>> parameters)
     {
         immutableSetParameters(parameters);
     }
@@ -429,7 +441,7 @@ public class SqlXmlParserImpl
      */
     @NotNull
     @Override
-    public List<Parameter<String>> getParameters()
+    public List<Parameter<String, ?>> getParameters()
     {
         return m__lParameters;
     }
@@ -728,41 +740,41 @@ public class SqlXmlParserImpl
 
         //     <parameter-ref>
         result.addFactoryCreate(
-            "sql-list/sql/parameter-ref",
+            SQL_LIST_SQL_PARAMETER_REF,
             new ParameterRefElementFactory());
-        result.addSetNext("sql-list/sql/parameter-ref", "add");
+        result.addSetNext(SQL_LIST_SQL_PARAMETER_REF, "add");
         //     </parameter-ref>
 
         //     <result-ref>
         result.addFactoryCreate(
-            "sql-list/sql/result-ref",
+            SQL_LIST_SQL_RESULT_REF,
             new ResultRefElementFactory());
         result.addSetNext(
-            "sql-list/sql/result-ref", "setResultRef");
+            SQL_LIST_SQL_RESULT_REF, "setResultRef");
         //     </result-ref>
 
         //     <connection-flags-ref>
         result.addFactoryCreate(
-            "sql-list/sql/connection-flags-ref",
+            SQL_LIST_SQL_CONNECTION_FLAGS_REF,
             new ConnectionFlagsRefElementFactory());
         result.addSetNext(
-            "sql-list/sql/connection-flags-ref", "setConnectionFlagsRef");
+            SQL_LIST_SQL_CONNECTION_FLAGS_REF, "setConnectionFlagsRef");
         //     </connection-flags-ref>
 
         //     <statement-flags-ref>
         result.addFactoryCreate(
-            "sql-list/sql/statement-flags-ref",
+            SQL_LIST_SQL_STATEMENT_FLAGS_REF,
             new StatementFlagsRefElementFactory());
         result.addSetNext(
-            "sql-list/sql/statement-flags-ref", "setStatementFlagsRef");
+            SQL_LIST_SQL_STATEMENT_FLAGS_REF, "setStatementFlagsRef");
         //     </statement-flags-ref>
 
         //     <resultset-flags-ref>
         result.addFactoryCreate(
-            "sql-list/sql/resultset-flags-ref",
+            SQL_LIST_SQL_RESULTSET_FLAGS_REF,
             new ResultSetFlagsRefElementFactory());
         result.addSetNext(
-            "sql-list/sql/resultset-flags-ref", "setResultSetFlagsRef");
+            SQL_LIST_SQL_RESULTSET_FLAGS_REF, "setResultSetFlagsRef");
         //     </resultset-flags-ref>
 
         result.addSetNext("sql-list/sql", "add");
@@ -779,26 +791,26 @@ public class SqlXmlParserImpl
 
         //     <parameter>
         result.addFactoryCreate(
-            "sql-list/parameter-list/parameter",
+            SQL_LIST_PARAMETER_LIST_PARAMETER,
             new ParameterElementFactory());
         result.addSetRoot(
-            "sql-list/parameter-list/parameter", "add");
+            SQL_LIST_PARAMETER_LIST_PARAMETER, "add");
         //     </parameter>
         //   </parameter-list>
 
         //   <result-list>
         //     <result>
         result.addFactoryCreate(
-            "sql-list/result-list/result",
+            SQL_LIST_RESULT_LIST_RESULT,
             new ResultElementFactory());
-        result.addSetRoot("sql-list/result-list/result", "add");
+        result.addSetRoot(SQL_LIST_RESULT_LIST_RESULT, "add");
 
         //       <property-ref>
         result.addFactoryCreate(
-            "sql-list/result-list/result/property-ref",
+            SQL_LIST_RESULT_LIST_RESULT_PROPERTY_REF,
             new PropertyRefElementFactory());
         result.addSetNext(
-            "sql-list/result-list/result/property-ref", "add");
+            SQL_LIST_RESULT_LIST_RESULT_PROPERTY_REF, "add");
         //       </property-ref>
         //     </result>
         //   </result-list>
@@ -806,34 +818,34 @@ public class SqlXmlParserImpl
         //   <property-list>
         //     <property>
         result.addFactoryCreate(
-            "sql-list/property-list/property",
+            SQL_LIST_PROPERTY_LIST_PROPERTY,
             new PropertyElementFactory());
         result.addSetRoot(
-            "sql-list/property-list/property", "add");
+            SQL_LIST_PROPERTY_LIST_PROPERTY, "add");
         //     </property>
         //   </property-list>
 
         //   <flag-list>
         //     <connection-flags>
         result.addFactoryCreate(
-            "sql-list/flag-list/connection-flags",
+            SQL_LIST_FLAG_LIST_CONNECTION_FLAGS,
             new ConnectionFlagsElementFactory());
         result.addSetRoot(
-            "sql-list/flag-list/connection-flags", "add");
+            SQL_LIST_FLAG_LIST_CONNECTION_FLAGS, "add");
         //     </connection-flags>
         //     <statement-flags>
         result.addFactoryCreate(
-            "sql-list/flag-list/statement-flags",
+            SQL_LIST_FLAG_LIST_STATEMENT_FLAGS,
             new StatementFlagsElementFactory());
         result.addSetRoot(
-            "sql-list/flag-list/statement-flags", "add");
+            SQL_LIST_FLAG_LIST_STATEMENT_FLAGS, "add");
         //     </statement-flags>
         //     <resultset-flags>
         result.addFactoryCreate(
-            "sql-list/flag-list/resultset-flags",
+            SQL_LIST_FLAG_LIST_RESULTSET_FLAGS,
             new ResultSetFlagsElementFactory());
         result.addSetRoot(
-            "sql-list/flag-list/resultset-flags", "add");
+            SQL_LIST_FLAG_LIST_RESULTSET_FLAGS, "add");
         //     </resultset-flags>
         //   </flag-list>
 

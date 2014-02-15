@@ -41,6 +41,9 @@ package org.acmsl.queryj.templates.packaging.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.handlers.TemplateBuildHandler;
+import org.acmsl.queryj.tools.exceptions.MissingJdbcPasswordAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingJdbcUrlAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingJdbcUserNameAtRuntimeException;
 import org.acmsl.queryj.tools.exceptions.MissingOutputDirAtRuntimeException;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
@@ -126,6 +129,10 @@ public abstract class TemplatePackagingBuildHandler
 
         @NotNull final File rootDir = retrieveRootDir(parameters);
 
+        @NotNull final String jdbcUrl = retrieveJdbcUrl(parameters);
+        @NotNull final String jdbcUsername = retrieveJdbcUsername(parameters);
+        @NotNull final String jdbcPassword = retrieveJdbcPassword(parameters);
+
         return
             new DefaultTemplatePackagingContext(
                 templateDef,
@@ -134,7 +141,10 @@ public abstract class TemplatePackagingBuildHandler
                 outputPackage,
                 rootDir,
                 new File(rootDir.getAbsolutePath()
-                    + File.separator + outputPackage.replaceAll("\\.", File.separator)));
+                    + File.separator + outputPackage.replaceAll("\\.", File.separator)),
+                jdbcUrl,
+                jdbcUsername,
+                jdbcPassword);
     }
 
     /**
@@ -153,6 +163,10 @@ public abstract class TemplatePackagingBuildHandler
 
         @NotNull final File rootDir = retrieveRootDir(parameters);
 
+        @NotNull final String jdbcUrl = retrieveJdbcUrl(parameters);
+        @NotNull final String jdbcUsername = retrieveJdbcUsername(parameters);
+        @NotNull final String jdbcPassword = retrieveJdbcPassword(parameters);
+
         return
             new GlobalTemplateContextImpl(
                 templateName,
@@ -161,6 +175,9 @@ public abstract class TemplatePackagingBuildHandler
                 rootDir,
                 new File(rootDir.getAbsolutePath()
                          + File.separator + outputPackage.replaceAll("\\.", File.separator)),
+                jdbcUrl,
+                jdbcUsername,
+                jdbcPassword,
                 templateDefs);
     }
 
@@ -223,7 +240,7 @@ public abstract class TemplatePackagingBuildHandler
 
         if (aux == null)
         {
-            result = new ArrayList<TemplateDef<String>>(0);
+            result = new ArrayList<>(0);
         }
         else
         {
@@ -256,6 +273,63 @@ public abstract class TemplatePackagingBuildHandler
         if (result == null)
         {
             throw new MissingOutputDirAtRuntimeException();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the JDBC url.
+     * @param parameters the parameters.
+     * @return the url.
+     */
+    @NotNull
+    public String retrieveJdbcUrl(@NotNull final QueryJCommand parameters)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(parameters).getSetting(JDBC_URL);
+
+        if (result == null)
+        {
+            throw new MissingJdbcUrlAtRuntimeException();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the JDBC user name.
+     * @param parameters the parameters.
+     * @return the information.
+     */
+    @NotNull
+    public String retrieveJdbcUsername(@NotNull final QueryJCommand parameters)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(parameters).getSetting(JDBC_USERNAME);
+
+        if (result == null)
+        {
+            throw new MissingJdbcUserNameAtRuntimeException();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the JDBC password.
+     * @param parameters the parameters.
+     * @return the password.
+     */
+    @NotNull
+    public String retrieveJdbcPassword(@NotNull final QueryJCommand parameters)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(parameters).getSetting(JDBC_PASSWORD);
+
+        if (result == null)
+        {
+            throw new MissingJdbcPasswordAtRuntimeException();
         }
 
         return result;

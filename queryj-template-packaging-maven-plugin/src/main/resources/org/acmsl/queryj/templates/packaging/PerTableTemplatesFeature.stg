@@ -70,15 +70,17 @@ Feature: Per-table templates
     | g_draws      | g_draw_type_id | d_draw_types | false       |
 
     And the following queries:
-      |       id      |     name      |     dao      |  type  | matches  |                        value                           |
-      | first.select  | first-select  | g_draws      | select | single   | select * from g_draws where g_draw_id = ?              |
-      | second.select | second-select | g_draws      | select | multiple | select * from g_draws where drawing_date > sysdate - 7 |
-      | third.select  | third-select  | g_draw_types | select | multiple | select * from g_draw_types where description like ?    |
+      |       id      |     name      |     dao      |  type  | matches  |                        value                           | validate |
+      | first.select  | first-select  | g_draws      | select | single   | select * from g_draws where g_draw_id = ?              |   true   |
+      | second.select | second-select | g_draws      | select | multiple | select * from g_draws where drawing_date > sysdate - 7 |   true   |
+      | third.select  | third-select  | g_draw_types | select | multiple | select * from g_draw_types where description like ?    |   true   |
+      | fourth.select | fourth-select | g_draws      | select | multiple | select * from g_draws where drawing_date = ?           |   true   |
 
     And the following query parameters:
-      |            id            |      sql       | index |  type  |     name     |
-      | g_draws.g_draw_id        |  first.select  |   1   |  long  | drawId       |
-      | g_draw_types.description |  third.select  |   1   | String | description  |
+      |            id            |     sql       | index |  type  |     name    | validation-value |
+      | g_draws.g_draw_id        | first.select  |   1   |  long  | drawId      |         1        |
+      | g_draw_types.description | third.select  |   1   | String | description |  'Euromillones'  |
+      | g_draws.drawing_date     | fourth.select |   1   |  Date  | drawingDate |   '2014/02/15'   |
 
     And the following contents:
       |    table     |         row          |
@@ -90,6 +92,10 @@ Feature: Per-table templates
 
     Then the generated per-table \<output> file compiles successfully
 
+    Then the queries are validated correctly using the following database:
+      |  url  |  userName  | password  |
+      | <C.jdbcUrl> | <C.jdbcUsername> | <C.jdbcPassword> |
+
     Examples:
       | template           | output                            |
       <C.templateDefs:{ d | <indirect_template(def=d, engineName="Oracle", tableName="User")>}; separator="\n">
@@ -98,13 +104,13 @@ Feature: Per-table templates
   Scenario Outline: Per-table templates compiles for a type 2 table
 
     Given the following tables:
-      | table       | parent table | decorated | relationship | static |
-      | car_brands  |              |           |              | name   |
+      | table      | parent table | decorated | relationship | static |
+      | car_brands |              |           |              | name   |
 
     And the following columns:
-      | table      | column    | type      | pk    | allows null | readonly | sequence  | keyword | boolean | length | precision |
-      | car_brands | brand_id  | number    | true  | false       | false    |           |         |         |     10 |         0 |
-      | car_brands | name      | varchar   | false | false       | false    |           |         |         |     30 |           |
+      | table      | column    | type     | pk    | allows null | readonly | sequence  | keyword | boolean | length | precision |
+      | car_brands | brand_id  | number   | true  | false       | false    |           |         |         |     10 |         0 |
+      | car_brands | name      | varchar  | false | false       | false    |           |         |         |     30 |           |
 
     And the following values:
       | car_brands | brand_id |       name |

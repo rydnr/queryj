@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ-Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -1005,7 +1005,7 @@ public class QueryJTask
     {
         try
         {
-            new QueryJChain<QueryJCommandHandler<QueryJCommand>>().process(command);
+            new QueryJChain<>().process(command);
         }
         catch  (@NotNull final QueryJBuildException buildException)
         {
@@ -1243,6 +1243,7 @@ public class QueryJTask
         return result;
     }
 
+    @NotNull
     @Override
     public String toString()
     {

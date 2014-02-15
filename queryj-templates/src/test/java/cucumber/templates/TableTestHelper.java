@@ -67,6 +67,7 @@ import org.acmsl.queryj.tools.ant.AntTablesElement;
 /*
  * Importing JetBrains annotations.
  */
+import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
@@ -74,7 +75,10 @@ import org.junit.Assert;
 /*
  * Importing JDK classes.
  */
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -101,6 +105,8 @@ public class TableTestHelper
     private static final String VALUE = "value";
     private static final String READONLY = "readonly";
     public static final String SYNTAX_ERROR_IN_STATIC_CONTENT = "Syntax error in static content ";
+    private static final String DATE_FORMAT_ES = "DD/MM/yyyy";
+    private static final String DATE_FORMAT_EN = "yyyy/MM/DD";
 
     /**
      * Singleton implementation to avoid double-locking check.
@@ -493,11 +499,22 @@ public class TableTestHelper
             @NotNull final String dao = sqlRow.get("dao");
             @NotNull final String type = sqlRow.get("type");
             @NotNull final String matches = sqlRow.get("matches");
+            @NotNull final String validate = sqlRow.get("validate");
             @NotNull final Cardinality cardinality = Cardinality.fromString(matches.toLowerCase(Locale.US));
             @NotNull final String value = sqlRow.get(VALUE);
 
             @NotNull final SqlElement<String> sql =
-                new SqlElement<>(id, dao, name, type, cardinality, "all", false, false, "Test " + id);
+                new SqlElement<>(
+                    id,
+                    dao,
+                    name,
+                    type,
+                    cardinality,
+                    "all",
+                    Boolean.valueOf(validate.trim().toLowerCase(Locale.US)),
+                    false,
+                    "Test " + id);
+
             sql.setValue(value);
 
             result.add(sql);
@@ -513,10 +530,10 @@ public class TableTestHelper
      * @return a Map of DAO-name, Sql pairs.
      */
     @NotNull
-    public Map<String, List<Parameter<String>>> defineParameters(
+    public Map<String, List<Parameter<String, ?>>> defineParameters(
         @NotNull final DataTable parameterInfo, @NotNull final List<Sql<String>> sqlList)
     {
-        @NotNull final Map<String, List<Parameter<String>>> result = new HashMap<>();
+        @NotNull final Map<String, List<Parameter<String, ?>>> result = new HashMap<>();
 
         for (@NotNull final Map<String, String> sqlRow: parameterInfo.asMaps())
         {
@@ -525,11 +542,20 @@ public class TableTestHelper
             @NotNull final String index = sqlRow.get(Literals.INDEX);
             @NotNull final String name = sqlRow.get("name");
             @NotNull final String type = sqlRow.get("type");
+            @Nullable final String validationValue = sqlRow.get("validation-value");
 
-            @NotNull final ParameterElement<String> parameter =
-                new ParameterElement<>(id, Integer.parseInt(index), name, type, null);
+            @Nullable final Object parseValidationValue = (validationValue != null) ? toDate(validationValue) : null;
 
-            @Nullable List<Parameter<String>> parameters = result.get(sqlRef);
+            @NotNull final ParameterElement<String, ?> parameter =
+                new ParameterElement<>(
+                    id,
+                    Integer.parseInt(index),
+                    name,
+                    type,
+                    (parseValidationValue != null) ? parseValidationValue : validationValue);
+
+            @Nullable List<Parameter<String, ?>> parameters = result.get(sqlRef);
+
             if (parameters == null)
             {
                 parameters = new ArrayList<>();
@@ -545,6 +571,36 @@ public class TableTestHelper
             else
             {
                 Assert.fail("SQL with id " + sqlRef + " not found");
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Tries to convert given value to a date.
+     * @param validationValue the value to convert.
+     * @return the {@link Date}.
+     */
+    @Nullable
+    protected Date toDate(@NotNull final String validationValue)
+    {
+        @Nullable Date result = null;
+
+        try
+        {
+            result = new SimpleDateFormat(DATE_FORMAT_ES).parse(validationValue);
+        }
+        catch (@NotNull final ParseException invalidDate)
+        {
+            try
+            {
+                result = new SimpleDateFormat(DATE_FORMAT_EN).parse(validationValue);
+            }
+            catch (@NotNull final ParseException invalidEnglishDate)
+            {
+                LogFactory.getLog(TableTestHelper.class).debug(
+                    "Cannot convert " + validationValue + " to a Date", invalidEnglishDate);
             }
         }
 

@@ -197,10 +197,10 @@ public class CachingDecoratorFactory
      */
     @NotNull
     @Override
-    public ParameterDecorator createDecorator(
-        @NotNull final Parameter<String> parameter, @NotNull final MetadataManager metadataManager)
+    public ParameterDecorator<?> createDecorator(
+        @NotNull final Parameter<String, ?> parameter, @NotNull final MetadataManager metadataManager)
     {
-        return new CachingParameterDecorator(parameter, metadataManager.getMetadataTypeManager());
+        return new CachingParameterDecorator<>(parameter, metadataManager.getMetadataTypeManager());
     }
 
     /**
@@ -264,8 +264,7 @@ public class CachingDecoratorFactory
     public <V> List<Attribute<DecoratedString>> decorateAttributes(
         @NotNull final List<Attribute<V>> attributes, @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final List<Attribute<DecoratedString>> result =
-            new ArrayList<Attribute<DecoratedString>>(attributes.size());
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<>(attributes.size());
 
         for (@Nullable final Attribute<V> t_Attribute : attributes)
         {
@@ -309,7 +308,7 @@ public class CachingDecoratorFactory
 
         if (result == null)
         {
-            result = new ArrayList<Attribute<DecoratedString>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -335,7 +334,7 @@ public class CachingDecoratorFactory
         {
             @NotNull final List<Attribute<String>> t_lPrimaryKey = t_Table.getPrimaryKey();
 
-            result = new ArrayList<Attribute<DecoratedString>>(t_lPrimaryKey.size());
+            result = new ArrayList<>(t_lPrimaryKey.size());
 
             for (@Nullable final Attribute<String> t_Attribute : t_lPrimaryKey)
             {
@@ -348,7 +347,7 @@ public class CachingDecoratorFactory
         }
         else
         {
-            result = new ArrayList<Attribute<DecoratedString>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;

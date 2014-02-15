@@ -54,14 +54,14 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public abstract class AbstractParameterDecorator
-    extends  ParameterElement<DecoratedString>
-    implements  ParameterDecorator
+public abstract class AbstractParameterDecorator<V>
+    extends  ParameterElement<DecoratedString, V>
+    implements  ParameterDecorator<V>
 {
     /**
      * The decorated parameter.
      */
-    private Parameter<String> m__Parameter;
+    private Parameter<String, V> m__Parameter;
 
     /**
      * The metadata type manager.
@@ -74,7 +74,7 @@ public abstract class AbstractParameterDecorator
      * @param metadataTypeManager the metadata type manager.
      */
     public AbstractParameterDecorator(
-        @NotNull final Parameter<String> parameter,
+        @NotNull final Parameter<String, V> parameter,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
         super(
@@ -82,7 +82,7 @@ public abstract class AbstractParameterDecorator
             parameter.getIndex(),
             new DecoratedString(parameter.getName()),
             new DecoratedString(parameter.getType()),
-            parameter.getValidationValue() != null ? new DecoratedString(parameter.getValidationValue()) : null);
+            parameter.getValidationValue());
 
         immutableSetParameter(parameter);
         immutableSetMetadataTypeManager(metadataTypeManager);
@@ -93,7 +93,7 @@ public abstract class AbstractParameterDecorator
      * @param parameter the parameter.
      */
     protected final void immutableSetParameter(
-        @NotNull final Parameter<String> parameter)
+        @NotNull final Parameter<String, V> parameter)
     {
         m__Parameter = parameter;
     }
@@ -103,7 +103,7 @@ public abstract class AbstractParameterDecorator
      * @param parameter the parameter.
      */
     @SuppressWarnings("unused")
-    protected void setParameter(@NotNull final Parameter<String> parameter)
+    protected void setParameter(@NotNull final Parameter<String, V> parameter)
     {
         immutableSetParameter(parameter);
     }
@@ -114,7 +114,7 @@ public abstract class AbstractParameterDecorator
      */
     @NotNull
     @Override
-    public Parameter<String> getParameter()
+    public Parameter<String, V> getParameter()
     {
         return m__Parameter;
     }
@@ -354,7 +354,7 @@ public abstract class AbstractParameterDecorator
     @NotNull
     public String toString()
     {
-        return toString(getParameter());
+        return toString(getParameter(), getMetadataTypeManager());
     }
 
     /**
@@ -364,9 +364,10 @@ public abstract class AbstractParameterDecorator
      * @return such information.
      */
     @NotNull
-    protected String toString(@NotNull final Parameter<String> parameter)
+    protected String toString(
+        @NotNull final Parameter<String, V> parameter, @NotNull final MetadataTypeManager typeManager)
     {
-        return "" + parameter;
+        return "" + parameter + typeManager;
     }
 
     /**
@@ -384,7 +385,7 @@ public abstract class AbstractParameterDecorator
      * @param parameter the decorated parameter.
      * @return such information.
      */
-    protected int hashCode(@NotNull final Parameter<String> parameter)
+    protected int hashCode(@NotNull final Parameter<String, V> parameter)
     {
         return parameter.hashCode();
     }
@@ -399,7 +400,7 @@ public abstract class AbstractParameterDecorator
     {
         boolean result = false;
 
-        @Nullable final Parameter<String> parameter = getParameter();
+        @Nullable final Parameter<String, V> parameter = getParameter();
 
         if (object instanceof Parameter)
         {
