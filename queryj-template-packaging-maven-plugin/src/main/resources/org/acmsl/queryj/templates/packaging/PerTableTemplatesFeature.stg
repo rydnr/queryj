@@ -93,8 +93,8 @@ Feature: Per-table templates
     Then the generated per-table \<output> file compiles successfully
 
     Then the queries are validated correctly using the following database:
-      |  url  |  userName  | password  |
-      | <C.jdbcUrl> | <C.jdbcUserName> | <C.jdbcPassword> |
+      |     driver     |     url     |     userName     |     password     |
+      | <C.jdbcDriver> | <C.jdbcUrl> | <C.jdbcUserName> | <C.jdbcPassword> |
 
     Examples:
       | template           | output                            |

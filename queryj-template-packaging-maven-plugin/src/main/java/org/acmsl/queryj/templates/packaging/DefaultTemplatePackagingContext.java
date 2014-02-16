@@ -77,6 +77,7 @@ public class DefaultTemplatePackagingContext
      * @param packageName the package name.
      * @param rootDir the root dir.
      * @param outputDir the output dir.
+     * @param jdbcDriver the JDBC driver.
      * @param jdbcUrl the JDBC url.
      * @param jdbcUsername the JDBC username.
      * @param jdbcPassword the JDBC password.
@@ -88,11 +89,12 @@ public class DefaultTemplatePackagingContext
         @NotNull final String packageName,
         @NotNull final File rootDir,
         @NotNull final File outputDir,
+        @NotNull final String jdbcDriver,
         @NotNull final String jdbcUrl,
         @NotNull final String jdbcUsername,
         @NotNull final String jdbcPassword)
     {
-        super(templateName, fileName, packageName, rootDir, outputDir, jdbcUrl, jdbcUsername, jdbcPassword);
+        super(templateName, fileName, packageName, rootDir, outputDir, jdbcDriver, jdbcUrl, jdbcUsername, jdbcPassword);
         immutableSetTemplateDef(templateDef);
     }
 

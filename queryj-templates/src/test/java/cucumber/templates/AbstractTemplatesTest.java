@@ -119,6 +119,7 @@ public abstract class AbstractTemplatesTest<G, F>
 {
     public static final String PARSER_ERROR = "Parser error: ";
     public static final String CANNOT_READ_FILE = "Cannot read file: ";
+
     /**
      * A simple mapping between template names and generators.
      */
@@ -176,6 +177,31 @@ public abstract class AbstractTemplatesTest<G, F>
     private Map<String, List<Row<String>>> m__mRows;
 
     /**
+     * The engine name.
+     */
+    private String m__strEngineName;
+
+    /**
+     * The JDBC driver for validating queries.
+     */
+    private String m__strJdbcDriver;
+
+    /**
+     * The JDBC url for validating queries.
+     */
+    private String m__strJdbcUrl;
+
+    /**
+     * The JDBC user name for validating queries.
+     */
+    private String m__strJdbcUserName;
+
+    /**
+     * The JDBC password for validating queries.
+     */
+    private String m__strJdbcPassword;
+
+    /**
      * Creates an empty instance.
      */
     protected AbstractTemplatesTest()
@@ -212,6 +238,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * Retrieves the output file.
      * @return such file.
      */
+    @NotNull
     public Map<String, File> getOutputFiles()
     {
         return m__mOutputFiles;
@@ -265,6 +292,10 @@ public abstract class AbstractTemplatesTest<G, F>
         immutableSetForeignKeys(foreignKeys);
     }
 
+    /**
+     * Retrieves the foreign keys.
+     * @return such collection.
+     */
     @NotNull
     protected List<ForeignKey<String>> getForeignKeys()
     {
@@ -295,6 +326,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @return such table.
      */
     @SuppressWarnings("unused")
+    @NotNull
     protected List<Sql<String>> getSqlList()
     {
         return this.m__lSql;
@@ -324,6 +356,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @return such parameters.
      */
     @SuppressWarnings("unused")
+    @NotNull
     protected final Map<String, List<Parameter<String, ?>>> getParameters()
     {
         return m__mParameters;
@@ -352,10 +385,152 @@ public abstract class AbstractTemplatesTest<G, F>
      * Retrieves the row map (table name > static rows.
      * @return such map.
      */
+    @NotNull
     protected Map<String, List<Row<String>>> getRows()
     {
         return this.m__mRows;
     }
+
+    /**
+     * Specifies the engine name.
+     * @param name such name.
+     */
+    protected final void immutableSetEngineName(@NotNull final String name)
+    {
+        this.m__strEngineName = name;
+    }
+
+    /**
+     * Specifies the engine name.
+     * @param name such name.
+     */
+    protected void setEngineName(@NotNull final String name)
+    {
+        immutableSetEngineName(name);
+    }
+
+    /**
+     * Retrieves the engine name.
+     * @return such name.
+     */
+    @Nullable
+    public String getEngineName()
+    {
+        return this.m__strEngineName;
+    }
+
+    /**
+     * Specifies the JDBC driver.
+     * @param driver such driver.
+     */
+    protected final void immutableSetJdbcDriver(@NotNull final String driver)
+    {
+        this.m__strJdbcDriver = driver;
+    }
+
+    /**
+     * Specifies the JDBC driver.
+     * @param driver such driver.
+     */
+    protected void setJdbcDriver(@NotNull final String driver)
+    {
+        immutableSetJdbcDriver(driver);
+    }
+
+    /**
+     * Retrieves the JDBC driver.
+     * @return such driver.
+     */
+    @Nullable
+    public String getJdbcDriver()
+    {
+        return this.m__strJdbcDriver;
+    }
+
+    /**
+     * Specifies the JDBC URL.
+     * @param url such url.
+     */
+    protected final void immutableSetJdbcUrl(@NotNull final String url)
+    {
+        this.m__strJdbcUrl = url;
+    }
+
+    /**
+     * Specifies the JDBC URL.
+     * @param url such url.
+     */
+    protected void setJdbcUrl(@NotNull final String url)
+    {
+        immutableSetJdbcUrl(url);
+    }
+
+    /**
+     * Retrieves the JDBC URL.
+     * @return such url.
+     */
+    @Nullable
+    public String getJdbcUrl()
+    {
+        return this.m__strJdbcUrl;
+    }
+
+    /**
+     * Specifies the JDBC user name.
+     * @param userName such user name.
+     */
+    protected final void immutableSetJdbcUserName(@NotNull final String userName)
+    {
+        this.m__strJdbcUserName = userName;
+    }
+
+    /**
+     * Specifies the JDBC user name.
+     * @param userName such user name.
+     */
+    protected void setJdbcUserName(@NotNull final String userName)
+    {
+        immutableSetJdbcUserName(userName);
+    }
+
+    /**
+     * Retrieves the JDBC user name.
+     * @return such user name.
+     */
+    @Nullable
+    public String getJdbcUserName()
+    {
+        return this.m__strJdbcUserName;
+    }
+
+    /**
+     * Specifies the JDBC password.
+     * @param password such password.
+     */
+    protected final void immutableSetJdbcPassword(@NotNull final String password)
+    {
+        this.m__strJdbcPassword = password;
+    }
+
+    /**
+     * Specifies the JDBC password.
+     * @param password such password.
+     */
+    protected void setJdbcPassword(@NotNull final String password)
+    {
+        immutableSetJdbcPassword(password);
+    }
+
+    /**
+     * Retrieves the JDBC password.
+     * @return such password.
+     */
+    @Nullable
+    public String getJdbcPassword()
+    {
+        return this.m__strJdbcPassword;
+    }
+
     /**
      * Retrieves a {@link org.acmsl.queryj.customsql.CustomSqlProvider} instance adapted for given result.
      * @param sqlList the list of {@link Sql}.
@@ -814,6 +989,16 @@ public abstract class AbstractTemplatesTest<G, F>
         result.append(m__mParameters);
         result.append(", rows=");
         result.append(m__mRows);
+        result.append(", engineName=");
+        result.append(m__strEngineName);
+        result.append(", jdbcDriver=");
+        result.append(m__strJdbcDriver);
+        result.append(", jdbcUrl=");
+        result.append(m__strJdbcUrl);
+        result.append(", jdbcUserName=");
+        result.append(m__strJdbcUserName);
+        result.append(", jdbcPassword=");
+        result.append(m__strJdbcPassword);
         result.append("}");
 
         return result.toString();

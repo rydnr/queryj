@@ -176,7 +176,7 @@ public class CustomSqlValidationHandler
      * @param metadataManager the metadata manager.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected void validate(
+    public void validate(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final SqlDAO sqlDAO,
         @NotNull final Connection connection,
@@ -207,7 +207,7 @@ public class CustomSqlValidationHandler
      * @param metadataTypeManager the metadata type manager.
      * @throws QueryJBuildException if the sql is not valid.
      */
-    protected void validate(
+    public void validate(
         @NotNull final Sql<String> sql,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final Connection connection,

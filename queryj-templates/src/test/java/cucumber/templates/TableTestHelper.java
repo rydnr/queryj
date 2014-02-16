@@ -65,16 +65,27 @@ import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
 
 /*
- * Importing JetBrains annotations.
+ * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing JUnit classes.
+ */
 import org.junit.Assert;
 
 /*
  * Importing JDK classes.
  */
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -764,10 +775,13 @@ public class TableTestHelper
         return result;
     }
 
+    /**
+     * A convenient class to fake properties not relevant in {@link AttributeIncompleteValueObject}.
+     */
     protected static class _AttributeIncompleteValueObject
         extends AttributeIncompleteValueObject
     {
-        public _AttributeIncompleteValueObject(final String staticAttribute, final String tableName)
+        public _AttributeIncompleteValueObject(@NotNull final String staticAttribute, @NotNull final String tableName)
         {
             super(
                 staticAttribute,
@@ -781,5 +795,69 @@ public class TableTestHelper
                 false, // allows null,
                 null); // value
         }
+    }
+
+    /**
+     * Retrieves the JDBC url.
+     * @param values the values.
+     * @return the url.
+     */
+    @Nullable
+    public String retrieveJdbcDriver(@NotNull final DataTable values)
+    {
+        return retrieveJdbcField(values, "driver");
+    }
+
+    /**
+     * Retrieves the JDBC url.
+     * @param values the values.
+     * @return the url.
+     */
+    @Nullable
+    public String retrieveJdbcUrl(@NotNull final DataTable values)
+    {
+        return retrieveJdbcField(values, "url");
+    }
+
+    /**
+     * Retrieves the JDBC user name.
+     * @param values the values.
+     * @return the user name.
+     */
+    @Nullable
+    public String retrieveJdbcUserName(@NotNull final DataTable values)
+    {
+        return retrieveJdbcField(values, "userName");
+    }
+
+    /**
+     * Retrieves the JDBC password.
+     * @param values the values.
+     * @return the password.
+     */
+    @Nullable
+    public String retrieveJdbcPassword(@NotNull final DataTable values)
+    {
+        return retrieveJdbcField(values, "password");
+    }
+
+    /**
+     * Retrieves a JDBC field.
+     * @param values the values.
+     * @param key the key.
+     * @return the field.
+     */
+    @Nullable
+    protected String retrieveJdbcField(@NotNull final DataTable values, @NotNull final String key)
+    {
+        @Nullable String result = null;
+
+        for (@NotNull final Map<String, String> tableRow: values.asMaps())
+        {
+            result = tableRow.get(key);
+            break;
+        }
+
+        return result;
     }
 }

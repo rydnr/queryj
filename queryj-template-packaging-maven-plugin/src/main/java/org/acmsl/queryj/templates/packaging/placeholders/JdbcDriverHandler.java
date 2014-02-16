@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,22 +23,23 @@
 
  ******************************************************************************
  *
- * Filename: GlobalTemplateContext.java
+ * Filename: JdbcDriverHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Context for templates requiring global access to all information
- *              available.
+ * Description: Resolves C.jdbcDriver in templates.
  *
- * Date: 2013/09/15
- * Time: 06:01
+ * Date: 2014/02/16
+ * Time: 17:09
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.templates.packaging.placeholders;
 
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.placeholders.AbstractDecoratedStringHandler;
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -46,53 +47,47 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
-/*
- * Importing JDK classes.
- */
-import java.util.List;
-
 /**
- * Context for templates requiring global access to all information available.
+ * Resolves {@code C.jdbcDriver} in templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/09/15 06:01
+ * Created: 2014/02/16 17:09
  */
 @ThreadSafe
-public interface GlobalTemplateContext
-    extends TemplatePackagingContext
+public class JdbcDriverHandler
+    extends AbstractDecoratedStringHandler<GlobalTemplateContext>
 {
-    /**
-     * Retrieves all {@link TemplateDef}s.
-     * @return such information.
-     */
-    @NotNull
-    List<TemplateDef<String>> getTemplateDefs();
+    private static final long serialVersionUID = -994534395903168997L;
 
     /**
-     * Retrieves the jdbc driver.
-     * @return such driver.
+     * Creates a handler to resolve "jdbcUrl" placeholders.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
-    @NotNull
-    String getJdbcDriver();
+    public JdbcDriverHandler(@NotNull final GlobalTemplateContext context)
+    {
+        super(context);
+    }
 
     /**
-     * Retrieves the jdbc url.
-     * @return such url.
+     * Returns "jdbcUrl".
+     * @return such placeholder.
      */
     @NotNull
-    String getJdbcUrl();
+    @Override
+    public String getPlaceHolder()
+    {
+        return "jdbcDriver";
+    }
 
     /**
-     * Retrieves the jdbc username.
-     * @return such information.
+     * Resolves the actual JDBC driver using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @return such value.
      */
     @NotNull
-    String getJdbcUsername();
-
-    /**
-     * Retrieves the jdbc password.
-     * @return such information.
-     */
-    @NotNull
-    String getJdbcPassword();
+    @Override
+    protected String resolveContextValue(@NotNull final GlobalTemplateContext context)
+    {
+        return context.getJdbcDriver();
+    }
 }

@@ -138,6 +138,12 @@
       <artifactId>antlr</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>com.oracle</groupId>
+      <artifactId>oracle-driver</artifactId>
+      <version>1.4</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -166,16 +172,24 @@
             <goals>
               <goal>package-templates</goal>
             </goals>
-            <configuration>
-              <sources>
-                <source>${project.basedir}/src/main/resources</source>
-              </sources>
-              <jdbcUrl>jdbc:oracle:bla</jdbcUrl>
-              <jdbcUsername>userName</jdbcUsername>
-              <jdbcPassword>password</jdbcPassword>
-            </configuration>
           </execution>
         </executions>
+        <configuration>
+          <sources>
+            <source>${project.basedir}/src/main/resources</source>
+          </sources>
+          <jdbcDriver>oracle.jdbc.driver.OracleDriver</jdbcDriver>
+          <jdbcUrl>jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=10.34.10.249)(PORT=1521))(CONNECT_DATA=(SERVER=dedicated)(SERVICE_NAME=PRE2)))</jdbcUrl>
+          <jdbcUserName>QUERYJGAMES</jdbcUserName>
+          <jdbcPassword>QUERYJGAMES</jdbcPassword>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>oracle-driver</artifactId>
+            <version>1.4</version>
+          </dependency>
+        </dependencies>
       </plugin>
 
       <plugin>

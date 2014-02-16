@@ -120,17 +120,22 @@ public interface TemplatePackagingSettings
     String DEFAULT_TEMPLATE_CHAIN_PROVIDER_TEMPLATE = "default_template_chain_provider_template";
 
     /**
+     * The jdbc driver.
+     */
+    String JDBC_DRIVER = "jdbcDriver";
+
+    /**
      * The jdbc url.
      */
-    String JDBC_URL = "jdbc-url";
+    String JDBC_URL = "jdbcUrl";
 
     /**
      * The jdbc user name.
      */
-    String JDBC_USERNAME = "jdbc-username";
+    String JDBC_USERNAME = "jdbcUserName";
 
     /**
      * The jdbc password.
      */
-    String JDBC_PASSWORD = "jdbc-password";
+    String JDBC_PASSWORD = "jdbcPassword";
 }

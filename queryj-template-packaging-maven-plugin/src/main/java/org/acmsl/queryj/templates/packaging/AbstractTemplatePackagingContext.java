@@ -92,6 +92,12 @@ public class AbstractTemplatePackagingContext
     private File m__OutputDir;
 
     /**
+     * The JDBC driver.
+     */
+    @NotNull
+    private String m__strJdbcDriver;
+
+    /**
      * The JDBC url.
      */
     @NotNull
@@ -116,6 +122,7 @@ public class AbstractTemplatePackagingContext
      * @param rootDir the root dir.
      * @param fileName the file name.
      * @param outputDir the output dir.
+     * @param jdbcDriver the JDBC driver.
      * @param jdbcUrl the JDBC url.
      * @param jdbcUsername the JDBC username.
      * @param jdbcPassword the JDBC password.
@@ -126,6 +133,7 @@ public class AbstractTemplatePackagingContext
         @NotNull final String packageName,
         @NotNull final File rootDir,
         @NotNull final File outputDir,
+        @NotNull final String jdbcDriver,
         @NotNull final String jdbcUrl,
         @NotNull final String jdbcUsername,
         @NotNull final String jdbcPassword)
@@ -135,6 +143,7 @@ public class AbstractTemplatePackagingContext
         immutableSetPackageName(packageName);
         immutableSetRootDir(rootDir);
         immutableSetOutputDir(outputDir);
+        immutableSetJdbcDriver(jdbcDriver);
         immutableSetJdbcUrl(jdbcUrl);
         immutableSetJdbcUsername(jdbcUsername);
         immutableSetJdbcPassword(jdbcPassword);
@@ -288,6 +297,36 @@ public class AbstractTemplatePackagingContext
     }
 
     /**
+     * Specifies the JDBC driver.
+     * @param jdbcDriver the JDBC driver.
+     */
+    protected final void immutableSetJdbcDriver(@NotNull final String jdbcDriver)
+    {
+        this.m__strJdbcDriver = jdbcDriver;
+    }
+
+    /**
+     * Specifies the JDBC driver.
+     * @param jdbcDriver the JDBC driver.
+     */
+    @SuppressWarnings("unused")
+    protected void setJdbcDriver(@NotNull final String jdbcDriver)
+    {
+        immutableSetJdbcDriver(jdbcDriver);
+    }
+
+    /**
+     * Retrieves the JDBC url.
+     * @return the JDBC url.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getJdbcDriver()
+    {
+        return this.m__strJdbcDriver;
+    }
+
+    /**
      * Specifies the JDBC url.
      * @param jdbcUrl the JDBC url.
      */
@@ -387,8 +426,9 @@ public class AbstractTemplatePackagingContext
                Literals.PACKAGE_NAME + m__strPackageName + '\'' +
                ", 'rootDir': '" + m__RootDir.getAbsolutePath() + '\'' +
                Literals.OUTPUT_DIR + m__OutputDir.getAbsolutePath() + '\'' +
-                ", 'jdbcUrl': '" + m__strJdbcUrl + '\'' +
-                ", 'jdbcUsername': '" + m__strJdbcUsername + '\'' +
-                ", 'jdbcPassword': '" + m__strJdbcPassword + "' }";
+               ", 'jdbcDriver': '" + m__strJdbcDriver + '\'' +
+               ", 'jdbcUrl': '" + m__strJdbcUrl + '\'' +
+               ", 'jdbcUsername': '" + m__strJdbcUsername + '\'' +
+               ", 'jdbcPassword': '" + m__strJdbcPassword + "' }";
     }
 }

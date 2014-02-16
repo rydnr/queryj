@@ -41,6 +41,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.handlers.TemplateBuildHandler;
+import org.acmsl.queryj.tools.exceptions.MissingJdbcDriverAtRuntimeException;
 import org.acmsl.queryj.tools.exceptions.MissingJdbcPasswordAtRuntimeException;
 import org.acmsl.queryj.tools.exceptions.MissingJdbcUrlAtRuntimeException;
 import org.acmsl.queryj.tools.exceptions.MissingJdbcUserNameAtRuntimeException;
@@ -129,6 +130,7 @@ public abstract class TemplatePackagingBuildHandler
 
         @NotNull final File rootDir = retrieveRootDir(parameters);
 
+        @NotNull final String jdbcDriver = retrieveJdbcDriver(parameters);
         @NotNull final String jdbcUrl = retrieveJdbcUrl(parameters);
         @NotNull final String jdbcUsername = retrieveJdbcUsername(parameters);
         @NotNull final String jdbcPassword = retrieveJdbcPassword(parameters);
@@ -142,6 +144,7 @@ public abstract class TemplatePackagingBuildHandler
                 rootDir,
                 new File(rootDir.getAbsolutePath()
                     + File.separator + outputPackage.replaceAll("\\.", File.separator)),
+                jdbcDriver,
                 jdbcUrl,
                 jdbcUsername,
                 jdbcPassword);
@@ -163,6 +166,7 @@ public abstract class TemplatePackagingBuildHandler
 
         @NotNull final File rootDir = retrieveRootDir(parameters);
 
+        @NotNull final String jdbcDriver = retrieveJdbcDriver(parameters);
         @NotNull final String jdbcUrl = retrieveJdbcUrl(parameters);
         @NotNull final String jdbcUsername = retrieveJdbcUsername(parameters);
         @NotNull final String jdbcPassword = retrieveJdbcPassword(parameters);
@@ -175,6 +179,7 @@ public abstract class TemplatePackagingBuildHandler
                 rootDir,
                 new File(rootDir.getAbsolutePath()
                          + File.separator + outputPackage.replaceAll("\\.", File.separator)),
+                jdbcDriver,
                 jdbcUrl,
                 jdbcUsername,
                 jdbcPassword,
@@ -273,6 +278,25 @@ public abstract class TemplatePackagingBuildHandler
         if (result == null)
         {
             throw new MissingOutputDirAtRuntimeException();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the JDBC driver.
+     * @param parameters the parameters.
+     * @return the driver.
+     */
+    @NotNull
+    public String retrieveJdbcDriver(@NotNull final QueryJCommand parameters)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(parameters).getSetting(JDBC_DRIVER);
+
+        if (result == null)
+        {
+            throw new MissingJdbcDriverAtRuntimeException();
         }
 
         return result;

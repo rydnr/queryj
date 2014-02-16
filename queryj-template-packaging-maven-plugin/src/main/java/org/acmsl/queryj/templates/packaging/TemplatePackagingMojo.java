@@ -101,42 +101,49 @@ public class TemplatePackagingMojo
      * Additional source directories.
      * @parameter property="sources" @required
      */
-    @Parameter( required = true, property = SOURCES)
+    @Parameter(required = true, property = SOURCES)
     private File[] m__aSources;
 
     /**
      * The output folder.
      * @parameter property="outputDir" expression="${project.build.directory}/generated-sources" default-value="${project.build.directory}/generated-sources"
      */
-    @Parameter( property = OUTPUT_DIR, defaultValue = "${project.build.directory}/generated-sources")
+    @Parameter(property = OUTPUT_DIR, defaultValue = "${project.build.directory}/generated-sources")
     private File m__OutputDir;
 
     /**
      * The output folder for tests.
      * @parameter property="outputDirForTests" expression="${project.build.directory}/generated-test-sources" default-value="${project.build.directory}/generated-test-sources"
      */
-    @Parameter( property = OUTPUT_DIR_FOR_TESTS, defaultValue = "${project.build.directory}/generated-test-sources")
+    @Parameter(property = OUTPUT_DIR_FOR_TESTS, defaultValue = "${project.build.directory}/generated-test-sources")
     private File m__OutputDirForTests;
+
+    /**
+     * The JDBC driver.
+     * @parameter property="jdbcDriver" @required
+     */
+    @Parameter(property = JDBC_DRIVER)
+    private String m__strJdbcDriver;
 
     /**
      * The JDBC url.
      * @parameter property="jdbcUrl" @required
      */
-    @Parameter( property = JDBC_URL)
+    @Parameter(property = JDBC_URL)
     private String m__strJdbcUrl;
 
     /**
      * The JDBC username.
-     * @parameter property="jdbcUsername" @required
+     * @parameter property="jdbcUserName" @required
      */
-    @Parameter( property = JDBC_USERNAME)
-    private String m__strJdbcUsername;
+    @Parameter(property = JDBC_USERNAME)
+    private String m__strJdbcUserName;
 
     /**
      * The JDBC password.
      * @parameter property="jdbcPassword" @required
      */
-    @Parameter( property = JDBC_PASSWORD)
+    @Parameter(property = JDBC_PASSWORD)
     private String m__strJdbcPassword;
 
     /**
@@ -294,6 +301,36 @@ public class TemplatePackagingMojo
     }
 
     /**
+     * Specifies the JDBC driver.
+     * @param jdbcDriver the JDBC driver.
+     */
+    protected final void immutableSetJdbcDriver(@NotNull final String jdbcDriver)
+    {
+        this.m__strJdbcDriver = jdbcDriver;
+    }
+
+    /**
+     * Specifies the JDBC driver.
+     * @param jdbcDriver the JDBC driver.
+     */
+    @SuppressWarnings("unused")
+    public void setJdbcDriver(@NotNull final String jdbcDriver)
+    {
+        immutableSetJdbcDriver(jdbcDriver);
+    }
+
+    /**
+     * Retrieves the JDBC driver.
+     * @return the JDBC driver.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getJdbcDriver()
+    {
+        return this.m__strJdbcDriver;
+    }
+
+    /**
      * Specifies the JDBC url.
      * @param jdbcUrl the JDBC url.
      */
@@ -325,21 +362,21 @@ public class TemplatePackagingMojo
 
     /**
      * Specifies the JDBC user name.
-     * @param jdbcUsername the JDBC user name.
+     * @param jdbcUserName the JDBC user name.
      */
-    protected final void immutableSetJdbcUsername(@NotNull final String jdbcUsername)
+    protected final void immutableSetJdbcUserName(@NotNull final String jdbcUserName)
     {
-        this.m__strJdbcUsername = jdbcUsername;
+        this.m__strJdbcUserName = jdbcUserName;
     }
 
     /**
      * Specifies the JDBC user name.
-     * @param jdbcUsername the JDBC user name.
+     * @param jdbcUserName the JDBC user name.
      */
     @SuppressWarnings("unused")
-    public void setJdbcUsername(@NotNull final String jdbcUsername)
+    public void setJdbcUserName(@NotNull final String jdbcUserName)
     {
-        immutableSetJdbcUsername(jdbcUsername);
+        immutableSetJdbcUserName(jdbcUserName);
     }
 
     /**
@@ -348,9 +385,9 @@ public class TemplatePackagingMojo
      */
     @SuppressWarnings("unused")
     @NotNull
-    public String getJdbcUsername()
+    public String getJdbcUserName()
     {
-        return this.m__strJdbcUsername;
+        return this.m__strJdbcUserName;
     }
 
     /**
@@ -470,7 +507,7 @@ public class TemplatePackagingMojo
             populateCommand(command, getSources());
             populateCommand(command, getOutputDir());
             populateCommandForTests(command, getOutputDirForTests());
-            populateCommand(command, getJdbcUrl(), getJdbcUsername(), getJdbcPassword());
+            populateCommand(command, getJdbcDriver(), getJdbcUrl(), getJdbcUserName(), getJdbcPassword());
 
             new TemplatePackagingChain<>().process(command);
         }
@@ -513,18 +550,21 @@ public class TemplatePackagingMojo
     /**
      * Populates the JDBC information in the Mojo to be available in the command.
      * @param command the command.
+     * @param jdbcDriver the JDBC driver.
      * @param jdbcUrl the JDBC url.
-     * @param jdbcUsername the JDBC user name.
+     * @param jdbcUserName the JDBC user name.
      * @param jdbcPassword the JDBC password.
      */
     protected void populateCommand(
         @NotNull final QueryJCommand command,
+        @NotNull final String jdbcDriver,
         @NotNull final String jdbcUrl,
-        @NotNull final String jdbcUsername,
+        @NotNull final String jdbcUserName,
         @NotNull final String jdbcPassword)
     {
+        new QueryJCommandWrapper<String>(command).setSetting(JDBC_DRIVER, jdbcDriver);
         new QueryJCommandWrapper<String>(command).setSetting(JDBC_URL, jdbcUrl);
-        new QueryJCommandWrapper<String>(command).setSetting(JDBC_USERNAME, jdbcUsername);
+        new QueryJCommandWrapper<String>(command).setSetting(JDBC_USERNAME, jdbcUserName);
         new QueryJCommandWrapper<String>(command).setSetting(JDBC_PASSWORD, jdbcPassword);
     }
 
@@ -538,8 +578,9 @@ public class TemplatePackagingMojo
             + ", \"sources\": \"" + Arrays.toString(this.m__aSources) + "\""
             + ", \"outputDir\": \"" + this.m__OutputDir.getAbsolutePath() + "\""
             + ", \"outputDirForTests\": \"" + this.m__OutputDirForTests.getAbsolutePath() + "\""
+            + ", \"jdbcDriver\": \"" + this.m__strJdbcDriver + "\""
             + ", \"jdbcUrl\": \"" + this.m__strJdbcUrl + "\""
-            + ", \"jdbcUsername\": \"" + this.m__strJdbcUsername + "\""
+            + ", \"jdbcUserName\": \"" + this.m__strJdbcUserName + "\""
             + ", \"jdbcPassword\": \"" + this.m__strJdbcPassword + "\""
             + " }";
     }

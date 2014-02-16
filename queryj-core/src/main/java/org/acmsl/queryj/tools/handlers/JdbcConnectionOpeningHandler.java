@@ -109,31 +109,52 @@ public class JdbcConnectionOpeningHandler
      * @return the JDBC connection.
      * @throws QueryJBuildException if the connection cannot be opened.
      */
-    @Nullable
+    @NotNull
     protected Connection openConnection(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
-        @Nullable final Connection result;
+        return
+            openConnection(
+                (String) parameters.getSetting(JDBC_DRIVER),
+                (String) parameters.getSetting(JDBC_URL),
+                (String) parameters.getSetting(JDBC_USERNAME),
+                (String) parameters.getSetting(JDBC_PASSWORD));
+    }
 
-        @Nullable final String driver = parameters.getSetting(JDBC_DRIVER);
-        @Nullable final String url = parameters.getSetting(JDBC_URL);
-        @Nullable final String userName = parameters.getSetting(JDBC_USERNAME);
-        @Nullable final String password = parameters.getSetting(JDBC_PASSWORD);
+    /**
+     * Opens the JDBC connection using the information stored in the
+     * attribute map.
+     * @param jdbcDriver the driver.
+     * @param jdbcUrl the URL.
+     * @param jdbcUserName the user name.
+     * @param jdbcPassword the password.
+     * @return the JDBC connection.
+     * @throws QueryJBuildException if the connection cannot be opened.
+     */
+    @NotNull
+    public Connection openConnection(
+        @Nullable final String jdbcDriver,
+        @Nullable final String jdbcUrl,
+        @Nullable final String jdbcUserName,
+        @Nullable final String jdbcPassword)
+        throws  QueryJBuildException
+    {
+        @NotNull final Connection result;
 
-        if (driver == null)
+        if (jdbcDriver == null)
         {
             throw new MissingJdbcDriverAtRuntimeException();
         }
-        else if (url == null)
+        else if (jdbcUrl == null)
         {
             throw new MissingJdbcUrlAtRuntimeException();
         }
-        else if (userName == null)
+        else if (jdbcUserName == null)
         {
             throw new MissingJdbcUserNameAtRuntimeException();
         }
 
-        result = openConnection(driver, url, userName, password);
+        result = proceed(jdbcDriver, jdbcUrl, jdbcUserName, jdbcPassword);
 
         return result;
     }
@@ -148,8 +169,8 @@ public class JdbcConnectionOpeningHandler
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
-    @Nullable
-    protected Connection openConnection(
+    @NotNull
+    protected Connection proceed(
         @NotNull final String driver,
         @NotNull final String url,
         @NotNull final String username,
