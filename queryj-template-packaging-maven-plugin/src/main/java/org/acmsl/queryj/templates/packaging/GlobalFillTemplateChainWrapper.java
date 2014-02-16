@@ -58,11 +58,14 @@ import org.acmsl.queryj.placeholders.TimestampHandler;
  * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.placeholders.GlobalClassNameHandler;
+import org.acmsl.queryj.templates.packaging.placeholders.GlobalTemplateDefsHandler;
+import org.acmsl.queryj.templates.packaging.placeholders.JdbcPasswordHandler;
+import org.acmsl.queryj.templates.packaging.placeholders.JdbcUrlHandler;
 
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.templates.packaging.placeholders.GlobalTemplateDefsHandler;
+import org.acmsl.queryj.templates.packaging.placeholders.JdbcUserNameHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -114,6 +117,9 @@ public class GlobalFillTemplateChainWrapper
         result.add(new TimestampHandler());
         result.add(new TemplateNameHandler<>(context));
         result.add(new GlobalTemplateDefsHandler<>(context));
+        result.add(new JdbcUrlHandler(context));
+        result.add(new JdbcUserNameHandler(context));
+        result.add(new JdbcPasswordHandler(context));
 
         return result;
     }

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,23 +23,27 @@
 
  ******************************************************************************
  *
- * Filename: PackageNameHandler.java
+ * Filename: JdbcUrlHandler.java
  *
- * Author: Jose San Leandro Armendariz (chous)
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to resolve "package" placeholders.
+ * Description: Resolves C.jdbcUrl in templates.
  *
- * Date: 2013/05/05
- * Time: 16:57
+ * Date: 2014/02/16
+ * Time: 12:09
  *
  */
-package org.acmsl.queryj.placeholders;
+package org.acmsl.queryj.templates.packaging.placeholders;
 
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.api.TemplateContext;
-import org.acmsl.queryj.metadata.DecoratedString;
+import org.acmsl.queryj.placeholders.AbstractDecoratedStringHandler;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 
 /*
  * Importing JetBrains annotations.
@@ -52,45 +56,46 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Is able to resolve "package" placeholders.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * Resolves {@code C.jdbcUrl} in templates.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/05/05
+ * Created: 2014/02/16 12:09
  */
 @ThreadSafe
-public class PackageNameHandler<C extends TemplateContext>
-    extends AbstractTemplateContextFillHandler<C, DecoratedString>
+public class JdbcUrlHandler
+    extends AbstractDecoratedStringHandler<GlobalTemplateContext>
 {
-    private static final long serialVersionUID = 6902259512128669602L;
+    private static final long serialVersionUID = -994534395903168997L;
 
     /**
-     * Creates a handler to resolve "package" placeholders.
+     * Creates a handler to resolve "jdbcUrl" placeholders.
      * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
-    public PackageNameHandler(@NotNull final C context)
+    public JdbcUrlHandler(@NotNull final GlobalTemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Returns "package".
+     * Returns "jdbcUrl".
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return Literals.PACKAGE;
+        return "jdbcUrl";
     }
 
     /**
-     * Retrieves the template value for this placeholder.
+     * Resolves the actual JDBC URL using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
+     * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @return such value.
      */
     @NotNull
     @Override
-    protected DecoratedString getValue(@NotNull final C context)
+    protected String resolveContextValue(@NotNull final GlobalTemplateContext context)
     {
-        return new DecoratedString(context.getPackageName());
+        return context.getJdbcUrl();
     }
 }

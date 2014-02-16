@@ -94,7 +94,7 @@ Feature: Per-table templates
 
     Then the queries are validated correctly using the following database:
       |  url  |  userName  | password  |
-      | <C.jdbcUrl> | <C.jdbcUsername> | <C.jdbcPassword> |
+      | <C.jdbcUrl> | <C.jdbcUserName> | <C.jdbcPassword> |
 
     Examples:
       | template           | output                            |
