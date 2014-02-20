@@ -187,12 +187,12 @@ public class JdbcMetadataTypeManager
 
             case Types.TIME:
             case Types.DATE:
-            case Types.TIMESTAMP:
             case 11:
-//                result = "Calendar";
                 result = "Date";
                 break;
-
+            case Types.TIMESTAMP:
+                result = Literals.TIMESTAMP;
+                break;
             case Types.CHAR:
             case Types.VARCHAR:
             case Types.LONGVARCHAR:
@@ -339,6 +339,7 @@ public class JdbcMetadataTypeManager
         @NotNull final Integer t_Long = Types.BIGINT;
         @NotNull final Integer t_Double = Types.REAL;
         @NotNull final Integer t_Time = Types.TIME;
+        @NotNull final Integer t_Date = Types.DATE;
         @NotNull final Integer t_TimeStamp = Types.TIMESTAMP;
         @NotNull final Integer t_Text = Types.VARCHAR;
 
@@ -363,8 +364,8 @@ public class JdbcMetadataTypeManager
         result.put(Literals.FLOAT, t_Double);
         result.put(Literals.DOUBLE, t_Double);
         result.put("TIME"       , t_Time);
-        result.put("DATE"       , t_TimeStamp);
-        result.put("Date"       , t_TimeStamp);
+        result.put("DATE"       , t_Date);
+        result.put("Date"       , t_Date);
         result.put(Literals.TIMESTAMP_U, t_TimeStamp);
         result.put(Literals.TIMESTAMP, t_TimeStamp);
         result.put("CHAR"       , t_Text);

@@ -105,8 +105,7 @@ public abstract class AbstractBasePerCustomResultTemplate<C extends PerCustomRes
     protected String buildHeader(
         @NotNull final String templateName, @NotNull final Result<String> result)
     {
-        return
-              Literals.GENERATING + templateName + " for " + result.getId();
+        return Literals.GENERATING + templateName + " for " + result.getId();
     }
 
     /**

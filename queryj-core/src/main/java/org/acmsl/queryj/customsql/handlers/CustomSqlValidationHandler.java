@@ -474,9 +474,13 @@ public class CustomSqlValidationHandler
                 {
                     @Nullable final Method t_ParameterMethod;
 
-                    if  (   (   ("Date".equals(t_strType))
-                             || (Literals.TIMESTAMP_U.equals(t_strType.toUpperCase(new Locale("US")))))
+                    if  (   ("Date".equals(t_strType))
                          && (t_Parameter.getValidationValue() != null))
+                    {
+                        t_ParameterValue = new java.sql.Date(new Date().getTime());
+                    }
+                    else if (   (Literals.TIMESTAMP_U.equals(t_strType.toUpperCase(new Locale("US"))))
+                             && (t_Parameter.getValidationValue() != null))
                     {
                         t_ParameterValue = new Timestamp(new Date().getTime());
                     }
@@ -770,22 +774,14 @@ public class CustomSqlValidationHandler
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final StringUtils stringUtils)
     {
-        @NotNull String result = prefix;
+        @NotNull final StringBuilder result = new StringBuilder(prefix);
 
-        if  (   ("Date".equals(type))
-             || (Literals.TIMESTAMP.equals(type.toUpperCase(new Locale("US")))))
-        {
-            result += Literals.TIMESTAMP_U;
-        }
-        else
-        {
-            result +=
-                stringUtils.capitalize(
-                    metadataTypeManager.getNativeType(
-                        metadataTypeManager.getJavaType(type)), '|');
-        }
+        result.append(
+            stringUtils.capitalize(
+                metadataTypeManager.getNativeType(
+                    metadataTypeManager.getJavaType(type)), '|'));
 
-        return result;
+        return result.toString();
     }
 
     /**
@@ -1150,14 +1146,14 @@ public class CustomSqlValidationHandler
             // Second try
             try
             {
-                result = Class.forName("java.util." + type);
+                result = Class.forName("java.sql." + type);
             }
             catch  (@NotNull final ClassNotFoundException secondClassNotFoundException)
             {
                 // third try
                 try
                 {
-                    result = Class.forName("java.sql." + type);
+                    result = Class.forName("java.util." + type);
                 }
                 catch  (@NotNull final ClassNotFoundException
                               thirddClassNotFoundException)
@@ -1204,10 +1200,12 @@ public class CustomSqlValidationHandler
                 }
             }
 
+            /*
             if  (result.equals(java.util.Date.class))
             {
                 result = Timestamp.class;
             }
+            */
         }
 
         return result;

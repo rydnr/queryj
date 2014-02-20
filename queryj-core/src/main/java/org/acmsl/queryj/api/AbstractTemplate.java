@@ -862,12 +862,21 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     {
         final boolean result;
 
-        final boolean debug =
-            ManagementFactory.getRuntimeMXBean(). getInputArguments().toString().contains(XRUNJDWP_TRANSPORT);
+        final boolean devModeDisabled = System.getProperty("queryj.devMode.disabled") != null;
 
-        result =
-            (   (debug)
-             && (!template.getFileName().startsWith("org/acmsl/queryj/templates/packaging")));
+        if (devModeDisabled)
+        {
+            result = false;
+        }
+        else
+        {
+            final boolean debug =
+                ManagementFactory.getRuntimeMXBean(). getInputArguments().toString().contains(XRUNJDWP_TRANSPORT);
+
+            result =
+                (   (debug)
+                 && (!template.getFileName().startsWith("org/acmsl/queryj/templates/packaging")));
+        }
 
         return result;
     }
