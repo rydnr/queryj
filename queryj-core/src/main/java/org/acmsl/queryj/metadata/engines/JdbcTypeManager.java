@@ -40,6 +40,8 @@ package org.acmsl.queryj.metadata.engines;
  * Importing JetBrains annotations.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.queryj.Literals;
+import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,8 +55,10 @@ import org.checkthread.annotations.ThreadSafe;
  */
 import java.io.InputStream;
 import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
@@ -94,15 +98,15 @@ public class JdbcTypeManager
     @NotNull protected static final String BINARY = "binary";
     @NotNull protected static final String BIT = "bit";
     @NotNull protected static final String BLOB = "blob";
-    @NotNull protected static final String BOOLEAN = "boolean";
+    @NotNull protected static final String BOOLEAN = Literals.BOOLEAN;
     @NotNull protected static final String CHAR = "char";
     @NotNull protected static final String CLOB = "clob";
     @NotNull protected static final String DATALINK = "datalink";
     @NotNull protected static final String DATE = "date";
     @NotNull protected static final String DECIMAL = "decimal";
     @NotNull protected static final String DISTINCT = "distinct";
-    @NotNull protected static final String DOUBLE = "double";
-    @NotNull protected static final String FLOAT = "float";
+    @NotNull protected static final String DOUBLE = Literals.DOUBLE;
+    @NotNull protected static final String FLOAT = Literals.FLOAT;
     @NotNull protected static final String INTEGER = "integer";
     @NotNull protected static final String JAVA_OBJECT = "java_object";
     @NotNull protected static final String LONGNVARCHAR = "longnvarchar";
@@ -118,110 +122,221 @@ public class JdbcTypeManager
     @NotNull protected static final String REF = "ref";
     @NotNull protected static final String ROWID = "rowid";
     @NotNull protected static final String SQLXML = "sqlxml";
-    @NotNull protected static final String SMALLINT = "smallint";
+    @NotNull protected static final String SMALLINT = Literals.SMALLINT_L;
     @NotNull protected static final String STRUCT = "struct";
     @NotNull protected static final String TIME = "time";
     @NotNull protected static final String TIMESTAMP = "timestamp";
-    @NotNull protected static final String TINYINT = "tinyint";
+    @NotNull protected static final String TINYINT = Literals.TINYINT_L;
     @NotNull protected static final String VARBINARY = "varbinary";
     @NotNull protected static final String VARCHAR = "varchar";
 
     protected static final Method SET_ARRAY_METHOD;
     protected static final Method SET_ASCII_STREAM_METHOD;
+    protected static final Method SET_ASCII_STREAM_INT_METHOD;
+    protected static final Method SET_ASCII_STREAM_LONG_METHOD;
     protected static final Method SET_BIG_DECIMAL_METHOD;
     protected static final Method SET_BINARY_STREAM_METHOD;
+    protected static final Method SET_BINARY_STREAM_INT_METHOD;
+    protected static final Method SET_BINARY_STREAM_LONG_METHOD;
     protected static final Method SET_BLOB_METHOD;
+    protected static final Method SET_BLOB_INPUT_STREAM_METHOD;
+    protected static final Method SET_BLOB_INPUT_STREAM_LONG_METHOD;
     protected static final Method SET_BOOLEAN_METHOD;
     protected static final Method SET_BYTE_METHOD;
     protected static final Method SET_BYTES_METHOD;
     protected static final Method SET_CHARACTER_STREAM_METHOD;
+    protected static final Method SET_CHARACTER_STREAM_INT_METHOD;
+    protected static final Method SET_CHARACTER_STREAM_LONG_METHOD;
     protected static final Method SET_CLOB_METHOD;
+    protected static final Method SET_CLOB_READER_METHOD;
+    protected static final Method SET_CLOB_READER_LONG_METHOD;
     protected static final Method SET_DATE_METHOD;
+    protected static final Method SET_DATE_CALENDAR_METHOD;
     protected static final Method SET_DOUBLE_METHOD;
     protected static final Method SET_FLOAT_METHOD;
     protected static final Method SET_INT_METHOD;
     protected static final Method SET_LONG_METHOD;
     protected static final Method SET_N_CHARACTER_STREAM_METHOD;
+    protected static final Method SET_N_CHARACTER_STREAM_LONG_METHOD;
     protected static final Method SET_N_CLOB_METHOD;
+    protected static final Method SET_N_CLOB_READER_METHOD;
+    protected static final Method SET_N_CLOB_READER_LONG_METHOD;
     protected static final Method SET_N_STRING_METHOD;
     protected static final Method SET_NULL_METHOD;
+    protected static final Method SET_NULL_STRING_METHOD;
     protected static final Method SET_OBJECT_METHOD;
+    protected static final Method SET_OBJECT_INT_METHOD;
+    protected static final Method SET_OBJECT_INT_INT_METHOD;
     protected static final Method SET_REF_METHOD;
     protected static final Method SET_ROW_ID_METHOD;
     protected static final Method SET_SHORT_METHOD;
     protected static final Method SET_SQLXML_METHOD;
     protected static final Method SET_STRING_METHOD;
     protected static final Method SET_TIME_METHOD;
+    protected static final Method SET_TIME_CALENDAR_METHOD;
     protected static final Method SET_TIMESTAMP_METHOD;
+    protected static final Method SET_TIMESTAMP_CALENDAR_METHOD;
     protected static final Method SET_URL_METHOD;
 
     static
     {
         @Nullable Method setArrayMethod = null;
         @Nullable Method setAsciiStreamMethod = null;
+        @Nullable Method setAsciiStreamIntMethod = null;
+        @Nullable Method setAsciiStreamLongMethod = null;
         @Nullable Method setBigDecimalMethod = null;
         @Nullable Method setBinaryStreamMethod = null;
+        @Nullable Method setBinaryStreamIntMethod = null;
+        @Nullable Method setBinaryStreamLongMethod = null;
         @Nullable Method setBlobMethod = null;
+        @Nullable Method setBlobInputStreamMethod = null;
+        @Nullable Method setBlobInputStreamLongMethod = null;
         @Nullable Method setBooleanMethod = null;
         @Nullable Method setByteMethod = null;
         @Nullable Method setBytesMethod = null;
         @Nullable Method setCharacterStreamMethod = null;
+        @Nullable Method setCharacterStreamIntMethod = null;
+        @Nullable Method setCharacterStreamLongMethod = null;
         @Nullable Method setClobMethod = null;
+        @Nullable Method setClobReaderMethod = null;
+        @Nullable Method setClobReaderLongMethod = null;
         @Nullable Method setDateMethod = null;
+        @Nullable Method setDateCalendarMethod = null;
         @Nullable Method setDoubleMethod = null;
         @Nullable Method setFloatMethod = null;
         @Nullable Method setIntMethod = null;
         @Nullable Method setLongMethod = null;
         @Nullable Method setNCharacterStreamMethod = null;
+        @Nullable Method setNCharacterStreamLongMethod = null;
         @Nullable Method setNClobMethod = null;
+        @Nullable Method setNClobReaderMethod = null;
+        @Nullable Method setNClobReaderLongMethod = null;
         @Nullable Method setNStringMethod = null;
         @Nullable Method setNullMethod = null;
+        @Nullable Method setNullStringMethod = null;
         @Nullable Method setObjectMethod = null;
+        @Nullable Method setObjectIntMethod = null;
+        @Nullable Method setObjectIntIntMethod = null;
         @Nullable Method setRefMethod = null;
         @Nullable Method setRowIdMethod = null;
         @Nullable Method setShortMethod = null;
         @Nullable Method setSqlXmlMethod = null;
         @Nullable Method setStringMethod = null;
         @Nullable Method setTimeMethod = null;
+        @Nullable Method setTimeCalendarMethod = null;
         @Nullable Method setTimestampMethod = null;
+        @Nullable Method setTimestampCalendarMethod = null;
         @Nullable Method setUrlMethod = null;
 
         try
         {
-            setArrayMethod = PreparedStatement.class.getMethod("setArray", int.class, Array.class);
+            setArrayMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_ARRAY, int.class, Array.class);
             setAsciiStreamMethod =
-                PreparedStatement.class.getMethod("setAsciiStream", int.class, InputStream.class, long.class);
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_ASCII_STREAM, int.class, InputStream.class);
+            setAsciiStreamIntMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_ASCII_STREAM, int.class, InputStream.class, int.class);
+            setAsciiStreamLongMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_ASCII_STREAM, int.class, InputStream.class, long.class);
             setBigDecimalMethod = PreparedStatement.class.getMethod("setBigDecimal", int.class, BigDecimal.class);
             setBinaryStreamMethod =
-                PreparedStatement.class.getMethod("setBinaryStream", int.class, InputStream.class, long.class);
-            setBlobMethod = PreparedStatement.class.getMethod("setBlob", int.class, InputStream.class, long.class);
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_BINARY_STREAM, int.class, InputStream.class);
+            setBinaryStreamIntMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_BINARY_STREAM, int.class, InputStream.class, int.class);
+            setBinaryStreamLongMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_BINARY_STREAM, int.class, InputStream.class, long.class);
+            setBlobMethod =
+                PreparedStatement.class.getMethod(org.acmsl.queryj.metadata.Literals.SET_BLOB, int.class, Blob.class);
+            setBlobInputStreamMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_BLOB, int.class, InputStream.class);
+            setBlobInputStreamLongMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_BLOB, int.class, InputStream.class, long.class);
             setBooleanMethod = PreparedStatement.class.getMethod("setBoolean", int.class, boolean.class);
             setByteMethod = PreparedStatement.class.getMethod("setByte", int.class, byte.class);
             setBytesMethod = PreparedStatement.class.getMethod("setBytes", int.class, new byte[0].getClass());
             setCharacterStreamMethod =
-                PreparedStatement.class.getMethod("setCharacterStream", int.class, Reader.class, long.class);
-            setClobMethod = PreparedStatement.class.getMethod("setClob", int.class, Reader.class, long.class);
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_CHARACTER_STREAM, int.class, Reader.class);
+            setCharacterStreamIntMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_CHARACTER_STREAM, int.class, Reader.class, int.class);
+            setCharacterStreamLongMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_CHARACTER_STREAM, int.class, Reader.class, long.class);
+            setClobMethod =
+                PreparedStatement.class.getMethod(org.acmsl.queryj.metadata.Literals.SET_CLOB, int.class, Clob.class);
+            setClobReaderMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_CLOB, int.class, Reader.class);
+            setClobReaderLongMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_CLOB, int.class, Reader.class, long.class);
             setDateMethod =
-                PreparedStatement.class.getMethod("setDate", int.class, java.sql.Date.class, Calendar.class);
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_DATE, int.class, java.sql.Date.class);
+            setDateCalendarMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_DATE, int.class, java.sql.Date.class, Calendar.class);
             setDoubleMethod = PreparedStatement.class.getMethod("setDouble", int.class, double.class);
             setFloatMethod = PreparedStatement.class.getMethod("setFloat", int.class, float.class);
             setIntMethod = PreparedStatement.class.getMethod("setInt", int.class, int.class);
             setLongMethod = PreparedStatement.class.getMethod("setLong", int.class, long.class);
             setNCharacterStreamMethod =
-                PreparedStatement.class.getMethod("setNCharacterStream", int.class, Reader.class, long.class);
-            setNClobMethod = PreparedStatement.class.getMethod("setNClob", int.class, Reader.class, long.class);
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_N_CHARACTER_STREAM, int.class, Reader.class);
+            setNCharacterStreamLongMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_N_CHARACTER_STREAM, int.class, Reader.class, long.class);
+            setNClobMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_N_CLOB, int.class, NClob.class);
+            setNClobReaderMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_N_CLOB, int.class, Reader.class);
+            setNClobReaderLongMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_N_CLOB, int.class, Reader.class, long.class);
             setNStringMethod = PreparedStatement.class.getMethod("setNString", int.class, String.class);
-            setNullMethod = PreparedStatement.class.getMethod("setNull", int.class, int.class);
+            setNullMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_NULL, int.class, int.class);
+            setNullStringMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_NULL, int.class, int.class, String.class);
             setObjectMethod =
-                PreparedStatement.class.getMethod("setObject", int.class, Object.class, int.class, int.class);
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_OBJECT, int.class, Object.class);
+            setObjectIntMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_OBJECT, int.class, Object.class, int.class);
+            setObjectIntIntMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_OBJECT, int.class, Object.class, int.class, int.class);
             setRefMethod = PreparedStatement.class.getMethod("setRef", int.class, Ref.class);
             setRowIdMethod = PreparedStatement.class.getMethod("setRowId", int.class, RowId.class);
             setShortMethod = PreparedStatement.class.getMethod("setShort", int.class, short.class);
             setSqlXmlMethod = PreparedStatement.class.getMethod("setSQLXML", int.class, java.sql.SQLXML.class);
             setStringMethod = PreparedStatement.class.getMethod("setString", int.class, String.class);
-            setTimeMethod = PreparedStatement.class.getMethod("setTime", int.class, Time.class, Calendar.class);
+            setTimeMethod =
+                PreparedStatement.class.getMethod(org.acmsl.queryj.metadata.Literals.SET_TIME, int.class, Time.class);
+            setTimeCalendarMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_TIME, int.class, Time.class, Calendar.class);
             setTimestampMethod =
-                PreparedStatement.class.getMethod("setTimestamp", int.class, Timestamp.class, Calendar.class);
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_TIMESTAMP, int.class, Timestamp.class);
+            setTimestampCalendarMethod =
+                PreparedStatement.class.getMethod(
+                    org.acmsl.queryj.metadata.Literals.SET_TIMESTAMP, int.class, Timestamp.class, Calendar.class);
             setUrlMethod = PreparedStatement.class.getMethod("setURL", int.class, java.net.URL.class);
         }
         catch (@NotNull final NoSuchMethodException noSuchMethod)
@@ -230,31 +345,50 @@ public class JdbcTypeManager
         }
         SET_ARRAY_METHOD = setArrayMethod;
         SET_ASCII_STREAM_METHOD = setAsciiStreamMethod;
+        SET_ASCII_STREAM_INT_METHOD = setAsciiStreamIntMethod;
+        SET_ASCII_STREAM_LONG_METHOD = setAsciiStreamLongMethod;
         SET_BIG_DECIMAL_METHOD = setBigDecimalMethod;
         SET_BINARY_STREAM_METHOD = setBinaryStreamMethod;
+        SET_BINARY_STREAM_INT_METHOD = setBinaryStreamIntMethod;
+        SET_BINARY_STREAM_LONG_METHOD = setBinaryStreamLongMethod;
         SET_BLOB_METHOD = setBlobMethod;
+        SET_BLOB_INPUT_STREAM_METHOD = setBlobInputStreamMethod;
+        SET_BLOB_INPUT_STREAM_LONG_METHOD = setBlobInputStreamLongMethod;
         SET_BOOLEAN_METHOD = setBooleanMethod;
         SET_BYTE_METHOD = setByteMethod;
         SET_BYTES_METHOD = setBytesMethod;
         SET_CHARACTER_STREAM_METHOD = setCharacterStreamMethod;
+        SET_CHARACTER_STREAM_INT_METHOD = setCharacterStreamIntMethod;
+        SET_CHARACTER_STREAM_LONG_METHOD = setCharacterStreamLongMethod;
         SET_CLOB_METHOD = setClobMethod;
+        SET_CLOB_READER_METHOD = setClobReaderMethod;
+        SET_CLOB_READER_LONG_METHOD = setClobReaderLongMethod;
         SET_DATE_METHOD = setDateMethod;
+        SET_DATE_CALENDAR_METHOD = setDateCalendarMethod;
         SET_DOUBLE_METHOD = setDoubleMethod;
         SET_FLOAT_METHOD = setFloatMethod;
         SET_INT_METHOD = setIntMethod;
         SET_LONG_METHOD = setLongMethod;
         SET_N_CHARACTER_STREAM_METHOD = setNCharacterStreamMethod;
+        SET_N_CHARACTER_STREAM_LONG_METHOD = setNCharacterStreamLongMethod;
         SET_N_CLOB_METHOD = setNClobMethod;
+        SET_N_CLOB_READER_METHOD = setNClobReaderMethod;
+        SET_N_CLOB_READER_LONG_METHOD = setNClobReaderLongMethod;
         SET_N_STRING_METHOD = setNStringMethod;
         SET_NULL_METHOD = setNullMethod;
+        SET_NULL_STRING_METHOD = setNullStringMethod;
         SET_OBJECT_METHOD = setObjectMethod;
+        SET_OBJECT_INT_METHOD = setObjectIntMethod;
+        SET_OBJECT_INT_INT_METHOD = setObjectIntIntMethod;
         SET_REF_METHOD = setRefMethod;
         SET_ROW_ID_METHOD = setRowIdMethod;
         SET_SHORT_METHOD = setShortMethod;
         SET_SQLXML_METHOD = setSqlXmlMethod;
         SET_STRING_METHOD = setStringMethod;
         SET_TIME_METHOD = setTimeMethod;
+        SET_TIME_CALENDAR_METHOD = setTimeCalendarMethod;
         SET_TIMESTAMP_METHOD = setTimestampMethod;
+        SET_TIMESTAMP_CALENDAR_METHOD = setTimestampCalendarMethod;
         SET_URL_METHOD = setUrlMethod;
 
         TYPE_MAPPING.put(ARRAY, Types.ARRAY);
@@ -267,12 +401,15 @@ public class JdbcTypeManager
         INVERSE_TYPE_MAPPING.put(Types.BIGINT, BIGINT);
         CLASS_MAPPING.put(Types.BIGINT, long.class);
         INVERSE_CLASS_MAPPING.put(long.class, Types.BIGINT);
+        INVERSE_CLASS_MAPPING.put(Long.class, Types.BIGINT);
+        INVERSE_CLASS_MAPPING.put(BigInteger.class, Types.BIGINT);
         PREPARED_STATEMENT_METHODS.put(Types.BIGINT, SET_LONG_METHOD);
 
         TYPE_MAPPING.put(BINARY, Types.BINARY);
         INVERSE_TYPE_MAPPING.put(Types.BINARY, BINARY);
         CLASS_MAPPING.put(Types.BINARY, new byte[0].getClass());
         INVERSE_CLASS_MAPPING.put(new byte[0].getClass(), Types.BINARY);
+        INVERSE_CLASS_MAPPING.put(new Byte[0].getClass(), Types.BINARY);
         PREPARED_STATEMENT_METHODS.put(Types.BINARY, SET_BYTES_METHOD);
 
         TYPE_MAPPING.put(BIT, Types.BIT);
@@ -290,6 +427,7 @@ public class JdbcTypeManager
         INVERSE_TYPE_MAPPING.put(Types.BOOLEAN, BOOLEAN);
         CLASS_MAPPING.put(Types.BOOLEAN, boolean.class);
         INVERSE_CLASS_MAPPING.put(boolean.class, Types.BOOLEAN);
+        INVERSE_CLASS_MAPPING.put(Boolean.class, Types.BOOLEAN);
         PREPARED_STATEMENT_METHODS.put(Types.BOOLEAN, SET_BOOLEAN_METHOD);
 
         TYPE_MAPPING.put(CHAR, Types.CHAR);
@@ -329,6 +467,7 @@ public class JdbcTypeManager
         INVERSE_TYPE_MAPPING.put(Types.DOUBLE, DOUBLE);
         CLASS_MAPPING.put(Types.DOUBLE, double.class);
         INVERSE_CLASS_MAPPING.put(double.class, Types.DOUBLE);
+        INVERSE_CLASS_MAPPING.put(Double.class, Types.DOUBLE);
         PREPARED_STATEMENT_METHODS.put(Types.DOUBLE, SET_DOUBLE_METHOD);
 
         TYPE_MAPPING.put(FLOAT, Types.FLOAT);
@@ -340,6 +479,7 @@ public class JdbcTypeManager
         INVERSE_TYPE_MAPPING.put(Types.INTEGER, INTEGER);
         CLASS_MAPPING.put(Types.INTEGER, int.class);
         INVERSE_CLASS_MAPPING.put(int.class, Types.INTEGER);
+        INVERSE_CLASS_MAPPING.put(Integer.class, Types.INTEGER);
         PREPARED_STATEMENT_METHODS.put(Types.INTEGER, SET_INT_METHOD);
 
         TYPE_MAPPING.put(JAVA_OBJECT, Types.JAVA_OBJECT);
@@ -399,6 +539,7 @@ public class JdbcTypeManager
         INVERSE_TYPE_MAPPING.put(Types.REAL, REAL);
         CLASS_MAPPING.put(Types.REAL, float.class);
         INVERSE_CLASS_MAPPING.put(float.class, Types.REAL);
+        INVERSE_CLASS_MAPPING.put(Float.class, Types.REAL);
         PREPARED_STATEMENT_METHODS.put(Types.REAL, SET_FLOAT_METHOD);
 
         TYPE_MAPPING.put(REF, Types.REF);
@@ -417,6 +558,7 @@ public class JdbcTypeManager
         INVERSE_TYPE_MAPPING.put(Types.SMALLINT, SMALLINT);
         CLASS_MAPPING.put(Types.SMALLINT, short.class);
         INVERSE_CLASS_MAPPING.put(short.class, Types.SMALLINT);
+        INVERSE_CLASS_MAPPING.put(Short.class, Types.SMALLINT);
         PREPARED_STATEMENT_METHODS.put(Types.SMALLINT, SET_SHORT_METHOD);
 
         TYPE_MAPPING.put(SQLXML, Types.SQLXML);
@@ -447,6 +589,7 @@ public class JdbcTypeManager
         INVERSE_TYPE_MAPPING.put(Types.TINYINT, TINYINT);
         CLASS_MAPPING.put(Types.TINYINT, byte.class);
         INVERSE_CLASS_MAPPING.put(byte.class, Types.TINYINT);
+        INVERSE_CLASS_MAPPING.put(Byte.class, Types.TINYINT);
         PREPARED_STATEMENT_METHODS.put(Types.TINYINT, SET_BYTE_METHOD);
 
         TYPE_MAPPING.put(VARBINARY, Types.VARBINARY);
@@ -460,6 +603,9 @@ public class JdbcTypeManager
         INVERSE_CLASS_MAPPING.put(String.class, Types.VARCHAR);
         PREPARED_STATEMENT_METHODS.put(Types.VARCHAR, SET_STRING_METHOD);
     }
+
+    protected static final String CANNOT_SET_PARAMETER = "Cannot set parameter ";
+    protected static final String ON_PREPARED_STATEMENT = " on PreparedStatement";
 
     /**
      * Creates a new instance.
@@ -543,6 +689,73 @@ public class JdbcTypeManager
         else
         {
             result = aux;
+        }
+
+        return result;
+    }
+
+    /**
+     * Calls the correct method on {@link PreparedStatement} to set the parameter.
+     * @param statement the {@link PreparedStatement}.
+     * @param index the parameter index.
+     * @param value the parameter value.
+     * @param <T> the parameter class.
+     */
+    public <T> void setPreparedStatementParameter(
+        @NotNull final PreparedStatement statement, final int index, @NotNull final T value)
+    {
+        @NotNull final Method t_Method = getPreparedStatementSetterMethod(findOutClass(value));
+
+        try
+        {
+            t_Method.invoke(statement, index, value);
+        }
+        catch (@NotNull final InvocationTargetException invalidMethodOrParams)
+        {
+            @Nullable final Log t_Log = UniqueLogFactory.getLog(JdbcTypeManager.class);
+
+            if (t_Log != null)
+            {
+                t_Log.fatal(CANNOT_SET_PARAMETER + value + ON_PREPARED_STATEMENT, invalidMethodOrParams);
+            }
+        }
+        catch (@NotNull final IllegalAccessException invalidMethodOrParams)
+        {
+            @Nullable final Log t_Log = UniqueLogFactory.getLog(JdbcTypeManager.class);
+
+            if (t_Log != null)
+            {
+                t_Log.fatal(CANNOT_SET_PARAMETER + value + ON_PREPARED_STATEMENT, invalidMethodOrParams);
+            }
+        }
+    }
+
+    /**
+     * Tries to find out the actual class of given value.
+     * @param value the value.
+     * @param <T> the class parameter.
+     * @return the actual class.
+     */
+    @SuppressWarnings("unchecked")
+    @NotNull
+    protected <T> Class<?> findOutClass(@NotNull final T value)
+    {
+        @Nullable Class<?> result = null;
+
+        @NotNull final Class<?>[] t_aInterfaces = value.getClass().getInterfaces();
+
+        for (@NotNull final Class<?> t_Interface : t_aInterfaces)
+        {
+            if (t_Interface.getPackage().getName().equals("java.sql"))
+            {
+                result = t_Interface;
+                break;
+            }
+        }
+
+        if (result == null)
+        {
+            result = value.getClass();
         }
 
         return result;

@@ -1534,7 +1534,7 @@ public class JdbcMetadataTypeManager
     /**
      * Checks if given data type represents numbers smaller than int.
      * @param dataType the data type.
-     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * @return <code>true</code> is such data type is smallint, tinyint
      * or similar.
      */
     @Override
@@ -1562,7 +1562,7 @@ public class JdbcMetadataTypeManager
     /**
      * Checks if given data type represents numbers smaller than int.
      * @param dataType the data type.
-     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * @return <code>true</code> is such data type is smallint, tinyint
      * or similar.
      */
     @Override

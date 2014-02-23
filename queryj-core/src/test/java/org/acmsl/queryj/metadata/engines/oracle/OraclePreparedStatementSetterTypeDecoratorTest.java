@@ -38,6 +38,7 @@ package org.acmsl.queryj.metadata.engines.oracle;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.Literals;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -76,6 +77,6 @@ public class OraclePreparedStatementSetterTypeDecoratorTest
 
         @NotNull final Method t_Method = instance.getSetterMethod(Array.class);
 
-        Assert.assertEquals(PreparedStatement.class.getMethod("setArray", int.class, Array.class), t_Method);
+        Assert.assertEquals(PreparedStatement.class.getMethod(Literals.SET_ARRAY, int.class, Array.class), t_Method);
     }
 }

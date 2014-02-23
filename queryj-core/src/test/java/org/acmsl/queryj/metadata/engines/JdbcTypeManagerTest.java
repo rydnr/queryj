@@ -36,6 +36,17 @@
 package org.acmsl.queryj.metadata.engines;
 
 /*
+ * Importing EasyMock classes.
+ */
+import org.easymock.Capture;
+import org.easymock.EasyMock;
+
+/*
+ * Importing PowerMock classes.
+ */
+import org.powermock.api.easymock.PowerMock;
+
+/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -53,17 +64,22 @@ import org.junit.runners.JUnit4;
  */
 import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.NClob;
+import java.sql.PreparedStatement;
 import java.sql.Ref;
+import java.sql.ResultSet;
 import java.sql.RowId;
+import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.sql.Struct;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.sql.Date;
+import java.util.Map;
 
 /**
  * Tests for {@link JdbcMetadataTypeManager}.
@@ -955,4 +971,200 @@ public class JdbcTypeManagerTest
         Assert.assertEquals(JdbcTypeManager.SET_STRING_METHOD, instance.getPreparedStatementSetterMethod(jdbcType));
     }
 
+    /**
+     * Tests whether the helper method findOutClass() works.
+     * @throws Exception
+     */
+    @Test
+    public void findOutClassWorks()
+        throws Exception
+    {
+        @NotNull final JdbcTypeManager instance =new JdbcTypeManager();
+
+        @NotNull final Class<?> type = Array.class;
+
+        @NotNull final Array t_Array = new Array()
+        {
+            @Override public String getBaseTypeName()
+            {
+                return null;
+            }
+
+            @Override public int getBaseType()
+            {
+                return 0;
+            }
+
+            @Override public Object getArray()
+            {
+                return null;
+            }
+
+            @Override public Object getArray(final Map<String, Class<?>> stringClassMap)
+            {
+                return null;
+            }
+
+            @Override public Object getArray(final long l, final int i)
+            {
+                return null;
+            }
+
+            @Override public Object getArray(final long l, final int i, final Map<String, Class<?>> stringClassMap)
+            {
+                return null;
+            }
+
+            @Override public ResultSet getResultSet()
+            {
+                return null;
+            }
+
+            @Override public ResultSet getResultSet(final Map<String, Class<?>> stringClassMap)
+            {
+                return null;
+            }
+
+            @Override public ResultSet getResultSet(final long l, final int i)
+            {
+                return null;
+            }
+
+            @Override public ResultSet getResultSet(final long l, final int i, final Map<String, Class<?>> stringClassMap)
+            {
+                return null;
+            }
+
+            @Override public void free()
+            {
+            }
+        };
+
+        Assert.assertEquals(Array.class, instance.findOutClass(t_Array));
+    }
+
+    /**
+     * Tests whether the correct PreparedStatement.setXX is called for Array parameters.
+     * @throws Exception
+     */
+    @Test
+    public void setArrayInPreparedStatementViaReflectionWorks()
+        throws Exception
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        @NotNull final Class<?> type = Array.class;
+
+        @NotNull final Array t_Array = PowerMock.createNiceMock(Array.class);
+
+        @NotNull final PreparedStatement t_Statement = PowerMock.createNiceMock(PreparedStatement.class);
+        t_Statement.setArray(1, t_Array);
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(t_Array);
+        EasyMock.replay(t_Statement);
+
+        instance.setPreparedStatementParameter(t_Statement, 1, t_Array);
+
+        EasyMock.verify(t_Statement);
+        EasyMock.verify(t_Array);
+    }
+
+    /**
+     * Tests whether the correct PreparedStatement.setXX is called for long parameters.
+     * @throws Exception
+     */
+    @Test
+    public void setLongInPreparedStatementViaReflectionWorks()
+        throws Exception
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        @NotNull final Class<?> type = long.class;
+        final long value = 111L;
+
+        @NotNull final PreparedStatement t_Statement = PowerMock.createNiceMock(PreparedStatement.class);
+        t_Statement.setLong(1, value);
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(t_Statement);
+
+        instance.setPreparedStatementParameter(t_Statement, 1, value);
+
+        EasyMock.verify(t_Statement);
+    }
+
+    /**
+     * Tests whether the correct PreparedStatement.setXX is called for byte[] parameters.
+     * @throws Exception
+     */
+    @Test
+    public void setBytesInPreparedStatementViaReflectionWorks()
+        throws Exception
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        @NotNull final Class<?> type = long.class;
+        @NotNull final byte[] value = new byte[0];
+
+        @NotNull final PreparedStatement t_Statement = PowerMock.createNiceMock(PreparedStatement.class);
+        t_Statement.setBytes(1, value);
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(t_Statement);
+
+        instance.setPreparedStatementParameter(t_Statement, 1, value);
+
+        EasyMock.verify(t_Statement);
+    }
+
+    /**
+     * Tests whether the correct PreparedStatement.setXX is called for boolean parameters.
+     * @throws Exception
+     */
+    @Test
+    public void setBooleanInPreparedStatementViaReflectionWorks()
+        throws Exception
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        @NotNull final Class<?> type = long.class;
+        final boolean value = true;
+
+        @NotNull final PreparedStatement t_Statement = PowerMock.createNiceMock(PreparedStatement.class);
+        t_Statement.setBoolean(1, value);
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(t_Statement);
+
+        instance.setPreparedStatementParameter(t_Statement, 1, value);
+
+        EasyMock.verify(t_Statement);
+    }
+
+    /**
+     * Tests whether the correct PreparedStatement.setXX is called for Blob parameters.
+     * @throws Exception
+     */
+    @Test
+    public void setBlobInPreparedStatementViaReflectionWorks()
+        throws Exception
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        @NotNull final Class<?> type = Blob.class;
+        @NotNull final Blob t_Value = PowerMock.createNiceMock(Blob.class);
+
+        @NotNull final PreparedStatement t_Statement = PowerMock.createNiceMock(PreparedStatement.class);
+        t_Statement.setBlob(1, t_Value);
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(t_Value);
+        EasyMock.replay(t_Statement);
+
+        instance.setPreparedStatementParameter(t_Statement, 1, t_Value);
+
+        EasyMock.verify(t_Value);
+        EasyMock.verify(t_Statement);
+    }
 }
