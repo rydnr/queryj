@@ -170,8 +170,8 @@ public class CustomSqlValidationHandler
 
     /**
      * Validates the SQL queries.
-     * @param sqlDAO the {@link SqlDAO} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param sqlDAO the {@link SqlDAO} instance.
      * @param connection the connection.
      * @param metadataManager the metadata manager.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -225,19 +225,126 @@ public class CustomSqlValidationHandler
 
         if  (t_Log != null)
         {
-            t_Log.trace(
-                "Validating " + sql.getId() + " [\n" + t_strSql + "\n]");
+            t_Log.trace("Validating " + sql.getId() + " [\n" + t_strSql + "\n]");
         }
         
         @Nullable PreparedStatement t_PreparedStatement = null;
-        @Nullable ResultSet t_ResultSet = null;
 
-        // The standard is true, but we assume false.
         boolean t_bLastAutoCommit = false;
+        try
+        {
+            t_bLastAutoCommit = setupConnection(connection);
+        }
+        catch  (@NotNull final SQLException sqlException)
+        {
+            t_ExceptionToWrap = sqlException;
+        }
 
         try
         {
-            t_bLastAutoCommit = connection.getAutoCommit();
+            t_PreparedStatement = connection.prepareStatement(t_strSql);
+        }
+        catch  (@NotNull final SQLException sqlException)
+        {
+            if (t_ExceptionToWrap == null)
+            {
+                t_ExceptionToWrap = sqlException;
+            }
+        }
+
+        if  (t_PreparedStatement != null)
+        {
+            try
+            {
+                bindParameters(
+                    sql,
+                    t_PreparedStatement,
+                    customSqlProvider,
+                    metadataTypeManager,
+                    ConversionUtils.getInstance());
+
+                validateStatement(sql, t_PreparedStatement, customSqlProvider, metadataManager, metadataTypeManager);
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                if (t_ExceptionToWrap == null)
+                {
+                    t_ExceptionToWrap = sqlException;
+                }
+            }
+            catch  (@NotNull final QueryJBuildException buildException)
+            {
+                t_ExceptionToThrow = buildException;
+            }
+
+            try
+            {
+                t_PreparedStatement.close();
+            }
+            catch  (@NotNull final SQLException anotherSqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Cannot close prepared statement.",
+                        anotherSqlException);
+                }
+
+                if (t_ExceptionToWrap == null)
+                {
+                    t_ExceptionToWrap = anotherSqlException;
+                }
+            }
+
+            try
+            {
+                tearDownConnection(connection, t_bLastAutoCommit);
+            }
+            catch  (@NotNull final SQLException anotherSqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Cannot restore the connection.",
+                        anotherSqlException);
+                }
+
+                if (t_ExceptionToWrap == null)
+                {
+                    t_ExceptionToWrap = anotherSqlException;
+                }
+            }
+        }
+
+        if  (t_ExceptionToWrap != null)
+        {
+            throw new InvalidCustomSqlException(sql, t_ExceptionToWrap);
+        }
+        else if  (t_ExceptionToThrow != null)
+        {
+            throw t_ExceptionToThrow;
+        }
+    }
+
+    /**
+     * Sets up the connection.
+     * @param connection the {@link Connection} instance.
+     * @return the current auto-commit flag, to be restored afterwards.
+     * @throws SQLException if the auto-commit behaviour cannot be changed.
+     */
+    protected boolean setupConnection(@NotNull final Connection connection)
+        throws SQLException
+    {
+        @Nullable SQLException t_ExceptionToThrow = null;
+
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+
+        // The standard is true, but we assume false.
+        boolean result = false;
+
+        try
+        {
+            result = connection.getAutoCommit();
         }
         catch  (@NotNull final SQLException sqlException)
         {
@@ -247,6 +354,8 @@ public class CustomSqlValidationHandler
                     "Cannot retrieve auto-commit flag.",
                     sqlException);
             }
+
+            t_ExceptionToThrow = sqlException;
         }
 
         try
@@ -261,128 +370,144 @@ public class CustomSqlValidationHandler
                     "Cannot set auto-commit flag to false.",
                     sqlException);
             }
+
+            if (t_ExceptionToThrow == null)
+            {
+                t_ExceptionToThrow = sqlException;
+            }
+        }
+
+        if (t_ExceptionToThrow != null)
+        {
+            throw t_ExceptionToThrow;
+        }
+
+        return result;
+    }
+
+    /**
+     * Performs any necessary actions once the connection is not needed anymore.
+     * @param connection the {@link Connection}.
+     * @param autoCommit the auto-commit behavior to restore.
+     * @throws SQLException if the connection cannot be restored successfully.
+     */
+    protected void tearDownConnection(@NotNull final Connection connection, final boolean autoCommit)
+        throws SQLException
+    {
+        @Nullable SQLException t_ExceptionToThrow = null;
+
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+
+        try
+        {
+            connection.setAutoCommit(autoCommit);
+        }
+        catch  (@NotNull final SQLException sqlException)
+        {
+            if  (t_Log != null)
+            {
+                t_Log.warn(
+                    "Cannot restore auto-commit flag.",
+                    sqlException);
+            }
+
+            t_ExceptionToThrow = sqlException;
         }
 
         try
         {
-            t_PreparedStatement =
-                connection.prepareStatement(t_strSql);
+            connection.rollback();
         }
         catch  (@NotNull final SQLException sqlException)
         {
-            t_ExceptionToWrap = sqlException;
+            if  (t_Log != null)
+            {
+                t_Log.warn(
+                    "Cannot rollback connection.",
+                    sqlException);
+            }
+
+            if (t_ExceptionToThrow == null)
+            {
+                t_ExceptionToThrow = sqlException;
+            }
         }
 
-        if  (t_PreparedStatement != null)
-        {
-            try
-            {
-                bindParameters(
-                    sql,
-                    t_PreparedStatement,
-                    customSqlProvider,
-                    metadataTypeManager,
-                    ConversionUtils.getInstance());
-
-                if  (   (Sql.INSERT.equals(sql.getType()))
-                     || (Sql.DELETE.equals(sql.getType())))
-                {
-                    t_PreparedStatement.executeUpdate();
-                }
-                else
-                {
-                    t_ResultSet = t_PreparedStatement.executeQuery();
-
-                    @Nullable final ResultRef t_ResultRef = sql.getResultRef();
-                    
-                    if  (t_ResultRef != null)
-                    {
-                        validateResultSet(
-                            t_ResultSet,
-                            sql,
-                            customSqlProvider.getSqlResultDAO().findByPrimaryKey(t_ResultRef.getId()),
-                            customSqlProvider,
-                            metadataManager,
-                            metadataTypeManager);
-                    }
-                }
-            }
-            catch  (@NotNull final SQLException sqlException)
-            {
-                t_ExceptionToWrap = sqlException;
-            }
-            catch  (@NotNull final QueryJBuildException buildException)
-            {
-                t_ExceptionToThrow = buildException;
-            }
-
-            if  (t_ResultSet != null)
-            {
-                try
-                {
-                    t_ResultSet.close();
-                }
-                catch  (@NotNull final SQLException sqlException)
-                {
-                    if  (t_Log != null)
-                    {
-                        t_Log.warn(
-                            "Cannot close result set.",
-                            sqlException);
-                    }
-                }
-            }
-            try
-            {
-                t_PreparedStatement.close();
-            }
-            catch  (@NotNull final SQLException anotherSqlException)
-            {
-                if  (t_Log != null)
-                {
-                    t_Log.warn(
-                        "Cannot close prepared statement.",
-                        anotherSqlException);
-                }
-            }
-
-            try
-            {
-                connection.setAutoCommit(t_bLastAutoCommit);
-            }
-            catch  (@NotNull final SQLException sqlException)
-            {
-                if  (t_Log != null)
-                {
-                    t_Log.warn(
-                        "Cannot restore auto-commit flag.",
-                        sqlException);
-                }
-            }
-
-            try
-            {
-                connection.rollback();
-            }
-            catch  (@NotNull final SQLException sqlException)
-            {
-                if  (t_Log != null)
-                {
-                    t_Log.warn(
-                        "Cannot rollback connection.",
-                        sqlException);
-                }
-            }                
-        }
-
-        if  (t_ExceptionToThrow != null)
+        if (t_ExceptionToThrow != null)
         {
             throw t_ExceptionToThrow;
         }
-        else if  (t_ExceptionToWrap != null)
+    }
+
+    /**
+     * Validates given statement.
+     * @param sql the {@link Sql}.
+     * @param preparedStatement the {@link PreparedStatement}.
+     * @param customSqlProvider the {@link CustomSqlProvider}.
+     * @param metadataManager the {@link MetadataManager}.
+     * @param metadataTypeManager the {@link MetadataTypeManager}.
+     * @return the {@link ResultSet}.
+     * @throws SQLException if the ResultSet cannot be closed.
+     * @throws QueryJBuildException if the validation fails.
+     */
+    protected ResultSet validateStatement(
+        @NotNull final Sql<String> sql,
+        @NotNull final PreparedStatement preparedStatement,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager)
+        throws SQLException,
+               QueryJBuildException
+    {
+        @Nullable final ResultSet result;
+
+        if  (   (Sql.INSERT.equals(sql.getType()))
+             || (Sql.DELETE.equals(sql.getType())))
         {
-            throw new InvalidCustomSqlException(sql, t_ExceptionToWrap);
+            preparedStatement.executeUpdate();
+
+            result = null;
         }
+        else
+        {
+            result = preparedStatement.executeQuery();
+
+            @Nullable final ResultRef t_ResultRef = sql.getResultRef();
+
+            if  (t_ResultRef != null)
+            {
+                validateResultSet(
+                    result,
+                    sql,
+                    customSqlProvider.getSqlResultDAO().findByPrimaryKey(t_ResultRef.getId()),
+                    customSqlProvider,
+                    metadataManager,
+                    metadataTypeManager);
+            }
+        }
+
+        if  (result != null)
+        {
+            try
+            {
+                result.close();
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Cannot close result set.",
+                        sqlException);
+                }
+
+                throw sqlException;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -392,7 +517,6 @@ public class CustomSqlValidationHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataTypeManager the metadata type manager.
      * @param conversionUtils the <code>ConversionUtils</code> instance.
-     * @throws SQLException if the binding process fails.
      * @throws QueryJBuildException if some problem occurs.
      */
     protected void bindParameters(
@@ -401,20 +525,9 @@ public class CustomSqlValidationHandler
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final ConversionUtils conversionUtils)
-     throws  SQLException,
-             QueryJBuildException
+     throws  QueryJBuildException
     {
         @Nullable QueryJBuildException exceptionToThrow = null;
-
-        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
-
-        @Nullable Method t_Method;
-
-        @Nullable Collection<Class<?>> t_cSetterParams;
-
-        @Nullable Class<?> t_Type;
-
-        @Nullable String t_strType;
 
         int t_iParameterIndex = 0;
 
@@ -429,269 +542,14 @@ public class CustomSqlValidationHandler
             }
             else
             {
-                t_Method = null;
+                bindParameter(
+                    t_Parameter,
+                    t_iParameterIndex,
+                    sql,
+                    statement,
+                    metadataTypeManager,
+                    conversionUtils);
 
-                t_cSetterParams = new ArrayList<>();
-
-                t_cSetterParams.add(Integer.TYPE);
-
-                // TODO: support boolean properties/parameters
-                t_strType =
-                    metadataTypeManager.getObjectType(
-                        metadataTypeManager.getJavaType(
-                            t_Parameter.getType()), false);
-
-                t_Type =
-                    retrieveType(t_strType, t_Parameter.getType());
-            }
-
-            if  (t_Type != null)
-            {
-                t_cSetterParams.add(t_Type);
-
-                @Nullable Object t_ParameterValue = null;
-
-                try
-                {
-                    t_Method =
-                        retrieveMethod(
-                            statement.getClass(),
-                            getSetterMethod(t_strType, metadataTypeManager),
-                            t_cSetterParams.toArray(new Class<?>[t_cSetterParams.size()]));
-                }
-                catch  (@NotNull final NoSuchMethodException noSuchMethodException)
-                {
-                    exceptionToThrow =
-                        new UnsupportedCustomSqlParameterTypeException(
-                            t_strType,
-                            t_iParameterIndex + 1,
-                            t_Parameter.getName(),
-                            sql,
-                            noSuchMethodException);
-                }
-
-                try
-                {
-                    @Nullable final Method t_ParameterMethod;
-
-                    if  (   ("Date".equals(t_strType))
-                         && (t_Parameter.getValidationValue() != null))
-                    {
-                        t_ParameterValue = new java.sql.Date(new Date().getTime());
-                    }
-                    else if (   (Literals.TIMESTAMP_U.equals(t_strType.toUpperCase(new Locale("US"))))
-                             && (t_Parameter.getValidationValue() != null))
-                    {
-                        t_ParameterValue = new Timestamp(new Date().getTime());
-                    }
-                    else
-                    {
-                        t_ParameterMethod =
-                            conversionUtils.getClass().getMethod(
-                                "to" + t_strType,
-                                CLASS_ARRAY_OF_ONE_STRING);
-
-                        if  (t_ParameterMethod != null)
-                        {
-                            t_ParameterValue =
-                                t_ParameterMethod.invoke(
-                                    conversionUtils,
-                                    t_Parameter.getValidationValue());
-
-                            exceptionToThrow = null;
-                        }
-                    }
-                }
-                catch  (@NotNull final NoSuchMethodException noSuchMethod)
-                {
-                    // it's not a plain type.
-                }
-                catch  (@NotNull final SecurityException securityMethod)
-                {
-                    // can do little
-                }
-                catch  (@NotNull final IllegalAccessException illegalAccessException)
-                {
-                    // can do little
-                }
-                catch  (@NotNull final InvocationTargetException invocationTargetException)
-                {
-                    // can do little
-                }
-
-                if  (t_ParameterValue == null)
-                {
-                    // let's try if it's a date.
-                    try
-                    {
-                        boolean t_bInvalidValidationValue = false;
-
-                        Object t_strValidationValue =
-                            t_Parameter.getValidationValue();
-
-                        if  (t_strValidationValue == null)
-                        {
-                            t_strValidationValue = DATE_FORMAT.format(new Date());
-                            t_bInvalidValidationValue = true;
-                        }
-
-                        try
-                        {
-                            t_ParameterValue =
-                                DATE_FORMAT.parse("" + t_strValidationValue);
-                        }
-                        catch (@NotNull final NumberFormatException invalidDate)
-                        {
-                            try
-                            {
-                                t_ParameterValue =
-                                    DATE_FORMAT_EN.parse("" + t_strValidationValue);
-                            }
-                            catch (@NotNull final NumberFormatException invalidEnglishDate)
-                            {
-                                // It doesn't need to be a date.
-                            }
-                        }
-
-                        if  (t_bInvalidValidationValue)
-                        {
-                            exceptionToThrow =
-                                new NoValidationValueForCustomSqlDateParameterException(
-                                    t_Parameter, sql);
-                        }
-                    }
-                    catch  (@NotNull final ParseException parseException)
-                    {
-                        // We have only once chance: constructor call.
-                        try
-                        {
-                            @Nullable final Constructor<?> t_Constructor =
-                                t_Type.getConstructor(CLASS_ARRAY_OF_ONE_STRING);
-
-                            if  (t_Constructor != null)
-                            {
-                                t_ParameterValue =
-                                    t_Constructor.newInstance(
-                                        t_Parameter.getValidationValue());
-                            }
-                        }
-                        catch  (@NotNull final NoSuchMethodException noSuchMethod)
-                        {
-                            exceptionToThrow =
-                                new UnsupportedCustomSqlParameterTypeException(
-                                    t_strType,
-                                    t_iParameterIndex + 1,
-                                    t_Parameter.getName(),
-                                    sql,
-                                    noSuchMethod);
-                        }
-                        catch  (@NotNull final SecurityException securityException)
-                        {
-                            exceptionToThrow =
-                                new UnsupportedCustomSqlParameterTypeException(
-                                    t_strType,
-                                    t_iParameterIndex + 1,
-                                    t_Parameter.getName(),
-                                    sql,
-                                    securityException);
-                        }
-                        catch  (@NotNull final IllegalAccessException illegalAccessException)
-                        {
-                            exceptionToThrow =
-                                new UnsupportedCustomSqlParameterTypeException(
-                                    t_strType,
-                                    t_iParameterIndex + 1,
-                                    t_Parameter.getName(),
-                                    sql,
-                                    illegalAccessException);
-                        }
-                        catch  (@NotNull final InstantiationException instantiationException)
-                        {
-                            exceptionToThrow =
-                                new UnsupportedCustomSqlParameterTypeException(
-                                    t_strType,
-                                    t_iParameterIndex + 1,
-                                    t_Parameter.getName(),
-                                    sql,
-                                    instantiationException);
-                        }
-                        catch  (@NotNull final InvocationTargetException invocationTargetException)
-                        {
-                            exceptionToThrow =
-                                new UnsupportedCustomSqlParameterTypeException(
-                                    t_strType,
-                                    t_iParameterIndex + 1,
-                                    t_Parameter.getName(),
-                                    sql,
-                                    invocationTargetException);
-                        }
-                    }
-                }
-
-                if  (   (exceptionToThrow == null)
-                     && (t_Method == null))
-                {
-                    exceptionToThrow =
-                        new UnsupportedCustomSqlParameterTypeException(
-                            t_strType,
-                            t_iParameterIndex + 1,
-                            t_Parameter.getName(),
-                            sql);
-                }
-
-                if  (exceptionToThrow == null)
-                {
-                    try
-                    {
-                        t_Method.invoke(
-                            statement,
-                            t_iParameterIndex + 1,
-                            t_ParameterValue);
-
-                    }
-                    catch  (@NotNull final IllegalAccessException illegalAccessException)
-                    {
-                        if  (t_Log != null)
-                        {
-                            t_Log.warn(
-                                  COULD_NOT_BIND_PARAMETER_VIA
-                                + PREPARED_STATEMENT_SET + t_strType
-                                + "(int, " + t_Type.getName() + ")",
-                                illegalAccessException);
-                        }
-
-                        exceptionToThrow =
-                            new UnsupportedCustomSqlParameterTypeException(
-                                t_strType,
-                                t_iParameterIndex + 1,
-                                t_Parameter.getName(),
-                                sql,
-                                illegalAccessException);
-                    }
-                    catch  (@NotNull final InvocationTargetException invocationTargetException)
-                    {
-                        if  (t_Log != null)
-                        {
-                            t_Log.warn(
-                                  COULD_NOT_BIND_PARAMETER_VIA
-                                + PREPARED_STATEMENT_SET + t_strType
-                                + "(int, " + t_Type.getName() + ")",
-                                invocationTargetException);
-                        }
-
-                        exceptionToThrow =
-                            new UnsupportedCustomSqlParameterTypeException(
-                                t_strType,
-                                t_iParameterIndex + 1,
-                                t_Parameter.getName(),
-                                sql,
-                                invocationTargetException);
-                    }
-                }
-                else
-                {
-                    break;
-                }
                 t_iParameterIndex++;
             }
         }
@@ -700,6 +558,435 @@ public class CustomSqlValidationHandler
         {
             throw exceptionToThrow;
         }
+    }
+
+    /**
+     * Binds the parameters to given statement.
+     * @param parameter the {@link Parameter}.
+     * @param sql the sql.
+     * @param statement the prepared statement.
+     * @param metadataTypeManager the metadata type manager.
+     * @param conversionUtils the <code>ConversionUtils</code> instance.
+     * @throws QueryJBuildException if some problem occurs.
+     */
+    protected void bindParameter(
+        @NotNull final Parameter<String, ?> parameter,
+        final int parameterIndex,
+        @NotNull final Sql<String> sql,
+        @NotNull final PreparedStatement statement,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final ConversionUtils conversionUtils)
+        throws QueryJBuildException
+    {
+        @Nullable QueryJBuildException exceptionToThrow = null;
+
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+
+        @Nullable final Method t_Method;
+
+        @Nullable final Collection<Class<?>> t_cSetterParams;
+
+        @Nullable final Class<?> t_Type;
+
+        @Nullable final String t_strType;
+
+        t_cSetterParams = new ArrayList<>();
+
+        t_cSetterParams.add(Integer.TYPE);
+
+        t_strType = retrieveType(parameter, metadataTypeManager);
+
+        t_Type = retrieveType(t_strType, parameter.getType());
+
+        if  (t_Type != null)
+        {
+            t_cSetterParams.add(t_Type);
+
+            t_Method =
+                retrievePreparedStatementMethod(
+                    parameter,
+                    parameterIndex,
+                    t_strType,
+                    sql,
+                    statement,
+                    metadataTypeManager);
+
+            @Nullable final Object t_ParameterValue =
+                retrieveParameterValue(parameter, parameterIndex, t_strType, t_Type, sql, conversionUtils);
+
+            if  (t_Method == null)
+            {
+                exceptionToThrow =
+                    new UnsupportedCustomSqlParameterTypeException(
+                        t_strType,
+                        parameterIndex + 1,
+                        parameter.getName(),
+                        sql);
+            }
+
+            if  (exceptionToThrow == null)
+            {
+                try
+                {
+                    t_Method.invoke(statement, parameterIndex + 1, t_ParameterValue);
+                }
+                catch  (@NotNull final IllegalAccessException illegalAccessException)
+                {
+                    if  (t_Log != null)
+                    {
+                        t_Log.warn(
+                            COULD_NOT_BIND_PARAMETER_VIA
+                            + PREPARED_STATEMENT_SET + t_strType
+                            + "(int, " + t_Type.getName() + ")",
+                            illegalAccessException);
+                    }
+
+                    exceptionToThrow =
+                        new UnsupportedCustomSqlParameterTypeException(
+                            t_strType,
+                            parameterIndex + 1,
+                            parameter.getName(),
+                            sql,
+                            illegalAccessException);
+                }
+                catch  (@NotNull final InvocationTargetException invocationTargetException)
+                {
+                    if  (t_Log != null)
+                    {
+                        t_Log.warn(
+                            COULD_NOT_BIND_PARAMETER_VIA
+                            + PREPARED_STATEMENT_SET + t_strType
+                            + "(int, " + t_Type.getName() + ")",
+                            invocationTargetException);
+                    }
+
+                    exceptionToThrow =
+                        new UnsupportedCustomSqlParameterTypeException(
+                            t_strType,
+                            parameterIndex + 1,
+                            parameter.getName(),
+                            sql,
+                            invocationTargetException);
+                }
+            }
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw exceptionToThrow;
+        }
+    }
+
+    /**
+     * Retrieves the type of the parameter.
+     * @param parameter the {@link Parameter}.
+     * @param metadataTypeManager the {@link MetadataTypeManager}.
+     * @return the parameter type.
+     */
+    protected String retrieveType(
+        @NotNull final Parameter<String, ?> parameter, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        // TODO: support boolean properties/parameters
+        return
+            metadataTypeManager.getObjectType(
+                metadataTypeManager.getJavaType(parameter.getType()), false);
+    }
+
+    /**
+     * Retrieves the method to invoke on {@link PreparedStatement} class to bind the parameter value.
+     * @param parameter the {@link Parameter}.
+     * @param parameterIndex the index of the parameter.
+     * @param type the parameter type.
+     * @param sql the sql.
+     * @param statement the prepared statement.
+     * @param metadataTypeManager the metadata type manager.
+     * @throws QueryJBuildException if some problem occurs.
+     */
+    protected Method retrievePreparedStatementMethod(
+        @NotNull final Parameter<String, ?> parameter,
+        final int parameterIndex,
+        @NotNull final String type,
+        @NotNull final Sql<String> sql,
+        @NotNull final PreparedStatement statement,
+        @NotNull final MetadataTypeManager metadataTypeManager)
+        throws  QueryJBuildException
+    {
+        @Nullable QueryJBuildException exceptionToThrow = null;
+
+        @Nullable Method result = null;
+
+        final Collection<Class<Integer>> t_cSetterParams = new ArrayList<>();
+
+        t_cSetterParams.add(Integer.TYPE);
+
+        try
+        {
+            result =
+                retrieveMethod(
+                    statement.getClass(),
+                    getSetterMethod(type, metadataTypeManager),
+                    t_cSetterParams.toArray(new Class<?>[t_cSetterParams.size()]));
+        }
+        catch  (@NotNull final NoSuchMethodException noSuchMethodException)
+        {
+            exceptionToThrow =
+                new UnsupportedCustomSqlParameterTypeException(
+                    type,
+                    parameterIndex + 1,
+                    parameter.getName(),
+                    sql,
+                    noSuchMethodException);
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw exceptionToThrow;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the validation value for given parameter.
+     * @param parameter the {@link Parameter}.
+     * @param parameterIndex the index of the parameter.
+     * @param type the parameter type.
+     * @param typeClass the class of the parameter type.
+     * @param sql the {@link Sql}.
+     * @param conversionUtils the {@link ConversionUtils} instance.
+     * @return the validation value.
+     * @throws QueryJBuildException if some problem occurs.
+     */
+    protected Object retrieveParameterValue(
+        @NotNull final Parameter<String, ?> parameter,
+        final int parameterIndex,
+        @NotNull final String type,
+        @NotNull final Class<?> typeClass,
+        @NotNull final Sql<String> sql,
+        @NotNull final ConversionUtils conversionUtils)
+        throws  QueryJBuildException
+    {
+        @Nullable Object result = null;
+
+        try
+        {
+            @Nullable final Method t_ParameterMethod;
+
+            if  (   ("Date".equals(type))
+                  && (parameter.getValidationValue() != null))
+            {
+                result = new java.sql.Date(new Date().getTime());
+            }
+            else if (   (Literals.TIMESTAMP_U.equals(type.toUpperCase(new Locale("US"))))
+                     && (parameter.getValidationValue() != null))
+            {
+                result = new Timestamp(new Date().getTime());
+            }
+            else
+            {
+                t_ParameterMethod =
+                    conversionUtils.getClass().getMethod(
+                        "to" + type,
+                        CLASS_ARRAY_OF_ONE_STRING);
+
+                if  (t_ParameterMethod != null)
+                {
+                    result =
+                        t_ParameterMethod.invoke(
+                            conversionUtils,
+                            parameter.getValidationValue());
+                }
+            }
+        }
+        catch  (@NotNull final NoSuchMethodException noSuchMethod)
+        {
+            // it's not a plain type.
+        }
+        catch  (@NotNull final SecurityException securityMethod)
+        {
+            // can do little
+        }
+        catch  (@NotNull final IllegalAccessException illegalAccessException)
+        {
+            // can do little
+        }
+        catch  (@NotNull final InvocationTargetException invocationTargetException)
+        {
+            // can do little
+        }
+
+        if (result == null)
+        {
+            result = assumeIsADate(parameter, sql);
+        }
+
+        if (result == null)
+        {
+            // We have only once chance: constructor call.
+            result = createViaConstructor(parameter, parameterIndex, type, typeClass, sql);
+        }
+
+        return result;
+    }
+
+    /**
+     * Tries to retrieve a Date value from given parameter.
+     * @param parameter the {@link Parameter}.
+     * @param sql the {@link Sql}.
+     * @return the {@link Date} value if it's a Date.
+     * @throws QueryJBuildException if some problem occurs.
+     */
+    protected Date assumeIsADate(
+        @NotNull final Parameter<String, ?> parameter,
+        @NotNull final Sql<String> sql)
+        throws  QueryJBuildException
+    {
+        @Nullable Date result = null;
+
+        @Nullable QueryJBuildException exceptionToThrow = null;
+
+        // let's try if it's a date.
+        try
+        {
+            boolean t_bInvalidValidationValue = false;
+
+            Object t_strValidationValue =
+                parameter.getValidationValue();
+
+            if  (t_strValidationValue == null)
+            {
+                t_strValidationValue = DATE_FORMAT.format(new Date());
+                t_bInvalidValidationValue = true;
+            }
+
+            try
+            {
+                result = DATE_FORMAT.parse("" + t_strValidationValue);
+            }
+            catch (@NotNull final NumberFormatException invalidDate)
+            {
+                try
+                {
+                    result = DATE_FORMAT_EN.parse("" + t_strValidationValue);
+                }
+                catch (@NotNull final NumberFormatException invalidEnglishDate)
+                {
+                    // It doesn't need to be a date.
+                }
+            }
+
+            if  (t_bInvalidValidationValue)
+            {
+                exceptionToThrow =
+                    new NoValidationValueForCustomSqlDateParameterException(
+                        parameter, sql);
+            }
+        }
+        catch  (@NotNull final ParseException parseException)
+        {
+            // It doesn't need to be a date.
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw exceptionToThrow;
+        }
+
+        return result;
+    }
+
+    /**
+     * Creates the validation value via constructor.
+     * @param parameter the {@link Parameter}.
+     * @param parameterIndex the index of the parameter.
+     * @param type the parameter type.
+     * @param typeClass the class of the parameter type.
+     * @param sql the {@link Sql}.
+     * @return the parameter value.
+     * @throws QueryJBuildException if some problem occurs.
+     */
+    protected Object createViaConstructor(
+        @NotNull final Parameter<String, ?> parameter,
+        final int parameterIndex,
+        @NotNull final String type,
+        @NotNull final Class<?> typeClass,
+        @NotNull final Sql<String> sql)
+        throws  QueryJBuildException
+    {
+        @Nullable Object result = null;
+
+        @Nullable QueryJBuildException exceptionToThrow = null;
+
+        // We have only once chance: constructor call.
+        try
+        {
+            @Nullable final Constructor<?> t_Constructor =
+                typeClass.getConstructor(CLASS_ARRAY_OF_ONE_STRING);
+
+            if  (t_Constructor != null)
+            {
+                result =
+                    t_Constructor.newInstance(
+                        parameter.getValidationValue());
+            }
+        }
+        catch  (@NotNull final NoSuchMethodException noSuchMethod)
+        {
+            exceptionToThrow =
+                new UnsupportedCustomSqlParameterTypeException(
+                    type,
+                    parameterIndex + 1,
+                    parameter.getName(),
+                    sql,
+                    noSuchMethod);
+        }
+        catch  (@NotNull final SecurityException securityException)
+        {
+            exceptionToThrow =
+                new UnsupportedCustomSqlParameterTypeException(
+                    type,
+                    parameterIndex + 1,
+                    parameter.getName(),
+                    sql,
+                    securityException);
+        }
+        catch  (@NotNull final IllegalAccessException illegalAccessException)
+        {
+            exceptionToThrow =
+                new UnsupportedCustomSqlParameterTypeException(
+                    type,
+                    parameterIndex + 1,
+                    parameter.getName(),
+                    sql,
+                    illegalAccessException);
+        }
+        catch  (@NotNull final InstantiationException instantiationException)
+        {
+            exceptionToThrow =
+                new UnsupportedCustomSqlParameterTypeException(
+                    type,
+                    parameterIndex + 1,
+                    parameter.getName(),
+                    sql,
+                    instantiationException);
+        }
+        catch  (@NotNull final InvocationTargetException invocationTargetException)
+        {
+            exceptionToThrow =
+                new UnsupportedCustomSqlParameterTypeException(
+                    type,
+                    parameterIndex + 1,
+                    parameter.getName(),
+                    sql,
+                    invocationTargetException);
+        }
+
+        if  (exceptionToThrow != null)
+        {
+            throw exceptionToThrow;
+        }
+
+        return result;
     }
 
     /**

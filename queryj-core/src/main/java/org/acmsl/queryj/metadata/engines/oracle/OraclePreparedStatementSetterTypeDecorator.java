@@ -1,5 +1,5 @@
 /*
-                        QueryJ Placeholders
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,40 +23,71 @@
 
  ******************************************************************************
  *
- * Filename: Literals.java
+ * Filename: OraclePreparedStatementSetterTypeDecorator.java
  *
  * Author: Jose San Leandro Armendariz
  *
  * Description: 
  *
- * Date: 2013/11/28
- * Time: 21:57
+ * Date: 2014/02/22
+ * Time: 20:22
  *
  */
-package org.acmsl.queryj.placeholders;
+package org.acmsl.queryj.metadata.engines.oracle;
+
+/*
+ * Importing QueryJ Core classes.
+ */
+import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
-import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing JDK classes.
+ */
+import java.lang.reflect.Method;
 
 /**
- * Literals for QueryJ Placeholders.
+ * Type resolution when setting properties in {@link java.sql.PreparedStatement}s, for Oracle databases.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/11/28 21:57
+ * Created: 2014/02/22 20:22
  */
 @ThreadSafe
-public class Literals
+public class OraclePreparedStatementSetterTypeDecorator
+    extends JdbcTypeManager
 {
-    public static final String CLASS_NAME = "class_name";
-    public static final String RESULT = "result";
-    public static final String FOREIGN_KEY = "foreign_key";
-    public static final String QUERYJ_PROPERTIES = "-queryj.properties";
-    public static final String HEADER = org.acmsl.queryj.Literals.HEADER;
-    public static final String LOB_HANDLING_REQUIRED = "lob_handling_required";
-    public static final String PACKAGE = org.acmsl.queryj.Literals.PACKAGE;
-    public static final String REPOSITORY = org.acmsl.queryj.Literals.REPOSITORY;
-    public static final String TIMESTAMP = JdbcTypeManager.TIMESTAMP;
+    /**
+     * Retrieves the setter method for given type.
+     * @param type the type.
+     * @return such method.
+     */
+    @NotNull
+    public Method getSetterMethod(@NotNull final Class<?> type)
+    {
+        @NotNull final Method result;
+
+        @Nullable final Method aux = PREPARED_STATEMENT_METHODS.get(getJdbcType(type));
+
+        if (aux == null)
+        {
+            result = SET_OBJECT_METHOD;
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
+    }
+
 }

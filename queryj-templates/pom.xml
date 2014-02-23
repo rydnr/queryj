@@ -123,7 +123,8 @@
     <dependency>
       <groupId>com.oracle</groupId>
       <artifactId>oracle-driver</artifactId>
-      <optional>true</optional>
+      <!--optional>true</optional-->
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>commons-digester</groupId>
@@ -137,12 +138,6 @@
       <groupId>org.antlr</groupId>
       <artifactId>antlr</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>oracle-driver</artifactId>
-      <version>1.4</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -183,13 +178,6 @@
           <jdbcUserName>QUERYJGAMES</jdbcUserName>
           <jdbcPassword>QUERYJGAMES</jdbcPassword>
         </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>oracle-driver</artifactId>
-            <version>1.4</version>
-          </dependency>
-        </dependencies>
       </plugin>
 
       <plugin>

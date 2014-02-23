@@ -55,15 +55,12 @@ public interface Literals
     String CONTEXT = "Context";
     String FILL_TEMPLATE_CHAIN_FACTORY = "FillTemplateChainFactory";
     String DEFAULT_PLACEHOLDER_PACKAGE = "org.acmsl.queryj.api.placeholders";
-
-
     String SOURCE = "source";
     String INVALID_TABLE_COMMENT = "Invalid table comment: ";
     String INVALID_COLUMN_COMMENT = "Invalid column comment: ";
     String REFERENCED_RESULT_NOT_FOUND = "Referenced result not found: ";
     String RESULT_SUFFIX = ".result";
     String TABLE_NOT_FOUND = "Table not found: ";
-
     String REPOSITORY = "repository";
     String PACKAGE = "package";
     String HEADER = "header";
@@ -71,25 +68,19 @@ public interface Literals
     String SCHEMA = "schema";
     String TIMESTAMP = "Timestamp";
     String CUSTOM_SQL = "custom-sql";
-    String BOOLEAN = "boolean";
     String DECIMAL = "DECIMAL";
     String BIG_DECIMAL = "BigDecimal";
     String TINYINT_U = "TINYINT";
-    String SMALLINT = "SMALLINT";
     String INTEGER = "Integer";
     String INTEGER_U = "INTEGER";
     String NUMERIC_U = "NUMERIC";
     String FLOAT_U = "FLOAT";
     String DOUBLE_U = "DOUBLE";
-    String FLOAT = "float";
-    String DOUBLE = "double";
     String TIMESTAMP_U = "TIMESTAMP";
     String VARCHAR_U = "VARCHAR";
     String LONGVARCHAR_U = "LONGVARCHAR";
     String VARBINARY_U = "VARBINARY";
     String STRING = "String";
-    String TINYINT_L = "tinyint";
-    String SMALLINT_L = "smallint";
     String DOUBLE_C = "Double";
     String FALSE_L = org.acmsl.commons.Literals.FALSE;
     String FLOAT_C = "Float";
@@ -103,9 +94,8 @@ public interface Literals
     String CONSTRAINT_NAME_U = "CONSTRAINT_NAME";
     String BIGINT_U = "BIGINT";
     String BINARY_U = "BINARY";
-    String BIGINT = BIGINT_U;
     String LONGVARBINARY_U = "LONGVARBINARY";
-    String SMALLINT_U = SMALLINT;
+    String SMALLINT_U = "SMALLINT";
     String NUMBER_U = "NUMBER";
     String COMMENT = "comment";
     String LENGTH = "length";
@@ -117,7 +107,13 @@ public interface Literals
     String DATA_TYPE1 = "DATA_TYPE";
     String COLUMN_ID1 = "COLUMN_ID";
     String ORG_ACMSL_QUERYJ_TEMPLATES = "org/acmsl/queryj/templates";
-    String ENGINE = "engine";
     String PACKAGE_NAME = "packageName";
+    String ENGINE = "engine";
     String UNKNOWN = "unknown";
+    String BOOLEAN = "boolean";
+    String FLOAT = "float";
+    String DOUBLE = "double";
+    String SMALLINT = "smallint";
+    String TINYINT_L = "tinyint";
+    String SMALLINT_L = "smallint";
 }
