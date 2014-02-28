@@ -64,7 +64,6 @@ import org.acmsl.queryj.metadata.vo.Attribute;
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.ConversionUtils;
-import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JDK classes.
@@ -83,6 +82,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -570,6 +570,7 @@ public class CustomSqlValidationHandler
      * @param conversionUtils the <code>ConversionUtils</code> instance.
      * @throws QueryJBuildException if some problem occurs.
      */
+    @SuppressWarnings("unchecked")
     protected void bindParameter(
         @NotNull final Parameter<String, ?> parameter,
         final int parameterIndex,
@@ -585,21 +586,20 @@ public class CustomSqlValidationHandler
 
         @Nullable final Method t_Method;
 
-        @Nullable final Collection<Class<?>> t_cSetterParams;
+        @Nullable final Collection<Class<?>> t_cParameterClasses;
 
-        @Nullable final Class<?> t_Type;
-
-        @Nullable final String t_strType;
-
-        t_cSetterParams = new ArrayList<>();
-
-        t_cSetterParams.add(Integer.TYPE);
-
-        t_Type = retrieveType(parameter, typeManager);
+        @Nullable final Class<?> t_Type = retrieveType(parameter, typeManager);
 
         if  (t_Type != null)
         {
-            t_cSetterParams.add(t_Type);
+            if (typeManager.isPrimitiveWrapper(t_Type))
+            {
+                t_cParameterClasses = Arrays.asList(new Class<?>[] { Integer.TYPE, typeManager.toPrimitive(t_Type) });
+            }
+            else
+            {
+                t_cParameterClasses = Arrays.asList(new Class<?>[] { Integer.TYPE, t_Type });
+            }
 
             t_Method =
                 retrievePreparedStatementMethod(
@@ -607,67 +607,53 @@ public class CustomSqlValidationHandler
                     parameterIndex,
                     t_Type,
                     sql,
-                    statement,
-                    typeManager);
+                    t_cParameterClasses);
 
-            if  (t_Method == null)
+            @Nullable final Object t_ParameterValue =
+                retrieveParameterValue(
+                    parameter, parameterIndex, t_Type.getSimpleName(), t_Type, sql, conversionUtils);
+
+            try
             {
+                t_Method.invoke(statement, parameterIndex + 1, t_ParameterValue);
+            }
+            catch  (@NotNull final IllegalAccessException illegalAccessException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.warn(
+                        COULD_NOT_BIND_PARAMETER_VIA
+                        + PREPARED_STATEMENT_SET + t_Type.getSimpleName()
+                        + "(int, " + t_Type.getName() + ")",
+                        illegalAccessException);
+                }
+
                 exceptionToThrow =
                     new UnsupportedCustomSqlParameterTypeException(
                         t_Type.getSimpleName(),
                         parameterIndex + 1,
                         parameter.getName(),
-                        sql);
+                        sql,
+                        illegalAccessException);
             }
-
-            if  (exceptionToThrow == null)
+            catch  (@NotNull final InvocationTargetException invocationTargetException)
             {
-                @Nullable final Object t_ParameterValue =
-                    retrieveParameterValue(
-                        parameter, parameterIndex, t_Type.getSimpleName(), t_Type, sql, conversionUtils);
-
-                try
+                if  (t_Log != null)
                 {
-                    t_Method.invoke(statement, parameterIndex + 1, t_ParameterValue);
+                    t_Log.warn(
+                        COULD_NOT_BIND_PARAMETER_VIA
+                        + PREPARED_STATEMENT_SET + t_Type.getSimpleName()
+                        + "(int, " + t_Type.getName() + ")",
+                        invocationTargetException);
                 }
-                catch  (@NotNull final IllegalAccessException illegalAccessException)
-                {
-                    if  (t_Log != null)
-                    {
-                        t_Log.warn(
-                            COULD_NOT_BIND_PARAMETER_VIA
-                            + PREPARED_STATEMENT_SET + t_Type.getSimpleName()
-                            + "(int, " + t_Type.getName() + ")",
-                            illegalAccessException);
-                    }
 
-                    exceptionToThrow =
-                        new UnsupportedCustomSqlParameterTypeException(
-                            t_Type.getSimpleName(),
-                            parameterIndex + 1,
-                            parameter.getName(),
-                            sql,
-                            illegalAccessException);
-                }
-                catch  (@NotNull final InvocationTargetException invocationTargetException)
-                {
-                    if  (t_Log != null)
-                    {
-                        t_Log.warn(
-                            COULD_NOT_BIND_PARAMETER_VIA
-                            + PREPARED_STATEMENT_SET + t_Type.getSimpleName()
-                            + "(int, " + t_Type.getName() + ")",
-                            invocationTargetException);
-                    }
-
-                    exceptionToThrow =
-                        new UnsupportedCustomSqlParameterTypeException(
-                            t_Type.getSimpleName(),
-                            parameterIndex + 1,
-                            parameter.getName(),
-                            sql,
-                            invocationTargetException);
-                }
+                exceptionToThrow =
+                    new UnsupportedCustomSqlParameterTypeException(
+                        t_Type.getSimpleName(),
+                        parameterIndex + 1,
+                        parameter.getName(),
+                        sql,
+                        invocationTargetException);
             }
         }
 
@@ -695,34 +681,28 @@ public class CustomSqlValidationHandler
      * @param parameterIndex the index of the parameter.
      * @param type the parameter type.
      * @param sql the sql.
-     * @param statement the prepared statement.
-     * @param typeManager the metadata type manager.
      * @throws QueryJBuildException if some problem occurs.
      */
+    @NotNull
     protected Method retrievePreparedStatementMethod(
         @NotNull final Parameter<String, ?> parameter,
         final int parameterIndex,
         @NotNull final Class<?> type,
         @NotNull final Sql<String> sql,
-        @NotNull final PreparedStatement statement,
-        @NotNull final TypeManager typeManager)
+        @NotNull final Collection<Class<?>> parameterClasses)
         throws  QueryJBuildException
     {
         @Nullable QueryJBuildException exceptionToThrow = null;
 
         @Nullable Method result = null;
 
-        final Collection<Class<?>> t_cSetterParams = new ArrayList<>();
-
-        t_cSetterParams.add(Integer.TYPE);
-        t_cSetterParams.add(type);
         try
         {
             result =
                 retrieveMethod(
                     PreparedStatement.class,
-                    getSetterMethod(type, typeManager),
-                    t_cSetterParams.toArray(new Class<?>[t_cSetterParams.size()]));
+                    getSetterMethod(type),
+                    parameterClasses.toArray(new Class<?>[parameterClasses.size()]));
         }
         catch  (@NotNull final NoSuchMethodException noSuchMethodException)
         {
@@ -1018,55 +998,37 @@ public class CustomSqlValidationHandler
     /**
      * Retrieves the setter method name.
      * @param type the data type.
-     * @param typeManager the metadata type manager.
      * @return the associated setter method.
      */
-    protected String getSetterMethod(
-        final Class<?> type, @NotNull final TypeManager typeManager)
+    protected String getSetterMethod(final Class<?> type)
     {
-        return
-            getAccessorMethod(
-                "set",  type, typeManager, StringUtils.getInstance());
+        return getAccessorMethod("set",  type);
     }
 
     /**
      * Retrieves the getter method name.
      * @param type the data type.
-     * @param typeManager the metadata type manager.
      * @return the associated getter method.
      */
     @NotNull
-    protected String getGetterMethod(
-        @NotNull final Class<?> type, @NotNull final TypeManager typeManager)
+    protected String getGetterMethod(@NotNull final Class<?> type)
     {
-        return
-            getAccessorMethod(
-                "get", type, typeManager, StringUtils.getInstance());
+        return getAccessorMethod("get", type);
     }
 
     /**
      * Retrieves the accessor method name.
      * @param prefix the prefix (set/get).
      * @param type the data type.
-     * @param typeManager the metadata type manager.
-     * @param stringUtils the <code>StringUtils</code> instance.
      * @return the associated getter method.
      */
     protected String getAccessorMethod(
         @NotNull final String prefix,
-        @NotNull final Class<?> type,
-        @NotNull final TypeManager typeManager,
-        @NotNull final StringUtils stringUtils)
+        @NotNull final Class<?> type)
     {
         @NotNull final StringBuilder result = new StringBuilder(prefix);
 
         result.append(type.getSimpleName());
-        /*
-        result.append(
-            stringUtils.capitalize(
-                typeManager.getNativeType(
-                    typeManager.getJavaType(type.getSimpleName())), '|'));
-        */
 
         return result.toString();
     }
@@ -1127,9 +1089,7 @@ public class CustomSqlValidationHandler
                             t_Method =
                                 retrieveMethod(
                                     ResultSet.class,
-                                    getGetterMethod(
-                                        Class.forName(t_Property.getType()),
-                                        typeManager),
+                                    getGetterMethod(Class.forName(t_Property.getType())),
                                     new Class<?>[]
                                     {
                                         (t_Property.getIndex() > 0)

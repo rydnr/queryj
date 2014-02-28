@@ -37,15 +37,10 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing QueryJ Core classes.
- */
-import org.acmsl.queryj.customsql.Parameter;
-import org.acmsl.queryj.metadata.vo.Attribute;
-
-/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Base class for entities able to deal with type conversions between Java and JDBC.
@@ -62,4 +57,19 @@ public interface TypeManager
      */
     @NotNull
     public Class<?> getClass(@NotNull final String type);
+
+    /**
+     * Checks whether given type is a primitive wrapper.
+     * @param type the type.
+     * @return {@code true} in such case.
+     */
+    public boolean isPrimitiveWrapper(@NotNull final Class<?> type);
+
+    /**
+     * Retrieves the primitive class for given primitive wrapper.
+     * @param type the type.
+     * @return the primitive class.
+     */
+    @Nullable
+    public Class<?> toPrimitive(@NotNull final Class<?> type);
 }

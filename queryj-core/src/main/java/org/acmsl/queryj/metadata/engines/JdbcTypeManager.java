@@ -926,4 +926,42 @@ public class JdbcTypeManager
 
         return result;
     }
+
+    /**
+     * Checks whether given type is a primitive wrapper.
+     * @param type the type.
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean isPrimitiveWrapper(@NotNull final Class<?> type)
+    {
+        final boolean result;
+
+        switch (type.getSimpleName())
+        {
+            case "Long": result = true; break;
+            default: result = false; break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the primitive class for given primitive wrapper.
+     * @param type the type.
+     * @return the primitive class.
+     */
+    @Nullable
+    public Class<?> toPrimitive(@NotNull final Class<?> type)
+    {
+        @Nullable final Class<?> result;
+
+        switch (type.getSimpleName())
+        {
+            case "Long": result = long.class; break;
+            default: result = null; break;
+        }
+
+        return result;
+    }
 }

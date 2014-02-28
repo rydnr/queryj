@@ -23,7 +23,7 @@
 
  ******************************************************************************
  *
- * Filename: CustomSqlValidationHelperTest.java
+ * Filename: CustomSqlValidationHandlerTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -43,8 +43,10 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.ParameterElement;
 import org.acmsl.queryj.customsql.ParameterRefElement;
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.Sql.Cardinality;
 import org.acmsl.queryj.customsql.SqlElement;
+import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.TypeManager;
@@ -52,7 +54,6 @@ import org.acmsl.queryj.metadata.TypeManager;
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -76,10 +77,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 /*
  * Importing JDK classes.
  */
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -90,30 +91,14 @@ import java.util.Date;
  */
 @SuppressWarnings("unused")
 @RunWith(PowerMockRunner.class)
-public class CustomSqlValidationHelperTest
+public class CustomSqlValidationHandlerTest
 {
     @SuppressWarnings("unused, unchecked")
     @Test
-    public void validateWorksForDateParameters()
+    public void validate_works_for_date_parameters()
         throws Exception
     {
         @NotNull final String t_strSql = "select sysdate from dual where sysdate = ?";
-
-        @NotNull final CustomSqlValidationHandler t_CustomSqlValidationHandler =
-            new CustomSqlValidationHandler();
-
-        @NotNull final CustomSqlProvider t_CustomSqlProvider = PowerMock.createNiceMock(CustomSqlProvider.class);
-        @NotNull final SqlParameterDAO t_SqlParameterDAO = PowerMock.createNiceMock(SqlParameterDAO.class);
-        @NotNull final MetadataManager t_MetadataManager = PowerMock.createNiceMock(MetadataManager.class);
-        @NotNull final TypeManager t_TypeManager = new JdbcTypeManager();
-        @NotNull final Connection t_Connection = PowerMock.createNiceMock(Connection.class);
-        @NotNull final PreparedStatement t_Statement = PowerMock.createNiceMock(PreparedStatement.class);
-        @NotNull final ResultSet t_ResultSet = PowerMock.createNiceMock(ResultSet.class);
-        @NotNull final Method t_Method = PowerMock.createNiceMock(Method.class);
-
-        EasyMock.expect(t_CustomSqlProvider.getSqlParameterDAO()).andReturn(t_SqlParameterDAO);
-        EasyMock.expect(t_Connection.getAutoCommit()).andReturn(true);
-        EasyMock.expect(t_Connection.prepareStatement(t_strSql)).andReturn(t_Statement);
 
         @NotNull final SqlElement<String> t_Sql =
             new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
@@ -125,7 +110,24 @@ public class CustomSqlValidationHelperTest
         @NotNull final Parameter t_Parameter =
             new ParameterElement<>("today", 0, "today", "Date", new Date());
 
-        EasyMock.expect(t_SqlParameterDAO.findByPrimaryKey("today")).andReturn(t_Parameter);
+        testBody(t_Sql, t_Parameter);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void testBody(@NotNull final Sql<String> sql, @NotNull final Parameter parameter)
+        throws Exception
+    {
+        @NotNull final CustomSqlProvider t_CustomSqlProvider = PowerMock.createNiceMock(CustomSqlProvider.class);
+        @NotNull final SqlParameterDAO t_SqlParameterDAO = PowerMock.createNiceMock(SqlParameterDAO.class);
+        @NotNull final MetadataManager t_MetadataManager = PowerMock.createNiceMock(MetadataManager.class);
+        @NotNull final TypeManager t_TypeManager = new JdbcTypeManager();
+        @NotNull final Connection t_Connection = PowerMock.createNiceMock(Connection.class);
+        @NotNull final PreparedStatement t_Statement = PowerMock.createNiceMock(PreparedStatement.class);
+        @NotNull final ResultSet t_ResultSet = PowerMock.createNiceMock(ResultSet.class);
+        EasyMock.expect(t_CustomSqlProvider.getSqlParameterDAO()).andReturn(t_SqlParameterDAO);
+        EasyMock.expect(t_Connection.getAutoCommit()).andReturn(true);
+        EasyMock.expect(t_Connection.prepareStatement(sql.getValue())).andReturn(t_Statement);
+        EasyMock.expect(t_SqlParameterDAO.findByPrimaryKey("" + parameter.getName())).andReturn(parameter);
 
         EasyMock.replay(t_CustomSqlProvider);
         EasyMock.replay(t_SqlParameterDAO);
@@ -136,8 +138,8 @@ public class CustomSqlValidationHelperTest
 
         try
         {
-            t_CustomSqlValidationHandler.validate(
-                t_Sql, t_CustomSqlProvider, t_Connection, t_MetadataManager, t_TypeManager);
+            new CustomSqlValidationHandler().validate(
+                sql, t_CustomSqlProvider, t_Connection, t_MetadataManager, t_TypeManager);
         }
         catch (@NotNull final QueryJBuildException exception)
         {
@@ -152,5 +154,59 @@ public class CustomSqlValidationHelperTest
             EasyMock.verify(t_SqlParameterDAO);
             EasyMock.verify(t_MetadataManager);
         }
+    }
+
+    @Test
+    public void validate_works_for_String_parameters()
+        throws Exception
+    {
+        @NotNull final String t_strSql = "select 1 from dual where ? = 'blah'";
+
+        @NotNull final SqlElement<String> t_Sql =
+            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+
+        t_Sql.setValue(t_strSql);
+
+        t_Sql.add(new ParameterRefElement("text"));
+
+        @NotNull final Parameter t_Parameter =
+            new ParameterElement<>("text", 0, "text", "String", "blah");
+
+        testBody(t_Sql, t_Parameter);
+    }
+
+    @Test
+    public void validate_works_for_Long_parameters()
+        throws Exception
+    {
+        @NotNull final String t_strSql = "select 1 from dual where ? = 1";
+
+        @NotNull final SqlElement<String> t_Sql =
+            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+
+        t_Sql.setValue(t_strSql);
+
+        t_Sql.add(new ParameterRefElement("userId"));
+
+        @NotNull final Parameter t_Parameter =
+            new ParameterElement<>("userId", 0, "userId", "Long", "1");
+
+        testBody(t_Sql, t_Parameter);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_Long_parameter()
+        throws Exception
+    {
+        @NotNull final CustomSqlValidationHandler t_Handler = new CustomSqlValidationHandler();
+
+        @NotNull final Parameter t_Parameter = new ParameterElement<>("id", 1, "id", Long.class, "1");
+
+        @NotNull final Sql<String> t_Sql =
+            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+
+        Assert.assertNotNull(
+            t_Handler.retrievePreparedStatementMethod(
+                t_Parameter, 0, Long.class, t_Sql, Arrays.asList(new Class<?>[] { int.class, long.class })));
     }
 }

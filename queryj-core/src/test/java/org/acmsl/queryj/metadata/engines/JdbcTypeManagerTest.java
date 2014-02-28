@@ -1550,4 +1550,26 @@ public class JdbcTypeManagerTest
         Assert.assertEquals(URL.class, instance.getClass(URL.class.getSimpleName()));
         Assert.assertEquals(URL.class, instance.getClass(URL.class.getName()));
     }
+
+    /**
+     * Tests whether the isPrimitiveWrapper method works for Long values.
+     */
+    @Test
+    public void is_primitive_wrapper_works_for_longs()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.isPrimitiveWrapper(Long.class));
+    }
+
+    /**
+     * Tests whether the toPrimitive method works for Long values.
+     */
+    @Test
+    public void to_primitive_works_for_longs()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(long.class, instance.toPrimitive(Long.class));
+    }
 }
