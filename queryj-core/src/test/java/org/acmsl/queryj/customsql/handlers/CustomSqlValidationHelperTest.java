@@ -46,12 +46,13 @@ import org.acmsl.queryj.customsql.ParameterRefElement;
 import org.acmsl.queryj.customsql.Sql.Cardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.MetadataTypeManager;
+import org.acmsl.queryj.metadata.SqlParameterDAO;
+import org.acmsl.queryj.metadata.TypeManager;
 
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.SqlParameterDAO;
+import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -75,10 +76,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 /*
  * Importing JDK classes.
  */
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Types;
 import java.util.Date;
 
 /**
@@ -92,25 +93,27 @@ import java.util.Date;
 public class CustomSqlValidationHelperTest
 {
     @SuppressWarnings("unused, unchecked")
-//    @Test
+    @Test
     public void validateWorksForDateParameters()
         throws Exception
     {
         @NotNull final String t_strSql = "select sysdate from dual where sysdate = ?";
 
+        @NotNull final CustomSqlValidationHandler t_CustomSqlValidationHandler =
+            new CustomSqlValidationHandler();
+
         @NotNull final CustomSqlProvider t_CustomSqlProvider = PowerMock.createNiceMock(CustomSqlProvider.class);
         @NotNull final SqlParameterDAO t_SqlParameterDAO = PowerMock.createNiceMock(SqlParameterDAO.class);
         @NotNull final MetadataManager t_MetadataManager = PowerMock.createNiceMock(MetadataManager.class);
-        @NotNull final MetadataTypeManager t_MetadataTypeManager = PowerMock.createNiceMock(MetadataTypeManager.class);
+        @NotNull final TypeManager t_TypeManager = new JdbcTypeManager();
         @NotNull final Connection t_Connection = PowerMock.createNiceMock(Connection.class);
         @NotNull final PreparedStatement t_Statement = PowerMock.createNiceMock(PreparedStatement.class);
         @NotNull final ResultSet t_ResultSet = PowerMock.createNiceMock(ResultSet.class);
+        @NotNull final Method t_Method = PowerMock.createNiceMock(Method.class);
 
         EasyMock.expect(t_CustomSqlProvider.getSqlParameterDAO()).andReturn(t_SqlParameterDAO);
-        EasyMock.expect(t_MetadataManager.getMetadataTypeManager()).andReturn(t_MetadataTypeManager);
         EasyMock.expect(t_Connection.getAutoCommit()).andReturn(true);
         EasyMock.expect(t_Connection.prepareStatement(t_strSql)).andReturn(t_Statement);
-        EasyMock.expect(t_Statement.executeQuery()).andReturn(t_ResultSet);
 
         @NotNull final SqlElement<String> t_Sql =
             new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
@@ -124,25 +127,17 @@ public class CustomSqlValidationHelperTest
 
         EasyMock.expect(t_SqlParameterDAO.findByPrimaryKey("today")).andReturn(t_Parameter);
 
-        EasyMock.expect(t_MetadataTypeManager.getJavaType("Date")).andReturn(Types.DATE);
-        EasyMock.expect(t_MetadataTypeManager.getObjectType(Types.DATE, false)).andReturn("Date");
-
-        // EasyMock.expect(t_MetadataTypeManager.getJavaType("java.sql.Date")).andReturn()
-        // metadataTypeManager.getNativeType(
-        // metadataTypeManager.getJavaType(type)), '|'));
-
         EasyMock.replay(t_CustomSqlProvider);
         EasyMock.replay(t_SqlParameterDAO);
         EasyMock.replay(t_MetadataManager);
-        EasyMock.replay(t_MetadataTypeManager);
         EasyMock.replay(t_Connection);
         EasyMock.replay(t_Statement);
         EasyMock.replay(t_ResultSet);
 
         try
         {
-            new CustomSqlValidationHandler().validate(
-                t_Sql, t_CustomSqlProvider, t_Connection, t_MetadataManager, t_MetadataTypeManager);
+            t_CustomSqlValidationHandler.validate(
+                t_Sql, t_CustomSqlProvider, t_Connection, t_MetadataManager, t_TypeManager);
         }
         catch (@NotNull final QueryJBuildException exception)
         {
@@ -156,7 +151,6 @@ public class CustomSqlValidationHelperTest
             EasyMock.verify(t_CustomSqlProvider);
             EasyMock.verify(t_SqlParameterDAO);
             EasyMock.verify(t_MetadataManager);
-            EasyMock.verify(t_MetadataTypeManager);
         }
     }
 }

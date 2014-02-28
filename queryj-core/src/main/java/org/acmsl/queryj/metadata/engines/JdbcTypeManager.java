@@ -37,11 +37,24 @@
 package org.acmsl.queryj.metadata.engines;
 
 /*
- * Importing JetBrains annotations.
+ * Importing ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.TypeManager;
+
+/*
+ * Importing Apache Commons Logging classes.
+ */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,8 +84,11 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -83,12 +99,16 @@ import java.util.Map;
  */
 @ThreadSafe
 public class JdbcTypeManager
+    implements TypeManager
 {
     @NotNull protected static final Map<String, Integer> TYPE_MAPPING = new HashMap<>();
     @NotNull protected static final Map<Integer, String> INVERSE_TYPE_MAPPING = new HashMap<>();
     @NotNull protected static final Map<Integer, Class<?>> CLASS_MAPPING = new HashMap<>();
     @NotNull protected static final Map<Class<?>, Integer> INVERSE_CLASS_MAPPING = new HashMap<>();
     @NotNull protected static final Map<Integer, Method> PREPARED_STATEMENT_METHODS = new HashMap<>();
+
+    @NotNull protected static final List<String> LOOKUP_PACKAGES =
+        Collections.unmodifiableList(Arrays.asList("java.lang", "", "java.sql", "java.util", "java.math", "java.net"));
 
     /**
      * Literals.
@@ -664,7 +684,7 @@ public class JdbcTypeManager
      * @return the {@link Method}.
      */
     @NotNull
-    public Method getPreparedStatementSetterMethod(@NotNull final Class<?> type)
+    protected Method getPreparedStatementSetterMethod(@NotNull final Class<?> type)
     {
         return getPreparedStatementSetterMethod(getJdbcType(type));
     }
@@ -676,7 +696,7 @@ public class JdbcTypeManager
      * @return the {@link Method}.
      */
     @NotNull
-    public Method getPreparedStatementSetterMethod(final int jdbcType)
+    protected Method getPreparedStatementSetterMethod(final int jdbcType)
     {
         @NotNull final Method result;
 
@@ -701,7 +721,7 @@ public class JdbcTypeManager
      * @param value the parameter value.
      * @param <T> the parameter class.
      */
-    public <T> void setPreparedStatementParameter(
+    protected <T> void setPreparedStatementParameter(
         @NotNull final PreparedStatement statement, final int index, @NotNull final T value)
     {
         @NotNull final Method t_Method = getPreparedStatementSetterMethod(findOutClass(value));
@@ -757,6 +777,152 @@ public class JdbcTypeManager
         {
             result = value.getClass();
         }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the class of given type.
+     * @param type the type.
+     * @return the type.
+     */
+    @NotNull
+    @Override
+    public Class<?> getClass(@NotNull final String type)
+    {
+        @Nullable Class<?> result = retrievePrimitiveClass(type);
+
+        if (result == null)
+        {
+            result = retrieveTypeClass(type);
+
+            /*
+            if (result != null)
+            {
+                result = toPrimitiveIfPossible(result, type);
+            }
+            */
+        }
+
+        if (result == null)
+        {
+            result = Object.class;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the primitive class associated to given type, if it's indeed
+     * a primitive type. Primitive types' classes cannot be retrieved via Class.forName().
+     * @param type the type.
+     * @return the primitive type, or {@code null} if it's not a primitive type.
+     */
+    @Nullable
+    protected Class<?> retrievePrimitiveClass(@NotNull final String type)
+    {
+        @Nullable final Class<?> result;
+
+        switch (type)
+        {
+            case "boolean": result = boolean.class; break;
+            case "byte": result = byte.class; break;
+            case "byte[]": result = byte[].class; break;
+            case "Byte[]": result = Byte[].class; break;
+            case "double": result = double.class; break;
+            case "float": result = float.class; break;
+            case "int": result = int.class; break;
+            case "long": result = long.class; break;
+            case "short": result = short.class; break;
+            default: result = null; break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the class for given type.
+     * @param type the type.
+     * @return the class.
+     */
+    @Nullable
+    public Class<?> retrieveTypeClass(@NotNull final String type)
+    {
+        @Nullable Class<?> result = null;
+
+        for (@NotNull final String pkg : LOOKUP_PACKAGES)
+        {
+            result = retrieveTypeClass(type, pkg);
+
+            if (result != null)
+            {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the class, assuming given type is under given package.
+     * @param type the type name.
+     * @param packageName the package name.
+     * @return such class.
+     */
+    @Nullable
+    protected Class<?> retrieveTypeClass(@NotNull final String type, @NotNull final String packageName)
+    {
+        @Nullable Class<?> result = null;
+
+        @NotNull final String pkg = "".equals(packageName) ? packageName : packageName + ".";
+
+        try
+        {
+            result = Class.forName(pkg + type);
+        }
+        catch  (@NotNull final ClassNotFoundException classNotFoundException)
+        {
+            // No luck this time.
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the primitive type, if it's a primitive, or the same class otherwise.
+     * @param typeClass the resolved class.
+     * @param type the original type.
+     * @return such class.
+     */
+    @Nullable
+    protected Class<?> toPrimitiveIfPossible(
+        @NotNull final Class<?> typeClass, @NotNull final String type)
+    {
+        @Nullable Class<?> result = typeClass;
+
+        if  (   (!typeClass.equals(type))
+             && (!typeClass.equals("java.lang.".concat(type))))
+        {
+            try
+            {
+                result = (Class) result.getDeclaredField("TYPE").get(result);
+            }
+            catch  (@NotNull final NoSuchFieldException noSuchFieldException)
+            {
+                // Nothing to do.
+            }
+            catch  (@NotNull final IllegalAccessException illegalAccessException)
+            {
+                // Nothing to do.
+            }
+        }
+
+        /*
+        if  (result.equals(java.util.Date.class))
+        {
+            result = Timestamp.class;
+        }
+        */
 
         return result;
     }

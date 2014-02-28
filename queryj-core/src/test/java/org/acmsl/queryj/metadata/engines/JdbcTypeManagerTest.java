@@ -38,7 +38,6 @@ package org.acmsl.queryj.metadata.engines;
 /*
  * Importing EasyMock classes.
  */
-import org.easymock.Capture;
 import org.easymock.EasyMock;
 
 /*
@@ -63,6 +62,7 @@ import org.junit.runners.JUnit4;
  * Importing JDK classes.
  */
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
@@ -72,7 +72,6 @@ import java.sql.PreparedStatement;
 import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.RowId;
-import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.sql.Struct;
 import java.sql.Time;
@@ -1166,5 +1165,389 @@ public class JdbcTypeManagerTest
 
         EasyMock.verify(t_Value);
         EasyMock.verify(t_Statement);
+    }
+
+    /**
+     * Tests whether the type java.sql.Array is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Array_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Array.class, instance.getClass(Array.class.getSimpleName()));
+        Assert.assertEquals(Array.class, instance.getClass(Array.class.getName()));
+    }
+
+    /**
+     * Tests whether the type BigDecimal is recognized correctly.
+     */
+    @Test
+    public void get_class_for_BigDecimal_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(BigDecimal.class, instance.getClass(BigDecimal.class.getSimpleName()));
+        Assert.assertEquals(BigDecimal.class, instance.getClass(BigDecimal.class.getName()));
+    }
+
+    /**
+     * Tests whether the type BigInteger is recognized correctly.
+     */
+    @Test
+    public void get_class_for_BigInteger_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(BigInteger.class, instance.getClass(BigInteger.class.getSimpleName()));
+        Assert.assertEquals(BigInteger.class, instance.getClass(BigInteger.class.getName()));
+    }
+
+    /**
+     * Tests whether the type byte is recognized correctly.
+     */
+    @Test
+    public void get_class_for_byte_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(byte.class, instance.getClass(byte.class.getSimpleName()));
+        Assert.assertEquals(byte.class, instance.getClass(byte.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Byte is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Byte_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Byte.class, instance.getClass(Byte.class.getSimpleName()));
+        Assert.assertEquals(Byte.class, instance.getClass(Byte.class.getName()));
+    }
+
+    /**
+     * Tests whether the type byte[] is recognized correctly.
+     */
+    @Test
+    public void get_class_for_byte_array_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(byte[].class, instance.getClass(byte[].class.getSimpleName()));
+        Assert.assertEquals(byte[].class, instance.getClass(byte[].class.getName()));
+    }
+
+    /**
+     * Tests whether the type Byte[] is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Byte_array_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Byte[].class, instance.getClass(Byte[].class.getSimpleName()));
+        Assert.assertEquals(Byte[].class, instance.getClass(Byte[].class.getName()));
+    }
+
+    /**
+     * Tests whether the type Blob is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Blob_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Blob.class, instance.getClass(Blob.class.getSimpleName()));
+        Assert.assertEquals(Blob.class, instance.getClass(Blob.class.getName()));
+    }
+
+    /**
+     * Tests whether the type boolean is recognized correctly.
+     */
+    @Test
+    public void get_class_for_boolean_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(boolean.class, instance.getClass(boolean.class.getSimpleName()));
+        Assert.assertEquals(boolean.class, instance.getClass(boolean.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Boolean is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Boolean_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Boolean.class, instance.getClass(Boolean.class.getSimpleName()));
+        Assert.assertEquals(Boolean.class, instance.getClass(Boolean.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Clob is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Clob_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Clob.class, instance.getClass(Clob.class.getSimpleName()));
+        Assert.assertEquals(Clob.class, instance.getClass(Clob.class.getName()));
+    }
+
+    /**
+     * Tests whether the type java.sql.Date is recognized correctly.
+     */
+    @Test
+    public void get_class_for_sqlDate_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(java.sql.Date.class, instance.getClass(java.sql.Date.class.getSimpleName()));
+        Assert.assertEquals(java.sql.Date.class, instance.getClass(java.sql.Date.class.getName()));
+    }
+
+    /**
+     * Tests whether the type double is recognized correctly.
+     */
+    @Test
+    public void get_class_for_double_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(double.class, instance.getClass(double.class.getSimpleName()));
+        Assert.assertEquals(double.class, instance.getClass(double.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Double is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Double_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Double.class, instance.getClass(Double.class.getSimpleName()));
+        Assert.assertEquals(Double.class, instance.getClass(Double.class.getName()));
+    }
+
+    /**
+     * Tests whether the type float is recognized correctly.
+     */
+    @Test
+    public void get_class_for_float_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(float.class, instance.getClass(float.class.getSimpleName()));
+        Assert.assertEquals(float.class, instance.getClass(float.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Float is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Float_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Float.class, instance.getClass(Float.class.getSimpleName()));
+        Assert.assertEquals(Float.class, instance.getClass(Float.class.getName()));
+    }
+
+    /**
+     * Tests whether the type int is recognized correctly.
+     */
+    @Test
+    public void get_class_for_int_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(int.class, instance.getClass(int.class.getSimpleName()));
+        Assert.assertEquals(int.class, instance.getClass(int.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Integer is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Integer_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Integer.class, instance.getClass(Integer.class.getSimpleName()));
+        Assert.assertEquals(Integer.class, instance.getClass(Integer.class.getName()));
+    }
+
+    /**
+     * Tests whether the type long is recognized correctly.
+     */
+    @Test
+    public void get_class_for_long_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(long.class, instance.getClass(long.class.getSimpleName()));
+        Assert.assertEquals(long.class, instance.getClass(long.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Long is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Long_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Long.class, instance.getClass(Long.class.getSimpleName()));
+        Assert.assertEquals(Long.class, instance.getClass(Long.class.getName()));
+    }
+
+    /**
+     * Tests whether the type NClob is recognized correctly.
+     */
+    @Test
+    public void get_class_for_NClob_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(NClob.class, instance.getClass(NClob.class.getSimpleName()));
+        Assert.assertEquals(NClob.class, instance.getClass(NClob.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Object is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Object_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Object.class, instance.getClass(Object.class.getSimpleName()));
+        Assert.assertEquals(Object.class, instance.getClass(Object.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Ref is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Ref_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Ref.class, instance.getClass(Ref.class.getSimpleName()));
+        Assert.assertEquals(Ref.class, instance.getClass(Ref.class.getName()));
+    }
+
+    /**
+     * Tests whether the type RowId is recognized correctly.
+     */
+    @Test
+    public void get_class_for_RowId_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(RowId.class, instance.getClass(RowId.class.getSimpleName()));
+        Assert.assertEquals(RowId.class, instance.getClass(RowId.class.getName()));
+    }
+
+    /**
+     * Tests whether the type short is recognized correctly.
+     */
+    @Test
+    public void get_class_for_short_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(short.class, instance.getClass(short.class.getSimpleName()));
+        Assert.assertEquals(short.class, instance.getClass(short.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Short is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Short_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Short.class, instance.getClass(Short.class.getSimpleName()));
+        Assert.assertEquals(Short.class, instance.getClass(Short.class.getName()));
+    }
+
+    /**
+     * Tests whether the type SQLXML is recognized correctly.
+     */
+    @Test
+    public void get_class_for_SQLXML_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(SQLXML.class, instance.getClass(SQLXML.class.getSimpleName()));
+        Assert.assertEquals(SQLXML.class, instance.getClass(SQLXML.class.getName()));
+    }
+
+    /**
+     * Tests whether the type String is recognized correctly.
+     */
+    @Test
+    public void get_class_for_String_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(String.class, instance.getClass(String.class.getSimpleName()));
+        Assert.assertEquals(String.class, instance.getClass(String.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Struct is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Struct_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Struct.class, instance.getClass(Struct.class.getSimpleName()));
+        Assert.assertEquals(Struct.class, instance.getClass(Struct.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Time is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Time_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Time.class, instance.getClass(Time.class.getSimpleName()));
+        Assert.assertEquals(Time.class, instance.getClass(Time.class.getName()));
+    }
+
+    /**
+     * Tests whether the type Timestamp is recognized correctly.
+     */
+    @Test
+    public void get_class_for_Timestamp_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Timestamp.class, instance.getClass(Timestamp.class.getSimpleName()));
+        Assert.assertEquals(Timestamp.class, instance.getClass(Timestamp.class.getName()));
+    }
+
+    /**
+     * Tests whether the type URL is recognized correctly.
+     */
+    @Test
+    public void get_class_for_URL_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(URL.class, instance.getClass(URL.class.getSimpleName()));
+        Assert.assertEquals(URL.class, instance.getClass(URL.class.getName()));
     }
 }

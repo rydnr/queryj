@@ -1,5 +1,5 @@
 /*
-                        QueryJ Placeholders
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,40 +23,43 @@
 
  ******************************************************************************
  *
- * Filename: Literals.java
+ * Filename: TypeManager.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Base class for entities able to deal with type conversions
+ *              between Java and JDBC.
  *
- * Date: 2013/11/28
- * Time: 21:57
+ * Date: 2014/02/24
+ * Time: 06:55
  *
  */
-package org.acmsl.queryj.placeholders;
+package org.acmsl.queryj.metadata;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
-import org.checkthread.annotations.ThreadSafe;
+import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.metadata.vo.Attribute;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Literals for QueryJ Placeholders.
+ * Base class for entities able to deal with type conversions between Java and JDBC.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/11/28 21:57
+ * Created: 2014/02/24 06:55
  */
-@ThreadSafe
-public class Literals
+public interface TypeManager
 {
-    public static final String CLASS_NAME = "class_name";
-    public static final String RESULT = "result";
-    public static final String FOREIGN_KEY = "foreign_key";
-    public static final String QUERYJ_PROPERTIES = "-queryj.properties";
-    public static final String HEADER = org.acmsl.queryj.Literals.HEADER;
-    public static final String LOB_HANDLING_REQUIRED = "lob_handling_required";
-    public static final String PACKAGE = org.acmsl.queryj.Literals.PACKAGE;
-    public static final String REPOSITORY = org.acmsl.queryj.Literals.REPOSITORY;
-    public static final String TIMESTAMP = "Timestamp";
+    /**
+     * Retrieves the class of given type.
+     * @param type the type.
+     * @return the type.
+     */
+    @NotNull
+    public Class<?> getClass(@NotNull final String type);
 }
