@@ -39,6 +39,7 @@ package org.acmsl.queryj.api.exceptions;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.commons.utils.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,6 +47,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 
 /*
@@ -71,17 +73,17 @@ public class CannotReadCustomSqlXmlFileException
      */
     public CannotReadCustomSqlXmlFileException(@Nullable final File file)
     {
-        super(CANNOT_READ_CUSTOM_SQL_XML_FILE, new Object[] { file != null ? file.getAbsolutePath() : "(null)" });
+        super(CANNOT_READ_CUSTOM_SQL_XML_FILE, new Object[]{file != null ? file.getAbsolutePath() : "(null)"});
     }
 
     /**
      * Creates an instance with given context.
-     * @param stream the custom SQL file stream.
+     * @param file the custom SQL file.
      * @param cause the exception to wrap.
      */
     public CannotReadCustomSqlXmlFileException(
-        @Nullable final InputStream stream, @NotNull final Throwable cause)
+        @Nullable final File file, @NotNull final Throwable cause)
     {
-        super(CANNOT_READ_CUSTOM_SQL_XML_FILE, new Object[] { stream }, cause);
+        super(CANNOT_READ_CUSTOM_SQL_XML_FILE, new Object[]{file != null ? file.getAbsolutePath() : "(null)"}, cause);
     }
 }

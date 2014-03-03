@@ -35,8 +35,24 @@ package org.acmsl.queryj.customsql.xml;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.commons.utils.SaxUtils;
 import org.acmsl.queryj.api.exceptions.CannotReadCustomSqlXmlFileException;
-import org.acmsl.queryj.customsql.*;
+import org.acmsl.queryj.customsql.ConnectionFlags;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.IdentifiableElement;
+import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.customsql.ParameterRef;
+import org.acmsl.queryj.customsql.Property;
+import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.customsql.PropertyRef;
+import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.ResultSetFlags;
+import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.SqlConnectionFlagsDAO;
+import org.acmsl.queryj.customsql.SqlResultSetFlagsDAO;
+import org.acmsl.queryj.customsql.SqlStatementFlagsDAO;
+import org.acmsl.queryj.customsql.SqlXmlParserSqlDAO;
+import org.acmsl.queryj.customsql.StatementFlags;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
@@ -47,10 +63,13 @@ import org.acmsl.queryj.api.exceptions.QueryJBuildException;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.commons.utils.io.FileUtils;
 
 /*
  * Importing some JDK classes.
  */
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -76,6 +95,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.xml.sax.SAXParseException;
 
 /**
  * Is able to read the contents contained in QueryJ's sql.xml files.
@@ -83,21 +103,72 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class SqlXmlParserImpl
-    implements  CustomSqlProvider,
+    implements CustomSqlProvider,
                 SqlXmlParser
 {
+    /**
+     * The serial version id.
+     */
     public static final long serialVersionUID = 4622172516611441363L;
+
+    /**
+     * The XML path for parameter-refs.
+     */
     protected static final String SQL_LIST_SQL_PARAMETER_REF = "sql-list/sql/parameter-ref";
+
+    /**
+     * The XML path for result-refs.
+     */
     protected static final String SQL_LIST_SQL_RESULT_REF = "sql-list/sql/result-ref";
+
+    /**
+     * The XML path for connection-flags-refs.
+     */
     protected static final String SQL_LIST_SQL_CONNECTION_FLAGS_REF = "sql-list/sql/connection-flags-ref";
+
+    /**
+     * The XML path for statement-flags-refs.
+     */
     protected static final String SQL_LIST_SQL_STATEMENT_FLAGS_REF = "sql-list/sql/statement-flags-ref";
+
+    /**
+     * The XML path for resultset-flags-refs.
+     */
     protected static final String SQL_LIST_SQL_RESULTSET_FLAGS_REF = "sql-list/sql/resultset-flags-ref";
+
+    /**
+     * The XML path for parameters.
+     */
     protected static final String SQL_LIST_PARAMETER_LIST_PARAMETER = "sql-list/parameter-list/parameter";
+
+    /**
+     * The XML path for results.
+     */
     protected static final String SQL_LIST_RESULT_LIST_RESULT = "sql-list/result-list/result";
+
+    /**
+     * The XML path for property-refs.
+     */
     protected static final String SQL_LIST_RESULT_LIST_RESULT_PROPERTY_REF = "sql-list/result-list/result/property-ref";
+
+    /**
+     * The XML path for property.
+     */
     protected static final String SQL_LIST_PROPERTY_LIST_PROPERTY = "sql-list/property-list/property";
+
+    /**
+     * The XML path for connection-flags.
+     */
     protected static final String SQL_LIST_FLAG_LIST_CONNECTION_FLAGS = "sql-list/flag-list/connection-flags";
+
+    /**
+     * The XML path for statement-flags.
+     */
     protected static final String SQL_LIST_FLAG_LIST_STATEMENT_FLAGS = "sql-list/flag-list/statement-flags";
+
+    /**
+     * The XML flag for resultset-flags.
+     */
     protected static final String SQL_LIST_FLAG_LIST_RESULTSET_FLAGS = "sql-list/flag-list/resultset-flags";
 
     /**
@@ -378,8 +449,7 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Retrieves the sql.xml {@link org.acmsl.queryj.metadata.vo.Table} collection.
-     * return such collection.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -407,8 +477,7 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.Result} collection.
-     * return such collection.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -436,8 +505,7 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.Parameter} collection.
-     * return such collection.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -447,8 +515,7 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.Parameter} collection.
-     * return such collection.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -476,8 +543,7 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.Property} collection.
-     * return such collection.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -487,8 +553,7 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.PropertyRef} collection.
-     * return such collection.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -516,8 +581,7 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.ConnectionFlags} collection.
-     * return such collection.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -545,8 +609,7 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.StatementFlags} collection.
-     * return such collection.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -574,8 +637,7 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.ResultSetFlags} collection.
-     * return such collection.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -699,7 +761,22 @@ public class SqlXmlParserImpl
                     // class-loading problem.
                 }
 
-                throw new CannotReadCustomSqlXmlFileException(input, exception);
+                @Nullable final File t_File;
+
+                if (exception instanceof SAXParseException)
+                {
+                    t_File = SaxUtils.getInstance().retrieveFailingFile((SAXParseException) exception);
+                }
+                else if (input instanceof FileInputStream)
+                {
+                    t_File = FileUtils.getInstance().retrieveFile((FileInputStream) input);
+                }
+                else
+                {
+                    t_File = null;
+                }
+
+                throw new CannotReadCustomSqlXmlFileException(t_File, exception);
             }
         }
     }
@@ -855,9 +932,9 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Parses the sql.xml associated to this instance.
-     * @throws QueryJBuildException if the information cannot be read.
+     * {@inheritDoc}
      */
+    @Override
     public void parse()
         throws  QueryJBuildException
     {
@@ -991,6 +1068,9 @@ public class SqlXmlParserImpl
         return new SqlXmlParserResultSetFlagsDAO(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {
