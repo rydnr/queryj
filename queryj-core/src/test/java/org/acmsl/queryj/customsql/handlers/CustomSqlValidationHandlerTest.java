@@ -81,6 +81,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -93,26 +94,6 @@ import java.util.Date;
 @RunWith(PowerMockRunner.class)
 public class CustomSqlValidationHandlerTest
 {
-    @SuppressWarnings("unused, unchecked")
-    @Test
-    public void validate_works_for_date_parameters()
-        throws Exception
-    {
-        @NotNull final String t_strSql = "select sysdate from dual where sysdate = ?";
-
-        @NotNull final SqlElement<String> t_Sql =
-            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
-
-        t_Sql.setValue(t_strSql);
-
-        t_Sql.add(new ParameterRefElement("today"));
-
-        @NotNull final Parameter t_Parameter =
-            new ParameterElement<>("today", 0, "today", "Date", new Date());
-
-        testBody(t_Sql, t_Parameter);
-    }
-
     @SuppressWarnings("unchecked")
     protected void testBody(@NotNull final Sql<String> sql, @NotNull final Parameter parameter)
         throws Exception
@@ -156,6 +137,26 @@ public class CustomSqlValidationHandlerTest
         }
     }
 
+    @SuppressWarnings("unused, unchecked")
+    @Test
+    public void validate_works_for_date_parameters()
+        throws Exception
+    {
+        @NotNull final String t_strSql = "select sysdate from dual where sysdate = ?";
+
+        @NotNull final SqlElement<String> t_Sql =
+            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+
+        t_Sql.setValue(t_strSql);
+
+        t_Sql.add(new ParameterRefElement("today"));
+
+        @NotNull final Parameter t_Parameter =
+            new ParameterElement<>("today", 0, "today", "Date", new Date());
+
+        testBody(t_Sql, t_Parameter);
+    }
+
     @Test
     public void validate_works_for_String_parameters()
         throws Exception
@@ -171,6 +172,25 @@ public class CustomSqlValidationHandlerTest
 
         @NotNull final Parameter t_Parameter =
             new ParameterElement<>("text", 0, "text", "String", "blah");
+
+        testBody(t_Sql, t_Parameter);
+    }
+
+    @Test
+    public void validate_works_for_int_parameters()
+        throws Exception
+    {
+        @NotNull final String t_strSql = "select 1 from dual where ? = 1";
+
+        @NotNull final SqlElement<String> t_Sql =
+            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+
+        t_Sql.setValue(t_strSql);
+
+        t_Sql.add(new ParameterRefElement("userId"));
+
+        @NotNull final Parameter t_Parameter =
+            new ParameterElement<>("userId", 0, "userId", "int", "1");
 
         testBody(t_Sql, t_Parameter);
     }
@@ -195,18 +215,120 @@ public class CustomSqlValidationHandlerTest
     }
 
     @Test
-    public void retrieve_statement_setter_method_works_for_Long_parameter()
+    public void validate_works_for_double_parameters()
+        throws Exception
+    {
+        @NotNull final String t_strSql = "select 1 from dual where ? = 1";
+
+        @NotNull final SqlElement<String> t_Sql =
+            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+
+        t_Sql.setValue(t_strSql);
+
+        t_Sql.add(new ParameterRefElement("userId"));
+
+        @NotNull final Parameter t_Parameter =
+            new ParameterElement<>("userId", 0, "userId", "double", "1");
+
+        testBody(t_Sql, t_Parameter);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testPrimitiveBody(@NotNull final Class<?> type)
         throws Exception
     {
         @NotNull final CustomSqlValidationHandler t_Handler = new CustomSqlValidationHandler();
 
-        @NotNull final Parameter t_Parameter = new ParameterElement<>("id", 1, "id", Long.class, "1");
+        @NotNull final Parameter t_Parameter = new ParameterElement<>("id", 1, "id", type, "1");
 
         @NotNull final Sql<String> t_Sql =
             new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
 
+        @NotNull final Class<?> t_ParameterType;
+
+        @NotNull final TypeManager t_TypeManager = new JdbcTypeManager();
+
+        if (t_TypeManager.isPrimitiveWrapper(type))
+        {
+            t_ParameterType = t_TypeManager.toPrimitive(type);
+        }
+        else
+        {
+            t_ParameterType = type;
+        }
+
         Assert.assertNotNull(
             t_Handler.retrievePreparedStatementMethod(
-                t_Parameter, 0, Long.class, t_Sql, Arrays.asList(new Class<?>[] { int.class, long.class })));
+                t_Parameter, 0, type, t_Sql, Arrays.asList(int.class, t_ParameterType)));
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_int_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(int.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_Int_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(Integer.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_long_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(long.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_Long_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(Long.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_double_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(double.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_Double_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(Double.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_float_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(float.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_Float_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(Float.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_boolean_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(boolean.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_Boolean_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(Boolean.class);
     }
 }

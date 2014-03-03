@@ -935,15 +935,7 @@ public class JdbcTypeManager
     @Override
     public boolean isPrimitiveWrapper(@NotNull final Class<?> type)
     {
-        final boolean result;
-
-        switch (type.getSimpleName())
-        {
-            case "Long": result = true; break;
-            default: result = false; break;
-        }
-
-        return result;
+        return toPrimitive(type) != null;
     }
 
     /**
@@ -958,6 +950,10 @@ public class JdbcTypeManager
 
         switch (type.getSimpleName())
         {
+            case "Boolean": result = boolean.class; break;
+            case "Double": result = double.class; break;
+            case "Float": result = float.class; break;
+            case "Integer": result = int.class; break;
             case "Long": result = long.class; break;
             default: result = null; break;
         }

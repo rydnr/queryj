@@ -36,6 +36,7 @@ package org.acmsl.queryj.customsql.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CustomResultWithInvalidNumberOfColumnsException;
@@ -571,8 +572,8 @@ public class CustomSqlValidationHandler
      * @throws QueryJBuildException if some problem occurs.
      */
     @SuppressWarnings("unchecked")
-    protected void bindParameter(
-        @NotNull final Parameter<String, ?> parameter,
+    protected <T> void bindParameter(
+        @NotNull final Parameter<String, T> parameter,
         final int parameterIndex,
         @NotNull final Sql<String> sql,
         @NotNull final PreparedStatement statement,
@@ -588,17 +589,17 @@ public class CustomSqlValidationHandler
 
         @Nullable final Collection<Class<?>> t_cParameterClasses;
 
-        @Nullable final Class<?> t_Type = retrieveType(parameter, typeManager);
+        @Nullable final Class<T> t_Type = retrieveType(parameter, typeManager);
 
         if  (t_Type != null)
         {
             if (typeManager.isPrimitiveWrapper(t_Type))
             {
-                t_cParameterClasses = Arrays.asList(new Class<?>[] { Integer.TYPE, typeManager.toPrimitive(t_Type) });
+                t_cParameterClasses = Arrays.asList(Integer.TYPE, typeManager.toPrimitive(t_Type));
             }
             else
             {
-                t_cParameterClasses = Arrays.asList(new Class<?>[] { Integer.TYPE, t_Type });
+                t_cParameterClasses = Arrays.asList(Integer.TYPE, t_Type);
             }
 
             t_Method =
@@ -669,10 +670,11 @@ public class CustomSqlValidationHandler
      * @param typeManager the {@link MetadataTypeManager}.
      * @return the parameter type.
      */
-    protected Class<?> retrieveType(
-        @NotNull final Parameter<String, ?> parameter, @NotNull final TypeManager typeManager)
+    @SuppressWarnings("unchecked")
+    protected <T> Class<T> retrieveType(
+        @NotNull final Parameter<String, T> parameter, @NotNull final TypeManager typeManager)
     {
-        return typeManager.getClass(parameter.getType());
+        return (Class<T>) typeManager.getClass(parameter.getType());
     }
 
     /**
@@ -734,45 +736,83 @@ public class CustomSqlValidationHandler
      * @return the validation value.
      * @throws QueryJBuildException if some problem occurs.
      */
-    protected Object retrieveParameterValue(
-        @NotNull final Parameter<String, ?> parameter,
+    @SuppressWarnings("unchecked")
+    protected <T> T retrieveParameterValue(
+        @NotNull final Parameter<String, T> parameter,
         final int parameterIndex,
         @NotNull final String type,
-        @NotNull final Class<?> typeClass,
+        @NotNull final Class<T> typeClass,
         @NotNull final Sql<String> sql,
         @NotNull final ConversionUtils conversionUtils)
         throws  QueryJBuildException
     {
-        @Nullable Object result = null;
+        @Nullable T result;
+
+        if  (   ("Date".equals(type))
+             && (parameter.getValidationValue() != null))
+        {
+            result = (T) new java.sql.Date(new Date().getTime());
+        }
+        else if (   (Literals.TIMESTAMP_U.equals(type.toUpperCase(new Locale("US"))))
+                 && (parameter.getValidationValue() != null))
+        {
+            result = (T) new Timestamp(new Date().getTime());
+        }
+        else
+        {
+            result =
+                retrieveParameterValue(
+                    parameter, type, conversionUtils, StringUtils.getInstance());
+        }
+
+        if (result == null)
+        {
+            result = (T) assumeIsADate(parameter, sql);
+        }
+
+        if (result == null)
+        {
+            // We have only once chance: constructor call.
+            result = createViaConstructor(parameter, parameterIndex, type, typeClass, sql);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the validation value for given parameter.
+     * @param parameter the {@link Parameter}.
+     * @param type the parameter type.
+     * @param conversionUtils the {@link ConversionUtils} instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return the validation value.
+     * @throws QueryJBuildException if some problem occurs.
+     */
+    @SuppressWarnings("unchecked")
+    protected <T> T retrieveParameterValue(
+        @NotNull final Parameter<String, T> parameter,
+        @NotNull final String type,
+        @NotNull final ConversionUtils conversionUtils,
+        @NotNull final StringUtils stringUtils)
+        throws  QueryJBuildException
+    {
+        @Nullable T result = null;
 
         try
         {
             @Nullable final Method t_ParameterMethod;
 
-            if  (   ("Date".equals(type))
-                  && (parameter.getValidationValue() != null))
-            {
-                result = new java.sql.Date(new Date().getTime());
-            }
-            else if (   (Literals.TIMESTAMP_U.equals(type.toUpperCase(new Locale("US"))))
-                     && (parameter.getValidationValue() != null))
-            {
-                result = new Timestamp(new Date().getTime());
-            }
-            else
-            {
-                t_ParameterMethod =
-                    conversionUtils.getClass().getMethod(
-                        "to" + type,
-                        CLASS_ARRAY_OF_ONE_STRING);
+            t_ParameterMethod =
+                conversionUtils.getClass().getMethod(
+                    "to" + stringUtils.capitalize(type),
+                    CLASS_ARRAY_OF_ONE_STRING);
 
-                if  (t_ParameterMethod != null)
-                {
-                    result =
-                        t_ParameterMethod.invoke(
-                            conversionUtils,
-                            parameter.getValidationValue());
-                }
+            if  (t_ParameterMethod != null)
+            {
+                result =
+                    (T) t_ParameterMethod.invoke(
+                        conversionUtils,
+                        parameter.getValidationValue());
             }
         }
         catch  (@NotNull final NoSuchMethodException noSuchMethod)
@@ -790,17 +830,6 @@ public class CustomSqlValidationHandler
         catch  (@NotNull final InvocationTargetException invocationTargetException)
         {
             // can do little
-        }
-
-        if (result == null)
-        {
-            result = assumeIsADate(parameter, sql);
-        }
-
-        if (result == null)
-        {
-            // We have only once chance: constructor call.
-            result = createViaConstructor(parameter, parameterIndex, type, typeClass, sql);
         }
 
         return result;
@@ -882,22 +911,22 @@ public class CustomSqlValidationHandler
      * @return the parameter value.
      * @throws QueryJBuildException if some problem occurs.
      */
-    protected Object createViaConstructor(
-        @NotNull final Parameter<String, ?> parameter,
+    protected <T> T createViaConstructor(
+        @NotNull final Parameter<String, T> parameter,
         final int parameterIndex,
         @NotNull final String type,
-        @NotNull final Class<?> typeClass,
+        @NotNull final Class<T> typeClass,
         @NotNull final Sql<String> sql)
         throws  QueryJBuildException
     {
-        @Nullable Object result = null;
+        @Nullable T result = null;
 
         @Nullable QueryJBuildException exceptionToThrow = null;
 
         // We have only once chance: constructor call.
         try
         {
-            @Nullable final Constructor<?> t_Constructor =
+            @Nullable final Constructor<T> t_Constructor =
                 typeClass.getConstructor(CLASS_ARRAY_OF_ONE_STRING);
 
             if  (t_Constructor != null)
@@ -1002,7 +1031,7 @@ public class CustomSqlValidationHandler
      */
     protected String getSetterMethod(final Class<?> type)
     {
-        return getAccessorMethod("set",  type);
+        return getAccessorMethod("set",  type, StringUtils.getInstance());
     }
 
     /**
@@ -1013,22 +1042,35 @@ public class CustomSqlValidationHandler
     @NotNull
     protected String getGetterMethod(@NotNull final Class<?> type)
     {
-        return getAccessorMethod("get", type);
+        return getAccessorMethod("get", type, StringUtils.getInstance());
     }
 
     /**
      * Retrieves the accessor method name.
      * @param prefix the prefix (set/get).
      * @param type the data type.
+     * @param stringUtils the {@link StringUtils} instance.
      * @return the associated getter method.
      */
     protected String getAccessorMethod(
         @NotNull final String prefix,
-        @NotNull final Class<?> type)
+        @NotNull final Class<?> type,
+        @NotNull final StringUtils stringUtils)
     {
         @NotNull final StringBuilder result = new StringBuilder(prefix);
 
-        result.append(type.getSimpleName());
+        @NotNull final String t_strSimpleName;
+
+        if (type.equals(Integer.class))
+        {
+            t_strSimpleName = "Int";
+        }
+        else
+        {
+            t_strSimpleName = stringUtils.capitalize(type.getSimpleName());
+        }
+
+        result.append(stringUtils.capitalize(t_strSimpleName));
 
         return result.toString();
     }
