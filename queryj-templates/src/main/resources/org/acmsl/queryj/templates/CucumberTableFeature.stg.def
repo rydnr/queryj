@@ -1,17 +1,17 @@
 /*
- * DAO template metadata.
+ * CucumberTableFeature template metadata.
  */
 // The template name (the filename).
-name : DAO.stg;
+name : CucumberTableFeature.stg;
 
 // The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-sql.
 type : per-table;
 
 // The output flavor.
-output: Java;
+output: Cucumber;
 
 // The filename builder.
-filename  builder : <engine.name><tableName.singular.camelCase>DAO.java;
+filename  builder : <tableName.singular.camelCase>.feature;
 
 // The package.
-package: <packageName>.dao.rdb.<engine.name.lowercased>;
+package: <packageName>.dao;

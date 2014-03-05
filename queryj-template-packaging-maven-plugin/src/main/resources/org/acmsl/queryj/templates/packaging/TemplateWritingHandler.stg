@@ -179,6 +179,7 @@ public class <C.class_name>
 
         for (@NotNull final String piece : pieces)
         {
+            aux.append(File.separator);
             aux.append(piece);
         }
 

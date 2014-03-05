@@ -38,6 +38,7 @@ package org.acmsl.queryj.metadata.engines;
 /*
  * Importing project classes.
  */
+import org.acmsl.commons.utils.Chronometer;
 import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.api.MetaLanguageUtils;
 import org.acmsl.queryj.metadata.ColumnDAO;
@@ -732,6 +733,19 @@ public abstract class AbstractJdbcMetadataManager
     {
         if (getTables().size() == 0)
         {
+            @Nullable final Chronometer t_Chronometer;
+
+            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractJdbcMetadataManager.class);
+            if (   (t_Log != null)
+                && (t_Log.isInfoEnabled()))
+            {
+                t_Chronometer = new Chronometer();
+                t_Log.info("Starting database crawl");
+            }
+            else
+            {
+                t_Chronometer = null;
+            }
             setTables(
                 extractTableMetadata(
                     getTableNames(),
@@ -741,6 +755,14 @@ public abstract class AbstractJdbcMetadataManager
                     isCaseSensitive(),
                     getMetadataExtractionListener(),
                     MetaLanguageUtils.getInstance()));
+
+            if (   (t_Log != null)
+                && (t_Log.isInfoEnabled())
+                && (t_Chronometer != null))
+            {
+                @NotNull final String t_strMessage = "Finished database crawl: " + t_Chronometer.now();
+                t_Log.info("Finished database crawl: " + t_Chronometer.now());
+            }
         }
     }
 

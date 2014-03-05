@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -93,10 +93,9 @@ public abstract class BasePerTableTemplateBuildHandler
      * Creates a {@link BasePerTableTemplateBuildHandler} instance.
      */
     protected BasePerTableTemplateBuildHandler() {}
+
     /**
      * Handles given information.
-     *
-     *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -496,7 +495,7 @@ public abstract class BasePerTableTemplateBuildHandler
     protected List<Row<String>> retrieveCachedStaticContent(
         @NotNull final QueryJCommand parameters, @NotNull final String tableName)
     {
-        return new QueryJCommandWrapper<List<Row<String>>>(parameters).getSetting(buildStaticContentKey(tableName));
+        return new QueryJCommandWrapper<Row<String>>(parameters).getListSetting(buildStaticContentKey(tableName));
     }
 
     /**

@@ -76,8 +76,11 @@ import org.checkthread.annotations.ThreadSafe;
 public class CachingTableDecorator
     extends AbstractTableDecorator
 {
-
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 7125795956047030470L;
+
     /**
      * The cached primary key.
      */
@@ -205,8 +208,7 @@ public class CachingTableDecorator
     }
 
     /**
-     * Retrieves the primary key attributes.
-     * @return such list.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
@@ -327,16 +329,7 @@ public class CachingTableDecorator
     }
 
     /**
-     * Creates a table decorator.
-     * @param parentTable the table name.
-     * @param primaryKey the primary key.
-     * @param attributes the attributes.
-     * @param isStatic whether the table is static.
-     * @param voDecorated whether the value-object is decorated.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @return such decorator.
+     * {@inheritDoc}
      */
     @Override
     @Nullable
@@ -426,8 +419,7 @@ public class CachingTableDecorator
     }
 
     /**
-     * Retrieves all parent tables.
-     * @return such information.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
@@ -565,8 +557,7 @@ public class CachingTableDecorator
     }
 
     /**
-     * Retrieves the custom selects.
-     * @return such information.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
@@ -660,8 +651,7 @@ public class CachingTableDecorator
     }
 
     /**
-     * Retrieves the custom results.
-     * @return such information.
+     * {@inheritDoc}
      */
     @Override
     @Nullable
@@ -767,9 +757,7 @@ public class CachingTableDecorator
     }
 
     /**
-     * Retrieves the foreign keys.
-     *
-     * @return such list.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -901,9 +889,7 @@ public class CachingTableDecorator
     }
 
     /**
-     * Retrieves the read-only attributes.
-     *
-     * @return such list.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -921,9 +907,7 @@ public class CachingTableDecorator
     }
 
     /**
-     * Retrieves the custom select-for-update queries.
-     *
-     * @return such list of {@link org.acmsl.queryj.customsql.Sql} elements.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -961,10 +945,9 @@ public class CachingTableDecorator
     {
         return m__lCachedExternallyManagedAttributes;
     }
+
     /**
-     * Retrieves the externally-managed attributes.
-     *
-     * @return such information.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -1038,6 +1021,9 @@ public class CachingTableDecorator
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

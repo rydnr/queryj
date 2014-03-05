@@ -61,6 +61,11 @@ public class EngineDecorator
     extends AbstractEngine<DecoratedString>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -1162196549794131467L;
+
+    /**
      * The wrapped engine.
      */
     private Engine<String> m__Engine;
@@ -108,6 +113,9 @@ public class EngineDecorator
         return this.m__Engine;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

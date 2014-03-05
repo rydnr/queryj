@@ -66,6 +66,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class GlobalClassNameHandler
     extends AbstractDecoratedStringHandler<GlobalTemplateContext>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 5318336642738009644L;
 
     /**

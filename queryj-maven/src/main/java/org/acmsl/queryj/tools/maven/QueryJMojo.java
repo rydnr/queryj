@@ -99,9 +99,25 @@ public class QueryJMojo
      */
     protected static final String POM_PROPERTIES_LOCATION =
         "META-INF/maven/org.acmsl.queryj/queryj-maven/pom.properties";
+
+    /**
+     * The key for the QueryJ package.
+     */
     protected static final String QUERYJ_PACKAGE = "queryj.package";
+
+    /**
+     * String literal: "(unknown)"
+     */
     public static final String UNKNOWN_LITERAL = "(unknown)";
+
+    /**
+     * String literal: "version"
+     */
     public static final String VERSION_LITERAL = "version";
+
+    /**
+     * String literal: "Strange... Cannot read my own "
+     */
     public static final String CANNOT_READ_MY_OWN_POM = "Strange... Cannot read my own ";
 
     /**
@@ -1497,6 +1513,8 @@ public class QueryJMojo
                         }
                     }
                 }
+
+                task.setExternallyManagedFields(element);
             }
         }
     }
@@ -1678,6 +1696,10 @@ public class QueryJMojo
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
     @Override
     public String toString()
     {

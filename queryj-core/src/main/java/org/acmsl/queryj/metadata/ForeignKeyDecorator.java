@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-2007  Jose San Leandro Armendariz
                         chous@acm-sl.org

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -177,8 +177,7 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @return the externally-managed-fields information.
      */
     @NotNull
-    protected AntExternallyManagedFieldsElement
-        retrieveExternallyManagedFieldsElement(
+    protected AntExternallyManagedFieldsElement retrieveExternallyManagedFieldsElement(
         @NotNull final QueryJCommand parameters)
     {
         @Nullable final AntExternallyManagedFieldsElement result;

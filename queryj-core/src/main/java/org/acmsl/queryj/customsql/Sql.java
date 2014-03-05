@@ -262,7 +262,7 @@ public interface Sql<T>
      * Retrieves the &lt;value&gt; element.
      * @return such value.
      */
-    @NotNull
+    @Nullable
     T getValue();
 
     /**

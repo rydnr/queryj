@@ -56,6 +56,11 @@ public class UndefinedJdbcEngine
     extends AbstractEngine<String>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 5951730135002749008L;
+
+    /**
      * Creates an undefined JDBC engine.
      * @param name the name.
      * @param version the version.

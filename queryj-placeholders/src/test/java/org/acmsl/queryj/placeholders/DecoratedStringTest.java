@@ -87,8 +87,56 @@ public class DecoratedStringTest
         @NotNull final DecoratedString decorator = new DecoratedString("E-Commerce");
 
         Assert.assertEquals(
-            "Invalid upper-case transformation for E-Commerce",
+            "Invalid normalized upper-case transformation for E-Commerce",
             "E_COMMERCE",
             decorator.getNormalized().getUppercased().getValue());
+    }
+
+    /**
+     * Tests {@link DecoratedString#getCamelCase()}
+     */
+    @Test
+    public void camelcase_works()
+    {
+        @NotNull final DecoratedString decorator = new DecoratedString("E_COMMERCE_RELOADED");
+
+        @NotNull final String camelCased = decorator.getCamelCase().getValue();
+
+        Assert.assertEquals(
+            "Invalid camel-case transformation for E_COMMERCE_RELOADED",
+            "ECommerceReloaded",
+            camelCased);
+    }
+
+    /**
+     * Tests {@link DecoratedString#getSingular().getCamelCase()}
+     */
+    @Test
+    public void camelcase_works_also_when_converting_from_plural_to_singular()
+    {
+        @NotNull final DecoratedString decorator = new DecoratedString("THREE_HOUSES");
+
+        @NotNull final String camelCased = decorator.getSingular().getCamelCase().getValue();
+
+        Assert.assertEquals(
+            "Invalid camel-case transformation for THREE_HOUSES",
+            "ThreeHouse",
+            camelCased);
+    }
+
+    /**
+     * Tests {@link DecoratedString#getSingular().getCamelCase()}
+     */
+    @Test
+    public void singleLine_works()
+    {
+        @NotNull final DecoratedString decorator = new DecoratedString("something\nwith\nmultiple\ncarriage\nreturns");
+
+        @NotNull final String singleLine = decorator.getSingleLine().getValue();
+
+        Assert.assertEquals(
+            "Invalid camel-case transformation for \"something\\nwith\\nmultiple\\ncarriage\\nreturns\"",
+            "something with multiple carriage returns",
+            singleLine);
     }
 }

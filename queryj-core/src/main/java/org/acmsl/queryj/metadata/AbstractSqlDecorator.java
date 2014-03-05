@@ -110,7 +110,11 @@ public abstract class AbstractSqlDecorator
             sql.getValidate(),
             sql.isDynamic(),
             new DecoratedString(sql.getDescription()));
-        immutableSetValue(new DecoratedString(sql.getValue()));
+        @Nullable final String t_strValue = sql.getValue();
+        if (t_strValue != null)
+        {
+            immutableSetValue(new DecoratedString(t_strValue));
+        }
         immutableSetParameterRefs(sql.getParameterRefs());
 
         @Nullable final ResultRef t_ResultRef = sql.getResultRef();

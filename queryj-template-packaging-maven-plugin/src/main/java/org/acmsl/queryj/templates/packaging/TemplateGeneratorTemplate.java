@@ -55,6 +55,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class TemplateGeneratorTemplate<C extends TemplatePackagingContext>
     extends AbstractTemplatePackagingTemplate<C>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 6495367163153844355L;
 
     /**
@@ -67,9 +70,7 @@ public class TemplateGeneratorTemplate<C extends TemplatePackagingContext>
     }
 
     /**
-     * Retrieves the template name.
-     *
-     * @return such name.
+     * {@inheritDoc}
      */
     @NotNull
     @Override

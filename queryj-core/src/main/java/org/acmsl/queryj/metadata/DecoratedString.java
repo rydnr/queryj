@@ -57,6 +57,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /*
  * Importing checkthread.org annotations.
@@ -75,7 +76,15 @@ public class DecoratedString
     implements Serializable,
                Comparable<DecoratedString>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 9213626121877319923L;
+
+    /**
+     * A regex for replacing new lines.
+     */
+    protected static final Pattern NEWLINE_PATTERN = Pattern.compile("\\s*\\n\\s*");
 
     /**
      * The actual value.
@@ -122,12 +131,18 @@ public class DecoratedString
         return this.m__strValue;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
         return new HashCodeBuilder().append(getValue()).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj)
     {
@@ -274,7 +289,7 @@ public class DecoratedString
 
         @NotNull final List<String> lines = Arrays.asList(decorationUtils.split(value));
 
-        result = new ArrayList<DecoratedString>(lines.size());
+        result = new ArrayList<>(lines.size());
 
         for (@NotNull final String line : lines)
         {
@@ -373,18 +388,33 @@ public class DecoratedString
         return new DecoratedString(decorationUtils.escape(value, toEscape));
     }
 
+    /**
+     * Splits the string and surrounds it with double quotes.
+     * @return the result of the split.
+     */
     @NotNull
     public DecoratedString[] getSplitAndSurroundByDoubleQuotes()
     {
         return surroundBy(getValue(), "\"", DecorationUtils.getInstance());
     }
 
+    /**
+     * Splits the string and surrounds it with single quotes.
+     * @return the result of the split.
+     */
     @NotNull
     public DecoratedString[] getSplitAndSurroundBySingleQuotes()
     {
         return surroundBy(getValue(), "'", DecorationUtils.getInstance());
     }
 
+    /**
+     * Surrounds the string.
+     * @param value the string.
+     * @param delimiter the delimiter.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return the converted text.
+     */
     @NotNull
     protected DecoratedString[] surroundBy(
         @NotNull final String value, final String delimiter, @NotNull final DecorationUtils decorationUtils)
@@ -397,6 +427,58 @@ public class DecoratedString
                             decorationUtils.escape(value, '\"'))),
                     "\"",
                     " \""));
+    }
+
+    /**
+     * Retrieves the camel-case version of the string.
+     * @return the camel-case formatted string.
+     */
+    @NotNull
+    public DecoratedString getCamelCase()
+    {
+        return getCamelCase(getValue(), StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the camel-case version of the string.
+     * @param value the value to convert.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return the camel-case formatted string.
+     */
+    @NotNull
+    protected DecoratedString getCamelCase(@NotNull final String value, @NotNull final StringUtils stringUtils)
+    {
+        @NotNull final StringBuilder result = new StringBuilder();
+
+        @NotNull final String[] t_astrParts = stringUtils.split(value, new String[] { "_" });
+
+        for (@NotNull final String t_strPart : t_astrParts)
+        {
+            result.append(new DecoratedString(t_strPart).getLowercased().getCapitalized().getValue());
+        }
+
+        return new DecoratedString(result.toString());
+    }
+
+    /**
+     * Retrieves the value, after replacing new lines with single spaces.
+     * @return the value, in a single line.
+     */
+    @NotNull
+    public DecoratedString getSingleLine()
+    {
+        return getSingleLine(getValue());
+    }
+
+    /**
+     * Retrieves the value, after replacing new lines with single spaces.
+     * @param value the original value.
+     * @return the value, in a single line.
+     */
+    @NotNull
+    protected DecoratedString getSingleLine(@NotNull final String value)
+    {
+        return new DecoratedString(NEWLINE_PATTERN.matcher(value).replaceAll(" "));
     }
 
     /**
@@ -419,6 +501,11 @@ public class DecoratedString
         return result;
     }
 
+    /**
+     * Compares this instance to given DecoratedString.
+     * @param decoratedString the value to compare to.
+     * @return the result of the comparison.
+     */
     @Override
     public int compareTo(@Nullable final DecoratedString decoratedString)
     {

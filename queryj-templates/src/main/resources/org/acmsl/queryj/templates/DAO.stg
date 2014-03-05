@@ -560,6 +560,7 @@ constructor(table, repository, engine, C) ::= <<
  @param repository the repository.
  @param C the context.
  !>
+/**
  * Builds a {@link <engine.name><table.name.voName>DAO} instance
  * with given data source.
  * @param dataSource the required {@link javax.sql.DataSource data source}.

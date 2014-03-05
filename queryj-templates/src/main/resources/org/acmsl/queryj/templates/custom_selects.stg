@@ -489,12 +489,11 @@ custom_select_return_nondecorated_explicit_single(cs, result, C) ::= <<
 >>
 
 custom_select_return_explicit_property_multiple(cs, result, C) ::= <<
-<notnull(C=C)>
 List\<<result.properties:{property|<property.objectType>}>\>
 >>
 
 custom_select_return_explicit_property_single(select, result, C) ::= <<
-<result.properties:{property|<if(!property.primitive)><if(property.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif><property.type>}>
+<result.properties:{property|<if(!property.primitive)><endif><property.type>}>
 >>
 
 custom_select_return_decorated_implicit(cs, result, C) ::= <<
@@ -541,7 +540,7 @@ custom_select_return_cast(cs, table, result, C) ::= <<
 >>
 
 custom_select_return_nullable_maybe(cs, result, C) ::= <<
-<if(cs.multiple)><notnull(C=C)><else><if(cs.resultRef)><if(result.wrappingASingleProperty)><result.properties:{property|<if(property.object)><nullable(C=C)><endif>}><else><if(cs.multiple)><notnull(C=C)><else>7<nullable(C=C)><endif><endif><else><nullable(C=C)><endif><endif>
+<if(!cs.multiple)><if(cs.resultRef)><if(result.wrappingASingleProperty)><result.properties:{property|<if(property.object)><nullable(C=C)><endif>}><endif><endif><endif>
 >>
 
 attribute_declaration(attr, C) ::= <<

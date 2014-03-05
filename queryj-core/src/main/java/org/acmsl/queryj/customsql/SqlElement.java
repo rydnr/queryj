@@ -559,7 +559,7 @@ public class SqlElement<T>
      * @return such value.
      */
     @Override
-    @NotNull
+    @Nullable
     public T getValue()
     {
         return m__strValue;

@@ -204,6 +204,7 @@
             </goals>
             <configuration>
               <sources>
+                <source>${project.basedir}/src/test/resources/</source>
                 <source>${project.build.directory}/generated-test-sources/</source>
               </sources>
             </configuration>
@@ -212,6 +213,9 @@
       </plugin>
    </plugins>
    <testResources>
+     <testResource>
+       <directory>${project.basedir}/src/test/resources/</directory>
+     </testResource>
      <testResource>
        <directory>${project.build.directory}/generated-test-sources</directory>
      </testResource>

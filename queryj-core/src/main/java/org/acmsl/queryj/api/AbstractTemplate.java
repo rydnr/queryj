@@ -374,7 +374,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @NotNull final Map<String, STGroup> cache,
         final boolean debugMode)
     {
-        @Nullable STGroup result = null;
+        @Nullable final STGroup result;
 
         @Nullable final STGroup cached;
 
@@ -557,9 +557,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Thread to provide some information about ANTLR class loaders,
      * since it's likely to have triggered the VM shutdown.
-     * @author <a href="mailto:jose.sanleandro@ventura24.es"
-     * >Jose San Leandro</a>
-     * @version $Revision$
      */
     protected static class FinalizingThread
         extends  Thread

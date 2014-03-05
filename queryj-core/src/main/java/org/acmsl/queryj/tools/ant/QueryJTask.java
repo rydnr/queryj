@@ -41,7 +41,6 @@ import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJChain;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
  * Importing some JDK classes.
@@ -79,8 +78,19 @@ public class QueryJTask
     implements  QueryJSettings,
                 DynamicConfigurator
 {
+    /**
+     * String literal: " elements are not supported"
+     */
     public static final String ELEMENTS_ARE_NOT_SUPPORTED = " elements are not supported";
-    public static final String EXTERNALLY_MANAGED_FIELDS = "externally-managed-fields";
+
+    /**
+     * String literal: "externally-managed-fields"
+     */
+    public static final String EXTERNALLY_MANAGED_FIELDS = ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS;
+
+    /**
+     * String literal: "No dynamic attributes are supported ("
+     */
     public static final String NO_DYNAMIC_ATTRIBUTES_ARE_SUPPORTED = "No dynamic attributes are supported (";
 
     /**
@@ -97,11 +107,6 @@ public class QueryJTask
      * The nested tables.
      */
     private AntTablesElement m__Tables;
-
-    /**
-     * The externally-managed fields.
-     */
-    private AntExternallyManagedFieldsElement m__ExternallyManagedFields;
 
     /**
      * Creates a {@link QueryJTask} instance.
@@ -1019,10 +1024,23 @@ public class QueryJTask
      * @param externallyManagedFields the externally-managed-fields xml
      * element.
      */
-    protected void setExternallyManagedFields(
+    public void setExternallyManagedFields(
         @NotNull final AntExternallyManagedFieldsElement externallyManagedFields)
     {
-        m__ExternallyManagedFields = externallyManagedFields;
+        setExternallyManagedFields(externallyManagedFields, getQueryJCommand());
+    }
+
+    /**
+     * Specifies the "externally-managed-fields" nested element.
+     * @param externallyManagedFields the externally-managed-fields xml
+     * element.
+     * @
+     */
+    protected void setExternallyManagedFields(
+        @NotNull final AntExternallyManagedFieldsElement externallyManagedFields, @NotNull final QueryJCommand command)
+    {
+        new QueryJCommandWrapper<AntExternallyManagedFieldsElement>(command)
+            .setSetting(EXTERNALLY_MANAGED_FIELDS, externallyManagedFields);
     }
 
     /**
@@ -1033,7 +1051,19 @@ public class QueryJTask
     @SuppressWarnings("unused")
     public AntExternallyManagedFieldsElement getExternallyManagedFields()
     {
-        return m__ExternallyManagedFields;
+        return getExternallyManagedFields(getQueryJCommand());
+    }
+
+    /**
+     * Retrieves the "externally-managed-fields" nested element.
+     * @return such information.
+     */
+    @Nullable
+    @SuppressWarnings("unused")
+    protected AntExternallyManagedFieldsElement getExternallyManagedFields(@NotNull final QueryJCommand command)
+    {
+        return
+            new QueryJCommandWrapper<AntExternallyManagedFieldsElement>(command).getSetting(EXTERNALLY_MANAGED_FIELDS);
     }
 
     /**
@@ -1243,6 +1273,10 @@ public class QueryJTask
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
     @NotNull
     @Override
     public String toString()
@@ -1250,7 +1284,6 @@ public class QueryJTask
         return "{ 'class': 'QueryJTask', 'classpath': '" + m__Classpath +
                "', 'queryJCommand': '" + m__QueryJCommand +
                "', 'tables': " + m__Tables +
-               "', 'externallyManagedFields': " + m__ExternallyManagedFields +
                '}';
     }
 }

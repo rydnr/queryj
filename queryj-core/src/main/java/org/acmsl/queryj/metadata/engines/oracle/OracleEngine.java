@@ -62,6 +62,11 @@ public class OracleEngine
     extends AbstractEngine<String>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 3126277107665888316L;
+
+    /**
      * Creates a new engine instance.
      * @param version the version.
      */

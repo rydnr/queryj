@@ -127,43 +127,37 @@ public class ParameterElementFactory
         {
             if (t_strType.equals("Date"))
             {
-                @Nullable Date date = null;
+                @Nullable Date date;
 
-                try
-                {
-                    date = new SimpleDateFormat(DATE_FORMAT_ES).parse(t_strValidationValue);
-                }
-                catch (@NotNull final ParseException invalidDate)
+                if (t_strValidationValue != null)
                 {
                     try
                     {
-                        date = new SimpleDateFormat(DATE_FORMAT_EN).parse(t_strValidationValue);
+                        date = new SimpleDateFormat(DATE_FORMAT_ES).parse(t_strValidationValue);
                     }
-                    catch (@NotNull final ParseException invalidEnglishDate)
+                    catch (@NotNull final ParseException invalidDate)
                     {
-                        result = null;
+                        try
+                        {
+                            date = new SimpleDateFormat(DATE_FORMAT_EN).parse(t_strValidationValue);
+                        }
+                        catch (@NotNull final ParseException invalidEnglishDate)
+                        {
+                            date = new Date();
+                        }
                     }
                 }
-                if (date != null)
+                else
                 {
-                    result =
-                        new ParameterElement<>(
-                            t_strId,
-                            t_iIndex,
-                            t_strName,
-                            t_strType,
-                            date);
+                    date = new Date();
                 }
+
+                result = new ParameterElement<>(t_strId, t_iIndex, t_strName, t_strType, date);
             }
             else
             {
                 result =
-                    new ParameterElement<>(
-                        t_strId,
-                        t_iIndex,
-                        t_strName,
-                        t_strType,
-                        t_strValidationValue);
+                    new ParameterElement<>(t_strId, t_iIndex, t_strName, t_strType, t_strValidationValue);
             }
         }
         else

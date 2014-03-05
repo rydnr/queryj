@@ -45,6 +45,8 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+import java.io.Serializable;
+
 /**
  * Represents engine vendors.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
@@ -53,6 +55,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public interface Engine<T>
+    extends Serializable
 {
     /**
      * Retrieves the name.

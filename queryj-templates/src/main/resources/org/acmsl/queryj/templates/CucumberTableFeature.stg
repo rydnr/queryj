@@ -1,0 +1,95 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: CucumberTableFeature.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate [Table].feature
+//              Cucumber tests
+//
+group CucumberTableFeature;
+
+source(C) ::= <<
+<!
+  Generates CucumberTable.feature files.
+!>
+<source_impl(table=C.table, engine=C.engine, C=C)>
+>>
+source_impl(table, engine, C) ::= <<
+<!
+  Generates CucumberTable.feature files.
+!>
+Feature: <table.name> code compiles
+
+  Scenario Outline: <table.name>-specific templates compile
+
+    Given the following tables:
+    |    table     | parent table | decorated | relationship |   static    |
+    | <table.name> | <table.parent> | <table.decorated> | <table.relationship> | <table.static> |
+
+    And the following columns:
+    |     table    |         column        | type      | pk    | allows null | readonly |   sequence    | keyword | boolean | length | precision |
+    <table.primaryKey:{ attr | | <table.name> | <attr.name> | <attr.type> | true | <attr.nullable> | <attr.readOnly> | <attr.sequence> | <attr.keyword> | <attr.boolean> | <attr.length> | <attr.precision> |}; separator="\n">
+    <table.own.minus.primaryKey:{ attr | | <table.name> | <attr.name> | <attr.type> | false | <attr.nullable> | <attr.readOnly> | <attr.sequence> | <attr.keyword> | <attr.boolean> | <attr.length> | <attr.precision> |}; separator="\n">
+
+<if(table.foreignKeys)>
+    And the following foreign keys:
+    | source table | source columns | target table | allows null |
+    <table.foreignKeys:{ fk | | <fk.source.name> | <fk.attributes:{ attr | <attr.name>}; separator=","> | <fk.targetTableName> | <fk.nullable> |}; separator="\n">
+<endif>
+
+<if(table.customSelects)>
+    And the following queries:
+      |       id      |     name      |     dao      |  type  | matches  |                        value                           | validate |
+      <table.customSelects:{ s | | <s.id> | <s.name> | <s.dao> | <s.type> | <s.matches> | <s.value.singleLine> | <s.validate> |}; separator="\n">
+
+    And the following query parameters:
+      |            id            |     sql       | index |  type  |     name    | validation-value |
+      <table.customSelects:{ s | | <s.parameters:{ p | <p.id> | <s.id> | <p.index> | <p.type> | <p.name> | <p.validationValue> |}; separator="\n">}; separator="\n">
+<endif>
+
+<if(table.static)>
+<if(table.staticContent)>
+    And the following contents:
+      |    table     |         row          |
+      <table.staticContent:{ r | | <table.name> | <r.attributes:{ a | <if(a.primitive)><a.value><else>"<a.value>"<endif>}; separator=",">}; separator="\n">
+<endif>
+<endif>
+
+    When I generate with \<template>.stg for <engine.name>
+
+    Then the generated \<output> file compiles successfully
+
+    Examples:
+      | template | output |
+      | DAO | <engine.name.capitalized><table.name.singular.camelcase>.java |
+>>

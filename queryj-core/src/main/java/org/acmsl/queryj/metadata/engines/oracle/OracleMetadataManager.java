@@ -40,6 +40,7 @@ package org.acmsl.queryj.metadata.engines.oracle;
 /*
  * Importing some project classes.
  */
+import org.acmsl.commons.utils.Chronometer;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
@@ -278,7 +279,8 @@ public class OracleMetadataManager
                 +    "and tc.table_name = uc.table_name "
                 +    "and c.column_name = uc.column_name ";
             
-            if  (t_Log != null)
+            if  (   (t_Log != null)
+                 && (t_Log.isDebugEnabled()))
             {
                 t_Log.debug("query:" + t_strQuery);
             }
@@ -294,7 +296,25 @@ public class OracleMetadataManager
         {
             try
             {
+                @Nullable final Chronometer t_Chronometer;
+
+                if  (   (t_Log != null)
+                     && (t_Log.isInfoEnabled()))
+                {
+                    t_Chronometer = new Chronometer();
+                    t_Log.info("Starting database crawl");
+                }
+                else
+                {
+                    t_Chronometer = null;
+                }
                 t_rsResults = t_PreparedStatement.executeQuery();
+                if  (   (t_Log != null)
+                     && (t_Log.isInfoEnabled())
+                     && (t_Chronometer != null))
+                {
+                    t_Log.info("Database crawl took " + t_Chronometer.now());
+                }
             }
             catch (@NotNull final SQLException queryFailed)
             {

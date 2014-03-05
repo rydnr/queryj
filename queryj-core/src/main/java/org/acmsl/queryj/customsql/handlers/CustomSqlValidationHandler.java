@@ -1131,7 +1131,7 @@ public class CustomSqlValidationHandler
                             t_Method =
                                 retrieveMethod(
                                     ResultSet.class,
-                                    getGetterMethod(Class.forName(t_Property.getType())),
+                                    getGetterMethod(typeManager.getClass(t_Property.getType())),
                                     new Class<?>[]
                                     {
                                         (t_Property.getIndex() > 0)
@@ -1144,12 +1144,6 @@ public class CustomSqlValidationHandler
                             throw
                                 new UnsupportedCustomResultPropertyTypeException(
                                     t_Property, sqlResult, sql, noSuchMethod);
-                        }
-                        catch  (@NotNull final ClassNotFoundException classNotFound)
-                        {
-                            throw
-                                new UnsupportedCustomResultPropertyTypeException(
-                                    t_Property, sqlResult, sql, classNotFound);
                         }
 
                         invokeResultSetGetter(
