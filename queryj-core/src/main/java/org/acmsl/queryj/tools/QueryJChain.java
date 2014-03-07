@@ -112,9 +112,9 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
         @NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain)
        throws QueryJBuildException
     {
-        chain.add((CH) new ParameterValidationHandler());
-
         chain.add((CH) new Log4JInitializerHandler());
+
+        chain.add((CH) new ParameterValidationHandler());
 
         chain.add((CH) new JdbcConnectionOpeningHandler());
         chain.add((CH) new CustomSqlProviderRetrievalHandler());

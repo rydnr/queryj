@@ -32,18 +32,23 @@
 package org.acmsl.queryj.tools.maven;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.ant.QueryJTask;
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some Maven classes.
  */
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.Mojo;
@@ -1251,6 +1256,7 @@ public class QueryJMojo
      * Executes QueryJ via Maven2.
      * @throws MojoExecutionException if something goes wrong.
      */
+    @Override
     public void execute()
         throws MojoExecutionException
     {
@@ -1366,6 +1372,15 @@ public class QueryJMojo
     }
 
     /**
+     * Initializes the logging.
+     * @param commonsLoggingLog such log.
+     */
+    protected void initLogging(@NotNull final org.apache.commons.logging.Log commonsLoggingLog)
+    {
+        UniqueLogFactory.initializeInstance(commonsLoggingLog);
+    }
+
+    /**
      * Builds the QueryJ task.
      * @param log the Maven log.
      * @return such info.
@@ -1373,7 +1388,11 @@ public class QueryJMojo
     @NotNull
     protected QueryJTask buildTask(@NotNull final Log log)
     {
-        @NotNull final QueryJTask result = new QueryJTask();
+        @NotNull final CommonsLoggingMavenLogAdapter t_Log = new CommonsLoggingMavenLogAdapter(log);
+
+        @NotNull final QueryJTask result = new QueryJTask(t_Log);
+
+        initLogging(t_Log);
 
         @NotNull final Project project = new AntProjectAdapter(new Project(), log);
 
@@ -1382,44 +1401,44 @@ public class QueryJMojo
         @NotNull final Path path = new Path(project);
         result.setClasspath(path);
 
-        log.debug("Catalog: " + getCatalog());
+        t_Log.debug("Catalog: " + getCatalog());
         result.setCatalog(getCatalog());
 
-        log.debug("Driver: " + getDriver());
+        t_Log.debug("Driver: " + getDriver());
         result.setDriver(getDriver());
 
-        log.debug("JNDI DataSource: " + getJndiDataSource());
+        t_Log.debug("JNDI DataSource: " + getJndiDataSource());
         result.setJndiDataSource(getJndiDataSource());
 
-        log.debug("Output dir: " + getOutputDir());
+        t_Log.debug("Output dir: " + getOutputDir());
         result.setOutputdir(getOutputDir());
 
-        log.debug("Package name: " + getPackageName());
+        t_Log.debug("Package name: " + getPackageName());
         result.setPackage(getPackageName());
 
-        log.debug("Repository: " + getRepository());
+        t_Log.debug("Repository: " + getRepository());
         result.setRepository(getRepository());
 
-        log.debug("Schema: " + getSchema());
+        t_Log.debug("Schema: " + getSchema());
         result.setSchema(getSchema());
 
-        log.debug("Url: " + getUrl());
+        t_Log.debug("Url: " + getUrl());
         result.setUrl(getUrl());
 
-        log.debug("Username: " + getUsername());
+        t_Log.debug("Username: " + getUsername());
         result.setUsername(getUsername());
 
-        log.debug("Password specified: " + (getPassword() != null));
+        t_Log.debug("Password specified: " + (getPassword() != null));
         result.setPassword(getPassword());
 
-        log.debug("SQL XML file: " + getSqlXmlFile());
+        t_Log.debug("SQL XML file: " + getSqlXmlFile());
         result.setSqlXmlFile(getSqlXmlFile());
 
-        log.debug("Header file: " + getHeaderFile());
+        t_Log.debug("Header file: " + getHeaderFile());
         result.setHeaderfile(getHeaderFile());
 
-        log.debug(
-              "Grammar bundle: " + getGrammarFolder() + File.separator
+        t_Log.debug(
+            "Grammar bundle: " + getGrammarFolder() + File.separator
             + getGrammarName() + "(_" + Locale.US.getLanguage().toLowerCase(Locale.US)
             + ")" + getGrammarSuffix());
 
@@ -1434,11 +1453,11 @@ public class QueryJMojo
 
         if (encoding == null)
         {
-            log.warn("Using default (platform-dependent) encoding to generate QueryJ sources");
+            t_Log.warn("Using default (platform-dependent) encoding to generate QueryJ sources");
         }
         else
         {
-            log.info("Using encoding: \"" + encoding + "\" to generate QueryJ sources");
+            t_Log.info("Using encoding: \"" + encoding + "\" to generate QueryJ sources");
         }
         result.setEncoding(encoding);
 
@@ -1446,7 +1465,7 @@ public class QueryJMojo
 
         final int threadCount = getRequestThreadCount();
 
-        log.info("Using " + threadCount + " threads");
+        t_Log.info("Using " + threadCount + " threads");
         result.setThreadCount(threadCount);
 
         final boolean disableGenerationTimestamps = getDisableGenerationTimestamps();

@@ -50,6 +50,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing some Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.Log4JLogger;
 
 /*
  * Importing some Log4J classes.
@@ -91,9 +92,8 @@ public class Log4JInitializerHandler
 {
     /**
      * Handles given parameters.
-     *
      * @param parameters the parameters.
-     * @return <code>true</code> to avoid further processing of such command
+     * @return {@code true} to avoid further processing of such command
      *         by different handlers.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
@@ -103,7 +103,7 @@ public class Log4JInitializerHandler
     {
         if (!isLog4JConfigured())
         {
-            connectLog4JToMaven();
+            connectLog4JToMaven(parameters.getLog());
         }
 
         return false;
@@ -115,31 +115,39 @@ public class Log4JInitializerHandler
      */
     protected boolean isLog4JConfigured()
     {
-        boolean result = true;
+        final boolean result;
 
         @NotNull final Logger root = Logger.getRootLogger();
 
-        if (!root.getAllAppenders().hasMoreElements())
-        {
-            result = false;
-        }
+        result = root.getAllAppenders().hasMoreElements();
 
         return result;
     }
 
     /**
      * Configures Log4J to use Maven's plugin API.
+     * @param log the runtime log from Maven.
      */
-    protected void connectLog4JToMaven()
+    protected void connectLog4JToMaven(@Nullable final Log log)
     {
-        @NotNull final Logger root = Logger.getRootLogger();
+        @NotNull final Logger t_Root = Logger.getRootLogger();
 
-        root.addAppender(
-            new WriterAppender(
-                new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN),
-                new WriterAdapter()));
+        if (log != null)
+        {
+            t_Root.addAppender(
+                new WriterAppender(
+                    new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN),
+                    new WriterAdapter(log, Level.INFO)));
+        }
 
-        root.setLevel(Level.WARN);
+        @NotNull final Log4JLogger t_LoggerAdapter = new Log4JLogger(t_Root);
+
+        @Nullable final Log t_Log = UniqueLogFactory.getLog("queryj");
+
+        if (t_Log == null)
+        {
+            UniqueLogFactory.initializeInstance(t_LoggerAdapter);
+        }
     }
 
     /**
@@ -151,25 +159,142 @@ public class Log4JInitializerHandler
         extends Writer
     {
         /**
-         * {@inheritDoc}
+         * The Maven log.
+         */
+        private Log m__Log;
+
+        /**
+         * The log level.
+         */
+        private Level m__Level;
+
+        /**
+         * Creates a new instance for given log.
+         * @param log the {@link Log}.
+         */
+        public WriterAdapter(@NotNull final Log log, @NotNull final Level level)
+        {
+            immutableSetLog(log);
+            immutableSetLevel(level);
+        }
+
+        /**
+         * Specifies the level.
+         * @param level such {@link Level}.
+         */
+        protected final void immutableSetLevel(@NotNull final Level level)
+        {
+            this.m__Level = level;
+        }
+
+        /**
+         * Specifies the level.
+         * @param level such {@link Level}.
+         */
+        @SuppressWarnings("unused")
+        protected void setLevel(@NotNull final Level level)
+        {
+            immutableSetLevel(level);
+        }
+
+        /**
+         * Retrievs the level.
+         * @return such {@link Level}.
+         */
+        public Level getLevel()
+        {
+            return this.m__Level;
+        }
+
+        /**
+         * Specifies the log.
+         * @param log such {@link Log} instance.
+         */
+        protected final void immutableSetLog(@NotNull final Log log)
+        {
+            this.m__Log = log;
+        }
+
+        /**
+         * Specifies the log.
+         * @param log such {@link Log} instance.
+         */
+        protected void setLog(@NotNull final Log log)
+        {
+            immutableSetLog(log);
+        }
+
+        /**
+         * Retrieves the log.
+         * @return such {@link Log} instance.
+         */
+        public Log getLog()
+        {
+            return this.m__Log;
+        }
+
+        /**
+         * Logs the buffer.
+         * @param cbuf the buffer to log.
+         * @param off the offset.
+         * @param len the buffer length.
+         * @throws IOException if the log fails.
          */
         @Override
         public void write(final char[] cbuf, final int off, final int len)
             throws IOException
         {
-            @Nullable final Log t_Log = UniqueLogFactory.getLog("log4j");
+            write(cbuf, off, len, getLog(), getLevel());
+        }
 
-            if (t_Log != null)
+        /**
+         * Logs the buffer.
+         * @param cbuf the buffer to log.
+         * @param off the offset.
+         * @param len the buffer length.
+         * @param log the actual {@link Log}.
+         * @param level the log {@link Level level}.
+         * @throws IOException if the log fails.
+         */
+        protected void write(
+            final char[] cbuf, final int off, final int len, @NotNull final Log log, @NotNull final Level level)
+            throws IOException
+        {
+            switch (level.toInt())
             {
-                t_Log.warn(new String(cbuf, off, len));
+                case Level.TRACE_INT: log.trace(new String(cbuf, off, len));
+                    break;
+                case Level.DEBUG_INT: log.debug(new String(cbuf, off, len));
+                    break;
+                case Level.INFO_INT: log.info(new String(cbuf, off, len));
+                    break;
+                case Level.WARN_INT: log.warn(new String(cbuf, off, len));
+                    break;
+                case Level.FATAL_INT: log.fatal(new String(cbuf, off, len));
+                    break;
+                default:
+                    break;
             }
         }
 
         /**
-         * {@inheritDoc}
+         * Flushes the writer's contents.
+         * @throws IOException if the flushing fails.
          */
         @Override
-        public void flush() throws IOException
+        public void flush()
+            throws IOException
+        {
+            // Nothing to do
+        }
+
+        /**
+         * Closes the writer.
+         * @throws IOException if the writer cannot be closed.
+         */
+        @Override
+        public void close()
+            throws IOException
         {
             // Nothing to do
         }
@@ -177,10 +302,14 @@ public class Log4JInitializerHandler
         /**
          * {@inheritDoc}
          */
+        @NotNull
         @Override
-        public void close() throws IOException
+        public String toString()
         {
-            // Nothing to do
+            return "WriterAdapter{ " +
+                   "\"log\"= \"" + this.m__Log
+                    + "\", \"level\"=" + m__Level +
+                   '}';
         }
     }
 }

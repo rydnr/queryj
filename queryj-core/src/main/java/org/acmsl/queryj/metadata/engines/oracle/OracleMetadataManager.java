@@ -399,6 +399,16 @@ public class OracleMetadataManager
         return result;
     }
 
+    /**
+     * Builds the table structures.
+     * @param tableMap the table map.
+     * @param columnMap the column map.
+     * @param primaryKeyMap the primary key map.
+     * @param foreignKeyMap the foreign key map.
+     * @param foreignKeyAttributeMap the foreign key attribute map.
+     * @param caseSensitiveness whether it's case sensitive.
+     * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
+     */
     protected void buildUpTables(
         @NotNull final Map<String,TableIncompleteValueObject> tableMap,
         @NotNull final Map<String,List<AttributeIncompleteValueObject>> columnMap,
@@ -408,6 +418,16 @@ public class OracleMetadataManager
         final boolean caseSensitiveness,
         @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        @Nullable Chronometer t_Chronometer = null;
+
+        if (   (t_Log != null)
+            && (t_Log.isInfoEnabled()))
+        {
+            t_Chronometer = new Chronometer();
+            t_Log.info("Building up " + tableMap.size() + " tables ...");
+        }
+
         for (@Nullable final TableIncompleteValueObject t_Table : tableMap.values())
         {
             if (t_Table != null)
@@ -449,12 +469,44 @@ public class OracleMetadataManager
             }
         }
 
+        if (   (t_Log != null)
+            && (t_Log.isInfoEnabled()))
+        {
+            t_Log.info("Table build up phase took " + t_Chronometer.now());
+
+            t_Log.info("Processing table comments ...");
+            t_Chronometer = new Chronometer();
+        }
+
         // second round: fix table properties based on the table comments.
         processTableComments(tableMap.values(), metaLanguageUtils);
 
+        if (   (t_Log != null)
+            && (t_Log.isInfoEnabled()))
+        {
+            t_Log.info("Processing table comments took " + t_Chronometer.now());
+            t_Log.info("Building hierarchy relationships ...");
+            t_Chronometer = new Chronometer();
+        }
+
         // third round: parent tables
         bindParentChildRelationships(tableMap.values(), caseSensitiveness, metaLanguageUtils);
+
+        if (   (t_Log != null)
+            && (t_Log.isInfoEnabled()))
+        {
+            t_Log.info("Hierarchy relationships took " + t_Chronometer.now());
+            t_Log.info("Binding attributes ...");
+            t_Chronometer = new Chronometer();
+        }
+
         bindAttributes(tableMap.values(), columnMap);
+
+        if (   (t_Log != null)
+            && (t_Log.isInfoEnabled()))
+        {
+            t_Log.info("Attribute binding took " + t_Chronometer.now());
+        }
     }
 
     /**

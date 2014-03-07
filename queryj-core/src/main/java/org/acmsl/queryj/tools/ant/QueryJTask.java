@@ -51,6 +51,7 @@ import java.io.File;
  * Importing some Ant classes.
  */
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.logging.Log;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
 import org.apache.tools.ant.Task;
@@ -111,9 +112,9 @@ public class QueryJTask
     /**
      * Creates a {@link QueryJTask} instance.
      */
-    public QueryJTask()
+    public QueryJTask(@NotNull final Log log)
     {
-        immutableSetQueryJCommand(new ConfigurationQueryJCommandImpl(new PropertiesConfiguration()));
+        immutableSetQueryJCommand(new ConfigurationQueryJCommandImpl(new PropertiesConfiguration(), log));
     }
 
     /**
