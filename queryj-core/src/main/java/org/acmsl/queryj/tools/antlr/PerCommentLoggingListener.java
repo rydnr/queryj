@@ -82,7 +82,7 @@ public class PerCommentLoggingListener
     public PerCommentLoggingListener(@NotNull final String comment)
     {
         immutableSetComment(comment);
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Parsing [" + comment + ']');
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Parsing [" + comment + ']');
     }
 
     /**
@@ -120,7 +120,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterTabStatic(@NotNull final PerCommentParser.TabStaticContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering tabStatic: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering tabStatic: " + ctx.getText());
     }
 
     /**
@@ -129,7 +129,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitTabStatic(@NotNull final PerCommentParser.TabStaticContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting tabStatic: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting tabStatic: " + ctx.getText());
     }
 
     /**
@@ -138,7 +138,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterColIsarefs(@NotNull final PerCommentParser.ColIsarefsContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering colIsarefs: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering colIsarefs: " + ctx.getText());
     }
 
     /**
@@ -147,7 +147,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitColIsarefs(@NotNull final PerCommentParser.ColIsarefsContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting colIsarefs: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting colIsarefs: " + ctx.getText());
     }
 
     /**
@@ -156,7 +156,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterColAnnotation(@NotNull final PerCommentParser.ColAnnotationContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering colAnnotation: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering colAnnotation: " + ctx.getText());
     }
 
     /**
@@ -165,7 +165,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitColAnnotation(@NotNull final PerCommentParser.ColAnnotationContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting colAnnotatiotn: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting colAnnotatiotn: " + ctx.getText());
     }
 
     /**
@@ -174,7 +174,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterTabIsa(@NotNull final PerCommentParser.TabIsaContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering tabIsa: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering tabIsa: " + ctx.getText());
     }
 
     /**
@@ -183,7 +183,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitTabIsa(@NotNull final PerCommentParser.TabIsaContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting tabIsa: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting tabIsa: " + ctx.getText());
     }
 
     /**
@@ -192,7 +192,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterColBool(@NotNull final PerCommentParser.ColBoolContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering colBool: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering colBool: " + ctx.getText());
     }
 
     /**
@@ -201,7 +201,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitColBool(@NotNull final PerCommentParser.ColBoolContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting colBool: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting colBool: " + ctx.getText());
     }
 
     /**
@@ -210,7 +210,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterColReadonly(@NotNull final PerCommentParser.ColReadonlyContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering colReadonly: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering colReadonly: " + ctx.getText());
     }
 
     /**
@@ -219,7 +219,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitColReadonly(@NotNull final PerCommentParser.ColReadonlyContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting colReadonly: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting colReadonly: " + ctx.getText());
     }
 
     /**
@@ -228,7 +228,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterTabRelationship(@NotNull final PerCommentParser.TabRelationshipContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering tabRelationship: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering tabRelationship: " + ctx.getText());
     }
 
     /**
@@ -237,7 +237,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitTabRelationship(@NotNull final PerCommentParser.TabRelationshipContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting tabRelationship: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting tabRelationship: " + ctx.getText());
     }
 
     /**
@@ -246,7 +246,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterColumnComment(@NotNull final PerCommentParser.ColumnCommentContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering columnComment: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering columnComment: " + ctx.getText());
     }
 
     /**
@@ -255,7 +255,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitColumnComment(@NotNull final PerCommentParser.ColumnCommentContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting columnComment: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting columnComment: " + ctx.getText());
     }
 
     /**
@@ -264,7 +264,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterColOraseq(@NotNull final PerCommentParser.ColOraseqContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering colOraseq: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering colOraseq: " + ctx.getText());
     }
 
     /**
@@ -273,7 +273,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitColOraseq(@NotNull final PerCommentParser.ColOraseqContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting colOraseq: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting colOraseq: " + ctx.getText());
     }
 
     /**
@@ -282,7 +282,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterIdent(@NotNull final PerCommentParser.IdentContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering ident: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering ident: " + ctx.getText());
     }
 
     /**
@@ -291,7 +291,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitIdent(@NotNull final PerCommentParser.IdentContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting ident: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting ident: " + ctx.getText());
     }
 
     /**
@@ -300,7 +300,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterTabAnnotation(@NotNull final PerCommentParser.TabAnnotationContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering tabAnnotation: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering tabAnnotation: " + ctx.getText());
     }
 
     /**
@@ -309,7 +309,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitTabAnnotation(@NotNull final PerCommentParser.TabAnnotationContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting tabAnnotation: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting tabAnnotation: " + ctx.getText());
     }
 
     /**
@@ -318,7 +318,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterTableComment(@NotNull final PerCommentParser.TableCommentContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering tableComment: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering tableComment: " + ctx.getText());
     }
 
     /**
@@ -327,7 +327,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitTableComment(@NotNull final PerCommentParser.TableCommentContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting tableComment: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting tableComment: " + ctx.getText());
     }
 
     /**
@@ -336,7 +336,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterTabIsatype(@NotNull final PerCommentParser.TabIsatypeContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering tabIsatype: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering tabIsatype: " + ctx.getText());
     }
 
     /**
@@ -345,7 +345,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitTabIsatype(@NotNull final PerCommentParser.TabIsatypeContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting tabIsatype: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting tabIsatype: " + ctx.getText());
     }
 
     /**
@@ -354,7 +354,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterTabDecorator(@NotNull final PerCommentParser.TabDecoratorContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering tabDecorator: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering tabDecorator: " + ctx.getText());
     }
 
     /**
@@ -363,7 +363,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitTabDecorator(@NotNull final PerCommentParser.TabDecoratorContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting tabDecorator: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting tabDecorator: " + ctx.getText());
     }
 
     /**
@@ -372,7 +372,7 @@ public class PerCommentLoggingListener
     @Override
     public void enterEveryRule(@NotNull final ParserRuleContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Entering everyRule: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Entering everyRule: " + ctx.getText());
     }
 
     /**
@@ -381,7 +381,7 @@ public class PerCommentLoggingListener
     @Override
     public void exitEveryRule(@NotNull final ParserRuleContext ctx)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Exiting everyRule: " + ctx.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Exiting everyRule: " + ctx.getText());
     }
 
     /**
@@ -390,7 +390,7 @@ public class PerCommentLoggingListener
     @Override
     public void visitTerminal(@NotNull final TerminalNode node)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Visiting terminal: " + node.getText());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Visiting terminal: " + node.getText());
     }
 
     /**
@@ -399,7 +399,7 @@ public class PerCommentLoggingListener
     @Override
     public void visitErrorNode(@NotNull final ErrorNode node)
     {
-        LogFactory.getLog(PerCommentLoggingListener.class).info("Visiting error node: " + node.getText() + " | " + node.toStringTree());
+        LogFactory.getLog(PerCommentLoggingListener.class).debug("Visiting error node: " + node.getText() + " | " + node.toStringTree());
     }
 
     @NotNull

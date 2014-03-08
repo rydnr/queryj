@@ -247,6 +247,9 @@ public abstract class AbstractQueryJChain
         @NotNull final QueryJBuildException buildException,
         @NotNull final QueryJCommand command);
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

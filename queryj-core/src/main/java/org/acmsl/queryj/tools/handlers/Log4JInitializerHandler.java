@@ -42,21 +42,18 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.logging.UniqueLogFactory;
-
-/*
  * Importing some Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.impl.Log4JLogger;
 
 /*
  * Importing some Log4J classes.
  */
+import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
+import org.apache.log4j.Priority;
+import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.WriterAppender;
 
 /*
@@ -135,11 +132,13 @@ public class Log4JInitializerHandler
         if (log != null)
         {
             t_Root.addAppender(
-                new WriterAppender(
+                new WriterAppenderImpl(
                     new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN),
-                    new WriterAdapter(log, Level.INFO)));
+                    new WriterAdapter(log, Level.INFO),
+                    Level.INFO));
         }
 
+        /*
         @NotNull final Log4JLogger t_LoggerAdapter = new Log4JLogger(t_Root);
 
         @Nullable final Log t_Log = UniqueLogFactory.getLog("queryj");
@@ -147,6 +146,56 @@ public class Log4JInitializerHandler
         if (t_Log == null)
         {
             UniqueLogFactory.initializeInstance(t_LoggerAdapter);
+        }
+        */
+    }
+
+    /**
+     * A {@link WriterAppender} implementation to ensure the priority conditions
+     * are met.
+     */
+    public static class WriterAppenderImpl
+        extends WriterAppender
+    {
+        /**
+         * The priority.
+         */
+        private Priority m__Priority;
+
+        /**
+         * Instantiate a WriterAppender and set the output destination to
+         * <code>writer</code>.
+         * <p/>
+         * <p>The <code>writer</code> must have been previously opened by
+         * the user.
+         */
+        public WriterAppenderImpl(final Layout layout, final Writer writer, final Priority priority)
+        {
+            super(layout, writer);
+            setThreshold(priority);
+        }
+
+        /**
+         * Logs the event if the priority conditions are met.
+         * @param event the {@link LoggingEvent event}.
+         */
+        @Override
+        public void append(@NotNull final LoggingEvent event)
+        {
+            append(event, getThreshold());
+        }
+
+        /**
+         * Logs the event if the priority conditions are met.
+         * @param event the {@link LoggingEvent event}.
+         * @param priority the {@link Priority}.
+         */
+        protected void append(@NotNull final LoggingEvent event, @NotNull final Priority priority)
+        {
+            if (event.getLevel().isGreaterOrEqual(priority))
+            {
+                super.append(event);
+            }
         }
     }
 

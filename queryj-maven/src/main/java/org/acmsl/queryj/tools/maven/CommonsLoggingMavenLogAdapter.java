@@ -367,7 +367,7 @@ public class CommonsLoggingMavenLogAdapter
     public void info(final Object message, final Throwable t)
     {
         if (   (message != null)
-               && (t != null))
+            && (t != null))
         {
             info(message, t, getLog());
         }
@@ -456,7 +456,7 @@ public class CommonsLoggingMavenLogAdapter
      * @param t       log this cause
      */
     @Override
-    public void warn(final Object message, final Throwable t)
+    public void warn(@Nullable final Object message, @Nullable final Throwable t)
     {
         if (   (message != null)
             && (t != null))
@@ -549,7 +549,7 @@ public class CommonsLoggingMavenLogAdapter
      * @param t       log this cause
      */
     @Override
-    public void error(final Object message, final Throwable t)
+    public void error(@Nullable final Object message, @Nullable final Throwable t)
     {
         if (   (message != null)
             && (t != null))
@@ -642,7 +642,7 @@ public class CommonsLoggingMavenLogAdapter
      * @param t       log this cause
      */
     @Override
-    public void fatal(final Object message, final Throwable t)
+    public void fatal(@Nullable final Object message, @Nullable final Throwable t)
     {
         if (   (message != null)
             && (t != null))
