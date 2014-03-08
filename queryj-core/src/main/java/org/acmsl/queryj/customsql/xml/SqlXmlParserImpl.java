@@ -35,10 +35,10 @@ package org.acmsl.queryj.customsql.xml;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.commons.utils.SaxUtils;
 import org.acmsl.queryj.api.exceptions.CannotReadCustomSqlXmlFileException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.customsql.AbstractCustomSqlProvider;
 import org.acmsl.queryj.customsql.ConnectionFlags;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.IdentifiableElement;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.ParameterRef;
@@ -57,13 +57,13 @@ import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
+import org.acmsl.commons.utils.SaxUtils;
 
 /*
  * Importing some JDK classes.
@@ -79,6 +79,7 @@ import java.util.List;
  * Importing Digester classes.
  */
 import org.apache.commons.digester.Digester;
+import org.xml.sax.SAXParseException;
 
 /*
  * Importing Jakarta Commons Logging classes
@@ -95,7 +96,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.xml.sax.SAXParseException;
 
 /**
  * Is able to read the contents contained in QueryJ's sql.xml files.
@@ -103,8 +103,8 @@ import org.xml.sax.SAXParseException;
  */
 @ThreadSafe
 public class SqlXmlParserImpl
-    implements CustomSqlProvider,
-                SqlXmlParser
+    extends AbstractCustomSqlProvider
+    implements SqlXmlParser
 {
     /**
      * The serial version id.
@@ -421,6 +421,7 @@ public class SqlXmlParserImpl
      * Adds given item, if not already annotated.
      * @param item the item.
      * @param items the item list.
+     * @param <C> the item type.
      */
     protected <C> void add(@NotNull final C item, @NotNull final List<C> items)
     {
@@ -965,6 +966,7 @@ public class SqlXmlParserImpl
     /**
      * Post-processes given items.
      * @param items the items.
+     * @param <T> the type of the items.
      * @return the processed items.
      */
     @NotNull
@@ -1071,6 +1073,7 @@ public class SqlXmlParserImpl
     /**
      * {@inheritDoc}
      */
+    @NotNull
     @Override
     public String toString()
     {

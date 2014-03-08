@@ -348,6 +348,12 @@
         <version>3.1</version>
       </dependency>
 
+      <dependency>
+        <groupId>org.jdogma.junit</groupId>
+        <artifactId>configurable-parallel-computer</artifactId>
+        <version>1.5</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 
@@ -429,6 +435,8 @@
           <version>2.12.2</version>
           <configuration>
             <useFile>false</useFile>
+            <parallel>classes</parallel>
+            <threadCount>2</threadCount>
           </configuration>
         </plugin>
 

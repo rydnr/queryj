@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -73,11 +73,15 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Checks whether we can use the cached metadata or not.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @since 3.0
  */
 @ThreadSafe
 public class DatabaseMetaDataCacheReadingHandler
     extends  AbstractDatabaseMetaDataCacheHandler
 {
+    /**
+     * String literal: "Cannot extract table metadata"
+     */
     protected static final String CANNOT_EXTRACT_TABLE_METADATA_LITERAL = "Cannot extract table metadata";
 
     /**
@@ -105,6 +109,7 @@ public class DatabaseMetaDataCacheReadingHandler
 
         return result;
     }
+
     /**
      * Checks whether the database vendor matches this handler.
      * @param productName the product name.
@@ -113,6 +118,7 @@ public class DatabaseMetaDataCacheReadingHandler
      * @param minorVersion the minor version number.
      * @return <code>true</code> in case it matches.
      */
+    @Override
     protected boolean checkVendor(
         @NotNull final String productName,
         @NotNull final String productVersion,

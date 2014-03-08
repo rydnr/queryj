@@ -86,6 +86,7 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Defines the steps performed by QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <CH> the command handler class.
  */
 @ThreadSafe
 public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
@@ -121,7 +122,8 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
 
         chain.add((CH) new ExternallyManagedFieldsRetrievalHandler());
 
-        // chain.add(new DatabaseMetaDataCacheReadingHandler());
+//        chain.add(new DatabaseMetaDataCacheReadingHandler());
+//        chain.add((CH) new CustomSqlValidationCacheReadingHandler());
 
         chain.add((CH) new MySQL4xMetaDataRetrievalHandler());
         chain.add((CH) new OracleMetaDataRetrievalHandler());

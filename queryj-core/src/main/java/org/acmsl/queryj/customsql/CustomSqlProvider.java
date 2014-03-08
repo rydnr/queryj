@@ -110,5 +110,33 @@ public interface CustomSqlProvider
      */
     @NotNull
     SqlResultSetFlagsDAO getSqlResultSetFlagsDAO();
+
+    /**
+     * Computes the hash for given {@link Sql} instance.
+     * @param sql the SQL instance.
+     * @param <T> the type.
+     * @return the hash.
+     */
+    @NotNull
+    <T> String getHash(@NotNull final Sql<T> sql);
+
+    /**
+     * Computes the hash for given {@link Parameter parameter}.
+     * @param parameter the parameter.
+     * @param <T> the type.
+     * @param <V> the type of the parameter value.
+     * @return the hash.
+     */
+    @NotNull
+    <T, V> String getHash(@NotNull final Parameter<T, V> parameter);
+
+    /**
+     * Computes the hash for given {@link Result result}.
+     * @param result the result.
+     * @param <T> the type.
+     * @return the hash.
+     */
+    @NotNull
+    <T> String getHash(@NotNull final Result<T> result);
 }
 

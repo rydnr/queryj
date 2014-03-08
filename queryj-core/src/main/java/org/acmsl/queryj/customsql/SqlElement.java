@@ -41,6 +41,8 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing JDK classes.
  */
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -600,7 +602,7 @@ public class SqlElement<T>
      * Adds a new &lt;parameter-ref&gt; element.
      * @param parameterRef such element.
      */
-    @NotNull
+    @Override
     public void add(@NotNull final ParameterRef parameterRef)
     {
         add(parameterRef, getParameterRefs());
@@ -621,8 +623,7 @@ public class SqlElement<T>
      * Specifies the &lt;result-ref&gt; element.
      * @param resultRef such element.
      */
-    protected final void immutableSetResultRef(
-        @NotNull final ResultRef resultRef)
+    protected final void immutableSetResultRef(@NotNull final ResultRef resultRef)
     {
         m__ResultRef = resultRef;
     }

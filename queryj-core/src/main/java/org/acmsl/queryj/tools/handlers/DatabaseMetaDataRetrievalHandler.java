@@ -164,14 +164,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
     {
         final boolean result;
 
-        @NotNull final DatabaseMetaData t_Metadata =
-            retrieveDatabaseMetaData(parameters);
+        @NotNull final DatabaseMetaData t_Metadata = retrieveDatabaseMetaData(parameters);
 
-        result =
-            handle(
-                parameters,
-                retrieveAlreadyDoneFlag(parameters),
-                t_Metadata);
+        result = handle(parameters, retrieveAlreadyDoneFlag(parameters), t_Metadata);
 
         return result;
     }

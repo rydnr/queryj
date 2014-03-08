@@ -53,6 +53,7 @@ import java.util.List;
  *    class CDATA #IMPLIED
  *    matches (single | multiple) #REQUIRED>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <T> the type.
  */
 public interface Sql<T>
     extends  IdentifiableElement<T>,
@@ -135,11 +136,25 @@ public interface Sql<T>
      */
     public enum Cardinality
     {
+        /**
+         * None.
+         */
         NONE("none"),
+
+        /**
+         * Just one record.
+         */
         SINGLE("single"),
+
+        /**
+         * Multiple results.
+         */
         MULTIPLE("multiple");
 
-        @NotNull private final String name;
+        /**
+         * The m__strName.
+         */
+        @NotNull private final String m__strName;
 
         /**
          * Creates a new enum value.
@@ -147,17 +162,17 @@ public interface Sql<T>
          */
         Cardinality(@NotNull final String value)
         {
-            this.name = value;
+            this.m__strName = value;
         }
 
         /**
-         * Retrieves the name.
+         * Retrieves the m__strName.
          * @return such information.
          */
         @NotNull
         public String getName()
         {
-            return this.name;
+            return this.m__strName;
         }
 
         /**
@@ -183,7 +198,22 @@ public interface Sql<T>
 
             return result;
         }
+
+        /**
+         * {@inheritDoc}
+         */
+        @NotNull
+        @Override
+        public String toString()
+        {
+            return
+                  "{ \"class\": \"" + Cardinality.class.getSimpleName() + "\""
+                + ", \"package\": \"org.acmsl.queryj.customsql\""
+                + ", \"name\": \"" + this.m__strName + "\""
+                + " }";
+        }
     }
+
     /**
      * Retrieves the <i>description</i> attribute.
      * @return such value.
@@ -206,7 +236,7 @@ public interface Sql<T>
     T getRepositoryScope();
 
     /**
-     * Retrieves the <i>name</i> attribute.
+     * Retrieves the <i>m__strName</i> attribute.
      * @return such value.
      */
     @NotNull
