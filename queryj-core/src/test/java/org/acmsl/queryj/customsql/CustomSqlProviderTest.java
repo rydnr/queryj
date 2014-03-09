@@ -56,7 +56,6 @@ import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
@@ -65,159 +64,9 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * @since 3.0
  * Created: 2014/03/08 18:36
  */
-@PrepareForTest(
-    {
-        SqlDAO.class,
-        SqlParameterDAO.class,
-        SqlPropertyDAO.class,
-        SqlResultDAO.class,
-        SqlConnectionFlagsDAO.class,
-        SqlStatementFlagsDAO.class,
-        SqlResultSetFlagsDAO.class
-    })
 @RunWith(PowerMockRunner.class)
 public class CustomSqlProviderTest
 {
-    /**
-     * A semi-mocked {@link AbstractCustomSqlProvider} instance.
-     */
-    protected static final class SemiMockedAbstractCustomSqlProvider
-        extends AbstractCustomSqlProvider
-    {
-        /**
-         * The connection flags DAO.
-         */
-        private SqlConnectionFlagsDAO m__ConnectionFlagsDAO;
-
-        /**
-         * The SQL DAO.
-         */
-        private SqlDAO m__SqlDAO;
-
-        /**
-         * The Result DAO.
-         */
-        private SqlResultDAO m__SqlResultDAO;
-
-        /**
-         * The parameter DAO.
-         */
-        private SqlParameterDAO m__SqlParameterDAO;
-
-        /**
-         * The property DAO.
-         */
-        private SqlPropertyDAO m__SqlPropertyDAO;
-
-        /**
-         * The statement flags DAO.
-         */
-        private SqlStatementFlagsDAO m__SqlStatementFlagsDAO;
-
-        /**
-         * The ResultSet flags DAO.
-         */
-        private SqlResultSetFlagsDAO m__SqlResultSetFlagsDAO;
-
-        /**
-         * Creates a new instance.
-         * @param sqlDAO the SQL DAO.
-         * @param parameterDAO the parameter DAO.
-         * @param propertyDAO the property DAO.
-         * @param resultDAO the result DAO.
-         * @param connectionFlagsDAO the connection flags DAO.
-         * @param statementFlagsDAO the statement flags DAO.
-         * @param resultSetFlagsDAO the result set flags DAO.
-         */
-        public SemiMockedAbstractCustomSqlProvider(
-            @NotNull final SqlDAO sqlDAO,
-            @NotNull final SqlParameterDAO parameterDAO,
-            @NotNull final SqlPropertyDAO propertyDAO,
-            @NotNull final SqlResultDAO resultDAO,
-            @NotNull final SqlConnectionFlagsDAO connectionFlagsDAO,
-            @NotNull final SqlStatementFlagsDAO statementFlagsDAO,
-            @NotNull final SqlResultSetFlagsDAO resultSetFlagsDAO)
-        {
-            this.m__SqlDAO = sqlDAO;
-            this.m__SqlParameterDAO = parameterDAO;
-            this.m__SqlPropertyDAO = propertyDAO;
-            this.m__SqlResultDAO = resultDAO;
-            this.m__ConnectionFlagsDAO = connectionFlagsDAO;
-            this.m__SqlStatementFlagsDAO = statementFlagsDAO;
-            this.m__SqlResultSetFlagsDAO = resultSetFlagsDAO;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @NotNull
-        @Override
-        public SqlDAO getSqlDAO()
-        {
-            return m__SqlDAO;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @NotNull
-        @Override
-        public SqlResultDAO getSqlResultDAO()
-        {
-            return m__SqlResultDAO;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @NotNull
-        @Override
-        public SqlParameterDAO getSqlParameterDAO()
-        {
-            return m__SqlParameterDAO;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @NotNull
-        @Override
-        public SqlPropertyDAO getSqlPropertyDAO()
-        {
-            return m__SqlPropertyDAO;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @NotNull
-        @Override
-        public SqlConnectionFlagsDAO getSqlConnectionFlagsDAO()
-        {
-            return m__ConnectionFlagsDAO;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @NotNull
-        @Override
-        public SqlStatementFlagsDAO getSqlStatementFlagsDAO()
-        {
-            return m__SqlStatementFlagsDAO;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @NotNull
-        @Override
-        public SqlResultSetFlagsDAO getSqlResultSetFlagsDAO()
-        {
-            return m__SqlResultSetFlagsDAO;
-        }
-    }
-
     /**
      * Tests whether different parameters give different hashes.
      */
@@ -508,5 +357,145 @@ public class CustomSqlProviderTest
         Assert.assertEquals(t_strHash1, t_strHash2);
 
         EasyMock.verify(resultDAO);
+    }
+
+    /**
+     * A semi-mocked {@link AbstractCustomSqlProvider} instance.
+     */
+    public static final class SemiMockedAbstractCustomSqlProvider
+        extends AbstractCustomSqlProvider
+    {
+        /**
+         * The connection flags DAO.
+         */
+        private SqlConnectionFlagsDAO m__ConnectionFlagsDAO;
+
+        /**
+         * The SQL DAO.
+         */
+        private SqlDAO m__SqlDAO;
+
+        /**
+         * The Result DAO.
+         */
+        private SqlResultDAO m__SqlResultDAO;
+
+        /**
+         * The parameter DAO.
+         */
+        private SqlParameterDAO m__SqlParameterDAO;
+
+        /**
+         * The property DAO.
+         */
+        private SqlPropertyDAO m__SqlPropertyDAO;
+
+        /**
+         * The statement flags DAO.
+         */
+        private SqlStatementFlagsDAO m__SqlStatementFlagsDAO;
+
+        /**
+         * The ResultSet flags DAO.
+         */
+        private SqlResultSetFlagsDAO m__SqlResultSetFlagsDAO;
+
+        /**
+         * Creates a new instance.
+         * @param sqlDAO the SQL DAO.
+         * @param parameterDAO the parameter DAO.
+         * @param propertyDAO the property DAO.
+         * @param resultDAO the result DAO.
+         * @param connectionFlagsDAO the connection flags DAO.
+         * @param statementFlagsDAO the statement flags DAO.
+         * @param resultSetFlagsDAO the result set flags DAO.
+         */
+        public SemiMockedAbstractCustomSqlProvider(
+            @NotNull final SqlDAO sqlDAO,
+            @NotNull final SqlParameterDAO parameterDAO,
+            @NotNull final SqlPropertyDAO propertyDAO,
+            @NotNull final SqlResultDAO resultDAO,
+            @NotNull final SqlConnectionFlagsDAO connectionFlagsDAO,
+            @NotNull final SqlStatementFlagsDAO statementFlagsDAO,
+            @NotNull final SqlResultSetFlagsDAO resultSetFlagsDAO)
+        {
+            this.m__SqlDAO = sqlDAO;
+            this.m__SqlParameterDAO = parameterDAO;
+            this.m__SqlPropertyDAO = propertyDAO;
+            this.m__SqlResultDAO = resultDAO;
+            this.m__ConnectionFlagsDAO = connectionFlagsDAO;
+            this.m__SqlStatementFlagsDAO = statementFlagsDAO;
+            this.m__SqlResultSetFlagsDAO = resultSetFlagsDAO;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @NotNull
+        @Override
+        public SqlDAO getSqlDAO()
+        {
+            return m__SqlDAO;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @NotNull
+        @Override
+        public SqlResultDAO getSqlResultDAO()
+        {
+            return m__SqlResultDAO;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @NotNull
+        @Override
+        public SqlParameterDAO getSqlParameterDAO()
+        {
+            return m__SqlParameterDAO;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @NotNull
+        @Override
+        public SqlPropertyDAO getSqlPropertyDAO()
+        {
+            return m__SqlPropertyDAO;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @NotNull
+        @Override
+        public SqlConnectionFlagsDAO getSqlConnectionFlagsDAO()
+        {
+            return m__ConnectionFlagsDAO;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @NotNull
+        @Override
+        public SqlStatementFlagsDAO getSqlStatementFlagsDAO()
+        {
+            return m__SqlStatementFlagsDAO;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @NotNull
+        @Override
+        public SqlResultSetFlagsDAO getSqlResultSetFlagsDAO()
+        {
+            return m__SqlResultSetFlagsDAO;
+        }
     }
 }
