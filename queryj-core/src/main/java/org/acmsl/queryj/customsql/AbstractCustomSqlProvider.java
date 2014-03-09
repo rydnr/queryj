@@ -69,6 +69,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -94,7 +95,7 @@ public abstract class AbstractCustomSqlProvider
      * @return the hash.
      */
     @NotNull
-    protected String getHash(@NotNull final String value)
+    protected String getHash(@NotNull final String value, @NotNull final String charset)
     {
         @Nullable String result = null;
 
@@ -102,7 +103,9 @@ public abstract class AbstractCustomSqlProvider
         {
             @NotNull final MessageDigest t_MessageDigest = MessageDigest.getInstance("SHA1");
 
-            result = DatatypeConverter.printBase64Binary(t_MessageDigest.digest(value.getBytes("UTF-8")));
+            result =
+                URLEncoder.encode(
+                    DatatypeConverter.printBase64Binary(t_MessageDigest.digest(value.getBytes(charset))), charset);
         }
         catch (@NotNull final NoSuchAlgorithmException noSuchAlgorithm)
         {
@@ -136,7 +139,7 @@ public abstract class AbstractCustomSqlProvider
      */
     @NotNull
     @Override
-    public <T> String getHash(@NotNull final Sql<T> sql)
+    public <T> String getHash(@NotNull final Sql<T> sql, @NotNull final String charset)
     {
         return
             getHash(
@@ -150,6 +153,7 @@ public abstract class AbstractCustomSqlProvider
                 sql.getRepositoryScope(),
                 sql.getImplementation(),
                 sql.getParameterRefs(),
+                charset,
                 getSqlParameterDAO(),
                 getSqlResultDAO(),
                 DEFAULT_SEPARATOR);
@@ -165,6 +169,7 @@ public abstract class AbstractCustomSqlProvider
      * @param dynamic whether it's dynamic or not.
      * @param value the value.
      * @param parameterRefs the parameter refs.
+     * @param charset the charset.
      * @param parameterDAO the {@link org.acmsl.queryj.metadata.SqlParameterDAO} instance.
      * @param resultDAO the {@link org.acmsl.queryj.metadata.SqlResultDAO} instance.
      * @param separator the hash separator.
@@ -181,8 +186,9 @@ public abstract class AbstractCustomSqlProvider
         final boolean dynamic,
         @Nullable final T value,
         @Nullable final T repositoryScoped,
-        @NotNull final T implementation,
+        @Nullable final T implementation,
         @NotNull final List<ParameterRef> parameterRefs,
+        @NotNull final String charset,
         @NotNull final SqlParameterDAO parameterDAO,
         @NotNull final SqlResultDAO resultDAO,
         @NotNull final String separator)
@@ -223,7 +229,15 @@ public abstract class AbstractCustomSqlProvider
             t_Builder.append("null");
         }
         t_Builder.append(separator);
-        t_Builder.append(implementation);
+
+        if (implementation != null)
+        {
+            t_Builder.append(implementation);
+        }
+        else
+        {
+            t_Builder.append("null");
+        }
         t_Builder.append(separator);
 
         for (@Nullable final ParameterRef t_ParameterRef : parameterRefs)
@@ -234,7 +248,7 @@ public abstract class AbstractCustomSqlProvider
 
                 if (t_Parameter != null)
                 {
-                    t_Builder.append(getHash(t_Parameter, separator));
+                    t_Builder.append(getHash(t_Parameter, charset, separator));
                     t_Builder.append(separator);
                 }
             }
@@ -244,10 +258,10 @@ public abstract class AbstractCustomSqlProvider
 
         if (t_Result != null)
         {
-            t_Builder.append(getHash(t_Result, separator));
+            t_Builder.append(getHash(t_Result, charset, separator));
         }
 
-        result = getHash(t_Builder.toString());
+        result = getHash(t_Builder.toString(), charset);
 
         return result;
     }
@@ -257,35 +271,37 @@ public abstract class AbstractCustomSqlProvider
      */
     @NotNull
     @Override
-    public <T, V> String getHash(@NotNull final Parameter<T, V> parameter)
+    public <T, V> String getHash(@NotNull final Parameter<T, V> parameter, @NotNull final String charset)
     {
-        return getHash(parameter, DEFAULT_SEPARATOR);
+        return getHash(parameter, charset, DEFAULT_SEPARATOR);
     }
-
 
     /**
      * Computes the hash for given {@link Parameter parameter}.
      * @param parameter the parameter.
      * @param separator the hash separator.
+     * @param charset the charset.
      * @param <T> the type.
      * @param <V> the type of the value.
      */
     @NotNull
-    protected <T, V> String getHash(@NotNull final Parameter<T, V> parameter, @NotNull final String separator)
+    protected <T, V> String getHash(
+        @NotNull final Parameter<T, V> parameter, @NotNull final String charset, @NotNull final String separator)
     {
-        return getHash(parameter.getIndex(), parameter.getType(), separator);
+        return getHash(parameter.getIndex(), parameter.getType(), charset, separator);
     }
 
     /**
      * Computes the hash for given {@link Parameter parameter}.
      * @param index the parameter index.
      * @param type the parameter type.
+     * @param charset the charset.
      * @param separator the hash separator.
      * @param <T> the type.
      */
     @NotNull
     protected <T> String getHash(
-        final int index, @NotNull final T type, @NotNull final String separator)
+        final int index, @NotNull final T type, @NotNull final String charset, @NotNull final String separator)
     {
         @NotNull final String result;
 
@@ -295,7 +311,7 @@ public abstract class AbstractCustomSqlProvider
         t_Builder.append(separator);
         t_Builder.append(type);
 
-        result = getHash(t_Builder.toString());
+        result = getHash(t_Builder.toString(), charset);
 
         return result;
     }
@@ -305,28 +321,37 @@ public abstract class AbstractCustomSqlProvider
      */
     @NotNull
     @Override
-    public <T> String getHash(@NotNull final Result<T> result)
+    public <T> String getHash(@NotNull final Result<T> result, @NotNull final String charset)
     {
-        return getHash(result.getClassValue(), result.getPropertyRefs(), getSqlPropertyDAO(), DEFAULT_SEPARATOR);
+        return
+            getHash(
+                result.getClassValue(),
+                result.getPropertyRefs(),
+                charset,
+                getSqlPropertyDAO(),
+                DEFAULT_SEPARATOR);
     }
 
     /**
      * Computes the hash for given {@link org.acmsl.queryj.customsql.Result result}.
      * @param result the result.
+     * @param charset the charset.
      * @param separator the separator.
      * @param <T> the type.
      * @return the hash.
      */
     @NotNull
-    protected <T> String getHash(@NotNull final Result<T> result, @NotNull final String separator)
+    protected <T> String getHash(
+        @NotNull final Result<T> result, @NotNull final String charset, @NotNull final String separator)
     {
-        return getHash(result.getClassValue(), result.getPropertyRefs(), getSqlPropertyDAO(), separator);
+        return getHash(result.getClassValue(), result.getPropertyRefs(), charset, getSqlPropertyDAO(), separator);
     }
 
     /**
      * Computes the hash for given {@link org.acmsl.queryj.customsql.Result result}.
      * @param classValue the class value.
      * @param propertyRefs the {@link PropertyRef property refs}.
+     * @param charset the charset.
      * @param propertyDAO the {@link org.acmsl.queryj.metadata.SqlPropertyDAO property DAO}.
      * @param separator the separator.
      * @param <T> the type.
@@ -336,6 +361,7 @@ public abstract class AbstractCustomSqlProvider
     protected <T> String getHash(
         @Nullable final T classValue,
         @NotNull final List<PropertyRef> propertyRefs,
+        @NotNull final String charset,
         @NotNull final SqlPropertyDAO propertyDAO,
         @NotNull final String separator)
     {
@@ -357,12 +383,12 @@ public abstract class AbstractCustomSqlProvider
 
                 if (t_Property != null)
                 {
-                    t_Builder.append(getHash(t_Property, separator));
+                    t_Builder.append(getHash(t_Property, charset, separator));
                 }
             }
         }
 
-        result = getHash(t_Builder.toString());
+        result = getHash(t_Builder.toString(), charset);
 
         return result;
     }
@@ -372,22 +398,25 @@ public abstract class AbstractCustomSqlProvider
      */
     @NotNull
     @Override
-    public <T> String getHash(@NotNull final Property<T> property)
+    public <T> String getHash(@NotNull final Property<T> property, @NotNull final String charset)
     {
-        return getHash(property.getColumnName(), property.getType(), property.isNullable(), DEFAULT_SEPARATOR);
+        return
+            getHash(property.getColumnName(), property.getType(), property.isNullable(), charset, DEFAULT_SEPARATOR);
     }
 
     /**
      * Computes the hash for given {@link Property} information.
      * @param property the property.
+     * @param charset the charset.
      * @param separator the hash separator.
      * @param <T> the type.
      * @return the computed hash.
      */
     @NotNull
-    protected <T> String getHash(@NotNull final Property<T> property, @NotNull final String separator)
+    protected <T> String getHash(
+        @NotNull final Property<T> property, @NotNull final String charset, @NotNull final String separator)
     {
-        return getHash(property.getColumnName(), property.getType(), property.isNullable(), separator);
+        return getHash(property.getColumnName(), property.getType(), property.isNullable(), charset, separator);
     }
 
     /**
@@ -395,13 +424,18 @@ public abstract class AbstractCustomSqlProvider
      * @param columnName the column name.
      * @param type the column type.
      * @param nullable whether the column allows nulls.
+     * @param charset the charset.
      * @param separator the hash separator.
      * @param <T> the type.
      * @return the computed hash.
      */
     @NotNull
     protected <T> String getHash(
-        @NotNull final T columnName, @NotNull final T type, final boolean nullable, @NotNull final String separator)
+        @NotNull final T columnName,
+        @NotNull final T type,
+        final boolean nullable,
+        @NotNull final String charset,
+        @NotNull final String separator)
     {
         @NotNull final String result;
 
@@ -413,7 +447,7 @@ public abstract class AbstractCustomSqlProvider
         t_Builder.append(separator);
         t_Builder.append(nullable);
 
-        result = getHash(t_Builder.toString());
+        result = getHash(t_Builder.toString(), charset);
 
         return result;
     }

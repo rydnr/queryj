@@ -110,7 +110,7 @@ public class CustomSqlCacheWritingHandler
         {
             if (sql != null)
             {
-                @NotNull final String hash = customSqlProvider.getHash(sql);
+                @NotNull final String hash = customSqlProvider.getHash(sql, charset.displayName());
 
                 writeHash(outputFolder, hash, charset);
             }
@@ -134,6 +134,7 @@ public class CustomSqlCacheWritingHandler
 
         if (!existsAlready(path))
         {
+            new File(outputFolder.getAbsolutePath()).mkdirs();
             FileUtils.getInstance().writeFileIfPossible(path, "", charset);
         }
     }

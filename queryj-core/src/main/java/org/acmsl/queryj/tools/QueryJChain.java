@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -40,6 +40,7 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.CannotFindTemplatesException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.customsql.handlers.CustomSqlCacheWritingHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.api.handlers.TemplateHandler;
@@ -129,6 +130,7 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
         chain.add((CH) new OracleMetaDataRetrievalHandler());
         chain.add((CH) new JdbcMetaDataRetrievalHandler());
         chain.add((CH) new CustomSqlValidationHandler());
+        chain.add((CH) new CustomSqlCacheWritingHandler());
 
         chain.add((CH) new DatabaseMetaDataCacheWritingHandler());
 

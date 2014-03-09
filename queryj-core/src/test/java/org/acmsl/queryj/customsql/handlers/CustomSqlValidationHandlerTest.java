@@ -63,12 +63,16 @@ import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.TypeManager;
+import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+
+/*
+ * Importing Apache Commons Configuration classes.
+ */
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -102,7 +106,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -406,7 +409,9 @@ public class CustomSqlValidationHandlerTest
         EasyMock.expect(resultDAO.findBySqlId("sql-id")).andReturn(t_Result1).anyTimes();
         EasyMock.replay(resultDAO);
 
-        @NotNull final String hash = t_CustomSqlProvider.getHash(t_Sql);
+        @NotNull final Charset t_Charset = Charset.defaultCharset();
+
+        @NotNull final String hash = t_CustomSqlProvider.getHash(t_Sql, t_Charset.displayName());
 
         FileUtils.getInstance().writeFile(tempFolder.getRoot() + File.separator + hash, "", Charset.defaultCharset());
 

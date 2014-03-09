@@ -61,6 +61,9 @@ public class PropertyElement<T>
     extends  AbstractParameterElement<T>
     implements  Property<T>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -6387934586093006533L;
 
     /**
@@ -113,8 +116,7 @@ public class PropertyElement<T>
     }
 
     /**
-     * Retrieves the column name.
-     * @return such name.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
@@ -144,8 +146,7 @@ public class PropertyElement<T>
     
 
     /**
-     * Retrieves ehether the property is nullable or not.
-     * @return such condition.
+     * {@inheritDoc}
      */
     public boolean isNullable()
     {
@@ -153,10 +154,7 @@ public class PropertyElement<T>
     }
 
     /**
-     * Provides a text representation of the information
-     * contained in this instance.
-     *
-     * @return such information.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
@@ -171,6 +169,7 @@ public class PropertyElement<T>
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -187,7 +186,7 @@ public class PropertyElement<T>
      */
     @Override
     @SuppressWarnings("unchecked")
-    public boolean equals(final Object object)
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 
@@ -207,6 +206,9 @@ public class PropertyElement<T>
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int compareTo(@Nullable final Property<T> property)
     {

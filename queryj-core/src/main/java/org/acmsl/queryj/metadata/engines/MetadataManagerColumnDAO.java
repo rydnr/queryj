@@ -264,7 +264,7 @@ public class MetadataManagerColumnDAO
     protected List<Attribute<String>> findAllColumns(
         @NotNull final String table, @NotNull final TableDAO tableDAO)
     {
-        @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>(0);
+        @NotNull final List<Attribute<String>> result = new ArrayList<>(0);
 
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
             tableDAO.findByName(table);

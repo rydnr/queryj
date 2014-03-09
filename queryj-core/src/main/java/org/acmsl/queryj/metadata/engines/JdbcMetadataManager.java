@@ -83,7 +83,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class JdbcMetadataManager
     extends AbstractJdbcMetadataManager
 {
-
+    /**
+     * The serial versi
+     */
     private static final long serialVersionUID = -3287133509095459164L;
     public static final String REMARKS = "REMARKS";
     public static final String DISCARDING = "Discarding ";

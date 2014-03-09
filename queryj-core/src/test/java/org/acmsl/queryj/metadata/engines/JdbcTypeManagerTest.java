@@ -1552,6 +1552,28 @@ public class JdbcTypeManagerTest
     }
 
     /**
+     * Tests whether the type "NUMBER" is recognized correctly.
+     */
+    @Test
+    public void get_class_for_NUMBER_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(long.class, instance.getClass("NUMBER"));
+    }
+
+    /**
+     * Tests whether the type "DATE" is recognized correctly.
+     */
+    @Test
+    public void get_class_for_DATE_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(Date.class, instance.getClass("DATE"));
+    }
+
+    /**
      * Tests whether the isPrimitiveWrapper method works for Long values.
      */
     @Test

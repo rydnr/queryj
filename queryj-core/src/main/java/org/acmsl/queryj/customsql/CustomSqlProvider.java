@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -114,38 +114,41 @@ public interface CustomSqlProvider
     /**
      * Computes the hash for given {@link Sql} instance.
      * @param sql the SQL instance.
+     * @param charset the charset.
      * @param <T> the type.
      * @return the hash.
      */
     @NotNull
-    <T> String getHash(@NotNull final Sql<T> sql);
+    <T> String getHash(@NotNull final Sql<T> sql, @NotNull final String charset);
 
     /**
      * Computes the hash for given {@link Parameter parameter}.
      * @param parameter the parameter.
+     * @param charset the charset.
      * @param <T> the type.
      * @param <V> the type of the parameter value.
      * @return the hash.
      */
     @NotNull
-    <T, V> String getHash(@NotNull final Parameter<T, V> parameter);
+    <T, V> String getHash(@NotNull final Parameter<T, V> parameter, @NotNull final String charset);
 
     /**
      * Computes the hash for given {@link Result result}.
      * @param result the result.
+     * @param charset the charset.
      * @param <T> the type.
      * @return the hash.
      */
     @NotNull
-    <T> String getHash(@NotNull final Result<T> result);
+    <T> String getHash(@NotNull final Result<T> result, @NotNull final String charset);
 
     /**
      * Computes the hash for given {@link Property} information.
      * @param property the property.
+     * @param charset the charset.
      * @param <T> the type.
      * @return the computed hash.
      */
     @NotNull
-    <T> String getHash(@NotNull final Property<T> property);
+    <T> String getHash(@NotNull final Property<T> property, @NotNull final String charset);
 }
-

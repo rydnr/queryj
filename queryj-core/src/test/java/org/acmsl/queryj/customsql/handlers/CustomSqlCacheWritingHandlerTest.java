@@ -82,6 +82,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,7 +146,9 @@ public class CustomSqlCacheWritingHandlerTest
         EasyMock.replay(resultDAO);
         EasyMock.replay(sqlDAO);
 
-        @NotNull final String hash = t_CustomSqlProvider.getHash(t_Sql);
+        @NotNull final Charset t_Charset = Charset.defaultCharset();
+
+        @NotNull final String hash = t_CustomSqlProvider.getHash(t_Sql, t_Charset.displayName());
 
         instance.handle(t_Command);
 
@@ -231,7 +234,9 @@ public class CustomSqlCacheWritingHandlerTest
         EasyMock.replay(resultDAO);
         EasyMock.replay(sqlDAO);
 
-        @NotNull final String hash = t_CustomSqlProvider.getHash(t_Sql);
+        @NotNull final Charset t_Charset = Charset.defaultCharset();
+
+        @NotNull final String hash = t_CustomSqlProvider.getHash(t_Sql, t_Charset.displayName());
 
         @NotNull final String path = instance.hashPath(tempFolder.getRoot().getAbsolutePath(), hash);
 

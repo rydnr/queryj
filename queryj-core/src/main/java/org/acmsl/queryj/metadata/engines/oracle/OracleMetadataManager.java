@@ -296,25 +296,7 @@ public class OracleMetadataManager
         {
             try
             {
-                @Nullable final Chronometer t_Chronometer;
-
-                if  (   (t_Log != null)
-                     && (t_Log.isInfoEnabled()))
-                {
-                    t_Chronometer = new Chronometer();
-                    t_Log.info("Starting database crawl");
-                }
-                else
-                {
-                    t_Chronometer = null;
-                }
                 t_rsResults = t_PreparedStatement.executeQuery();
-                if  (   (t_Log != null)
-                     && (t_Log.isInfoEnabled())
-                     && (t_Chronometer != null))
-                {
-                    t_Log.info("Database crawl took " + t_Chronometer.now());
-                }
             }
             catch (@NotNull final SQLException queryFailed)
             {

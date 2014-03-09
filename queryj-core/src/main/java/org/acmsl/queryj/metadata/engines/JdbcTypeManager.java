@@ -89,6 +89,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -101,12 +102,34 @@ import java.util.Map;
 public class JdbcTypeManager
     implements TypeManager
 {
+    /**
+     * The type mapping.
+     */
     @NotNull protected static final Map<String, Integer> TYPE_MAPPING = new HashMap<>();
+
+    /**
+     * The inverse type mapping.
+     */
     @NotNull protected static final Map<Integer, String> INVERSE_TYPE_MAPPING = new HashMap<>();
+
+    /**
+     * The class mapping.
+     */
     @NotNull protected static final Map<Integer, Class<?>> CLASS_MAPPING = new HashMap<>();
+
+    /**
+     * The inverse class mapping.
+     */
     @NotNull protected static final Map<Class<?>, Integer> INVERSE_CLASS_MAPPING = new HashMap<>();
+
+    /**
+     * The PreparedStatement methods.
+     */
     @NotNull protected static final Map<Integer, Method> PREPARED_STATEMENT_METHODS = new HashMap<>();
 
+    /**
+     * The lookup packages.
+     */
     @NotNull protected static final List<String> LOOKUP_PACKAGES =
         Collections.unmodifiableList(Arrays.asList("java.lang", "", "java.sql", "java.util", "java.math", "java.net"));
 
@@ -135,6 +158,7 @@ public class JdbcTypeManager
     @NotNull protected static final String NCHAR = "nchar";
     @NotNull protected static final String NCLOB = "nclob";
     @NotNull protected static final String NULL = "null";
+    @NotNull protected static final String NUMBER = "number";
     @NotNull protected static final String NUMERIC = "numeric";
     @NotNull protected static final String NVARCHAR = "nvarchar";
     @NotNull protected static final String OTHER = "other";
@@ -411,220 +435,238 @@ public class JdbcTypeManager
         SET_TIMESTAMP_CALENDAR_METHOD = setTimestampCalendarMethod;
         SET_URL_METHOD = setUrlMethod;
 
-        TYPE_MAPPING.put(ARRAY, Types.ARRAY);
+        TYPE_MAPPING.put(normalizeKey(ARRAY), Types.ARRAY);
         INVERSE_TYPE_MAPPING.put(Types.ARRAY, ARRAY);
         CLASS_MAPPING.put(Types.ARRAY, java.sql.Array.class);
         INVERSE_CLASS_MAPPING.put(java.sql.Array.class, Types.ARRAY);
         PREPARED_STATEMENT_METHODS.put(Types.ARRAY, SET_ARRAY_METHOD);
 
-        TYPE_MAPPING.put(BIGINT, Types.BIGINT);
+        TYPE_MAPPING.put(normalizeKey(BIGINT), Types.BIGINT);
         INVERSE_TYPE_MAPPING.put(Types.BIGINT, BIGINT);
         CLASS_MAPPING.put(Types.BIGINT, long.class);
         INVERSE_CLASS_MAPPING.put(long.class, Types.BIGINT);
         INVERSE_CLASS_MAPPING.put(Long.class, Types.BIGINT);
         INVERSE_CLASS_MAPPING.put(BigInteger.class, Types.BIGINT);
+        TYPE_MAPPING.put(normalizeKey(NUMBER), Types.BIGINT);
         PREPARED_STATEMENT_METHODS.put(Types.BIGINT, SET_LONG_METHOD);
 
-        TYPE_MAPPING.put(BINARY, Types.BINARY);
+        TYPE_MAPPING.put(normalizeKey(BINARY), Types.BINARY);
         INVERSE_TYPE_MAPPING.put(Types.BINARY, BINARY);
         CLASS_MAPPING.put(Types.BINARY, new byte[0].getClass());
         INVERSE_CLASS_MAPPING.put(new byte[0].getClass(), Types.BINARY);
         INVERSE_CLASS_MAPPING.put(new Byte[0].getClass(), Types.BINARY);
         PREPARED_STATEMENT_METHODS.put(Types.BINARY, SET_BYTES_METHOD);
 
-        TYPE_MAPPING.put(BIT, Types.BIT);
+        TYPE_MAPPING.put(normalizeKey(BIT), Types.BIT);
         INVERSE_TYPE_MAPPING.put(Types.BIT, BIT);
         CLASS_MAPPING.put(Types.BIT, boolean.class);
         PREPARED_STATEMENT_METHODS.put(Types.BIT, SET_BOOLEAN_METHOD);
 
-        TYPE_MAPPING.put(BLOB, Types.BLOB);
+        TYPE_MAPPING.put(normalizeKey(BLOB), Types.BLOB);
         INVERSE_TYPE_MAPPING.put(Types.BLOB, BLOB);
         CLASS_MAPPING.put(Types.BLOB, Blob.class);
         INVERSE_CLASS_MAPPING.put(Blob.class, Types.BLOB);
         PREPARED_STATEMENT_METHODS.put(Types.BLOB, SET_BLOB_METHOD);
 
-        TYPE_MAPPING.put(BOOLEAN, Types.BOOLEAN);
+        TYPE_MAPPING.put(normalizeKey(BOOLEAN), Types.BOOLEAN);
         INVERSE_TYPE_MAPPING.put(Types.BOOLEAN, BOOLEAN);
         CLASS_MAPPING.put(Types.BOOLEAN, boolean.class);
         INVERSE_CLASS_MAPPING.put(boolean.class, Types.BOOLEAN);
         INVERSE_CLASS_MAPPING.put(Boolean.class, Types.BOOLEAN);
         PREPARED_STATEMENT_METHODS.put(Types.BOOLEAN, SET_BOOLEAN_METHOD);
 
-        TYPE_MAPPING.put(CHAR, Types.CHAR);
+        TYPE_MAPPING.put(normalizeKey(CHAR), Types.CHAR);
         INVERSE_TYPE_MAPPING.put(Types.CHAR, CHAR);
         CLASS_MAPPING.put(Types.CHAR, String.class);
         INVERSE_CLASS_MAPPING.put(String.class, Types.CHAR);
         PREPARED_STATEMENT_METHODS.put(Types.CHAR, SET_STRING_METHOD);
 
-        TYPE_MAPPING.put(CLOB, Types.CLOB);
+        TYPE_MAPPING.put(normalizeKey(CLOB), Types.CLOB);
         INVERSE_TYPE_MAPPING.put(Types.CLOB, CLOB);
         CLASS_MAPPING.put(Types.CLOB, Clob.class);
         INVERSE_CLASS_MAPPING.put(Clob.class, Types.CLOB);
         PREPARED_STATEMENT_METHODS.put(Types.CLOB, SET_CLOB_METHOD);
 
-        TYPE_MAPPING.put(DATALINK, Types.DATALINK);
+        TYPE_MAPPING.put(normalizeKey(DATALINK), Types.DATALINK);
         INVERSE_TYPE_MAPPING.put(Types.DATALINK, DATALINK);
         CLASS_MAPPING.put(Types.DATALINK, java.net.URL.class);
         INVERSE_CLASS_MAPPING.put(java.net.URL.class, Types.DATALINK);
         PREPARED_STATEMENT_METHODS.put(Types.DATALINK, SET_URL_METHOD);
 
-        TYPE_MAPPING.put(DATE, Types.DATE);
+        TYPE_MAPPING.put(normalizeKey(DATE), Types.DATE);
         INVERSE_TYPE_MAPPING.put(Types.DATE, DATE);
         CLASS_MAPPING.put(Types.DATE, Date.class);
         INVERSE_CLASS_MAPPING.put(Date.class, Types.DATE);
         PREPARED_STATEMENT_METHODS.put(Types.DATE, SET_DATE_METHOD);
 
-        TYPE_MAPPING.put(DECIMAL, Types.DECIMAL);
+        TYPE_MAPPING.put(normalizeKey(DECIMAL), Types.DECIMAL);
         INVERSE_TYPE_MAPPING.put(Types.DECIMAL, DECIMAL);
         CLASS_MAPPING.put(Types.DECIMAL, BigDecimal.class);
         PREPARED_STATEMENT_METHODS.put(Types.DECIMAL, SET_BIG_DECIMAL_METHOD);
 
-        TYPE_MAPPING.put(DISTINCT, Types.DISTINCT);
+        TYPE_MAPPING.put(normalizeKey(DISTINCT), Types.DISTINCT);
         INVERSE_TYPE_MAPPING.put(Types.DISTINCT, DISTINCT);
         CLASS_MAPPING.put(Types.DISTINCT, void.class);
 
-        TYPE_MAPPING.put(DOUBLE, Types.DOUBLE);
+        TYPE_MAPPING.put(normalizeKey(DOUBLE), Types.DOUBLE);
         INVERSE_TYPE_MAPPING.put(Types.DOUBLE, DOUBLE);
         CLASS_MAPPING.put(Types.DOUBLE, double.class);
         INVERSE_CLASS_MAPPING.put(double.class, Types.DOUBLE);
         INVERSE_CLASS_MAPPING.put(Double.class, Types.DOUBLE);
         PREPARED_STATEMENT_METHODS.put(Types.DOUBLE, SET_DOUBLE_METHOD);
 
-        TYPE_MAPPING.put(FLOAT, Types.FLOAT);
+        TYPE_MAPPING.put(normalizeKey(FLOAT), Types.FLOAT);
         INVERSE_TYPE_MAPPING.put(Types.FLOAT, FLOAT);
         CLASS_MAPPING.put(Types.FLOAT, double.class);
         PREPARED_STATEMENT_METHODS.put(Types.FLOAT, SET_DOUBLE_METHOD);
 
-        TYPE_MAPPING.put(INTEGER, Types.INTEGER);
+        TYPE_MAPPING.put(normalizeKey(INTEGER), Types.INTEGER);
         INVERSE_TYPE_MAPPING.put(Types.INTEGER, INTEGER);
         CLASS_MAPPING.put(Types.INTEGER, int.class);
         INVERSE_CLASS_MAPPING.put(int.class, Types.INTEGER);
         INVERSE_CLASS_MAPPING.put(Integer.class, Types.INTEGER);
         PREPARED_STATEMENT_METHODS.put(Types.INTEGER, SET_INT_METHOD);
 
-        TYPE_MAPPING.put(JAVA_OBJECT, Types.JAVA_OBJECT);
+        TYPE_MAPPING.put(normalizeKey(JAVA_OBJECT), Types.JAVA_OBJECT);
         INVERSE_TYPE_MAPPING.put(Types.JAVA_OBJECT, JAVA_OBJECT);
         CLASS_MAPPING.put(Types.JAVA_OBJECT, Object.class);
         INVERSE_CLASS_MAPPING.put(Object.class, Types.JAVA_OBJECT);
         PREPARED_STATEMENT_METHODS.put(Types.JAVA_OBJECT, SET_OBJECT_METHOD);
 
-        TYPE_MAPPING.put(LONGNVARCHAR, Types.LONGNVARCHAR);
+        TYPE_MAPPING.put(normalizeKey(LONGNVARCHAR), Types.LONGNVARCHAR);
         INVERSE_TYPE_MAPPING.put(Types.LONGNVARCHAR, LONGNVARCHAR);
         CLASS_MAPPING.put(Types.LONGNVARCHAR, String.class);
         PREPARED_STATEMENT_METHODS.put(Types.LONGNVARCHAR, SET_STRING_METHOD);
 
-        TYPE_MAPPING.put(LONGVARBINARY, Types.LONGVARBINARY);
+        TYPE_MAPPING.put(normalizeKey(LONGVARBINARY), Types.LONGVARBINARY);
         INVERSE_TYPE_MAPPING.put(Types.LONGVARBINARY, LONGVARBINARY);
         CLASS_MAPPING.put(Types.LONGVARBINARY, new byte[0].getClass());
         PREPARED_STATEMENT_METHODS.put(Types.LONGVARBINARY, SET_BYTES_METHOD);
 
-        TYPE_MAPPING.put(LONGVARCHAR, Types.LONGVARCHAR);
+        TYPE_MAPPING.put(normalizeKey(LONGVARCHAR), Types.LONGVARCHAR);
         INVERSE_TYPE_MAPPING.put(Types.LONGVARCHAR, LONGVARCHAR);
         CLASS_MAPPING.put(Types.LONGVARCHAR, String.class);
         PREPARED_STATEMENT_METHODS.put(Types.LONGVARCHAR, SET_STRING_METHOD);
 
-        TYPE_MAPPING.put(NCHAR, Types.NCHAR);
+        TYPE_MAPPING.put(normalizeKey(NCHAR), Types.NCHAR);
         INVERSE_TYPE_MAPPING.put(Types.NCHAR, NCHAR);
         CLASS_MAPPING.put(Types.NCHAR, String.class);
         PREPARED_STATEMENT_METHODS.put(Types.NCHAR, SET_STRING_METHOD);
 
-        TYPE_MAPPING.put(NCLOB, Types.NCLOB);
+        TYPE_MAPPING.put(normalizeKey(NCLOB), Types.NCLOB);
         INVERSE_TYPE_MAPPING.put(Types.NCLOB, NCLOB);
         CLASS_MAPPING.put(Types.NCLOB, NClob.class);
         INVERSE_CLASS_MAPPING.put(NClob.class, Types.NCLOB);
         PREPARED_STATEMENT_METHODS.put(Types.NCLOB, SET_N_CLOB_METHOD);
 
-        TYPE_MAPPING.put(NULL, Types.NULL);
+        TYPE_MAPPING.put(normalizeKey(NULL), Types.NULL);
         INVERSE_TYPE_MAPPING.put(Types.NULL, NULL);
         CLASS_MAPPING.put(Types.NULL, void.class);
 
-        TYPE_MAPPING.put(NUMERIC, Types.NUMERIC);
+        TYPE_MAPPING.put(normalizeKey(NUMERIC), Types.NUMERIC);
         INVERSE_TYPE_MAPPING.put(Types.NUMERIC, NUMERIC);
         CLASS_MAPPING.put(Types.NUMERIC, BigDecimal.class);
         INVERSE_CLASS_MAPPING.put(BigDecimal.class, Types.NUMERIC);
         PREPARED_STATEMENT_METHODS.put(Types.NUMERIC, SET_BIG_DECIMAL_METHOD);
 
-        TYPE_MAPPING.put(NVARCHAR, Types.NVARCHAR);
+        TYPE_MAPPING.put(normalizeKey(NVARCHAR), Types.NVARCHAR);
         INVERSE_TYPE_MAPPING.put(Types.NVARCHAR, NVARCHAR);
         CLASS_MAPPING.put(Types.NVARCHAR, String.class);
         PREPARED_STATEMENT_METHODS.put(Types.NVARCHAR, SET_STRING_METHOD);
 
-        TYPE_MAPPING.put(OTHER, Types.OTHER);
+        TYPE_MAPPING.put(normalizeKey(OTHER), Types.OTHER);
         INVERSE_TYPE_MAPPING.put(Types.OTHER, OTHER);
         CLASS_MAPPING.put(Types.OTHER, void.class);
         INVERSE_CLASS_MAPPING.put(void.class, Types.OTHER);
         PREPARED_STATEMENT_METHODS.put(Types.OTHER, SET_OBJECT_METHOD);
 
-        TYPE_MAPPING.put(REAL, Types.REAL);
+        TYPE_MAPPING.put(normalizeKey(REAL), Types.REAL);
         INVERSE_TYPE_MAPPING.put(Types.REAL, REAL);
         CLASS_MAPPING.put(Types.REAL, float.class);
         INVERSE_CLASS_MAPPING.put(float.class, Types.REAL);
         INVERSE_CLASS_MAPPING.put(Float.class, Types.REAL);
         PREPARED_STATEMENT_METHODS.put(Types.REAL, SET_FLOAT_METHOD);
 
-        TYPE_MAPPING.put(REF, Types.REF);
+        TYPE_MAPPING.put(normalizeKey(REF), Types.REF);
         INVERSE_TYPE_MAPPING.put(Types.REF, REF);
         CLASS_MAPPING.put(Types.REF, Ref.class);
         INVERSE_CLASS_MAPPING.put(Ref.class, Types.REF);
         PREPARED_STATEMENT_METHODS.put(Types.REF, SET_REF_METHOD);
 
-        TYPE_MAPPING.put(ROWID, Types.ROWID);
+        TYPE_MAPPING.put(normalizeKey(ROWID), Types.ROWID);
         INVERSE_TYPE_MAPPING.put(Types.ROWID, ROWID);
         CLASS_MAPPING.put(Types.ROWID, RowId.class);
         INVERSE_CLASS_MAPPING.put(RowId.class, Types.ROWID);
         PREPARED_STATEMENT_METHODS.put(Types.ROWID, SET_ROW_ID_METHOD);
 
-        TYPE_MAPPING.put(SMALLINT, Types.SMALLINT);
+        TYPE_MAPPING.put(normalizeKey(SMALLINT), Types.SMALLINT);
         INVERSE_TYPE_MAPPING.put(Types.SMALLINT, SMALLINT);
         CLASS_MAPPING.put(Types.SMALLINT, short.class);
         INVERSE_CLASS_MAPPING.put(short.class, Types.SMALLINT);
         INVERSE_CLASS_MAPPING.put(Short.class, Types.SMALLINT);
         PREPARED_STATEMENT_METHODS.put(Types.SMALLINT, SET_SHORT_METHOD);
 
-        TYPE_MAPPING.put(SQLXML, Types.SQLXML);
+        TYPE_MAPPING.put(normalizeKey(SQLXML), Types.SQLXML);
         INVERSE_TYPE_MAPPING.put(Types.SQLXML, SQLXML);
         CLASS_MAPPING.put(Types.SQLXML, java.sql.SQLXML.class);
         INVERSE_CLASS_MAPPING.put(java.sql.SQLXML.class, Types.SQLXML);
         PREPARED_STATEMENT_METHODS.put(Types.SQLXML, SET_SQLXML_METHOD);
 
-        TYPE_MAPPING.put(STRUCT, Types.STRUCT);
+        TYPE_MAPPING.put(normalizeKey(STRUCT), Types.STRUCT);
         INVERSE_TYPE_MAPPING.put(Types.STRUCT, STRUCT);
         CLASS_MAPPING.put(Types.STRUCT, Struct.class);
         INVERSE_CLASS_MAPPING.put(Struct.class, Types.STRUCT);
         PREPARED_STATEMENT_METHODS.put(Types.STRUCT, SET_OBJECT_METHOD);
 
-        TYPE_MAPPING.put(TIME, Types.TIME);
+        TYPE_MAPPING.put(normalizeKey(TIME), Types.TIME);
         INVERSE_TYPE_MAPPING.put(Types.TIME, TIME);
         CLASS_MAPPING.put(Types.TIME, Time.class);
         INVERSE_CLASS_MAPPING.put(Time.class, Types.TIME);
         PREPARED_STATEMENT_METHODS.put(Types.TIME, SET_TIME_METHOD);
 
-        TYPE_MAPPING.put(TIMESTAMP, Types.TIMESTAMP);
+        TYPE_MAPPING.put(normalizeKey(TIMESTAMP), Types.TIMESTAMP);
         INVERSE_TYPE_MAPPING.put(Types.TIMESTAMP, TIMESTAMP);
         CLASS_MAPPING.put(Types.TIMESTAMP, Timestamp.class);
         INVERSE_CLASS_MAPPING.put(Timestamp.class, Types.TIMESTAMP);
         PREPARED_STATEMENT_METHODS.put(Types.TIMESTAMP, SET_TIMESTAMP_METHOD);
 
-        TYPE_MAPPING.put(TINYINT, Types.TINYINT);
+        TYPE_MAPPING.put(normalizeKey(TINYINT), Types.TINYINT);
         INVERSE_TYPE_MAPPING.put(Types.TINYINT, TINYINT);
         CLASS_MAPPING.put(Types.TINYINT, byte.class);
         INVERSE_CLASS_MAPPING.put(byte.class, Types.TINYINT);
         INVERSE_CLASS_MAPPING.put(Byte.class, Types.TINYINT);
         PREPARED_STATEMENT_METHODS.put(Types.TINYINT, SET_BYTE_METHOD);
 
-        TYPE_MAPPING.put(VARBINARY, Types.VARBINARY);
+        TYPE_MAPPING.put(normalizeKey(VARBINARY), Types.VARBINARY);
         INVERSE_TYPE_MAPPING.put(Types.VARBINARY, VARBINARY);
         CLASS_MAPPING.put(Types.VARBINARY, new byte[0].getClass());
         PREPARED_STATEMENT_METHODS.put(Types.VARBINARY, SET_BYTES_METHOD);
 
-        TYPE_MAPPING.put(VARCHAR, Types.VARCHAR);
+        TYPE_MAPPING.put(normalizeKey(VARCHAR), Types.VARCHAR);
         INVERSE_TYPE_MAPPING.put(Types.VARCHAR, VARCHAR);
         CLASS_MAPPING.put(Types.VARCHAR, String.class);
         INVERSE_CLASS_MAPPING.put(String.class, Types.VARCHAR);
         PREPARED_STATEMENT_METHODS.put(Types.VARCHAR, SET_STRING_METHOD);
     }
 
+    /**
+     * Normalizes given key.
+     * @param key the key.
+     * @return the normalized key.
+     */
+    protected static final String normalizeKey(@NotNull final String key)
+    {
+        return key.toLowerCase(Locale.getDefault());
+    }
+
+    /**
+     * String literal: "Cannot set parameter ".
+     */
     protected static final String CANNOT_SET_PARAMETER = "Cannot set parameter ";
+
+    /**
+     * String literal: " on PreparedStatement";
+     */
     protected static final String ON_PREPARED_STATEMENT = " on PreparedStatement";
 
     /**
@@ -700,7 +742,7 @@ public class JdbcTypeManager
     {
         @NotNull final Method result;
 
-        @Nullable final Method aux  = PREPARED_STATEMENT_METHODS.get(jdbcType);
+        @Nullable final Method aux = PREPARED_STATEMENT_METHODS.get(jdbcType);
 
         if (aux == null)
         {
@@ -802,6 +844,17 @@ public class JdbcTypeManager
                 result = toPrimitiveIfPossible(result, type);
             }
             */
+        }
+
+        if (result == null)
+        {
+            result = retrievePrimitiveClass(type);
+        }
+
+        if (   (result == null)
+            && (TYPE_MAPPING.containsKey(normalizeKey(type))))
+        {
+            result = getClass(TYPE_MAPPING.get(normalizeKey(type)));
         }
 
         if (result == null)

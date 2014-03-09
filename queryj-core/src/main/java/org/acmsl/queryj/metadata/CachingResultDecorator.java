@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -65,6 +65,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class CachingResultDecorator
     extends  AbstractResultDecorator
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -381471036464860260L;
 
     /**

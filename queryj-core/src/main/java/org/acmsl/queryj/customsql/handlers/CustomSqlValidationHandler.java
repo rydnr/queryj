@@ -75,6 +75,7 @@ import java.lang.reflect.Method;
 import java.lang.NoSuchMethodException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -179,6 +180,8 @@ public class CustomSqlValidationHandler
         @NotNull final CustomSqlProvider t_CustomSqlProvider =
             retrieveCustomSqlProvider(parameters);
 
+        @NotNull final Charset t_Charset = retrieveCharset(parameters);
+
         if (t_MetadataManager == null)
         {
             result = true;
@@ -190,7 +193,8 @@ public class CustomSqlValidationHandler
                 t_CustomSqlProvider.getSqlDAO(),
                 retrieveConnection(parameters),
                 t_MetadataManager,
-                retrieveOutputFolderForSqlHashes(parameters));
+                retrieveOutputFolderForSqlHashes(parameters),
+                t_Charset.displayName());
         }
 
         return result;
@@ -214,6 +218,7 @@ public class CustomSqlValidationHandler
      * @param connection the connection.
      * @param metadataManager the metadata manager.
      * @param hashesFolder the folder where the hashes are cached.
+     * @param charset the charset.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     public void validate(
@@ -221,7 +226,8 @@ public class CustomSqlValidationHandler
         @NotNull final SqlDAO sqlDAO,
         @NotNull final Connection connection,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final File hashesFolder)
+        @NotNull final File hashesFolder,
+        @NotNull final String charset)
       throws  QueryJBuildException
     {
         @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
@@ -239,7 +245,7 @@ public class CustomSqlValidationHandler
         {
             if (   (t_Sql != null)
                 && (t_Sql.isValidate())
-                && (notCached(t_Sql, customSqlProvider, hashesFolder)))
+                && (notCached(t_Sql, customSqlProvider, hashesFolder, charset)))
             {
                 @Nullable final Chronometer t_Chronometer;
 
@@ -284,11 +290,15 @@ public class CustomSqlValidationHandler
      * @param hashesFolder the folder.
      * @return {@code true} if the hash is not found.
      */
-    protected boolean notCached(final Sql<String> sql, final CustomSqlProvider customSqlProvider, final File hashesFolder)
+    protected boolean notCached(
+        @NotNull final Sql<String> sql,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final File hashesFolder,
+        @NotNull final String charset)
     {
         final boolean result;
 
-        @NotNull final String hash = customSqlProvider.getHash(sql);
+        @NotNull final String hash = customSqlProvider.getHash(sql, charset);
 
         result = !(new File(hashesFolder.getAbsolutePath() + File.separator + hash).exists());
 
@@ -1204,6 +1214,8 @@ public class CustomSqlValidationHandler
     {
         @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
+        boolean t_bOrderMatters = true;
+
         @NotNull Collection<Property<String>> t_cProperties =
             retrieveExplicitProperties(
                 sql,
@@ -1216,6 +1228,8 @@ public class CustomSqlValidationHandler
         {
             t_cProperties =
                 retrieveImplicitProperties(sqlResult, customSqlProvider, metadataManager, typeManager);
+
+            t_bOrderMatters = false;
         }
 
         if  (t_cProperties.size() == 0)
@@ -1283,7 +1297,8 @@ public class CustomSqlValidationHandler
                              t_iColumnType,
                              t_iIndex,
                              t_cProperties,
-                             typeManager))
+                             typeManager,
+                             t_bOrderMatters))
                     {
                         if  (t_Log != null)
                         {
@@ -1396,6 +1411,10 @@ public class CustomSqlValidationHandler
 
         if  (t_strTable != null)
         {
+            if (t_strTable.equalsIgnoreCase("g_shares"))
+            {
+                int a = 0;
+            }
             @Nullable final List<Attribute<String>> t_lColumns =
                 metadataManager.getColumnDAO().findAllColumns(t_strTable);
 
@@ -1545,6 +1564,7 @@ public class CustomSqlValidationHandler
      * @param index the column index.
      * @param properties the properties.
      * @param typeManager the <code>MetadataTypeManager</code> instance.
+     * @param orderMatters whether order matters.
      * @return <code>true</code> in such case.
      */
     protected boolean matches(
@@ -1552,24 +1572,41 @@ public class CustomSqlValidationHandler
         final int type,
         final int index,
         @NotNull final Collection<Property<String>> properties,
-        @NotNull final TypeManager typeManager)
+        @NotNull final TypeManager typeManager,
+        final boolean orderMatters)
     {
         boolean result = false;
 
-        int t_iPropertyIndex = 0;
+        int t_iPropertyIndex = 1;
 
         for (@Nullable final Property<String> t_Property : properties)
         {
             if (t_Property != null)
             {
-                final boolean t_bMatches =
-                    matches(
-                        name, type, index, t_Property, t_iPropertyIndex, typeManager);
+                final boolean t_bNameMatches =
+                    name.equalsIgnoreCase(t_Property.getColumnName());
 
-                if (t_bMatches)
+                if (t_bNameMatches)
                 {
-                    result = true;
-                    break;
+                    final boolean t_bMatches =
+                        matches(
+                            name, type, index, t_Property, t_iPropertyIndex, typeManager, orderMatters);
+
+                    if (t_bMatches)
+                    {
+                        result = true;
+                        break;
+                    }
+                    else
+                    {
+                        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+
+                        if (t_Log != null)
+                        {
+                            t_Log.warn(
+                                "Wrong type (" + t_Property.getType() + ") for property " + t_Property.getId());
+                        }
+                    }
                 }
                 t_iPropertyIndex++;
             }
@@ -1587,6 +1624,7 @@ public class CustomSqlValidationHandler
      * @param property the property.
      * @param propertyIndex the property index.
      * @param typeManager the <code>MetadataTypeManager</code> instance.
+     * @param orderMatters whether the order matters.
      * @return <code>true</code> in such case.
      */
     @SuppressWarnings("unused")
@@ -1596,7 +1634,8 @@ public class CustomSqlValidationHandler
         final int index,
         @NotNull final Property<String> property,
         final int propertyIndex,
-        final TypeManager typeManager)
+        final TypeManager typeManager,
+        final boolean orderMatters)
     {
         boolean result = true;
 
@@ -1606,6 +1645,7 @@ public class CustomSqlValidationHandler
             result = false;
         }
 
+        // TODO: check types
         // This doesn't seem to work well for Oracle (2 != -5)
 //         if  (   (result)
 //              && (type != metadataTypeManager.getJavaType(property.getType())))
@@ -1614,6 +1654,7 @@ public class CustomSqlValidationHandler
 //         }
 
         if  (   (result)
+             && (orderMatters)
              && (index != propertyIndex))
         {
             result = false;

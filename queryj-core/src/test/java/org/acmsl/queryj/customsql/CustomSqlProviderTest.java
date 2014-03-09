@@ -58,6 +58,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.nio.charset.Charset;
+
 /**
  * Tests for CustomSqlProvider.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
@@ -95,8 +97,10 @@ public class CustomSqlProviderTest
                 statementFlagsDAO,
                 resultSetFlagsDAO);
 
-        @NotNull final String t_strHash1 = instance.getHash(t_Param1);
-        @NotNull final String t_strHash2 = instance.getHash(t_Param2);
+        @NotNull final Charset t_Charset = Charset.defaultCharset();
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Param1, t_Charset.displayName());
+        @NotNull final String t_strHash2 = instance.getHash(t_Param2, t_Charset.displayName());
 
         Assert.assertNotSame(t_strHash1, t_strHash2);
     }
@@ -129,8 +133,10 @@ public class CustomSqlProviderTest
                 statementFlagsDAO,
                 resultSetFlagsDAO);
 
-        @NotNull final String t_strHash1 = instance.getHash(t_Param1);
-        @NotNull final String t_strHash2 = instance.getHash(t_Param2);
+        @NotNull final Charset t_Charset = Charset.defaultCharset();
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Param1, t_Charset.displayName());
+        @NotNull final String t_strHash2 = instance.getHash(t_Param2, t_Charset.displayName());
 
         Assert.assertEquals(t_strHash1, t_strHash2);
     }
@@ -163,8 +169,10 @@ public class CustomSqlProviderTest
                 statementFlagsDAO,
                 resultSetFlagsDAO);
 
-        @NotNull final String t_strHash1 = instance.getHash(t_Property1);
-        @NotNull final String t_strHash2 = instance.getHash(t_Property2);
+        @NotNull final Charset t_Charset = Charset.defaultCharset();
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Property1, t_Charset.displayName());
+        @NotNull final String t_strHash2 = instance.getHash(t_Property2, t_Charset.displayName());
 
         Assert.assertNotSame(t_strHash1, t_strHash2);
     }
@@ -197,8 +205,10 @@ public class CustomSqlProviderTest
                 statementFlagsDAO,
                 resultSetFlagsDAO);
 
-        @NotNull final String t_strHash1 = instance.getHash(t_Property1);
-        @NotNull final String t_strHash2 = instance.getHash(t_Property2);
+        @NotNull final Charset t_Charset = Charset.defaultCharset();
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Property1, t_Charset.displayName());
+        @NotNull final String t_strHash2 = instance.getHash(t_Property2, t_Charset.displayName());
 
         Assert.assertEquals(t_strHash1, t_strHash2);
     }
@@ -231,8 +241,10 @@ public class CustomSqlProviderTest
                 statementFlagsDAO,
                 resultSetFlagsDAO);
 
-        @NotNull final String t_strHash1 = instance.getHash(t_Result1);
-        @NotNull final String t_strHash2 = instance.getHash(t_Result2);
+        @NotNull final Charset t_Charset = Charset.defaultCharset();
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Result1, t_Charset.displayName());
+        @NotNull final String t_strHash2 = instance.getHash(t_Result2, t_Charset.displayName());
 
         Assert.assertNotSame(t_strHash1, t_strHash2);
     }
@@ -264,8 +276,10 @@ public class CustomSqlProviderTest
                 statementFlagsDAO,
                 resultSetFlagsDAO);
 
-        @NotNull final String t_strHash1 = instance.getHash(t_Result1);
-        @NotNull final String t_strHash2 = instance.getHash(t_Result2);
+        @NotNull final Charset t_Charset = Charset.defaultCharset();
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Result1, t_Charset.displayName());
+        @NotNull final String t_strHash2 = instance.getHash(t_Result2, t_Charset.displayName());
 
         Assert.assertEquals(t_strHash1, t_strHash2);
     }
@@ -306,8 +320,10 @@ public class CustomSqlProviderTest
                 statementFlagsDAO,
                 resultSetFlagsDAO);
 
-        @NotNull final String t_strHash1 = instance.getHash(t_Sql1);
-        @NotNull final String t_strHash2 = instance.getHash(t_Sql2);
+        @NotNull final Charset t_Charset = Charset.defaultCharset();
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Sql1, t_Charset.displayName());
+        @NotNull final String t_strHash2 = instance.getHash(t_Sql2, t_Charset.displayName());
 
         Assert.assertNotSame(t_strHash1, t_strHash2);
 
@@ -351,8 +367,10 @@ public class CustomSqlProviderTest
                 statementFlagsDAO,
                 resultSetFlagsDAO);
 
-        @NotNull final String t_strHash1 = instance.getHash(t_Sql1);
-        @NotNull final String t_strHash2 = instance.getHash(t_Sql2);
+        @NotNull final Charset t_Charset = Charset.defaultCharset();
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Sql1, t_Charset.displayName());
+        @NotNull final String t_strHash2 = instance.getHash(t_Sql2, t_Charset.displayName());
 
         Assert.assertEquals(t_strHash1, t_strHash2);
 

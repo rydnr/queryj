@@ -1003,7 +1003,7 @@ public class SqlXmlParserImpl
     protected void addResult(
         @NotNull final String id, @NotNull final Result<String> result, @NotNull final List<Result<String>> results)
     {
-        if (results.contains(result))
+        if (!results.contains(result))
         {
             results.add(result);
         }
