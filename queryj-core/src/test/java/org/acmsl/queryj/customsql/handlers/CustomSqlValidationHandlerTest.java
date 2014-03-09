@@ -38,14 +38,27 @@ package org.acmsl.queryj.customsql.handlers;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.commons.utils.io.FileUtils;
+import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.CustomSqlProviderTest.SemiMockedAbstractCustomSqlProvider;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.ParameterElement;
 import org.acmsl.queryj.customsql.ParameterRefElement;
+import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlConnectionFlagsDAO;
 import org.acmsl.queryj.customsql.SqlElement;
+import org.acmsl.queryj.customsql.SqlResultSetFlagsDAO;
+import org.acmsl.queryj.customsql.SqlStatementFlagsDAO;
+import org.acmsl.queryj.metadata.SqlDAO;
+import org.acmsl.queryj.metadata.SqlPropertyDAO;
+import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
@@ -54,13 +67,17 @@ import org.acmsl.queryj.metadata.TypeManager;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing JUnit classes.
  */
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
 /*
@@ -77,12 +94,17 @@ import org.powermock.modules.junit4.PowerMockRunner;
 /*
  * Importing JDK classes.
  */
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Tests for {@link CustomSqlValidationHandler}.
@@ -94,6 +116,12 @@ import java.util.Date;
 @RunWith(PowerMockRunner.class)
 public class CustomSqlValidationHandlerTest
 {
+    /**
+     * A temporary folder for testing hash caches.
+     */
+    @Rule
+    public TemporaryFolder tempFolder = new TemporaryFolder();
+
     @SuppressWarnings("unchecked")
     protected void testBody(@NotNull final Sql<String> sql, @NotNull final Parameter parameter)
         throws Exception
@@ -137,6 +165,10 @@ public class CustomSqlValidationHandlerTest
         }
     }
 
+    /**
+     * Checks if validation works for date parameters.
+     * @throws Exception
+     */
     @SuppressWarnings("unused, unchecked")
     @Test
     public void validate_works_for_date_parameters()
@@ -330,5 +362,96 @@ public class CustomSqlValidationHandlerTest
         throws Exception
     {
         testPrimitiveBody(Boolean.class);
+    }
+
+    @Test
+    public void validation_skipped_if_hash_is_cached()
+        throws IOException
+    {
+        @NotNull final Sql<String> t_Sql =
+            new SqlElement<>("sql-id", "dao", "sql-name", "select", Cardinality.SINGLE, "all", true, false, "fake sql");
+        @NotNull final Result<String> t_Result1 = new ResultElement<>("p1", "class1");
+
+        @NotNull final MetadataManager t_MetadataManager = PowerMock.createNiceMock(MetadataManager.class);
+        @NotNull final SqlDAO sqlDAO = EasyMock.createNiceMock(SqlDAO.class);
+        @NotNull final SqlParameterDAO parameterDAO = EasyMock.createNiceMock(SqlParameterDAO.class);
+        @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);
+        @NotNull final SqlResultDAO resultDAO = EasyMock.createNiceMock(SqlResultDAO.class);
+        @NotNull final SqlConnectionFlagsDAO connectionFlagsDAO = EasyMock.createNiceMock(SqlConnectionFlagsDAO.class);
+        @NotNull final SqlStatementFlagsDAO statementFlagsDAO = EasyMock.createNiceMock(SqlStatementFlagsDAO.class);
+        @NotNull final SqlResultSetFlagsDAO resultSetFlagsDAO = EasyMock.createNiceMock(SqlResultSetFlagsDAO.class);
+        @NotNull final List<Sql<String>> sqlList = new ArrayList<>(1);
+        sqlList.add(t_Sql);
+
+        @NotNull final CustomSqlProvider t_CustomSqlProvider =
+            new SemiMockedAbstractCustomSqlProvider(
+                sqlDAO,
+                parameterDAO,
+                propertyDAO,
+                resultDAO,
+                connectionFlagsDAO,
+                statementFlagsDAO,
+                resultSetFlagsDAO);
+
+        @NotNull final QueryJCommand t_Command = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        new QueryJCommandWrapper<File>(t_Command).setSetting(
+            CustomSqlCacheWritingHandler.CUSTOM_SQL_OUTPUT_FOLDER_FOR_HASHES, tempFolder.getRoot());
+        new QueryJCommandWrapper<MetadataManager>(t_Command)
+            .setSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, t_MetadataManager);
+        new QueryJCommandWrapper<CustomSqlProvider>(t_Command).setSetting(
+            CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, t_CustomSqlProvider);
+
+        EasyMock.expect(sqlDAO.findAll()).andReturn(sqlList).anyTimes();
+        EasyMock.replay(sqlDAO);
+        EasyMock.expect(resultDAO.findBySqlId("sql-id")).andReturn(t_Result1).anyTimes();
+        EasyMock.replay(resultDAO);
+
+        @NotNull final String hash = t_CustomSqlProvider.getHash(t_Sql);
+
+        FileUtils.getInstance().writeFile(tempFolder.getRoot() + File.separator + hash, "", Charset.defaultCharset());
+
+        Assert.assertTrue(new File(tempFolder.getRoot() + File.separator + hash).exists());
+
+        @NotNull final CustomSqlValidationHandler instance =
+            new CustomSqlValidationHandler()
+            {
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public void validate(
+                    @NotNull final Sql<String> sql,
+                    @NotNull final CustomSqlProvider customSqlProvider,
+                    @NotNull final Connection connection,
+                    @NotNull final MetadataManager metadataManager,
+                    @NotNull final TypeManager typeManager)
+                {
+                    Assert.fail("Hash cache doesn't prevent validation");
+                }
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @NotNull
+                @Override
+                protected Connection retrieveConnection(@NotNull final QueryJCommand parameters)
+                {
+                    return PowerMock.createNiceMock(Connection.class);
+                }
+            };
+
+        try
+        {
+            instance.handle(t_Command);
+
+        }
+        catch (@NotNull final QueryJBuildException exception)
+        {
+            Assert.fail(exception.getMessage());
+        }
+        finally
+        {
+            EasyMock.verify(sqlDAO);
+        }
     }
 }

@@ -130,8 +130,12 @@ public class CustomSqlCacheWritingHandler
         @NotNull final String hash,
         @NotNull final Charset charset)
     {
-        FileUtils.getInstance().writeFileIfPossible(
-            outputFolder + File.separator + hash, "", charset);
+        @NotNull final String path = hashPath(outputFolder.getAbsolutePath(), hash);
+
+        if (!existsAlready(path))
+        {
+            FileUtils.getInstance().writeFileIfPossible(path, "", charset);
+        }
     }
 
     /**
@@ -150,7 +154,7 @@ public class CustomSqlCacheWritingHandler
      * @return such folder.
      */
     @NotNull
-    protected File retrieveOutputFolderForSqlHashes(@NotNull final QueryJCommand command)
+    public File retrieveOutputFolderForSqlHashes(@NotNull final QueryJCommand command)
     {
         @NotNull final File result;
 
@@ -169,5 +173,26 @@ public class CustomSqlCacheWritingHandler
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the file name associated to given hash, under the given folder.
+     * @param folder the parent folder.
+     * @param hash the hash.
+     * @return the absolute file name.
+     */
+    public String hashPath(@NotNull final String folder, @NotNull final String hash)
+    {
+        return folder + File.separator + hash;
+    }
+
+    /**
+     * Checks whether the path exists already.
+     * @param path the path.
+     * @return {@code true} in such case.
+     */
+    public boolean existsAlready(@NotNull final String path)
+    {
+        return new File(path).exists();
     }
 }

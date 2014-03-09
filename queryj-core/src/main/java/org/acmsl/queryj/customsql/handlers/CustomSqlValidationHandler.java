@@ -34,10 +34,8 @@
 package org.acmsl.queryj.customsql.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.commons.utils.Chronometer;
-import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CustomResultWithInvalidNumberOfColumnsException;
@@ -65,11 +63,14 @@ import org.acmsl.queryj.metadata.vo.Attribute;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.commons.utils.Chronometer;
 import org.acmsl.commons.utils.ConversionUtils;
+import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JDK classes.
  */
+import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.NoSuchMethodException;
 import java.lang.reflect.Constructor;
@@ -188,10 +189,22 @@ public class CustomSqlValidationHandler
                 t_CustomSqlProvider,
                 t_CustomSqlProvider.getSqlDAO(),
                 retrieveConnection(parameters),
-                t_MetadataManager);
+                t_MetadataManager,
+                retrieveOutputFolderForSqlHashes(parameters));
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the output folder for SQL hashes.
+     * @param parameters the command.
+     * @return such folder.
+     */
+    @NotNull
+    protected File retrieveOutputFolderForSqlHashes(final QueryJCommand parameters)
+    {
+        return new CustomSqlCacheWritingHandler().retrieveOutputFolderForSqlHashes(parameters);
     }
 
     /**
@@ -200,13 +213,15 @@ public class CustomSqlValidationHandler
      * @param sqlDAO the {@link SqlDAO} instance.
      * @param connection the connection.
      * @param metadataManager the metadata manager.
+     * @param hashesFolder the folder where the hashes are cached.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     public void validate(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final SqlDAO sqlDAO,
         @NotNull final Connection connection,
-        @NotNull final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final File hashesFolder)
       throws  QueryJBuildException
     {
         @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
@@ -223,7 +238,8 @@ public class CustomSqlValidationHandler
         for (@Nullable final Sql<String> t_Sql : sqlDAO.findAll())
         {
             if (   (t_Sql != null)
-                && (t_Sql.isValidate()))
+                && (t_Sql.isValidate())
+                && (notCached(t_Sql, customSqlProvider, hashesFolder)))
             {
                 @Nullable final Chronometer t_Chronometer;
 
@@ -259,6 +275,24 @@ public class CustomSqlValidationHandler
 
             t_iIndex++;
         }
+    }
+
+    /**
+     * Checks whether the hash for given {@link Sql} is already cached.
+     * @param sql the {@link Sql}.
+     * @param customSqlProvider the {@link CustomSqlProvider}.
+     * @param hashesFolder the folder.
+     * @return {@code true} if the hash is not found.
+     */
+    protected boolean notCached(final Sql<String> sql, final CustomSqlProvider customSqlProvider, final File hashesFolder)
+    {
+        final boolean result;
+
+        @NotNull final String hash = customSqlProvider.getHash(sql);
+
+        result = !(new File(hashesFolder.getAbsolutePath() + File.separator + hash).exists());
+
+        return result;
     }
 
     /**
@@ -637,6 +671,7 @@ public class CustomSqlValidationHandler
      * @param statement the prepared statement.
      * @param typeManager the metadata type manager.
      * @param conversionUtils the <code>ConversionUtils</code> instance.
+     * @param <T> the type.
      * @throws QueryJBuildException if some problem occurs.
      */
     @SuppressWarnings("unchecked")
@@ -736,6 +771,7 @@ public class CustomSqlValidationHandler
      * Retrieves the type of the parameter.
      * @param parameter the {@link Parameter}.
      * @param typeManager the {@link MetadataTypeManager}.
+     * @param <T> the type.
      * @return the parameter type.
      */
     @SuppressWarnings("unchecked")
@@ -853,6 +889,7 @@ public class CustomSqlValidationHandler
      * @param type the parameter type.
      * @param conversionUtils the {@link ConversionUtils} instance.
      * @param stringUtils the {@link StringUtils} instance.
+     * @param <T> the type.
      * @return the validation value.
      * @throws QueryJBuildException if some problem occurs.
      */
@@ -976,6 +1013,7 @@ public class CustomSqlValidationHandler
      * @param type the parameter type.
      * @param typeClass the class of the parameter type.
      * @param sql the {@link Sql}.
+     * @param <T> the type.
      * @return the parameter value.
      * @throws QueryJBuildException if some problem occurs.
      */
