@@ -138,5 +138,14 @@ public interface CustomSqlProvider
      */
     @NotNull
     <T> String getHash(@NotNull final Result<T> result);
+
+    /**
+     * Computes the hash for given {@link Property} information.
+     * @param property the property.
+     * @param <T> the type.
+     * @return the computed hash.
+     */
+    @NotNull
+    <T> String getHash(@NotNull final Property<T> property);
 }
 

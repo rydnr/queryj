@@ -38,6 +38,7 @@ package org.acmsl.queryj.customsql;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.customsql.Sql.Cardinality;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
@@ -251,7 +252,6 @@ public class CustomSqlProviderTest
         Assert.assertNotSame(t_strHash1, t_strHash2);
     }
 
-
     /**
      * Tests whether equal parameters give equal hashes.
      */
@@ -284,5 +284,229 @@ public class CustomSqlProviderTest
         @NotNull final String t_strHash2 = instance.getHash(t_Param2);
 
         Assert.assertEquals(t_strHash1, t_strHash2);
+    }
+
+    /**
+     * Tests whether different properties give different hashes.
+     */
+    @Test
+    public void different_properties_give_different_hashes()
+    {
+        @NotNull final Property<String> t_Property1 = new PropertyElement<>("p1", "col_name_1", 1, "int", true);
+
+        @NotNull final Property<String> t_Property2 = new PropertyElement<>("p2", "col_name_2", 2, "int", true);
+
+        @NotNull final SqlDAO sqlDAO = EasyMock.createNiceMock(SqlDAO.class);
+        @NotNull final SqlParameterDAO parameterDAO = EasyMock.createNiceMock(SqlParameterDAO.class);
+        @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);
+        @NotNull final SqlResultDAO resultDAO = EasyMock.createNiceMock(SqlResultDAO.class);
+        @NotNull final SqlConnectionFlagsDAO connectionFlagsDAO = EasyMock.createNiceMock(SqlConnectionFlagsDAO.class);
+        @NotNull final SqlStatementFlagsDAO statementFlagsDAO = EasyMock.createNiceMock(SqlStatementFlagsDAO.class);
+        @NotNull final SqlResultSetFlagsDAO resultSetFlagsDAO = EasyMock.createNiceMock(SqlResultSetFlagsDAO.class);
+
+        @NotNull final CustomSqlProvider instance =
+            new SemiMockedAbstractCustomSqlProvider(
+                sqlDAO,
+                parameterDAO,
+                propertyDAO,
+                resultDAO,
+                connectionFlagsDAO,
+                statementFlagsDAO,
+                resultSetFlagsDAO);
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Property1);
+        @NotNull final String t_strHash2 = instance.getHash(t_Property2);
+
+        Assert.assertNotSame(t_strHash1, t_strHash2);
+    }
+
+    /**
+     * Tests whether equal properties give equal hashes.
+     */
+    @Test
+    public void equal_properties_give_equal_hashes()
+    {
+        @NotNull final Property<String> t_Property1 = new PropertyElement<>("p1", "col_1", 1, "int", true);
+
+        @NotNull final Property<String> t_Property2 = new PropertyElement<>("p2", "col_1", 2, "int", true);
+
+        @NotNull final SqlDAO sqlDAO = EasyMock.createNiceMock(SqlDAO.class);
+        @NotNull final SqlParameterDAO parameterDAO = EasyMock.createNiceMock(SqlParameterDAO.class);
+        @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);
+        @NotNull final SqlResultDAO resultDAO = EasyMock.createNiceMock(SqlResultDAO.class);
+        @NotNull final SqlConnectionFlagsDAO connectionFlagsDAO = EasyMock.createNiceMock(SqlConnectionFlagsDAO.class);
+        @NotNull final SqlStatementFlagsDAO statementFlagsDAO = EasyMock.createNiceMock(SqlStatementFlagsDAO.class);
+        @NotNull final SqlResultSetFlagsDAO resultSetFlagsDAO = EasyMock.createNiceMock(SqlResultSetFlagsDAO.class);
+
+        @NotNull final CustomSqlProvider instance =
+            new SemiMockedAbstractCustomSqlProvider(
+                sqlDAO,
+                parameterDAO,
+                propertyDAO,
+                resultDAO,
+                connectionFlagsDAO,
+                statementFlagsDAO,
+                resultSetFlagsDAO);
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Property1);
+        @NotNull final String t_strHash2 = instance.getHash(t_Property2);
+
+        Assert.assertEquals(t_strHash1, t_strHash2);
+    }
+
+    /**
+     * Tests whether different {@link Result}s give different hashes.
+     */
+    @Test
+    public void different_results_give_different_hashes()
+    {
+        @NotNull final Result<String> t_Result1 = new ResultElement<>("p1", "class1");
+
+        @NotNull final Result<String> t_Result2 = new ResultElement<>("p1", "class2");
+
+        @NotNull final SqlDAO sqlDAO = EasyMock.createNiceMock(SqlDAO.class);
+        @NotNull final SqlParameterDAO parameterDAO = EasyMock.createNiceMock(SqlParameterDAO.class);
+        @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);
+        @NotNull final SqlResultDAO resultDAO = EasyMock.createNiceMock(SqlResultDAO.class);
+        @NotNull final SqlConnectionFlagsDAO connectionFlagsDAO = EasyMock.createNiceMock(SqlConnectionFlagsDAO.class);
+        @NotNull final SqlStatementFlagsDAO statementFlagsDAO = EasyMock.createNiceMock(SqlStatementFlagsDAO.class);
+        @NotNull final SqlResultSetFlagsDAO resultSetFlagsDAO = EasyMock.createNiceMock(SqlResultSetFlagsDAO.class);
+
+        @NotNull final CustomSqlProvider instance =
+            new SemiMockedAbstractCustomSqlProvider(
+                sqlDAO,
+                parameterDAO,
+                propertyDAO,
+                resultDAO,
+                connectionFlagsDAO,
+                statementFlagsDAO,
+                resultSetFlagsDAO);
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Result1);
+        @NotNull final String t_strHash2 = instance.getHash(t_Result2);
+
+        Assert.assertNotSame(t_strHash1, t_strHash2);
+    }
+
+    /**
+     * Tests whether equal {@link Result}s give equal hashes.
+     */
+    @Test
+    public void equal_results_give_equal_hashes()
+    {
+        @NotNull final Result<String> t_Result1 = new ResultElement<>("p1", "class1");
+        @NotNull final Result<String> t_Result2 = new ResultElement<>("p2", "class1");
+
+        @NotNull final SqlDAO sqlDAO = EasyMock.createNiceMock(SqlDAO.class);
+        @NotNull final SqlParameterDAO parameterDAO = EasyMock.createNiceMock(SqlParameterDAO.class);
+        @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);
+        @NotNull final SqlResultDAO resultDAO = EasyMock.createNiceMock(SqlResultDAO.class);
+        @NotNull final SqlConnectionFlagsDAO connectionFlagsDAO = EasyMock.createNiceMock(SqlConnectionFlagsDAO.class);
+        @NotNull final SqlStatementFlagsDAO statementFlagsDAO = EasyMock.createNiceMock(SqlStatementFlagsDAO.class);
+        @NotNull final SqlResultSetFlagsDAO resultSetFlagsDAO = EasyMock.createNiceMock(SqlResultSetFlagsDAO.class);
+
+        @NotNull final CustomSqlProvider instance =
+            new SemiMockedAbstractCustomSqlProvider(
+                sqlDAO,
+                parameterDAO,
+                propertyDAO,
+                resultDAO,
+                connectionFlagsDAO,
+                statementFlagsDAO,
+                resultSetFlagsDAO);
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Result1);
+        @NotNull final String t_strHash2 = instance.getHash(t_Result2);
+
+        Assert.assertEquals(t_strHash1, t_strHash2);
+    }
+
+    /**
+     * Tests whether different {@link Sql}s give different hashes.
+     */
+    @Test
+    public void different_sql_give_different_hashes()
+    {
+        @NotNull final Sql<String> t_Sql1 =
+            new SqlElement<>("id1", "dao", null, "name1", "select", Cardinality.SINGLE, "all", true, false, "desc1");
+        @NotNull final Sql<String> t_Sql2 =
+            new SqlElement<>("id2", "dao2", null, "name1", "select", Cardinality.SINGLE, "all", true, false, "desc1");
+
+        @NotNull final Result<String> t_Result1 = new ResultElement<>("p1", "class1");
+        @NotNull final Result<String> t_Result2 = new ResultElement<>("p2", "class1");
+
+        @NotNull final SqlDAO sqlDAO = EasyMock.createNiceMock(SqlDAO.class);
+        @NotNull final SqlParameterDAO parameterDAO = EasyMock.createNiceMock(SqlParameterDAO.class);
+        @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);
+        @NotNull final SqlResultDAO resultDAO = EasyMock.createNiceMock(SqlResultDAO.class);
+        @NotNull final SqlConnectionFlagsDAO connectionFlagsDAO = EasyMock.createNiceMock(SqlConnectionFlagsDAO.class);
+        @NotNull final SqlStatementFlagsDAO statementFlagsDAO = EasyMock.createNiceMock(SqlStatementFlagsDAO.class);
+        @NotNull final SqlResultSetFlagsDAO resultSetFlagsDAO = EasyMock.createNiceMock(SqlResultSetFlagsDAO.class);
+
+        EasyMock.expect(resultDAO.findBySqlId("id1")).andReturn(t_Result1);
+        EasyMock.expect(resultDAO.findBySqlId("id2")).andReturn(t_Result2);
+        EasyMock.replay(resultDAO);
+
+        @NotNull final CustomSqlProvider instance =
+            new SemiMockedAbstractCustomSqlProvider(
+                sqlDAO,
+                parameterDAO,
+                propertyDAO,
+                resultDAO,
+                connectionFlagsDAO,
+                statementFlagsDAO,
+                resultSetFlagsDAO);
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Sql1);
+        @NotNull final String t_strHash2 = instance.getHash(t_Sql2);
+
+        Assert.assertNotSame(t_strHash1, t_strHash2);
+
+        EasyMock.verify(resultDAO);
+    }
+
+
+    /**
+     * Tests whether equal {@link Sql}s give equal hashes.
+     */
+    @Test
+    public void equal_sql_give_equal_hashes()
+    {
+        @NotNull final Sql<String> t_Sql1 =
+            new SqlElement<>("id1", "dao", null, "name1", "select", Cardinality.SINGLE, "all", true, false, "desc1");
+        @NotNull final Sql<String> t_Sql2 =
+            new SqlElement<>("id2", "dao", null, "name1", "select", Cardinality.SINGLE, "all", true, false, "desc1");
+
+        @NotNull final Result<String> t_Result1 = new ResultElement<>("p1", "class1");
+        @NotNull final Result<String> t_Result2 = new ResultElement<>("p2", "class1");
+
+        @NotNull final SqlDAO sqlDAO = EasyMock.createNiceMock(SqlDAO.class);
+        @NotNull final SqlParameterDAO parameterDAO = EasyMock.createNiceMock(SqlParameterDAO.class);
+        @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);
+        @NotNull final SqlResultDAO resultDAO = EasyMock.createNiceMock(SqlResultDAO.class);
+        @NotNull final SqlConnectionFlagsDAO connectionFlagsDAO = EasyMock.createNiceMock(SqlConnectionFlagsDAO.class);
+        @NotNull final SqlStatementFlagsDAO statementFlagsDAO = EasyMock.createNiceMock(SqlStatementFlagsDAO.class);
+        @NotNull final SqlResultSetFlagsDAO resultSetFlagsDAO = EasyMock.createNiceMock(SqlResultSetFlagsDAO.class);
+
+        EasyMock.expect(resultDAO.findBySqlId("id1")).andReturn(t_Result1);
+        EasyMock.expect(resultDAO.findBySqlId("id2")).andReturn(t_Result2);
+        EasyMock.replay(resultDAO);
+
+        @NotNull final CustomSqlProvider instance =
+            new SemiMockedAbstractCustomSqlProvider(
+                sqlDAO,
+                parameterDAO,
+                propertyDAO,
+                resultDAO,
+                connectionFlagsDAO,
+                statementFlagsDAO,
+                resultSetFlagsDAO);
+
+        @NotNull final String t_strHash1 = instance.getHash(t_Sql1);
+        @NotNull final String t_strHash2 = instance.getHash(t_Sql2);
+
+        Assert.assertEquals(t_strHash1, t_strHash2);
+
+        EasyMock.verify(resultDAO);
     }
 }

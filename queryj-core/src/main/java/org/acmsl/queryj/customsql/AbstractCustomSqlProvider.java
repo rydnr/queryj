@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Common logic for CustomSqlProviders.
  *
  * Date: 2014/03/08
  * Time: 19:32
@@ -36,29 +36,45 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing JetBrains annotations.
+ * Importing ACMSL Java Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.customsql.xml.SqlXmlParser;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
+
+/*
+ * Importing Apache Commons Logging classes.
+ */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
+import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
- *
+ * Common logic for {@link CustomSqlProvider}s.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/03/08 19:32
@@ -85,7 +101,8 @@ public abstract class AbstractCustomSqlProvider
         try
         {
             @NotNull final MessageDigest t_MessageDigest = MessageDigest.getInstance("SHA1");
-            result = new String(t_MessageDigest.digest(value.getBytes("UTF-8")), "UTF-8");
+
+            result = DatatypeConverter.printBase64Binary(t_MessageDigest.digest(value.getBytes("UTF-8")));
         }
         catch (@NotNull final NoSuchAlgorithmException noSuchAlgorithm)
         {
@@ -124,21 +141,26 @@ public abstract class AbstractCustomSqlProvider
         return
             getHash(
                 sql.getId(),
+                sql.getName(),
                 sql.getType(),
+                sql.getDao(),
                 sql.isValidate(),
                 sql.isDynamic(),
                 sql.getValue(),
+                sql.getRepositoryScope(),
+                sql.getImplementation(),
                 sql.getParameterRefs(),
                 getSqlParameterDAO(),
                 getSqlResultDAO(),
                 DEFAULT_SEPARATOR);
     }
 
-
     /**
      * Retrieves the hash of the SQL whose details are given.
-     * @param id the sql id.
+     * @param id the id.
+     * @param name the sql name.
      * @param type the type.
+     * @param dao the DAO.
      * @param validate whether to validate or not.
      * @param dynamic whether it's dynamic or not.
      * @param value the value.
@@ -152,10 +174,14 @@ public abstract class AbstractCustomSqlProvider
     @NotNull
     protected <T> String getHash(
         @NotNull final T id,
+        @NotNull final T name,
         @NotNull final T type,
+        @Nullable final T dao,
         final boolean validate,
         final boolean dynamic,
         @Nullable final T value,
+        @Nullable final T repositoryScoped,
+        @NotNull final T implementation,
         @NotNull final List<ParameterRef> parameterRefs,
         @NotNull final SqlParameterDAO parameterDAO,
         @NotNull final SqlResultDAO resultDAO,
@@ -164,11 +190,17 @@ public abstract class AbstractCustomSqlProvider
         @NotNull final String result;
 
         @NotNull final StringBuilder t_Builder = new StringBuilder();
-        t_Builder.append(id);
+        t_Builder.append(name);
         t_Builder.append(separator);
 
         t_Builder.append(type);
         t_Builder.append(separator);
+
+        if (dao != null)
+        {
+            t_Builder.append(dao);
+            t_Builder.append(separator);
+        }
 
         t_Builder.append(validate);
         t_Builder.append(separator);
@@ -182,6 +214,18 @@ public abstract class AbstractCustomSqlProvider
             t_Builder.append(separator);
         }
 
+        if (repositoryScoped != null)
+        {
+            t_Builder.append(repositoryScoped);
+        }
+        else
+        {
+            t_Builder.append("null");
+        }
+        t_Builder.append(separator);
+        t_Builder.append(implementation);
+        t_Builder.append(separator);
+
         for (@Nullable final ParameterRef t_ParameterRef : parameterRefs)
         {
             if (t_ParameterRef != null)
@@ -190,7 +234,7 @@ public abstract class AbstractCustomSqlProvider
 
                 if (t_Parameter != null)
                 {
-                    t_Builder.append(getHash(t_Parameter));
+                    t_Builder.append(getHash(t_Parameter, separator));
                     t_Builder.append(separator);
                 }
             }
@@ -200,7 +244,7 @@ public abstract class AbstractCustomSqlProvider
 
         if (t_Result != null)
         {
-            t_Builder.append(getHash(t_Result));
+            t_Builder.append(getHash(t_Result, separator));
         }
 
         result = getHash(t_Builder.toString());
@@ -218,6 +262,7 @@ public abstract class AbstractCustomSqlProvider
         return getHash(parameter, DEFAULT_SEPARATOR);
     }
 
+
     /**
      * Computes the hash for given {@link Parameter parameter}.
      * @param parameter the parameter.
@@ -228,13 +273,27 @@ public abstract class AbstractCustomSqlProvider
     @NotNull
     protected <T, V> String getHash(@NotNull final Parameter<T, V> parameter, @NotNull final String separator)
     {
+        return getHash(parameter.getIndex(), parameter.getType(), separator);
+    }
+
+    /**
+     * Computes the hash for given {@link Parameter parameter}.
+     * @param index the parameter index.
+     * @param type the parameter type.
+     * @param separator the hash separator.
+     * @param <T> the type.
+     */
+    @NotNull
+    protected <T> String getHash(
+        final int index, @NotNull final T type, @NotNull final String separator)
+    {
         @NotNull final String result;
 
         @NotNull final StringBuilder t_Builder = new StringBuilder();
 
-        t_Builder.append(parameter.getIndex());
+        t_Builder.append(index);
         t_Builder.append(separator);
-        t_Builder.append(parameter.getType());
+        t_Builder.append(type);
 
         result = getHash(t_Builder.toString());
 
@@ -242,17 +301,26 @@ public abstract class AbstractCustomSqlProvider
     }
 
     /**
-     * Computes the hash for given {@link org.acmsl.queryj.customsql.Result result}.
-     *
-     * @param result the result.
-     * @param <T>    the type.
-     * @return the hash.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
     public <T> String getHash(@NotNull final Result<T> result)
     {
         return getHash(result.getClassValue(), result.getPropertyRefs(), getSqlPropertyDAO(), DEFAULT_SEPARATOR);
+    }
+
+    /**
+     * Computes the hash for given {@link org.acmsl.queryj.customsql.Result result}.
+     * @param result the result.
+     * @param separator the separator.
+     * @param <T> the type.
+     * @return the hash.
+     */
+    @NotNull
+    protected <T> String getHash(@NotNull final Result<T> result, @NotNull final String separator)
+    {
+        return getHash(result.getClassValue(), result.getPropertyRefs(), getSqlPropertyDAO(), separator);
     }
 
     /**
@@ -289,13 +357,61 @@ public abstract class AbstractCustomSqlProvider
 
                 if (t_Property != null)
                 {
-                    t_Builder.append(t_Property.getColumnName());
-                    t_Builder.append(separator);
-                    t_Builder.append(t_Property.getType());
-                    t_Builder.append(separator);
+                    t_Builder.append(getHash(t_Property, separator));
                 }
             }
         }
+
+        result = getHash(t_Builder.toString());
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public <T> String getHash(@NotNull final Property<T> property)
+    {
+        return getHash(property.getColumnName(), property.getType(), property.isNullable(), DEFAULT_SEPARATOR);
+    }
+
+    /**
+     * Computes the hash for given {@link Property} information.
+     * @param property the property.
+     * @param separator the hash separator.
+     * @param <T> the type.
+     * @return the computed hash.
+     */
+    @NotNull
+    protected <T> String getHash(@NotNull final Property<T> property, @NotNull final String separator)
+    {
+        return getHash(property.getColumnName(), property.getType(), property.isNullable(), separator);
+    }
+
+    /**
+     * Computes the hash for given {@link Property} information.
+     * @param columnName the column name.
+     * @param type the column type.
+     * @param nullable whether the column allows nulls.
+     * @param separator the hash separator.
+     * @param <T> the type.
+     * @return the computed hash.
+     */
+    @NotNull
+    protected <T> String getHash(
+        @NotNull final T columnName, @NotNull final T type, final boolean nullable, @NotNull final String separator)
+    {
+        @NotNull final String result;
+
+        @NotNull final StringBuilder t_Builder = new StringBuilder();
+
+        t_Builder.append(columnName);
+        t_Builder.append(separator);
+        t_Builder.append(type);
+        t_Builder.append(separator);
+        t_Builder.append(nullable);
 
         result = getHash(t_Builder.toString());
 
