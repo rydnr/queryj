@@ -84,6 +84,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -442,6 +443,7 @@ public class JdbcTypeManager
         PREPARED_STATEMENT_METHODS.put(Types.ARRAY, SET_ARRAY_METHOD);
 
         TYPE_MAPPING.put(normalizeKey(BIGINT), Types.BIGINT);
+        TYPE_MAPPING.put(normalizeKey(long.class.getSimpleName()), Types.BIGINT);
         INVERSE_TYPE_MAPPING.put(Types.BIGINT, BIGINT);
         CLASS_MAPPING.put(Types.BIGINT, long.class);
         INVERSE_CLASS_MAPPING.put(long.class, Types.BIGINT);
@@ -477,6 +479,7 @@ public class JdbcTypeManager
 
         TYPE_MAPPING.put(normalizeKey(CHAR), Types.CHAR);
         INVERSE_TYPE_MAPPING.put(Types.CHAR, CHAR);
+        TYPE_MAPPING.put(normalizeKey(String.class.getSimpleName()), Types.CHAR);
         CLASS_MAPPING.put(Types.CHAR, String.class);
         INVERSE_CLASS_MAPPING.put(String.class, Types.CHAR);
         PREPARED_STATEMENT_METHODS.put(Types.CHAR, SET_STRING_METHOD);
@@ -702,6 +705,7 @@ public class JdbcTypeManager
      * @param jdbcType the constant in {@link Types}.
      * @return the associated class, or {@code null} if there's no match.
      */
+    @Override
     @Nullable
     public Class<?> getClass(final int jdbcType)
     {
@@ -1009,6 +1013,136 @@ public class JdbcTypeManager
             case "Integer": result = int.class; break;
             case "Long": result = long.class; break;
             default: result = null; break;
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean areColumnTypesCompatible(final int first, final int second)
+    {
+        return areColumnTypesCompatible(first, second, true);
+    }
+
+    /**
+     * Checks whether given column types are compatible.
+     * @param first the first.
+     * @param second the other.
+     * @param checkReverse whether to check the reverse way if no direct match is found.
+     * @return {@code true} if so.
+     */
+    protected boolean areColumnTypesCompatible(final int first, final int second, final boolean checkReverse)
+    {
+        boolean result = first == second;
+
+        if (!result)
+        {
+            @NotNull final List<Integer> t_lCompatibleTypes = getCompatibleTypesFor(first);
+
+            result = t_lCompatibleTypes.contains(second);
+        }
+
+        if (   (!result)
+            && (checkReverse))
+        {
+            result = areColumnTypesCompatible(second, first, false);
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getSqlType(@NotNull final Class<?> classType)
+    {
+        final int result;
+
+        if (INVERSE_CLASS_MAPPING.containsKey(classType))
+        {
+            result = INVERSE_CLASS_MAPPING.get(classType);
+        }
+        else
+        {
+            result = Types.OTHER;
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getSqlType(@NotNull final String type)
+    {
+        final int result;
+
+        if (TYPE_MAPPING.containsKey(normalizeKey(type)))
+        {
+            result = TYPE_MAPPING.get(normalizeKey(type));
+        }
+        else
+        {
+            result = Types.OTHER;
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public List<Integer> getCompatibleTypesFor(final int type)
+    {
+        @NotNull final List<Integer> result = new ArrayList<>();
+
+        switch (type)
+        {
+            case Types.CHAR:
+            case Types.LONGNVARCHAR:
+            case Types.LONGVARCHAR:
+            case Types.NCHAR:
+            case Types.NVARCHAR:
+            case Types.VARCHAR:
+                result.add(Types.CHAR);
+                result.add(Types.LONGNVARCHAR);
+                result.add(Types.LONGVARCHAR);
+                result.add(Types.NCHAR);
+                result.add(Types.NVARCHAR);
+                result.add(Types.VARCHAR);
+                break;
+            case Types.NUMERIC:
+            case Types.BIGINT:
+            case Types.BIT:
+            case Types.BOOLEAN:
+            case Types.DECIMAL:
+            case Types.DOUBLE:
+            case Types.FLOAT:
+            case Types.INTEGER:
+            case Types.REAL:
+            case Types.SMALLINT:
+            case Types.TINYINT:
+                result.add(Types.NUMERIC);
+                result.add(Types.BIGINT);
+                result.add(Types.BIT);
+                result.add(Types.BOOLEAN);
+                result.add(Types.DECIMAL);
+                result.add(Types.DOUBLE);
+                result.add(Types.FLOAT);
+                result.add(Types.INTEGER);
+                result.add(Types.REAL);
+                result.add(Types.SMALLINT);
+                result.add(Types.TINYINT);
+                break;
+            default:
+                break;
         }
 
         return result;

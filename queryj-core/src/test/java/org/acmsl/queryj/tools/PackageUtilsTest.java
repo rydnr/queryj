@@ -38,11 +38,6 @@
 package org.acmsl.queryj.tools;
 
 /*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.queryj.tools.PackageUtils;
-
-/*
  * Importing JUnit classes.
  */
 import junit.framework.TestCase;
@@ -58,6 +53,10 @@ import java.io.IOException;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,7 +76,7 @@ public class PackageUtilsTest
      * Constructs a test case with the given name.
      * @param name the test case name.
      */
-    public PackageUtilsTest(final String name)
+    public PackageUtilsTest(@NotNull final String name)
     {
         super(name);
     }
@@ -86,7 +85,7 @@ public class PackageUtilsTest
      * Executes the tests from command line.
      * @param args the command-line arguments. Not needed so far.
      */
-    public static void main(final String args[])
+    public static void main(@NotNull final String args[])
     {
         TestRunner.run(PackageUtilsTest.class);
     }
@@ -95,7 +94,7 @@ public class PackageUtilsTest
      * Specifies a new test file.
      * @param file a file just for testing.
      */
-    protected void setTestFile(final File file)
+    protected void setTestFile(@Nullable final File file)
     {
         m__File = file;
     }
@@ -104,6 +103,7 @@ public class PackageUtilsTest
      * Retrieves the test file
      * @return such file.
      */
+    @Nullable
     protected File getTestFile()
     {
         return m__File;
@@ -116,9 +116,9 @@ public class PackageUtilsTest
     {
         try 
         {
-            File t_File = File.createTempFile("queryj", null);
+            @NotNull final File t_File = File.createTempFile("queryj", null);
 
-            @NotNull File t_TestFile =
+            @NotNull final File t_TestFile =
                 new File(t_File.getAbsolutePath() + "folder" + File.separator + "tmp");
 
             t_TestFile.mkdirs();
@@ -140,11 +140,11 @@ public class PackageUtilsTest
      */
     protected void tearDown()
     {
-        File t_TestFile = getTestFile();
+        @Nullable final File t_TestFile = getTestFile();
 
         if  (t_TestFile != null)
         {
-            File t_Parent = t_TestFile.getParentFile();
+            @Nullable final File t_Parent = t_TestFile.getParentFile();
 
             t_TestFile.delete();
 
@@ -163,7 +163,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveBaseDAOPackage()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @Nullable final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -174,19 +174,19 @@ public class PackageUtilsTest
 
     /**
      * Tests the retrieveBaseDAOFolder() method
-     * @see org.acmsl.queryj.tools.PackageUtils#retrieveBaseDAOFolder(File,String)
+     * @see org.acmsl.queryj.tools.PackageUtils#retrieveBaseDAOFolder(File,String,boolean)
      */
     public void testRetrieveBaseDAOFolder()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
-        File t_TestFile = getTestFile();
+        @Nullable final File t_TestFile = getTestFile();
 
         assertNotNull(t_TestFile);
 
-        @Nullable File t_BaseDAOFolder =
+        @Nullable final File t_BaseDAOFolder =
             t_PackageUtils.retrieveBaseDAOFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -211,7 +211,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveBaseDAOFactoryPackage()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -222,19 +222,19 @@ public class PackageUtilsTest
 
     /**
      * Tests the retrieveBaseDAOFactoryFolder() method
-     * @see org.acmsl.queryj.tools.PackageUtils#retrieveBaseDAOFactoryFolder(File,String)
+     * @see org.acmsl.queryj.tools.PackageUtils#retrieveBaseDAOFactoryFolder(File,String,boolean)
      */
     public void testRetrieveBaseDAOFactoryFolder()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
-        File t_TestFile = getTestFile();
+        @Nullable final File t_TestFile = getTestFile();
 
         assertNotNull(t_TestFile);
 
-        @Nullable File t_BaseDAOFactoryFolder =
+        @Nullable final File t_BaseDAOFactoryFolder =
             t_PackageUtils.retrieveBaseDAOFactoryFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -259,7 +259,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveValueObjectPackage()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -270,19 +270,19 @@ public class PackageUtilsTest
 
     /**
      * Tests the retrieveValueObjectFolder() method
-     * @see org.acmsl.queryj.tools.PackageUtils#retrieveValueObjectFolder(File,String)
+     * @see org.acmsl.queryj.tools.PackageUtils#retrieveValueObjectFolder(File,String,boolean)
      */
     public void testRetrieveValueObjectFolder()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
-        File t_TestFile = getTestFile();
+        @Nullable final File t_TestFile = getTestFile();
 
         assertNotNull(t_TestFile);
 
-        @Nullable File t_ValueObjectFolder =
+        @Nullable final File t_ValueObjectFolder =
             t_PackageUtils.retrieveValueObjectFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -307,7 +307,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveValueObjectFactoryPackage()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -318,19 +318,19 @@ public class PackageUtilsTest
 
     /**
      * Tests the retrieveValueObjectFactoryFolder() method
-     * @see org.acmsl.queryj.tools.PackageUtils#retrieveValueObjectFactoryFolder(File,String)
+     * @see org.acmsl.queryj.tools.PackageUtils#retrieveValueObjectFactoryFolder(File,String,boolean)
      */
     public void testRetrieveValueObjectFactoryFolder()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
-        File t_TestFile = getTestFile();
+        @Nullable final File t_TestFile = getTestFile();
 
         assertNotNull(t_TestFile);
 
-        @Nullable File t_ValueObjectFactoryFolder =
+        @Nullable final File t_ValueObjectFactoryFolder =
             t_PackageUtils.retrieveValueObjectFactoryFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -355,7 +355,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveDataAccessManagerPackage()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -366,19 +366,19 @@ public class PackageUtilsTest
 
     /**
      * Tests the retrieveDataAccessManagerFolder() method
-     * @see org.acmsl.queryj.tools.PackageUtils#retrieveDataAccessManagerFolder(File,String)
+     * @see org.acmsl.queryj.tools.PackageUtils#retrieveDataAccessManagerFolder(File,String,boolean)
      */
     public void testRetrieveDataAccessManagerFolder()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
-        File t_TestFile = getTestFile();
+        @Nullable final File t_TestFile = getTestFile();
 
         assertNotNull(t_TestFile);
 
-        @Nullable File t_DataAccessManagerFolder =
+        @Nullable final File t_DataAccessManagerFolder =
             t_PackageUtils.retrieveDataAccessManagerFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -403,7 +403,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveJdbcDAOPackage()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @Nullable final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -416,19 +416,19 @@ public class PackageUtilsTest
 
     /**
      * Tests the retrieveJdbcDAOFolder() method
-     * @see org.acmsl.queryj.tools.PackageUtils#retrieveJdbcDAOFolder(File,String)
+     * @see org.acmsl.queryj.tools.PackageUtils#retrieveJdbcDAOFolder(File,String,boolean)
      */
     public void testRetrieveJdbcDAOFolder()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
-        File t_TestFile = getTestFile();
+        @Nullable final File t_TestFile = getTestFile();
 
         assertNotNull(t_TestFile);
 
-        @NotNull File t_JdbcDAOFolder =
+        @NotNull final File t_JdbcDAOFolder =
             t_PackageUtils.retrieveJdbcDAOFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -455,7 +455,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveDAOPackage()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @Nullable final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -469,19 +469,19 @@ public class PackageUtilsTest
 
     /**
      * Tests the retrieveDAOFolder() method
-     * @see org.acmsl.queryj.tools.PackageUtils#retrieveDAOFolder(File,String,String)
+     * @see org.acmsl.queryj.tools.PackageUtils#retrieveDAOFolder(File,String,String,boolean)
      */
     public void testRetrieveDAOFolder()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
-        File t_TestFile = getTestFile();
+        @Nullable final File t_TestFile = getTestFile();
 
         assertNotNull(t_TestFile);
 
-        @NotNull File t_DAOFolder =
+        @NotNull final File t_DAOFolder =
             t_PackageUtils.retrieveDAOFolder(
                 t_TestFile, "com.foo.bar", "mysql", false);
 
@@ -510,7 +510,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveDAOFactoryPackage()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @Nullable final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -524,19 +524,19 @@ public class PackageUtilsTest
 
     /**
      * Tests the retrieveDAOFactoryFolder() method
-     * @see org.acmsl.queryj.tools.PackageUtils#retrieveDAOFactoryFolder(File,String,String)
+     * @see org.acmsl.queryj.tools.PackageUtils#retrieveDAOFactoryFolder(File,String,String,boolean)
      */
     public void testRetrieveDAOFactoryFolder()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
-        File t_TestFile = getTestFile();
+        @Nullable final File t_TestFile = getTestFile();
 
         assertNotNull(t_TestFile);
 
-        @NotNull File t_DAOFactoryFolder =
+        @NotNull final File t_DAOFactoryFolder =
             t_PackageUtils.retrieveDAOFactoryFolder(
                 t_TestFile, "com.foo.bar", "mysql", false);
 
@@ -566,7 +566,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveJdbcOperationsPackage()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @Nullable final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -581,19 +581,19 @@ public class PackageUtilsTest
 
     /**
      * Tests the retrieveJdbcOperationsFolder() method
-     * @see org.acmsl.queryj.tools.PackageUtils#retrieveDAOFactoryFolder(File,String,String,String)
+     * @see org.acmsl.queryj.tools.PackageUtils#retrieveJdbcOperationsFolder(java.io.File, String, String, String, boolean)
      */
     public void testRetrieveJdbcOperationsFolder()
     {
-        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @Nullable final PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
-        File t_TestFile = getTestFile();
+        @Nullable final File t_TestFile = getTestFile();
 
         assertNotNull(t_TestFile);
 
-        @NotNull File t_DAOFactoryFolder =
+        @NotNull final File t_DAOFactoryFolder =
             t_PackageUtils.retrieveJdbcOperationsFolder(
                 t_TestFile, "com.foo.bar", "mysql", "user", false);
 

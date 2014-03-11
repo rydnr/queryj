@@ -48,6 +48,8 @@ import org.acmsl.queryj.customsql.CustomSqlProviderTest.SemiMockedAbstractCustom
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.ParameterElement;
 import org.acmsl.queryj.customsql.ParameterRefElement;
+import org.acmsl.queryj.customsql.Property;
+import org.acmsl.queryj.customsql.PropertyElement;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.Sql;
@@ -104,6 +106,7 @@ import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -458,5 +461,42 @@ public class CustomSqlValidationHandlerTest
         {
             EasyMock.verify(sqlDAO);
         }
+    }
+
+    @Test
+    public void property_type_check_works_for_Strings()
+    {
+        @NotNull final CustomSqlValidationHandler instance = new CustomSqlValidationHandler();
+
+        final int type = Types.VARCHAR;
+
+        @NotNull final Property<String> t_Property =
+            new PropertyElement<>("id", "columnName", 1, String.class.getSimpleName(), false);
+
+        Assert.assertTrue(instance.matchesType(type, t_Property, new JdbcTypeManager()));
+    }
+
+    @Test
+    public void property_type_check_works_for_longs()
+    {
+        @NotNull final CustomSqlValidationHandler instance = new CustomSqlValidationHandler();
+
+        final int bigInt = Types.BIGINT;
+        final int numeric = Types.NUMERIC;
+
+        @NotNull final Property<String> t_Property =
+            new PropertyElement<>("id", "columnName", 1, long.class.getSimpleName(), false);
+
+        Assert.assertTrue(instance.matchesType(bigInt, t_Property, new JdbcTypeManager()));
+        Assert.assertTrue(instance.matchesType(numeric, t_Property, new JdbcTypeManager()));
+    }
+
+    @Test
+    public void property_index_check_works()
+    {
+        @NotNull final CustomSqlValidationHandler instance = new CustomSqlValidationHandler();
+
+        Assert.assertTrue(instance.matchesPosition(1, 1));
+        Assert.assertFalse(instance.matchesPosition(1, 3));
     }
 }

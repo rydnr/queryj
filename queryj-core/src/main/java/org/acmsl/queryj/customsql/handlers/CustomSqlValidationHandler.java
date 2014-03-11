@@ -1411,10 +1411,6 @@ public class CustomSqlValidationHandler
 
         if  (t_strTable != null)
         {
-            if (t_strTable.equalsIgnoreCase("g_shares"))
-            {
-                int a = 0;
-            }
             @Nullable final List<Attribute<String>> t_lColumns =
                 metadataManager.getColumnDAO().findAllColumns(t_strTable);
 
@@ -1431,7 +1427,7 @@ public class CustomSqlValidationHandler
                 if (t_Column != null)
                 {
                     t_strId = t_strTable + "." + t_Column.getName() + ".property";
-                
+
                     t_Type = typeManager.getClass(t_Column.getType());
 
                     result.add(
@@ -1588,14 +1584,40 @@ public class CustomSqlValidationHandler
 
                 if (t_bNameMatches)
                 {
-                    final boolean t_bMatches =
-                        matches(
-                            name, type, index, t_Property, t_iPropertyIndex, typeManager, orderMatters);
-
-                    if (t_bMatches)
+                    if (t_Property.getId().equalsIgnoreCase("G_PRODUCTS.AMOUNT.property"))
                     {
-                        result = true;
-                        break;
+                        int a = 0;
+                    }
+                    final boolean t_bTypesMatch = matchesType(type, t_Property, typeManager);
+
+                    if (t_bTypesMatch)
+                    {
+                        if (orderMatters)
+                        {
+                            final boolean t_bPositionsMatch = matchesPosition(index, t_iPropertyIndex);
+
+                            if (t_bPositionsMatch)
+                            {
+                                result = true;
+                                break;
+                            }
+                            else
+                            {
+                                @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+
+                                if (t_Log != null)
+                                {
+                                    t_Log.warn(
+                                          "Wrong position (" + index + " should be " + t_iPropertyIndex
+                                        + ") for property " + t_Property.getId());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            result = true;
+                            break;
+                        }
                     }
                     else
                     {
@@ -1616,51 +1638,35 @@ public class CustomSqlValidationHandler
     }
 
     /**
-     * Checks whether given column information is represented by the
-     * defined property.
-     * @param name the column name.
-     * @param type the column type.
+     * Checks whether the index of the column matches the property's.
      * @param index the column index.
-     * @param property the property.
      * @param propertyIndex the property index.
-     * @param typeManager the <code>MetadataTypeManager</code> instance.
-     * @param orderMatters whether the order matters.
      * @return <code>true</code> in such case.
      */
-    @SuppressWarnings("unused")
-    protected boolean matches(
-        @Nullable final String name,
-        final int type,
-        final int index,
-        @NotNull final Property<String> property,
-        final int propertyIndex,
-        final TypeManager typeManager,
-        final boolean orderMatters)
+    protected boolean matchesPosition(final int index, final int propertyIndex)
     {
-        boolean result = true;
+        return (index == propertyIndex);
+    }
 
-        if  (   (name != null)
-             && (!name.equalsIgnoreCase(property.getColumnName())))
-        {
-            result = false;
-        }
+    /**
+     * Checks whether given column information is represented by the
+     * defined property.
+     * @param type the column type.
+     * @param property the property.
+     * @param typeManager the <code>TypeManager</code> instance.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean matchesType(
+        final int type, @NotNull final Property<String> property, final TypeManager typeManager)
+    {
+        /*
+        @NotNull final Class<?> t_PropertyType = typeManager.getClass(property.getType());
 
-        // TODO: check types
-        // This doesn't seem to work well for Oracle (2 != -5)
-//         if  (   (result)
-//              && (type != metadataTypeManager.getJavaType(property.getType())))
-//         {
-//             result = false;
-//         }
+        @Nullable final Class<?> t_Type = typeManager.getClass(type);
 
-        if  (   (result)
-             && (orderMatters)
-             && (index != propertyIndex))
-        {
-            result = false;
-        }
-
-        return result;
+        return t_PropertyType.equals(t_Type);
+        */
+        return typeManager.areColumnTypesCompatible(type, typeManager.getSqlType(property.getType()));
     }
 
     /**

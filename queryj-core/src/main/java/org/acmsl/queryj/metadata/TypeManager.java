@@ -42,6 +42,8 @@ package org.acmsl.queryj.metadata;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * Base class for entities able to deal with type conversions between Java and JDBC.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
@@ -72,4 +74,42 @@ public interface TypeManager
      */
     @Nullable
     public Class<?> toPrimitive(@NotNull final Class<?> type);
+
+    /**
+     * Retrieves the class for given JDBC type.
+     * @param jdbcType the constant in {@link java.sql.Types}.
+     * @return the associated class, or {@code null} if there's no match.
+     */
+    @Nullable
+    public Class<?> getClass(final int jdbcType);
+
+    /**
+     * Checks whether given types (from {@link java.sql.Types} constants) are compatible.
+     * @param first the first.
+     * @param second the other.
+     * @return {@code true} if so.
+     */
+    public boolean areColumnTypesCompatible(final int first, final int second);
+
+    /**
+     * Retrieves the reference type for given class.
+     * @param classType the class.
+     * @return the constant in {@link java.sql.Types}.
+     */
+    int getSqlType(@NotNull final Class<?> classType);
+
+    /**
+     * Retrieves the reference type for given type.
+     * @param type the type.
+     * @return the constant in {@link java.sql.Types}.
+     */
+    int getSqlType(@NotNull final String type);
+
+    /**
+     * Retrieves the column types compatible with given one.
+     * @param type the type.
+     * @return the list of compatible (or convertible in a way) types.
+     */
+    @NotNull
+    List<Integer> getCompatibleTypesFor(final int type);
 }

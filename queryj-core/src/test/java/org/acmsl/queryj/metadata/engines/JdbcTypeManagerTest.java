@@ -78,6 +78,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.sql.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -1593,5 +1594,155 @@ public class JdbcTypeManagerTest
         @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
 
         Assert.assertEquals(long.class, instance.toPrimitive(Long.class));
+    }
+
+    @Test
+    public void get_class_int_for_String_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(String.class, instance.getClass(Types.VARCHAR));
+    }
+
+    @Test
+    public void bigint_can_be_used_for_numeric_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.NUMERIC, Types.BIGINT));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.BIGINT, Types.NUMERIC));
+    }
+
+    @Test
+    public void decimal_can_be_used_for_numeric_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.NUMERIC, Types.DECIMAL));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.DECIMAL, Types.NUMERIC));
+    }
+
+    @Test
+    public void varchar_can_be_used_for_nvarchar_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.VARCHAR, Types.NVARCHAR));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.NVARCHAR, Types.VARCHAR));
+    }
+
+    @Test
+    public void correct_type_reference_for_longs()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(instance.getSqlType(long.class), Types.BIGINT);
+        Assert.assertEquals(instance.getSqlType("long"), Types.BIGINT);
+    }
+
+    @Test
+    public void correct_type_reference_for_Dates()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(instance.getSqlType(Date.class), Types.DATE);
+        Assert.assertEquals(instance.getSqlType("Date"), Types.DATE);
+    }
+
+    @Test
+    public void double_can_be_used_for_numeric_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.NUMERIC, Types.DOUBLE));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.DOUBLE, Types.NUMERIC));
+    }
+
+    @Test
+    public void float_can_be_used_for_numeric_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.NUMERIC, Types.FLOAT));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.FLOAT, Types.NUMERIC));
+    }
+
+    @Test
+    public void integer_can_be_used_for_numeric_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.NUMERIC, Types.INTEGER));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.INTEGER, Types.NUMERIC));
+    }
+
+    @Test
+    public void smallint_can_be_used_for_numeric_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.NUMERIC, Types.SMALLINT));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.SMALLINT, Types.NUMERIC));
+    }
+
+    @Test
+    public void tinyint_can_be_used_for_numeric_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.NUMERIC, Types.TINYINT));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.TINYINT, Types.NUMERIC));
+    }
+
+    @Test
+    public void real_can_be_used_for_numeric_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.NUMERIC, Types.REAL));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.REAL, Types.NUMERIC));
+    }
+
+    @Test
+    public void bit_can_be_used_for_numeric_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.NUMERIC, Types.BIT));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.BIT, Types.NUMERIC));
+    }
+
+    @Test
+    public void boolean_can_be_used_for_numeric_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.NUMERIC, Types.BOOLEAN));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.BOOLEAN, Types.NUMERIC));
+    }
+
+    @Test
+    public void longnvarchar_can_be_used_for_char_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.CHAR, Types.LONGNVARCHAR));
+        Assert.assertTrue(instance.areColumnTypesCompatible(Types.LONGNVARCHAR, Types.CHAR));
+    }
+
+    @Test
+    public void types_compatible_with_char_columns()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        @NotNull final List<Integer> t_CompatibleTypes = instance.getCompatibleTypesFor(Types.CHAR);
+
+        Assert.assertEquals(6, t_CompatibleTypes.size());
+        Assert.assertTrue(t_CompatibleTypes.contains(Types.CHAR));
+        Assert.assertTrue(t_CompatibleTypes.contains(Types.LONGNVARCHAR));
+        Assert.assertTrue(t_CompatibleTypes.contains(Types.LONGVARCHAR));
+        Assert.assertTrue(t_CompatibleTypes.contains(Types.NCHAR));
+        Assert.assertTrue(t_CompatibleTypes.contains(Types.NVARCHAR));
+        Assert.assertTrue(t_CompatibleTypes.contains(Types.VARCHAR));
     }
 }

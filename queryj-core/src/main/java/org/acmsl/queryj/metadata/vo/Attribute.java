@@ -37,15 +37,22 @@
  */
 package org.acmsl.queryj.metadata.vo;
 
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.io.Serializable;
 
 /**
  * Represents <i>attribute</i> entities in the metadata model.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
+ * @param <V> the type.
  */
 public interface Attribute<V>
     extends Comparable<Attribute<V>>,
