@@ -199,9 +199,9 @@ public abstract class AbstractParameterElement<T>
     {
         boolean result = false;
 
-        if  (object instanceof Parameter)
+        if  (object instanceof AbstractParameterElement)
         {
-            @NotNull final Parameter<String, ?> t_OtherInstance = (Parameter<String, ?>) object;
+            @NotNull final AbstractParameterElement t_OtherInstance = (AbstractParameterElement) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()

@@ -260,7 +260,7 @@ public class CustomSqlValidationHandler
 
                 if (t_bDebug)
                 {
-                    t_Log.info("Validating " + t_Sql.getId() + " " + t_iIndex + "/" + t_iCount);
+                    t_Log.info("Validating " + " " + t_iIndex + "/" + t_iCount + " (" + t_Sql.getId() + ')');
                 }
                 else if (t_bInfo)
                 {
@@ -1212,11 +1212,7 @@ public class CustomSqlValidationHandler
       throws SQLException,
              QueryJBuildException
     {
-        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
-
-        boolean t_bOrderMatters = true;
-
-        @NotNull Collection<Property<String>> t_cProperties =
+        @NotNull List<Property<String>> t_lProperties =
             retrieveExplicitProperties(
                 sql,
                 sqlResult,
@@ -1224,15 +1220,13 @@ public class CustomSqlValidationHandler
                 metadataManager,
                 typeManager);
 
-        if  (t_cProperties.size() == 0)
+        if  (t_lProperties.size() == 0)
         {
-            t_cProperties =
+            t_lProperties =
                 retrieveImplicitProperties(sqlResult, customSqlProvider, metadataManager, typeManager);
-
-            t_bOrderMatters = false;
         }
 
-        if  (t_cProperties.size() == 0)
+        if  (t_lProperties.size() == 0)
         {
             throw new CustomResultWithNoPropertiesException(sqlResult, sql);
         }
@@ -1242,7 +1236,7 @@ public class CustomSqlValidationHandler
             {
                 @NotNull Method t_Method;
 
-                for (@Nullable final Property<String> t_Property : t_cProperties)
+                for (@Nullable final Property<String> t_Property : t_lProperties)
                 {
                     if (t_Property != null)
                     {
@@ -1277,44 +1271,49 @@ public class CustomSqlValidationHandler
 
                 final int t_iColumnCount = t_Metadata.getColumnCount();
                 
-                if  (t_iColumnCount < t_cProperties.size())
+                if  (t_iColumnCount < t_lProperties.size())
                 {
                     throw
                         new CustomResultWithInvalidNumberOfColumnsException(
-                            t_iColumnCount, t_cProperties.size());
+                            t_iColumnCount, t_lProperties.size());
                 }
 
-                String t_strColumnName;
-                int t_iColumnType;
-                
+                @NotNull final List<Property<String>> t_lColumns = new ArrayList<>();
+
                 for  (int t_iIndex = 1; t_iIndex <= t_iColumnCount; t_iIndex++)
                 {
-                    t_strColumnName = t_Metadata.getColumnName(t_iIndex);
-                    t_iColumnType = t_Metadata.getColumnType(t_iIndex);
-
-                    if  (!matches(
-                             t_strColumnName,
-                             t_iColumnType,
-                             t_iIndex,
-                             t_cProperties,
-                             typeManager,
-                             t_bOrderMatters))
-                    {
-                        if  (t_Log != null)
-                        {
-                            t_Log.warn(
-                                  "Column not mapped ("
-                                + t_iIndex + ", "
-                                + t_strColumnName
-                                + ", " + t_iColumnType + "), in sql "
-                                + sql.getId());
-                        }
-                    }
+                    t_lColumns.add(createPropertyFrom(t_Metadata, t_iIndex));
                 }
+
+                if (sql.getId().equalsIgnoreCase("bet.subtypes.find-bet-types-by-purchase-type-id"))
+                {
+                    int debug = 1;
+                }
+
+                diagnoseMissingProperties(t_lProperties, t_lColumns, sql);
+                diagnoseUnusedProperties(t_lProperties, t_lColumns, sql);
             }
         }
     }
-    
+
+    /**
+     * Creates a property from given {@link ResultSetMetaData}.
+     * @param metadata the result set metadata.
+     * @param index the index.
+     * @return the associated {@link Property}.
+     * @throws SQLException if accessing the metadata instance fails.
+     */
+    @NotNull
+    protected Property<String> createPropertyFrom(@NotNull final ResultSetMetaData metadata, final int index)
+        throws SQLException
+    {
+        @NotNull final String t_strColumnName = metadata.getColumnName(index);
+        final String t_strType = metadata.getColumnTypeName(index);
+        final boolean t_bNullable = (metadata.isNullable(index) == ResultSetMetaData.columnNullable);
+
+        return new PropertyElement<>(t_strColumnName, t_strColumnName, index, t_strType, t_bNullable);
+    }
+
     /**
      * Retrieves the properties declared for given result.
      * @param sql the sql.
@@ -1366,7 +1365,7 @@ public class CustomSqlValidationHandler
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected Collection<Property<String>> retrieveImplicitProperties(
+    protected List<Property<String>> retrieveImplicitProperties(
         @NotNull final Result<String> sqlResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -1393,7 +1392,7 @@ public class CustomSqlValidationHandler
      * @throws QueryJBuildException if the properties cannot be retrieved..
      */
     @NotNull
-    protected Collection<Property<String>> retrieveImplicitProperties(
+    protected List<Property<String>> retrieveImplicitProperties(
         @NotNull final Result<String> sqlResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -1401,7 +1400,7 @@ public class CustomSqlValidationHandler
         @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
     {
-        @NotNull final Collection<Property<String>> result = new ArrayList<>();
+        @NotNull final List<Property<String>> result = new ArrayList<>();
 
         @Nullable final String t_strTable =
             customResultUtils.retrieveTable(
@@ -1592,32 +1591,17 @@ public class CustomSqlValidationHandler
 
                     if (t_bTypesMatch)
                     {
+                        result = true;
+
                         if (orderMatters)
                         {
                             final boolean t_bPositionsMatch = matchesPosition(index, t_iPropertyIndex);
 
-                            if (t_bPositionsMatch)
+                            if (!t_bPositionsMatch)
                             {
-                                result = true;
-                                break;
-                            }
-                            else
-                            {
-                                @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
-
-                                if (t_Log != null)
-                                {
-                                    t_Log.warn(
-                                          "Wrong position (" + index + " should be " + t_iPropertyIndex
-                                        + ") for property " + t_Property.getId());
-                                }
                             }
                         }
-                        else
-                        {
-                            result = true;
-                            break;
-                        }
+                        break;
                     }
                     else
                     {
@@ -1677,6 +1661,175 @@ public class CustomSqlValidationHandler
     protected boolean retrieveDisableCustomSqlValidation(@NotNull final QueryJCommand settings)
     {
         return settings.getBooleanSetting(ParameterValidationHandler.DISABLE_CUSTOM_SQL_VALIDATION, false);
+    }
+
+    /**
+     * Tries to detect the name of any missing properties.
+     * @param properties the declared properties.
+     * @param columns the runtime columns (which potentially refer to undeclared properties)
+     * @return the list of columns not declared in the property list.
+     */
+    @NotNull
+    protected List<Property<String>> detectMissingProperties(
+        @NotNull final List<Property<String>> properties, @NotNull final List<Property<String>> columns)
+    {
+        @NotNull final List<Property<String>> result = new ArrayList<>();
+
+        for (int index = 0; index < columns.size(); index++)
+        {
+            @Nullable final Property<String> column = columns.get(index);
+
+            if (column != null)
+            {
+                if (index < properties.size())
+                {
+                    @Nullable final Property<String> property = properties.get(index);
+
+                    if (property != null)
+                    {
+                        if (   (!column.getColumnName().equalsIgnoreCase(property.getColumnName()))
+                            && (!isColumnIncluded(column.getColumnName(), properties)))
+                        {
+                            result.add(column);
+                        }
+                    }
+                }
+                else if (!isColumnIncluded(column.getColumnName(), properties))
+                {
+                    result.add(column);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given column is included in the property list.
+     * @param column the column name.
+     * @param properties the properties.
+     * @return {@code true} in such case.
+     */
+    protected boolean isColumnIncluded(@NotNull final String column, @NotNull final List<Property<String>> properties)
+    {
+        boolean result = false;
+
+        for (@Nullable final Property<String> property : properties)
+        {
+            if (   (property != null)
+                && (column.equalsIgnoreCase(property.getColumnName())))
+            {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Detects any extra properties not declared in the query itself.
+     * @param properties the declared properties.
+     * @param resultSetProperties the properties actually exported by the query.
+     * @return any extra property.
+     */
+    @NotNull
+    protected List<Property<String>> detectExtraProperties(
+        @NotNull final List<Property<String>> properties, @NotNull final List<Property<String>> resultSetProperties)
+    {
+        return detectMissingProperties(resultSetProperties, properties);
+    }
+
+    /*
+    protected void diagnoseProperty(
+        final int columnIndex,
+        final int propertyIndex,
+        final Property<String> property)
+    {
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+
+        if (t_Log != null)
+        {
+            t_Log.warn(
+                "Wrong position (" + columnIndex + " should be " + propertyIndex
+                + ") for property " + property.getId());
+        }
+    }
+    */
+
+    /**
+     * Reports any undeclared property.
+     * @param properties the declared properties.
+     * @param columns the properties from the result set.
+     * @param sql the query itself.
+     */
+    protected void diagnoseMissingProperties(
+        @NotNull final List<Property<String>> properties,
+        @NotNull final List<Property<String>> columns,
+        @NotNull final Sql<String> sql)
+    {
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+
+        if (t_Log != null)
+        {
+            @NotNull final List<Property<String>> t_lMissingProperties =
+                detectMissingProperties(properties, columns);
+
+            int t_iIndex = 1;
+
+            for (@Nullable final Property<String> t_MissingProperty : t_lMissingProperties)
+            {
+                if  (t_MissingProperty != null)
+                {
+                    t_Log.warn(
+                        "Column not declared ("
+                        + t_iIndex + ", "
+                        + t_MissingProperty.getColumnName() + ", "
+                        + t_MissingProperty.getType() + "), in sql "
+                        + sql.getId());
+                }
+
+                t_iIndex++;
+            }
+        }
+    }
+
+    /**
+     * Reports any unused property.
+     * @param properties the declared properties.
+     * @param columns the properties from the result set.
+     * @param sql the query itself.
+     */
+    protected void diagnoseUnusedProperties(
+        @NotNull final List<Property<String>> properties,
+        @NotNull final List<Property<String>> columns,
+        @NotNull final Sql<String> sql)
+    {
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+
+        if (t_Log != null)
+        {
+            @NotNull final List<Property<String>> t_lExtraProperties =
+                detectExtraProperties(properties, columns);
+
+            int t_iIndex = 1;
+
+            for (@Nullable final Property<String> t_ExtraProperty : t_lExtraProperties)
+            {
+                if  (t_ExtraProperty != null)
+                {
+                    t_Log.warn(
+                        "Column declared but not used ("
+                        + t_iIndex + ", "
+                        + t_ExtraProperty.getColumnName() + ", "
+                        + t_ExtraProperty.getType() + "), in sql "
+                        + sql.getId());
+                }
+
+                t_iIndex++;
+            }
+        }
     }
 
     /**

@@ -499,4 +499,51 @@ public class CustomSqlValidationHandlerTest
         Assert.assertTrue(instance.matchesPosition(1, 1));
         Assert.assertFalse(instance.matchesPosition(1, 3));
     }
+
+    @Test
+    public void detectMissingProperties_detects_a_missing_property()
+    {
+        @NotNull final CustomSqlValidationHandler instance = new CustomSqlValidationHandler();
+
+        @NotNull final List<Property<String>> t_lProperties = new ArrayList<>(2);
+        t_lProperties.add(new PropertyElement<>("p1", "c1", 1, "long", false));
+        t_lProperties.add(new PropertyElement<>("p2", "c3", 2, "String", false));
+
+        @NotNull final Property<String> t_MissingProperty =
+            new PropertyElement<>("p2", "c2", 2, "String", false);
+
+        @NotNull final List<Property<String>> t_lResultSetProperties = new ArrayList<>(3);
+        t_lResultSetProperties.add(new PropertyElement<>("p1", "c1", 1, "long", false));
+        t_lResultSetProperties.add(t_MissingProperty);
+        t_lResultSetProperties.add(new PropertyElement<>("p3", "c3", 3, "Date", false));
+
+        @NotNull final List<Property<String>> t_lDetectedMissingProperties =
+            instance.detectMissingProperties(t_lProperties, t_lResultSetProperties);
+
+        Assert.assertEquals(1, t_lDetectedMissingProperties.size());
+        Assert.assertTrue(t_lDetectedMissingProperties.contains(t_MissingProperty));
+    }
+
+    @Test
+    public void detectExtraProperties_detects_an_extra_property()
+    {
+        @NotNull final CustomSqlValidationHandler instance = new CustomSqlValidationHandler();
+
+        @NotNull final List<Property<String>> t_lProperties = new ArrayList<>(2);
+        t_lProperties.add(new PropertyElement<>("p1", "c1", 1, "long", false));
+
+        @NotNull final Property<String> t_ExtraProperty =
+            new PropertyElement<>("p2", "c2", 2, "String", false);
+
+        t_lProperties.add(t_ExtraProperty);
+
+        @NotNull final List<Property<String>> t_lResultSetProperties = new ArrayList<>(3);
+        t_lResultSetProperties.add(new PropertyElement<>("p1", "c1", 1, "long", false));
+
+        @NotNull final List<Property<String>> t_lDetectedExtraProperties =
+            instance.detectExtraProperties(t_lProperties, t_lResultSetProperties);
+
+        Assert.assertEquals(1, t_lDetectedExtraProperties.size());
+        Assert.assertTrue(t_lDetectedExtraProperties.contains(t_ExtraProperty));
+    }
 }
