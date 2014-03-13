@@ -116,4 +116,5 @@ public interface Literals
     String SMALLINT = "smallint";
     String TINYINT_L = "tinyint";
     String SMALLINT_L = "smallint";
+    String VALIDATING = "Validating ";
 }

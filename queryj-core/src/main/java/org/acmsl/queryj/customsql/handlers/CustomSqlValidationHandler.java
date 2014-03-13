@@ -150,12 +150,12 @@ public class CustomSqlValidationHandler
     /**
      * The date format.
      */
-    public final DateFormat DATE_FORMAT = new SimpleDateFormat("MM/DD/yyyy");
+    public final String DATE_FORMAT = "MM/DD/yyyy";
 
     /**
      * The date format, in english notation.
      */
-    public final DateFormat DATE_FORMAT_EN = new SimpleDateFormat("yyyy/DD/MM/DD");
+    public final String DATE_FORMAT_EN = "yyyy/DD/MM/DD";
 
     /**
      * Creates a <code>CustomSqlValidationHandler</code> instance.
@@ -260,11 +260,11 @@ public class CustomSqlValidationHandler
 
                 if (t_bDebug)
                 {
-                    t_Log.info("Validating " + " " + t_iIndex + "/" + t_iCount + " (" + t_Sql.getId() + ')');
+                    t_Log.info(Literals.VALIDATING + " " + t_iIndex + "/" + t_iCount + " (" + t_Sql.getId() + ')');
                 }
                 else if (t_bInfo)
                 {
-                    t_Log.info("Validating " + t_iIndex + "/" + t_iCount);
+                    t_Log.info(Literals.VALIDATING + t_iIndex + "/" + t_iCount);
                 }
                 validate(
                     t_Sql,
@@ -974,21 +974,22 @@ public class CustomSqlValidationHandler
             Object t_strValidationValue =
                 parameter.getValidationValue();
 
+            @NotNull final DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
             if  (t_strValidationValue == null)
             {
-                t_strValidationValue = DATE_FORMAT.format(new Date());
+                t_strValidationValue = formatter.format(new Date());
                 t_bInvalidValidationValue = true;
             }
 
             try
             {
-                result = DATE_FORMAT.parse("" + t_strValidationValue);
+                result = formatter.parse("" + t_strValidationValue);
             }
             catch (@NotNull final NumberFormatException invalidDate)
             {
                 try
                 {
-                    result = DATE_FORMAT_EN.parse("" + t_strValidationValue);
+                    result = new SimpleDateFormat(DATE_FORMAT_EN).parse("" + t_strValidationValue);
                 }
                 catch (@NotNull final NumberFormatException invalidEnglishDate)
                 {
@@ -1212,6 +1213,11 @@ public class CustomSqlValidationHandler
       throws SQLException,
              QueryJBuildException
     {
+        if (sql.getId().equalsIgnoreCase("bet.subtypes.find-bet-types-by-purchase-type-id"))
+        {
+            int debug = 1;
+        }
+
         @NotNull List<Property<String>> t_lProperties =
             retrieveExplicitProperties(
                 sql,
@@ -1248,9 +1254,7 @@ public class CustomSqlValidationHandler
                                     getGetterMethod(typeManager.getClass(t_Property.getType())),
                                     new Class<?>[]
                                     {
-                                        (t_Property.getIndex() > 0)
-                                        ?  Integer.TYPE
-                                        :  String.class
+                                        String.class
                                     });
                         }
                         catch  (@NotNull final NoSuchMethodException noSuchMethod)
@@ -1283,11 +1287,6 @@ public class CustomSqlValidationHandler
                 for  (int t_iIndex = 1; t_iIndex <= t_iColumnCount; t_iIndex++)
                 {
                     t_lColumns.add(createPropertyFrom(t_Metadata, t_iIndex));
-                }
-
-                if (sql.getId().equalsIgnoreCase("bet.subtypes.find-bet-types-by-purchase-type-id"))
-                {
-                    int debug = 1;
                 }
 
                 diagnoseMissingProperties(t_lProperties, t_lColumns, sql);
@@ -1481,14 +1480,7 @@ public class CustomSqlValidationHandler
         {
             @NotNull final Object[] t_aParameters = new Object[1];
 
-            if  (property.getIndex() > 0)
-            {
-                t_aParameters[0] = property.getIndex();
-            }
-            else
-            {
-                t_aParameters[0] = property.getColumnName();
-            }
+            t_aParameters[0] = property.getColumnName();
 
             method.invoke(resultSet, t_aParameters);
         }
@@ -1583,10 +1575,6 @@ public class CustomSqlValidationHandler
 
                 if (t_bNameMatches)
                 {
-                    if (t_Property.getId().equalsIgnoreCase("G_PRODUCTS.AMOUNT.property"))
-                    {
-                        int a = 0;
-                    }
                     final boolean t_bTypesMatch = matchesType(type, t_Property, typeManager);
 
                     if (t_bTypesMatch)
