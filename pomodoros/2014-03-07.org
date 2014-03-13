@@ -1,0 +1,5 @@
+* 2014/03/07
+** DONE Redirect Commons Logging logs to Maven Log (#449): 2 -> X X
+    
+* Pending
+** TODO Create testable Cucumber feature for each table (#448): 1 -> 

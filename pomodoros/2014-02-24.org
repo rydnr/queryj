@@ -1,0 +1,2 @@
+* 2014/02/24
+** DONE MetadataTypeManager refactoring + tests: 2 -> 

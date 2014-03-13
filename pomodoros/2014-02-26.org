@@ -1,0 +1,35 @@
+* 2014/02/26
+** MetadataTypeManager refactoring + tests: 2 -> X X
+*** getType()
+**** DONE Array
+**** TODO BigDecimal
+**** TODO BigInteger
+**** TODO byte
+**** TODO Byte
+**** TODO byte[]
+**** TODO Byte[]
+**** TODO Blob
+**** TODO boolean
+**** TODO Boolean
+**** TODO Clob
+**** TODO Date
+**** TODO double
+**** TODO Double
+**** TODO float
+**** TODO Float
+**** TODO int
+**** TODO Integer
+**** TODO long
+**** TODO Long
+**** TODO NClob
+**** TODO Object
+**** TODO Ref
+**** TODO RowId
+**** TODO short
+**** TODO Short
+**** TODO SQLXML
+**** TODO String
+**** TODO Struct
+**** TODO Time
+**** TODO Timestamp
+**** TODO URL

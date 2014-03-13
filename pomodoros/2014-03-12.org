@@ -1,0 +1,13 @@
+* 2014/03/12
+** TODO Create hash and cache the when a query is correctly validated (#451): 1 ->
+** DONE Review "column not mapped" warnings (#452): 2 + 1 -> X X X
+
+* Pending
+** TODO Create testable Cucumber feature for each table (#448): 1 -> 
+
+* Notes
+
+n
+province_id
+g_administration_id
+available

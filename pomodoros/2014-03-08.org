@@ -1,0 +1,7 @@
+* 2014/03/08
+** DONE Filter out log messages based on log levels (#450): 2 -> X X
+** DONE Create hash and cache the when a query is correctly validated (#451): 2 -> X X
+** TODO Review "column not mapped" warnings: 2 ->
+
+* Pending
+** TODO Create testable Cucumber feature for each table (#448): 1 -> 

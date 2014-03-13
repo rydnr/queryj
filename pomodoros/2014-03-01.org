@@ -1,0 +1,2 @@
+* 2014/03/01
+** DONE CustomSqlValidationHandler test for int parameters: 1 -> X

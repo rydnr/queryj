@@ -1,0 +1,4 @@
+* 2014/03/04
+** TODO Fix compilation errors DAO.stg (#447): 2 ->
+** DONE Create Cucumber feature for each table (#448): 3 -> X X X
+** DONE Migrate Redmine issues to github: 1 -> X

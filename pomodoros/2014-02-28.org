@@ -1,0 +1,37 @@
+* 2014/02/28
+** MetadataTypeManager refactoring + tests: 2 -> X X
+*** getType()
+**** DONE Array
+**** DONE BigDecimal
+**** DONE BigInteger
+**** DONE byte
+**** DONE Byte
+**** DONE byte[]
+**** DONE Byte[]
+**** DONE Blob
+**** DONE boolean
+**** DONE Boolean
+**** DONE Clob
+**** DONE Date
+**** DONE double
+**** DONE Double
+**** DONE float
+**** DONE Float
+**** DONE int
+**** DONE Integer
+**** DONE long
+**** DONE Long
+**** DONE NClob
+**** DONE Object
+**** DONE Ref
+**** DONE RowId
+**** DONE short
+**** DONE Short
+**** DONE SQLXML
+**** DONE String
+**** DONE Struct
+**** DONE Time
+**** DONE Timestamp
+**** DONE URL
+*** DONE CustomSqlValidationHandler test for Date parameters: 1 -> X
+*** DONE CustomSqlValidationHandler test for String, Long parameters: 2 -> X X

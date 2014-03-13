@@ -1,0 +1,3 @@
+* 2014/02/14
+** DONE Fix bug #443
+** DONE Work on bug #444

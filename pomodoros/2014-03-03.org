@@ -1,0 +1,4 @@
+* 2014/03/03
+** DONE CustomSqlValidationHandler test for int, double, float parameters: 1 -> X
+** DONE Test against desa: 4 -> X X X X
+** DONE Fix cannot parse custom SQL exception message: 3 -> X X

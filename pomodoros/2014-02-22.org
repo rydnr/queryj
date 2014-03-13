@@ -1,0 +1,4 @@
+* 2014/02/22
+** DONE CustomSqlValidationHandler test: 2 -> X
+** DONE MetadataTypeManager refactoring + tests: 3 -> X X X X
+ 

@@ -1,0 +1,2 @@
+* 2014/03/13
+** DONE #453 Fix bug converting types while validating certain queries : 1 -> X
