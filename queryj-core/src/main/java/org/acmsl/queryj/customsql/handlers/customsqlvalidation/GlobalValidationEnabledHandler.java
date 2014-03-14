@@ -39,8 +39,8 @@ package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 

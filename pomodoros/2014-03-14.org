@@ -1,5 +1,5 @@
 * 2014/03/14
-** DONE #451 The result of validating queries should be cached even if some queries fail afterwards: 2 -> X X
+** DONE #451 The result of validating queries should be cached even if some queries fail afterwards: 2 + 1 -> X X X
 
 * Notes:
 ** TODO toString() in PropertyElement does not include the type
