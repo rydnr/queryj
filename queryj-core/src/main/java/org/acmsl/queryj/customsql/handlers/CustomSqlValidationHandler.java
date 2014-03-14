@@ -243,6 +243,12 @@ public class CustomSqlValidationHandler
 
         for (@Nullable final Sql<String> t_Sql : sqlDAO.findAll())
         {
+            if (t_iIndex < 239)
+            {
+                t_iIndex++;
+                continue;
+            }
+
             if (   (t_Sql != null)
                 && (t_Sql.isValidate())
                 && (notCached(t_Sql, customSqlProvider, hashesFolder, charset)))
@@ -1213,7 +1219,7 @@ public class CustomSqlValidationHandler
       throws SQLException,
              QueryJBuildException
     {
-        if (sql.getId().equalsIgnoreCase("bet.subtypes.find-bet-types-by-purchase-type-id"))
+        if (sql.getId().equalsIgnoreCase("find-product-types-by-draw-type-id"))
         {
             int debug = 1;
         }
@@ -1580,15 +1586,6 @@ public class CustomSqlValidationHandler
                     if (t_bTypesMatch)
                     {
                         result = true;
-
-                        if (orderMatters)
-                        {
-                            final boolean t_bPositionsMatch = matchesPosition(index, t_iPropertyIndex);
-
-                            if (!t_bPositionsMatch)
-                            {
-                            }
-                        }
                         break;
                     }
                     else
