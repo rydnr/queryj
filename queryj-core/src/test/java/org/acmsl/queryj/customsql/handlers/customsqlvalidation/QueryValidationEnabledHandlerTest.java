@@ -89,4 +89,21 @@ public class QueryValidationEnabledHandlerTest
 
         Assert.assertTrue(instance.handle(parameters));
     }
+
+    @Test
+    public void allows_the_validation_process_for_the_current_query_if_validation_flag_is_enabled()
+        throws QueryJBuildException
+    {
+        @NotNull final QueryValidationEnabledHandler instance = new QueryValidationEnabledHandler();
+
+        @NotNull final QueryJCommand parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+
+        @NotNull final Sql<String> sql =
+            new SqlElement<>(
+                "id", "dao", "name", "String", Cardinality.SINGLE, "all", true /* validation */, false, "description");
+
+        new QueryJCommandWrapper<Sql<String>>(parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, sql);
+
+        Assert.assertFalse(instance.handle(parameters));
+    }
 }

@@ -124,6 +124,16 @@ public class RetrieveQueryHandler
     }
 
     /**
+     * Retrieves the current sql in the command.
+     * @param command the {@link QueryJCommand command}.
+     * @return such {@link Sql}.
+     */
+    public Sql<String> retrieveCurrentSql(@NotNull final QueryJCommand command)
+    {
+        return new QueryJCommandWrapper<Sql<String>>(command).getSetting(CURRENT_SQL);
+    }
+
+    /**
      * Retrieves the index of the current SQL, or {@code 0} if the iteration
      * has not started yet.
      * @param parameters the parameters.

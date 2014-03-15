@@ -122,6 +122,7 @@ public class CustomSqlValidationHandler
     @SuppressWarnings("unchecked")
     private static final Class<String>[] CLASS_ARRAY_OF_ONE_STRING =
         (Class<String>[]) new Class<?>[] { String.class };
+
     /**
      * String literal: "Could not bind parameter via "
      */
