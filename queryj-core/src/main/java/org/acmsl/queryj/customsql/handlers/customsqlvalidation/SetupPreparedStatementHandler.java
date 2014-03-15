@@ -49,6 +49,7 @@ import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.InvalidCustomSqlException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.exceptions.PreparedStatementNotAvailableForValidationException;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 
@@ -113,7 +114,7 @@ public class SetupPreparedStatementHandler
         {
             @Nullable final PreparedStatement t_Statement = setupStatement(sql, connection);
 
-            setPreparedStatement(t_Statement, command);
+            setCurrentPreparedStatement(t_Statement, command);
         }
         catch (@NotNull final SQLException invalidSql)
         {
@@ -128,7 +129,7 @@ public class SetupPreparedStatementHandler
      * @param statement the statement.
      * @param command the command.
      */
-    protected void setPreparedStatement(final PreparedStatement statement, final QueryJCommand command)
+    protected void setCurrentPreparedStatement(final PreparedStatement statement, final QueryJCommand command)
     {
         new QueryJCommandWrapper<PreparedStatement>(command).setSetting(CURRENT_PREPARED_STATEMENT, statement);
     }
@@ -138,9 +139,20 @@ public class SetupPreparedStatementHandler
      * @param command the command.
      * @return the statement.
      */
-    protected PreparedStatement getPreparedStatement(final QueryJCommand command)
+    @NotNull
+    protected PreparedStatement retrieveCurrentPreparedStatement(final QueryJCommand command)
     {
-        return new QueryJCommandWrapper<PreparedStatement >(command).getSetting(CURRENT_PREPARED_STATEMENT);
+        @Nullable final PreparedStatement result =
+            new QueryJCommandWrapper<PreparedStatement>(command).getSetting(CURRENT_PREPARED_STATEMENT);
+
+        if (result == null)
+        {
+            throw
+                new PreparedStatementNotAvailableForValidationException(
+                    new RetrieveQueryHandler().retrieveCurrentSql(command));
+        }
+
+        return result;
     }
 
     /**

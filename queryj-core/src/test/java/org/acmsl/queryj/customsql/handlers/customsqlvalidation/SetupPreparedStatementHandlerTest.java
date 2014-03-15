@@ -118,7 +118,7 @@ public class SetupPreparedStatementHandlerTest
 
         Assert.assertNotNull(t_ActualStatement);
         Assert.assertEquals(t_Statement, t_ActualStatement);
-        Assert.assertEquals(t_Statement, instance.getPreparedStatement(parameters));
+        Assert.assertEquals(t_Statement, instance.retrieveCurrentPreparedStatement(parameters));
 
         EasyMock.verify(t_Connection);
     }
