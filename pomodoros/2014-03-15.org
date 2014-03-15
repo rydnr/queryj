@@ -1,5 +1,5 @@
 * 2014/03/15
-** TODO #454 Refactor CustomSqlValidationHandler into its own chain: 6 -> X
+** TODO #454 Refactor CustomSqlValidationHandler into its own chain: 6 -> X X X
 ** DONE Setup RT for QueryJ again: 1 -> X
 
 * Notes:
