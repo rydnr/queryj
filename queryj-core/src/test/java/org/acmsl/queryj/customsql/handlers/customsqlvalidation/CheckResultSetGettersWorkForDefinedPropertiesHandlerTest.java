@@ -105,7 +105,7 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandlerTest
     @Test
     public void executes_resultset_getters_for_defined_properties()
         throws QueryJBuildException,
-        SQLException
+               SQLException
     {
         @NotNull final CheckResultSetGettersWorkForDefinedPropertiesHandler instance =
             new CheckResultSetGettersWorkForDefinedPropertiesHandler();
@@ -147,7 +147,6 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandlerTest
         EasyMock.expect(t_Statement.executeQuery()).andReturn(t_ResultSet);
         EasyMock.expect(t_ResultSet.next()).andReturn(true);
 
-        int t_iIndex = 1;
         for (@NotNull final Property<String> t_Property : t_lProperties)
         {
             EasyMock.expect(t_PropertyDAO.findByPrimaryKey(t_Property.getId())).andReturn(t_Property);
@@ -159,7 +158,6 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandlerTest
             {
                 EasyMock.expect(t_ResultSet.getDate(t_Property.getColumnName())).andReturn(new Date(new java.util.Date().getTime()));
             }
-            t_iIndex++;
         }
 
         new QueryJCommandWrapper<Sql<String>>(t_Parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, t_Sql);
