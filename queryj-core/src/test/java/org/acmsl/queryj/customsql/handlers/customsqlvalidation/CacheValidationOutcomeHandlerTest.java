@@ -40,18 +40,42 @@ package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.CustomSqlProviderTest.SemiMockedAbstractCustomSqlProvider;
+import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.ResultElement;
+import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlConnectionFlagsDAO;
+import org.acmsl.queryj.customsql.SqlElement;
+import org.acmsl.queryj.customsql.SqlResultSetFlagsDAO;
+import org.acmsl.queryj.customsql.SqlStatementFlagsDAO;
+import org.acmsl.queryj.customsql.handlers.CustomSqlCacheWritingHandler;
+import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
+import org.acmsl.queryj.metadata.SqlDAO;
+import org.acmsl.queryj.metadata.SqlParameterDAO;
+import org.acmsl.queryj.metadata.SqlPropertyDAO;
+import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.easymock.EasyMock;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
-import org.checkthread.annotations.ThreadSafe;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.io.File;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -62,14 +86,147 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class CacheValidationOutcomeHandlerTest
 {
+    /**
+     * A temporary folder for testing hash caches.
+     */
+    @Rule
+    public TemporaryFolder tempFolder = new TemporaryFolder();
+
     @Test
     public void caches_validation_outcome_to_disk()
         throws QueryJBuildException
     {
         @NotNull final CacheValidationOutcomeHandler instance = new CacheValidationOutcomeHandler();
 
-        @NotNull final QueryJCommand t_Parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final Sql<String> t_Sql =
+            new SqlElement<>("sql-id", "dao", "sql-name", "select", Cardinality.SINGLE, "all", true, false, "fake sql");
 
-        Assert.assertFalse(instance.handle(t_Parameters));
+        @NotNull final Result<String> t_Result = new ResultElement<>("r1", "Whatever");
+
+        @NotNull final SqlDAO sqlDAO = EasyMock.createNiceMock(SqlDAO.class);
+        @NotNull final SqlParameterDAO parameterDAO = EasyMock.createNiceMock(SqlParameterDAO.class);
+        @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);
+        @NotNull final SqlResultDAO resultDAO = EasyMock.createNiceMock(SqlResultDAO.class);
+        @NotNull final SqlConnectionFlagsDAO connectionFlagsDAO = EasyMock.createNiceMock(SqlConnectionFlagsDAO.class);
+        @NotNull final SqlStatementFlagsDAO statementFlagsDAO = EasyMock.createNiceMock(SqlStatementFlagsDAO.class);
+        @NotNull final SqlResultSetFlagsDAO resultSetFlagsDAO = EasyMock.createNiceMock(SqlResultSetFlagsDAO.class);
+
+        @NotNull final CustomSqlProvider t_CustomSqlProvider =
+            new SemiMockedAbstractCustomSqlProvider(
+                sqlDAO,
+                parameterDAO,
+                propertyDAO,
+                resultDAO,
+                connectionFlagsDAO,
+                statementFlagsDAO,
+                resultSetFlagsDAO);
+
+        EasyMock.expect(resultDAO.findBySqlId(t_Sql.getId())).andReturn(t_Result);
+        EasyMock.replay(resultDAO);
+
+        @NotNull final QueryJCommand t_Command = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+
+        new QueryJCommandWrapper<File>(t_Command).setSetting(
+            CustomSqlCacheWritingHandler.CUSTOM_SQL_OUTPUT_FOLDER_FOR_HASHES, tempFolder.getRoot());
+        new QueryJCommandWrapper<CustomSqlProvider>(t_Command).setSetting(
+            CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, t_CustomSqlProvider);
+        new RetrieveQueryHandler().setCurrentSql(t_Sql, t_Command);
+        new CheckResultSetGettersWorkForDefinedPropertiesHandler().setValidationOutcome(true, t_Sql, t_Command);
+
+        new QueryJCommandWrapper<File>(t_Command).setSetting(
+            CustomSqlCacheWritingHandler.CUSTOM_SQL_OUTPUT_FOLDER_FOR_HASHES, tempFolder.getRoot());
+
+        @NotNull final String hash = "bzS4lagreKYbqR9tX8G2d5CCYGA%3D";
+
+        instance.handle(t_Command);
+
+        Assert.assertTrue(new File(tempFolder.getRoot() + File.separator + hash).exists());
+    }
+
+    /**
+     * Checks the conventions used when building hash files.
+     */
+    @Test
+    public void hash_path_follows_convention()
+    {
+        Assert.assertEquals(
+            tempFolder.getRoot().getAbsolutePath() + File.separator + "abc",
+            new CustomSqlCacheWritingHandler().hashPath(tempFolder.getRoot().getAbsolutePath(), "abc"));
+    }
+
+    /**
+     * Checks the logic to test whether a file exist, works.
+     */
+    @Test
+    public void file_check_works()
+    {
+        Assert.assertTrue(new CustomSqlCacheWritingHandler().existsAlready(tempFolder.getRoot().getAbsolutePath()));
+    }
+
+    /**
+     * Tests whether the hash for a given SQL is written to disk.
+     */
+    @Test
+    public void sql_hash_does_not_get_written_if_it_exists_already()
+        throws QueryJBuildException
+    {
+        @NotNull final CacheValidationOutcomeHandler instance =
+            new CacheValidationOutcomeHandler()
+            {
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                public boolean existsAlready(@NotNull final String path)
+                {
+                    return true;
+                }
+            };
+
+        @NotNull final Sql<String> t_Sql =
+            new SqlElement<>("sql-id", "dao", "sql-name", "select", Cardinality.SINGLE, "all", true, false, "fake sql");
+
+        @NotNull final Result<String> t_Result = new ResultElement<>("r1", "Whatever");
+        @NotNull final SqlDAO sqlDAO = EasyMock.createNiceMock(SqlDAO.class);
+        @NotNull final SqlParameterDAO parameterDAO = EasyMock.createNiceMock(SqlParameterDAO.class);
+        @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);
+        @NotNull final SqlResultDAO resultDAO = EasyMock.createNiceMock(SqlResultDAO.class);
+        @NotNull final SqlConnectionFlagsDAO connectionFlagsDAO = EasyMock.createNiceMock(SqlConnectionFlagsDAO.class);
+        @NotNull final SqlStatementFlagsDAO statementFlagsDAO = EasyMock.createNiceMock(SqlStatementFlagsDAO.class);
+        @NotNull final SqlResultSetFlagsDAO resultSetFlagsDAO = EasyMock.createNiceMock(SqlResultSetFlagsDAO.class);
+
+        @NotNull final CustomSqlProvider t_CustomSqlProvider =
+            new SemiMockedAbstractCustomSqlProvider(
+                sqlDAO,
+                parameterDAO,
+                propertyDAO,
+                resultDAO,
+                connectionFlagsDAO,
+                statementFlagsDAO,
+                resultSetFlagsDAO);
+
+        EasyMock.expect(resultDAO.findBySqlId(t_Sql.getId())).andReturn(t_Result);
+        EasyMock.replay(resultDAO);
+
+        @NotNull final QueryJCommand t_Command = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+
+        new QueryJCommandWrapper<File>(t_Command).setSetting(
+            CustomSqlCacheWritingHandler.CUSTOM_SQL_OUTPUT_FOLDER_FOR_HASHES, tempFolder.getRoot());
+        new QueryJCommandWrapper<CustomSqlProvider>(t_Command).setSetting(
+            CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, t_CustomSqlProvider);
+        new RetrieveQueryHandler().setCurrentSql(t_Sql, t_Command);
+        new CheckResultSetGettersWorkForDefinedPropertiesHandler().setValidationOutcome(true, t_Sql, t_Command);
+
+        @NotNull final String hash = "bzS4lagreKYbqR9tX8G2d5CCYGA%3D";
+
+        @NotNull final String path = instance.hashPath(tempFolder.getRoot().getAbsolutePath(), hash);
+
+        Assert.assertFalse(new File(path).exists());
+
+        Assert.assertFalse(instance.handle(t_Command));
+
+        Assert.assertFalse(new File(path).exists());
+
+        EasyMock.verify(resultDAO);
     }
 }
