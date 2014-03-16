@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Tests for CacheValidationOutcomeHandler.
  *
  * Date: 2014/03/16
  * Time: 15:07
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
@@ -58,13 +58,21 @@ import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
+
+/*
+ * Importing Apache Commons Configuration classes.
+ */
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.easymock.EasyMock;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JUnit/PowerMock/EasyMock classes.
  */
+import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -72,13 +80,13 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+/*
+ * Importing JDK classes.
+ */
 import java.io.File;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- *
+ * Tests for {@link CacheValidationOutcomeHandler}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/03/16 15:07
@@ -187,6 +195,7 @@ public class CacheValidationOutcomeHandlerTest
             new SqlElement<>("sql-id", "dao", "sql-name", "select", Cardinality.SINGLE, "all", true, false, "fake sql");
 
         @NotNull final Result<String> t_Result = new ResultElement<>("r1", "Whatever");
+
         @NotNull final SqlDAO sqlDAO = EasyMock.createNiceMock(SqlDAO.class);
         @NotNull final SqlParameterDAO parameterDAO = EasyMock.createNiceMock(SqlParameterDAO.class);
         @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);
