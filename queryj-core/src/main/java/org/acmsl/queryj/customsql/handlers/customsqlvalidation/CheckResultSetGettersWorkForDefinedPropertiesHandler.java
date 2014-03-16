@@ -40,6 +40,7 @@ package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.CustomResultWithInvalidNumberOfColumnsException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.exceptions.ReferencedResultNotFoundException;
@@ -49,6 +50,8 @@ import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.SqlElement;
+import org.acmsl.queryj.customsql.exceptions.ResultSetGettersValidationNotAvailableException;
 import org.acmsl.queryj.customsql.exceptions.ResultSetMetadataOperationFailedException;
 import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.metadata.TypeManager;
@@ -74,7 +77,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Performs some checks in the {@link ResultSet}, for the expected {@link Property properties}.
@@ -86,6 +91,11 @@ import java.util.List;
 public class CheckResultSetGettersWorkForDefinedPropertiesHandler
     extends AbstractQueryJCommandHandler
 {
+    /**
+     * The key to store the validation outcomes per SQL.
+     */
+    protected static final String VALIDATION = "resultset-getters-validation";
+
     /**
      * Asks the handler to process the command. The idea is that each
      * command handler decides if such command is suitable of being
@@ -119,9 +129,13 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandler
                 try
                 {
                     validateProperties(t_ResultSet, t_lProperties, t_Sql, t_Result, new JdbcTypeManager(), t_Handler);
+
+                    setValidationOutcome(true, t_Sql, command);
                 }
                 catch (@NotNull final SQLException errorDealingWithResultSetMetadata)
                 {
+                    setValidationOutcome(false, t_Sql, command);
+
                     throw
                         new ResultSetMetadataOperationFailedException(
                             t_Sql, t_ResultRef, errorDealingWithResultSetMetadata);
@@ -227,4 +241,59 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandler
         }
     }
 
+    /**
+     * Retrieves the validation outcome for given {@link Sql}.
+     * @param sql the SQL.
+     * @param command the command.
+     * @return the outcome of the validation.
+     */
+    public boolean getValidationOutcome(@NotNull final SqlElement<String> sql, @NotNull final QueryJCommand command)
+    {
+        final boolean result;
+
+        @NotNull final QueryJCommandWrapper<Map<Sql, Boolean>> wrapper =
+            new QueryJCommandWrapper<>(command);
+
+        @Nullable Map<Sql, Boolean> outcomes = wrapper.getSetting(VALIDATION);
+
+        if (outcomes == null)
+        {
+            outcomes = new HashMap<>();
+            wrapper.setSetting(VALIDATION, outcomes);
+        }
+
+        if (outcomes.containsKey(sql))
+        {
+            result = outcomes.get(sql);
+        }
+        else
+        {
+            throw new ResultSetGettersValidationNotAvailableException(sql);
+        }
+
+        return result;
+    }
+
+    /**
+     * Annotates the validation outcome for given {@link Sql}.
+     * @param outcome the outcome.
+     * @param sql the SQL.
+     * @param command the command.
+     */
+    protected void setValidationOutcome(
+        final boolean outcome, @NotNull final Sql<String> sql, @NotNull final QueryJCommand command)
+    {
+        @NotNull final QueryJCommandWrapper<Map<Sql, Boolean>> wrapper =
+            new QueryJCommandWrapper<>(command);
+
+        @Nullable Map<Sql, Boolean> outcomes = wrapper.getSetting(VALIDATION);
+
+        if (outcomes == null)
+        {
+            outcomes = new HashMap<>();
+            wrapper.setSetting(VALIDATION, outcomes);
+        }
+
+        outcomes.put(sql, outcome);
+    }
 }
