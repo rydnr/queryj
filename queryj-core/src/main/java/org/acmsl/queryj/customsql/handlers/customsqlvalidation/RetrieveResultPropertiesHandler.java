@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Retrieves the properties from the ResultSet and injects
+ *              them into the command.
  *
  * Date: 2014/03/15
  * Time: 16:52
@@ -36,15 +37,19 @@
 package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 
 /*
- * Importing JetBrains annotations.
+ * Importing ACM SL Java Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.CustomResultWithInvalidNumberOfColumnsException;
 import org.acmsl.queryj.api.exceptions.CustomResultWithNoPropertiesException;
 import org.acmsl.queryj.api.exceptions.CustomSqlWithNoPropertiesException;
-import org.acmsl.queryj.api.exceptions.NoTableMatchingCustomResultException;
 import org.acmsl.queryj.api.exceptions.NoTableMatchingSqlException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.exceptions.UnsupportedCustomResultPropertyTypeException;
@@ -56,6 +61,7 @@ import org.acmsl.queryj.customsql.PropertyRef;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.exceptions.PropertiesNotAvailableForValidationException;
 import org.acmsl.queryj.customsql.exceptions.ResultSetMetadataOperationFailedException;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -64,15 +70,26 @@ import org.acmsl.queryj.metadata.TypeManager;
 import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
+
+/*
+ * Importing Apache Commons Logging classes.
+ */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -82,7 +99,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Retrieves the {@link Property properties} from the {@link ResultSet} and injects
+ * them into the command.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/03/15 16:52
@@ -107,6 +125,11 @@ public class RetrieveResultPropertiesHandler
     protected static final String RESULT_SET = "ResultSet.";
 
     /**
+     * The key to store the current properties.
+     */
+    protected static final String CURRENT_PROPERTIES = "current-properties";
+
+    /**
      * Asks the handler to process the command. The idea is that each
      * command handler decides if such command is suitable of being
      * processed, and if so perform the concrete actions the command
@@ -120,7 +143,6 @@ public class RetrieveResultPropertiesHandler
     public boolean handle(@NotNull final QueryJCommand command)
         throws QueryJBuildException
     {
-        @NotNull final ResultSet t_ResultSet = new ExecuteQueryHandler().retrieveCurrentResultSet(command);
         @NotNull final Sql<String> t_Sql = new RetrieveQueryHandler().retrieveCurrentSql(command);
 
         @NotNull final CustomSqlProvider t_CustomSqlProvider = retrieveCustomSqlProvider(command);
@@ -130,54 +152,54 @@ public class RetrieveResultPropertiesHandler
 
         if  (t_ResultRef != null)
         {
-            try
-            {
-                validateResultSet(
-                    t_ResultSet,
+            @NotNull final List<Property<String>> t_lProperties =
+                retrieveProperties(
                     t_Sql,
                     t_CustomSqlProvider.getSqlResultDAO().findByPrimaryKey(t_ResultRef.getId()),
                     t_CustomSqlProvider,
                     t_MetadataManager,
                     new JdbcTypeManager());
-            }
-            catch (@NotNull final SQLException errorDealingWithResultSetMetadata)
-            {
-                throw
-                    new ResultSetMetadataOperationFailedException(
-                        t_Sql, t_ResultRef, errorDealingWithResultSetMetadata);
-            }
+
+            setCurrentProperties(t_lProperties, command);
         }
 
         return false;
     }
 
     /**
+     * Annotates the properties into the command.
+     * @param properties the {@link Property properties}.
+     * @param command the command.
+     */
+    protected void setCurrentProperties(
+        @NotNull final List<Property<String>> properties, @NotNull final QueryJCommand command)
+    {
+        new QueryJCommandWrapper<List<Property<String>>>(command).setSetting(CURRENT_PROPERTIES, properties);
+    }
+
+    /**
      * Validates the result set.
-     * @param resultSet the result set to validate.
      * @param sql the sql.
      * @param sqlResult the custom sql result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param typeManager the <code>MetadataTypeManager</code> instance.
-     * @throws java.sql.SQLException if the SQL operation fails.
      * @throws QueryJBuildException if the expected result cannot be extracted.
      */
-    protected void validateResultSet(
-        @NotNull final ResultSet resultSet,
+    protected List<Property<String>> retrieveProperties(
         @NotNull final Sql<String> sql,
         @Nullable final Result<String> sqlResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final TypeManager typeManager)
-        throws SQLException,
-               QueryJBuildException
+        throws QueryJBuildException
     {
+        @NotNull List<Property<String>> result = new ArrayList<>();
+
         if (sql.getId().equalsIgnoreCase("find-product-types-by-draw-type-id"))
         {
             int debug = 1;
         }
-
-        @NotNull List<Property<String>> t_lProperties = new ArrayList<>();
 
         @Nullable final String t_strTable =
             CustomResultUtils.getInstance().retrieveTable(sql, metadataManager);
@@ -190,16 +212,16 @@ public class RetrieveResultPropertiesHandler
 
         if (sqlResult != null)
         {
-            t_lProperties.addAll(retrieveExplicitProperties(sqlResult, customSqlProvider.getSqlPropertyDAO()));
+            result.addAll(retrieveExplicitProperties(sqlResult, customSqlProvider.getSqlPropertyDAO()));
         }
 
-        if  (   (t_lProperties.size() == 0)
+        if  (   (result.size() == 0)
              && (t_strTable != null))
         {
-            t_lProperties = retrieveImplicitProperties(t_strTable, metadataManager, typeManager);
+            result = retrieveImplicitProperties(t_strTable, metadataManager, typeManager);
         }
 
-        if  (t_lProperties.size() == 0)
+        if  (result.size() == 0)
         {
             if (sqlResult != null)
             {
@@ -210,60 +232,8 @@ public class RetrieveResultPropertiesHandler
                 throw new CustomSqlWithNoPropertiesException(sql);
             }
         }
-        else
-        {
-            if  (resultSet.next())
-            {
-                @NotNull Method t_Method;
 
-                for (@Nullable final Property<String> t_Property : t_lProperties)
-                {
-                    if (t_Property != null)
-                    {
-                        try
-                        {
-                            t_Method =
-                                retrieveMethod(
-                                    ResultSet.class,
-                                    getGetterMethod(typeManager.getClass(t_Property.getType())),
-                                    new Class<?>[]
-                                        {
-                                            String.class
-                                        });
-                        }
-                        catch  (@NotNull final NoSuchMethodException noSuchMethod)
-                        {
-                            throw
-                                new UnsupportedCustomResultPropertyTypeException(
-                                    t_Property, sql, sqlResult, noSuchMethod);
-                        }
-
-                        invokeResultSetGetter(
-                            t_Method, resultSet, t_Property, sqlResult, sql);
-                    }
-                }
-            }
-            else
-            {
-                @NotNull final ResultSetMetaData t_Metadata = resultSet.getMetaData();
-
-                final int t_iColumnCount = t_Metadata.getColumnCount();
-
-                if  (t_iColumnCount < t_lProperties.size())
-                {
-                    throw
-                        new CustomResultWithInvalidNumberOfColumnsException(
-                            t_iColumnCount, t_lProperties.size());
-                }
-
-                @NotNull final List<Property<String>> t_lColumns = new ArrayList<>();
-
-                for  (int t_iIndex = 1; t_iIndex <= t_iColumnCount; t_iIndex++)
-                {
-                    t_lColumns.add(createPropertyFrom(t_Metadata, t_iIndex));
-                }
-            }
-        }
+        return result;
     }
 
     /**
@@ -461,5 +431,28 @@ public class RetrieveResultPropertiesHandler
     protected String getGetterMethod(@NotNull final Class<?> type)
     {
         return new BindQueryParametersHandler().getAccessorMethod("get", type, StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the properties for current SQL.
+     * @param command the command.
+     * @return the properties.
+     * @throws PropertiesNotAvailableForValidationException if this method is called before the
+     * required previous handlers (up to ExecuteQueryHandler).
+     */
+    @NotNull
+    public List<Property<String>> retrieveCurrentProperties(final QueryJCommand command)
+    {
+        @Nullable final List<Property<String>> result =
+            new QueryJCommandWrapper<Property<String>>(command).getListSetting(CURRENT_PROPERTIES);
+
+        if (result == null)
+        {
+            @NotNull final Sql<String> t_Sql = new RetrieveQueryHandler().retrieveCurrentSql(command);
+
+            throw new PropertiesNotAvailableForValidationException(t_Sql);
+        }
+
+        return result;
     }
 }

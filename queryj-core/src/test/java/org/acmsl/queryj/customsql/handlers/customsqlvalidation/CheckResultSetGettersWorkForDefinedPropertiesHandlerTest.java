@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: RetrieveResultPropertiesHandlerTest.java
+ * Filename: CheckResultSetGettersWorkForDefinedPropertiesHandlerTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for RetrieveResultPropertiesHandler.
+ * Description: Tests for CheckResultSetGettersWorkForDefinedPropertiesHandler.
  *
- * Date: 2014/03/15
- * Time: 16:34
+ * Date: 2014/03/16
+ * Time: 08:38
  *
  */
 package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
@@ -85,6 +85,7 @@ import org.powermock.api.easymock.PowerMock;
 /*
  * Importing JDK classes.
  */
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -93,20 +94,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Tests for {@link RetrieveResultPropertiesHandler}.
+ * Tests for {@link CheckResultSetGettersWorkForDefinedPropertiesHandler}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/03/15 16:34
+ * Created: 2014/03/16 08:38
  */
 @RunWith(JUnit4.class)
-public class RetrieveResultPropertiesHandlerTest
+public class CheckResultSetGettersWorkForDefinedPropertiesHandlerTest
 {
     @Test
-    public void publishes_explicit_properties()
-        throws  QueryJBuildException,
-                SQLException
+    public void executes_resultset_getters_for_defined_properties()
+        throws QueryJBuildException,
+        SQLException
     {
-        @NotNull final RetrieveResultPropertiesHandler instance = new RetrieveResultPropertiesHandler();
+        @NotNull final CheckResultSetGettersWorkForDefinedPropertiesHandler instance =
+            new CheckResultSetGettersWorkForDefinedPropertiesHandler();
 
         @NotNull final QueryJCommand t_Parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
 
@@ -132,8 +134,10 @@ public class RetrieveResultPropertiesHandlerTest
         @NotNull final ResultSet t_ResultSet = PowerMock.createNiceMock(ResultSet.class);
         @NotNull final PreparedStatement t_Statement = PowerMock.createNiceMock(PreparedStatement.class);
         @NotNull final TableDAO t_TableDAO = PowerMock.createNiceMock(TableDAO.class);
+        @NotNull final ResultSetMetaData t_Metadata = PowerMock.createNiceMock(ResultSetMetaData.class);
         @SuppressWarnings("unchecked")
-        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> t_Table = PowerMock.createNiceMock(Table.class);
+        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+            PowerMock.createNiceMock(Table.class);
 
         EasyMock.expect(t_MetadataManager.getTableDAO()).andReturn(t_TableDAO);
         EasyMock.expect(t_TableDAO.findByDAO("dao")).andReturn(t_Table);
@@ -142,10 +146,24 @@ public class RetrieveResultPropertiesHandlerTest
         EasyMock.expect(t_CustomSqlProvider.getSqlPropertyDAO()).andReturn(t_PropertyDAO);
         EasyMock.expect(t_ResultDAO.findByPrimaryKey(t_Result.getId())).andReturn(t_Result);
         EasyMock.expect(t_Statement.executeQuery()).andReturn(t_ResultSet);
+        EasyMock.expect(t_ResultSet.getMetaData()).andReturn(t_Metadata);
+        EasyMock.expect(t_Metadata.getColumnCount()).andReturn(t_lProperties.size());
 
+        int t_iIndex = 1;
         for (@NotNull final Property<String> t_Property : t_lProperties)
         {
             EasyMock.expect(t_PropertyDAO.findByPrimaryKey(t_Property.getId())).andReturn(t_Property);
+            EasyMock.expect(t_Metadata.getColumnName(t_iIndex)).andReturn(t_Property.getColumnName());
+            EasyMock.expect(t_Metadata.getColumnTypeName(t_iIndex)).andReturn(t_Property.getType());
+            if (t_Property.getType().equals(String.class.getSimpleName()))
+            {
+                EasyMock.expect(t_ResultSet.getString(t_iIndex)).andReturn("1");
+            }
+            else if (t_Property.getType().equals("Date"))
+            {
+                EasyMock.expect(t_ResultSet.getDate(t_iIndex)).andReturn(new Date(new java.util.Date().getTime()));
+            }
+            t_iIndex++;
         }
 
         new QueryJCommandWrapper<Sql<String>>(t_Parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, t_Sql);
@@ -163,9 +181,11 @@ public class RetrieveResultPropertiesHandlerTest
         EasyMock.replay(t_ResultDAO);
         EasyMock.replay(t_ResultSet);
         EasyMock.replay(t_Statement);
+        EasyMock.replay(t_Metadata);
 
         new SetupPreparedStatementHandler().setCurrentPreparedStatement(t_Statement, t_Parameters);
         new ExecuteQueryHandler().handle(t_Parameters);
+        new RetrieveResultPropertiesHandler().handle(t_Parameters);
 
         Assert.assertFalse(instance.handle(t_Parameters));
 
@@ -175,6 +195,8 @@ public class RetrieveResultPropertiesHandlerTest
         EasyMock.verify(t_Table);
         EasyMock.verify(t_PropertyDAO);
         EasyMock.verify(t_ResultDAO);
+        EasyMock.verify(t_ResultSet);
         EasyMock.verify(t_Statement);
+        EasyMock.verify(t_Metadata);
     }
 }
