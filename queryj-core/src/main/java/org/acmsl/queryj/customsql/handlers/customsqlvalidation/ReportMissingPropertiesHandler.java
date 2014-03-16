@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Detects and reports missing properties: the ones that are
+ *              returned by the ResultSet, but are not declared.
  *
  * Date: 2014/03/16
  * Time: 10:34
@@ -36,29 +37,44 @@
 package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 
 /*
- * Importing JetBrains annotations.
+ * Importing ACM SL Java Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
+
+/*
+ * Importing Apache Commons Logging classes.
+ */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Detects and reports missing properties: the ones that are returned
+ * by the {@link java.sql.ResultSet}, but are not declared.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/03/16 10:34
@@ -83,7 +99,26 @@ public class ReportMissingPropertiesHandler
         @NotNull final List<Property<String>> t_lProperties =
             new RetrieveResultPropertiesHandler().retrieveCurrentProperties(command);
 
+        @NotNull final List<Property<String>> t_lColumns =
+            new RetrieveResultSetColumnsHandler().retrieveCurrentColumns(command);
+
+        @NotNull final Sql<String> t_Sql = new RetrieveQueryHandler().retrieveCurrentSql(command);
+
+        @Nullable final Log t_Log = retrieveLog();
+
+        diagnoseMissingProperties(t_lProperties, t_lColumns, t_Sql, t_Log);
+
         return false;
+    }
+
+    /**
+     * Retrieves the log.
+     * @return such instance.
+     */
+    @Nullable
+    protected Log retrieveLog()
+    {
+        return UniqueLogFactory.getLog(ReportMissingPropertiesHandler.class);
     }
 
     /**
@@ -91,15 +126,15 @@ public class ReportMissingPropertiesHandler
      * @param properties the declared properties.
      * @param columns the properties from the result set.
      * @param sql the query itself.
+     * @param log the log.
      */
     protected void diagnoseMissingProperties(
         @NotNull final List<Property<String>> properties,
         @NotNull final List<Property<String>> columns,
-        @NotNull final Sql<String> sql)
+        @NotNull final Sql<String> sql,
+        @Nullable final Log log)
     {
-        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
-
-        if (t_Log != null)
+        if (log != null)
         {
             @NotNull final List<Property<String>> t_lMissingProperties =
                 detectMissingProperties(properties, columns);
@@ -110,7 +145,7 @@ public class ReportMissingPropertiesHandler
             {
                 if  (t_MissingProperty != null)
                 {
-                    t_Log.warn(
+                    log.warn(
                         "Column not declared ("
                         + t_iIndex + ", "
                         + t_MissingProperty.getColumnName() + ", "
@@ -177,7 +212,7 @@ public class ReportMissingPropertiesHandler
         for (@Nullable final Property<String> property : properties)
         {
             if (   (property != null)
-                   && (column.equalsIgnoreCase(property.getColumnName())))
+                && (column.equalsIgnoreCase(property.getColumnName())))
             {
                 result = true;
                 break;

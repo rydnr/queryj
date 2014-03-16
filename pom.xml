@@ -334,24 +334,28 @@
         <groupId>org.powermock</groupId>
         <artifactId>powermock-module-junit4</artifactId>
         <version>${version.powermock}</version>
+        <optional>true</optional>
       </dependency>
     
       <dependency>
         <groupId>org.powermock</groupId>
         <artifactId>powermock-api-easymock</artifactId>
         <version>${version.powermock}</version>
+        <optional>true</optional>
       </dependency>
 
       <dependency>
         <groupId>org.easymock</groupId>
         <artifactId>easymock</artifactId>
         <version>3.1</version>
+        <optional>true</optional>
       </dependency>
 
       <dependency>
         <groupId>org.jdogma.junit</groupId>
         <artifactId>configurable-parallel-computer</artifactId>
         <version>1.5</version>
+        <optional>true</optional>
       </dependency>
 
     </dependencies>
