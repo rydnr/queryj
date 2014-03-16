@@ -173,8 +173,6 @@ public class CustomSqlValidationHandler
     public boolean handle(@NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
-        boolean result = false;
-
         @Nullable final MetadataManager t_MetadataManager =
             retrieveMetadataManager(parameters);
 
@@ -183,11 +181,7 @@ public class CustomSqlValidationHandler
 
         @NotNull final Charset t_Charset = retrieveCharset(parameters);
 
-        if (t_MetadataManager == null)
-        {
-            result = true;
-        }
-        else if  (!retrieveDisableCustomSqlValidation(parameters))
+        if (!retrieveDisableCustomSqlValidation(parameters))
         {
             validate(
                 t_CustomSqlProvider,
@@ -198,7 +192,7 @@ public class CustomSqlValidationHandler
                 t_Charset.displayName());
         }
 
-        return result;
+        return false;
     }
 
     /**
@@ -1268,7 +1262,7 @@ public class CustomSqlValidationHandler
                         {
                             throw
                                 new UnsupportedCustomResultPropertyTypeException(
-                                    t_Property, sqlResult, sql, noSuchMethod);
+                                    t_Property, sql, sqlResult, noSuchMethod);
                         }
 
                         invokeResultSetGetter(
@@ -1509,7 +1503,7 @@ public class CustomSqlValidationHandler
 
             throw
                 new UnsupportedCustomResultPropertyTypeException(
-                    property, sqlResult, sql, illegalAccessException);
+                    property, sql, sqlResult, illegalAccessException);
         }
         catch  (@NotNull final InvocationTargetException invocationTargetException)
         {
@@ -1529,7 +1523,7 @@ public class CustomSqlValidationHandler
 
             throw
                 new UnsupportedCustomResultPropertyTypeException(
-                    property, sqlResult, sql, invocationTargetException);
+                    property, sql, sqlResult, invocationTargetException);
         }
     }
 

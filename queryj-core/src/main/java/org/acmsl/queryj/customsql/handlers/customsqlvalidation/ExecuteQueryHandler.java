@@ -100,9 +100,12 @@ public class ExecuteQueryHandler
 
         try
         {
-            @NotNull final ResultSet t_ResultSet = validateStatement(t_Sql, t_Statement);
+            @Nullable final ResultSet t_ResultSet = validateStatement(t_Sql, t_Statement);
 
-            setCurrentResultSet(t_ResultSet, command);
+            if (t_ResultSet != null)
+            {
+                setCurrentResultSet(t_ResultSet, command);
+            }
         }
         catch (@NotNull final SQLException invalidSql)
         {
@@ -150,6 +153,7 @@ public class ExecuteQueryHandler
      * @throws java.sql.SQLException if the ResultSet cannot be closed.
      * @throws QueryJBuildException if the validation fails.
      */
+    @Nullable
     protected ResultSet validateStatement(
         @NotNull final Sql<String> sql,
         @NotNull final PreparedStatement preparedStatement)
@@ -159,7 +163,7 @@ public class ExecuteQueryHandler
         @Nullable final ResultSet result;
 
         if  (   (Sql.INSERT.equals(sql.getType()))
-                || (Sql.DELETE.equals(sql.getType())))
+             || (Sql.DELETE.equals(sql.getType())))
         {
             preparedStatement.executeUpdate();
 

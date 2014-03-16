@@ -322,25 +322,16 @@ public class CustomResultUtils
                 @SuppressWarnings("unused") final int a = 1;
             }
 
-            String t_strDao;
-
             for (@Nullable final Sql<String> t_Sql : retrieveSqlElementsByResultId(customSqlProvider, "" + resultId))
             {
                 if (t_Sql != null)
                 {
-                    t_strDao = t_Sql.getDao();
+                    result = retrieveTable(t_Sql, metadataManager);
 
-                    if (t_strDao != null)
+                    if (result != null)
                     {
-                        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
-                            metadataManager.getTableDAO().findByDAO(t_strDao);
-
-                        if  (t_Table != null)
-                        {
-                            result = t_Table.getName();
-                            cacheEntry("" + resultId, result);
-                            break;
-                        }
+                        cacheEntry("" + resultId, result);
+                        break;
                     }
                 }
             }
@@ -351,6 +342,42 @@ public class CustomResultUtils
 //        {
 //            throw new IllegalArgumentException("Result " + resultElement.getId() + " does not match any table");
 //        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the table associated to the {@link Sql}.
+     * @param sql the {@link Sql}.
+     * @param metadataManager the database metadata manager.
+     * @return the table name.
+     */
+    @Nullable
+    public <T> String retrieveTable(
+        @NotNull final Sql<T> sql,
+        @NotNull final MetadataManager metadataManager)
+    {
+        @Nullable final String result;
+        @Nullable final T t_strDao = sql.getDao();
+
+        if (t_strDao != null)
+        {
+            @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+                metadataManager.getTableDAO().findByDAO("" + t_strDao);
+
+            if  (t_Table != null)
+            {
+                result = t_Table.getName();
+            }
+            else
+            {
+                result = null;
+            }
+        }
+        else
+        {
+            result = null;
+        }
 
         return result;
     }

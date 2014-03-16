@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -47,6 +47,7 @@ import org.acmsl.queryj.customsql.Sql;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -62,6 +63,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class UnsupportedCustomResultPropertyTypeException
     extends QueryJBuildException
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -7066638500035915220L;
 
     /**
@@ -74,13 +78,16 @@ public class UnsupportedCustomResultPropertyTypeException
      */
     public UnsupportedCustomResultPropertyTypeException(
         @NotNull final Property<?> property,
-        @NotNull final Result<?> result,
         @NotNull final Sql<?> sql,
+        @Nullable final Result<?> result,
         @NotNull final Throwable cause)
     {
         super(
             "unsupported.property.type.in.custom-result",
-            new Object[] { property.getType(), property.getId(), result.getId(), sql.getId() },
+            new Object[]
+            {
+                property.getType(), property.getId(), (result != null) ? result.getId() : "(none)", sql.getId()
+            },
             cause);
     }
 

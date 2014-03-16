@@ -70,6 +70,7 @@ import java.util.concurrent.Future;
 /*
  * Importing some Apache Commons Logging classes.
  */
+import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
 import org.acmsl.queryj.tools.exceptions.MissingConnectionAtRuntimeException;
 import org.acmsl.queryj.tools.exceptions.MissingCustomSqlProviderAtRuntimeException;
 import org.acmsl.queryj.tools.exceptions.MissingDataSourceJndiPathAtRuntimeException;
@@ -174,12 +175,19 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return the manager.
      */
-    @Nullable
+    @NotNull
     protected MetadataManager retrieveMetadataManager(@NotNull final QueryJCommand parameters)
     {
-        return
+        @Nullable final MetadataManager result =
             new QueryJCommandWrapper<MetadataManager>(parameters)
                 .getSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER);
+
+        if (result == null)
+        {
+            throw new MetadataManagerNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
