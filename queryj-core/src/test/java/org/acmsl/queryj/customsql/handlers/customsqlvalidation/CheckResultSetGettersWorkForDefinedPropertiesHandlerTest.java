@@ -127,41 +127,37 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandlerTest
         t_Sql.add(new ParameterRefElement("id"));
         t_Sql.setResultRef(new ResultRefElement("r1"));
 
-        @NotNull final CustomSqlProvider t_CustomSqlProvider = PowerMock.createNiceMock(CustomSqlProvider.class);
-        @NotNull final MetadataManager t_MetadataManager = PowerMock.createMock(MetadataManager.class);
+        @NotNull final CustomSqlProvider t_CustomSqlProvider = EasyMock.createNiceMock(CustomSqlProvider.class);
+        @NotNull final MetadataManager t_MetadataManager = PowerMock.createNiceMock(MetadataManager.class);
         @NotNull final SqlResultDAO t_ResultDAO = PowerMock.createNiceMock(SqlResultDAO.class);
         @NotNull final SqlPropertyDAO t_PropertyDAO = PowerMock.createNiceMock(SqlPropertyDAO.class);
         @NotNull final ResultSet t_ResultSet = PowerMock.createNiceMock(ResultSet.class);
         @NotNull final PreparedStatement t_Statement = PowerMock.createNiceMock(PreparedStatement.class);
         @NotNull final TableDAO t_TableDAO = PowerMock.createNiceMock(TableDAO.class);
-        @NotNull final ResultSetMetaData t_Metadata = PowerMock.createNiceMock(ResultSetMetaData.class);
         @SuppressWarnings("unchecked")
         @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
             PowerMock.createNiceMock(Table.class);
 
+        EasyMock.expect(t_CustomSqlProvider.getSqlPropertyDAO()).andReturn(t_PropertyDAO);
+        EasyMock.expect(t_CustomSqlProvider.getSqlResultDAO()).andReturn(t_ResultDAO).anyTimes();
         EasyMock.expect(t_MetadataManager.getTableDAO()).andReturn(t_TableDAO);
         EasyMock.expect(t_TableDAO.findByDAO("dao")).andReturn(t_Table);
         EasyMock.expect(t_Table.getName()).andReturn("dao");
-        EasyMock.expect(t_CustomSqlProvider.getSqlResultDAO()).andReturn(t_ResultDAO);
-        EasyMock.expect(t_CustomSqlProvider.getSqlPropertyDAO()).andReturn(t_PropertyDAO);
-        EasyMock.expect(t_ResultDAO.findByPrimaryKey(t_Result.getId())).andReturn(t_Result);
+        EasyMock.expect(t_ResultDAO.findByPrimaryKey(t_Result.getId())).andReturn(t_Result).anyTimes();
         EasyMock.expect(t_Statement.executeQuery()).andReturn(t_ResultSet);
-        EasyMock.expect(t_ResultSet.getMetaData()).andReturn(t_Metadata);
-        EasyMock.expect(t_Metadata.getColumnCount()).andReturn(t_lProperties.size());
+        EasyMock.expect(t_ResultSet.next()).andReturn(true);
 
         int t_iIndex = 1;
         for (@NotNull final Property<String> t_Property : t_lProperties)
         {
             EasyMock.expect(t_PropertyDAO.findByPrimaryKey(t_Property.getId())).andReturn(t_Property);
-            EasyMock.expect(t_Metadata.getColumnName(t_iIndex)).andReturn(t_Property.getColumnName());
-            EasyMock.expect(t_Metadata.getColumnTypeName(t_iIndex)).andReturn(t_Property.getType());
             if (t_Property.getType().equals(String.class.getSimpleName()))
             {
-                EasyMock.expect(t_ResultSet.getString(t_iIndex)).andReturn("1");
+                EasyMock.expect(t_ResultSet.getString(t_Property.getColumnName())).andReturn("1");
             }
             else if (t_Property.getType().equals("Date"))
             {
-                EasyMock.expect(t_ResultSet.getDate(t_iIndex)).andReturn(new Date(new java.util.Date().getTime()));
+                EasyMock.expect(t_ResultSet.getDate(t_Property.getColumnName())).andReturn(new Date(new java.util.Date().getTime()));
             }
             t_iIndex++;
         }
@@ -181,7 +177,6 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandlerTest
         EasyMock.replay(t_ResultDAO);
         EasyMock.replay(t_ResultSet);
         EasyMock.replay(t_Statement);
-        EasyMock.replay(t_Metadata);
 
         new SetupPreparedStatementHandler().setCurrentPreparedStatement(t_Statement, t_Parameters);
         new ExecuteQueryHandler().handle(t_Parameters);
@@ -197,6 +192,5 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandlerTest
         EasyMock.verify(t_ResultDAO);
         EasyMock.verify(t_ResultSet);
         EasyMock.verify(t_Statement);
-        EasyMock.verify(t_Metadata);
     }
 }

@@ -42,6 +42,7 @@ package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.CustomResultWithInvalidNumberOfColumnsException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.exceptions.ReferencedResultNotFoundException;
 import org.acmsl.queryj.api.exceptions.UnsupportedCustomResultPropertyTypeException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
@@ -111,7 +112,7 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandler
 
             if (t_Result == null)
             {
-                // TODO: throw exception
+                throw new ReferencedResultNotFoundException(t_ResultRef, t_Sql);
             }
             else
             {
