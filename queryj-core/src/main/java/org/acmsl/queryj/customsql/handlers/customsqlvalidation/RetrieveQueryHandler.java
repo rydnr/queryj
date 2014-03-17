@@ -108,28 +108,20 @@ public class RetrieveQueryHandler
     protected boolean handle(@NotNull final QueryJCommand command, @NotNull final CustomQueryChain chain)
         throws QueryJBuildException
     {
-        final boolean result;
-
-        final int index = retrieveCurrentSqlIndex(command);
+        int index = retrieveCurrentSqlIndex(command);
 
         @NotNull final List<Sql<String>> t_lSql = retrieveSqlList(command);
 
-        if (   (index > -1)
-            && (index < t_lSql.size()))
+        while (   (index > -1)
+               && (index < t_lSql.size()))
         {
             setCurrentSql(t_lSql.get(index), command);
-            setCurrentSqlIndex(index + 1, command);
+            setCurrentSqlIndex(index++, command);
 
             chain.process(command);
-
-            result = false;
-        }
-        else
-        {
-            result = true;
         }
 
-        return result;
+        return false;
     }
 
     /**
