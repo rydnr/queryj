@@ -1,5 +1,5 @@
 * 2014/03/16
-** TODO #454 Refactor CustomSqlValidationHandler into its own chain: 6 + 3 -> 8
+** DONE #454 Refactor CustomSqlValidationHandler into its own chain: 6 + 3 -> 8
 
 * Notes:
 ** TODO toString() in PropertyElement does not include the type

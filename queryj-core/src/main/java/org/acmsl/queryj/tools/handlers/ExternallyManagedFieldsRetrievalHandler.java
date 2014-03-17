@@ -107,15 +107,14 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(
-        @Nullable final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         @Nullable final AntExternallyManagedFieldsElement externallyManagedFields,
         @NotNull final StringValidator stringValidator)
       throws  QueryJBuildException
     {
         final boolean result = false;
 
-        if  (   (metadataManager != null)
-             && (externallyManagedFields != null))
+        if  (externallyManagedFields != null)
         {
             for (@Nullable final AntFieldElement t_Field : externallyManagedFields.getFields())
             {
@@ -127,8 +126,7 @@ public class ExternallyManagedFieldsRetrievalHandler
                     }
                     else
                     {
-                        if (stringValidator.isEmpty(
-                            t_Field.getTableName()))
+                        if (stringValidator.isEmpty(t_Field.getTableName()))
                         {
                             throw new MissingExternallyManagedFieldTableNameException(t_Field);
                         }

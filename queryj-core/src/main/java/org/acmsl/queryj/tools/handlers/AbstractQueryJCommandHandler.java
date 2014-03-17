@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -45,7 +45,6 @@ import org.acmsl.queryj.api.exceptions.UnsupportedCharsetQueryjException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
 
@@ -178,9 +177,7 @@ public abstract class AbstractQueryJCommandHandler
     @NotNull
     protected MetadataManager retrieveMetadataManager(@NotNull final QueryJCommand parameters)
     {
-        @Nullable final MetadataManager result =
-            new QueryJCommandWrapper<MetadataManager>(parameters)
-                .getSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER);
+        @Nullable final MetadataManager result = retrieveMetadataManagerIfExists(parameters);
 
         if (result == null)
         {
@@ -188,6 +185,19 @@ public abstract class AbstractQueryJCommandHandler
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the database metadata manager from the attribute map.
+     * @param parameters the parameter map.
+     * @return the manager.
+     */
+    @Nullable
+    protected MetadataManager retrieveMetadataManagerIfExists(@NotNull final QueryJCommand parameters)
+    {
+        return
+            new QueryJCommandWrapper<MetadataManager>(parameters)
+                .getSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER);
     }
 
     /**

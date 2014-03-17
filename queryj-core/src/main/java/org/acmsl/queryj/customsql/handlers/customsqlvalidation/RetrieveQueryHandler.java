@@ -41,7 +41,9 @@ package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 
 /*
@@ -103,6 +105,10 @@ public class RetrieveQueryHandler
             && (index < t_lSql.size()))
         {
             setCurrentSql(t_lSql.get(index), command);
+            setCurrentSqlIndex(index + 1, command);
+
+            new CustomQueryChain().process(command);
+
             result = false;
         }
         else
@@ -131,6 +137,16 @@ public class RetrieveQueryHandler
     public Sql<String> retrieveCurrentSql(@NotNull final QueryJCommand command)
     {
         return new QueryJCommandWrapper<Sql<String>>(command).getSetting(CURRENT_SQL);
+    }
+
+    /**
+     * Specifies the index of the current SQL.
+     * @param index the index of the current SQL.
+     * @param parameters the parameters.
+     */
+    protected void setCurrentSqlIndex(final int index, final QueryJCommand parameters)
+    {
+        new QueryJCommandWrapper<Integer>(parameters).setSetting(CURRENT_SQL_INDEX, index);
     }
 
     /**
@@ -170,9 +186,15 @@ public class RetrieveQueryHandler
         @Nullable final List<Sql<String>> aux =
             new QueryJCommandWrapper<Sql<String>>(parameters).getListSetting(SQL_LIST);
 
-        if (aux == null)
+        if (   (aux == null)
+            || (aux.size() == 0))
         {
-            result = new ArrayList<>(0);
+            @NotNull final CustomSqlProvider t_CustomSqlProvider =
+                retrieveCustomSqlProvider(parameters);
+
+            @NotNull final SqlDAO t_SqlDAO = t_CustomSqlProvider.getSqlDAO();
+
+            result = t_SqlDAO.findAll();
         }
         else
         {

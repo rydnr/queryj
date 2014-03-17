@@ -124,7 +124,8 @@ public abstract class AbstractQueryJChain
      * @return the updated chain.
      * @throws QueryJBuildException if the chain cannot be built successfully.
      */
-    protected abstract Chain<C, QueryJBuildException, CH> buildChain(@NotNull final Chain<C, QueryJBuildException, CH> chain)
+    protected abstract Chain<C, QueryJBuildException, CH> buildChain(
+        @NotNull final Chain<C, QueryJBuildException, CH> chain)
         throws QueryJBuildException;
 
     /**
@@ -255,7 +256,8 @@ public abstract class AbstractQueryJChain
     public String toString()
     {
         return
-              "{ \"class\": \"" + AbstractQueryJChain.class.getName() + '"'
+              "{ \"class\": \"" + AbstractQueryJChain.class.getSimpleName() + '"'
+            + ", \"package\": \"org.acmsl.queryj\""
             + ", \"chain\": " + getChain() + " }";
     }
 }
