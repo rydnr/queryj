@@ -142,7 +142,10 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandler
                 }
             }
         }
-
+        else
+        {
+            setValidationOutcome(true, t_Sql, command);
+        }
         return false;
     }
 

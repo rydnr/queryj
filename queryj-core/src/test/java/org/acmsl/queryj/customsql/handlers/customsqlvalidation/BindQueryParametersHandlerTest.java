@@ -51,6 +51,8 @@ import org.acmsl.queryj.customsql.Sql.Cardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
+import org.acmsl.queryj.metadata.TypeManager;
+import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 
 /*
@@ -79,6 +81,7 @@ import org.easymock.EasyMock;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 /**
  * Tests for {@link BindQueryParametersHandler}.
@@ -137,5 +140,104 @@ public class BindQueryParametersHandlerTest
         EasyMock.verify(t_SqlParameterDAO);
         EasyMock.verify(t_Connection);
         EasyMock.verify(t_Statement);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testPrimitiveBody(@NotNull final Class<?> type)
+        throws Exception
+    {
+        @NotNull final BindQueryParametersHandler t_Handler = new BindQueryParametersHandler();
+
+        @NotNull final Parameter t_Parameter = new ParameterElement<>("id", 1, "id", type, "1");
+
+        @NotNull final Sql<String> t_Sql =
+            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+
+        @NotNull final Class<?> t_ParameterType;
+
+        @NotNull final TypeManager t_TypeManager = new JdbcTypeManager();
+
+        if (t_TypeManager.isPrimitiveWrapper(type))
+        {
+            t_ParameterType = t_TypeManager.toPrimitive(type);
+        }
+        else
+        {
+            t_ParameterType = type;
+        }
+
+        Assert.assertNotNull(
+            t_Handler.retrievePreparedStatementMethod(
+                t_Parameter, 0, type, t_Sql, Arrays.asList(int.class, t_ParameterType)));
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_int_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(int.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_Int_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(Integer.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_long_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(long.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_Long_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(Long.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_double_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(double.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_Double_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(Double.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_float_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(float.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_Float_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(Float.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_boolean_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(boolean.class);
+    }
+
+    @Test
+    public void retrieve_statement_setter_method_works_for_Boolean_parameter()
+        throws Exception
+    {
+        testPrimitiveBody(Boolean.class);
     }
 }

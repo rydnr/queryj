@@ -114,7 +114,10 @@ public class SetupPreparedStatementHandler
         {
             @Nullable final PreparedStatement t_Statement = setupStatement(sql, connection);
 
-            setCurrentPreparedStatement(t_Statement, command);
+            if (t_Statement != null)
+            {
+                setCurrentPreparedStatement(t_Statement, command);
+            }
         }
         catch (@NotNull final SQLException invalidSql)
         {
@@ -171,8 +174,6 @@ public class SetupPreparedStatementHandler
 
         @Nullable final String t_strValue = sql.getValue();
 
-        @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
-
         if (t_strValue != null)
         {
             @NotNull final String t_strSql = t_strValue.trim();
@@ -181,6 +182,8 @@ public class SetupPreparedStatementHandler
         }
         else
         {
+            @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
+
             if (t_Log != null)
             {
                 t_Log.warn("Non-select/empty query with validate=\"true\": " + sql.getId());

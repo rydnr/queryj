@@ -95,6 +95,19 @@ public class RetrieveQueryHandler
     public boolean handle(@NotNull final QueryJCommand command)
         throws QueryJBuildException
     {
+        return handle(command, new CustomQueryChain());
+    }
+
+    /**
+     * Retrieves the current {@link Sql query}, and delegates
+     * the flow to given chain.
+     * @param command the command.
+     * @param chain the chain.
+     * @return {@code false} if everything went fine.
+     */
+    protected boolean handle(@NotNull final QueryJCommand command, @NotNull final CustomQueryChain chain)
+        throws QueryJBuildException
+    {
         final boolean result;
 
         final int index = retrieveCurrentSqlIndex(command);
@@ -107,7 +120,7 @@ public class RetrieveQueryHandler
             setCurrentSql(t_lSql.get(index), command);
             setCurrentSqlIndex(index + 1, command);
 
-            new CustomQueryChain().process(command);
+            chain.process(command);
 
             result = false;
         }
