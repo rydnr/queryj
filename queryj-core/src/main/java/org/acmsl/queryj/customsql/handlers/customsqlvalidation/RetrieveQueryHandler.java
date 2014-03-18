@@ -36,6 +36,12 @@
 package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 
 /*
+ * Importing ACM SL Java Commons classes.
+ */
+import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.commons.utils.Chronometer;
+
+/*
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
@@ -45,6 +51,11 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
+
+/*
+ * Importing Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing JetBrains annotations.
@@ -60,7 +71,6 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -108,17 +118,47 @@ public class RetrieveQueryHandler
     protected boolean handle(@NotNull final QueryJCommand command, @NotNull final CustomQueryChain chain)
         throws QueryJBuildException
     {
-        int index = retrieveCurrentSqlIndex(command);
+        int t_iIndex = retrieveCurrentSqlIndex(command);
+
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(RetrieveQueryHandler.class);
 
         @NotNull final List<Sql<String>> t_lSql = retrieveSqlList(command);
 
-        while (   (index > -1)
-               && (index < t_lSql.size()))
-        {
-            setCurrentSql(t_lSql.get(index), command);
-            setCurrentSqlIndex(index++, command);
+        final int t_iTotalQueries = t_lSql.size();
 
+        @Nullable final Chronometer t_Chronometer;
+
+        if (   (t_Log != null)
+            && (t_Log.isInfoEnabled()))
+        {
+            t_Chronometer = new Chronometer();
+            t_Log.info("Validating up to " + t_iTotalQueries + " queries. It can take some time.");
+        }
+        else
+        {
+            t_Chronometer = null;
+        }
+
+        while (   (t_iIndex > -1)
+               && (t_iIndex < t_lSql.size()))
+        {
+            @NotNull final Sql<String> t_Sql = t_lSql.get(t_iIndex);
+
+            setCurrentSql(t_Sql, command);
+
+            if (   (t_Log != null)
+                && (t_Log.isDebugEnabled()))
+            {
+                t_Log.debug("[" + t_iIndex + "/" + t_iTotalQueries + "] / " + t_Sql.getId());
+            }
+            setCurrentSqlIndex(t_iIndex++, command);
             chain.process(command);
+        }
+
+        if (   (t_Log != null)
+            && (t_Chronometer != null))
+        {
+            t_Log.info("Validation took " + t_Chronometer.now());
         }
 
         return false;
