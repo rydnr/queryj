@@ -103,7 +103,14 @@ public class OracleMetadataManager
     implements  OracleTableRepository,
                 Serializable
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -914170490377897216L;
+
+    /**
+     * String literal: "left outer join ( ";
+     */
     public static final String LEFT_OUTER_JOIN = "left outer join ( ";
 
     /**
@@ -146,18 +153,7 @@ public class OracleMetadataManager
     }
 
     /**
-     * Retrieves the table names.
-     * @param tableNames optionally specified table names.
-     * @param metaData the metadata.
-     * @param catalog the catalog.
-     * @param schema the schema.
-     * @param caseSensitiveness whether it's case sensitive or not.
-     * @param metadataExtractionListener the {@link MetadataExtractionListener} instance.
-     * @param metaLanguageUtils the {@link org.acmsl.queryj.api.MetaLanguageUtils} instance.
-     * @return the list of tables.
-     * @throws java.sql.SQLException if the database operation fails.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJException if an error, which is identified
-     * by QueryJ, occurs.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -684,5 +680,23 @@ public class OracleMetadataManager
         }
 
         return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInvalidColumnNameException(@NotNull final SQLException sqlException)
+    {
+        return sqlException.getErrorCode() == 17006;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInvalidColumnTypeException(@NotNull final SQLException sqlException)
+    {
+        return sqlException.getErrorCode() == 17004;
     }
 }

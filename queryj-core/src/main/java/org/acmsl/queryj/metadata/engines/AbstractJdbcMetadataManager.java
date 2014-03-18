@@ -267,8 +267,7 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Retrieves the table names.
-     * @return such names.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
@@ -402,8 +401,7 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Retrieves the database meta data.
-     * @return such information.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -628,10 +626,8 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Retrieves the case sensitiveness.
-     * @return whether the engine is case sensitive.
+     * {@inheritDoc}
      */
-    @SuppressWarnings("unused")
     public boolean isCaseSensitive()
     {
         return immutableIsCaseSensitive();
@@ -723,9 +719,7 @@ public abstract class AbstractJdbcMetadataManager
 
     // RefactoredMetadataManager interface.
     /**
-     * Retrieves the metadata.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if an error, which is identified by QueryJ, occurs.
+     * {@inheritDoc}
      */
     @Override
     public void eagerlyFetchMetadata()
@@ -1389,7 +1383,7 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * Parses given environment property to find out whether some tables are
      * explicitly specified.
-     * @param environmentProperty the environment propery.
+     * @param environmentProperty the environment property.
      * @return the tables specified in given environment property.
      */
     @NotNull
@@ -1399,9 +1393,7 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Checks whether the generation phase is enabled for given foreign key.
-     * @param foreignKey the foreign key.
-     * @return <code>true</code> in such case.
+     * {@inheritDoc}
      */
     @Override
     public boolean isGenerationAllowedForForeignKey(@NotNull final ForeignKey<String> foreignKey)
@@ -1775,12 +1767,104 @@ public abstract class AbstractJdbcMetadataManager
         return result;
     }
 
+    /**
+     * Checks whether given exception identifies an "Invalid column name".
+     * @param exception the exception.
+     * @return {@code true} in such case.
+     */
+    protected SQLException unwrap(@NotNull final Throwable exception)
+    {
+        @Nullable final SQLException result;
+
+        @Nullable Throwable underlying = exception.getCause();
+
+        while (   (underlying != null)
+               && (!(underlying instanceof SQLException)))
+        {
+            underlying = underlying.getCause();
+        }
+
+        if (underlying instanceof SQLException)
+        {
+            result = (SQLException) underlying;
+        }
+        else
+        {
+            result = null;
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInvalidColumnNameException(@NotNull final Throwable exception)
+    {
+        final boolean result;
+
+        @Nullable final SQLException underlying = unwrap(exception);
+
+        if (underlying != null)
+        {
+            result = isInvalidColumnNameException(underlying);
+        }
+        else
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isInvalidColumnTypeException(@NotNull final Throwable exception)
+    {
+        final boolean result;
+
+        @Nullable final SQLException underlying = unwrap(exception);
+
+        if (underlying != null)
+        {
+            result = isInvalidColumnTypeException(underlying);
+        }
+        else
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given exception identifies an "Invalid column name".
+     * @param exception the exception.
+     * @return {@code true} in such case.
+     */
+    protected abstract boolean isInvalidColumnNameException(@NotNull final SQLException exception);
+
+    /**
+     * Checks whether given exception identifies an "Invalid column type".
+     * @param exception the exception.
+     * @return {@code true} in such case.
+     */
+    protected abstract boolean isInvalidColumnTypeException(@NotNull final SQLException exception);
+
+    /**
+     * @{inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
         return
-              "{  \"class\": \"" + AbstractJdbcMetadataManager.class.getName() + "\""
+              "{  \"class\": \"" + AbstractJdbcMetadataManager.class.getSimpleName() + "\""
+            + ", \"package\": \"org.acmsl.queryj.metadata.engines\""
             + ", \"caseSensitive\": \"" + m__bCaseSensitive + "\""
             + ", \"name\": \"" + m__strName + "\""
             + ", \"metaData\": \"" + m__MetaData + "\""

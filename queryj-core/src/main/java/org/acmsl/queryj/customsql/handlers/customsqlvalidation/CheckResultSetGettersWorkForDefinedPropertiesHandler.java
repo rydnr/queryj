@@ -50,9 +50,9 @@ import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.customsql.exceptions.ResultSetGettersValidationNotAvailableException;
 import org.acmsl.queryj.customsql.exceptions.ResultSetMetadataOperationFailedException;
+import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.metadata.TypeManager;
 import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
@@ -110,9 +110,6 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandler
     public boolean handle(@NotNull final QueryJCommand command)
         throws QueryJBuildException
     {
-        @NotNull final ResultSet t_ResultSet = new ExecuteQueryHandler().retrieveCurrentResultSet(command);
-        @NotNull final RetrieveResultPropertiesHandler t_Handler = new RetrieveResultPropertiesHandler();
-        @NotNull final List<Property<String>> t_lProperties = t_Handler.retrieveCurrentProperties(command);
         @NotNull final Sql<String> t_Sql = new RetrieveQueryHandler().retrieveCurrentSql(command);
         @Nullable final ResultRef t_ResultRef = t_Sql.getResultRef();
 
@@ -126,9 +123,15 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandler
             }
             else
             {
+                @NotNull final ResultSet t_ResultSet = new ExecuteQueryHandler().retrieveCurrentResultSet(command);
+                @NotNull final RetrieveResultPropertiesHandler t_Handler = new RetrieveResultPropertiesHandler();
+                @NotNull final List<Property<String>> t_lProperties = t_Handler.retrieveCurrentProperties(command);
+                @NotNull final MetadataManager t_MetadataManager = retrieveMetadataManager(command);
+
                 try
                 {
-                    validateProperties(t_ResultSet, t_lProperties, t_Sql, t_Result, new JdbcTypeManager(), t_Handler);
+                    validateProperties(
+                        t_ResultSet, t_lProperties, t_Sql, t_Result, new JdbcTypeManager(), t_Handler, t_MetadataManager);
 
                     setValidationOutcome(true, t_Sql, command);
                 }
@@ -172,6 +175,7 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandler
      * @param sqlResult the custom sql result.
      * @param typeManager the {@link TypeManager} instance.
      * @param handler a {@link RetrieveResultPropertiesHandler} for dealing with reflection.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @throws java.sql.SQLException if the SQL operation fails.
      * @throws QueryJBuildException if the expected result cannot be extracted.
      */
@@ -181,15 +185,11 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandler
         @NotNull final Sql<String> sql,
         @NotNull final Result<String> sqlResult,
         @NotNull final TypeManager typeManager,
-        @NotNull final RetrieveResultPropertiesHandler handler)
+        @NotNull final RetrieveResultPropertiesHandler handler,
+        @NotNull final MetadataManager metadataManager)
         throws SQLException,
                QueryJBuildException
     {
-        if (sql.getId().equalsIgnoreCase("find-product-types-by-draw-type-id"))
-        {
-            int debug = 1;
-        }
-
         if  (resultSet.next())
         {
             @NotNull Method t_Method;
@@ -218,7 +218,7 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandler
                     }
 
                     handler.invokeResultSetGetter(
-                        t_Method, resultSet, t_Property, sqlResult, sql);
+                        t_Method, resultSet, t_Property, sqlResult, sql, metadataManager);
                 }
             }
         }

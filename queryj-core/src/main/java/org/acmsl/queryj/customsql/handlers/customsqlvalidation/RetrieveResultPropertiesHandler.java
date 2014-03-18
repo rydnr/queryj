@@ -50,6 +50,7 @@ import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.CustomResultWithInvalidNumberOfColumnsException;
 import org.acmsl.queryj.api.exceptions.CustomResultWithNoPropertiesException;
 import org.acmsl.queryj.api.exceptions.CustomSqlWithNoPropertiesException;
+import org.acmsl.queryj.api.exceptions.InvalidColumnNameInCustomResultException;
 import org.acmsl.queryj.api.exceptions.NoTableMatchingSqlException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.exceptions.UnsupportedCustomResultPropertyTypeException;
@@ -342,6 +343,7 @@ public class RetrieveResultPropertiesHandler
      * @param property the property.
      * @param sqlResult the {@link Result} instance.
      * @param sql the SQL element.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @throws QueryJBuildException if the validation fails.
      */
     protected void invokeResultSetGetter(
@@ -349,7 +351,8 @@ public class RetrieveResultPropertiesHandler
         @NotNull final ResultSet resultSet,
         @NotNull final Property<String> property,
         @Nullable final Result<String> sqlResult,
-        @NotNull final Sql<String> sql)
+        @NotNull final Sql<String> sql,
+        @NotNull final MetadataManager metadataManager)
         throws QueryJBuildException
     {
         @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
@@ -362,7 +365,7 @@ public class RetrieveResultPropertiesHandler
 
             method.invoke(resultSet, t_aParameters);
         }
-        catch  (@NotNull final IllegalAccessException illegalAccessException)
+        catch  (@NotNull final Throwable cannotRetrieveColumnValue)
         {
             if  (t_Log != null)
             {
@@ -375,32 +378,21 @@ public class RetrieveResultPropertiesHandler
                           ?  "" + property.getIndex()
                           :  property.getColumnName())
                     + ")",
-                    illegalAccessException);
+                    cannotRetrieveColumnValue);
             }
 
-            throw
-                new UnsupportedCustomResultPropertyTypeException(
-                    property, sql, sqlResult, illegalAccessException);
-        }
-        catch  (@NotNull final InvocationTargetException invocationTargetException)
-        {
-            if  (t_Log != null)
+            if (metadataManager.isInvalidColumnNameException(cannotRetrieveColumnValue))
             {
-                t_Log.warn(
-                    VALIDATION_FAILED_FOR + sql.getId() + ":\n"
-                    + COULD_NOT_RETRIEVE_RESULT_VIA
-                    + RESULT_SET + method.getName()
-                    + "("
-                    + (   (property.getIndex() > 0)
-                          ?  "" + property.getIndex()
-                          :  property.getColumnName())
-                    + ")",
-                    invocationTargetException);
+                throw
+                    new InvalidColumnNameInCustomResultException(
+                        property, sql, sqlResult, cannotRetrieveColumnValue);
             }
-
-            throw
-                new UnsupportedCustomResultPropertyTypeException(
-                    property, sql, sqlResult, invocationTargetException);
+            else if (metadataManager.isInvalidColumnTypeException(cannotRetrieveColumnValue))
+            {
+                throw
+                    new UnsupportedCustomResultPropertyTypeException(
+                        property, sql, sqlResult, cannotRetrieveColumnValue);
+            }
         }
     }
 

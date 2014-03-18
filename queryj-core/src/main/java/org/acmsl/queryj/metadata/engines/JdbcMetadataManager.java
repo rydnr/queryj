@@ -84,11 +84,23 @@ public class JdbcMetadataManager
     extends AbstractJdbcMetadataManager
 {
     /**
-     * The serial versi
+     * The serial version id.
      */
     private static final long serialVersionUID = -3287133509095459164L;
+
+    /**
+     * String literal: "REMARKS".
+     */
     public static final String REMARKS = "REMARKS";
+
+    /**
+     * String literal: "Discarding ".
+     */
     public static final String DISCARDING = "Discarding ";
+
+    /**
+     * String literal: "KEY_SEQ".
+     */
     public static final String KEY_SEQ = "KEY_SEQ";
 
     /**
@@ -143,15 +155,7 @@ public class JdbcMetadataManager
     }
 
     /**
-     * Retrieves the table names.
-     * @param metaData the metadata.
-     * @param catalog the catalog.
-     * @param schema the schema.
-     * @param tableNames the fixed table names to process.
-     * @param metadataExtractionListener the metadata extraction listener.
-     * @param caseSensitiveness whether the checks are case sensitive or not.
-     * @return the list of all table names.
-     * @throws SQLException if the database operation fails.
+     * {@inheritDoc}
      */
     @Override
     protected List<TableIncompleteValueObject> extractTableNamesAndComments(
@@ -225,14 +229,7 @@ public class JdbcMetadataManager
     }
 
     /**
-     * Retrieves the column information for given tables.
-     * @param metaData the metadata.
-     * @param catalog the catalog.
-     * @param schema the schema.
-     * @param caseSensitiveness whether the table names are case sensitive or not.
-     * @param metadataExtractionListener the metadata extraction listener.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if the any other error occurs.
+     * {@inheritDoc}
      */
     @Override
     protected void extractTableColumns(
@@ -334,14 +331,7 @@ public class JdbcMetadataManager
     }
 
     /**
-     * Retrieves the primary keys for given tables.
-     * @param metaData the metadata.
-     * @param catalog the catalog.
-     * @param schema the schema.
-     * @param caseSensitiveness whether the table names are case sensitive or not.
-     * @param metadataExtractionListener the metadata extraction listener.
-     * @throws java.sql.SQLException if the database operation fails.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJException if the any other error occurs.
+     * {@inheritDoc}
      */
     @Override
     protected void extractPrimaryKeys(
@@ -598,14 +588,54 @@ public class JdbcMetadataManager
     }
 
     /**
-     * Retrieves the {@link org.acmsl.queryj.metadata.TableDAO} instance.
-     *
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
     public TableDAO getTableDAO()
     {
         return new JdbcTableDAO(this);
+    }
+
+    /**
+     * Checks whether the message in given exception contains a text.
+     * @param exception the exception.
+     * @param text the text.
+     * @return {@code true} in such case.
+     */
+    protected boolean matchesMessage(@NotNull final SQLException exception, @NotNull final String text)
+    {
+        final boolean result;
+
+        @Nullable final String message = exception.getMessage();
+
+        if (message != null)
+        {
+            result = message.contains(text);
+        }
+        else
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean isInvalidColumnNameException(@NotNull final SQLException exception)
+    {
+        return matchesMessage(exception, "Invalid column name");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean isInvalidColumnTypeException(@NotNull final SQLException exception)
+    {
+        return matchesMessage(exception, "Invalid column type");
     }
 }
