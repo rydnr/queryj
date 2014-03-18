@@ -1,0 +1,4 @@
+* 2014/03/18
+** DONE #455 Stop processing non-select queries just before dealing with ResultSet.getMetaData(): 1 -> 1
+** DONE #456 Distinguish between invalid column name/type: 1 -> 1
+** DONE # 457 Improve validation logging : 1 -> 1
