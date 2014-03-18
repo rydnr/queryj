@@ -51,6 +51,9 @@ import org.acmsl.queryj.customsql.ResultElement;
 /*
  * Importing Apache Commons Configuration classes.
  */
+import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlElement;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
@@ -95,6 +98,12 @@ public class RetrieveResultSetColumnsHandlerTest
 
         @NotNull final QueryJCommand t_Parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
 
+        @NotNull final SqlElement<String> sql =
+            new SqlElement<>(
+                "id", "dao", "name", Sql.SELECT, Cardinality.SINGLE, "all", true /* validation */, false, "description");
+
+        sql.setValue("select sysdate from dual where ? = 'A'");
+
         @NotNull final ResultSet t_ResultSet = PowerMock.createNiceMock(ResultSet.class);
         @NotNull final ResultSetMetaData t_ResultSetMetaData = PowerMock.createNiceMock(ResultSetMetaData.class);
 
@@ -123,6 +132,7 @@ public class RetrieveResultSetColumnsHandlerTest
         EasyMock.replay(t_ResultSet);
         EasyMock.replay(t_ResultSetMetaData);
 
+        new QueryJCommandWrapper<Sql<String>>(t_Parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, sql);
         new QueryJCommandWrapper<ResultSet>(t_Parameters).setSetting(
             ExecuteQueryHandler.CURRENT_RESULTSET, t_ResultSet);
 
@@ -130,6 +140,27 @@ public class RetrieveResultSetColumnsHandlerTest
 
         EasyMock.verify(t_ResultSet);
         EasyMock.verify(t_ResultSetMetaData);
+    }
 
+    @Test
+    public void does_not_process_non_select_queries()
+        throws QueryJBuildException,
+        SQLException
+    {
+        @NotNull final RetrieveResultSetColumnsHandler instance = new RetrieveResultSetColumnsHandler();
+
+        @NotNull final QueryJCommand t_Parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+
+        @NotNull final ResultSet t_ResultSet = PowerMock.createMock(ResultSet.class);
+
+        @NotNull final SqlElement<String> sql =
+            new SqlElement<>(
+                "id", "dao", "name", Sql.UPDATE, Cardinality.SINGLE, "all", true /* validation */, false, "description");
+
+        new QueryJCommandWrapper<Sql<String>>(t_Parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, sql);
+        new QueryJCommandWrapper<ResultSet>(t_Parameters).setSetting(
+            ExecuteQueryHandler.CURRENT_RESULTSET, t_ResultSet);
+
+        Assert.assertTrue(instance.handle(t_Parameters));
     }
 }

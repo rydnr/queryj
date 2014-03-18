@@ -75,7 +75,7 @@ public class CustomSqlValidationHandler
     {
         new CustomSqlValidationChain().process(parameters);
 
-        return false;
+        return true;
     }
 
     /**

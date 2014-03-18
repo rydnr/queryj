@@ -49,6 +49,7 @@ import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.InvalidCustomSqlException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.exceptions.CannotValidateEmptyQueryException;
 import org.acmsl.queryj.customsql.exceptions.PreparedStatementNotAvailableForValidationException;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
@@ -174,21 +175,15 @@ public class SetupPreparedStatementHandler
 
         @Nullable final String t_strValue = sql.getValue();
 
-        if (t_strValue != null)
+        if (t_strValue == null)
+        {
+            throw new CannotValidateEmptyQueryException(sql);
+        }
+        else
         {
             @NotNull final String t_strSql = t_strValue.trim();
 
             result = connection.prepareStatement(t_strSql);
-        }
-        else
-        {
-            @Nullable final Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
-
-            if (t_Log != null)
-            {
-                t_Log.warn("Non-select/empty query with validate=\"true\": " + sql.getId());
-            }
-            result = null;
         }
 
         return result;

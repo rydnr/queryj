@@ -97,23 +97,36 @@ public class RetrieveResultSetColumnsHandler
     public boolean handle(@NotNull final QueryJCommand command)
         throws QueryJBuildException
     {
+        final boolean result;
+
         @NotNull final ResultSet t_ResultSet = new ExecuteQueryHandler().retrieveCurrentResultSet(command);
 
-        try
-        {
-            @NotNull final List<Property<String>> t_lColumns =
-                retrieveColumns(t_ResultSet.getMetaData(), new RetrieveResultPropertiesHandler());
+        @NotNull final Sql<String> t_Sql = new RetrieveQueryHandler().retrieveCurrentSql(command);
 
-            setColumns(t_lColumns, command);
-        }
-        catch (@NotNull final SQLException sqlException)
+        if (t_Sql.getType().equals(Sql.SELECT))
         {
-            throw
-                new CannotAnalyzeResultSetForValidationException(
-                    new RetrieveQueryHandler().retrieveCurrentSql(command));
+            result = false;
+
+            try
+            {
+                @NotNull final List<Property<String>> t_lColumns =
+                    retrieveColumns(t_ResultSet.getMetaData(), new RetrieveResultPropertiesHandler());
+
+                setColumns(t_lColumns, command);
+            }
+            catch (@NotNull final SQLException sqlException)
+            {
+                throw
+                    new CannotAnalyzeResultSetForValidationException(
+                        sqlException, new RetrieveQueryHandler().retrieveCurrentSql(command));
+            }
+        }
+        else
+        {
+            result = true;
         }
 
-        return false;
+        return result;
     }
 
     /**

@@ -150,6 +150,10 @@ public class BindQueryParametersHandler
         @NotNull final CustomSqlProvider customSqlProvider = retrieveCustomSqlProvider(command);
         @NotNull final TypeManager typeManager = new JdbcTypeManager();
 
+        if ("share.bookings.close-shares-bookings-by-parent-club-definition-id-and-cycle-id".equals(sql.getId()))
+        {
+            int a = 0;
+        }
         @NotNull final PreparedStatement t_PreparedStatement =
             new SetupPreparedStatementHandler().retrieveCurrentPreparedStatement(command);
 

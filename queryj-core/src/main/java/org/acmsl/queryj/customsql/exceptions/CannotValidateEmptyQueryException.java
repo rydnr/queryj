@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,28 +23,23 @@
 
  ******************************************************************************
  *
- * Filename: CannotAnalyzeResultSetForValidationException.java
+ * Filename: CannotValidateEmptyQueryException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents any problem dealing with ResultSetMetaData when
- *              validating what a SQL actually returns.
+ * Description: Represents the error when trying to validate an empty SQL.
  *
- * Date: 2014/03/16
- * Time: 11:28
+ * Date: 2014/03/18
+ * Time: 08:29
  *
  */
-package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
-
-/*
- * Importing QueryJ Core classes.
- */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
-import org.acmsl.queryj.customsql.Sql;
+package org.acmsl.queryj.customsql.exceptions;
 
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
+import org.acmsl.queryj.customsql.Sql;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -52,31 +47,22 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
-import java.sql.SQLException;
-
 /**
- * Represents any problem dealing with {@link java.sql.ResultSetMetaData} when validating what a SQL
- * actually returns.
+ * Represents the error when trying to validate an empty SQL.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/03/16 11:28
+ * Created: 2014/03/18 08:29
  */
 @ThreadSafe
-public class CannotAnalyzeResultSetForValidationException
+public class CannotValidateEmptyQueryException
     extends QueryJNonCheckedException
 {
     /**
-     * The serial version id.
+     * Creates a new instance using given {@link Sql} as context.
+     * @param sql the failing SQL.
      */
-    private static final long serialVersionUID = 4342020210966103632L;
-
-    /**
-     * Creates a new instance associated to given {@link Sql}.
-     * @param sql the SQL.
-     */
-    public CannotAnalyzeResultSetForValidationException(
-        @NotNull final SQLException cause, @NotNull final Sql<String> sql)
+    public CannotValidateEmptyQueryException(final Sql<String> sql)
     {
-        super("cannot.analyze.ResultSet.for.validation", new String[] { sql.getId() }, cause);
+        super("cannot.validate.empty.query", new String[] { sql.getId() });
     }
 }

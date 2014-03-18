@@ -161,8 +161,6 @@ public class RetrieveResultPropertiesHandler
                     new JdbcTypeManager());
 
             setCurrentProperties(t_lProperties, command);
-
-
         }
 
         return false;

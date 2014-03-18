@@ -94,7 +94,7 @@ public class SetupPreparedStatementHandlerTest
 
         @NotNull final SqlElement<String> sql =
             new SqlElement<>(
-                "id", "dao", "name", "String", Cardinality.SINGLE, "all", true /* validation */, false, "description");
+                "id", "dao", "name", "select", Cardinality.SINGLE, "all", true /* validation */, false, "description");
 
         sql.setValue("select sysdate from dual where ? = 'A'");
 
