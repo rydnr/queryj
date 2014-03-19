@@ -64,11 +64,6 @@ source(C) ::= <<
 <checkers_import()>
 
 /*
- * Importing project classes.
- */
-<C.templateDefs:{ d | <def_import(d=d)>}; separator="\n">
-
-/*
  * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.api.AbstractTemplate;
@@ -78,8 +73,11 @@ import org.acmsl.queryj.api.PerTableTemplate;
 import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.PerTableTemplateFactory;
 import org.acmsl.queryj.api.PerTableTemplateGenerator;
+import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
+import org.acmsl.queryj.customsql.handlers.customsqlvalidation.RetrieveQueryHandler;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.Literals;
@@ -94,7 +92,21 @@ import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+
+/*
+ * Importing project classes.
+ */
+<C.templateDefs:{ d | <def_import(d=d)>}; separator="\n">
+
+/*
+ * Importing Apache Commons Logging classes.
+ */
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing StringTemplate classes.
@@ -140,6 +152,7 @@ import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -631,6 +644,7 @@ public class PerTableTemplatesTest
         setJdbcPassword(t_strJdbcPassword);
 
         validateQueries(
+            getSqlList(),
             t_strJdbcDriver,
             t_strJdbcUrl,
             t_strJdbcUserName,
@@ -641,6 +655,7 @@ public class PerTableTemplatesTest
 
     /**
      * Checks the queries pass the validation against a real database.
+     * @param sqlList the queries to validate.
      * @param jdbcDriver the JDBC driver.
      * @param jdbcUrl the JDBC URL.
      * @param jdbcUserName the JDBC user name.
@@ -649,6 +664,7 @@ public class PerTableTemplatesTest
      * @param metadataManager the {@link MetadataManager} instance.
      */
     protected void validateQueries(
+        @NotNull final List\<Sql\<String\>> sqlList,
         @NotNull final String jdbcDriver,
         @NotNull final String jdbcUrl,
         @NotNull final String jdbcUserName,
@@ -664,15 +680,31 @@ public class PerTableTemplatesTest
                 new JdbcConnectionOpeningHandler().openConnection(
                     jdbcDriver, jdbcUrl, jdbcUserName, jdbcPassword);
 
-            new CustomSqlValidationHandler().validate(
-                provider,
-                provider.getSqlDAO(),
-                connection,
-                metadataManager);
+            @NotNull final QueryJCommand t_Parameters =
+                new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+
+            new QueryJCommandWrapper\<Connection>(t_Parameters)
+                .setSetting(JdbcConnectionOpeningHandler.JDBC_CONNECTION, connection);
+            new QueryJCommandWrapper\<MetadataManager>(t_Parameters)
+                .setSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
+            new QueryJCommandWrapper\<CustomSqlProvider>(t_Parameters)
+                .setSetting(CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, provider);
+            new QueryJCommandWrapper\<File>(t_Parameters)
+                .setSetting(
+                    ParameterValidationHandler.OUTPUT_FOLDER,
+                    this.createTempFolder(String.valueOf(new Date().getTime())));
+            new QueryJCommandWrapper\<List\<Sql\<String>\>>(t_Parameters)
+                .setSetting(RetrieveQueryHandler.SQL_LIST, sqlList);
+
+            new CustomSqlValidationHandler().handle(t_Parameters);
         }
         catch (@NotNull final QueryJBuildException cannotValidateQuery)
         {
             Assert.fail(cannotValidateQuery.getMessage());
+        }
+        catch (@NotNull final IOException cannotCreateTemporaryFolder)
+        {
+            Assert.fail(cannotCreateTemporaryFolder.getMessage());
         }
         finally
         {

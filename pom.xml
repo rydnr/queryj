@@ -439,8 +439,8 @@
           <version>2.12.2</version>
           <configuration>
             <useFile>false</useFile>
-            <parallel>classes</parallel>
-            <threadCount>2</threadCount>
+            <!--parallel>classes</parallel>
+            <threadCount>2</threadCount-->
           </configuration>
         </plugin>
 

@@ -48,7 +48,7 @@ import org.junit.runner.RunWith;
 /**
  * Runs Cucumber within JUnit.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/04/12
+ * Created: 2013/04/12
  */
 @RunWith(Cucumber.class)
 @Cucumber.Options(format = {"pretty", "html:target/cucumber-html-report", "json-pretty:target/cucumber-json-report.json"})
