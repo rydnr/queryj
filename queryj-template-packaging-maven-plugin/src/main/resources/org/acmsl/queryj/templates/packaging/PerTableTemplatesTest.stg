@@ -550,7 +550,7 @@ public class PerTableTemplatesTest
 
                 outputFiles.put(
                     table.getName(),
-                    new File(outputDir, template.getTemplateContext().getTemplateName()));
+                    new File(outputDir, template.getTemplateContext().getFileName()));
             }
         }
 

@@ -41,6 +41,7 @@ package cucumber.templates;
 import cucumber.templates.sql.CucumberSqlDAO;
 import cucumber.templates.sql.CucumberSqlParameterDAO;
 import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Row;
@@ -964,6 +965,35 @@ public abstract class AbstractTemplatesTest<G, F>
         return result;
     }
 
+    /**
+     * Builds the template name.
+     * @param context the template context.
+     * @return such name.
+     */
+    protected String buildTemplateName(@NotNull final TemplateContext context)
+    {
+        @NotNull final String result;
+
+        @NotNull final String aux = context.getTemplateName();
+
+        final int t_iPosition = aux.indexOf('(');
+
+        if (t_iPosition > -1)
+        {
+            result = aux.substring(0, t_iPosition);
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
     @Override
     public String toString()
     {
