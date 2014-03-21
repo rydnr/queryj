@@ -73,6 +73,9 @@ public class TableAttributesPartialListDecorator
     implements PartialListDecorator,
                TableDecorator
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 3942968754043772227L;
 
     /**
@@ -90,8 +93,17 @@ public class TableAttributesPartialListDecorator
      */
     public static enum Operation
     {
+        /**
+         * The plus operation.
+         */
         PLUS,
+        /**
+         * The minus operation.
+         */
         MINUS,
+        /**
+         * The "only" operation.
+         */
         ONLY
     }
 
@@ -203,6 +215,10 @@ public class TableAttributesPartialListDecorator
     }
 
     // ListDecorator implementation
+    /**
+     * Retrieves the items.
+     * @return such information.
+     */
     @SuppressWarnings("unused")
     @NotNull
     public List<Attribute<DecoratedString>> getItems()
@@ -210,12 +226,20 @@ public class TableAttributesPartialListDecorator
         throw new RuntimeException(AbstractTableAttributesListDecorator.INVALID_OPERATION);
     }
 
+    /**
+     * Applies the "plus" operation to the items.
+     * @return the partial result.
+     */
     @NotNull
     public PartialListDecorator plus()
     {
         throw new RuntimeException(AbstractTableAttributesListDecorator.INVALID_OPERATION);
     }
 
+    /**
+     * Applies the "minus" operation to the items.
+     * @return the partial result.
+     */
     @NotNull
     public PartialListDecorator minus()
     {
@@ -224,6 +248,9 @@ public class TableAttributesPartialListDecorator
 
     // TableDecorator implementation
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes()
@@ -279,6 +306,9 @@ public class TableAttributesPartialListDecorator
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>>
@@ -300,6 +330,9 @@ public class TableAttributesPartialListDecorator
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes()
@@ -385,8 +418,7 @@ public class TableAttributesPartialListDecorator
     }
 
     /**
-     * Retrieves the dynamic queries.
-     * @return such queries.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -395,6 +427,9 @@ public class TableAttributesPartialListDecorator
         return getTable().getDynamicQueries();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<Row<DecoratedString>> getStaticContent()
@@ -402,6 +437,9 @@ public class TableAttributesPartialListDecorator
         return getTable().getStaticContent();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<Result<DecoratedString>> getDifferentCustomResults()
@@ -409,6 +447,9 @@ public class TableAttributesPartialListDecorator
         return getTable().getDifferentCustomResults();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<DecoratedString> getAttributeTypes()
@@ -417,6 +458,9 @@ public class TableAttributesPartialListDecorator
     }
 
     // Table implementation
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public DecoratedString getName()
@@ -424,6 +468,9 @@ public class TableAttributesPartialListDecorator
         return getTable().getName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Nullable
     @Override
     public DecoratedString getComment()
@@ -431,6 +478,9 @@ public class TableAttributesPartialListDecorator
         return getTable().getComment();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getPrimaryKey()
@@ -440,6 +490,10 @@ public class TableAttributesPartialListDecorator
 
     @SuppressWarnings("unused")
     // TODO: remove me
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
     public ListDecorator<Attribute<DecoratedString>> getPrimaryKey1()
     {
         return getPrimaryKey();
@@ -480,6 +534,9 @@ public class TableAttributesPartialListDecorator
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getAttributes()
@@ -522,6 +579,9 @@ public class TableAttributesPartialListDecorator
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<ForeignKey<DecoratedString>> getForeignKeys()
@@ -529,6 +589,9 @@ public class TableAttributesPartialListDecorator
         return getTable().getForeignKeys();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Nullable
     @Override
     public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>
@@ -537,24 +600,48 @@ public class TableAttributesPartialListDecorator
         return getTable().getParentTable();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isStatic()
     {
         return getTable().isStatic();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @NotNull
     public Attribute<DecoratedString> getStaticAttribute()
     {
         return getTable().getStaticAttribute();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isVoDecorated()
     {
         return getTable().isVoDecorated();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isRelationship()
+    {
+        return getTable().isRelationship();
+    }
+
+    /**
+     * Compares the wrapped table to given one.
+     * @param table the table to compare with.
+     * @return the result of comparing them.
+     */
     @Override
     public int compareTo(
         @Nullable final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> table)
@@ -562,12 +649,16 @@ public class TableAttributesPartialListDecorator
         return getTable().compareTo(table);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
         return
-              "{ \"class\": \"" + TableAttributesPartialListDecorator.class.getName() + '"'
+              "{ \"class\": \"" + TableAttributesPartialListDecorator.class.getSimpleName() + '"'
+            + ", \"package\": \"org.acmsl.queryj.metadata\""
             + ", \"listDecorator\": " + m__ListDecorator
             + ", \"table\": " + m__Table
             + ", \"operation\": " + m__Operation

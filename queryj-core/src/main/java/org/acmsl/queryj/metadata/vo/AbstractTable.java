@@ -107,6 +107,11 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     private boolean m__bVoDecorated;
 
     /**
+     * Whether the table represents a relationship.
+     */
+    private boolean m__bRelationship;
+
+    /**
      * Creates an <code>AbstractTable</code> with the following
      * information.
      * @param name the name.
@@ -128,13 +133,15 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
      * @param staticAttribute the attribute used to label static rows.
      * @param voDecorated whether the value-object for the table
      * is decorated.
+     * @param isRelationship whether the table identifies a relationship.
      */
     protected AbstractTable(
         @NotNull final V name,
         @Nullable final V comment,
         @Nullable final Table<V, A, L> parentTable,
         @Nullable final A staticAttribute,
-        final boolean voDecorated)
+        final boolean voDecorated,
+        final boolean isRelationship)
     {
         immutableSetName(name);
         immutableSetComment(comment);
@@ -144,6 +151,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
             immutableSetStaticAttribute(staticAttribute);
         }
         immutableSetVoDecorated(voDecorated);
+        immutableSetRelationship(isRelationship);
     }
 
     /**
@@ -156,6 +164,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
      * @param parentTable the parent table.
      * @param staticAttribute the attribute used to label static rows.
      * @param voDecorated whether it's decorated.
+     * @param isRelationship whether the table identifies a relationship.
      */
     protected AbstractTable(
         @NotNull final V name,
@@ -165,9 +174,10 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
         @NotNull final List<ForeignKey<V>> foreignKeys,
         @Nullable final Table<V, A, L> parentTable,
         @Nullable final A staticAttribute,
-        final boolean voDecorated)
+        final boolean voDecorated,
+        final boolean isRelationship)
     {
-        this(name, comment, parentTable, staticAttribute, voDecorated);
+        this(name, comment, parentTable, staticAttribute, voDecorated, isRelationship);
         immutableSetPrimaryKey(primaryKey);
         immutableSetAttributes(attributes);
         immutableSetForeignKeys(foreignKeys);
@@ -222,8 +232,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     }
 
     /**
-     * Retrieves the table comment.
-     * @return such information.
+     * {@inheritDoc}
      */
     @Nullable
     @Override
@@ -281,8 +290,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     }
 
     /**
-     * Retrieves the primary key.
-     * @return the primary key.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -320,8 +328,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     }
 
     /**
-     * Retrieves the attributes.
-     * @return attributes.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -360,8 +367,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     }
 
     /**
-     * Retrieves the foreign keys.
-     * @return the foreign keys.
+     * {@inheritDoc}
      */
     @NotNull
     public List<ForeignKey<V>> getForeignKeys()
@@ -402,8 +408,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     }
 
     /**
-     * Retrievesthe attribute used to label static contents.
-     * @return such attribute.
+     * {@inheritDoc}
      */
     @Override
     @Nullable
@@ -413,8 +418,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     }
 
     /**
-     * Retrieves whether the table is static or not.
-     * @return <tt>true</tt> in such case.
+     * {@inheritDoc}
      */
     @SuppressWarnings("unused")
     @Override
@@ -445,22 +449,54 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     }
 
     /**
-     * Retrieves whether the value-object for the table is decorated.
-     * @return such information.
+     * {@inheritDoc}
      */
-    @SuppressWarnings("unused")
     @Override
     public boolean isVoDecorated()
     {
         return m__bVoDecorated;
     }
 
+    /**
+     * Specifies whether the table identifies a relationship.
+     * @param flag such condition.
+     */
+    protected final void immutableSetRelationship(final boolean flag)
+    {
+        this.m__bRelationship = flag;
+    }
+
+    /**
+     * Specifies whether the table identifies a relationship.
+     * @param flag such condition.
+     */
+    @SuppressWarnings("unused")
+    protected void setRelationship(final boolean flag)
+    {
+        immutableSetRelationship(flag);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isRelationship()
+    {
+        return this.m__bRelationship;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
         return new HashCodeBuilder().append(this.m__Name).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj)
     {
@@ -534,11 +570,16 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
         return ("" + first.getName()).compareToIgnoreCase("" + second.getName());
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
     @Override
     public String toString()
     {
         return
-              "{ \"class\": \"" + AbstractTable.class.getName()
+              "{ \"class\": \"" + AbstractTable.class.getSimpleName()
+            + ", \"package\": \"org.acmsl.queryj.metadata.vo\""
             + ", \"name\": \"" + m__Name + '"'
             + ", \"comment\": \"" + m__Comment + '"'
             + ", \"parentTable\": " + m__ParentTable
@@ -546,7 +587,8 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
             + ", \"attributes\": " + ToStringUtils.getInstance().toJson(m__lAttributes)
             + ", \"foreignKeys\": " + ToStringUtils.getInstance().toJson(m__lForeignKeys)
             + ", \"static\": " + m__Static
-            + ", \"voDecorated\": " + m__bVoDecorated +
+            + ", \"voDecorated\": " + m__bVoDecorated
+            + ", \"relationship\": " + m__bRelationship
             + '}';
     }
 }

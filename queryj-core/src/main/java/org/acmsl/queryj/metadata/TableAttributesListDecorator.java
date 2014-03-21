@@ -74,8 +74,16 @@ import java.util.List;
 public class TableAttributesListDecorator
     extends AbstractTableAttributesListDecorator
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -4692044880067201567L;
 
+    /**
+     * Creates a new instance.
+     * @param list the attributes.
+     * @param table the wrapped table.
+     */
     public TableAttributesListDecorator(
         @NotNull final List<Attribute<DecoratedString>> list,
         @NotNull final TableDecorator table)
@@ -84,6 +92,9 @@ public class TableAttributesListDecorator
     }
     // TableDecorator implementation
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes()
@@ -91,6 +102,9 @@ public class TableAttributesListDecorator
         throw new RuntimeException(INVALID_OPERATION);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>>
@@ -99,6 +113,9 @@ public class TableAttributesListDecorator
         throw new RuntimeException(INVALID_OPERATION);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes()
@@ -106,6 +123,9 @@ public class TableAttributesListDecorator
         throw new RuntimeException(INVALID_OPERATION);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<Sql<DecoratedString>> getDynamicQueries()
@@ -113,6 +133,9 @@ public class TableAttributesListDecorator
         throw new RuntimeException(INVALID_OPERATION);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<Row<DecoratedString>> getStaticContent()
@@ -120,6 +143,9 @@ public class TableAttributesListDecorator
         throw new RuntimeException(INVALID_OPERATION);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<Result<DecoratedString>> getDifferentCustomResults()
@@ -127,6 +153,9 @@ public class TableAttributesListDecorator
         throw new RuntimeException(INVALID_OPERATION);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<DecoratedString> getAttributeTypes()
@@ -135,6 +164,9 @@ public class TableAttributesListDecorator
     }
 
     // Table implementation
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public DecoratedString getName()
@@ -142,6 +174,9 @@ public class TableAttributesListDecorator
         return getTable().getName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Nullable
     @Override
     public DecoratedString getComment()
@@ -149,6 +184,9 @@ public class TableAttributesListDecorator
         return getTable().getComment();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getPrimaryKey()
@@ -157,6 +195,9 @@ public class TableAttributesListDecorator
     }
 
     // TODO: remove me
+    /**
+     * {@inheritDoc}
+     */
     public List<Attribute<DecoratedString>> getPrimaryKey1()
     {
         List<Object> a = new ArrayList<>(2);
@@ -167,6 +208,9 @@ public class TableAttributesListDecorator
         return getPrimaryKey();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<ForeignKey<DecoratedString>> getForeignKeys()
@@ -174,6 +218,9 @@ public class TableAttributesListDecorator
         return getTable().getForeignKeys();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Nullable
     @Override
     public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>
@@ -182,24 +229,45 @@ public class TableAttributesListDecorator
         return getTable().getParentTable();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isStatic()
     {
         return getTable().isStatic();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Attribute<DecoratedString> getStaticAttribute()
     {
         return getTable().getStaticAttribute();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isVoDecorated()
     {
         return getTable().isVoDecorated();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isRelationship()
+    {
+        return getTable().isRelationship();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int compareTo(final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> table)
     {

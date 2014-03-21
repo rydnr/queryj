@@ -73,7 +73,11 @@ public abstract class AbstractTableAttributesListDecorator
     extends AbstractListDecorator<Attribute<DecoratedString>>
     implements TableDecorator
 {
+    /**
+     * The serial version id.
+     */
     public static final String INVALID_OPERATION = "Invalid operation";
+
     /**
      * The table decorator.
      */
@@ -121,6 +125,9 @@ public abstract class AbstractTableAttributesListDecorator
         return this.m__Table;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public PartialListDecorator getPlus()
@@ -130,6 +137,9 @@ public abstract class AbstractTableAttributesListDecorator
                 this, getTable(), Operation.PLUS);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public PartialListDecorator getMinus()
@@ -139,6 +149,9 @@ public abstract class AbstractTableAttributesListDecorator
                 this, getTable(), Operation.MINUS);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public PartialListDecorator getOnly()
@@ -150,6 +163,9 @@ public abstract class AbstractTableAttributesListDecorator
 
     // TableDecorator implementation
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes()
@@ -168,6 +184,9 @@ public abstract class AbstractTableAttributesListDecorator
         return getReadOnlyAttributes();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>>
@@ -176,6 +195,9 @@ public abstract class AbstractTableAttributesListDecorator
         throw new RuntimeException(INVALID_OPERATION);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes()
@@ -194,6 +216,9 @@ public abstract class AbstractTableAttributesListDecorator
         return getExternallyManagedAttributes();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<Sql<DecoratedString>> getDynamicQueries()
@@ -201,6 +226,9 @@ public abstract class AbstractTableAttributesListDecorator
         throw new RuntimeException(INVALID_OPERATION);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<Row<DecoratedString>> getStaticContent()
@@ -208,6 +236,9 @@ public abstract class AbstractTableAttributesListDecorator
         throw new RuntimeException(INVALID_OPERATION);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<Result<DecoratedString>> getDifferentCustomResults()
@@ -215,6 +246,9 @@ public abstract class AbstractTableAttributesListDecorator
         throw new RuntimeException(INVALID_OPERATION);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<DecoratedString> getAttributeTypes()
@@ -223,6 +257,9 @@ public abstract class AbstractTableAttributesListDecorator
     }
 
     // Table implementation
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public DecoratedString getName()
@@ -230,6 +267,9 @@ public abstract class AbstractTableAttributesListDecorator
         return getTable().getName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Nullable
     @Override
     public DecoratedString getComment()
@@ -237,6 +277,9 @@ public abstract class AbstractTableAttributesListDecorator
         return getTable().getComment();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getPrimaryKey()
@@ -244,6 +287,9 @@ public abstract class AbstractTableAttributesListDecorator
         return getTable().getPrimaryKey();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListDecorator<Attribute<DecoratedString>> getAttributes()
@@ -262,6 +308,9 @@ public abstract class AbstractTableAttributesListDecorator
         return getAttributes();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<ForeignKey<DecoratedString>> getForeignKeys()
@@ -269,6 +318,9 @@ public abstract class AbstractTableAttributesListDecorator
         return getTable().getForeignKeys();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Nullable
     @Override
     public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>
@@ -277,30 +329,45 @@ public abstract class AbstractTableAttributesListDecorator
         return getTable().getParentTable();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isStatic()
     {
         return getTable().isStatic();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isVoDecorated()
     {
         return getTable().isVoDecorated();
     }
 
+    /**
+     * Compares given instance with the one wrapped by this instance.
+     * @param table the table to compare with.
+     * @return the result of comparing given instance with the wrapped one.
+     */
     @Override
     public int compareTo(final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> table)
     {
         return getTable().compareTo(table);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
         return
-              "{ \"class\": " + AbstractTableAttributesListDecorator.class.getName() + '"'
+              "{ \"class\": " + AbstractTableAttributesListDecorator.class.getSimpleName() + '"'
+            + ", \"package\": \"org.acmsl.queryj.metadata\""
             + ", \"table\": " + m__Table
             + " }";
     }

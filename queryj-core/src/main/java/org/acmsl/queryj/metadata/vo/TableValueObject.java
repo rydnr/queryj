@@ -56,7 +56,9 @@ import java.util.List;
 public final class TableValueObject
     extends AbstractTable<String, Attribute<String>, List<Attribute<String>>>
 {
-
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -1699360842530765122L;
 
     /**
@@ -70,6 +72,7 @@ public final class TableValueObject
      * @param parentTable the parent table.
      * @param staticAttribute the attribute used to label static contents.
      * @param voDecorated whether the table is decorated.
+     * @param isRelationship whether the table identifies a relationship.
      */
     public TableValueObject(
         @NotNull final String name,
@@ -79,7 +82,8 @@ public final class TableValueObject
         @NotNull final List<ForeignKey<String>> foreignKeys,
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable,
         @Nullable final Attribute<String> staticAttribute,
-        final boolean voDecorated)
+        final boolean voDecorated,
+        final boolean isRelationship)
     {
         super(
             name,
@@ -89,7 +93,8 @@ public final class TableValueObject
             foreignKeys,
             parentTable,
             staticAttribute,
-            voDecorated);
+            voDecorated,
+            isRelationship);
     }
 }
 

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today Jose San Leandro Armendariz
                         chous@acm-sl.org
@@ -58,10 +58,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * Decorates <code>Table</code> instances to provide required alternate
+ * Decorates {@link Table} instances to provide required alternate
  * representations of the information stored therein.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  */
 public interface TableDecorator
     extends  Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>

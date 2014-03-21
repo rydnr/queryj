@@ -118,4 +118,10 @@ public interface Table<V, A extends Attribute<V>, L extends List<A>>
      * @return such information.
      */
     boolean isVoDecorated();
+
+    /**
+     * Retrieves whether is a relationship table.
+     * @return such information.
+     */
+    boolean isRelationship();
 }

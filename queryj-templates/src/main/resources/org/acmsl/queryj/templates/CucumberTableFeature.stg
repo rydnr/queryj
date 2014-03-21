@@ -54,7 +54,7 @@ Feature: <table.name> code compiles
 
     Given the following tables:
     |    table     | parent table | decorated | relationship |   static    |
-    | <table.name> | <table.parent> | <table.decorated> | <table.relationship> | <table.static> |
+    | <table.name> | <table.parentTableName> | <table.voDecorated> | <table.relationship> | <table.static> |
 
     And the following columns:
     |     table    |         column        | type      | pk    | allows null | readonly |   sequence    | keyword | boolean | length | precision |
@@ -70,7 +70,7 @@ Feature: <table.name> code compiles
 <if(table.customSelects)>
     And the following queries:
       |       id      |     name      |     dao      |  type  | matches  |                        value                           | validate |
-      <table.customSelects:{ s | | <s.id> | <s.name> | <s.dao> | <s.type> | <s.matches> | <s.value.singleLine> | <s.validate> |}; separator="\n">
+      <table.customSelects:{ s | | <s.id> | <s.name> | <s.dao> | <s.type> | <s.cardinality> | <s.value.singleLine> | <s.validate> |}; separator="\n">
 
     And the following query parameters:
       |            id            |     sql       | index |  type  |     name    | validation-value |
@@ -91,5 +91,5 @@ Feature: <table.name> code compiles
 
     Examples:
       | template | output |
-      | DAO | <engine.name.capitalized><table.name.singular.camelcase>.java |
+      | DAO | <engine.name.capitalized><table.name.singular.camelCase>.java |
 >>

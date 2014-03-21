@@ -98,6 +98,9 @@ public abstract class AbstractListDecorator<T>
         immutableSetList(list);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<T> getItems()
@@ -106,6 +109,9 @@ public abstract class AbstractListDecorator<T>
     }
 
     // java.util.List implementation
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public List<T> subList(final int i, final int i2)
@@ -113,12 +119,18 @@ public abstract class AbstractListDecorator<T>
         return getItems().subList(i, i2);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addAll(@NotNull final Collection<? extends T> attributes)
     {
         return getItems().addAll(attributes);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public <T> T[] toArray(@NotNull final T[] ts)
@@ -126,24 +138,36 @@ public abstract class AbstractListDecorator<T>
         return getItems().toArray(ts);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear()
     {
         getItems().clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean remove(@Nullable final Object o)
     {
         return getItems().remove(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addAll(final int i, @NotNull final Collection<? extends T> attributes)
     {
         return getItems().addAll(i, attributes);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Nullable
     public T remove(final int i)
@@ -151,12 +175,18 @@ public abstract class AbstractListDecorator<T>
         return getItems().remove(i);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int indexOf(@Nullable final Object o)
     {
         return getItems().indexOf(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @NotNull
     public ListIterator<T> listIterator(final int i)
@@ -164,18 +194,27 @@ public abstract class AbstractListDecorator<T>
         return getItems().listIterator(i);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean removeAll(@NotNull final Collection<?> objects)
     {
         return getItems().removeAll(objects);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public T set(final int i, @Nullable final T item)
     {
         return getItems().set(i, item);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ListIterator<T> listIterator()
@@ -183,36 +222,56 @@ public abstract class AbstractListDecorator<T>
         return getItems().listIterator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void add(final int i, @Nullable final T item)
     {
         getItems().add(i, item);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsAll(@NotNull final Collection<?> objects)
     {
         return getItems().containsAll(objects);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean add(@NotNull final T item)
     {
         return getItems().add(item);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean retainAll(@NotNull final Collection<?> objects)
     {
         return getItems().retainAll(objects);
     }
 
+    /**
+     * Checks whether the list is empty.
+     * @return such information.
+     */
     @Override
     public boolean isEmpty()
     {
         return getItems().isEmpty();
     }
 
+    /**
+     * Retrieves an {@link Iterator} to browse all items.
+     * @return such iterator.
+     */
     @Override
     @NotNull
     public Iterator<T> iterator()
@@ -220,6 +279,11 @@ public abstract class AbstractListDecorator<T>
         return getItems().iterator();
     }
 
+    /**
+     * Retrieves the item at given position.
+     * @param i the position.
+     * @return the item.
+     */
     @Override
     @Nullable
     public T get(final int i)
@@ -227,24 +291,42 @@ public abstract class AbstractListDecorator<T>
         return getItems().get(i);
     }
 
+    /**
+     * Checks whether given item is included.
+     * @param o the item.
+     * @return {@code true} in such case.
+     */
     @Override
     public boolean contains(@Nullable final Object o)
     {
         return getItems().contains(o);
     }
 
+    /**
+     * Finds the position of given item in the list.
+     * @param o the item.
+     * @return among all occurrences of the item in the list, the position of the right-most item.
+     */
     @Override
     public int lastIndexOf(@Nullable final Object o)
     {
         return getItems().lastIndexOf(o);
     }
 
+    /**
+     * Returns the number of items.
+     * @return such count.
+     */
     @Override
     public int size()
     {
         return getItems().size();
     }
 
+    /**
+     * Converts the items to an array.
+     * @return such items.
+     */
     @NotNull
     @Override
     public Object[] toArray()
@@ -252,6 +334,11 @@ public abstract class AbstractListDecorator<T>
         return getItems().toArray();
     }
 
+    /**
+     * Writes a textual representation of the instance.
+     * @return such text.
+     */
+    @NotNull
     @Override
     public String toString()
     {

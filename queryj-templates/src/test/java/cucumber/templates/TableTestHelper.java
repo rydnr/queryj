@@ -83,9 +83,6 @@ import org.junit.Assert;
 /*
  * Importing JDK classes.
  */
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,25 +95,94 @@ import java.util.Map;
 /**
  * Helper class for per-table Cucumber tests.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/05/26
+ * @since 3.0
+ * Created: 2013/05/26
  */
 public class TableTestHelper
 {
+    /**
+     * A String literal: "test comment".
+     */
     private static final String TEST_COMMENT = "test comment";
+
+    /**
+     * A String literal: "column".
+     */
     private static final String COLUMN = "column";
+
+    /**
+     * A String literal: "parent table".
+     */
     private static final String PARENT_TABLE = "parent table";
+
+    /**
+     * A String literal: "static".
+     */
     private static final String STATIC = "static";
+
+    /**
+     * A String literal: "decorated".
+     */
     private static final String DECORATED = "decorated";
+
+    /**
+     * A String literal: "relationship".
+     */
+    private static final String RELATIONSHIP = "relationship";
+
+    /**
+     * A String literal: "precision".
+     */
     private static final String PRECISION = "precision";
+
+    /**
+     * A String literal: "query".
+     */
     private static final String QUERY = "query";
+
+    /**
+     * A String literal: "allows null".
+     */
     private static final String ALLOWS_NULL = "allows null";
+
+    /**
+     * A String literal: "source table".
+     */
     private static final String SOURCE_TABLE = "source table";
+
+    /**
+     * A String literal: "target table".
+     */
     private static final String TARGET_TABLE = "target table";
+
+    /**
+     * A String literal: "source columns".
+     */
     private static final String SOURCE_COLUMNS = "source columns";
+
+    /**
+     * A String literal: "value".
+     */
     private static final String VALUE = "value";
+
+    /**
+     * A String literal: "readonly".
+     */
     private static final String READONLY = "readonly";
+
+    /**
+     * A String literal: "Syntax error in static content ".
+     */
     public static final String SYNTAX_ERROR_IN_STATIC_CONTENT = "Syntax error in static content ";
+
+    /**
+     * The date format, in Spanish flavor.
+     */
     private static final String DATE_FORMAT_ES = "DD/MM/yyyy";
+
+    /**
+     * The date format, in English flavor.
+     */
     private static final String DATE_FORMAT_EN = "yyyy/MM/DD";
 
     /**
@@ -187,7 +253,8 @@ public class TableTestHelper
                     tableEntry.get(Literals.COMMENT),
                     tableEntry.get(PARENT_TABLE),
                     tableEntry.get(STATIC),
-                    isNullOrBlank(tableEntry.get(DECORATED)));
+                    isNullOrBlank(tableEntry.get(DECORATED)),
+                    isNullOrBlank(tableEntry.get(RELATIONSHIP)));
         }
 
         return result;
@@ -282,6 +349,7 @@ public class TableTestHelper
      * @param parentTable the name of the parent table, if any.
      * @param staticAttribute the attribute used to label static contents.
      * @param isDecorated whether the table is decorated.
+     * @param isRelationship whether the table identifies a relationship.
      * @return the {@link Table} instance.
      */
     @Nullable
@@ -290,7 +358,8 @@ public class TableTestHelper
         @Nullable final String comment,
         @SuppressWarnings("unused") @Nullable final String parentTable,
         @Nullable final String staticAttribute,
-        final boolean isDecorated)
+        final boolean isDecorated,
+        final boolean isRelationship)
     {
         return
             new TableValueObject(
@@ -303,7 +372,8 @@ public class TableTestHelper
                 // and the table collection.
                 null, //parentTable,
                 staticAttribute != null ? new _AttributeIncompleteValueObject(staticAttribute, tableName) : null,
-                isDecorated);
+                isDecorated,
+                isRelationship);
     }
 
     /**
@@ -781,6 +851,11 @@ public class TableTestHelper
     protected static class _AttributeIncompleteValueObject
         extends AttributeIncompleteValueObject
     {
+        /**
+         * Creates a new instance.
+         * @param staticAttribute the static attribute.
+         * @param tableName the table name.
+         */
         public _AttributeIncompleteValueObject(@NotNull final String staticAttribute, @NotNull final String tableName)
         {
             super(
@@ -803,6 +878,7 @@ public class TableTestHelper
      * @return the url.
      */
     @Nullable
+    @SuppressWarnings("unused")
     public String retrieveJdbcDriver(@NotNull final DataTable values)
     {
         return retrieveJdbcField(values, "driver");

@@ -755,7 +755,7 @@ public abstract class AbstractJdbcMetadataManager
                 && (t_Chronometer != null))
             {
                 @NotNull final String t_strMessage = "Finished database crawl: " + t_Chronometer.now();
-                t_Log.info("Finished database crawl: " + t_Chronometer.now());
+                t_Log.info(t_strMessage);
             }
         }
     }
@@ -927,7 +927,8 @@ public abstract class AbstractJdbcMetadataManager
                     cloneForeignKeys(table.getForeignKeys()),
                     t_Table,
                     table.getStaticAttribute(),
-                    table.isVoDecorated());
+                    table.isVoDecorated(),
+                    table.isRelationship());
         }
 
         return result;
@@ -1236,9 +1237,7 @@ public abstract class AbstractJdbcMetadataManager
                 QueryJException;
 
     /**
-     * Retrieves the {@link org.acmsl.queryj.metadata.ColumnDAO} instance.
-     *
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -1248,9 +1247,7 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Retrieves the {@link org.acmsl.queryj.metadata.PrimaryKeyDAO} instance.
-     *
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -1260,9 +1257,7 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Retrieves the {@link org.acmsl.queryj.metadata.ForeignKeyDAO} instance.
-     *
-     * @return such instance.
+     *{@inheritDoc}
      */
     @NotNull
     @Override

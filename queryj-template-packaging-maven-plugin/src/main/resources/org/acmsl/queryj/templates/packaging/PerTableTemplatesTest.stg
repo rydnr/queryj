@@ -564,7 +564,7 @@ public class PerTableTemplatesTest
      * Resolves the engine.
      * @param name the engine name.
      * @return the {@link Engine}.
-     */
+     */                                           N
     @NotNull
     protected Engine\<String> resolveEngine(@NotNull final String name)
     {

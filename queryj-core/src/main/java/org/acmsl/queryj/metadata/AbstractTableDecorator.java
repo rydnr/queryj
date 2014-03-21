@@ -163,6 +163,7 @@ public abstract class AbstractTableDecorator
             table.getParentTable(),
             table.getStaticAttribute(),
             table.isVoDecorated(),
+            table.isRelationship(),
             metadataManager,
             decoratorFactory,
             customSqlProvider);
@@ -178,6 +179,7 @@ public abstract class AbstractTableDecorator
      * @param parentTable the parent table.
      * @param staticAttribute the attribute used to label static contents.
      * @param voDecorated whether the value-object should be decorated.
+     * @param isRelationship whether the table identifies a relationship.
      * @param metadataManager the {@link MetadataManager metadata manager}.
      * @param decoratorFactory the {@link DecoratorFactory decorator factory}.
      * @param customSqlProvider the {@link CustomSqlProvider custom-sql provider}.
@@ -191,6 +193,7 @@ public abstract class AbstractTableDecorator
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable,
         @Nullable final Attribute<String> staticAttribute,
         final boolean voDecorated,
+        final boolean isRelationship,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -202,7 +205,8 @@ public abstract class AbstractTableDecorator
             ? new CachingTableDecorator(parentTable, metadataManager, decoratorFactory, customSqlProvider)
             : null,
             staticAttribute != null ? decorate(staticAttribute, metadataManager) : null,
-            voDecorated);
+            voDecorated,
+            isRelationship);
 
         immutableSetTable(table);
         immutableSetPrimaryKey(
@@ -1057,7 +1061,31 @@ public abstract class AbstractTableDecorator
         return result;
     }
 
+    /**
+     * Retrieves the name of the parent table, or {@code null} if no parent exists.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    public DecoratedString getParentTableName()
+    {
+        @Nullable final DecoratedString result;
 
+        @Nullable final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>
+            t_Parent = getParentTable();
+
+        if (t_Parent != null)
+        {
+            result = t_Parent.getName();
+        }
+        else
+        {
+            result = null;
+        }
+
+        return result;
+
+    }
     /**
      * Removes the duplicated attributes from <code>secondAttributes</code>.
      * @param firstAttributes the child attributes.
