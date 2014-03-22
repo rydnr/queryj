@@ -411,7 +411,7 @@ public class PerTableTemplatesTest
      * @param engine the engine.
      */
     @SuppressWarnings("unused")
-    @When("^I generate with per-table (.*)\\\\.stg for (.*)$")
+    @When("^I generate with per-table (.*) for (.*)$")
     public void generateFile(@NotNull final String template, @NotNull final String engine)
     {
         setEngineName(engine);
@@ -564,7 +564,7 @@ public class PerTableTemplatesTest
      * Resolves the engine.
      * @param name the engine name.
      * @return the {@link Engine}.
-     */                                           N
+     */
     @NotNull
     protected Engine\<String> resolveEngine(@NotNull final String name)
     {

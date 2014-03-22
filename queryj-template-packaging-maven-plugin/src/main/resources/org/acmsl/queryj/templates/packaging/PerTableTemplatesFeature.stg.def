@@ -15,3 +15,5 @@ filename  builder : PerTableTemplates.feature;
 
 // The package.
 package: cucumber.templates;
+
+disabled;
