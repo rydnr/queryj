@@ -47,6 +47,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.InvalidCustomSqlParameterException;
 import org.acmsl.queryj.api.exceptions.NoValidationValueForCustomSqlDateParameterException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -412,7 +413,7 @@ public class BindQueryParametersHandler
         @Nullable T result;
 
         if  (   ("Date".equals(type))
-                && (parameter.getValidationValue() != null))
+             && (parameter.getValidationValue() != null))
         {
             result = (T) new java.sql.Date(new Date().getTime());
         }
@@ -468,7 +469,7 @@ public class BindQueryParametersHandler
 
             t_ParameterMethod =
                 conversionUtils.getClass().getMethod(
-                    "to" + stringUtils.capitalize(type),
+                    "to" + stringUtils.capitalize(type, QueryJSettings.DEFAULT_LOCALE),
                     CLASS_ARRAY_OF_ONE_STRING);
 
             if  (t_ParameterMethod != null)
@@ -722,10 +723,10 @@ public class BindQueryParametersHandler
         }
         else
         {
-            t_strSimpleName = stringUtils.capitalize(type.getSimpleName());
+            t_strSimpleName = stringUtils.capitalize(type.getSimpleName(), QueryJSettings.DEFAULT_LOCALE);
         }
 
-        result.append(stringUtils.capitalize(t_strSimpleName));
+        result.append(stringUtils.capitalize(t_strSimpleName, QueryJSettings.DEFAULT_LOCALE));
 
         return result.toString();
     }
@@ -745,5 +746,20 @@ public class BindQueryParametersHandler
         throws  NoSuchMethodException
     {
         return instanceClass.getDeclaredMethod(methodName, parameterClasses);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"class\": \"" + BindQueryParametersHandler.class.getSimpleName() + '"'
+            + ", \"package\": \"org.acmsl.queryj.customsql.handlers.customsqlvalidation\""
+            + "DATE_FORMAT=\"" + DATE_FORMAT + '"'
+            + ", DATE_FORMAT_EN=\"" + DATE_FORMAT_EN + '"'
+            + " }";
     }
 }

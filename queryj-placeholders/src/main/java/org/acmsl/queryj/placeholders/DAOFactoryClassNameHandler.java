@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -38,6 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.DefaultThemeUtils;
 
@@ -71,6 +72,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class DAOFactoryClassNameHandler
     extends AbstractDecoratedStringHandler<PerTableTemplateContext>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 3512450479515440652L;
 
     /**
@@ -130,9 +134,9 @@ public class DAOFactoryClassNameHandler
         @NotNull final String t_strSingularName =
             stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    tableName.toLowerCase()));
+                    tableName.toLowerCase(QueryJSettings.DEFAULT_LOCALE)),
+                QueryJSettings.DEFAULT_LOCALE);
 
-        return
-            defaultThemeUtils.buildDAOFactoryClassName(t_strSingularName);
+        return defaultThemeUtils.buildDAOFactoryClassName(t_strSingularName);
     }
 }

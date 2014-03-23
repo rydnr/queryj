@@ -28,6 +28,8 @@
  */
 package org.acmsl.queryj;
 
+import java.util.Locale;
+
 /**
  * Defines QueryJ settings.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -193,4 +195,9 @@ public interface QueryJSettings
      * Whether to enable caching.
      */
     public static final String CACHING = "caching";
+
+    /**
+     * The default locale.
+     */
+    public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
 }

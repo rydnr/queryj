@@ -38,6 +38,7 @@ package org.acmsl.queryj.metadata.engines;
  * Importing project classes.
  */
 import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
 
 /*
@@ -81,6 +82,9 @@ public class JdbcMetadataTypeManager
                 Singleton,
                 Serializable
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 560475071137483642L;
 
     /**
@@ -410,7 +414,7 @@ public class JdbcMetadataTypeManager
 
         if (allowsNull)
         {
-            result = stringUtils.capitalize(result, '_');
+            result = stringUtils.capitalize(result, QueryJSettings.DEFAULT_LOCALE, '_');
         }
 
         return result;
@@ -562,7 +566,7 @@ public class JdbcMetadataTypeManager
      * @param paramIndex the parameter index.
      * @return the associated getter method name.
      */
-    @Nullable
+    @NotNull
     @Override
     public String getGetterMethod(final int dataType, final int paramIndex)
     {
@@ -574,7 +578,7 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated getter method name.
      */
-    @Nullable
+    @NotNull
     @Override
     public String getGetterMethod(final int dataType)
     {
@@ -587,7 +591,7 @@ public class JdbcMetadataTypeManager
      * @param param the parameter.
      * @return the associated getter method name.
      */
-    @Nullable
+    @NotNull
     @Override
     public String getGetterMethod(final int dataType, @Nullable final String param)
     {
@@ -624,11 +628,9 @@ public class JdbcMetadataTypeManager
     }
 
     /**
-     * Retrieves the result type.
-     * @param dataType the data type.
-     * @return the associated result type.
+     * {@inheritDoc}
      */
-    @Nullable
+    @NotNull
     @Override
     public String getProcedureResultType(final int dataType, final boolean isBool)
     {
@@ -664,10 +666,7 @@ public class JdbcMetadataTypeManager
     }
 
     /**
-     * Retrieves the procedure's default value.
-     * @param dataType the data type.
-     * @param allowsNull whether the data type allows null vales or not.
-     * @return the associated default value.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -708,10 +707,7 @@ public class JdbcMetadataTypeManager
     }
 
     /**
-     * Retrieves the object type of given data type.
-     * @param dataType the data type.
-     * @param isBool whether the column allows null values or not.
-     * @return the associated object type.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -811,9 +807,7 @@ public class JdbcMetadataTypeManager
     }
 
     /**
-     * Retrieves the object type of given data type.
-     * @param dataType the data type.
-     * @return the associated object type.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -847,12 +841,9 @@ public class JdbcMetadataTypeManager
     }
 
     /**
-     * Retrieves the object type of given data type.
-     * @param dataType the data type.
-     * @param isBool whether the column represents boolean values or not.
-     * @return the associated object type.
+     * {@inheritDoc}
      */
-    @Nullable
+    @NotNull
     @Override
     public String getSmartObjectType(final int dataType, final boolean isBool)
     {
@@ -911,12 +902,9 @@ public class JdbcMetadataTypeManager
     }
 
     /**
-     * Retrieves the object type of given data type when retrieving information.
-     * @param dataType the data type.
-     * @param isBool whether the type represents boolean values.
-     * @return the associated object type.
+     * {@inheritDoc}
      */
-    @Nullable
+    @NotNull
     @Override
     public String getSmartObjectRetrievalType(final int dataType, final boolean isBool)
     {
@@ -1086,8 +1074,8 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated constant name.
      */
+    @NotNull
     @Override
-    @Nullable
     public String getConstantName(final int dataType)
     {
         @Nullable final String result;

@@ -51,7 +51,7 @@ import org.junit.runner.RunWith;
  * Created: 2013/04/12
  */
 @RunWith(Cucumber.class)
-@Cucumber.Options(format = {"pretty", "html:target/cucumber-html-report", "json-pretty:target/cucumber-json-report.json"})
+@Cucumber.Options(format = {"pretty", "html:target/cucumber-html-report"})
 public class RunCukesTest
 {
 }

@@ -38,6 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.DefaultThemeUtils;
@@ -68,6 +69,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class DAOImplementationClassNameHandler
     extends AbstractDecoratedStringHandler<PerTableTemplateContext>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 5319051009737434878L;
 
     /**
@@ -127,12 +131,14 @@ public class DAOImplementationClassNameHandler
         @NotNull final EnglishGrammarUtils englishGrammarUtils,
         @NotNull final StringUtils stringUtils)
     {
-        @NotNull final String t_strCapitalizedEngine = stringUtils.capitalize(metadataManager.getEngine().getName());
+        @NotNull final String t_strCapitalizedEngine =
+            stringUtils.capitalize(metadataManager.getEngine().getName(), QueryJSettings.DEFAULT_LOCALE);
 
         @NotNull final String t_strSingularName =
             stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    tableName.toLowerCase()));
+                    tableName.toLowerCase(QueryJSettings.DEFAULT_LOCALE)),
+                QueryJSettings.DEFAULT_LOCALE);
 
         return
             defaultThemeUtils.buildDAOImplementationClassName(

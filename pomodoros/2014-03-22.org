@@ -1,5 +1,8 @@
 * 2014/03/22
-** TODO #448 Cucumber template: 3 -> 1
-** TODO Review generated DAO: 1 ->
+** DONE #448 Cucumber template: 3 -> 3
+** DONE Review generated DAO: 1 -> 1
 ** TODO Add BaseDAO: 1 ->
 ** TODO Fix BaseDAO: 1 ->
+
+** Pending:
+*** Move TableTestHelper out of QueryJ Templates

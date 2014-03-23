@@ -360,6 +360,7 @@ public interface MetadataTypeManager
     /**
      * Checks if given data type represents clobs.
      * @param dataType the data type.
+     * @param <T> the type.
      * @return <code>true</code> if such data type can be managed as a
      * clob.
      */

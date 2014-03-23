@@ -38,6 +38,7 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.DefaultThemeUtils;
 
@@ -67,6 +68,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class DAOClassNameHandler
     extends AbstractDecoratedStringHandler<PerTableTemplateContext>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 4567838577335701238L;
 
     /**
@@ -126,9 +130,9 @@ public class DAOClassNameHandler
         @NotNull final String t_strSingularName =
             stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    tableName.toLowerCase()));
+                    tableName.toLowerCase(QueryJSettings.DEFAULT_LOCALE)),
+                QueryJSettings.DEFAULT_LOCALE);
 
-        return
-            defaultThemeUtils.buildDAOClassName(t_strSingularName);
+        return defaultThemeUtils.buildDAOClassName(t_strSingularName);
     }
 }

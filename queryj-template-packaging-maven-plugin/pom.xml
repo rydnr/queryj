@@ -27,6 +27,10 @@
     <version>3.0-SNAPSHOT</version>
   </parent>
 
+  <prerequisites>
+    <maven>2.2.1</maven>
+  </prerequisites>
+ 
   <dependencies>
     <dependency>
       <groupId>org.acmsl.queryj</groupId>
@@ -55,7 +59,7 @@
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <scope>provided</scope>
+      <scope>runtime</scope>
       <optional>true</optional>
     </dependency>
     <dependency>

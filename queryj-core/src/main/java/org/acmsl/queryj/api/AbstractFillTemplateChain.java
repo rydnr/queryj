@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -38,6 +38,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing project classes.
  */
+import org.acmsl.commons.patterns.CommandHandler;
 import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -148,7 +149,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
     protected Chain<QueryJCommand, QueryJBuildException, FillHandler<?>> buildChain(
         @NotNull final Chain<QueryJCommand, QueryJBuildException, FillHandler<?>> chain, final boolean relevantOnly)
     {
-        @NotNull final List<FillAdapterHandler<?, ?>> t_lHandlers = (List<FillAdapterHandler<?, ?>>) getHandlers();
+        @NotNull final List<FillAdapterHandler> t_lHandlers = (List<FillAdapterHandler>) getHandlers();
 
         // Don't know how to fix the generics warnings
         for (@NotNull final FillAdapterHandler t_Handler : t_lHandlers)
@@ -160,9 +161,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
     }
 
     /**
-     * Retrieves the handlers.
-     *
-     * @return such handlers.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -186,21 +185,21 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
      * @param relevantOnly whether to include only relevant placeholders.
      */
     @SuppressWarnings("unchecked")
-    protected <F extends FillHandler<P>, P> void add(
-        @NotNull final Chain<QueryJCommand, QueryJBuildException, F> chain,
-        @NotNull final FillAdapterHandler<F, P> handler,
+    protected  void add(
+        @NotNull final Chain chain,
+        @NotNull final FillAdapterHandler handler,
         final boolean relevantOnly)
     {
-        final F actualHandler;
+        final CommandHandler<QueryJCommand, QueryJBuildException> actualHandler;
 
         if (   (relevantOnly)
             && (handler.getFillHandler() instanceof NonRelevantFillHandler))
         {
-            actualHandler = (F) new EmptyFillAdapterHandler<F, P>(handler.getFillHandler());
+            actualHandler = new EmptyFillAdapterHandler(handler.getFillHandler());
         }
         else
         {
-            actualHandler = (F) handler;
+            actualHandler = handler;
         }
 
         chain.add(actualHandler);

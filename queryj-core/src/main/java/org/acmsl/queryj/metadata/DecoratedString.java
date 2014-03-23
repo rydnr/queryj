@@ -40,6 +40,7 @@ package org.acmsl.queryj.metadata;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.SingularPluralFormConverter;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -177,7 +178,7 @@ public class DecoratedString
     @NotNull
     protected String capitalize(@NotNull final String value, @NotNull final StringUtils stringUtils)
     {
-        return stringUtils.capitalize(value);
+        return stringUtils.capitalize(value, QueryJSettings.DEFAULT_LOCALE);
     }
 
     /**

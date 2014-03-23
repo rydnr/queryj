@@ -41,16 +41,15 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
+ * Importing QueryJ Core classes.
+ */
+import org.acmsl.queryj.QueryJSettings;
+import org.acmsl.queryj.SingularPluralFormConverter;
+/*
  * Importing jetbrains annotations.
  */
-import org.acmsl.queryj.SingularPluralFormConverter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Locale;
 
 /*
  * Importing checkthread.org annotations.
@@ -101,7 +100,7 @@ public class DecorationUtils
     @NotNull
     public String upperCase(@NotNull final String value)
     {
-        return value.toUpperCase(Locale.US);
+        return value.toUpperCase(QueryJSettings.DEFAULT_LOCALE);
     }
     
     /**
@@ -110,9 +109,10 @@ public class DecorationUtils
      * @return the alternate version of the value.
      */
     @NotNull
+    @SuppressWarnings("unused")
     public String lowerCase(@NotNull final String value)
     {
-        return value.toLowerCase(Locale.US);
+        return value.toLowerCase(QueryJSettings.DEFAULT_LOCALE);
     }
 
     /**
@@ -136,7 +136,7 @@ public class DecorationUtils
     protected String uncapitalize(
         @NotNull final String value, @NotNull final StringUtils stringUtils)
     {
-        return stringUtils.unCapitalizeStart(stringUtils.capitalize(value));
+        return stringUtils.unCapitalizeStart(stringUtils.capitalize(value, QueryJSettings.DEFAULT_LOCALE));
     }
 
     /**
@@ -160,7 +160,7 @@ public class DecorationUtils
     protected String capitalize(
         @NotNull final String value, @NotNull final StringUtils stringUtils)
     {
-        return stringUtils.capitalize(value.toLowerCase(Locale.US));
+        return stringUtils.capitalize(value, QueryJSettings.DEFAULT_LOCALE);
     }
 
     /**
@@ -184,7 +184,7 @@ public class DecorationUtils
     protected String normalize(
         @NotNull final String value, @NotNull final StringUtils stringUtils)
     {
-        return stringUtils.normalize(value, '_');
+        return stringUtils.normalize(value, QueryJSettings.DEFAULT_LOCALE, '_');
     }
 
     /**
@@ -193,6 +193,7 @@ public class DecorationUtils
      * @return the normalized value.
      */
     @NotNull
+    @SuppressWarnings("unused")
     public String softNormalize(@NotNull final String value)
     {
         return softNormalize(value, StringUtils.getInstance());
@@ -359,6 +360,7 @@ public class DecorationUtils
      * @return the capitalized value.
      */
     @NotNull
+    @SuppressWarnings("unused")
     public String standardCapitalize(@NotNull final String value)
     {
         return standardCapitalize(value, StringUtils.getInstance());
@@ -378,11 +380,11 @@ public class DecorationUtils
         return
             stringUtils.capitalize(
                 stringUtils.capitalize(
-                    stringUtils.capitalize(
-                        value,
-                    '.'),
-                '_'),
-            '-');
+                    stringUtils.capitalize(value, QueryJSettings.DEFAULT_LOCALE, '.'),
+                    QueryJSettings.DEFAULT_LOCALE,
+                    '_'),
+                QueryJSettings.DEFAULT_LOCALE,
+                '-');
     }
 
     /**

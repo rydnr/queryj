@@ -129,7 +129,7 @@ public class ParseTemplateDefsHandler
 
             if (templateDefs == null)
             {
-                templateDefs = new ArrayList<TemplateDef<String>>(templateDefFiles.size());
+                templateDefs = new ArrayList<>(templateDefFiles.size());
             }
 
             for (@Nullable final File defFile : templateDefFiles)
