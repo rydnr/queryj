@@ -422,7 +422,6 @@ public class TemplatePackagingMojo
 
     /**
      * Executes Template Packaging via Maven2.
-     * @throws MojoExecutionException if something goes wrong.
      */
     @Override
     public void execute()
@@ -434,7 +433,6 @@ public class TemplatePackagingMojo
     /**
      * Executes Template Packaging via Maven2.
      * @param log the Maven log.
-     * @throws MojoExecutionException if something goes wrong.
      */
     protected void execute(@NotNull final Log log)
         throws MojoExecutionException
@@ -494,7 +492,6 @@ public class TemplatePackagingMojo
      * @param command the command.
      * @param log the log.
      * @param version the version.
-     * @throws MojoExecutionException whenever the execution fails.
      */
     protected void execute(
         @NotNull final QueryJCommand command, @NotNull final Log log, final String version)

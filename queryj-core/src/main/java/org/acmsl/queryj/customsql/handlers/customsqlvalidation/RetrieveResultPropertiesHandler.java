@@ -47,7 +47,6 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.api.exceptions.CustomResultWithInvalidNumberOfColumnsException;
 import org.acmsl.queryj.api.exceptions.CustomResultWithNoPropertiesException;
 import org.acmsl.queryj.api.exceptions.CustomSqlWithNoPropertiesException;
 import org.acmsl.queryj.api.exceptions.InvalidColumnNameInCustomResultException;
@@ -63,7 +62,6 @@ import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.exceptions.PropertiesNotAvailableForValidationException;
-import org.acmsl.queryj.customsql.exceptions.ResultSetMetadataOperationFailedException;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
@@ -91,7 +89,6 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -151,18 +148,16 @@ public class RetrieveResultPropertiesHandler
 
         @Nullable final ResultRef t_ResultRef = t_Sql.getResultRef();
 
-        if  (t_ResultRef != null)
-        {
-            @NotNull final List<Property<String>> t_lProperties =
-                retrieveProperties(
-                    t_Sql,
-                    t_CustomSqlProvider.getSqlResultDAO().findByPrimaryKey(t_ResultRef.getId()),
-                    t_CustomSqlProvider,
-                    t_MetadataManager,
-                    new JdbcTypeManager());
+        @NotNull final List<Property<String>> t_lProperties =
+            retrieveProperties(
+                t_Sql,
+                (t_ResultRef != null)
+                ? t_CustomSqlProvider.getSqlResultDAO().findByPrimaryKey(t_ResultRef.getId()) : null,
+                t_CustomSqlProvider,
+                t_MetadataManager,
+                new JdbcTypeManager());
 
-            setCurrentProperties(t_lProperties, command);
-        }
+        setCurrentProperties(t_lProperties, command);
 
         return false;
     }
@@ -185,7 +180,6 @@ public class RetrieveResultPropertiesHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param typeManager the <code>MetadataTypeManager</code> instance.
-     * @throws QueryJBuildException if the expected result cannot be extracted.
      */
     protected List<Property<String>> retrieveProperties(
         @NotNull final Sql<String> sql,
@@ -242,7 +236,6 @@ public class RetrieveResultPropertiesHandler
      * @param metadata the result set metadata.
      * @param index the index.
      * @return the associated {@link Property}.
-     * @throws SQLException if accessing the metadata instance fails.
      */
     @NotNull
     protected Property<String> createPropertyFrom(@NotNull final ResultSetMetaData metadata, final int index)
@@ -260,7 +253,6 @@ public class RetrieveResultPropertiesHandler
      * @param sqlResult the custom sql result.
      * @param propertyDAO the {@link org.acmsl.queryj.metadata.SqlPropertyDAO} instance.
      * @return such properties.
-     * @throws QueryJBuildException if the properties cannot be retrieved..
      */
     @NotNull
     protected List<Property<String>> retrieveExplicitProperties(
@@ -293,7 +285,6 @@ public class RetrieveResultPropertiesHandler
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param typeManager the <code>MetadataTypeManager</code> instance.
      * @return such properties.
-     * @throws QueryJBuildException if the properties cannot be retrieved..
      */
     @NotNull
     protected List<Property<String>> retrieveImplicitProperties(
@@ -344,7 +335,6 @@ public class RetrieveResultPropertiesHandler
      * @param sqlResult the {@link Result} instance.
      * @param sql the SQL element.
      * @param metadataManager the {@link MetadataManager} instance.
-     * @throws QueryJBuildException if the validation fails.
      */
     protected void invokeResultSetGetter(
         @NotNull final Method method,
@@ -401,7 +391,6 @@ public class RetrieveResultPropertiesHandler
      * @param instanceClass the instance class.
      * @param methodName the method name.
      * @return the <code>Method</code> instance.
-     * @throws NoSuchMethodException if the desired method is not available.
      */
     @NotNull
     protected Method retrieveMethod(
@@ -429,8 +418,6 @@ public class RetrieveResultPropertiesHandler
      * Retrieves the properties for current SQL.
      * @param command the command.
      * @return the properties.
-     * @throws PropertiesNotAvailableForValidationException if this method is called before the
-     * required previous handlers (up to ExecuteQueryHandler).
      */
     @NotNull
     public List<Property<String>> retrieveCurrentProperties(final QueryJCommand command)

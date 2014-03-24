@@ -155,6 +155,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 <class(defs=C.templateDefs, C=C)>
 >>
@@ -643,6 +644,14 @@ public class PerTableTemplatesTest
         setJdbcUserName(t_strJdbcUserName);
         setJdbcPassword(t_strJdbcPassword);
 
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> t_mTables = getTables();
+        @NotNull final Set\<String> t_TableNameSet = t_mTables.keySet();
+        @NotNull final List\<String> t_lTableNames = new ArrayList\<>(t_TableNameSet.size());
+        @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> t_lTables =
+            new ArrayList\<>(t_TableNameSet.size());
+        t_lTableNames.addAll(t_TableNameSet);
+        t_lTables.addAll(t_mTables.values());
+
         validateQueries(
             getSqlList(),
             t_strJdbcDriver,
@@ -650,7 +659,7 @@ public class PerTableTemplatesTest
             t_strJdbcUserName,
             t_strJdbcPassword,
             retrieveCustomSqlProvider(getSqlList(), getParameters()),
-            retrieveMetadataManager(engineName));
+            retrieveMetadataManager(engineName, t_lTableNames, t_lTables));
     }
 
     /**

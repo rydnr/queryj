@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -35,7 +35,7 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
@@ -92,7 +92,6 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -109,7 +108,6 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * Builds the templates.
      * @param parameters the parameters.
      * @param metaData the database metadata.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
         @NotNull final QueryJCommand parameters, @NotNull final DatabaseMetaData metaData)
@@ -136,7 +134,6 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the quote character.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
         @NotNull final QueryJCommand parameters,
@@ -162,7 +159,6 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param quote the quote character.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom SQL provider.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
         @NotNull final QueryJCommand parameters,
@@ -211,7 +207,6 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param repository the repository.
      * @param sqlElements the custom SQL elements.
      * @param header the header.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
         @NotNull final QueryJCommand parameters,

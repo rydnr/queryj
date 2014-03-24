@@ -95,7 +95,6 @@ public class TemplateDefPackageVisitor
 
     /**
      * {@inheritDoc}
-     * <p/>
      * The default implementation returns the result of calling
      * {@link #visitChildren} on {@code ctx}.
      */

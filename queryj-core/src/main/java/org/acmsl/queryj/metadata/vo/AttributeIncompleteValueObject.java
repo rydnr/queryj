@@ -49,13 +49,16 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * An incomplete {@link Attribute}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/06
+ * @since 3.0
+ * Created: 2012/06/06
  */
 @ThreadSafe
 public class AttributeIncompleteValueObject
     extends AbstractAttribute<String>
 {
-
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -8585509128283241379L;
 
     /**

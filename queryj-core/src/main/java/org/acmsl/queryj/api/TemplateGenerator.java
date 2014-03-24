@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -59,8 +59,6 @@ public interface TemplateGenerator<T extends Template<C>, C extends TemplateCont
      * @param rootFolder the root folder.
      * @param charset the file encoding.
      * @return <code>true</code> if it actually generated the file.
-     * @throws IOException if the file cannot be created.
-     * @throws QueryJBuildException if the generation process fails.
      */
     boolean write(
         @NotNull final T template,

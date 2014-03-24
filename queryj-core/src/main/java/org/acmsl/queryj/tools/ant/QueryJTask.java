@@ -991,8 +991,6 @@ public class QueryJTask
 
     /**
      * Requests the chained logic to be performed.
-     * @throws BuildException whenever the required
-     * parameters are not present or valid.
      */
     public void execute()
         throws  BuildException
@@ -1003,8 +1001,6 @@ public class QueryJTask
     /**
      * Requests the chained logic to be performed.
      * @param command the command.
-     * @throws BuildException whenever the required
-     * parameters are not present or valid.
      */
     protected void execute(@NotNull final QueryJCommand command)
         throws  BuildException
@@ -1035,7 +1031,6 @@ public class QueryJTask
      * Specifies the "externally-managed-fields" nested element.
      * @param externallyManagedFields the externally-managed-fields xml
      * element.
-     * @
      */
     protected void setExternallyManagedFields(
         @NotNull final AntExternallyManagedFieldsElement externallyManagedFields, @NotNull final QueryJCommand command)
@@ -1227,6 +1222,7 @@ public class QueryJTask
      * @param name the attribute name.
      * @param value the attribute value.
      */
+    @Override
     public void setDynamicAttribute(
         final String name, final String value)
     {
@@ -1240,8 +1236,8 @@ public class QueryJTask
      * Creates a dynamic element.
      * @param name the element's name.
      * @return the object.
-     * @throws BuildException if the element is not supported.
      */
+    @Override
     @Nullable
     public Object createDynamicElement(final String name)
     {

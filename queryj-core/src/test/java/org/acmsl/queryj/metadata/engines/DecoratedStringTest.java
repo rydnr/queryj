@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Tests for DecoratedString.
  *
  * Date: 2014/03/22
  * Time: 17:55
@@ -51,7 +51,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- *
+ * Tests for {@link DecoratedString}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/03/22 17:55
@@ -62,9 +62,8 @@ public class DecoratedStringTest
     @Test
     public void capitalize_works_for_upper_cased_strings()
     {
-        @NotNull final DecoratedString instance = new DecoratedString("G_CYCLE_TYPES");
-
-        Assert.assertEquals("GCycleTypes", instance.getCapitalized().getValue());
+        Assert.assertEquals("GCycleTypes", new DecoratedString("G_CYCLE_TYPES").getCapitalized().getValue());
+        Assert.assertEquals("Name", new DecoratedString("NAME").getCapitalized().getValue());
     }
 
     @Test

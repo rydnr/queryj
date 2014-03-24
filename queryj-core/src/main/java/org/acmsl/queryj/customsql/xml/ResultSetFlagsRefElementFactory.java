@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -79,11 +79,8 @@ public class ResultSetFlagsRefElementFactory
      * @param digester the Digester instance.
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;resultset-ref&gt; information.
-     * @throws SAXException if the attributes are not valid.
-     * @precondition attributes != null
-     * @precondition digester != null
-     * @precondition conversionUtils != null
      */
+    @Override
     @Nullable
     public Object createObject(
         @NotNull final Attributes attributes,
@@ -91,9 +88,9 @@ public class ResultSetFlagsRefElementFactory
         final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable ResultSetFlagsRefElement result = null;
+        @Nullable final ResultSetFlagsRefElement result;
 
-        String t_strId = attributes.getValue("id");
+        @NotNull final String t_strId = attributes.getValue("id");
 
         result = new ResultSetFlagsRefElement(t_strId);
 

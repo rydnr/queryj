@@ -35,6 +35,7 @@ package org.acmsl.queryj.customsql;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
 import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.DecoratorFactory;
@@ -42,6 +43,7 @@ import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
 import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.metadata.SqlDAO;
+import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.tools.DebugUtils;
@@ -357,26 +359,40 @@ public class CustomResultUtils
         @NotNull final Sql<T> sql,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable final String result;
+        return retrieveTable(sql, metadataManager.getTableDAO());
+    }
+
+    /**
+     * Retrieves the table associated to the {@link Sql}.
+     * @param sql the {@link Sql}.
+     * @param metadataManager the database metadata manager.
+     * @return the table name.
+     */
+    @Nullable
+    protected <T> String retrieveTable(@NotNull final Sql<T> sql, @NotNull final TableDAO tableDAO)
+    {
+        @Nullable String result = null;
         @Nullable final T t_strDao = sql.getDao();
 
         if (t_strDao != null)
         {
-            @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
-                metadataManager.getTableDAO().findByDAO("" + t_strDao);
+            @NotNull final List<String> t_lTableNameVariants =
+                Arrays.asList(
+                    "" + t_strDao,
+                    ("" + t_strDao).toLowerCase(QueryJSettings.DEFAULT_LOCALE),
+                    ("" + t_strDao).toUpperCase(QueryJSettings.DEFAULT_LOCALE));
 
-            if  (t_Table != null)
+            for (@NotNull final String t_strTableName : t_lTableNameVariants)
             {
-                result = t_Table.getName();
+                @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+                    tableDAO.findByDAO(t_strTableName);
+
+                if  (t_Table != null)
+                {
+                    result = t_Table.getName();
+                    break;
+                }
             }
-            else
-            {
-                result = null;
-            }
-        }
-        else
-        {
-            result = null;
         }
 
         return result;

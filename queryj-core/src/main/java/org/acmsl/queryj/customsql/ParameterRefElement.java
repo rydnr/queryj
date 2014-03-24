@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,22 +34,22 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing JetBrains annotations.
  */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Models &lt;parameter-ref&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
  * non-xml implementations):
- *  <!ELEMENT parameter-ref EMPTY>
- *  <!ATTLIST parameter-ref
- *    id IDREF #REQUIRED>
+ *  &lt;!ELEMENT parameter-ref EMPTY&gt;
+ *  &lt;!ATTLIST parameter-ref
+ *    id IDREF #REQUIRED&gt;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe

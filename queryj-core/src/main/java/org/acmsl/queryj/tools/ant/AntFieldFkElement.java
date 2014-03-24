@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -45,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains all information inside a "fk" XML element in Ant scripts,
@@ -69,7 +70,7 @@ public class AntFieldFkElement
      * Specifies the table name.
      * @param table the table name.
      */
-    protected void setTable(final String table)
+    protected void setTable(@NotNull final String table)
     {
         m__strTable = table;
     }
@@ -78,6 +79,7 @@ public class AntFieldFkElement
      * Retrieves the table name.
      * @return such table.
      */
+    @Nullable
     public String getTable()
     {
         return m__strTable;
@@ -87,7 +89,7 @@ public class AntFieldFkElement
      * Specifies the fk field.
      * @param field the field.
      */
-    protected void setField(final String field)
+    protected void setField(@NotNull final String field)
     {
         m__strField = field;
     }
@@ -96,6 +98,7 @@ public class AntFieldFkElement
      * Retrieves the fk field.
      * @return such field.
      */
+    @Nullable
     public String getField()
     {
         return m__strField;
@@ -106,7 +109,8 @@ public class AntFieldFkElement
      * @param name the attribute name.
      * @param value the attribute value.
      */
-    public void setDynamicAttribute(final String name, final String value)
+    @Override
+    public void setDynamicAttribute(@NotNull final String name, @NotNull final String value)
     {
         if  (AntTablesElement.TABLE.equals(name))
         {
@@ -126,16 +130,20 @@ public class AntFieldFkElement
      * Creates a dynamic element.
      * @param name the element's name.
      * @return the object.
-     * @throws BuildException if the element is not supported.
      */
     @NotNull
-    public Object createDynamicElement(final String name)
+    @Override
+    public Object createDynamicElement(@NotNull final String name)
     {
         throw
             new BuildException(
                 "Nested elements inside <fk> are not supported");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
     @Override
     public String toString()
     {

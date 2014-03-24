@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,7 +34,7 @@
 package org.acmsl.queryj.customsql.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
@@ -67,7 +67,6 @@ import org.checkthread.annotations.ThreadSafe;
  * the need to manually specify elements derived from the model.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-@SuppressWarnings("unused")
 @ThreadSafe
 public class CustomSqlProvisioningHandler
     extends AbstractQueryJCommandHandler
@@ -75,16 +74,12 @@ public class CustomSqlProvisioningHandler
     /**
      * Creates a <code>CustomSqlProvisioningHandler</code> instance.
      */
-    @SuppressWarnings("unused")
     public CustomSqlProvisioningHandler() {}
 
     /**
      * Handles given parameters.
-     *
-     *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -131,7 +126,6 @@ public class CustomSqlProvisioningHandler
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(
         @NotNull final SqlPropertyDAO sqlPropertyDAO,
@@ -144,12 +138,7 @@ public class CustomSqlProvisioningHandler
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> t_lTables =
             metadataManager.getTableDAO().findAllTables();
 
-        String t_strTableName;
-        String t_strResultName;
-        String[] t_astrAttributeNames;
-        String t_strAttributeName;
         String t_strPropertyName;
-        int t_iAttributeCount;
 
         for  (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table : t_lTables)
         {

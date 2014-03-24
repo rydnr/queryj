@@ -72,7 +72,6 @@ public class CustomQueryChain
      * Builds the chain.
      * @param chain the chain to be configured.
      * @return the updated chain.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the chain cannot be built successfully.
      */
     @Override
     protected Chain<QueryJCommand, QueryJBuildException, QueryJCommandHandler<QueryJCommand>> buildChain(

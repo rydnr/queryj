@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,7 +34,7 @@
 package org.acmsl.queryj;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -57,10 +57,16 @@ import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Manages a sequential chain of actions within QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public abstract class AbstractQueryJChain
     <C extends QueryJCommand, CH extends QueryJCommandHandler<C>>
 {
@@ -74,7 +80,7 @@ public abstract class AbstractQueryJChain
      */
     public AbstractQueryJChain()
     {
-        immutableSetChain(new ArrayListChainAdapter<C, QueryJBuildException, CH>());
+        immutableSetChain(new ArrayListChainAdapter<>());
     }
 
     /**
@@ -109,9 +115,7 @@ public abstract class AbstractQueryJChain
     /**
      * Requests the chained logic to be performed.
      * @param settings the command.
-     * @throws QueryJBuildException whenever the required
-     * parameters are not present or valid.
-     */
+    */
     public void process(@NotNull final C settings)
         throws QueryJBuildException
     {
@@ -122,7 +126,6 @@ public abstract class AbstractQueryJChain
      * Builds the chain.
      * @param chain the chain to be configured.
      * @return the updated chain.
-     * @throws QueryJBuildException if the chain cannot be built successfully.
      */
     protected abstract Chain<C, QueryJBuildException, CH> buildChain(
         @NotNull final Chain<C, QueryJBuildException, CH> chain)
@@ -170,7 +173,6 @@ public abstract class AbstractQueryJChain
      * @param chain the concrete chain.
      * @param command the command that represents which actions should be done.
      * @return <code>true</code> if the command is processed by the chain.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean process(
         @NotNull final Chain<C, QueryJBuildException, CH> chain, @NotNull final C command)

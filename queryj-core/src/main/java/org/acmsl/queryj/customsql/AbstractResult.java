@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -55,7 +55,7 @@ public abstract class AbstractResult<T>
     implements  Result<T>
 {
     /**
-     * The <i>property-ref> elements.
+     * The <i>property-ref</i> elements.
      */
     private List<PropertyRef> m__lPropertyRefs;
 
@@ -128,7 +128,7 @@ public abstract class AbstractResult<T>
     /**
      * Adds a new &lt;property-ref&gt; element.
      * @param propertyRef such element.
-     * @param propertyRefs thhe &ltproperty-ref&gt; elements.
+     * @param propertyRefs thhe &lt;property-ref&gt; elements.
      */
     protected synchronized void add(
         @NotNull final PropertyRef propertyRef, @NotNull final List<PropertyRef> propertyRefs)
@@ -228,8 +228,6 @@ public abstract class AbstractResult<T>
      * Compares given object with this instance.
      * @param object the object to compare to.
      * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
-     * object prevents it from being compared to this Object.
      */
     @Override
     public int compareTo(@Nullable final Result<T> object)

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -81,7 +81,7 @@ public class AntTableElement
      * Specifies the table name.
      * @param name the table name.
      */
-    protected final void immutableSetName(final String name)
+    protected final void immutableSetName(@NotNull final String name)
     {
         m__strTableName = name;
     }
@@ -90,7 +90,7 @@ public class AntTableElement
      * Specifies the table name.
      * @param name the table name.
      */
-    public void setName(final String name)
+    public void setName(@NotNull final String name)
     {
         immutableSetName(name);
     }
@@ -99,6 +99,7 @@ public class AntTableElement
      * Retrieves the table name.
      * @return such name.
      */
+    @Nullable
     public String getName()
     {
         return m__strTableName;
@@ -108,7 +109,7 @@ public class AntTableElement
      * Specifies the field collection.
      * @param fields the collection
      */
-    protected final void immutableSetFields(final List<AntFieldElement> fields)
+    protected final void immutableSetFields(@NotNull final List<AntFieldElement> fields)
     {
         m__lFields = fields;
     }
@@ -117,7 +118,7 @@ public class AntTableElement
      * Specifies the field collection.
      * @param fields the collection
      */
-    public void setFields(final List<AntFieldElement> fields)
+    public void setFields(@NotNull final List<AntFieldElement> fields)
     {
         immutableSetFields(fields);
     }
@@ -126,6 +127,7 @@ public class AntTableElement
      * Retrieves the field collection.
      * @return such collection.
      */
+    @Nullable
     public List<AntFieldElement> getFields()
     {
         return m__lFields;
@@ -136,6 +138,7 @@ public class AntTableElement
      * @param name the attribute name.
      * @param value the attribute value.
      */
+    @Override
     public void setDynamicAttribute(@NotNull final String name, @NotNull final String value)
     {
         if  ("name".equals(name))
@@ -152,8 +155,8 @@ public class AntTableElement
      * Creates a dynamic element.
      * @param name the element's name.
      * @return the object.
-     * @throws BuildException if the element is not supported.
      */
+    @Override
     @Nullable
     public Object createDynamicElement(@NotNull final String name)
     {
@@ -167,7 +170,7 @@ public class AntTableElement
 
             if  (t_lFields == null)
             {
-                t_lFields = new ArrayList<AntFieldElement>();
+                t_lFields = new ArrayList<>();
                 setFields(t_lFields);
             }
 
@@ -181,6 +184,9 @@ public class AntTableElement
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

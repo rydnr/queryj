@@ -81,7 +81,7 @@ import org.checkthread.annotations.ThreadSafe;
 
 class(def, C) ::= <<
 /**
- * Handler bundle for {@link <def.name.capitalized>Template}s.
+ * Handler bundle for {@link org.acmsl.queryj.templates.<def.name.capitalized>Template}s.
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/packaging/TemplateHandlerBundle.stg",
   timestamp=C.timestamp)>

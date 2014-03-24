@@ -105,7 +105,6 @@ public class FindTemplateDefsHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand command)
@@ -119,14 +118,13 @@ public class FindTemplateDefsHandler
      * @param command the command to handle.
      * @param log the log.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(@NotNull final QueryJCommand command, @Nullable final Log log)
         throws  QueryJBuildException
     {
         @NotNull final Set<File> t_lBaseFolders = expandFolders(retrieveSourceFolders(command));
 
-        @NotNull final List<File> t_lTotalDefFiles = new ArrayList<File>();
+        @NotNull final List<File> t_lTotalDefFiles = new ArrayList<>();
 
         for (@NotNull final File t_BaseFolder: t_lBaseFolders)
         {
@@ -157,7 +155,7 @@ public class FindTemplateDefsHandler
     @NotNull
     protected Set<File> expandFolders(@NotNull final List<File> folders)
     {
-        @NotNull final Set<File> result = new TreeSet<File>();
+        @NotNull final Set<File> result = new TreeSet<>();
 
         for (@NotNull final File t_Folder : folders)
         {
@@ -175,7 +173,7 @@ public class FindTemplateDefsHandler
     @NotNull
     protected Set<File> expandFolders(@NotNull final File folder)
     {
-        @NotNull final Set<File> result = new TreeSet<File>();
+        @NotNull final Set<File> result = new TreeSet<>();
 
         if (folder.isDirectory())
         {
@@ -305,6 +303,9 @@ public class FindTemplateDefsHandler
             return name.endsWith(extension);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @NotNull
         @Override
         public String toString()

@@ -1,8 +1,8 @@
 * 2014/03/23
-** TODO Update dependencies to latest versions: 1 ->
-** TODO Upgrade to Java 8 : 1 ->
-** TODO #448 Cucumber template: 3 ->
-** TODO Review generated DAO: 1 ->
+** DONE Update dependencies to latest versions: 1 -> 1
+** DONE Upgrade to Java 8 : 1 -> 1
+** DONE #448 Cucumber template: 1 -> 1
+** DONE Review generated DAO: 1 -> 1
 ** TODO Add BaseDAO: 1 ->
 ** TODO Fix BaseDAO: 1 ->
 

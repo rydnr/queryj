@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ-Core
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -138,8 +138,6 @@ public class QueryJLogFactory
      * Convenience method to derive a name from the specified class and
      * call <code>getInstance(String)</code> with it.
      * @param clazz Class for which a suitable Log name will be derived
-     * @throws LogConfigurationException if a suitable <code>Log</code>
-     * instance cannot be returned
      */
     @Nullable
     @Override
@@ -154,8 +152,6 @@ public class QueryJLogFactory
      * call <code>getInstance(String)</code> with it.
      * @param clazz Class for which a suitable Log name will be derived
      * @param log the cached log instance.
-     * @throws LogConfigurationException if a suitable <code>Log</code>
-     * instance cannot be returned
      */
     @Nullable
     protected Log getInstance(@NotNull final Class clazz, @Nullable final Log log)
@@ -184,8 +180,6 @@ public class QueryJLogFactory
      * @param name Logical name of the <code>Log</code> instance to be
      * returned (the meaning of this name is only known to the underlying
      * logging implementation that is being wrapped)
-     * @throws LogConfigurationException if a suitable <code>Log</code>
-     * instance cannot be returned
      */
     @Override
     @Nullable
@@ -207,8 +201,6 @@ public class QueryJLogFactory
      * returned (the meaning of this name is only known to the underlying
      * logging implementation that is being wrapped)
      * @param log the possibly cached log instance.
-     * @throws LogConfigurationException if a suitable <code>Log</code>
-     * instance cannot be returned
      */
     @Nullable
     public Log getInstance(@NotNull final String name, @Nullable final Log log)

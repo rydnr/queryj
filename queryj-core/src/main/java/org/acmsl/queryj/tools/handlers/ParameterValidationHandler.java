@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -158,7 +158,6 @@ public class ParameterValidationHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     public boolean handle(@NotNull final QueryJCommand command)
         throws QueryJBuildException
@@ -171,7 +170,6 @@ public class ParameterValidationHandler
      * @param command the command to handle.
      * @param log the log.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(@NotNull final QueryJCommand command, @Nullable final Log log)
         throws  QueryJBuildException
@@ -185,7 +183,6 @@ public class ParameterValidationHandler
      * Validates the parameters.
      * @param command the parameter map.
      * @param usingAnt whether QueryJ is executed within Ant.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     public void validateParameters(
         @NotNull final QueryJCommand command, final boolean usingAnt)
@@ -238,8 +235,6 @@ public class ParameterValidationHandler
      * @param threadCount the number of threads.
      * @param command the command, to store processed information.
      * such as the header contents.
-     * @throws QueryJBuildException whenever the required
-     * parameters are not present or valid.
      */
     protected void validateParameters(
         @Nullable final String driver,
@@ -470,8 +465,6 @@ public class ParameterValidationHandler
      * information.
      * @param classpath the classpath.
      * such as the header contents.
-     * @throws QueryJBuildException whenever the required
-     * parameters are not present or valid.
      */
     protected void validateAntParameters(
         @Nullable final AntTablesElement tables,
@@ -502,11 +495,6 @@ public class ParameterValidationHandler
      * Reads the contents of given file.
      * @param file the file.
      * @return the file contents.
-     * @throws FileNotFoundException if the file is not found.
-     * @throws SecurityException if the environment prevents
-     * reading the file.
-     * @throws IOException if the file cannot be read for any
-     * other reason.
      */
     @NotNull
     protected String readFile(@NotNull final File file, @NotNull final Charset charset)
@@ -521,11 +509,6 @@ public class ParameterValidationHandler
      * @param file the file.
      * @param fileUtils the {@link FileUtils} instance.
      * @return the file contents.
-     * @throws FileNotFoundException if the file is not found.
-     * @throws SecurityException if the environment prevents
-     * reading the file.
-     * @throws IOException if the file cannot be read for any
-     * other reason.
      */
     @NotNull
     protected String readFile(

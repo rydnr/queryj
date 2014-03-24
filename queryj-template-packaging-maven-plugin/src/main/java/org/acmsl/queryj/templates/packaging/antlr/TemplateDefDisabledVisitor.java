@@ -98,7 +98,6 @@ public class TemplateDefDisabledVisitor
 
     /**
      * {@inheritDoc}
-     * <p/>
      * The default implementation returns the result of calling
      * {@link #visitChildren} on {@code ctx}.
      */
@@ -111,6 +110,9 @@ public class TemplateDefDisabledVisitor
         return super.visitDisabledRule(ctx);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

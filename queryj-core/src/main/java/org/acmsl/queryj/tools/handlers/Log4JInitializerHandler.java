@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -92,7 +92,6 @@ public class Log4JInitializerHandler
      * @param parameters the parameters.
      * @return {@code true} to avoid further processing of such command
      *         by different handlers.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -287,7 +286,6 @@ public class Log4JInitializerHandler
          * @param cbuf the buffer to log.
          * @param off the offset.
          * @param len the buffer length.
-         * @throws IOException if the log fails.
          */
         @Override
         public void write(final char[] cbuf, final int off, final int len)
@@ -303,7 +301,6 @@ public class Log4JInitializerHandler
          * @param len the buffer length.
          * @param log the actual {@link Log}.
          * @param level the log {@link Level level}.
-         * @throws IOException if the log fails.
          */
         protected void write(
             final char[] cbuf, final int off, final int len, @NotNull final Log log, @NotNull final Level level)
@@ -328,7 +325,6 @@ public class Log4JInitializerHandler
 
         /**
          * Flushes the writer's contents.
-         * @throws IOException if the flushing fails.
          */
         @Override
         public void flush()
@@ -339,7 +335,6 @@ public class Log4JInitializerHandler
 
         /**
          * Closes the writer.
-         * @throws IOException if the writer cannot be closed.
          */
         @Override
         public void close()

@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -145,7 +145,6 @@ public abstract class AbstractFillTemplateChainWrapper<C extends TemplateContext
      * be able to find out if two template realizations are equivalent. Usually,
      * generation timestamps,
      * documentation, etc. can be considered not relevant.
-     * @throws QueryJBuildException if the process fails.
      */
     @NotNull
     @Override
@@ -168,7 +167,6 @@ public abstract class AbstractFillTemplateChainWrapper<C extends TemplateContext
      * generation timestamps, documentation, etc. can be considered not relevant.
      * @param handlers the {@link FillHandler}s.
      * @return the {@link QueryJCommand}.
-     * @throws QueryJBuildException if the process fails.
      */
     @NotNull
     protected QueryJCommand providePlaceholders(

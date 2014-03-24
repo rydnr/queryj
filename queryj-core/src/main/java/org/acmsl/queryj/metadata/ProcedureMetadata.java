@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,7 +33,14 @@
  */
 package org.acmsl.queryj.metadata;
 
+/*
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.Literals;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,21 +56,6 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class ProcedureMetadata
 {
-    /**
-     * Indicates that a procedure's result is unknown.
-     */
-    public static final int PROCEDURE_RESULT_UNKNOWN = 1;
-
-    /**
-     * Indicates that a procedure doesn't return anything.
-     */
-    public static final int PROCEDURE_NO_RESULT = 2;
-
-    /**
-     * Indicates that a procedure returns something.
-     */
-    public static final int PROCEDURE_RETURNS_RESULT = 3;
-
     /**
      * The name.
      */
@@ -86,11 +78,14 @@ public class ProcedureMetadata
      * @param comment the procedure comment.
      */
     public ProcedureMetadata(
-        final String name, final int type, final String comment)
+        @NotNull final String name, final int type, @Nullable final String comment)
     {
         immutableSetName(name);
         immutableSetType(type);
-        immutableSetComment(comment);
+        if (comment != null)
+        {
+            immutableSetComment(comment);
+        }
     }
 
     /**
@@ -160,7 +155,7 @@ public class ProcedureMetadata
      * Specifies the comment.
      * @param comment the comment.
      */
-    protected void setComment(final String comment)
+    protected void setComment(@NotNull final String comment)
     {
         immutableSetComment(comment);
     }
@@ -169,6 +164,7 @@ public class ProcedureMetadata
      * Retrieves the comment.
      * @return such comment.
      */
+    @Nullable
     public String getComment()
     {
         return m__strComment;
@@ -179,6 +175,8 @@ public class ProcedureMetadata
      * contained in this instance.
      * @return such information.
      */
+    @NotNull
+    @Override
     public String toString()
     {
         return
@@ -194,6 +192,7 @@ public class ProcedureMetadata
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -210,6 +209,7 @@ public class ProcedureMetadata
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
+    @Override
     public boolean equals(final Object object)
     {
         boolean result = false;

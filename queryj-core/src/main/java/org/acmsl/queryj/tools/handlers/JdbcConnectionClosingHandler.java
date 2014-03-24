@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -86,6 +86,9 @@ public class JdbcConnectionClosingHandler
      */
     private static final Object LOCK = new Object();
 
+    /**
+     * String literal: "Interrupted while waiting for the threads to finish".
+     */
     protected static final String INTERRUPTED_WHILE_WAITING_FOR_THE_THREADS_TO_FINISH =
         "Interrupted while waiting for the threads to finish";
 
@@ -96,11 +99,8 @@ public class JdbcConnectionClosingHandler
 
     /**
      * Handles given information.
-     *
-     *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -217,7 +217,6 @@ public class JdbcConnectionClosingHandler
     /**
      * Closes the JDBC connection stored in the attribute map.
      * @param parameters the parameter map.
-     * @throws QueryJBuildException if the connection cannot be closed.
      */
     protected void closeConnection(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
@@ -230,8 +229,6 @@ public class JdbcConnectionClosingHandler
     /**
      * Closes the connection.
      * @param connection the JDBC connection.
-     * @throws QueryJBuildException whenever the required
-     * connection is not present or valid.
      */
     protected void closeConnection(@Nullable final Connection connection)
         throws  QueryJBuildException
@@ -252,8 +249,6 @@ public class JdbcConnectionClosingHandler
     /**
      * Removes the JDBC connection in given attribute map.
      * @param parameters the parameter map.
-     * @throws QueryJBuildException if the connection cannot be removed for
-     * any reason.
      */
     protected void removeConnection(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException

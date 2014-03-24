@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,9 +33,8 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing some project-specific classes.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
@@ -46,6 +45,7 @@ import org.acmsl.queryj.metadata.vo.Table;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
  * Importing some JetBrains annotations.
@@ -321,7 +321,7 @@ public class MetadataUtils
      * @param metadataManager the {@link MetadataManager} instance.
      * @return the foreign keys of other tables pointing
      * to this one:
-     * a map of referringTableName -> ForeignKey[].
+     * a map of referringTableName -&gt; ForeignKey[].
      */
     @SuppressWarnings("unused")
     @NotNull

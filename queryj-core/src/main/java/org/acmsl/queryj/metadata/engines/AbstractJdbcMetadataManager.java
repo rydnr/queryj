@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -89,7 +89,8 @@ import java.util.Map;
 /**
  * Abstract implementation of {@link MetadataManager}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/06
+ * @since 3.0
+ * Created: 2012/06/06
  */
 public abstract class AbstractJdbcMetadataManager
     implements MetadataManager
@@ -130,7 +131,7 @@ public abstract class AbstractJdbcMetadataManager
     private List<Table<String, Attribute<String>, List<Attribute<String>>>> m__lTables;
 
     /**
-     * The table attributes (table name -> columns).
+     * The table attributes (table name -&gt; columns).
      */
     private Map<String,List<Attribute<String>>> m__mColumns;
 
@@ -771,9 +772,6 @@ public abstract class AbstractJdbcMetadataManager
      * <code>MetadataExtractionListener</code> instance.
      * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
      * @return the list of tables.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if an error, which is identified by QueryJ,
-     * occurs.
      */
     @NotNull
     protected List<Table<String, Attribute<String>, List<Attribute<String>>>> extractTableMetadata(
@@ -1003,7 +1001,7 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * Appends parent attributes into their children.
      * @param tables the list of tables.
-     * @param attributes the map of tableName -> attributes.
+     * @param attributes the map of tableName -&gt; attributes.
      */
     protected void bindAttributes(
         @NotNull final Collection<TableIncompleteValueObject> tables,
@@ -1164,7 +1162,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param metadataExtractionListener the metadata extraction listener.
      * @param caseSensitiveness whether the checks are case sensitive or not.
      * @return the list of all table names.
-     * @throws SQLException if the database operation fails.
      */
     protected abstract List<TableIncompleteValueObject> extractTableNamesAndComments(
         @NotNull final DatabaseMetaData metaData,
@@ -1183,8 +1180,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param schema the schema.
      * @param caseSensitiveness whether the table names are case sensitive or not.
      * @param metadataExtractionListener the metadata extraction listener.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if the any other error occurs.
      */
     protected abstract void extractTableColumns(
         @NotNull final DatabaseMetaData metaData,
@@ -1203,8 +1198,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param schema the schema.
      * @param caseSensitiveness whether the table names are case sensitive or not.
      * @param metadataExtractionListener the metadata extraction listener.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if the any other error occurs.
      */
     protected abstract void extractPrimaryKeys(
         @NotNull final DatabaseMetaData metaData,
@@ -1223,8 +1216,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param schema the schema.
      * @param caseSensitiveness whether the table names are case sensitive or not.
      * @param metadataExtractionListener the metadata extraction listener.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if the any other error occurs.
      */
     protected abstract void extractForeignKeys(
         @NotNull final DatabaseMetaData metaData,
@@ -1851,7 +1842,7 @@ public abstract class AbstractJdbcMetadataManager
     protected abstract boolean isInvalidColumnTypeException(@NotNull final SQLException exception);
 
     /**
-     * @{inheritDoc}
+     * {@inheritDoc}
      */
     @NotNull
     @Override

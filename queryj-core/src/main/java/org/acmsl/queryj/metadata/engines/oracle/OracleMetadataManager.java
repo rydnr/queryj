@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -188,7 +188,6 @@ public class OracleMetadataManager
      * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @return the list of all table names.
-     * @throws java.sql.SQLException if the database operation fails.
      */
     @NotNull
     @SuppressWarnings("unused")
@@ -537,7 +536,6 @@ public class OracleMetadataManager
      * @param caseSensitiveness whether the engine is case sensitive or not.
      * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
-     * @throws SQLException if the {@link ResultSet} cannot be processed.
      */
     @SuppressWarnings("unused,unchecked")
     protected void processRow(

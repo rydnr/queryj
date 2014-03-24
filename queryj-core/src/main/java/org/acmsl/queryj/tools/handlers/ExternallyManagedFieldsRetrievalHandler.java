@@ -84,7 +84,6 @@ public class ExternallyManagedFieldsRetrievalHandler
      *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -104,7 +103,6 @@ public class ExternallyManagedFieldsRetrievalHandler
      * externally-managed fields.
      * @param stringValidator the {@link StringValidator} instance.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(
         @NotNull final MetadataManager metadataManager,

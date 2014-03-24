@@ -98,7 +98,6 @@ public class TemplateTemplateWritingHandler
      * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws QueryJBuildException if the template retrieval process if faulty.
      */
     @NotNull
     @Override

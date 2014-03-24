@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -59,7 +59,11 @@ import org.checkthread.annotations.ThreadSafe;
 public class ImplicitDAOResult<T>
     extends  AbstractResult<T>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -8715430319121603602L;
+
     /**
      * The <i>DAO</i> attribute.
      */
@@ -229,8 +233,6 @@ public class ImplicitDAOResult<T>
      * Compares given object with this instance.
      * @param object the object to compare to.
      * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
-     * object prevents it from being compared to this Object.
      */
     @SuppressWarnings("unchecked")
     @Override

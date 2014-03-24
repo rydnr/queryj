@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -73,13 +73,7 @@ public class StatementFlagsElementFactory
     public StatementFlagsElementFactory() {}
 
     /**
-     * Creates a StatementFlagsElement instance from given SAX
-     * attributes.
-     * @param attributes the attributes.
-     * @param digester the Digester instance.
-     * @param conversionUtils the ConversionUtils instance.
-     * @return the &lt;sql&gt; information.
-     * @throws SAXException if the attributes are not valid.
+     * {@inheritDoc}
      */
     @Nullable
     @Override

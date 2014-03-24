@@ -160,7 +160,6 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
      * @param context the context.
      * @param relevantOnly whether to include only relevant placeholders.
      * @return such code.
-     * @throws InvalidTemplateException if the template cannot be processed.
      */
     @Nullable
     @SuppressWarnings("unused")

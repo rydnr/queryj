@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -66,6 +66,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class AntExternallyManagedFieldsElement
     implements  DynamicConfigurator
 {
+    /**
+     * String literal: "field".
+     */
     public static final String FIELD_LITERAL = "field";
 
     /**
@@ -114,7 +117,7 @@ public class AntExternallyManagedFieldsElement
 
         if (t_cFields == null)
         {
-            result = new ArrayList<AntFieldElement>();
+            result = new ArrayList<>();
             setFields(result);
         }
         else
@@ -130,6 +133,7 @@ public class AntExternallyManagedFieldsElement
      * @param name the attribute name.
      * @param value the attribute value.
      */
+    @Override
     public void setDynamicAttribute(@NotNull final String name, @NotNull final String value)
     {
         throw new BuildException("Attributes are not supported");
@@ -139,9 +143,9 @@ public class AntExternallyManagedFieldsElement
      * Creates a dynamic element.
      * @param name the element's name.
      * @return the object.
-     * @throws BuildException if the element is not supported.
      */
     @Nullable
+    @Override
     public Object createDynamicElement(@NotNull final String name)
     {
         @Nullable final AntFieldElement result;
@@ -162,6 +166,9 @@ public class AntExternallyManagedFieldsElement
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

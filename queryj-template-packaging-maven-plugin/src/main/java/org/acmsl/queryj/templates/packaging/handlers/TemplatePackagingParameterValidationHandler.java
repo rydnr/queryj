@@ -91,26 +91,12 @@ public class TemplatePackagingParameterValidationHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
+    @Override
     public boolean handle(@NotNull final QueryJCommand command)
         throws QueryJBuildException
     {
-        return handle(command, command.getLog());
-    }
-
-    /**
-     * Handles given parameters.
-     * @param command the command to handle.
-     * @param log the log.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected boolean handle(@NotNull final QueryJCommand command, @Nullable final Log log)
-        throws  QueryJBuildException
-    {
-        validateParameters(
-            new QueryJCommandWrapper<File>(command).getListSetting(SOURCES));
+        validateParameters(new QueryJCommandWrapper<File>(command).getListSetting(SOURCES));
 
         return false;
     }
@@ -118,8 +104,6 @@ public class TemplatePackagingParameterValidationHandler
     /**
      * Validates the parameters.
      * @param sources the source folders.
-     * @throws QueryJBuildException whenever the required
-     * parameters are not present or valid.
      */
     protected void validateParameters(@Nullable final List<File> sources)
         throws  QueryJBuildException

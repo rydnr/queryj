@@ -89,7 +89,6 @@ public abstract class GlobalBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -106,7 +105,6 @@ public abstract class GlobalBuildHandler
      * Builds the template.
      * @param parameters the parameters.
      * @param factory the TF instance.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @NotNull
     protected T buildTemplate(@NotNull final QueryJCommand parameters, @NotNull final TF factory)

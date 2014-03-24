@@ -95,7 +95,6 @@ public class TemplateDefOutputVisitor
 
     /**
      * {@inheritDoc}
-     * <p/>
      * The default implementation returns the result of calling
      * {@link #visitChildren} on {@code ctx}.
      */
@@ -107,6 +106,10 @@ public class TemplateDefOutputVisitor
         return super.visitOutputRule(ctx);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
     @Override
     public String toString()
     {

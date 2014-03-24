@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -83,6 +83,9 @@ import java.security.NoSuchAlgorithmException;
 public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends TemplateContext>
     implements TemplateGenerator<N, C>
 {
+    /**
+     * String literal: "Cannot serialize template ";
+     */
     protected static final String CANNOT_SERIALIZE_TEMPLATE_LITERAL = "Cannot serialize template ";
 
     /**
@@ -170,8 +173,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param outputDir the output folder.
      * @param rootFolder the root folder.
      * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @throws QueryJBuildException if the generation process fails.
      */
     @Override
     public boolean write(
@@ -180,7 +181,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         @NotNull final File rootFolder,
         @NotNull final Charset charset)
         throws  IOException,
-        QueryJBuildException
+                QueryJBuildException
     {
         return
             write(
@@ -202,8 +203,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param rootFolder the root folder.
      * @param charset the file encoding.
      * @param fileUtils the {@link org.acmsl.commons.utils.io.FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @throws QueryJBuildException if the generation process fails.
      */
     protected boolean write(
         final boolean caching,
@@ -236,7 +235,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param charset the {@link Charset} to use.
      * @param fileUtils the {@link FileUtils} instance.
      * @param log the {@link Log} instance.
-     * @throws IOException if the output dir cannot be created.
      */
     protected boolean generate(
         @NotNull final N template,

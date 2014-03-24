@@ -184,7 +184,6 @@ public class ParseTemplateDefsHandler
     /**
      * Parses a template def file.
      * @param file the file to parse.
-     * @throws TemplatePackagingCheckedException if the parsing fails.
      */
     @NotNull
     protected TemplateDef<String> parseDefFile(@NotNull final File file)
@@ -322,8 +321,6 @@ public class ParseTemplateDefsHandler
      * Sets up the template definition parser.
      * @param file the template def contents to parse.
      * @return the {@link TemplateDefParser} instance.
-     * @throws org.antlr.v4.runtime.RecognitionException if the comment cannot be parsed.
-     * @throws IOException if the file could not be read.
      */
     @SuppressWarnings("unchecked")
     @NotNull

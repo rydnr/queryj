@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,20 +34,20 @@
 package org.acmsl.queryj.tools.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.CannotEstablishDatabaseConnectionException;
 import org.acmsl.queryj.api.exceptions.JdbcDriverNotFoundException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.tools.exceptions.MissingJdbcUrlAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingJdbcUserNameAtRuntimeException;
 import org.acmsl.queryj.tools.exceptions.MissingJdbcDriverAtRuntimeException;
 
 /*
- * Importing some Commons-Logging classes.
+ * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.tools.exceptions.MissingJdbcUrlAtRuntimeException;
-import org.acmsl.queryj.tools.exceptions.MissingJdbcUserNameAtRuntimeException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -86,18 +86,14 @@ public class JdbcConnectionOpeningHandler
      * Handles given parameters.
      * @param command the command.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
     {
-        @Nullable final Connection connection = openConnection(command);
+        @NotNull final Connection connection = openConnection(command);
 
-        if (connection != null)
-        {
-            storeConnection(connection, command);
-        }
+        storeConnection(connection, command);
 
         return false;
     }
@@ -116,9 +112,9 @@ public class JdbcConnectionOpeningHandler
         return
             openConnection(
                 (String) parameters.getSetting(JDBC_DRIVER),
-                (String) parameters.getSetting(JDBC_URL),
-                (String) parameters.getSetting(JDBC_USERNAME),
-                (String) parameters.getSetting(JDBC_PASSWORD));
+                parameters.getSetting(JDBC_URL),
+                parameters.getSetting(JDBC_USERNAME),
+                parameters.getSetting(JDBC_PASSWORD));
     }
 
     /**
@@ -129,7 +125,6 @@ public class JdbcConnectionOpeningHandler
      * @param jdbcUserName the user name.
      * @param jdbcPassword the password.
      * @return the JDBC connection.
-     * @throws QueryJBuildException if the connection cannot be opened.
      */
     @NotNull
     public Connection openConnection(
@@ -166,8 +161,6 @@ public class JdbcConnectionOpeningHandler
      * @param username the username.
      * @param password the password.
      * @return the JDBC connection.
-     * @throws QueryJBuildException whenever the required
-     * parameters are not present or valid.
      */
     @NotNull
     protected Connection proceed(

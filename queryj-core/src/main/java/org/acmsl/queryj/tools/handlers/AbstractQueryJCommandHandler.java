@@ -133,7 +133,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the database metadata from the attribute map.
      * @param parameters the parameter map.
      * @return the metadata.
-     * @throws QueryJBuildException if the database metadata is not accessible.
      */
     @NotNull
     protected DatabaseMetaData retrieveDatabaseMetaData(@NotNull final QueryJCommand parameters)
@@ -340,8 +339,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the {@link Connection} instance.
      * @param parameters the parameter map.
      * @return such instance.
-     * @throws QueryJBuildException if the provider cannot be stored for
-     * any reason.
      */
     @NotNull
     protected Connection retrieveConnection(@NotNull final QueryJCommand parameters)
@@ -363,7 +360,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the {@link Charset} instance.
      * @param parameters the parameter map.
      * @return such instance.
-     * @throws QueryJBuildException if the charset is not valid.
      */
     protected Charset retrieveCharset(@NotNull final QueryJCommand parameters)
       throws  QueryJBuildException

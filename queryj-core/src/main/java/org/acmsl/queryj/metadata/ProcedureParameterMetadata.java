@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,20 +34,25 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project-specific classes.
+ * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.Literals;
 
 /*
  * Importing Commons-Logging classes.
  */
-import org.acmsl.queryj.Literals;
 import org.apache.commons.logging.LogFactory;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents procedure parameter metadata.
@@ -57,31 +62,6 @@ import org.checkthread.annotations.ThreadSafe;
 public class ProcedureParameterMetadata
     extends  ProcedureMetadata
 {
-    /**
-     * Indicates that the parameter definition is unknown.
-     */
-    public static final int UNKNOWN_PARAMETER = 0;
-
-    /**
-     * Indicates that the parameter is defined as IN.
-     */
-    public static final int IN_PARAMETER = 1;
-
-    /**
-     * Indicates that the parameter is defined as IN/OUT.
-     */
-    public static final int IN_OUT_PARAMETER = 2;
-
-    /**
-     * Indicates that the parameter is defined as OUT.
-     */
-    public static final int OUT_PARAMETER = 3;
-
-    /**
-     * Indicates that the parameter is defined as the result of the procedure.
-     */
-    public static final int RESULT_PARAMETER = 5;
-
     /**
      * The data type.
      */
@@ -109,7 +89,7 @@ public class ProcedureParameterMetadata
     public ProcedureParameterMetadata(
         final String name,
         final int type,
-        final String comment,
+        @Nullable final String comment,
         final int dataType,
         final int length,
         final int nullable)
@@ -145,6 +125,7 @@ public class ProcedureParameterMetadata
      * Specifies the data type.
      * @param dataType the data type.
      */
+    @SuppressWarnings("unused")
     protected void setDataType(final int dataType)
     {
         immutableSetDataType(dataType);
@@ -214,10 +195,10 @@ public class ProcedureParameterMetadata
     }
 
     /**
-     * Provides a text representation of the information
-     * contained in this instance.
-     * @return such information.
+     * {@inheritDoc}
      */
+    @NotNull
+    @Override
     public String toString()
     {
         return
@@ -230,9 +211,9 @@ public class ProcedureParameterMetadata
     }
 
     /**
-     * Retrieves the hash code associated to this instance.
-     * @return such information.
+     * {@inheritDoc}
      */
+    @Override
     public int hashCode()
     {
         return
@@ -249,9 +230,10 @@ public class ProcedureParameterMetadata
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
+    @Override
     public boolean equals(final Object object)
     {
-        boolean result = false;
+        final boolean result;
 
         if  (object instanceof ProcedureParameterMetadata)
         {
@@ -281,16 +263,13 @@ public class ProcedureParameterMetadata
     }
 
     /**
-     * Compares given object with this instance.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
-     * object prevents it from being compared to this Object.
+     * {@inheritDoc}
      */
+    @Override
     public int compareTo(final Object object)
         throws  ClassCastException
     {
-        int result = 1;
+        final int result;
 
         if  (object instanceof ProcedureParameterMetadata)
         {

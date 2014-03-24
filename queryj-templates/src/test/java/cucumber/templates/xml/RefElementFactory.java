@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -55,7 +55,8 @@ import org.xml.sax.Attributes;
 /**
  * Creates RefElements.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/05/25
+ * @since 3.0
+ * Created: 2013/05/25
  */
 public  class RefElementFactory
     implements ObjectCreationFactory
@@ -68,9 +69,7 @@ public  class RefElementFactory
     /**
      * <p>Factory method called by {@link org.apache.commons.digester.FactoryCreateRule} to supply an
      * object based on the element's attributes.
-     *
      * @param attributes the element's attributes
-     * @throws Exception any exception thrown will be propagated upwards
      */
     @Override
     public Object createObject(@NotNull final Attributes attributes)

@@ -103,8 +103,6 @@ public class DefaultTemplateChainProviderTemplateWritingHandler
      * Retrieves the templates from the command.
      * @param parameters the parameters.
      * @return the template.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException
-     *          if the template retrieval process fails.
      */
     @NotNull
     @Override

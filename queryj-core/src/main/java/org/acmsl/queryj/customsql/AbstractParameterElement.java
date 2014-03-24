@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -42,13 +42,13 @@ import org.jetbrains.annotations.Nullable;
  * Models elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
  * non-xml implementations):
- *   <!ELEMENT <i>element</i> EMPTY>
- *  <!ATTLIST <i>element</i>
+ *  &lt;!ELEMENT <i>element</i> EMPTY&gt;
+ *  &lt;!ATTLIST <i>element</i>
  *    id ID #REQUIRED
  *    column_name CDATA #IMPLIED
  *    index CDATA #IMPLIED
  *    name CDATA #IMPLIED
- *    type CDATA #REQUIRED>
+ *    type CDATA #REQUIRED&gt;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractParameterElement<T>

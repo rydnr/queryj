@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -83,7 +83,14 @@ import java.util.Date;
 public class ParameterElementFactory
     extends  ElementFactory
 {
+    /**
+     * The date format in Spanish.
+     */
     private static final String DATE_FORMAT_ES = "DD/MM/yyyy";
+
+    /**
+     * The date format in English.
+     */
     private static final String DATE_FORMAT_EN = "yyyy/DD/MM";
 
     /**
@@ -97,7 +104,6 @@ public class ParameterElementFactory
      * @param digester the Digester instance.
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;parameter&gt; information.
-     * @throws SAXException if the attributes are not valid.
      */
     @Override
     @Nullable

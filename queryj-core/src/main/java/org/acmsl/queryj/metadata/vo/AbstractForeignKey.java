@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -319,8 +319,6 @@ public abstract class AbstractForeignKey<V>
      * Compares given object with this instance.
      * @param object the object to compare to.
      * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
-     * object prevents it from being compared to this Object.
      */
     @Override
     public int compareTo(@Nullable final ForeignKey<V> object)

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -111,7 +111,6 @@ public abstract class AbstractTemplateWritingHandler
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -130,9 +129,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param parameters the parameters.
      * @param threadCount the thread count.
      * @param rootDir the root dir.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
-    @ThreadSafe
     protected void writeTemplates(
         @NotNull final QueryJCommand parameters,
         final int threadCount,
@@ -180,9 +177,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param charset the file encoding.
      * @param templateGenerator the template generator.
      * @param rootDir the root dir.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
-    @ThreadSafe
     @SuppressWarnings("unused")
     protected void writeTemplatesSequentially(
         @Nullable final List<T> templates,
@@ -229,9 +224,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param threadCount the number of threads to use.
      * @param rootDir the root dir.
      * @return the list if {@link Future} to keep track of the progress.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
      */
-    @ThreadSafe
     @NotNull
     protected List<Future<T>> writeTemplatesMultithread(
         @Nullable final List<T> templates,
@@ -321,9 +314,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param templateGenerator the template generator.
      * @param threadCount the number of threads to use.
      * @param rootDir the root dir.
-     * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException if the build process cannot be performed.
      */
-    @ThreadSafe
     @NotNull
     @SuppressWarnings("unused")
     protected List<Future<?>> writeTemplatesMultithread2ndVersion(
@@ -443,7 +434,6 @@ public abstract class AbstractTemplateWritingHandler
      * Retrieves the templates from the command.
      * @param parameters the parameters.
      * @return the template.
-     * @throws QueryJBuildException if the template retrieval process fails.
      */
     @NotNull
     protected abstract List<T> retrieveTemplates(@NotNull final QueryJCommand parameters)
@@ -465,7 +455,7 @@ public abstract class AbstractTemplateWritingHandler
 
         if (aux == null)
         {
-            result = new ArrayList<Future<T>>(0);
+            result = new ArrayList<>(0);
         }
         else
         {
@@ -481,7 +471,6 @@ public abstract class AbstractTemplateWritingHandler
      * @param rootDir the root dir.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      */
     @NotNull
     protected abstract File retrieveOutputDir(

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -57,7 +57,8 @@ import java.util.List;
 /**
  * Visits colBool rules in PerComment.g4 grammar.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/07/06
+ * @since 3.0
+ * Created: 2013/07/06
  */
 public class PerCommentColBoolVisitor
     extends PerCommentBaseVisitor<List<String>>
@@ -65,8 +66,8 @@ public class PerCommentColBoolVisitor
     /**
      * Visits the parser tree within the <pre>tabRelationship</pre> rule.
      * @param context the parse context.
-     * @return the list of boolean definitions. At position 0, the value representing {@code true}; 1 -> {@code false};
-     * 2 -> {@code null}.
+     * @return the list of boolean definitions.
+     * At position 0, the value representing {@code true}; 1 -&gt; {@code false}; 2 -&gt; {@code null}.
      */
     @NotNull
     @Override

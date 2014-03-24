@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -94,7 +94,6 @@ public class TemplateDefFilenameBuilderVisitor
 
     /**
      * {@inheritDoc}
-     * <p/>
      * The default implementation returns the result of calling
      * {@link #visitChildren} on {@code ctx}.
      */
@@ -106,6 +105,10 @@ public class TemplateDefFilenameBuilderVisitor
         return super.visitFilenameBuilderRule(ctx);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
     @Override
     public String toString()
     {

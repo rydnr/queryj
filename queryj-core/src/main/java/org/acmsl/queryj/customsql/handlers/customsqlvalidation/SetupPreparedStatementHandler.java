@@ -37,11 +37,6 @@
 package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 
 /*
- * Importing ACM-SL Java Commons classes.
- */
-import org.acmsl.commons.logging.UniqueLogFactory;
-
-/*
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
@@ -51,13 +46,7 @@ import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.exceptions.CannotValidateEmptyQueryException;
 import org.acmsl.queryj.customsql.exceptions.PreparedStatementNotAvailableForValidationException;
-import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.logging.Log;
 
 /*
  * Importing JetBrains annotations.
@@ -163,7 +152,6 @@ public class SetupPreparedStatementHandler
      * Validates given sql element.
      * @param sql such element.
      * @param connection the connection.
-     * @throws SQLException if the sql is not valid.
      */
     @Nullable
     public PreparedStatement setupStatement(

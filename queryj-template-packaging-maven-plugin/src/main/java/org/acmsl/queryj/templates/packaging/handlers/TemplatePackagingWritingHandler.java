@@ -156,7 +156,6 @@ public abstract class TemplatePackagingWritingHandler
      * @param rootDir the root dir.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws QueryJBuildException if the output-dir retrieval process fails.
      */
     @NotNull
     @Override

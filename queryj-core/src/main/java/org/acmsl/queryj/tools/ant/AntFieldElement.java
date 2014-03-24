@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -72,12 +72,31 @@ public class AntFieldElement
     extends  AbstractField
     implements  DynamicConfigurator
 {
-
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 5709131443641728342L;
+
+    /**
+     * String literal: "table-name".
+     */
     public static final String TABLE_NAME_LITERAL = "table-name";
+
+    /**
+     * String literal: "keyword".
+     */
     public static final String KEYWORD_LITERAL = "keyword";
+
+    /**
+     * String literal: "retrieval-query".
+     */
     public static final String RETRIEVAL_QUERY_LITERAL = "retrieval-query";
+
+    /**
+     * String literal: "Attribute ".
+     */
     static final String ATTRIBUTE_LITERAL = "Attribute ";
+
     /**
      * The field pk nature.
      */
@@ -122,7 +141,8 @@ public class AntFieldElement
      * @param name the attribute name.
      * @param value the attribute value.
      */
-    public void setDynamicAttribute(final String name, final String value)
+    @Override
+    public void setDynamicAttribute(@NotNull final String name, @NotNull final String value)
     {
         if  ("name".equals(name))
         {
@@ -160,8 +180,8 @@ public class AntFieldElement
      * Creates a dynamic element.
      * @param name the element's name.
      * @return the object.
-     * @throws BuildException if the element is not supported.
      */
+    @Override
     @Nullable
     public Object createDynamicElement(final String name)
     {
@@ -175,7 +195,7 @@ public class AntFieldElement
 
             if  (t_cFieldFks == null)
             {
-                t_cFieldFks = new ArrayList<AntFieldFkElement>();
+                t_cFieldFks = new ArrayList<>();
                 setFieldFks(t_cFieldFks);
             }
 
@@ -189,6 +209,9 @@ public class AntFieldElement
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

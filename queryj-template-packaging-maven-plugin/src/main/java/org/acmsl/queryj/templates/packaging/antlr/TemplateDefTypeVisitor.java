@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -96,7 +96,6 @@ public class TemplateDefTypeVisitor
 
     /**
      * {@inheritDoc}
-     * <p/>
      * The default implementation returns the result of calling
      * {@link #visitChildren} on {@code ctx}.
      */
@@ -107,6 +106,9 @@ public class TemplateDefTypeVisitor
         return super.visitTypeRule(context);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

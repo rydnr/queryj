@@ -93,16 +93,13 @@ public class TemplateFactoryTemplateWritingHandler
     protected TemplatePackagingTemplateGenerator<TemplateFactoryTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>
         retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return
-            new TemplatePackagingTemplateGenerator<TemplateFactoryTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>(
-                caching, threadCount);
+        return new TemplatePackagingTemplateGenerator<>(caching, threadCount);
     }
 
     /**
      * Retrieves the templates from the command.
      * @param parameters the parameters.
      * @return the template.
-     * @throws QueryJBuildException if the template retrieval process fails.
      */
     @NotNull
     @Override

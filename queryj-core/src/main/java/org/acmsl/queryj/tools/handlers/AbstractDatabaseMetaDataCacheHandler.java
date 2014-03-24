@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -89,7 +89,6 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
      * Caches given {@link MetadataManager database information} to disk.
      * @param manager the {@link MetadataManager} instance.
      * @param outputDir the output dir.
-     * @throws IOException if the information could not be written to disk.
      */
     protected void cache(@NotNull final MetadataManager manager, @NotNull final File outputDir)
         throws IOException
@@ -147,7 +146,6 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
      * Retrieves the cache.
      * @param outputDir the output dir.
      * @return {@link MetadataManager} instance from disk.
-     * @throws IOException if the cache cannot be read.
      */
     @Nullable
     @SuppressWarnings("unused")

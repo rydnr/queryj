@@ -15,5 +15,3 @@ filename  builder : <tableName.singular.camelCase>.feature;
 
 // The package.
 package: <packageName>.dao;
-
-disabled;
