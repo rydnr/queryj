@@ -82,7 +82,6 @@ public class ConnectionFlagsRefElementFactory
      * @param digester the Digester instance.
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;connection-ref&gt; information.
-     * @throws SAXException if the attributes are not valid.
      */
     @NotNull
     @Override

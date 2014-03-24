@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -448,9 +448,8 @@ public class JdbcMetadataManager
      * @param schema the schema.
      * @param caseSensitiveness whether the table names are case sensitive or not.
      * @param metadataExtractionListener the metadata extraction listener.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if the any other error occurs.
      */
+    @Override
     protected void extractForeignKeys(
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,

@@ -36,7 +36,7 @@
 package org.acmsl.queryj.tools.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -81,7 +81,8 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Ensures Log4J is correctly configured.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2012/06/19
+ * @since 3.0
+ * Created: 2012/06/19
  */
 @ThreadSafe
 public class Log4JInitializerHandler
@@ -164,7 +165,6 @@ public class Log4JInitializerHandler
         /**
          * Instantiate a WriterAppender and set the output destination to
          * <code>writer</code>.
-         * <p/>
          * <p>The <code>writer</code> must have been previously opened by
          * the user.
          */

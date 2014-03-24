@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -47,9 +47,9 @@ import org.checkthread.annotations.ThreadSafe;
  * Models &lt;property-ref&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
  * non-xml implementations):
- *  <!ELEMENT property-ref EMPTY>
- *  <!ATTLIST property-ref
- *    id IDREF #REQUIRED>
+ *  &lt;!ELEMENT property-ref EMPTY&gt;
+ *  &lt;!ATTLIST property-ref
+ *    id IDREF #REQUIRED&gt;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
@@ -57,6 +57,9 @@ public class PropertyRefElement
     extends  AbstractIdElement<String>
     implements PropertyRef
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -944778567031371562L;
 
     /**

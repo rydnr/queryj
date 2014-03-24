@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -47,11 +47,11 @@ import java.util.List;
  * Models &lt;sql&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
  * non-xml implementations):
- *  <!ELEMENT sql (parameter-ref)+>
- *  <!ATTLIST sql
+ *  &lt;!ELEMENT sql (parameter-ref)+&gt;
+ *  &lt;!ATTLIST sql
  *    id ID #REQUIRED
  *    class CDATA #IMPLIED
- *    matches (single | multiple) #REQUIRED>
+ *    matches (single | multiple) #REQUIRED&gt;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @param <T> the type.
  */

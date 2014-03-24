@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -53,18 +53,22 @@ import org.jetbrains.annotations.Nullable;
  * Models &lt;result&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
  * non-xml implementations):
- *  <!ELEMENT result (property-ref)+>
- *  <!ATTLIST result
+ *  &lt;!ELEMENT result (property-ref)+&gt;
+ *  &lt;!ATTLIST result
  *    id ID #REQUIRED
  *    class CDATA #IMPLIED
- *    matches (single | multiple) #REQUIRED>
+ *    matches (single | multiple) #REQUIRED&gt;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
 public class ResultElement<T>
     extends  AbstractResult<T>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -1123144871258452499L;
+
     /**
      * The <i>class</i> attribute.
      */
@@ -123,20 +127,17 @@ public class ResultElement<T>
      */
     public int hashCode()
     {
-        return hashCode(getId(), getClassValue(), getPropertyRefs());
+        return hashCode(getId(), getPropertyRefs());
     }
 
     /**
      * Retrieves the hashcode.
      * @param id the <i>id</i> attribute.
-     * @param classValue the <i>class</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such value.
      */
-    @SuppressWarnings("unused")
     protected int hashCode(
         @NotNull final T id,
-        @NotNull final T classValue,
         @NotNull final Collection<PropertyRef> propertyRefs)
     {
         return ("" + id).toLowerCase(Locale.US).hashCode() + Result.class.hashCode();

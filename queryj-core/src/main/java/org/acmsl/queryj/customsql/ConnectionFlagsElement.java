@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -48,15 +48,15 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Models &lt;connection-flags&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
- * non-xml implementations):<br/>
- * <!ELEMENT connection-flags EMPTY><br/>
- * <!ATTLIST connection-flags<br/>
- *   id ID #REQUIRED<br/>
- *   transactionisolation (  TRANSACTION_NONE<br/>
- *                         | TRANSACTION_READ_COMMITTED<br/>
- *                         | TRANSACTION_READ_UNCOMMITTED<br/>
- *                         | TRANSACTION_REPEATABLE_READ<br/>
- *                         | TRANSACTION_SERIALIZABLE ) #REQUIRED><br/>
+ * non-xml implementations):
+ * &lt;!ELEMENT connection-flags EMPTY&gt;
+ * &lt;!ATTLIST connection-flags
+ *   id ID #REQUIRED
+ *   transactionisolation (  TRANSACTION_NONE
+ *                         | TRANSACTION_READ_COMMITTED
+ *                         | TRANSACTION_READ_UNCOMMITTED
+ *                         | TRANSACTION_REPEATABLE_READ
+ *                         | TRANSACTION_SERIALIZABLE ) #REQUIRED&gt;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
@@ -64,7 +64,11 @@ public class ConnectionFlagsElement
     extends  AbstractIdElement<String>
     implements  ConnectionFlags
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 7483005190203528643L;
+
     /**
      * The <i>transactionisolation</i> attribute.
      */
@@ -184,7 +188,6 @@ public class ConnectionFlagsElement
      * Compares given object with this instance.
      * @param object the object to compare to.
      * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
     public int compareTo(final ConnectionFlags object)

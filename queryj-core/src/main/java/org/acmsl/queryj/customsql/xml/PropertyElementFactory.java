@@ -92,7 +92,6 @@ public class PropertyElementFactory
      * @param digester the Digester instance.
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;property&gt; information.
-     * @throws SAXException if the attributes are not valid.
      */
     @Nullable
     public Object createObject(

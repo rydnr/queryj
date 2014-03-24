@@ -107,7 +107,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -140,7 +139,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param parameters the parameters.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom RESULT provider.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @ThreadSafe
     protected void buildTemplates(
@@ -202,7 +200,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param resultElements the {@link Result} list.
      * @param customResultUtils the {@link CustomResultUtils} instance.
-     * @throws QueryJBuildException if the templates cannot be built.
      */
     @ThreadSafe
     @SuppressWarnings("unchecked")
@@ -318,7 +315,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param engine the engine.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws QueryJBuildException if the package retrieval process if faulty.
      */
     @ThreadSafe
     protected String retrievePackage(
@@ -372,7 +368,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customSqlProvider the custom RESULT provider.
      * @param allowDuplicates whether to remove duplicates.
      * @return such templates.
-     * @throws QueryJBuildException if the templates cannot be retrieved for any
      * reason.
      */
     @NotNull

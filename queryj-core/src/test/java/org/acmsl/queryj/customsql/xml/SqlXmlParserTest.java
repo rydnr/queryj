@@ -234,7 +234,6 @@ public class SqlXmlParserTest
 
     /**
      * Tests SqlXmlParserTest.parse()
-     * @throws Exception if an unexpected situation occurs.
      * @see org.acmsl.queryj.customsql.xml.SqlXmlParser#parse()
      */
     @Test

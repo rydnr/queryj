@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -63,6 +63,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class MySQL4xMetadataManager
 //    extends JdbcMetadataManager
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -9087872657546547720L;
 
     /**
@@ -83,9 +86,6 @@ public class MySQL4xMetadataManager
      * @param catalog the database catalog.
      * @param schema the database schema.
      * @param caseSensitive whether the database engine is case sensitive or not.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if an error, which is identified by QueryJ,
-     * occurs.
      */
     public MySQL4xMetadataManager(
         @NotNull final String[] tableNames,

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.xml.AbstractSqlXmlParserDAO;
 import org.acmsl.queryj.customsql.xml.SqlXmlParser;
@@ -73,7 +73,7 @@ public class SqlXmlParserSqlDAO
     implements SqlDAO
 {
     /**
-     * A cache of id -> Sql
+     * A cache of id -&gt; Sql
      */
     private static final Map<String, Sql<String>> FIND_BY_PRIMARY_KEY_CACHE = new HashMap<>();
 
@@ -83,12 +83,12 @@ public class SqlXmlParserSqlDAO
     private static final Map<String, Boolean> PRIMARY_KEY_MISS_CACHE = new HashMap<>();
 
     /**
-     * The cache of resultId -> List<Sql<String>>
+     * The cache of resultId -&gt; List&lt;Sql&lt;String&gt;&gt;
      */
     private static final Map<String, List<Sql<String>>> FIND_BY_RESULTID_CACHE = new HashMap<>();
 
     /**
-     * The cache of type -> List<Sql<String>>
+     * The cache of type -&gt; List&lt;Sql&lt;String&gt;&gt;
      */
     private static final Map<String, List<Sql<String>>> FIND_BY_TYPE_CACHE = new HashMap<>();
 
@@ -258,7 +258,7 @@ public class SqlXmlParserSqlDAO
     }
 
     /**
-     * Retrieves all <i>insert</i> {@link Sql<String> sentences} for a given DAO (table).
+     * Retrieves all <i>insert</i> {@link Sql sentences} for a given DAO (table).
      * @param table the table.
      * @return all matching <i>insert</i> sentences.
      */
@@ -270,7 +270,7 @@ public class SqlXmlParserSqlDAO
     }
 
     /**
-     * Retrieves all <i>update</i> {@link Sql<String> sentences} for a given DAO (table).
+     * Retrieves all <i>update</i> {@link Sql sentences} for a given DAO (table).
      * @param table the table.
      * @return all matching <i>update</i> sentences.
      */
@@ -282,7 +282,7 @@ public class SqlXmlParserSqlDAO
     }
 
     /**
-     * Retrieves all <i>delete</i> {@link Sql<String> sentences} for a given DAO (table).
+     * Retrieves all <i>delete</i> {@link Sql sentences} for a given DAO (table).
      * @param table the table.
      * @return all matching <i>delete</i> sentences.
      */
@@ -294,7 +294,7 @@ public class SqlXmlParserSqlDAO
     }
 
     /**
-     * Retrieves all <i>delete</i> {@link Sql<String> sentences} for a given DAO (table).
+     * Retrieves all <i>delete</i> {@link Sql sentences} for a given DAO (table).
      * @param table the table.
      * @param queries the complete list of queries.
      * @param metadataUtils the {@link MetadataUtils} instance.

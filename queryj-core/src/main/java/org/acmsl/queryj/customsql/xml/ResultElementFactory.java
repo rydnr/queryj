@@ -82,7 +82,6 @@ public class ResultElementFactory
      * @param digester the Digester instance.
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;result&gt; information.
-     * @throws SAXException if the attributes are not valid.
      */
     @Override
     @Nullable

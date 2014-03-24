@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.metadata.engines;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
@@ -74,15 +74,15 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
     private M m__MetadataManager;
 
     /**
-     * The cache of DAO -> Table.
+     * The cache of DAO -&gt; Table.
      */
     private static final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> FIND_BY_DAO_CACHE =
-        new HashMap<String, Table<String, Attribute<String>, List<Attribute<String>>>>();
+        new HashMap<>();
 
     /**
      * The cache miss.
      */
-    private static final Map<String, Boolean> FIND_BY_DAO_CACHE_MISS = new HashMap<String, Boolean>();
+    private static final Map<String, Boolean> FIND_BY_DAO_CACHE_MISS = new HashMap<>();
 
     /**
      * Creates a new {@link MetadataManagerTableDAO} instance using given {@link MetadataManager}.

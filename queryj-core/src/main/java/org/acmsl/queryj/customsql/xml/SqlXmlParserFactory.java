@@ -120,7 +120,6 @@ public class SqlXmlParserFactory
      * @param inputFilePath the file path (retrieved via Class.getResourceAsStream() or
      * new FileInputStream())).
      * @return such parser.
-     * @precondition inputFilePath != null
      */
     @Nullable
     public SqlXmlParser createSqlXmlParser(final String inputFilePath)
@@ -179,7 +178,6 @@ public class SqlXmlParserFactory
      * Creates a <b>sql.xml</b> parser.
      * @param file the file.
      * @return such parser.
-     * @precondition file != null
      */
     @Nullable
     public SqlXmlParser createSqlXmlParser(final File file)

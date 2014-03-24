@@ -184,7 +184,6 @@ public class EmptyFillAdapterHandler<F extends FillHandler<P>, P>
          * @param command the command.
          * @return <code>true</code> to avoid further processing of such command
          *         by different handlers.
-         * @throws org.acmsl.queryj.api.exceptions.QueryJBuildException
          *          if the build process cannot be performed.
          */
         @Override

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -94,7 +94,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the process fails unexpectedly.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand command)
@@ -108,40 +107,28 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param parameters the parameters.
      * @param projectPackage the project package.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(@NotNull final QueryJCommand parameters, @NotNull final String projectPackage)
         throws  QueryJBuildException
     {
-        final boolean result;
-
-        @Nullable final MetadataManager t_MetadataManager =
+        @NotNull final MetadataManager t_MetadataManager =
             retrieveMetadataManager(parameters);
 
-        if (t_MetadataManager != null)
-        {
-            result = false;
+        buildTemplate(
+            parameters,
+            t_MetadataManager,
+            retrieveCustomSqlProvider(parameters),
+            retrieveTemplateFactory(),
+            retrievePackage(t_MetadataManager.getEngine(), projectPackage, PackageUtils.getInstance()),
+            projectPackage,
+            retrieveTableRepositoryName(parameters),
+            retrieveHeader(parameters),
+            retrieveImplementMarkerInterfaces(parameters),
+            retrieveJmx(parameters),
+            retrieveJNDILocation(parameters),
+            CachingDecoratorFactory.getInstance());
 
-            buildTemplate(
-                parameters,
-                t_MetadataManager,
-                retrieveCustomSqlProvider(parameters),
-                retrieveTemplateFactory(),
-                retrievePackage(t_MetadataManager.getEngine(), projectPackage, PackageUtils.getInstance()),
-                projectPackage,
-                retrieveTableRepositoryName(parameters),
-                retrieveHeader(parameters),
-                retrieveImplementMarkerInterfaces(parameters),
-                retrieveJmx(parameters),
-                retrieveJNDILocation(parameters),
-                CachingDecoratorFactory.getInstance());
-        }
-        else
-        {
-            result = true;
-        }
-
-        return result;
+        return false;
     }
 
     /**
@@ -158,7 +145,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param jmx whether to support JMX or not.
      * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @SuppressWarnings("unchecked")
     protected void buildTemplate(
@@ -236,7 +222,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param disableNotNullAnnotations whether to disable NotNull annotations.
      * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @return the template.
-     * @throws QueryJBuildException on invalid input.
      */
     @SuppressWarnings("unused")
     @Nullable

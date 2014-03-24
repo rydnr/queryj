@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,26 +33,18 @@
  */
 package org.acmsl.queryj.customsql;
 
-/*
- * Importing project-specific classes.
- */
-
-/*
- * Importing JDK classes.
- */
-
 /**
  * Models &lt;connection-flags&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
- * non-xml implementations):<br/>
- * <!ELEMENT connection-flags EMPTY><br/>
- * <!ATTLIST connection-flags<br/>
- *   id ID #REQUIRED<br/>
- *   transactionisolation (  TRANSACTION_NONE<br/>
- *                         | TRANSACTION_READ_COMMITTED<br/>
- *                         | TRANSACTION_READ_UNCOMMITTED<br/>
- *                         | TRANSACTION_REPEATABLE_READ<br/>
- *                         | TRANSACTION_SERIALIZABLE ) #REQUIRED><br/>
+ * non-xml implementations):
+ * &lt;!ELEMENT connection-flags EMPTY&gt;
+ * &lt;!ATTLIST connection-flags
+ *   id ID #REQUIRED
+ *   transactionisolation (  TRANSACTION_NONE
+ *                         | TRANSACTION_READ_COMMITTED
+ *                         | TRANSACTION_READ_UNCOMMITTED
+ *                         | TRANSACTION_REPEATABLE_READ
+ *                         | TRANSACTION_SERIALIZABLE ) #REQUIRED&gt;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface ConnectionFlags

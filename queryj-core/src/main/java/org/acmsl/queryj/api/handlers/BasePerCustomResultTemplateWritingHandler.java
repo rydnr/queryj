@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -87,22 +87,15 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     {
         final File result;
 
-        @Nullable final MetadataManager t_MetadataManager =
+        @NotNull final MetadataManager t_MetadataManager =
             retrieveMetadataManager(parameters);
 
-        if (t_MetadataManager != null)
-        {
-            result =
-                retrieveOutputDir(
-                    context.getResult(),
-                    retrieveCustomSqlProvider(parameters),
-                    t_MetadataManager,
-                    parameters);
-        }
-        else
-        {
-            throw new CannotRetrieveMetadataManagerException();
-        }
+        result =
+            retrieveOutputDir(
+                context.getResult(),
+                retrieveCustomSqlProvider(parameters),
+                t_MetadataManager,
+                parameters);
 
         return result;
     }
@@ -114,7 +107,6 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @param metadataManager the metadata manager.
      * @param parameters the parameter map.
      * @return such folder.
-     * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      */
     @NotNull
     @SuppressWarnings("unchecked")
@@ -151,7 +143,6 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      */
     @NotNull
     protected abstract File retrieveOutputDir(

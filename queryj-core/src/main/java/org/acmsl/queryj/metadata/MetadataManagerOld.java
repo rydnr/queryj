@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2001-today Jose San Leandro Armendariz
                         chous@acm-sl.org
@@ -83,9 +83,6 @@ public interface MetadataManagerOld
 
     /**
      * Retrieves the metadata.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if an error, which is identified by QueryJ,
-     * occurs.
      */
     public void retrieveMetadata()
         throws  SQLException,
@@ -270,7 +267,7 @@ public interface MetadataManagerOld
         final String[] refColumnNames);
 
     /**
-     * Retrieves the tables refering to given table's.
+     * Retrieves the tables referring to given table's.
      * @param tableName the table name.
      * @return such tables.
      */
@@ -280,7 +277,7 @@ public interface MetadataManagerOld
     /**
      * Retrieves the foreign keys of given table.
      * @param tableName the table name.
-     * @return its foreign keys, a structure of<br/>
+     * @return its foreign keys, a structure of
      * <pre>
      * [referredTableName1]
      *   {foreign-key1-attribute1,..foreign-key1-attributeN}

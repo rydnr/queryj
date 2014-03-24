@@ -1,5 +1,5 @@
 /*
-                        QueryJ-Core
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,7 +33,7 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
@@ -47,14 +47,15 @@ import org.jetbrains.annotations.Nullable;
  * Models &lt;property&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
  * non-xml implementations):
- *   <!ELEMENT property EMPTY>
- *  <!ATTLIST property
+ *  &lt;!ELEMENT property EMPTY&gt;
+ *  &lt;!ATTLIST property
  *    id ID #REQUIRED
  *    column_name CDATA #IMPLIED
  *    index CDATA #IMPLIED
  *    name CDATA #IMPLIED
- *    type CDATA #REQUIRED>
+ *    type CDATA #REQUIRED&gt;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <T> the type.
  */
 @ThreadSafe
 public class PropertyElement<T>

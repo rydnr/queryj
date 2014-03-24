@@ -93,7 +93,6 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -124,7 +123,6 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param templateFactory the template factory.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
         @NotNull final QueryJCommand parameters,
@@ -175,7 +173,6 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param foreignKeys the foreign keys.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
         @NotNull final QueryJCommand parameters,

@@ -82,7 +82,6 @@ public class ConnectionFlagsElementFactory
      * @param digester the Digester instance.
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;sql&gt; information.
-     * @throws SAXException if the attributes are not valid.
      */
     @Override
     @NotNull

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,7 +37,7 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
@@ -67,6 +67,9 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
     implements QueryJCommandHandler<QueryJCommand>,
                FillHandler<P>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 6058212934620381875L;
 
     /**
@@ -119,7 +122,6 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
      * @param command the command.
      * @return {@code true} to avoid further processing of such command
      * by different handlers.
-     * @throws QueryJBuildException if the process fails.
      */
     @SuppressWarnings("unchecked")
     public boolean handle(@NotNull final QueryJCommand command)
@@ -134,7 +136,6 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
      * @param fillHandler the {@link FillHandler fill handler}.
      * @return {@code true} to avoid further processing of such command
      * by different handlers.
-     * @throws QueryJBuildException if the process fails.
      */
     @SuppressWarnings("unchecked")
     public boolean handle(@NotNull final QueryJCommand settings, @NotNull final FillHandler<P> fillHandler)

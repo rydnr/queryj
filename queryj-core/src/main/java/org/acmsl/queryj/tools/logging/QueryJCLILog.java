@@ -86,7 +86,6 @@ public class QueryJCLILog
      * from given <code>PrintStream</code>.
      * @param threshold the threshold.
      * @param printStream the print stream.
-     * @precondition printStream != null
      */
     public QueryJCLILog(final int threshold, final PrintStream printStream)
     {
@@ -348,7 +347,6 @@ public class QueryJCLILog
      * <p>Logs a message.</p>
      * @param message the message.
      * @param printStream the <code>PrintStream</code> instance.
-     * @precondition project != null
      */
     protected void log(final Object message, @NotNull final PrintStream printStream)
     {
@@ -360,7 +358,6 @@ public class QueryJCLILog
      * @param message the message.
      * @param throwable the cause.
      * @param printStream the print stream.
-     * @precondition printStream != null
      */
     protected void log(
         final Object message,

@@ -33,7 +33,7 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
@@ -98,28 +98,17 @@ public abstract class BasePerTableTemplateBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
     {
-        final boolean result;
-
-        @Nullable final MetadataManager t_MetadataManager =
+        @NotNull final MetadataManager t_MetadataManager =
             retrieveMetadataManager(parameters);
 
-        if (t_MetadataManager != null)
-        {
-            buildTemplate(parameters, t_MetadataManager, t_MetadataManager.getTableDAO());
-            result = false;
-        }
-        else
-        {
-            result = true;
-        }
+        buildTemplate(parameters, t_MetadataManager, t_MetadataManager.getTableDAO());
 
-        return result;
+        return false;
     }
 
     /**
@@ -127,7 +116,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param parameters the parameters.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param tableDAO the {@link TableDAO} instance.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplate(
         @NotNull final QueryJCommand parameters,
@@ -180,7 +168,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param tables the tables.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @SuppressWarnings("unchecked")
     protected void buildTemplate(
@@ -282,7 +269,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param engine the engine.
      * @param parameters the parameter map.
      * @return the package name.
-     * @throws QueryJBuildException if the package retrieval process if faulty.
      */
     protected String retrievePackage(
         @NotNull final String tableName, @NotNull final Engine<String> engine, @NotNull final QueryJCommand parameters)
@@ -470,7 +456,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param decoratorFactory the decorator factory.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return such information.
-     * @throws SQLException if the operation fails.
      */
     @Nullable
     protected List<Row<String>> retrieveStaticContent(

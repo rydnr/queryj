@@ -1,5 +1,5 @@
 /*
-                        QueryJ-Core
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,7 +33,7 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing Jetbrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,8 +41,6 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing JDK classes.
  */
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -56,19 +54,24 @@ import org.checkthread.annotations.ThreadSafe;
  * Models &lt;sql&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
  * non-xml implementations):
- *  <!ELEMENT sql (parameter-ref)+>
- *  <!ATTLIST sql
+ *  &lt;!ELEMENT sql (parameter-ref)+&gt;
+ *  &lt;!ATTLIST sql
  *    id ID #REQUIRED
  *    class CDATA #IMPLIED
- *    matches (single | multiple) #REQUIRED>
+ *    matches (single | multiple) #REQUIRED&gt;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <T> the type.
  */
 @ThreadSafe
 public class SqlElement<T>
     extends  AbstractIdElement<T>
     implements Sql<T>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -7884918833943291505L;
+
     /**
      * The <i>dao</i> attribute.
      */
@@ -289,8 +292,7 @@ public class SqlElement<T>
     }
     
     /**
-     * Retrieves the <i>repositoryScope</i> attribute.
-     * @return such information.
+     * {@inheritDoc}
      */
     @Override
     @Nullable
@@ -319,8 +321,7 @@ public class SqlElement<T>
     }
 
     /**
-     * Retrieves the <i>name</i> attribute.
-     * @return such value.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
@@ -390,8 +391,7 @@ public class SqlElement<T>
     }
 
     /**
-     * Checks whether the query returns multiple values or not.
-     * @return such information.
+     * {@inheritDoc}
      */
     @Override
     public boolean isMultiple()
@@ -611,7 +611,7 @@ public class SqlElement<T>
     /**
      * Adds a new &lt;parameter-ref&gt; element.
      * @param parameterRef such element.
-     * @param parameterRefs thhe &ltparameter-ref&gt; elements.
+     * @param parameterRefs the &lt;parameter-ref&gt; elements.
      */
     protected synchronized void add(
         @NotNull final ParameterRef parameterRef, @NotNull final List<ParameterRef> parameterRefs)
@@ -828,27 +828,22 @@ public class SqlElement<T>
      * Compares this object with the specified object for order.  Returns a
      * negative integer, zero, or a positive integer as this object is less
      * than, equal to, or greater than the specified object.
-     * <p/>
      * <p>The implementor must ensure <tt>sgn(x.compareTo(y)) ==
      * -sgn(y.compareTo(x))</tt> for all <tt>x</tt> and <tt>y</tt>.  (This
      * implies that <tt>x.compareTo(y)</tt> must throw an exception iff
      * <tt>y.compareTo(x)</tt> throws an exception.)
-     * <p/>
      * <p>The implementor must also ensure that the relation is transitive:
      * <tt>(x.compareTo(y)&gt;0 &amp;&amp; y.compareTo(z)&gt;0)</tt> implies
      * <tt>x.compareTo(z)&gt;0</tt>.
-     * <p/>
      * <p>Finally, the implementor must ensure that <tt>x.compareTo(y)==0</tt>
      * implies that <tt>sgn(x.compareTo(z)) == sgn(y.compareTo(z))</tt>, for
      * all <tt>z</tt>.
-     * <p/>
      * <p>It is strongly recommended, but <i>not</i> strictly required that
      * <tt>(x.compareTo(y)==0) == (x.equals(y))</tt>.  Generally speaking, any
      * class that implements the <tt>Comparable</tt> interface and violates
      * this condition should clearly indicate this fact.  The recommended
      * language is "Note: this class has a natural ordering that is
      * inconsistent with equals."
-     * <p/>
      * <p>In the foregoing description, the notation
      * <tt>sgn(</tt><i>expression</i><tt>)</tt> designates the mathematical
      * <i>signum</i> function, which is defined to return one of <tt>-1</tt>,
@@ -858,7 +853,6 @@ public class SqlElement<T>
      * @param o the object to be compared.
      * @return a negative integer, zero, or a positive integer as this object
      *         is less than, equal to, or greater than the specified object.
-     * @throws ClassCastException if the specified object's type prevents it
      *                            from being compared to this object.
      */
     @Override

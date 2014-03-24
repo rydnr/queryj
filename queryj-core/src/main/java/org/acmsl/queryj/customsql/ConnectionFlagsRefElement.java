@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,6 +36,7 @@ package org.acmsl.queryj.customsql;
  * Importing project-specific classes.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -46,9 +47,9 @@ import org.checkthread.annotations.ThreadSafe;
  * Models &lt;connection-flags-ref&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
  * non-xml implementations):
- *  <!ELEMENT connection-flags-ref EMPTY>
- *  <!ATTLIST connection-flags-ref
- *    id IDREF #REQUIRED>
+ *  &lt;!ELEMENT connection-flags-ref EMPTY&gt;
+ *  &lt;!ATTLIST connection-flags-ref
+ *    id IDREF #REQUIRED&gt;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
@@ -56,6 +57,9 @@ public class ConnectionFlagsRefElement
     extends  AbstractIdElement<String>
     implements ConnectionFlagsRef
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 3311191419084681233L;
 
     /**
@@ -86,6 +90,7 @@ public class ConnectionFlagsRefElement
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -99,7 +104,8 @@ public class ConnectionFlagsRefElement
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    @Override
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 

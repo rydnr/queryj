@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,7 +34,7 @@
 package org.acmsl.queryj.customsql.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
@@ -47,11 +47,7 @@ import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
- * Importing some ACM-SL classes.
- */
-
-/*
- * Importing some Commons-Logging classes.
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,7 +86,6 @@ public class CustomSqlProviderRetrievalHandler
      *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -114,7 +109,6 @@ public class CustomSqlProviderRetrievalHandler
      * Builds the custom SQL provider.
      * @param parameters the parameter map.
      * @return such provider.
-     * @throws QueryJBuildException if some problem occurs.
      */
     @Nullable
     protected CustomSqlProvider buildCustomSqlProvider(@NotNull final QueryJCommand parameters)
@@ -155,7 +149,6 @@ public class CustomSqlProviderRetrievalHandler
      * @param xmlFile the XML file.
      * @param factory the <code>SqlXmlParserFactory</code> instance.
      * @return such provider.
-     * @throws QueryJBuildException if some problem occurs.
      */
     @Nullable
     protected CustomSqlProvider buildCustomSqlProvider(

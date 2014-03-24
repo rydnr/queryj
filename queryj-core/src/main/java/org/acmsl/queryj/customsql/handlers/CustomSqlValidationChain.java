@@ -85,7 +85,6 @@ public class CustomSqlValidationChain
      * Builds the chain.
      * @param chain the chain to be configured.
      * @return the updated chain.
-     * @throws QueryJBuildException if the chain cannot be built successfully.
      */
     @Override
     protected Chain<QueryJCommand, QueryJBuildException, QueryJCommandHandler<QueryJCommand>> buildChain(

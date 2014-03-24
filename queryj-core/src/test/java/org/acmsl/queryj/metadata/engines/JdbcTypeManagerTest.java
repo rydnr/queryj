@@ -973,7 +973,6 @@ public class JdbcTypeManagerTest
 
     /**
      * Tests whether the helper method findOutClass() works.
-     * @throws Exception
      */
     @Test
     public void findOutClassWorks()
@@ -1045,7 +1044,6 @@ public class JdbcTypeManagerTest
 
     /**
      * Tests whether the correct PreparedStatement.setXX is called for Array parameters.
-     * @throws Exception
      */
     @Test
     public void setArrayInPreparedStatementViaReflectionWorks()
@@ -1072,7 +1070,6 @@ public class JdbcTypeManagerTest
 
     /**
      * Tests whether the correct PreparedStatement.setXX is called for long parameters.
-     * @throws Exception
      */
     @Test
     public void setLongInPreparedStatementViaReflectionWorks()
@@ -1096,7 +1093,6 @@ public class JdbcTypeManagerTest
 
     /**
      * Tests whether the correct PreparedStatement.setXX is called for byte[] parameters.
-     * @throws Exception
      */
     @Test
     public void setBytesInPreparedStatementViaReflectionWorks()
@@ -1120,7 +1116,6 @@ public class JdbcTypeManagerTest
 
     /**
      * Tests whether the correct PreparedStatement.setXX is called for boolean parameters.
-     * @throws Exception
      */
     @Test
     public void setBooleanInPreparedStatementViaReflectionWorks()
@@ -1144,7 +1139,6 @@ public class JdbcTypeManagerTest
 
     /**
      * Tests whether the correct PreparedStatement.setXX is called for Blob parameters.
-     * @throws Exception
      */
     @Test
     public void setBlobInPreparedStatementViaReflectionWorks()

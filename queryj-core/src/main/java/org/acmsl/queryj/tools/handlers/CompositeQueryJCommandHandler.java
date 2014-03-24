@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -166,6 +166,7 @@ public class CompositeQueryJCommandHandler<C extends QueryJCommand, CH extends Q
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      */
+    @Override
     public boolean handle(@NotNull final C command)
         throws QueryJBuildException
     {
@@ -178,7 +179,6 @@ public class CompositeQueryJCommandHandler<C extends QueryJCommand, CH extends Q
      * @param handlerCollection the handler collection.
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(
         @NotNull final C command,
@@ -216,7 +216,6 @@ public class CompositeQueryJCommandHandler<C extends QueryJCommand, CH extends Q
      * @param handler the concrete handler.
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
-     * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(
         @NotNull final C command, @NotNull final CH handler)

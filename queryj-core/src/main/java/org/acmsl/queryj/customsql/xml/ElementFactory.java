@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -44,6 +44,7 @@ import org.acmsl.commons.utils.ConversionUtils;
  */
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.ObjectCreationFactory;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -70,7 +71,8 @@ public abstract class ElementFactory
      * Specifies a new Digester instance.
      * @param digester such instance.
      */
-    public void setDigester(final Digester digester)
+    @Override
+    public void setDigester(@NotNull final Digester digester)
     {
         m__Digester = digester;
     }
@@ -79,6 +81,8 @@ public abstract class ElementFactory
      * Retrieves the Digester instance.
      * @return such instance.
      */
+    @Override
+    @NotNull
     public Digester getDigester()
     {
         return m__Digester;
@@ -88,11 +92,10 @@ public abstract class ElementFactory
      * Creates a Customer value object from given SAX attributes.
      * @param attributes the attributes.
      * @return the Customer information.
-     * @throws SAXException if the attributes are not valid.
-     * @precondition attributes != null
      */
     @Nullable
-    public Object createObject(final Attributes attributes)
+    @Override
+    public Object createObject(@NotNull final Attributes attributes)
       throws SAXException
     {
         return createObject(attributes, getDigester(), ConversionUtils.getInstance());
@@ -104,10 +107,6 @@ public abstract class ElementFactory
      * @param digester the Digester instance.
      * @param conversionUtils the ConversionUtils instance.
      * @return the Customer information.
-     * @throws SAXException if the attributes are not valid.
-     * @precondition attributes != null
-     * @precondition digester != null
-     * @precondition conversionUtils != null
      */
     @Nullable
     protected abstract Object createObject(

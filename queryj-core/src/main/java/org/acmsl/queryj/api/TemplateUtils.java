@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -324,7 +324,6 @@ public class TemplateUtils
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom results.
-     * @throws QueryJBuildException if there inconsistencies in the custom SQL
      * model.
      */
     @SuppressWarnings("unused")
@@ -356,8 +355,6 @@ public class TemplateUtils
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom results.
-     * @throws QueryJBuildException if there inconsistencies in the custom SQL
-     * model.
      */
     @NotNull
     public List<Result<String>> retrieveCustomResults(
@@ -390,8 +387,6 @@ public class TemplateUtils
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom results.
-     * @throws QueryJBuildException if there inconsistencies in the custom SQL
-     * model.
      */
     @NotNull
     public List<Result<String>> retrieveCustomResults(

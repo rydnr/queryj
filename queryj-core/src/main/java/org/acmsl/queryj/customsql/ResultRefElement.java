@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -46,9 +46,9 @@ import org.checkthread.annotations.ThreadSafe;
  * Models &lt;result-ref&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
  * non-xml implementations):
- *  <!ELEMENT result-ref EMPTY>
- *  <!ATTLIST result-ref
- *    id IDREF #REQUIRED>
+ *  &lt;!ELEMENT result-ref EMPTY&gt;
+ *  &lt;!ATTLIST result-ref
+ *    id IDREF #REQUIRED&gt;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
@@ -56,6 +56,9 @@ public class ResultRefElement
     extends  AbstractIdElement<String>
     implements ResultRef
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -4772977255913187237L;
 
     /**

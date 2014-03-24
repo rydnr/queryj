@@ -686,7 +686,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Generates the source code.
      * @return such output.
-     * @throws org.acmsl.queryj.api.exceptions.InvalidTemplateException if the template cannot be generated.
      */
     @Nullable
     @Override
@@ -702,7 +701,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param context the {@link QueryJTemplateContext} instance.
      * @param relevantOnly whether to include only relevant placeholders.
      * @return such output.
-     * @throws InvalidTemplateException if the template cannot be generated.
      */
     @Nullable
     protected String generate(@NotNull final C context, final boolean relevantOnly)
@@ -731,7 +729,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param context the context.
      * @param relevantOnly whether to include only relevant placeholders.
      * @return such code.
-     * @throws InvalidTemplateException if the template cannot be processed.
      */
     @Nullable
     protected String generateOutput(
@@ -882,7 +879,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Builds the correct chain.
      * @param context the context.
      * @return the specific {@link FillTemplateChain}.
-     * @throws QueryJBuildException if the templates are unavailable.
      */
     @SuppressWarnings("unchecked")
     @NotNull
@@ -928,7 +924,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param context the context.
      * @param placeholderPackage the placeholder package.
      * @return the {@link org.acmsl.queryj.tools.PlaceholderChainProvider} class.
-     * @throws QueryJBuildException if the template factory class is unavailable.
      */
     @Nullable
     @SuppressWarnings("unchecked")

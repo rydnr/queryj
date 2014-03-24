@@ -38,15 +38,15 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing some project classes.
  */
-
-/*
- * Importing some JetBrains annotations.
- */
 import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -120,9 +120,6 @@ public interface MetadataManager
 
     /**
      * Retrieves the metadata.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if an error, which is identified by QueryJ,
-     * occurs.
      */
     public void eagerlyFetchMetadata()
       throws SQLException,

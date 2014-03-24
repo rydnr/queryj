@@ -377,7 +377,6 @@ public class DAOTemplateUtils
      * @param metadataManager the metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the retrieved rows.
-     * @throws SQLException if the operation fails.
      */
     @Nullable
     public List<Row<String>> queryContents(
@@ -403,7 +402,6 @@ public class DAOTemplateUtils
      * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
      * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @return the retrieved rows.
-     * @throws SQLException if the operation fails.
      */
     @NotNull
     public List<Row<String>> queryContents(
@@ -452,7 +450,6 @@ public class DAOTemplateUtils
      * @param metadataManager the metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the retrieved rows.
-     * @throws SQLException if the operation fails.
      */
     @NotNull
     public List<Row<String>> queryContents(
@@ -484,7 +481,6 @@ public class DAOTemplateUtils
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param metaData the metadata.
      * @return the retrieved rows.
-     * @throws SQLException if the operation fails.
      */
     @NotNull
     protected List<Row<String>> queryContents(
@@ -520,7 +516,6 @@ public class DAOTemplateUtils
      * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @param connection the connection.
      * @return the retrieved rows.
-     * @throws SQLException if the operation fails.
      */
     @SuppressWarnings("unused")
     @NotNull

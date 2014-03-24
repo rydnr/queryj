@@ -61,7 +61,6 @@ public interface Template<T extends TemplateContext>
      * Generates the output source code.
      * @param relevantOnly whether to include only relevant placeholders.
      * @return such output.
-     * @throws org.acmsl.queryj.api.exceptions.InvalidTemplateException if the template cannot be generated.
      */
     @Nullable
     String generate(final boolean relevantOnly)

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
@@ -59,8 +59,9 @@ import java.util.List;
 
 /**
  * Provides methods to access {@link ForeignKey} information.
- * @author <a href="mailto:chous@acm-sl.org>chous</a>
- * @since 2012/06/06
+ * @author <a href="mailto:queryj@acm-sl.org">chous</a>
+ * @since 3.0
+ * Created: 2012/06/06
  */
 public interface ForeignKeyDAO
     extends DAO

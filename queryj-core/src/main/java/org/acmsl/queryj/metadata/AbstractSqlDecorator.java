@@ -669,7 +669,6 @@ public abstract class AbstractSqlDecorator
      * Compares given object with this instance.
      * @param object the object to compare to.
      * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
     @Override

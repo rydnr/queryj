@@ -216,7 +216,6 @@ public class CustomSqlValidationHandlerTest
 
     /**
      * Checks if validation works for date parameters.
-     * @throws Exception
      */
     @SuppressWarnings("unused, unchecked")
     @Test
