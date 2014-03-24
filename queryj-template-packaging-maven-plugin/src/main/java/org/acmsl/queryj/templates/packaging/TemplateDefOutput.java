@@ -58,7 +58,14 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public enum TemplateDefOutput
 {
+    /**
+     * Java flavour.
+     */
     JAVA,
+
+    /**
+     * Cucumber flavour.
+     */
     CUCUMBER;
 
     /**
@@ -70,5 +77,4 @@ public enum TemplateDefOutput
     {
         return EnumUtils.getInstance().getEnumFromString(TemplateDefOutput.class, type);
     }
-
 }

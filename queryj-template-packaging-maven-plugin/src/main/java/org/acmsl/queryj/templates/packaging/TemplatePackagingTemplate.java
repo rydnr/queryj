@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -50,6 +50,7 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/08/16 10/08
+ * @param <C> the context.
 */
 @ThreadSafe
 public interface TemplatePackagingTemplate<C extends TemplatePackagingContext>

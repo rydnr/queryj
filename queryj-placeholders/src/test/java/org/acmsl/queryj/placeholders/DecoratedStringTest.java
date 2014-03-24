@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -79,7 +79,7 @@ public class DecoratedStringTest
     }
 
     /**
-     * Tests {@link DecoratedString#getNormalized().getUppercased()}
+     * Tests {@code DecoratedString#getNormalized().getUppercased()}
      */
     @Test
     public void testNormalizedUppercased()
@@ -93,7 +93,7 @@ public class DecoratedStringTest
     }
 
     /**
-     * Tests {@link DecoratedString#getCamelCase()}
+     * Tests {@code DecoratedString#getCamelCase()}
      */
     @Test
     public void camelcase_works()
@@ -109,7 +109,7 @@ public class DecoratedStringTest
     }
 
     /**
-     * Tests {@link DecoratedString#getSingular().getCamelCase()}
+     * Tests {@code DecoratedString#getSingular().getCamelCase()}
      */
     @Test
     public void camelcase_works_also_when_converting_from_plural_to_singular()
@@ -125,7 +125,7 @@ public class DecoratedStringTest
     }
 
     /**
-     * Tests {@link DecoratedString#getSingular().getCamelCase()}
+     * Tests {@code DecoratedString#getSingular().getCamelCase()}
      */
     @Test
     public void singleLine_works()

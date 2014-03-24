@@ -56,11 +56,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * Minimal {@link SqlPropertyDAO} implementation on top of a list of {@link Property properties}
  * and a given {@link Result}.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/25
+ * @since 3.0
+ * Created: 2013/06/25
  */
 @SuppressWarnings("unused")
 public class CucumberSqlPropertyDAO
@@ -202,6 +203,8 @@ public class CucumberSqlPropertyDAO
      * Retrieves all {@link Property properties} used in given
      * {@link Result}.
      * @param resultId the {@link Result} identifier.
+     * @param properties the properties.
+     * @param customResult the custom result.
      * @return the list of properties associated to given {@link Result}.
      */
     @NotNull
@@ -246,6 +249,7 @@ public class CucumberSqlPropertyDAO
      * @param index the property index.
      * @param type the type.
      * @param nullable whether it allows null or not.
+     * @param properties the properties.
      */
     protected void insert(
         @NotNull final String id,

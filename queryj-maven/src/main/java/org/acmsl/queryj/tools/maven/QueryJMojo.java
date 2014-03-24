@@ -1254,7 +1254,6 @@ public class QueryJMojo
 
     /**
      * Executes QueryJ via Maven2.
-     * @throws MojoExecutionException if something goes wrong.
      */
     @Override
     public void execute()
@@ -1266,7 +1265,6 @@ public class QueryJMojo
     /**
      * Executes QueryJ via Maven2.
      * @param log the Maven log.
-     * @throws MojoExecutionException if something goes wrong.
      */
     protected void execute(@NotNull final Log log)
         throws MojoExecutionException
@@ -1296,7 +1294,6 @@ public class QueryJMojo
      * Executes QueryJ via Maven2.
      * @param log the Maven log.
      * @param version the QueryJ version.
-     * @throws MojoExecutionException if something goes wrong.
      */
     protected void execute(@NotNull final Log log, final String version)
         throws MojoExecutionException

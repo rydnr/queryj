@@ -51,11 +51,15 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/08/15 07:49
+ * @param <C> the context.
  */
 @ThreadSafe
 public class TemplateTemplate<C extends TemplatePackagingContext>
     extends AbstractTemplatePackagingTemplate<C>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -392473631653215353L;
 
     /**

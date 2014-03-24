@@ -57,7 +57,8 @@ import java.util.List;
 /**
  * Cucumber-specific {@link SqlDAO} implementation.
  * @author <a href="mailto:jose.sanleandro@ventura24.es">Jose San Leandro</a>
- * @since 2013/06/24
+ * @since 3.0
+ * Created: 2013/06/24
  */
 public class CucumberSqlDAO
     implements SqlDAO
@@ -283,6 +284,7 @@ public class CucumberSqlDAO
     /**
      * Retrieves all SQL matching given result id.
      * @param resultId the result id.
+     * @param sqlList the list of {@link Sql}.
      * @return the list of matching {@link Sql}.
      */
     @NotNull

@@ -105,7 +105,6 @@ public class CommonsLoggingMavenLogAdapter
 
     /**
      * <p> Is trace logging currently enabled? </p>
-     * <p/>
      * <p> Call this method to prevent having to perform expensive operations
      * (for example, <code>String</code> concatenation)
      * when the log level is more than trace. </p>
@@ -197,7 +196,6 @@ public class CommonsLoggingMavenLogAdapter
 
     /**
      * <p> Is debug logging currently enabled? </p>
-     * <p/>
      * <p> Call this method to prevent having to perform expensive operations
      * (for example, <code>String</code> concatenation)
      * when the log level is more than debug. </p>
@@ -289,7 +287,6 @@ public class CommonsLoggingMavenLogAdapter
 
     /**
      * <p> Is info logging currently enabled? </p>
-     * <p/>
      * <p> Call this method to prevent having to perform expensive operations
      * (for example, <code>String</code> concatenation)
      * when the log level is more than info. </p>
@@ -383,7 +380,6 @@ public class CommonsLoggingMavenLogAdapter
 
     /**
      * <p> Is warn logging currently enabled? </p>
-     * <p/>
      * <p> Call this method to prevent having to perform expensive operations
      * (for example, <code>String</code> concatenation)
      * when the log level is more than warn. </p>
@@ -475,7 +471,6 @@ public class CommonsLoggingMavenLogAdapter
 
     /**
      * <p> Is error logging currently enabled? </p>
-     * <p/>
      * <p> Call this method to prevent having to perform expensive operations
      * (for example, <code>String</code> concatenation)
      * when the log level is more than error. </p>
@@ -568,7 +563,6 @@ public class CommonsLoggingMavenLogAdapter
 
     /**
      * <p> Is fatal logging currently enabled? </p>
-     * <p/>
      * <p> Call this method to prevent having to perform expensive operations
      * (for example, <code>String</code> concatenation)
      * when the log level is more than fatal. </p>

@@ -1,5 +1,5 @@
 /*
-                        QueryJ-Core
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -86,6 +86,11 @@ public class DecoratedString
      * A regex for replacing new lines.
      */
     protected static final Pattern NEWLINE_PATTERN = Pattern.compile("\\s*\\n\\s*");
+
+    /**
+     * A regex for removing the extension.
+     */
+    protected static final Pattern EXT_REGEX = Pattern.compile("(\\..*)$");
 
     /**
      * The actual value.
@@ -533,5 +538,28 @@ public class DecoratedString
     public String toString()
     {
         return getValue();
+    }
+
+    /**
+     * Removes the extension, if applicable.
+     * @return the new DecoratedString.
+     */
+    @NotNull
+    public DecoratedString getNoExtension()
+    {
+        return removeExtension(getValue());
+    }
+
+    /**
+     * Removes the extension, if applicable.
+     * @param value the value.
+     * @return the new DecoratedString.
+     */
+    @NotNull
+    protected DecoratedString removeExtension(@NotNull final String value)
+    {
+        @NotNull final String result = EXT_REGEX.matcher(value).replaceAll("");
+
+        return new DecoratedString(result);
     }
 }

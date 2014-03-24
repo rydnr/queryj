@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -58,6 +58,8 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/08/17 10/09
+ * @param <T> the template.
+ * @param <C> the context.
  */
 @ThreadSafe
 public class TemplatePackagingTemplateGenerator

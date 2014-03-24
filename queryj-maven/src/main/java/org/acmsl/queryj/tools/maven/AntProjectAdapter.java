@@ -310,7 +310,6 @@ public class AntProjectAdapter
     /**
      * Initializes this project.
      * @param project the {@link Project} instance.
-     * @throws BuildException if the initialization fails.
      */
     protected void init(@NotNull final Project project)
         throws BuildException
@@ -331,7 +330,6 @@ public class AntProjectAdapter
     /**
      * Initializes the project properties.
      * @param project the {@link Project} instance.
-     * @throws BuildException if the initialization fails.
      */
     protected void initProperties(@NotNull final Project project)
         throws BuildException
@@ -652,7 +650,6 @@ public class AntProjectAdapter
      * @return the given string with embedded property names replaced
      *         by values, or <code>null</code> if the given string is
      *         <code>null</code>.
-     * @throws BuildException if the given value has an unclosed
      *                        property name, e.g. <code>${xxx</code>.
      */
     @NotNull
@@ -994,15 +991,13 @@ public class AntProjectAdapter
     }
 
     /**
-     * (Copied from Apache Ant 1.8.1 javadoc):<br/>
+     * (Copied from Apache Ant 1.8.1 javadoc):
      * Sets the <code>ant.java.version</code> property and tests for
      * unsupported JVM versions. If the version is supported,
      * verbose log messages are generated to record the Java version
      * and operating system name.
      *
      * @param project the {@link Project} instance.
-     * @exception BuildException if this Java version is not supported.
-     *
      * @see org.apache.tools.ant.util.JavaEnvUtils#getJavaVersion
      */
     protected void setJavaVersionProperty(@NotNull final Project project)
@@ -1044,7 +1039,6 @@ public class AntProjectAdapter
      * @param taskName the task name.
      * @param taskClass the task class.
      * @param project the {@link Project} instance.
-     * @throws BuildException if the operation fails.
      */
     protected void addTaskDefinition(
         @NotNull final String taskName, @NotNull final Class taskClass, @NotNull final Project project)
@@ -1067,7 +1061,6 @@ public class AntProjectAdapter
      * Checks given task class.
      * @param taskClass the task class.
      * @param project the {@link Project} instance.
-     * @throws BuildException if the verification fails.
      */
     protected void checkTaskClass(@NotNull final Class taskClass, @NotNull final Project project)
         throws BuildException
@@ -1193,7 +1186,6 @@ public class AntProjectAdapter
      * Adds given target.
      * @param target the target.
      * @param project the {@link Project} instance.
-     * @throws BuildException if the target cannot be added.
      */
     protected void addTarget(@NotNull final Target target, @NotNull final Project project)
         throws BuildException
@@ -1216,7 +1208,6 @@ public class AntProjectAdapter
      * @param targetName the target name.
      * @param target the target.
      * @param project the {@link Project} instance.
-     * @throws BuildException if the target cannot be added.
      */
     protected void addTarget(
         @NotNull final String targetName, @NotNull final Target target, @NotNull final Project project)
@@ -1239,7 +1230,6 @@ public class AntProjectAdapter
      * Adds given target.
      * @param target the target.
      * @param project the {@link Project} instance.
-     * @throws BuildException if the target cannot be added.
      */
     protected void addOrReplaceTarget(@NotNull final Target target, @NotNull final Project project)
         throws BuildException
@@ -1262,7 +1252,6 @@ public class AntProjectAdapter
      * @param targetName the target name.
      * @param target the target.
      * @param project the {@link Project} instance.
-     * @throws BuildException if the target cannot be added.
      */
     protected void addOrReplaceTarget(
         @NotNull final String targetName, @NotNull final Target target, @NotNull final Project project)
@@ -1329,7 +1318,6 @@ public class AntProjectAdapter
      * @param taskType the task type.
      * @param project the {@link Project} instance.
      * @return the new task.
-     * @throws BuildException if the task cannot be created.
      */
     @NotNull
     protected Task createTask(@NotNull final String taskType, @NotNull final Project project)
@@ -1353,7 +1341,6 @@ public class AntProjectAdapter
      * @param typeName the name of the data type.
      * @param project the {@link Project} instance.
      * @return the new data type.
-     * @throws BuildException if the data type cannot be created.
      */
     protected Object createDataType(@NotNull final String typeName, @NotNull final Project project)
         throws BuildException
@@ -1432,7 +1419,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#demuxOutput(String, boolean)}
+     * @see Project#demuxOutput(String, boolean)
      * @param output the output.
      * @param isWarning whether the text represents a warning.
      * @param project the {@link Project} instance.
@@ -1454,13 +1441,12 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#defaultInput(byte[], int, int)}
+     * @see Project#defaultInput(byte[], int, int)
      * @param buffer the buffer.
      * @param offset the offset.
      * @param length the buffer length.
      * @param project the {@link Project} instance.
      * @return the number of bytes read.
-     * @throws IOException in some cases.
      */
     protected int defaultInput(
         @NotNull final byte[] buffer, final int offset, final int length, @NotNull final Project project)
@@ -1480,13 +1466,12 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#demuxInput(byte[], int, int)}
+     * @see Project#demuxInput(byte[], int, int)
      * @param buffer the input buffer.
      * @param offset the offset.
      * @param length the buffer length.
      * @param project the {@link Project} instance.
      * @return the number of bytes processed.
-     * @throws IOException in some cases.
      */
     protected int demuxInput(
         @NotNull final byte[] buffer, final int offset, final int length, @NotNull final Project project)
@@ -1505,7 +1490,8 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#demuxFlush(String, boolean)}.
+     * See {@link Project#demuxFlush(String, boolean)}.
+     * See Project#demuxFlush().
      * @param output the output.
      * @param isError whether the output represents an error message.
      * @param project the {@link Project} instance.
@@ -1527,10 +1513,9 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#executeTarget(String)}.
+     * See {@link Project#executeTarget(String)}.
      * @param targetName the target name.
      * @param project the {@link Project} instance.
-     * @throws BuildException if the target fails.
      */
     protected void executeTarget(@NotNull final String targetName, @NotNull final Project project)
         throws BuildException
@@ -1549,10 +1534,9 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#executeSortedTargets(Vector).
+     * See {@link Project#executeSortedTargets(Vector)}.
      * @param sortedTargets the target list.
      * @param project the {@link Project} instance.
-     * @throws BuildException if any of the targets fails.
      */
     protected void executeSortedTargets(@NotNull final Vector sortedTargets, @NotNull final Project project)
         throws BuildException
@@ -1571,7 +1555,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#resolveFile(String)}.
+     * See {@link Project#resolveFile(String)}.
      * @param fileName the file name.
      * @param project the {@link Project} instance.
      * @return the file.
@@ -1592,7 +1576,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#inheritIDReferences(Project)}.
+     * See {@link Project#inheritIDReferences(Project)}.
      * @param parent the parent project.
      * @param project the {@link Project} instance.
      */
@@ -1611,7 +1595,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#addIdReference(String, Object)}.
+     * See {@link Project#addIdReference(String, Object)}.
      * @param id the id.
      * @param value the reference.
      * @param project the {@link Project} instance.
@@ -1632,7 +1616,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#addReference(String, Object)}.
+     * See {@link Project#addReference(String, Object)}.
      * @param referenceName the reference name.
      * @param value the value.
      * @param project the {@link Project} instance.
@@ -1654,7 +1638,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#getReferences()}.
+     * See {@link Project#getReferences()}.
      * @param project the {@link Project} instance.
      * @return such references.
      */
@@ -1674,7 +1658,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#hasReference(String)}.
+     * See {@link Project#hasReference(String)}.
      * @param key the reference key.
      * @param project the {@link Project} instance.
      * @return <code>true</code> in such case.
@@ -1695,7 +1679,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#getCopyOfReferences()}.
+     * See {@link Project#getCopyOfReferences()}.
      * @param project the {@link Project} instance.
      * @return such references.
      */
@@ -1716,7 +1700,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#getReference(String)}.
+     * See {@link Project#getReference(String)}.
      * @param key the reference key.
      * @param project the {@link Project} instance.
      * @return the reference value.
@@ -1738,7 +1722,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#getElementName(Object)}.
+     * See {@link Project#getElementName(Object)}.
      * @param element the element.
      * @param project the {@link Project} instance.
      * @return the name.
@@ -1759,7 +1743,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#fireBuildStarted()}.
+     * See {@link Project#fireBuildStarted()}.
      * @param project the {@link Project} instance.
      */
     protected void fireBuildStarted(@NotNull final Project project)
@@ -1777,7 +1761,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#fireBuildFinished(Throwable)}.
+     * See {@link Project#fireBuildFinished(Throwable)}.
      * @param exception the exception, should it occurs.
      * @param project the {@link Project} instance.
      */
@@ -1796,7 +1780,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#fireSubBuildStarted()}.
+     * See {@link Project#fireSubBuildStarted()}.
      * @param project the {@link Project} instance.
      */
     protected void fireSubBuildStarted(@NotNull final Project project)
@@ -1814,7 +1798,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#fireSubBuildFinished(Throwable)}.
+     * See {@link Project#fireSubBuildFinished(Throwable)}.
      * @param exception the exception, should it occurs.
      * @param project the {@link Project} instance.
      */
@@ -1852,7 +1836,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#getThreadTask(Thread)}.
+     * See {@link Project#getThreadTask(Thread)}.
      * @param thread the thread task.
      * @param project the {@link Project} instance.
      * @return the task.
@@ -1874,7 +1858,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#getResource(String)}.
+     * See {@link Project#getResource(String)}.
      * @param name the resource name.
      * @param project the {@link Project} instance.
      * @return the resource.
@@ -1916,7 +1900,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#log(String)}.
+     * See {@link Project#log(String)}.
      * @param message the message.
      * @param msgLevel either {@link Project#MSG_ERR}, {@link Project#MSG_WARN},
      * {@link Project#MSG_INFO}, {@link Project#MSG_VERBOSE}, or {@link Project#MSG_DEBUG}.
@@ -1952,7 +1936,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link #log(String, Throwable, int)}.
+     * See {@link Project#log(String, Throwable, int)}.
      * @param message the message.
      * @param throwable the error.
      * @param msgLevel either {@link Project#MSG_ERR}, {@link Project#MSG_WARN},
@@ -1993,7 +1977,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#log(Task, String, int)}.
+     * See {@link Project#log(Task, String, int)}.
      * @param task the task.
      * @param message the message.
      * @param msgLevel either {@link Project#MSG_ERR}, {@link Project#MSG_WARN},
@@ -2034,7 +2018,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#log(Task, String, int)}.
+     * See {@link Project#log(Task, String, int)}.
      * @param task the task.
      * @param message the message.
      * @param throwable the error.
@@ -2079,7 +2063,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#log(Target, String, int)}.
+     * See {@link Project#log(Target, String, int)}.
      * @param target the target.
      * @param message the message.
      * @param msgLevel either {@link Project#MSG_ERR}, {@link Project#MSG_WARN},
@@ -2123,7 +2107,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#log(Target, String, int)}.
+     * See {@link Project#log(Target, String, int)}.
      * @param target the target.
      * @param message the message.
      * @param throwable the error.
@@ -2158,6 +2142,9 @@ public class AntProjectAdapter
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @NotNull
     public String toString()

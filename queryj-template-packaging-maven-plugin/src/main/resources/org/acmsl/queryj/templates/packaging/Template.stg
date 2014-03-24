@@ -105,7 +105,7 @@ public class <C.class_name>
     /**
      * The serial version UID for serialization.
      */
-    private static final long serialVersionUID = <C.serialVersionUID>;
+    private static final long serialVersionUID = <C.serialVersionUID>L;
 
     /**
      * Builds a <def.name.capitalized> using given context.
@@ -132,13 +132,13 @@ public class <C.class_name>
 
     /**
      * Retrieves the template name.
-     * @return "<def.name.capitalized>";
+     * @return "<def.name.toExtension>";
      */
     @NotNull
     @Override
     public String getTemplateName()
     {
-        return "<def.name.capitalized>";
+        return "<def.name.noExtension>";
     }
 }
 >>

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Maven
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -68,7 +68,7 @@ public class Table
      * Specifies the name.
      * @param name the table name.
      */
-    protected final void immutableSetName(final String name)
+    protected final void immutableSetName(@NotNull final String name)
     {
         m__strName = name;
     }
@@ -77,7 +77,7 @@ public class Table
      * Specifies the name.
      * @param name the table name.
      */
-    public void setName(final String name)
+    public void setName(@NotNull final String name)
     {
         immutableSetName(name);
     }
@@ -86,6 +86,7 @@ public class Table
      * Returns the name.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetName()
     {
         return m__strName;
@@ -95,6 +96,7 @@ public class Table
      * Returns the name.
      * @return such value.
      */
+    @Nullable
     public String getName()
     {
         return immutableGetName();
@@ -104,7 +106,7 @@ public class Table
      * Specifies the fields.
      * @param fields the fields.
      */
-    protected final void immutableSetFields(final List<Field> fields)
+    protected final void immutableSetFields(@NotNull final List<Field> fields)
     {
         m__aFields = fields;
     }
@@ -113,7 +115,8 @@ public class Table
      * Specifies the fields.
      * @param fields the fields.
      */
-    public void setFields(final List<Field> fields)
+    @SuppressWarnings("unused")
+    public void setFields(@NotNull final List<Field> fields)
     {
         immutableSetFields(fields);
     }
@@ -122,6 +125,7 @@ public class Table
      * Returns the fields.
      * @return such values.
      */
+    @Nullable
     protected final List<Field> immutableGetFields()
     {
         return m__aFields;
@@ -131,14 +135,17 @@ public class Table
      * Returns the fields.
      * @return such values.
      */
+    @Nullable
     public List<Field> getFields()
     {
         return immutableGetFields();
     }
 
     /**
-     * @{inheritDoc}
+     * {@inheritDoc}
      */
+    @Override
+    @NotNull
     public String toString()
     {
         return
@@ -157,11 +164,11 @@ public class Table
      * @return the formatted text.
      */
     protected String toString(
-        final String className,
-        final String name,
+        @NotNull final String className,
+        @Nullable final String name,
         @Nullable final List<Field> fields)
     {
-        @NotNull StringBuilder result = new StringBuilder();
+        @NotNull final StringBuilder result = new StringBuilder();
 
         result.append("{ class-name : \"");
         result.append(className);
@@ -174,7 +181,7 @@ public class Table
             result.append(", {");
             boolean firstTime = true;
 
-            for (Field field : fields)
+            for (@Nullable final Field field : fields)
             {
                 if (!firstTime)
                 {

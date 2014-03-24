@@ -113,7 +113,6 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
     /**
      * Retrieves the template value for that placeholder.
      * @return the dynamic value.
-     * @throws QueryJBuildException if the value cannot be retrieved.
      */
     @Nullable
     @Override
@@ -126,7 +125,6 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
     /**
      * Retrieves the template value for this placeholder.
      * @return such value.
-     * @throws QueryJBuildException if there inconsistencies in the custom SQL
      * model.
      */
     @Nullable

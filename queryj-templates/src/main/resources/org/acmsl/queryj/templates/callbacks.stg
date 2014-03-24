@@ -522,8 +522,6 @@ protected static class SelectForUpdateTransactionCallback
      * Manages the prepared statement logic.
      * @param preparedStatement the statement.
      * @return the result of the operation.
-     * @throws SQLException if it gets thrown as result of the operation.
-     * @throws DataAccessException if the data cannot be accessed for some
      * reason.
      */
     <nullable(C=C)>
@@ -545,8 +543,6 @@ protected static class SelectForUpdateTransactionCallback
      * @param preparedStatementSetter the prepared statement setter.
      * @param resultSetExtractor the result set extractor.
      * @return the result of the operation.
-     * @throws SQLException if it gets thrown as result of the operation.
-     * @throws DataAccessException if the data cannot be accessed for some
      * reason.
      */
     <nullable(C=C)>

@@ -70,7 +70,6 @@ public class BeanElementFactory
      * object based on the element's attributes.
      *
      * @param attributes the element's attributes
-     * @throws Exception any exception thrown will be propagated upwards
      */
     @NotNull
     @Override

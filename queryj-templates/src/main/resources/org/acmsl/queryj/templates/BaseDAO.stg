@@ -173,7 +173,6 @@ public interface <table.name.voName>DAO
      <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @return the \<code><table.name.voName>\</code> matching given
      * primary key.
-     * @throws DataAccessException if the operation fails.
      */
     public <table.name.voName> findByPrimaryKey(
         <table.primaryKey:attribute_declaration(attr=it); separator=",\n">)
@@ -183,7 +182,6 @@ public interface <table.name.voName>DAO
      * Persists \<code><table.name.voName>\</code> information.
      <table.allButExternallyManagedAttributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
-     * @throws DataAccessException if the operation fails.
      */
     public void insert(
         <table.allButExternallyManagedAttributes:attribute_declaration(
@@ -195,7 +193,6 @@ public interface <table.name.voName>DAO
      * \<code><table.name.voName>\</code> instance.
      <table.allButExternallyManagedAttributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
-     * @throws DataAccessException if the operation fails.
      */
     public <table.name.voName> create(
         <table.allButExternallyManagedAttributes:attribute_declaration(
@@ -206,7 +203,6 @@ public interface <table.name.voName>DAO
      * Updates \<code><table.name.voName>\</code> information.
      <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @return the number of entities updated.
-     * @throws DataAccessException if the operation fails.
      */
     public int update(
         <input.attributes:attribute_declaration(attr=it); separator=",\n">)
@@ -321,7 +317,6 @@ custom_select(cs) ::= <<
  * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
- * @throws DataAccessException if the operation fails.
  */
 public <cs.resultClass> <cs.nameUncapitalized>(
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
@@ -337,7 +332,6 @@ custom_update_or_insert(cs) ::= <<
  * Custom sql \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @throws DataAccessException if the operation fails.
  */
 public void <cs.nameUncapitalized>(
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
@@ -354,7 +348,6 @@ custom_select_for_update(cs) ::= <<
  * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
- * @throws DataAccessException if the operation fails.
  */
 public <cs.resultClass> <cs.nameUncapitalized>(
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)

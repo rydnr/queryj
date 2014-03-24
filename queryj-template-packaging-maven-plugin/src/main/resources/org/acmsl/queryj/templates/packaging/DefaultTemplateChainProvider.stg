@@ -95,7 +95,7 @@ import java.util.List;
 >>
 
 import_bundle(def) ::= <<
-import org.acmsl.queryj.templates.handlers.<def.name.capitalized>TemplateHandlerBundle;
+import org.acmsl.queryj.templates.handlers.<def.name.noExtension>TemplateHandlerBundle;
 >>
 
 class(defs, C) ::= <<
@@ -128,5 +128,5 @@ public class <C.class_name>
 >>
 
 add_handler_bundle(def) ::= <<
-result.add(new <def.name.capitalized>TemplateHandlerBundle());
+result.add(new <def.name.noExtension>TemplateHandlerBundle());
 >>

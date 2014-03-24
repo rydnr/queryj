@@ -276,6 +276,7 @@ public class TableTestHelper
      * Defines the columns from the feature.
      * @param columnInfo the column information.
      * @param tables the tables.
+     * @return the input columns.
      */
     public List<Table<String, Attribute<String>, List<Attribute<String>>>> defineInputColumns(
         @NotNull final DataTable columnInfo,
@@ -714,6 +715,8 @@ public class TableTestHelper
     /**
      * Defines the static contents defined in a Cucumber test.
      * @param values the test values.
+     * @param tables the tables.
+     * @return the rows.
      */
     @NotNull
     public Map<String, List<Row<String>>> defineRows(
@@ -851,6 +854,11 @@ public class TableTestHelper
     protected static class _AttributeIncompleteValueObject
         extends AttributeIncompleteValueObject
     {
+        /**
+         * The serial version id.
+         */
+        private static final long serialVersionUID = 5282401170254035076L;
+
         /**
          * Creates a new instance.
          * @param staticAttribute the static attribute.

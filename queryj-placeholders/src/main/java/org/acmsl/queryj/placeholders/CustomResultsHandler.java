@@ -89,7 +89,6 @@ public class CustomResultsHandler
      * Retrieves the {@link List} of {@link Result}s for given {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      * @param context the context.
      * @return such value.
-     * @throws QueryJBuildException if there inconsistencies in the custom SQL
      * model.
      */
     @NotNull
@@ -127,7 +126,6 @@ public class CustomResultsHandler
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom results.
-     * @throws QueryJBuildException if there inconsistencies in the custom SQL
      * model.
      */
     @NotNull

@@ -75,8 +75,8 @@ import org.acmsl.queryj.tools.PackageUtils;
 /*
  * Importing custom templates.
  */
-import org.acmsl.queryj.templates.<def.name.capitalized>Template;
-import org.acmsl.queryj.templates.<def.name.capitalized>TemplateGenerator;
+import org.acmsl.queryj.templates.<def.name.noExtension>Template;
+import org.acmsl.queryj.templates.<def.name.noExtension>TemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -101,7 +101,7 @@ import java.util.List;
 
 class(def, C) ::= <<
 /**
- * Writing handler for {@link <def.name.capitalized>Template}s.
+ * Writing handler for {@link <def.name.noExtension>Template}s.
 <class_common_javadoc(
   template="org/acmsl/templates/packaging/TemplateWritingHandler.stg",
   timestamp=C.timestamp)>
@@ -109,12 +109,12 @@ class(def, C) ::= <<
 @ThreadSafe
 public class <C.class_name>
     extends Base<def.type.capitalized>TemplateWritingHandler\<
-                <def.name.capitalized>Template,
+                <def.name.noExtension>Template,
                 <def.type.capitalized>TemplateContext,
-                <def.name.capitalized>TemplateGenerator>
+                <def.name.noExtension>TemplateGenerator>
 {
     /**
-     * Creates a new writing handler for {@link <def.name.capitalized>Template templates}.
+     * Creates a new writing handler for {@link <def.name.noExtension>Template templates}.
      */
     public <C.class_name>() {}
 
@@ -123,9 +123,9 @@ public class <C.class_name>
      */
     @NotNull
     @Override
-    protected <def.name.capitalized>TemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
+    protected <def.name.noExtension>TemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return new <def.name.capitalized>TemplateGenerator(caching, threadCount);
+        return new <def.name.noExtension>TemplateGenerator(caching, threadCount);
     }
 
     /**
@@ -133,17 +133,17 @@ public class <C.class_name>
      */
     @NotNull
     @Override
-    protected List\<<def.name.capitalized>Template> retrieveTemplates(@NotNull final QueryJCommand parameters)
+    protected List\<<def.name.noExtension>Template> retrieveTemplates(@NotNull final QueryJCommand parameters)
     {
-        @NotNull final List\<<def.name.capitalized>Template> result;
+        @NotNull final List\<<def.name.noExtension>Template> result;
 
-        @Nullable final List\<<def.name.capitalized>Template> aux =
-            new QueryJCommandWrapper\<List\<<def.name.capitalized>Template\>>(parameters)
-                .getSetting(<def.name.capitalized>TemplateBuildHandler.TEMPLATES_KEY);
+        @Nullable final List\<<def.name.noExtension>Template> aux =
+            new QueryJCommandWrapper\<List\<<def.name.noExtension>Template\>>(parameters)
+                .getSetting(<def.name.noExtension>TemplateBuildHandler.TEMPLATES_KEY);
 
         if (aux == null)
         {
-            result = new ArrayList\<<def.name.capitalized>Template>(0);
+            result = new ArrayList\<<def.name.noExtension>Template>(0);
         }
         else
         {
@@ -170,7 +170,7 @@ public class <C.class_name>
         @NotNull final File result;
 
         @NotNull final String packageName =
-            <def.name.capitalized>TemplateBuildHandler.buildPackageName(
+            <def.name.noExtension>TemplateBuildHandler.buildPackageName(
                 tableName, engine, projectPackage);
 
         @NotNull final String[] pieces = packageName.split("\\\.");

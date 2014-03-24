@@ -56,7 +56,6 @@ custom_select(cs, table, C) ::= <<
 <else>
  * @return the {@link <cs.dao.voName>} information retrieved.
 <endif>
- * @throws DataAccessException if the operation fails.
  */
 <custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
 public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(<if(!cs.parametersShouldBeWrapped)><cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=", ">)
@@ -99,7 +98,6 @@ public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.nam
 <else>
  * @return the {@link <cs.dao.voName>} information retrieved.
 <endif>
- * @throws DataAccessException if the operation fails.
  */
 <custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
 protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(
@@ -135,7 +133,6 @@ protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.
 <else>
  * @return the {@link <cs.dao.voName>} information retrieved.
 <endif>
- * @throws DataAccessException if the operation fails.
  */
 <custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
 protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(
@@ -172,7 +169,6 @@ protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.
 <else>
  * @return the {@link <cs.dao.voName>} information retrieved.
 <endif>
- * @throws DataAccessException if the operation fails.
  */
 <custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
 protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(
@@ -232,7 +228,6 @@ custom_update_or_insert(cs) ::= <<
  * \<b><cs.description>\</b>.
  <cs.parameters:{ p | <attribute_javadoc(name=p.name.lowercased)>}; separator="\n">
  * @return the number of entities updated.
- * @throws DataAccessException if the operation fails.
  */
 public int <cs.name.uncapitalized>(
     <cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=",\n">)
@@ -311,7 +306,6 @@ custom_select_for_update(cs, table) ::= <<
 <else>
  * @return the {@link <cs.dao.voName>} information retrieved.
 <endif>
- * @throws DataAccessException if the operation fails.
  */
 <if(cs.resultClass)>
 <cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>

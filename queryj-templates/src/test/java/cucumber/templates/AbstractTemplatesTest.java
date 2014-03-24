@@ -36,10 +36,14 @@
 package cucumber.templates;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import cucumber.templates.sql.CucumberSqlDAO;
 import cucumber.templates.sql.CucumberSqlParameterDAO;
+
+/*
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
@@ -114,11 +118,20 @@ import java.util.Properties;
  * Generic stuff for template tests.
  * @author <a href="chous@acm-sl.org">Jose San Leandro</a>
  * @since 2013/05/05
+ * @param <G> the generator class.
+ * @param <F> the factory class.
  */
 @SuppressWarnings("unused")
 public abstract class AbstractTemplatesTest<G, F>
 {
+    /**
+     * String literal: "Parser error: ".
+     */
     public static final String PARSER_ERROR = "Parser error: ";
+
+    /**
+     * String literal: "Cannot read file: ".
+     */
     public static final String CANNOT_READ_FILE = "Cannot read file: ";
 
     /**
@@ -207,12 +220,12 @@ public abstract class AbstractTemplatesTest<G, F>
      */
     protected AbstractTemplatesTest()
     {
-        immutableSetOutputFiles(new HashMap<String, File>());
-        immutableSetTables(new HashMap<String, Table<String, Attribute<String>, List<Attribute<String>>>>());
-        immutableSetForeignKeys(new ArrayList<ForeignKey<String>>());
-        immutableSetSqlList(new ArrayList<Sql<String>>());
-        immutableSetParameters(new HashMap<String, List<Parameter<String, ?>>>());
-        immutableSetRows(new HashMap<String, List<Row<String>>>());
+        immutableSetOutputFiles(new HashMap<>());
+        immutableSetTables(new HashMap<>());
+        immutableSetForeignKeys(new ArrayList<>());
+        immutableSetSqlList(new ArrayList<>());
+        immutableSetParameters(new HashMap<>());
+        immutableSetRows(new HashMap<>());
     }
 
     /**
@@ -364,7 +377,7 @@ public abstract class AbstractTemplatesTest<G, F>
     }
 
     /**
-     * Specifies the row map (table name > static rows.
+     * Specifies the row map (table name -&gt; static rows).
      * @param map such map.
      */
     protected final void immutableSetRows(@NotNull final Map<String, List<Row<String>>> map)
@@ -373,7 +386,7 @@ public abstract class AbstractTemplatesTest<G, F>
     }
 
     /**
-     * Specifies the row map (table name > static rows.
+     * Specifies the row map (table name -&gt; static rows).
      * @param map such map.
      */
     @SuppressWarnings("unused")
@@ -383,7 +396,7 @@ public abstract class AbstractTemplatesTest<G, F>
     }
 
     /**
-     * Retrieves the row map (table name > static rows.
+     * Retrieves the row map (table name &gt; static rows).
      * @return such map.
      */
     @NotNull
@@ -571,8 +584,6 @@ public abstract class AbstractTemplatesTest<G, F>
      * Sets up the Java parser.
      * @param javaFile the Java contents to parse.
      * @return the {@link JavaParser} instance.
-     * @throws RecognitionException if the comment cannot be parsed.
-     * @throws IOException if the file could not be read.
      */
     @SuppressWarnings("unchecked")
     @NotNull
@@ -696,7 +707,6 @@ public abstract class AbstractTemplatesTest<G, F>
      * Creates a temporary directory.
      * @param prefix the prefix to use (optional).
      * @return the temporary folder.
-     * @throws java.io.IOException if the folder cannot be created.
      */
     @SuppressWarnings("unused")
     @NotNull

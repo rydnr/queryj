@@ -103,8 +103,6 @@ public abstract class AbstractFillHandler<P>
      * Processes input extracted from given map to fill a placeholder.
      * @param map the command map.
      * @param placeHolder the placeholder.
-     * @throws InvalidTemplateException if the template contains errors.
-     * @throws QueryJBuildException if there inconsistencies in the custom SQL
      * model.
      */
     @SuppressWarnings("unchecked")

@@ -58,13 +58,14 @@ import java.util.Map.Entry;
 /**
  * Cucumber-specific {@link SqlParameterDAO} implementation.
  * @author <a href="mailto:jose.sanleandro@ventura24.es">Jose San Leandro</a>
- * @since 2013/06/26
+ * @since 3.0
+ * Created: 2013/06/26
  */
 public class CucumberSqlParameterDAO
     implements SqlParameterDAO
 {
     /**
-     * The map of sqlId -> parameters.
+     * The map of sqlId -&gt; parameters.
      */
     private Map<String, List<Parameter<String, ?>>> m__mParameters;
 

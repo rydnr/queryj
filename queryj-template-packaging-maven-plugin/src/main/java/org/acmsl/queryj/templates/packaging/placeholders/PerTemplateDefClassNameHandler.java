@@ -110,7 +110,7 @@ public class PerTemplateDefClassNameHandler
     protected String resolveContextValue(@NotNull final DefaultTemplatePackagingContext context)
     {
         @NotNull final String result =
-              new DecoratedString(STG_EXT.matcher(context.getTemplateDef().getName()).replaceAll("")).getCapitalized().getValue();
+              new DecoratedString(STG_EXT.matcher(context.getTemplateDef().getName()).replaceAll("")).getValue(); //getCapitalized().getValue();
 
         return result + context.getTemplateName();
     }
