@@ -38,6 +38,7 @@ package cucumber.templates.sql;
 /*
  * Importing QueryJ-core classes.
  */
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.SqlDAO;
@@ -197,7 +198,8 @@ public class CucumberSqlDAO
 
         for (@NotNull final Sql<String> sql : sqlList)
         {
-            if (table.equals(sql.getDao()))
+            if (table.toUpperCase(QueryJSettings.DEFAULT_LOCALE)
+                    .equals(sql.getDao().toUpperCase(QueryJSettings.DEFAULT_LOCALE)))
             {
                 result.add(sql);
             }

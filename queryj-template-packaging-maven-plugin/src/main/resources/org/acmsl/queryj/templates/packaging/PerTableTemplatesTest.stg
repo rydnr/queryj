@@ -421,6 +421,7 @@ public class PerTableTemplatesTest
             template,
             engine,
             getTables(),
+            getRows(),
             getOutputFiles(),
             retrieveCustomSqlProvider(getSqlList(), getParameters()));
     }
@@ -429,7 +430,8 @@ public class PerTableTemplatesTest
      * Generates a file with the information from the feature.
      * @param templateName the template.
      * @param engine the engine name.
-     * @param tables the tables.
+     * @param tableMap the table map.
+     * @param rows the rows.
      * @param outputFiles the output files.
      * @param sqlProvider the {@link CustomSqlProvider} instance.
      */
@@ -437,7 +439,8 @@ public class PerTableTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
-        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tableMap,
+        @NotNull final Map\<String, List\<Row\<String>\>> rows,
         @NotNull final Map\<String, File> outputFiles,
         @NotNull final CustomSqlProvider sqlProvider)
     {
@@ -457,7 +460,12 @@ public class PerTableTemplatesTest
         {
             firstTime = false;
 
-            for (@NotNull final Table\<String, Attribute\<String>, List\<Attribute\<String>\>> table : tables.values())
+            @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables =
+                new ArrayList\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>>(tableMap.values());
+
+            @NotNull final MetadataManager metadataManager = retrieveMetadataManager(engine, tables);
+
+            for (@NotNull final Table\<String, Attribute\<String>, List\<Attribute\<String>\>> table : tables)
             {
                 @Nullable final PerTableTemplateFactory\<? extends PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext> templateFactory =
                     retrieveTemplateFactory(templateName);
@@ -467,9 +475,15 @@ public class PerTableTemplatesTest
                 @NotNull final String packageName =
                     resolvePackage(PACKAGE_MAPPINGS.get(templateName), resolveEngine(engine));
 
+                @Nullable List\<Row\<String\>> tableRows = rows.get(table.getName());
+
+                if (tableRows == null)
+                {
+                    tableRows = new ArrayList\<Row\<String\>>(0);
+                }
                 @Nullable final PerTableTemplate\<PerTableTemplateContext> template =
                     templateFactory.createTemplate(
-                        retrieveMetadataManager(engine, table),
+                        metadataManager,
                         sqlProvider,
                         retrieveDecoratorFactory(generator),
                         packageName,
@@ -483,7 +497,7 @@ public class PerTableTemplatesTest
                         false, // disable NotNull annotations
                         true, // disable checkThread.org annotations
                         table.getName(),
-                        new ArrayList\<Row\<String\>>(0));
+                        tableRows);
 
                 Assert.assertNotNull("No template found for " + templateName, template);
 

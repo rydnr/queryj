@@ -841,6 +841,29 @@ public abstract class AbstractTemplatesTest<G, F>
     /**
      * Retrieves a {@link MetadataManager} instance.
      * @param engineName the name of the engine.
+     * @param tables the tables.
+     * @return such instance.
+     */
+    @NotNull
+    protected MetadataManager retrieveMetadataManager(
+        @NotNull final String engineName, @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables)
+    {
+        @NotNull final List<String> tableNames = new ArrayList<>(tables.size());
+
+        for (@Nullable final Table<String, Attribute<String>, List<Attribute<String>>> table : tables)
+        {
+            if (table != null)
+            {
+                tableNames.add(table.getName());
+            }
+        }
+
+        return retrieveMetadataManager(engineName, tableNames, tables);
+    }
+
+    /**
+     * Retrieves a {@link MetadataManager} instance.
+     * @param engineName the name of the engine.
      * @param tableNames the table names.
      * @param tables the tables.
      * @return such instance.
@@ -848,7 +871,7 @@ public abstract class AbstractTemplatesTest<G, F>
     @NotNull
     protected MetadataManager retrieveMetadataManager(
         @NotNull final String engineName, @NotNull final List<String> tableNames,
-	@NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables)
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
         return
             new JdbcMetadataManager(
