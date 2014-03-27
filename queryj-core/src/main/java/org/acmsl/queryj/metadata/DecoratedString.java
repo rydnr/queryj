@@ -93,6 +93,11 @@ public class DecoratedString
     protected static final Pattern EXT_REGEX = Pattern.compile("(\\..*)$");
 
     /**
+     * A regex matching all non-alphanumeric characters.
+     */
+    protected static final Pattern NON_ALPHANUMERIC_REGEX = Pattern.compile("[^\\p{Alnum}]+");
+
+    /**
      * The actual value.
      */
     @NotNull
@@ -559,6 +564,29 @@ public class DecoratedString
     protected DecoratedString removeExtension(@NotNull final String value)
     {
         @NotNull final String result = EXT_REGEX.matcher(value).replaceAll("");
+
+        return new DecoratedString(result);
+    }
+
+    /**
+     * Removes all non-alphanumeric characters.
+     * @return the shrunk string.
+     */
+    @NotNull
+    public DecoratedString getShrink()
+    {
+        return getShrink(getValue());
+    }
+
+    /**
+     * Removes all non-alphanumeric characters.
+     * @param value the value.
+     * @return the shrunk string.
+     */
+    @NotNull
+    protected DecoratedString getShrink(@NotNull final String value)
+    {
+        @NotNull final String result = NON_ALPHANUMERIC_REGEX.matcher(value).replaceAll("");
 
         return new DecoratedString(result);
     }

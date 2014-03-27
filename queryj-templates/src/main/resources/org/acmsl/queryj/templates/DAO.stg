@@ -212,11 +212,11 @@ project_imports(
   @param parent the parent table (optional).
 !>
 /*
- * Importing project-specific classes.
+ * Importing <trName> classes.
  */
-import <package>.<table.name.lowercased>.<table.name.voName>AttributesStatementSetter;
-import <package>.<table.name.lowercased>.<table.name.voName>PkStatementSetter;
-import <package>.<table.name.lowercased>.<table.name.voName>ResultSetExtractor;
+import <package>.<table.name.shrink.lowercased>.<table.name.voName>AttributesStatementSetter;
+import <package>.<table.name.shrink.lowercased>.<table.name.voName>PkStatementSetter;
+import <package>.<table.name.shrink.lowercased>.<table.name.voName>ResultSetExtractor;
 import <basePackageName>.<voSubpackageName>.<table.name.voName>;
 <if(parent)>
 import <basePackageName>.<baseDAOSubpackageName>.<parent.name.voName>DAO;
@@ -336,14 +336,6 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
 <endif>
     <constructor(table=table, repository=repository, engine=engine, C=C)>
 <if(table.static)>
-    /**
-     * The fixed constants.
-     */
-    <notnull(C=C)>
-    protected final List\<<table.name.voName\>> FIXED_CONSTANTS =
-        Arrays.asList(
-            <C.staticValues:{ r | new <table.name.voName>(<r.attributes:{ a | <if(a.primitive)><a><else>"<a>"<endif>}; separator=", ">)}; separator=",\n">);
-
     /**
      * Retrieves the static (pre-cached) values.
      * @return such information.

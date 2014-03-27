@@ -85,4 +85,12 @@ public class DecoratedStringTest
     {
         Assert.assertEquals("bla", new DecoratedString("bla").getNoExtension().getValue());
     }
+
+    @Test
+    public void shrink_removes_all_non_alphanumeric_characters()
+    {
+        Assert.assertEquals("bcd", new DecoratedString("b_c_d$").getShrink().getValue());
+
+        Assert.assertEquals("GCYCLETYPES", new DecoratedString("G_CYCLE_TYPES").getShrink().getValue());
+    }
 }

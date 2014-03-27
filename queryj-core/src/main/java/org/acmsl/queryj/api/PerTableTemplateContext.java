@@ -204,18 +204,20 @@ public class PerTableTemplateContext
      * @return such values.
      */
     @SuppressWarnings("unused")
-    @Nullable
+    @NotNull
     public List<Row<String>> getStaticValues()
     {
-        @Nullable List<Row<String>> result = null;
+        @Nullable final List<Row<String>> result;
 
         @Nullable final List<Row<String>> t_lRows = immutableGetStaticValues();
 
         if (t_lRows != null)
         {
-            result = new ArrayList<Row<String>>(t_lRows.size());
-
-            Collections.copy(result, t_lRows);
+            result = new ArrayList<>(t_lRows);
+        }
+        else
+        {
+            result = new ArrayList<>(0);
         }
 
         return result;
