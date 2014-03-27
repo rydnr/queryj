@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,21 +33,29 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
 
+/*
+ * Importing Apache Commons Lang classes.
+ */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.vo.Attribute;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /*
  * Importing some JDK classes.
@@ -58,12 +66,17 @@ import java.util.List;
 /**
  * Abstract implementation of {@link QueryJTemplateContext}.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
- * @since 2012/05/20
+ * @since 3.0
+ * Created: 2012/05/20
  */
+@ThreadSafe
 public abstract class AbstractTemplateContext
     implements QueryJTemplateContext,
                Serializable
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 3405496681880071590L;
 
     /**
@@ -635,6 +648,9 @@ public abstract class AbstractTemplateContext
         return result.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
@@ -648,6 +664,9 @@ public abstract class AbstractTemplateContext
             .toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(@Nullable final Object obj)
     {
@@ -678,6 +697,10 @@ public abstract class AbstractTemplateContext
             .isEquals();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
     @Override
     public String toString()
     {

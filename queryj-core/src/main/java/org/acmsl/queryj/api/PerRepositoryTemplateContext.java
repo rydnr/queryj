@@ -205,6 +205,7 @@ public class PerRepositoryTemplateContext
             .isEquals();
     }
 
+    @NotNull
     @Override
     public String toString()
     {

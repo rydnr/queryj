@@ -35,18 +35,25 @@
  */
 package org.acmsl.queryj.api;
 
+/*
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Row;
+import org.acmsl.queryj.metadata.vo.Table;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing Apache Commons Lang classes.
  */
-import org.acmsl.queryj.metadata.vo.Table;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +61,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /*
@@ -65,7 +71,8 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Context used by per-table templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/20
+ * @since 3.0
+ * Created: 2012/05/20
  */
 @ThreadSafe
 public class PerTableTemplateContext
@@ -225,7 +232,6 @@ public class PerTableTemplateContext
 
     /**
      * {@inheritDoc}
-     * @return
      */
     @Override
     @NotNull
@@ -259,6 +265,9 @@ public class PerTableTemplateContext
         return result.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
@@ -266,8 +275,11 @@ public class PerTableTemplateContext
             .toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean equals(final Object obj)
+    public boolean equals(@Nullable final Object obj)
     {
         if (obj == null)
         {
@@ -282,6 +294,10 @@ public class PerTableTemplateContext
             .append(this.m__lStaticValues, other.m__lStaticValues).isEquals();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
     @Override
     public String toString()
     {

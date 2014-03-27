@@ -210,6 +210,7 @@ public class PerForeignKeyTemplateContext
             .isEquals();
     }
 
+    @NotNull
     @Override
     public String toString()
     {

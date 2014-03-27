@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,7 +34,7 @@
 package org.acmsl.queryj;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some ACM-SL Java Commons classes.
  */
 import org.acmsl.commons.patterns.Command;
 
@@ -87,6 +87,7 @@ public interface QueryJCommand
     /**
      * Retrieves the setting for given key.
      * @param key the key.
+     * @param <T> the object type.
      * @return the value for such key.
      */
     @Nullable
@@ -104,6 +105,7 @@ public interface QueryJCommand
      * Specifies the setting for given key.
      * @param key the key.
      * @param value the value for such key.
+     * @param <T> the object type.
      */
     public <T> void setSetting(@NotNull final String key, @Nullable final T value);
 
@@ -131,17 +133,19 @@ public interface QueryJCommand
      */
     public int getIntSetting(@NotNull final String key, final int defaultValue);
 
-
     /**
      * Retrieves the setting for given key.
      * @param key the key.
+     * @param <T> the object type.
      * @return the value for such key.
      */
+    @Nullable
     public <T> T getObjectSetting(@NotNull final String key);
 
     /**
      * Retrieves all keys.
      * @return such keys
      */
+    @NotNull
     public Iterable<String> getKeys();
 }
