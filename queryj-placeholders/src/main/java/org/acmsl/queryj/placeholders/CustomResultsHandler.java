@@ -67,12 +67,16 @@ import org.checkthread.annotations.ThreadSafe;
  * Resolves "custom_results" placeholders in
  * {@link org.acmsl.queryj.api.PerTableTemplate BasePerTableTemplates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/31
+ * @since 3.0
+ * Created: 2012/05/31
  */
 @ThreadSafe
 public class CustomResultsHandler
     extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Result<String>>>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 6281653014442667192L;
 
     /**

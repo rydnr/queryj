@@ -71,7 +71,11 @@ import org.checkthread.annotations.ThreadSafe;
 public class PerTableTemplateContext
     extends AbstractTemplateContext
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -7439946925532182308L;
+
     /**
      * The table name.
      */

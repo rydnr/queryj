@@ -137,7 +137,7 @@ public class DecoratedTemplateDefWrapper
     @NotNull
     protected DecoratedString getName(@NotNull final TemplateDef<String> def)
     {
-        return new DecoratedString(def.getName().replaceAll("\\.stg$", ""));
+        return new DecoratedString(def.getName()).getNoExtension();
     }
 
     /**

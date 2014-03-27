@@ -68,7 +68,7 @@ public class PerTableFillTemplateChainFactoryImpl
         @NotNull final PerTableTemplateContext context)
     {
         return
-            new FillTemplateChainWrapper<PerTableTemplateContext>(
+            new FillTemplateChainWrapper<>(
                 new BasePerTableFillTemplateChain(context));
     }
 }

@@ -33,11 +33,20 @@
 package org.acmsl.queryj.metadata.vo;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.Literals;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /*
  * importing JDK classes.
@@ -47,7 +56,9 @@ import java.util.List;
 /**
  * Abstract logic-less implementation of <code>Row</code> interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <V> the type.
  */
+@ThreadSafe
 public abstract class AbstractRow<V>
     implements Row<V>
 {

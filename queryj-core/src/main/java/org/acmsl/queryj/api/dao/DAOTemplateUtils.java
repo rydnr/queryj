@@ -419,8 +419,18 @@ public class DAOTemplateUtils
 
         if (t_Table != null)
         {
-            @Nullable final String t_strStaticAttribute =
-                metaLanguageUtils.retrieveStaticAttribute(t_Table.getComment());
+            @Nullable final Attribute<String> t_StaticAttribute = t_Table.getStaticAttribute();
+
+            @Nullable final String t_strStaticAttribute;
+
+            if (t_StaticAttribute == null)
+            {
+                t_strStaticAttribute = metaLanguageUtils.retrieveStaticAttribute(t_Table.getComment());
+            }
+            else
+            {
+                t_strStaticAttribute = t_StaticAttribute.getName();
+            }
 
             if (t_strStaticAttribute != null)
             {
@@ -436,7 +446,7 @@ public class DAOTemplateUtils
 
         if (result == null)
         {
-            result = new ArrayList<Row<String>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
