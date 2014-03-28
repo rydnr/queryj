@@ -112,21 +112,7 @@ public class PerCustomSqlTemplateContext
         @NotNull final String fileName,
         @NotNull final Sql<String> sql)
     {
-        super(
-            metadataManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            basePackageName,
-            repositoryName,
-            implementMarkerInterfaces,
-            jmx,
-            jndiLocation,
-            disableGenerationTimestamps,
-            disableNotNullAnnotations,
-            disableCheckthreadAnnotations,
-            fileName);
+        super(null);
 
         immutableSetSql(sql);
     }

@@ -35,7 +35,11 @@ package org.acmsl.queryj.api;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.exceptions.DecoratorFactoryNotAvailableException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.exceptions.CustomSqlProviderNotAvailableException;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
@@ -43,6 +47,7 @@ import org.acmsl.queryj.metadata.vo.Attribute;
 /*
  * Importing Apache Commons Lang classes.
  */
+import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -80,24 +85,14 @@ public abstract class AbstractTemplateContext
     private static final long serialVersionUID = 3405496681880071590L;
 
     /**
-     * The optional header.
+     * The package name key.
      */
-    private String m__strHeader;
+    protected static final String PACKAGE_NAME = "packageName";
 
     /**
-     * The decorator factory.
+     * The command.
      */
-    private DecoratorFactory m__DecoratorFactory;
-
-    /**
-     * The database metadata manager.
-     */
-    private MetadataManager m__MetadataManager;
-
-    /**
-     * The custom-sql provider.
-     */
-    private CustomSqlProvider m__CustomSqlProvider;
+    private QueryJCommand m__Command;
 
     /**
      * The package name.
@@ -151,72 +146,40 @@ public abstract class AbstractTemplateContext
 
     /**
      * Creates an {@link AbstractTemplateContext} with given information.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param header the header.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param implementMarkerInterfaces whether to implement marker interfaces.
-     * @param jmx whether to include JMX support.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations.
-     * @param fileName the file name.
+     * @param command the {@link QueryJCommand} instance.
      */
-    protected AbstractTemplateContext(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @Nullable final String header,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName)
+    protected AbstractTemplateContext(@NotNull final QueryJCommand command)
     {
-        immutableSetMetadataManager(metadataManager);
-        immutableSetCustomSqlProvider(customSqlProvider);
-        immutableSetHeader(header);
-        immutableSetDecoratorFactory(decoratorFactory);
-        immutableSetPackageName(packageName);
-        immutableSetBasePackageName(basePackageName);
-        immutableSetRepositoryName(repositoryName);
-        immutableSetImplementMarkerInterfaces(implementMarkerInterfaces);
-        immutableSetJmxSupportEnabled(jmx);
-        immutableSetJndiLocation(jndiLocation);
-        immutableSetDisableGenerationTimestamps(disableGenerationTimestamps);
-        immutableSetDisableNotNullAnnotations(disableNotNullAnnotations);
-        immutableSetDisableCheckthreadAnnotations(disableCheckthreadAnnotations);
-        immutableSetFileName(fileName);
+        immutableSetCommand(command);
     }
 
     /**
-     * Specifies the metadata manager.
-     * @param metadataManager the metadata manager.
+     * Specifies the command.
+     * @param command the command.
      */
-    private void immutableSetMetadataManager(
-        @NotNull final MetadataManager metadataManager)
+    private void immutableSetCommand(@NotNull final QueryJCommand command)
     {
-        m__MetadataManager = metadataManager;
+        m__Command = command;
     }
 
     /**
-     * Specifies the metadata manager.
-     * @param metadataManager the metadata manager.
+     * Specifies the command.
+     * @param command the command.
      */
     @SuppressWarnings("unused")
-    protected void setMetadataManager(
-        @NotNull final MetadataManager metadataManager)
+    protected void setCommand(@NotNull final QueryJCommand command)
     {
-        immutableSetMetadataManager(metadataManager);
+        immutableSetCommand(command);
+    }
+
+    /**
+     * Retrieves the command.
+     * @return such command.
+     */
+    @NotNull
+    public QueryJCommand getCommand()
+    {
+        return m__Command;
     }
 
     /**
@@ -227,28 +190,26 @@ public abstract class AbstractTemplateContext
     @Override
     public MetadataManager getMetadataManager()
     {
-        return m__MetadataManager;
+        return getMetadataManager(getCommand());
     }
 
     /**
-     * Specifies the custom-sql provider.
-     * @param customSqlProvider the customsql provider.
+     * Retrieves the metadata manager.
+     * @param command the command.
+     * @return such manager.
      */
-    private void immutableSetCustomSqlProvider(
-        @NotNull final CustomSqlProvider customSqlProvider)
+    @NotNull
+    protected MetadataManager getMetadataManager(@NotNull final QueryJCommand command)
     {
-        m__CustomSqlProvider = customSqlProvider;
-    }
+        @Nullable final MetadataManager result =
+            new QueryJCommandWrapper<MetadataManager>(command).getSetting(MetadataManager.class.getSimpleName());
 
-    /**
-     * Specifies the custom-sql provider.
-     * @param customSqlProvider the customsql provider.
-     */
-    @SuppressWarnings("unused")
-    protected void setCustomSqlProvider(
-        @NotNull final CustomSqlProvider customSqlProvider)
-    {
-        immutableSetCustomSqlProvider(customSqlProvider);
+        if (result == null)
+        {
+            throw new MetadataManagerNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
@@ -259,26 +220,26 @@ public abstract class AbstractTemplateContext
     @Override
     public CustomSqlProvider getCustomSqlProvider()
     {
-        return m__CustomSqlProvider;
+        return getCustomSqlProvider(getCommand());
     }
 
     /**
-     * Specifies the header.
-     * @param header the header.
+     * Retrieves the custom-sql provider.
+     * @param command the command.
+     * @return such provider.
      */
-    protected final void immutableSetHeader(@Nullable final String header)
+    @NotNull
+    protected CustomSqlProvider getCustomSqlProvider(@NotNull final QueryJCommand command)
     {
-        m__strHeader = header;
-    }
+        @Nullable final CustomSqlProvider result =
+            new QueryJCommandWrapper<CustomSqlProvider>(command).getSetting(CustomSqlProvider.class.getSimpleName());
 
-    /**
-     * Specifies the header.
-     * @param header the header.
-     */
-    @SuppressWarnings("unused")
-    protected void setHeader(@Nullable final String header)
-    {
-        immutableSetHeader(header);
+        if (result == null)
+        {
+            throw new CustomSqlProviderNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
@@ -289,28 +250,18 @@ public abstract class AbstractTemplateContext
     @Override
     public String getHeader()
     {
-        return m__strHeader;
+        return getHeader(getCommand());
     }
 
     /**
-     * Specifies the decorator factory.
-     * @param factory the {@link DecoratorFactory} instance.
+     * Retrieves the header.
+     * @param command the command.
+     * @return the header.
      */
-    protected final void immutableSetDecoratorFactory(
-        @NotNull final DecoratorFactory factory)
+    @Nullable
+    protected String getHeader(@NotNull final QueryJCommand command)
     {
-        m__DecoratorFactory = factory;
-    }
-
-    /**
-     * Specifies the decorator factory.
-     * @param factory the {@link DecoratorFactory} instance.
-     */
-    @SuppressWarnings("unused")
-    protected void setDecoratorFactory(
-        @NotNull final DecoratorFactory factory)
-    {
-        immutableSetDecoratorFactory(factory);
+        return new QueryJCommandWrapper<String>(command).getSetting("header");
     }
 
     /**
@@ -321,26 +272,25 @@ public abstract class AbstractTemplateContext
     @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
-        return m__DecoratorFactory;
+        return getDecoratorFactory(getCommand());
     }
 
     /**
-     * Specifies the package name.
-     * @param packageName the new package name.
+     * Retrieves the {@link DecoratorFactory} instance.
+     * @return such instance.
      */
-    private void immutableSetPackageName(@NotNull final String packageName)
+    @NotNull
+    protected DecoratorFactory getDecoratorFactory(@NotNull final QueryJCommand command)
     {
-        m__strPackageName = packageName;
-    }
+        @Nullable final DecoratorFactory result =
+            new QueryJCommandWrapper<DecoratorFactory>(command).getSetting(DecoratorFactory.class.getName());
 
-    /**
-     * Specifies the package name.
-     * @param packageName the new package name.
-     */
-    @SuppressWarnings("unused")
-    protected void setPackageName(@NotNull final String packageName)
-    {
-        immutableSetPackageName(packageName);
+        if (result == null)
+        {
+            throw new DecoratorFactoryNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
@@ -355,22 +305,17 @@ public abstract class AbstractTemplateContext
     }
 
     /**
-     * Specifies the base package name.
-     * @param basePackageName the new base package name.
+     * Retrieves the package name.
+     * @param command the command.
+     * @return such information.
      */
-    private void immutableSetBasePackageName(@NotNull final String basePackageName)
+    @NotNull
+    protected String getPackageName(@NotNull final QueryJCommand command)
     {
-        m__strBasePackageName = basePackageName;
-    }
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting(PACKAGE_NAME);
 
-    /**
-     * Specifies the base package name.
-     * @param basePackageName the new base package name.
-     */
-    @SuppressWarnings("unused")
-    protected void setBasePackageName(@NotNull final String basePackageName)
-    {
-        immutableSetBasePackageName(basePackageName);
+        return result;
     }
 
     /**
@@ -385,25 +330,6 @@ public abstract class AbstractTemplateContext
     }
 
     /**
-     * Specifies the repository name.
-     * @param repositoryName the new repository name.
-     */
-    private void immutableSetRepositoryName(@NotNull final String repositoryName)
-    {
-        m__strRepositoryName = repositoryName;
-    }
-
-    /**
-     * Specifies the repository name.
-     * @param repositoryName the new repository name.
-     */
-    @SuppressWarnings("unused")
-    protected void setRepositoryName(@NotNull final String repositoryName)
-    {
-        immutableSetRepositoryName(repositoryName);
-    }
-
-    /**
      * Retrieves the repository name.
      * @return such information.
      */
@@ -412,27 +338,6 @@ public abstract class AbstractTemplateContext
     public String getRepositoryName()
     {
         return m__strRepositoryName;
-    }
-
-    /**
-     * Specifies whether to implement marker interfaces.
-     * @param flag such condition.
-     */
-    protected final void immutableSetImplementMarkerInterfaces(
-        final boolean flag)
-    {
-        m__bImplementMarkerInterfaces = flag;
-    }
-
-    /**
-     * Specifies whether to implement marker interfaces.
-     * @param flag such condition.
-     */
-    @SuppressWarnings("unused")
-    protected void setImplementMarkerInterfaces(
-        final boolean flag)
-    {
-        immutableSetImplementMarkerInterfaces(flag);
     }
 
     /**
@@ -445,25 +350,6 @@ public abstract class AbstractTemplateContext
     }
 
     /**
-     * Specifies whether to include JMX support.
-     * @param jmx such information.
-     */
-    protected final void immutableSetJmxSupportEnabled(final boolean jmx)
-    {
-        this.m__bJmx = jmx;
-    }
-
-    /**
-     * Specifies whether to include JMX support.
-     * @param jmx such information.
-     */
-    @SuppressWarnings("unused")
-    protected void setJmxSupportEnabled(final boolean jmx)
-    {
-        immutableSetJmxSupportEnabled(jmx);
-    }
-
-    /**
      * Retrieves whether to include JMX support.
      * @return such information.
      */
@@ -471,25 +357,6 @@ public abstract class AbstractTemplateContext
     public boolean isJmxSupportEnabled()
     {
         return m__bJmx;
-    }
-
-    /**
-     * Specifies the JNDI location for the {@link javax.sql.DataSource}.
-     * @param location the JNDI location.
-     */
-    protected final void immutableSetJndiLocation(@NotNull final String location)
-    {
-        this.m__strJndiLocation = location;
-    }
-
-    /**
-     * Specifies the JNDI location for the {@link javax.sql.DataSource}.
-     * @param location the JNDI location.
-     */
-    @SuppressWarnings("unused")
-    protected void setJndiLocation(@NotNull final String location)
-    {
-        this.m__strJndiLocation = location;
     }
 
     /**
@@ -504,27 +371,7 @@ public abstract class AbstractTemplateContext
     }
 
     /**
-     * Specifies whether to disable generation timestamps or not.
-     * @param flag such setting.
-     */
-    protected final void immutableSetDisableGenerationTimestamps(final boolean flag)
-    {
-        m__bDisableGenerationTimestamps = flag;
-    }
-
-    /**
-     * Specifies whether to disable generation timestamps or not.
-     * @param flag such setting.
-     */
-    @SuppressWarnings("unused")
-    protected void setDisableGenerationTimestamps(final boolean flag)
-    {
-        immutableSetDisableGenerationTimestamps(flag);
-    }
-
-    /**
      * Retrieves whether to use generation timestamps or not.
-     *
      * @return such setting.
      */
     @Override
@@ -534,27 +381,7 @@ public abstract class AbstractTemplateContext
     }
 
     /**
-     * Specifies whether to disable NotNull annotations or not.
-     * @param flag such setting.
-     */
-    protected final void immutableSetDisableNotNullAnnotations(final boolean flag)
-    {
-        m__bDisableNotNullAnnotations = flag;
-    }
-
-    /**
-     * Specifies whether to disable NotNull annotations or not.
-     * @param flag such setting.
-     */
-    @SuppressWarnings("unused")
-    protected void setDisableNotNullAnnotations(final boolean flag)
-    {
-        immutableSetDisableNotNullAnnotations(flag);
-    }
-
-    /**
      * Retrieves whether to use NotNull annotations or not.
-     *
      * @return such setting.
      */
     @Override
@@ -564,52 +391,13 @@ public abstract class AbstractTemplateContext
     }
 
     /**
-     * Specifies whether to disable checkthread.org annotations or not.
-     * @param flag such setting.
-     */
-    protected final void immutableSetDisableCheckthreadAnnotations(final boolean flag)
-    {
-        m__bDisableCheckthreadAnnotations = flag;
-    }
-
-    /**
-     * Specifies whether to disable checkthread.org annotations or not.
-     * @param flag such setting.
-     */
-    @SuppressWarnings("unused")
-    protected void setDisableCheckthreadAnnotations(final boolean flag)
-    {
-        immutableSetDisableCheckthreadAnnotations(flag);
-    }
-
-    /**
      * Retrieves whether to use checkthread.org annotations or not.
-     *
      * @return such setting.
      */
     @Override
     public boolean getDisableCheckthreadAnnotations()
     {
         return m__bDisableCheckthreadAnnotations;
-    }
-
-    /**
-     * Specifies the file name.
-     * @param fileName the file name.
-     */
-    protected final void immutableSetFileName(@NotNull final String fileName)
-    {
-        this.m__strFileName = fileName;
-    }
-
-    /**
-     * Specifies the file name.
-     * @param fileName the file name.
-     */
-    @SuppressWarnings("unused")
-    protected void setFileName(@NotNull final String fileName)
-    {
-        immutableSetFileName(fileName);
     }
 
     /**
@@ -655,13 +443,7 @@ public abstract class AbstractTemplateContext
     public int hashCode()
     {
         return
-            new HashCodeBuilder().append(this.m__strHeader).append(this.m__DecoratorFactory)
-            .append(this.m__MetadataManager).append(this.m__CustomSqlProvider).append(this.m__strPackageName)
-            .append(this.m__strBasePackageName).append(this.m__strRepositoryName)
-            .append(this.m__bImplementMarkerInterfaces).append(this.m__bJmx).append(this.m__strJndiLocation)
-            .append(this.m__bDisableGenerationTimestamps).append(this.m__bDisableNotNullAnnotations)
-            .append(this.m__bDisableCheckthreadAnnotations).append(this.m__strFileName)
-            .toHashCode();
+            new HashCodeBuilder().append(AbstractTemplateContext.class.getName()).append(this.m__Command).toHashCode();
     }
 
     /**
@@ -680,21 +462,7 @@ public abstract class AbstractTemplateContext
         }
         final AbstractTemplateContext other = (AbstractTemplateContext) obj;
 
-        return
-            new EqualsBuilder().append(this.m__strHeader, other.m__strHeader)
-            .append(this.m__DecoratorFactory, other.m__DecoratorFactory)
-            .append(this.m__MetadataManager, other.m__MetadataManager)
-            .append(this.m__CustomSqlProvider, other.m__CustomSqlProvider)
-            .append(this.m__strPackageName, other.m__strPackageName)
-            .append(this.m__strBasePackageName, other.m__strBasePackageName)
-            .append(this.m__strRepositoryName, other.m__strRepositoryName)
-            .append(this.m__bImplementMarkerInterfaces, other.m__bImplementMarkerInterfaces)
-            .append(this.m__bJmx, other.m__bJmx).append(this.m__strJndiLocation, other.m__strJndiLocation)
-            .append(this.m__bDisableGenerationTimestamps, other.m__bDisableGenerationTimestamps)
-            .append(this.m__bDisableNotNullAnnotations, other.m__bDisableNotNullAnnotations)
-            .append(this.m__bDisableCheckthreadAnnotations, other.m__bDisableCheckthreadAnnotations)
-            .append(this.m__strFileName, other.m__strFileName)
-            .isEquals();
+        return new EqualsBuilder().append(this.m__Command, other.m__Command).isEquals();
     }
 
     /**
@@ -704,21 +472,10 @@ public abstract class AbstractTemplateContext
     @Override
     public String toString()
     {
-        return "AbstractTemplateContext{" +
-               "disableCheckthreadAnnotations=" + m__bDisableCheckthreadAnnotations +
-               ", header='" + m__strHeader + '\'' +
-               ", decoratorFactory=" + m__DecoratorFactory +
-               ", metadataManager=" + m__MetadataManager +
-               ", customSqlProvider=" + m__CustomSqlProvider +
-               ", packageName='" + m__strPackageName + '\'' +
-               ", basePackageName='" + m__strBasePackageName + '\'' +
-               ", repositoryName='" + m__strRepositoryName + '\'' +
-               ", implementMarkerInterfaces=" + m__bImplementMarkerInterfaces +
-               ", jmx=" + m__bJmx +
-               ", jndiLocation='" + m__strJndiLocation + '\'' +
-               ", disableGenerationTimestamps=" + m__bDisableGenerationTimestamps +
-               ", disableNotNullAnnotations=" + m__bDisableNotNullAnnotations +
-               ", fileName='" + m__strFileName + '\'' +
-               '}';
+        return
+              "{ \"class\": \"" + AbstractTemplateContext.class.getSimpleName() + '"'
+            + ", \"package\": \"org.acmsl.queryj.api\""
+            + ", \"command\": " + m__Command
+            + " }";
     }
 }

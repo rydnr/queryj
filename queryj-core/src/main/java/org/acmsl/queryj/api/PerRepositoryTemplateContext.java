@@ -115,21 +115,7 @@ public class PerRepositoryTemplateContext
         final boolean disableCheckthreadAnnotations,
         @NotNull final String fileName)
     {
-        super(
-            metadataManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            basePackageName,
-            repositoryName,
-            implementMarkerInterfaces,
-            jmx,
-            jndiLocation,
-            disableGenerationTimestamps,
-            disableNotNullAnnotations,
-            disableCheckthreadAnnotations,
-            fileName);
+        super(null);
 
         immutableSetTableNames(tableNames);
     }

@@ -38,6 +38,9 @@ package org.acmsl.queryj.api;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -45,6 +48,7 @@ import org.acmsl.queryj.metadata.MetadataManager;
 /*
  * Importing JetBrains annotations.
  */
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -233,47 +237,66 @@ public class AbstractTemplateContextTest
     @NotNull
     protected AbstractTemplateContext createContext()
     {
+        @NotNull final QueryJCommand t_Command =
+            new ConfigurationQueryJCommandImpl(new PropertiesConfiguration(), null);
+
         @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
+        new QueryJCommandWrapper<MetadataManager>(t_Command).setSetting(
+            MetadataManager.class.getName(), metadataManager);
+
         @NotNull final CustomSqlProvider customSqlProvider = EasyMock.createNiceMock(CustomSqlProvider.class);
+        new QueryJCommandWrapper<CustomSqlProvider>(t_Command).setSetting(
+            CustomSqlProvider.class.getName(), customSqlProvider);
+
         @Nullable final String header = "header";
+        new QueryJCommandWrapper<String>(t_Command).setSetting("header", header);
+
         @NotNull final DecoratorFactory decoratorFactory = EasyMock.createNiceMock(DecoratorFactory.class);
+        new QueryJCommandWrapper<DecoratorFactory>(t_Command)
+            .setSetting(DecoratorFactory.class.getName(), decoratorFactory);
+
         @NotNull final String packageName = "package.name";
+        new QueryJCommandWrapper<String>(t_Command).setSetting("packageName", packageName);
+
         @NotNull final String basePackageName = "base.package.name";
+        new QueryJCommandWrapper<String>(t_Command).setSetting("basePackageName", basePackageName);
+
         @NotNull final String repositoryName = "repository.name";
+        new QueryJCommandWrapper<String>(t_Command).setSetting("repositoryName", repositoryName);
+
         final boolean implementMarkerInterfaces = false;
+        new QueryJCommandWrapper<Boolean>(t_Command).setSetting("markerInterfaces", implementMarkerInterfaces);
+
         final boolean jmx = false;
+        new QueryJCommandWrapper<Boolean>(t_Command).setSetting("jmx", jmx);
+
         @NotNull final String jndiLocation = "jndi:/location";
-        final boolean disableGenerationTimestamps = true;
+        new QueryJCommandWrapper<String>(t_Command).setSetting("jndiLocation", jndiLocation);
+
+        final boolean disableTimestampGeneration = true;
+        new QueryJCommandWrapper<Boolean>(t_Command).setSetting("disableTimestampGeneration", disableTimestampGeneration);
+
         final boolean disableNotNullAnnotations = true;
+        new QueryJCommandWrapper<Boolean>(t_Command).setSetting("disableNotNullAnnotations", disableNotNullAnnotations);
+
         final boolean disableCheckthreadAnnotations = true;
+        new QueryJCommandWrapper<Boolean>(t_Command).setSetting("disableCheckthreadAnnotations", disableCheckthreadAnnotations);
+
         @NotNull final String fileName = "file.name";
+        new QueryJCommandWrapper<String>(t_Command).setSetting("fileName", fileName);
 
         return
-            new AbstractTemplateContext(
-                metadataManager,
-                customSqlProvider,
-                header,
-                decoratorFactory,
-                packageName,
-                basePackageName,
-                repositoryName,
-                implementMarkerInterfaces,
-                jmx,
-                jndiLocation,
-                disableGenerationTimestamps,
-                disableNotNullAnnotations,
-                disableCheckthreadAnnotations,
-                fileName)
-            {
-                /**
-                 * {@inheritDoc}
-                 */
-                @NotNull
-                @Override
-                public String getTemplateName()
+            new AbstractTemplateContext(t_Command)
                 {
-                    return "";
-                }
-            };
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @NotNull
+                    @Override
+                    public String getTemplateName()
+                    {
+                        return "";
+                    }
+                };
     }
 }
