@@ -37,7 +37,10 @@ package org.acmsl.queryj.api;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.exceptions.BasePackageNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.DecoratorFactoryNotAvailableException;
+import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
+import org.acmsl.queryj.api.exceptions.RepositoryNameNotAvailableException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.exceptions.CustomSqlProviderNotAvailableException;
 import org.acmsl.queryj.metadata.DecoratorFactory;
@@ -90,24 +93,19 @@ public abstract class AbstractTemplateContext
     protected static final String PACKAGE_NAME = "packageName";
 
     /**
+     * The base package name key.
+     */
+    protected static final String BASE_PACKAGE_NAME = "basePackageName";
+
+    /**
+     * The repository name key.
+     */
+    protected static final String REPOSITORY_NAME = "repositoryName";
+
+    /**
      * The command.
      */
     private QueryJCommand m__Command;
-
-    /**
-     * The package name.
-     */
-    private String m__strPackageName;
-
-    /**
-     * The base package name.
-     */
-    private String m__strBasePackageName;
-
-    /**
-     * The repository name.
-     */
-    private String m__strRepositoryName;
 
     /**
      * Whether to implement marker interfaces.
@@ -202,7 +200,7 @@ public abstract class AbstractTemplateContext
     protected MetadataManager getMetadataManager(@NotNull final QueryJCommand command)
     {
         @Nullable final MetadataManager result =
-            new QueryJCommandWrapper<MetadataManager>(command).getSetting(MetadataManager.class.getSimpleName());
+            new QueryJCommandWrapper<MetadataManager>(command).getSetting(MetadataManager.class.getName());
 
         if (result == null)
         {
@@ -232,7 +230,7 @@ public abstract class AbstractTemplateContext
     protected CustomSqlProvider getCustomSqlProvider(@NotNull final QueryJCommand command)
     {
         @Nullable final CustomSqlProvider result =
-            new QueryJCommandWrapper<CustomSqlProvider>(command).getSetting(CustomSqlProvider.class.getSimpleName());
+            new QueryJCommandWrapper<CustomSqlProvider>(command).getSetting(CustomSqlProvider.class.getName());
 
         if (result == null)
         {
@@ -301,7 +299,7 @@ public abstract class AbstractTemplateContext
     @Override
     public String getPackageName()
     {
-        return m__strPackageName;
+        return getPackageName(getCommand());
     }
 
     /**
@@ -315,6 +313,11 @@ public abstract class AbstractTemplateContext
         @Nullable final String result =
             new QueryJCommandWrapper<String>(command).getSetting(PACKAGE_NAME);
 
+        if (result == null)
+        {
+            throw new PackageNameNotAvailableException();
+        }
+
         return result;
     }
 
@@ -326,7 +329,26 @@ public abstract class AbstractTemplateContext
     @Override
     public String getBasePackageName()
     {
-        return m__strBasePackageName;
+        return getBasePackageName(getCommand());
+    }
+
+    /**
+     * Retrieves the base package name.
+     * @param command the command.
+     * @return such information.
+     */
+    @NotNull
+    protected String getBasePackageName(@NotNull final QueryJCommand command)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting(BASE_PACKAGE_NAME);
+
+        if (result == null)
+        {
+            throw new BasePackageNameNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
@@ -337,7 +359,26 @@ public abstract class AbstractTemplateContext
     @Override
     public String getRepositoryName()
     {
-        return m__strRepositoryName;
+        return getRepositoryName(getCommand());
+    }
+
+    /**
+     * Retrieves the repository name.
+     * @param command the command.
+     * @return such information.
+     */
+    @NotNull
+    protected String getRepositoryName(@NotNull final QueryJCommand command)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting(REPOSITORY_NAME);
+
+        if (result == null)
+        {
+            throw new RepositoryNameNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
