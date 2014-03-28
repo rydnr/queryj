@@ -37,8 +37,11 @@ package org.acmsl.queryj.api;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.BasePackageNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.DecoratorFactoryNotAvailableException;
+import org.acmsl.queryj.api.exceptions.FileNameNotAvailableException;
+import org.acmsl.queryj.api.exceptions.JndiLocationNotAvailableException;
 import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.RepositoryNameNotAvailableException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
@@ -93,54 +96,14 @@ public abstract class AbstractTemplateContext
     protected static final String PACKAGE_NAME = "packageName";
 
     /**
-     * The base package name key.
+     * The file name key.
      */
-    protected static final String BASE_PACKAGE_NAME = "basePackageName";
-
-    /**
-     * The repository name key.
-     */
-    protected static final String REPOSITORY_NAME = "repositoryName";
+    protected static final String FILE_NAME = "fileName";
 
     /**
      * The command.
      */
     private QueryJCommand m__Command;
-
-    /**
-     * Whether to implement marker interfaces.
-     */
-    private boolean m__bImplementMarkerInterfaces;
-
-    /**
-     * Whether to include JMX support.
-     */
-    private boolean m__bJmx;
-
-    /**
-     * The JNDI path of the DataSource.
-     */
-    private String m__strJndiLocation;
-
-    /**
-     * Whether to disable generation timestamps.
-     */
-    private boolean m__bDisableGenerationTimestamps;
-
-    /**
-     * Whether to disable NotNull annotations.
-     */
-    private boolean m__bDisableNotNullAnnotations;
-
-    /**
-     * Whether to disable checkthread.org annotations.
-     */
-    private boolean m__bDisableCheckthreadAnnotations;
-
-    /**
-     * The file name.
-     */
-    private String m__strFileName;
 
     /**
      * Creates an {@link AbstractTemplateContext} with given information.
@@ -259,7 +222,7 @@ public abstract class AbstractTemplateContext
     @Nullable
     protected String getHeader(@NotNull final QueryJCommand command)
     {
-        return new QueryJCommandWrapper<String>(command).getSetting("header");
+        return new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.HEADER_FILE);
     }
 
     /**
@@ -341,7 +304,7 @@ public abstract class AbstractTemplateContext
     protected String getBasePackageName(@NotNull final QueryJCommand command)
     {
         @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(BASE_PACKAGE_NAME);
+            new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.PACKAGE);
 
         if (result == null)
         {
@@ -371,7 +334,7 @@ public abstract class AbstractTemplateContext
     protected String getRepositoryName(@NotNull final QueryJCommand command)
     {
         @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(REPOSITORY_NAME);
+            new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.REPOSITORY);
 
         if (result == null)
         {
@@ -385,19 +348,20 @@ public abstract class AbstractTemplateContext
      * Retrieves whether to implement marker interfaces.
      * @return such condition.
      */
+    @Override
     public boolean getImplementMarkerInterfaces()
     {
-        return m__bImplementMarkerInterfaces;
+        return getBooleanValue(getCommand(), QueryJSettings.IMPLEMENT_MARKER_INTERFACES);
     }
 
     /**
      * Retrieves whether to include JMX support.
      * @return such information.
      */
-    @SuppressWarnings("unused")
+    @Override
     public boolean isJmxSupportEnabled()
     {
-        return m__bJmx;
+        return getBooleanValue(getCommand(), QueryJSettings.JMX);
     }
 
     /**
@@ -408,7 +372,26 @@ public abstract class AbstractTemplateContext
     @NotNull
     public String getJndiLocation()
     {
-        return this.m__strJndiLocation;
+        return getJndiLocation(getCommand());
+    }
+
+    /**
+     * Retrieves the JNDI location for the {@link javax.sql.DataSource}.
+     * @param command the command.
+     * @return such location.
+     */
+    @NotNull
+    protected String getJndiLocation(@NotNull final QueryJCommand command)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.JNDI_DATASOURCE);
+
+        if (result == null)
+        {
+            throw new JndiLocationNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
@@ -418,7 +401,31 @@ public abstract class AbstractTemplateContext
     @Override
     public boolean getDisableGenerationTimestamps()
     {
-        return m__bDisableGenerationTimestamps;
+        return getBooleanValue(getCommand(), QueryJSettings.DISABLE_TIMESTAMPS);
+    }
+
+    /**
+     * Retrieves a boolean value from the command.
+     * @param command the command.
+     * @return such value.
+     */
+    protected boolean getBooleanValue(
+        @NotNull final QueryJCommand command, @NotNull final String key)
+    {
+        final boolean result;
+
+        @Nullable final Boolean aux = new QueryJCommandWrapper<Boolean>(command).getSetting(key);
+
+        if (aux == null)
+        {
+            result = false;
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
     }
 
     /**
@@ -428,7 +435,7 @@ public abstract class AbstractTemplateContext
     @Override
     public boolean getDisableNotNullAnnotations()
     {
-        return m__bDisableNotNullAnnotations;
+        return getBooleanValue(getCommand(), QueryJSettings.DISABLE_NOTNULL_ANNOTATIONS);
     }
 
     /**
@@ -438,7 +445,7 @@ public abstract class AbstractTemplateContext
     @Override
     public boolean getDisableCheckthreadAnnotations()
     {
-        return m__bDisableCheckthreadAnnotations;
+        return getBooleanValue(getCommand(), QueryJSettings.DISABLE_CHECKTHREAD_ANNOTATIONS);
     }
 
     /**
@@ -449,7 +456,26 @@ public abstract class AbstractTemplateContext
     @NotNull
     public String getFileName()
     {
-        return this.m__strFileName;
+        return getFileName(getCommand());
+    }
+
+    /**
+     * Retrieves the file name.
+     * @param command the command.
+     * @return such information.
+     */
+    @NotNull
+    protected String getFileName(@NotNull final QueryJCommand command)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting(FILE_NAME);
+
+        if (result == null)
+        {
+            throw new FileNameNotAvailableException();
+        }
+
+        return result;
     }
 
     /**

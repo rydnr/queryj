@@ -41,6 +41,7 @@ package org.acmsl.queryj.api;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -249,7 +250,7 @@ public class AbstractTemplateContextTest
             CustomSqlProvider.class.getName(), customSqlProvider);
 
         @Nullable final String header = "header";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("header", header);
+        new QueryJCommandWrapper<String>(t_Command).setSetting(QueryJSettings.HEADER_FILE, header);
 
         @NotNull final DecoratorFactory decoratorFactory = EasyMock.createNiceMock(DecoratorFactory.class);
         new QueryJCommandWrapper<DecoratorFactory>(t_Command)
@@ -259,28 +260,32 @@ public class AbstractTemplateContextTest
         new QueryJCommandWrapper<String>(t_Command).setSetting("packageName", packageName);
 
         @NotNull final String basePackageName = "base.package.name";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("basePackageName", basePackageName);
+        new QueryJCommandWrapper<String>(t_Command).setSetting(QueryJSettings.PACKAGE, basePackageName);
 
         @NotNull final String repositoryName = "repository.name";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("repositoryName", repositoryName);
+        new QueryJCommandWrapper<String>(t_Command).setSetting(QueryJSettings.REPOSITORY, repositoryName);
 
         final boolean implementMarkerInterfaces = false;
-        new QueryJCommandWrapper<Boolean>(t_Command).setSetting("markerInterfaces", implementMarkerInterfaces);
+        new QueryJCommandWrapper<Boolean>(t_Command).setSetting(
+            QueryJSettings.IMPLEMENT_MARKER_INTERFACES, implementMarkerInterfaces);
 
         final boolean jmx = false;
-        new QueryJCommandWrapper<Boolean>(t_Command).setSetting("jmx", jmx);
+        new QueryJCommandWrapper<Boolean>(t_Command).setSetting(QueryJSettings.JMX, jmx);
 
         @NotNull final String jndiLocation = "jndi:/location";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("jndiLocation", jndiLocation);
+        new QueryJCommandWrapper<String>(t_Command).setSetting(QueryJSettings.JNDI_DATASOURCE, jndiLocation);
 
         final boolean disableTimestampGeneration = true;
-        new QueryJCommandWrapper<Boolean>(t_Command).setSetting("disableTimestampGeneration", disableTimestampGeneration);
+        new QueryJCommandWrapper<Boolean>(t_Command).setSetting(
+            QueryJSettings.DISABLE_TIMESTAMPS, disableTimestampGeneration);
 
         final boolean disableNotNullAnnotations = true;
-        new QueryJCommandWrapper<Boolean>(t_Command).setSetting("disableNotNullAnnotations", disableNotNullAnnotations);
+        new QueryJCommandWrapper<Boolean>(t_Command).setSetting(
+            QueryJSettings.DISABLE_NOTNULL_ANNOTATIONS, disableNotNullAnnotations);
 
         final boolean disableCheckthreadAnnotations = true;
-        new QueryJCommandWrapper<Boolean>(t_Command).setSetting("disableCheckthreadAnnotations", disableCheckthreadAnnotations);
+        new QueryJCommandWrapper<Boolean>(t_Command).setSetting(
+            QueryJSettings.DISABLE_CHECKTHREAD_ANNOTATIONS, disableCheckthreadAnnotations);
 
         @NotNull final String fileName = "file.name";
         new QueryJCommandWrapper<String>(t_Command).setSetting("fileName", fileName);

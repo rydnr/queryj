@@ -1,0 +1,7 @@
+* 2014/03/28
+** TODO Refactor TemplateContext #459: 4 -> 3
+** TODO Add BaseDAO: 1 ->
+** TODO Fix BaseDAO: 1 ->
+
+** Pending:
+*** Move TableTestHelper out of QueryJ Templates

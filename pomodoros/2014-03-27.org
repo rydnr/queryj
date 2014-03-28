@@ -1,0 +1,9 @@
+* 2014/03/27
+** DONE Implement StaticValuesHandler: 1 -> 1
+** DONE Review generated DAO: 1 -> 1
+** DONE Refactor TemplateContext #459: 1 -> 1
+** TODO Add BaseDAO: 1 ->
+** TODO Fix BaseDAO: 1 ->
+
+** Pending:
+*** Move TableTestHelper out of QueryJ Templates
