@@ -38,8 +38,10 @@ package org.acmsl.queryj.api;
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.exceptions.StaticValuesNotAvailableException;
+import org.acmsl.queryj.api.exceptions.TableNameNotAvailableException;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Row;
@@ -84,74 +86,22 @@ public class PerTableTemplateContext
     private static final long serialVersionUID = -7439946925532182308L;
 
     /**
-     * The table name.
+     * The table-name key.
      */
-    private String tableName;
+    protected static final String TABLE_NAME = "tableName";
 
     /**
-     * The static contents.
+     * The static-values key.
      */
-    private List<Row<String>> m__lStaticValues;
+    protected static final String STATIC_VALUES = "staticValues";
 
     /**
      * Creates a {@link PerTableTemplateContext} with given information.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param header the header.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param implementMarkerInterfaces whether to implement marker interfaces or not.
-     * @param jmx whether to include JMX support.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
-     * @param tableName the table name.
-     * @param staticValues the static rows, if the table is marked as <code>@static</code>.
+     * @param command the {@link QueryJCommand}.
      */
-    public PerTableTemplateContext(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @Nullable final String header,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
-        @NotNull final String tableName,
-        @Nullable final List<Row<String>> staticValues)
+    public PerTableTemplateContext(@NotNull final QueryJCommand command)
     {
-        super(null);
-
-        immutableSetTableName(tableName);
-        immutableSetStaticValues(staticValues);
-    }
-
-    /**
-     * Specifies the table name.
-     * @param tableName such name.
-     */
-    protected final void immutableSetTableName(@NotNull final String tableName)
-    {
-        this.tableName = tableName;
-    }
-
-    /**
-     * Specifies the table name.
-     * @param tableName such name.
-     */
-    @SuppressWarnings("unused")
-    protected void setTableName(@NotNull final String tableName)
-    {
-        immutableSetTableName(tableName);
+        super(command);
     }
 
     /**
@@ -161,35 +111,53 @@ public class PerTableTemplateContext
     @NotNull
     public String getTableName()
     {
-        return tableName;
+        return getTableName(getCommand());
     }
 
     /**
-     * Specifies the static values.
-     * @param values such values.
+     * Retrieves the table name.
+     * @return such name.
      */
-    protected final void immutableSetStaticValues(@Nullable final List<Row<String>> values)
+    @NotNull
+    protected String getTableName(@NotNull final QueryJCommand command)
     {
-        m__lStaticValues = values;
-    }
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting(TABLE_NAME);
 
-    /**
-     * Specifies the static values.
-     * @param values such values.
-     */
-    @SuppressWarnings("unused")
-    protected void setStaticValues(@Nullable final List<Row<String>> values)
-    {
-        immutableSetStaticValues(values);
+        if (result == null)
+        {
+            throw new TableNameNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
      * Retrieves the static values.
      * @return such values.
      */
+    @NotNull
     protected final List<Row<String>> immutableGetStaticValues()
     {
-        return m__lStaticValues;
+        return immutableGetStaticValues(getCommand());
+    }
+
+    /**
+     * Retrieves the static values.
+     * @return such values.
+     */
+    @NotNull
+    protected final List<Row<String>> immutableGetStaticValues(@NotNull final QueryJCommand command)
+    {
+        @Nullable final List<Row<String>> result =
+            new QueryJCommandWrapper<Row<String>>(command).getListSetting(STATIC_VALUES);
+
+        if (result == null)
+        {
+            throw new StaticValuesNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
@@ -200,20 +168,7 @@ public class PerTableTemplateContext
     @NotNull
     public List<Row<String>> getStaticValues()
     {
-        @Nullable final List<Row<String>> result;
-
-        @Nullable final List<Row<String>> t_lRows = immutableGetStaticValues();
-
-        if (t_lRows != null)
-        {
-            result = new ArrayList<>(t_lRows);
-        }
-        else
-        {
-            result = new ArrayList<>(0);
-        }
-
-        return result;
+        return new ArrayList<>(immutableGetStaticValues());
     }
 
     /**
@@ -257,7 +212,7 @@ public class PerTableTemplateContext
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.tableName).append(this.m__lStaticValues)
+        return new HashCodeBuilder().appendSuper(super.hashCode()).append(getCommand())
             .toHashCode();
     }
 
@@ -276,8 +231,11 @@ public class PerTableTemplateContext
             return false;
         }
         final PerTableTemplateContext other = (PerTableTemplateContext) obj;
-        return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.tableName, other.tableName)
-            .append(this.m__lStaticValues, other.m__lStaticValues).isEquals();
+
+        return
+            new EqualsBuilder()
+                .appendSuper(super.equals(obj)).append(this.getCommand(), other.getCommand())
+                .isEquals();
     }
 
     /**
@@ -288,7 +246,8 @@ public class PerTableTemplateContext
     public String toString()
     {
         return
-              "PerTableTemplateContext{ staticValues=" + m__lStaticValues
-            + ", tableName='" + tableName + "' }";
+              "{ \"class\": \"" + PerTableTemplateContext.class.getSimpleName() + '"'
+            + ", \"package\": \"org.acmsl.queryj.api\""
+            + ", \"command\": { " + getCommand() + "} }";
     }
 }

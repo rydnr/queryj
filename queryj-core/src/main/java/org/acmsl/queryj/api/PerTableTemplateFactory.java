@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -35,9 +35,8 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Row;
 
 /*
@@ -54,45 +53,26 @@ import java.util.List;
 /**
  * Represents entities able to create per-table templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <T> the template type.
+ * @param <C> the template context.
  */
 public interface PerTableTemplateFactory<T extends PerTableTemplate<C>, C extends PerTableTemplateContext>
     extends  TemplateFactory
 {
     /**
      * Generates a <i>per-table</i> template.
-     * @param metadataManager the metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
+     * @param command the command.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param jmx whether to include JMX support.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param tableName the table name.
      * @param staticContents the table's static contents (optional).
      * @return a template.
      */
     @Nullable
     public T createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final QueryJCommand command,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @Nullable final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
         @NotNull final List<Row<String>> staticContents);
 }

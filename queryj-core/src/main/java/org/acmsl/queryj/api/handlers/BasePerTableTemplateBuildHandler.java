@@ -42,7 +42,6 @@ import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.api.PerTableTemplate;
 import org.acmsl.queryj.api.PerTableTemplateFactory;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -81,6 +80,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Builds a per-table template using database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <T> the template type.
+ * @param <C> the template context.
+ * @param <TF> the template factory.
  */
 public abstract class BasePerTableTemplateBuildHandler
        <T extends PerTableTemplate<C>,
@@ -126,17 +128,7 @@ public abstract class BasePerTableTemplateBuildHandler
         buildTemplate(
             parameters,
             metadataManager,
-            retrieveCustomSqlProvider(parameters),
             retrieveTemplateFactory(),
-            retrieveProjectPackage(parameters),
-            retrieveTableRepositoryName(parameters),
-            retrieveHeader(parameters),
-            retrieveImplementMarkerInterfaces(parameters),
-            retrieveJmx(parameters),
-            retrieveJNDILocation(parameters),
-            retrieveDisableGenerationTimestamps(parameters),
-            retrieveDisableNotNullAnnotations(parameters),
-            retrieveDisableCheckthreadAnnotations(parameters),
             tableDAO.findAllTables(),
             CachingDecoratorFactory.getInstance(),
             DAOTemplateUtils.getInstance());
@@ -150,21 +142,9 @@ public abstract class BasePerTableTemplateBuildHandler
 
     /**
      * Builds the template.
-     *
      * @param parameters the parameters.
      * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
-     * @param projectPackage the project package.
-     * @param repository the repository.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param jmx whether to include JMX support.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param tables the tables.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
@@ -173,17 +153,7 @@ public abstract class BasePerTableTemplateBuildHandler
     protected void buildTemplate(
         @NotNull final QueryJCommand parameters,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @Nullable final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
@@ -234,20 +204,9 @@ public abstract class BasePerTableTemplateBuildHandler
                     t_Template =
                         createTemplate(
                             templateFactory,
-                            metadataManager,
-                            customSqlProvider,
                             decoratorFactory,
                             retrievePackage(
                                 t_Table.getName(), metadataManager.getEngine(), parameters),
-                            projectPackage,
-                            repository,
-                            header,
-                            implementMarkerInterfaces,
-                            jmx,
-                            jndiLocation,
-                            disableGenerationTimestamps,
-                            disableNotNullAnnotations,
-                            disableCheckthreadAnnotations,
                             t_Table.getName(),
                             t_lStaticContent,
                             parameters);
@@ -307,18 +266,7 @@ public abstract class BasePerTableTemplateBuildHandler
     /**
      * Creates a template with required information.
      * @param templateFactory the {@link org.acmsl.queryj.api.PerTableTemplateFactory} instance.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
-     * @param projectPackage the project's base package.
-     * @param repository the repository name.
-     * @param header the custom file header.
-     * @param implementMarkerInterfaces whether to use marker interface or not.
-     * @param jmx whether to include JMX support or not.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param tableName the table name.
      * @param staticContents the table's static contents (optional).
      * @param parameters the parameter map.
@@ -326,39 +274,18 @@ public abstract class BasePerTableTemplateBuildHandler
     @Nullable
     protected T createTemplate(
         @NotNull final TF templateFactory,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @Nullable final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
         @NotNull final List<Row<String>> staticContents,
-        @SuppressWarnings("unused") @NotNull final QueryJCommand parameters)
+        @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         return
             templateFactory.createTemplate(
-                metadataManager,
-                customSqlProvider,
+                parameters,
                 decoratorFactory,
                 packageName,
-                projectPackage,
-                repository,
-                header,
-                implementMarkerInterfaces,
-                jmx,
-                jndiLocation,
-                disableGenerationTimestamps,
-                disableNotNullAnnotations,
-                disableCheckthreadAnnotations,
                 tableName,
                 staticContents);
     }

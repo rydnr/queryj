@@ -49,11 +49,11 @@ import org.acmsl.queryj.customsql.exceptions.CustomSqlProviderNotAvailableExcept
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
 
 /*
  * Importing Apache Commons Lang classes.
  */
-import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
