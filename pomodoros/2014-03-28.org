@@ -1,5 +1,5 @@
 * 2014/03/28
-** TODO Refactor TemplateContext #459: 4 -> 3
+** DONE Refactor TemplateContext #459: 4 -> 4
 ** TODO Add BaseDAO: 1 ->
 ** TODO Fix BaseDAO: 1 ->
 

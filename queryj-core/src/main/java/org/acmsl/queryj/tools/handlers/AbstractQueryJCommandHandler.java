@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.handlers;
  */
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
+import org.acmsl.queryj.api.QueryJCommandUtils;
 import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseMetadataException;
 import org.acmsl.queryj.api.Template;
 import org.acmsl.queryj.api.exceptions.UnsupportedCharsetQueryjException;
@@ -47,6 +48,13 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
+import org.acmsl.queryj.tools.exceptions.MissingConnectionAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingCustomSqlProviderAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingDataSourceJndiPathAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingOutputDirAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingProjectPackageAtRuntimeException;
+import org.acmsl.queryj.tools.exceptions.MissingRepositoryNameAtRuntimeException;
 
 /*
  * Importing some ACM-SL classes.
@@ -69,13 +77,6 @@ import java.util.concurrent.Future;
 /*
  * Importing some Apache Commons Logging classes.
  */
-import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
-import org.acmsl.queryj.tools.exceptions.MissingConnectionAtRuntimeException;
-import org.acmsl.queryj.tools.exceptions.MissingCustomSqlProviderAtRuntimeException;
-import org.acmsl.queryj.tools.exceptions.MissingDataSourceJndiPathAtRuntimeException;
-import org.acmsl.queryj.tools.exceptions.MissingOutputDirAtRuntimeException;
-import org.acmsl.queryj.tools.exceptions.MissingProjectPackageAtRuntimeException;
-import org.acmsl.queryj.tools.exceptions.MissingRepositoryNameAtRuntimeException;
 import org.apache.commons.logging.Log;
 
 /*
@@ -176,14 +177,7 @@ public abstract class AbstractQueryJCommandHandler
     @NotNull
     protected MetadataManager retrieveMetadataManager(@NotNull final QueryJCommand parameters)
     {
-        @Nullable final MetadataManager result = retrieveMetadataManagerIfExists(parameters);
-
-        if (result == null)
-        {
-            throw new MetadataManagerNotAvailableException();
-        }
-
-        return result;
+        return retrieveMetadataManager(parameters, QueryJCommandUtils.getInstance());
     }
 
     /**
@@ -191,12 +185,11 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return the manager.
      */
-    @Nullable
-    protected MetadataManager retrieveMetadataManagerIfExists(@NotNull final QueryJCommand parameters)
+    @NotNull
+    protected MetadataManager retrieveMetadataManager(
+        @NotNull final QueryJCommand parameters, @NotNull final QueryJCommandUtils queryJCommandUtils)
     {
-        return
-            new QueryJCommandWrapper<MetadataManager>(parameters)
-                .getSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER);
+        return queryJCommandUtils.retrieveMetadataManager(parameters);
     }
 
     /**
@@ -488,6 +481,7 @@ public abstract class AbstractQueryJCommandHandler
      * Annotates given list of generation tasks into the parameter map.
      * @param tasks the tasks to track.
      * @param parameters the parameter map.
+     * @param <T> the template type.
      */
     @SuppressWarnings("unused")
     protected <T extends Template<?>> void annotateGenerationTasks(

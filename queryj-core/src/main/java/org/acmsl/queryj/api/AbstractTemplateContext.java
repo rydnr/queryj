@@ -46,6 +46,7 @@ import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.RepositoryNameNotAvailableException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.exceptions.CustomSqlProviderNotAvailableException;
+import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
@@ -54,6 +55,7 @@ import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
 /*
  * Importing Apache Commons Lang classes.
  */
+import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -93,12 +95,12 @@ public abstract class AbstractTemplateContext
     /**
      * The package name key.
      */
-    protected static final String PACKAGE_NAME = "packageName";
+    public static final String PACKAGE_NAME = "packageName";
 
     /**
      * The file name key.
      */
-    protected static final String FILE_NAME = "fileName";
+    public static final String FILE_NAME = "fileName";
 
     /**
      * The command.
@@ -163,7 +165,8 @@ public abstract class AbstractTemplateContext
     protected MetadataManager getMetadataManager(@NotNull final QueryJCommand command)
     {
         @Nullable final MetadataManager result =
-            new QueryJCommandWrapper<MetadataManager>(command).getSetting(MetadataManager.class.getName());
+            new QueryJCommandWrapper<MetadataManager>(command)
+                .getSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER);
 
         if (result == null)
         {
@@ -193,7 +196,8 @@ public abstract class AbstractTemplateContext
     protected CustomSqlProvider getCustomSqlProvider(@NotNull final QueryJCommand command)
     {
         @Nullable final CustomSqlProvider result =
-            new QueryJCommandWrapper<CustomSqlProvider>(command).getSetting(CustomSqlProvider.class.getName());
+            new QueryJCommandWrapper<CustomSqlProvider>(command).getSetting(
+                CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
 
         if (result == null)
         {
