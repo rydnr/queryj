@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ Template Packaging Maven Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,49 +23,60 @@
 
  ******************************************************************************
  *
- * Filename: MissingOutputDirForTestsException.java
+ * Filename: TemplatePackagingNonCheckedExceptionTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The parent folder for the generated tests is not known at
- *              runtime.
+ * Description: Tests for TemplatePackagingNonCheckedException.
  *
- * Date: 2013/12/08
- * Time: 16:49
+ * Date: 2014/03/30
+ * Time: 20:01
  *
  */
 package org.acmsl.queryj.templates.packaging.exceptions;
 
 /*
- * Importing QueryJ-API classes..
+ * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JUnit classes.
+ */
+import org.junit.Assert;
+import org.junit.Test;
+
 /**
- * The parent folder for the generated tests is not known at runtime.
+ * Tests for {@link TemplatePackagingNonCheckedException}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/12/08 16:49
+ * Created: 2014/03/30 20:01
  */
 @ThreadSafe
-public class MissingOutputDirForTestsException
-    extends QueryJNonCheckedException
+public class TemplatePackagingNonCheckedExceptionTest
 {
-    /**
-     * The serial vension id.
-     */
-    private static final long serialVersionUID = 752770316506222245L;
-
-    /**
-     * Creates a new instance.
-     */
-    public MissingOutputDirForTestsException()
+    @Test
+    public void customizes_the_bundle()
     {
-        super("missing.output-dir-for-tests");
+        @NotNull final TemplatePackagingNonCheckedException instance =
+            new TemplatePackagingNonCheckedException("bla") {};
+
+        Assert.assertEquals("template-packaging-exceptions", instance.retrieveExceptionsBundleName());
+    }
+
+    @Test
+    public void customizes_the_system_property()
+    {
+        @NotNull final TemplatePackagingNonCheckedException instance =
+            new TemplatePackagingNonCheckedException("bla") {};
+
+        Assert.assertEquals(
+            "org.acmsl.queryj.templates.packaging.exceptions",
+            instance.retrieveExceptionsBundleProperty());
     }
 }

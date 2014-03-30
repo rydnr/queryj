@@ -61,6 +61,9 @@ public class DefaultTemplatePackagingContext
     extends AbstractTemplatePackagingContext
     implements PerTemplateDefTemplateContext
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -1034808848836900245L;
 
     /**
@@ -94,7 +97,7 @@ public class DefaultTemplatePackagingContext
         @NotNull final String jdbcUsername,
         @NotNull final String jdbcPassword)
     {
-        super(templateName, fileName, packageName, rootDir, outputDir, jdbcDriver, jdbcUrl, jdbcUsername, jdbcPassword);
+        super(null);//templateName, fileName, packageName, rootDir, outputDir, jdbcDriver, jdbcUrl, jdbcUsername, jdbcPassword);
         immutableSetTemplateDef(templateDef);
     }
 

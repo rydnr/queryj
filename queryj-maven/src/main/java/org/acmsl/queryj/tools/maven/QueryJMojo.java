@@ -1316,7 +1316,7 @@ public class QueryJMojo
             }
 
             //execute task
-            task = buildTask(log);
+            task = buildTask(version, log);
 
             log.info("Running QueryJ " + version);
 
@@ -1379,11 +1379,12 @@ public class QueryJMojo
 
     /**
      * Builds the QueryJ task.
+     * @param version the version.
      * @param log the Maven log.
      * @return such info.
      */
     @NotNull
-    protected QueryJTask buildTask(@NotNull final Log log)
+    protected QueryJTask buildTask(@NotNull final String version, @NotNull final Log log)
     {
         @NotNull final CommonsLoggingMavenLogAdapter t_Log = new CommonsLoggingMavenLogAdapter(log);
 
@@ -1397,6 +1398,8 @@ public class QueryJMojo
 
         @NotNull final Path path = new Path(project);
         result.setClasspath(path);
+
+        result.setVersion(version);
 
         t_Log.debug("Catalog: " + getCatalog());
         result.setCatalog(getCatalog());

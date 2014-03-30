@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -38,16 +38,14 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.*;
 import org.acmsl.queryj.api.QueryJTemplateContext;
-import org.acmsl.queryj.metadata.DecoratedString;
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.engines.Engine;
-import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -58,12 +56,16 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Resolves the "engine_name" placeholder in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/19
+ * @since 3.0
+ * Created: 2012/05/19
  */
 @ThreadSafe
 public class EngineHandler
     extends AbstractTemplateContextFillHandler<QueryJTemplateContext, EngineDecorator>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -3471879288390673346L;
 
     /**

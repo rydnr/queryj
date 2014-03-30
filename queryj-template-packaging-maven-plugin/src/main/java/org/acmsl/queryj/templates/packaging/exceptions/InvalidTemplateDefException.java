@@ -58,6 +58,9 @@ import java.io.File;
 public class InvalidTemplateDefException
     extends QueryJNonCheckedException
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -2699031028498366917L;
 
     /**

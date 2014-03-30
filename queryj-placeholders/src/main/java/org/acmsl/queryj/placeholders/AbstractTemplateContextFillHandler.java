@@ -58,7 +58,10 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Base implementation of {@link TemplateContextFillHandler}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/19
+ * @param <C> the context.
+ * @param <P> the placeholder type.
+ * @since 3.0
+ * Created: 2012/05/19
  */
 @ThreadSafe
 public abstract class AbstractTemplateContextFillHandler<C extends TemplateContext,P>
@@ -125,18 +128,23 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
     /**
      * Retrieves the template value for this placeholder.
      * @return such value.
-     * model.
      */
     @Nullable
     protected abstract P getValue(@NotNull final C context)
         throws QueryJBuildException;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
         return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.templateContext).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj)
     {
@@ -153,7 +161,11 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
             .isEquals();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @NotNull
     public String toString()
     {
         return "AbstractTemplateContextFillHandler{" +

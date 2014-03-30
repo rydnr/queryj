@@ -197,6 +197,11 @@ public interface QueryJSettings
     public static final String CACHING = "caching";
 
     /**
+     * The version.
+     */
+    public static final String VERSION = "version";
+
+    /**
      * The default locale.
      */
     public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;

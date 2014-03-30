@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ Template Packaging Maven Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,23 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: MissingOutputDirForTestsException.java
+ * Filename: RootDirNotAvailableException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The parent folder for the generated tests is not known at
- *              runtime.
+ * Description: Identifies the bug when the root-dir information is lost.
  *
- * Date: 2013/12/08
- * Time: 16:49
+ * Date: 2014/03/30
+ * Time: 20:22
  *
  */
 package org.acmsl.queryj.templates.packaging.exceptions;
-
-/*
- * Importing QueryJ-API classes..
- */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 
 /*
  * Importing checkthread.org annotations.
@@ -47,25 +41,25 @@ import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The parent folder for the generated tests is not known at runtime.
+ * Identifies the bug when the root-dir information is lost.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/12/08 16:49
+ * Created: 2014/03/30 20:22
  */
 @ThreadSafe
-public class MissingOutputDirForTestsException
-    extends QueryJNonCheckedException
+public class RootDirNotAvailableException
+    extends TemplatePackagingNonCheckedException
 {
     /**
-     * The serial vension id.
+     * The serial version id.
      */
-    private static final long serialVersionUID = 752770316506222245L;
+    private static final long serialVersionUID = 1517138699849500608L;
 
     /**
      * Creates a new instance.
      */
-    public MissingOutputDirForTestsException()
+    public RootDirNotAvailableException()
     {
-        super("missing.output-dir-for-tests");
+        super("RootDir.not.available");
     }
 }

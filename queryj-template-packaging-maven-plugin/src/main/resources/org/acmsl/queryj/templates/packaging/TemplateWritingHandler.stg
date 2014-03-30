@@ -104,7 +104,8 @@ class(def, C) ::= <<
  * Writing handler for {@link <def.name.noExtension>Template}s.
 <class_common_javadoc(
   template="org/acmsl/templates/packaging/TemplateWritingHandler.stg",
-  timestamp=C.timestamp)>
+  timestamp=C.timestamp,
+  version=C.version)>
  */
 @ThreadSafe
 public class <C.class_name>

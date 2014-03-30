@@ -36,16 +36,32 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
+ * Importing QueryJ Core classes.
+ */
+import org.acmsl.queryj.QueryJCommand;
+
+/*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.tools.maven.Literals;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.exceptions.FileNameNotAvailableException;
+import org.acmsl.queryj.api.exceptions.MissingOutputFolderException;
+import org.acmsl.queryj.api.exceptions.OutputDirIsNotAFolderException;
+import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
+import org.acmsl.queryj.templates.packaging.exceptions.OutputDirNotAvailableException;
+import org.acmsl.queryj.templates.packaging.exceptions.RootDirNotAvailableException;
+import org.acmsl.queryj.templates.packaging.exceptions.TemplateNameNotAvailableException;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.io.File;
 import java.io.Serializable;
 
@@ -59,7 +75,16 @@ import java.io.Serializable;
 public class AbstractTemplatePackagingContext
     implements Serializable
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -7291939701431286380L;
+
+    /**
+     * The command.
+     */
+    @NotNull
+    private QueryJCommand m__Command;
 
     /**
      * The template name.
@@ -117,55 +142,40 @@ public class AbstractTemplatePackagingContext
 
     /**
      * Creates a new instance.
-     * @param templateName the template name.
-     * @param packageName the package name.
-     * @param rootDir the root dir.
-     * @param fileName the file name.
-     * @param outputDir the output dir.
-     * @param jdbcDriver the JDBC driver.
-     * @param jdbcUrl the JDBC url.
-     * @param jdbcUsername the JDBC username.
-     * @param jdbcPassword the JDBC password.
+     * @param command the command.
      */
-    public AbstractTemplatePackagingContext(
-        @NotNull final String templateName,
-        @NotNull final String fileName,
-        @NotNull final String packageName,
-        @NotNull final File rootDir,
-        @NotNull final File outputDir,
-        @NotNull final String jdbcDriver,
-        @NotNull final String jdbcUrl,
-        @NotNull final String jdbcUsername,
-        @NotNull final String jdbcPassword)
+    public AbstractTemplatePackagingContext(@NotNull final QueryJCommand command)
     {
-        immutableSetTemplateName(templateName);
-        immutableSetFileName(fileName);
-        immutableSetPackageName(packageName);
-        immutableSetRootDir(rootDir);
-        immutableSetOutputDir(outputDir);
-        immutableSetJdbcDriver(jdbcDriver);
-        immutableSetJdbcUrl(jdbcUrl);
-        immutableSetJdbcUsername(jdbcUsername);
-        immutableSetJdbcPassword(jdbcPassword);
+        immutableSetCommand(command);
     }
 
     /**
      * Specifies the name of the template.
-     * @param templateName such name.
+     * @param command such name.
      */
-    protected final void immutableSetTemplateName(@NotNull final String templateName)
+    protected final void immutableSetCommand(@NotNull final QueryJCommand command)
     {
-        this.m__strTemplateName = templateName;
+        this.m__Command = command;
     }
 
     /**
      * Specifies the name of the template.
-     * @param templateName such name.
+     * @param command such name.
      */
     @SuppressWarnings("unused")
-    protected void setTemplateName(@NotNull final String templateName)
+    protected void setCommand(@NotNull final QueryJCommand command)
     {
-        immutableSetTemplateName(templateName);
+        immutableSetCommand(command);
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    @NotNull
+    public QueryJCommand getCommand()
+    {
+        return this.m__Command;
     }
 
     /**
@@ -175,56 +185,55 @@ public class AbstractTemplatePackagingContext
     @NotNull
     public String getTemplateName()
     {
-        return this.m__strTemplateName;
+        return getTemplateName(getCommand());
     }
 
     /**
-     * Specifies the file name.
-     * @param fileName such file name.
+     * Retrieves the template name.
+     * @param command the command.
+     * @return such information.
      */
-    protected final void immutableSetFileName(@NotNull final String fileName)
+    @NotNull
+    protected String getTemplateName(@NotNull final QueryJCommand command)
     {
-        this.m__strFileName = fileName;
-    }
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting("templateName");
 
-    /**
-     * Specifies the file name.
-     * @param fileName such file name.
-     */
-    @SuppressWarnings("unused")
-    protected void setFileName(@NotNull final String fileName)
-    {
-        immutableSetFileName(fileName);
+        if (result == null)
+        {
+            throw new TemplateNameNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
      * Retrieves the file name.
      * @return such information.
      */
-    @SuppressWarnings("unused")
     @NotNull
     public String getFileName()
     {
-        return this.m__strFileName;
+        return getFileName(getCommand());
     }
 
     /**
-     * Specifies the package name.
-     * @param packageName such information.
+     * Retrieves the file name.
+     * @param command the command.
+     * @return such information.
      */
-    protected void immutableSetPackageName(@NotNull final String packageName)
+    @NotNull
+    protected String getFileName(@NotNull final QueryJCommand command)
     {
-        this.m__strPackageName = packageName;
-    }
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting("fileName");
 
-    /**
-     * Specifies the package name.
-     * @param packageName such information.
-     */
-    @SuppressWarnings("unused")
-    protected void setPackageName(@NotNull final String packageName)
-    {
-        immutableSetPackageName(packageName);
+        if (result == null)
+        {
+            throw new FileNameNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
@@ -234,56 +243,55 @@ public class AbstractTemplatePackagingContext
     @NotNull
     public String getPackageName()
     {
-        return m__strPackageName;
+        return getPackageName(getCommand());
     }
 
     /**
-     * Specifies the root dir.
-     * @param dir such dir.
+     * Retrieves the package name.
+     * @param command the command.
+     * @return such information.
      */
-    protected final void immutableSetRootDir(@NotNull final File dir)
+    @NotNull
+    protected String getPackageName(@NotNull final QueryJCommand command)
     {
-        this.m__RootDir = dir;
-    }
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting("packageName");
 
-    /**
-     * Specifies the root dir.
-     * @param dir such dir.
-     */
-    @SuppressWarnings("unused")
-    protected void setRootDir(@NotNull final File dir)
-    {
-        immutableSetRootDir(dir);
+        if (result == null)
+        {
+            throw new PackageNameNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
      * Retrieves the root dir.
      * @return such folder.
      */
-    @SuppressWarnings("unused")
     @NotNull
     public File getRootDir()
     {
-        return this.m__RootDir;
+        return getRootDir(getCommand());
     }
 
     /**
-     * Specifies the output dir.
-     * @param dir such dir.
+     * Retrieves the root dir.
+     * @param command the command.
+     * @return such folder.
      */
-    protected final void immutableSetOutputDir(@NotNull final File dir)
+    @NotNull
+    protected File getRootDir(@NotNull final QueryJCommand command)
     {
-        this.m__OutputDir = dir;
-    }
+        @Nullable final File result =
+            new QueryJCommandWrapper<File>(command).getSetting("rootDir");
 
-    /**
-     * Specifies the output dir.
-     * @param dir such dir.
-     */
-    @SuppressWarnings("unused")
-    protected void setOutputDir(@NotNull final File dir)
-    {
-        immutableSetOutputDir(dir);
+        if (result == null)
+        {
+            throw new RootDirNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
@@ -293,26 +301,26 @@ public class AbstractTemplatePackagingContext
     @NotNull
     public File getOutputDir()
     {
-        return this.m__OutputDir;
+        return getOutputDir(getCommand());
     }
 
     /**
-     * Specifies the JDBC driver.
-     * @param jdbcDriver the JDBC driver.
+     * Retrieves the output dir.
+     * @param command the command.
+     * @return such folder.
      */
-    protected final void immutableSetJdbcDriver(@NotNull final String jdbcDriver)
+    @NotNull
+    protected File getOutputDir(@NotNull final QueryJCommand command)
     {
-        this.m__strJdbcDriver = jdbcDriver;
-    }
+        @Nullable final File result =
+            new QueryJCommandWrapper<File>(command).getSetting("outputDir");
 
-    /**
-     * Specifies the JDBC driver.
-     * @param jdbcDriver the JDBC driver.
-     */
-    @SuppressWarnings("unused")
-    protected void setJdbcDriver(@NotNull final String jdbcDriver)
-    {
-        immutableSetJdbcDriver(jdbcDriver);
+        if (result == null)
+        {
+            throw new OutputDirNotAvailableException();
+        }
+
+        return result;
     }
 
     /**
@@ -327,25 +335,6 @@ public class AbstractTemplatePackagingContext
     }
 
     /**
-     * Specifies the JDBC url.
-     * @param jdbcUrl the JDBC url.
-     */
-    protected final void immutableSetJdbcUrl(@NotNull final String jdbcUrl)
-    {
-        this.m__strJdbcUrl = jdbcUrl;
-    }
-
-    /**
-     * Specifies the JDBC url.
-     * @param jdbcUrl the JDBC url.
-     */
-    @SuppressWarnings("unused")
-    protected void setJdbcUrl(@NotNull final String jdbcUrl)
-    {
-        immutableSetJdbcUrl(jdbcUrl);
-    }
-
-    /**
      * Retrieves the JDBC url.
      * @return the JDBC url.
      */
@@ -354,25 +343,6 @@ public class AbstractTemplatePackagingContext
     public String getJdbcUrl()
     {
         return this.m__strJdbcUrl;
-    }
-
-    /**
-     * Specifies the JDBC user name.
-     * @param jdbcUsername the JDBC user name.
-     */
-    protected final void immutableSetJdbcUsername(@NotNull final String jdbcUsername)
-    {
-        this.m__strJdbcUsername = jdbcUsername;
-    }
-
-    /**
-     * Specifies the JDBC user name.
-     * @param jdbcUsername the JDBC user name.
-     */
-    @SuppressWarnings("unused")
-    protected void setJdbcUsername(@NotNull final String jdbcUsername)
-    {
-        immutableSetJdbcUsername(jdbcUsername);
     }
 
     /**
@@ -387,25 +357,6 @@ public class AbstractTemplatePackagingContext
     }
 
     /**
-     * Specifies the JDBC password.
-     * @param jdbcPassword the JDBC password.
-     */
-    protected final void immutableSetJdbcPassword(@NotNull final String jdbcPassword)
-    {
-        this.m__strJdbcPassword = jdbcPassword;
-    }
-
-    /**
-     * Specifies the JDBC url.
-     * @param jdbcPassword the JDBC password.
-     */
-    @SuppressWarnings("unused")
-    protected void setJdbcPassword(@NotNull final String jdbcPassword)
-    {
-        immutableSetJdbcPassword(jdbcPassword);
-    }
-
-    /**
      * Retrieves the JDBC url.
      * @return the JDBC url.
      */
@@ -416,19 +367,16 @@ public class AbstractTemplatePackagingContext
         return this.m__strJdbcPassword;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'DefaultTemplatePackagingContext' " +
-               ", 'fileName': '" + m__strFileName + '\'' +
-               ", 'templateName': '" + m__strTemplateName + '\'' +
-               Literals.PACKAGE_NAME + m__strPackageName + '\'' +
-               ", 'rootDir': '" + m__RootDir.getAbsolutePath() + '\'' +
-               Literals.OUTPUT_DIR + m__OutputDir.getAbsolutePath() + '\'' +
-               ", 'jdbcDriver': '" + m__strJdbcDriver + '\'' +
-               ", 'jdbcUrl': '" + m__strJdbcUrl + '\'' +
-               ", 'jdbcUsername': '" + m__strJdbcUsername + '\'' +
-               ", 'jdbcPassword': '" + m__strJdbcPassword + "' }";
+        return
+              "{ \"class\": \"DefaultTemplatePackagingContext\""
+            + ", \"package\": \"org.acmsl.queryj.templates.packaging\""
+            + ", \"command\": " + m__Command +" }";
     }
 }

@@ -65,6 +65,9 @@ import java.io.File;
 public class CannotProcessTemplateDefException
     extends QueryJNonCheckedException
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -6806400103110889176L;
 
     /**

@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.packaging;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.maven.QueryJMojo;
 
@@ -505,6 +506,7 @@ public class TemplatePackagingMojo
             populateCommand(command, getOutputDir());
             populateCommandForTests(command, getOutputDirForTests());
             populateCommand(command, getJdbcDriver(), getJdbcUrl(), getJdbcUserName(), getJdbcPassword());
+            populateCommand(command, version);
 
             new TemplatePackagingChain<>().process(command);
         }
@@ -565,12 +567,27 @@ public class TemplatePackagingMojo
         new QueryJCommandWrapper<String>(command).setSetting(JDBC_PASSWORD, jdbcPassword);
     }
 
+    /**
+     * Populates the version information in the Mojo to be available in the command.
+     * @param command the command.
+     * @param version the version.
+     */
+    protected void populateCommand(
+        @NotNull final QueryJCommand command, @NotNull final String version)
+    {
+        new QueryJCommandWrapper<String>(command).setSetting(QueryJSettings.VERSION, version);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
         return
-              "{ \"class\": \"" + TemplatePackagingMojo.class.getName() + "\""
+              "{ \"class\": \"" + TemplatePackagingMojo.class.getSimpleName() + "\""
+            + ", \"package\": \"org.acmsl.queryj.templates.packaging\""
             + ", \"queryJCommand\": \"" + this.m__QueryJCommand + "\""
             + ", \"sources\": \"" + Arrays.toString(this.m__aSources) + "\""
             + ", \"outputDir\": \"" + this.m__OutputDir.getAbsolutePath() + "\""

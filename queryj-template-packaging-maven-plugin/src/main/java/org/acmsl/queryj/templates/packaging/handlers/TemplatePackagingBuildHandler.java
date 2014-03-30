@@ -134,6 +134,7 @@ public abstract class TemplatePackagingBuildHandler
         @NotNull final String jdbcUrl = retrieveJdbcUrl(parameters);
         @NotNull final String jdbcUsername = retrieveJdbcUsername(parameters);
         @NotNull final String jdbcPassword = retrieveJdbcPassword(parameters);
+//        @NotNull final String version = retrieveVersion(parameters);
 
         return
             new DefaultTemplatePackagingContext(

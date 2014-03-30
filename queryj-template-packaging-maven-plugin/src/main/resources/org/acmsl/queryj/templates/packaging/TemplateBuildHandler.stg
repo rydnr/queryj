@@ -58,7 +58,7 @@ sourceImpl(def, C) ::= <<
   description_oneline=true,
   filename=C.class_name,
   template="org/acmsl/queryj/templates/packaging/TemplateBuildHandler.stg",
-   C=C)>
+  C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
 
 /*
@@ -108,7 +108,8 @@ class(def, C) ::= <<
  * Build handler for {@link org.acmsl.queryj.templates.<def.name.noExtension>Template}s.
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/packaging/TemplateBuildHandler.stg",
-  timestamp=C.timestamp)>
+  timestamp=C.timestamp,
+  version=C.version)>
  */
 @ThreadSafe
 public class <C.class_name>

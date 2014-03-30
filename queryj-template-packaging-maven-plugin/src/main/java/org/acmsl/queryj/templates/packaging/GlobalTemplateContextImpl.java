@@ -94,8 +94,8 @@ public class GlobalTemplateContextImpl
         @NotNull final String jdbcPassword,
         @NotNull final List<TemplateDef<String>> templateDefs)
     {
-        super(
-            templateName, fileName, packageName, rootDir, outputDir, jdbcDriver, jdbcUrl, jdbcUsername, jdbcPassword);
+        super(null);
+            //templateName, fileName, packageName, rootDir, outputDir, jdbcDriver, jdbcUrl, jdbcUsername, jdbcPassword);
         immutableSetTemplateDefs(templateDefs);
     }
 

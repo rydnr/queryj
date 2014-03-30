@@ -1,5 +1,5 @@
 /*
-                        QueryJ-Core
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -992,6 +992,7 @@ public class QueryJTask
     /**
      * Requests the chained logic to be performed.
      */
+    @Override
     public void execute()
         throws  BuildException
     {
@@ -1215,6 +1216,46 @@ public class QueryJTask
     protected final boolean getDisableCheckthreadAnnotations(@NotNull final QueryJCommand delegee)
     {
         return delegee.getBooleanSetting(DISABLE_CHECKTHREAD_ANNOTATIONS, false);
+    }
+
+    /**
+     * Specifies the QueryJ version.
+     * @param version the version.
+     */
+    public void setVersion(@NotNull final String version)
+    {
+        setVersion(version, getQueryJCommand());
+    }
+
+    /**
+     * Specifies the QueryJ version.
+     * @param version the version.
+     * @param command the command.
+     */
+    protected void setVersion(@NotNull final String version, @NotNull final QueryJCommand command)
+    {
+        new QueryJCommandWrapper<String>(command).setSetting(VERSION, version);
+    }
+
+    /**
+     * Retrieves the version.
+     * @return such information.
+     */
+    @Nullable
+    public String getVersion()
+    {
+        return getVersion(getQueryJCommand());
+    }
+
+    /**
+     * Retrieves the version.
+     * @param command the command.
+     * @return such information.
+     */
+    @Nullable
+    protected String getVersion(@NotNull final QueryJCommand command)
+    {
+        return new QueryJCommandWrapper<String>(command).getSetting(VERSION);
     }
 
     /**

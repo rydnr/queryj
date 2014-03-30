@@ -58,7 +58,7 @@ sourceImpl(def, C) ::= <<
   description_oneline=true,
   filename=C.class_name,
   template="org/acmsl/queryj/templates/packaging/TemplateFactory.stg",
-   C=C)>
+  C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates")>
 
 /*
@@ -109,7 +109,8 @@ class(def, C) ::= <<
  * Factory for {@link <def.name.noExtension>Template}s.
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/packaging/TemplateFactory.stg",
-  timestamp=C.timestamp)>
+  timestamp=C.timestamp,
+  version=C.version)>
  */
 @ThreadSafe
 public class <C.class_name>

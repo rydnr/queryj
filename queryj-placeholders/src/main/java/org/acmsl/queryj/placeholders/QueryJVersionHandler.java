@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,23 +23,28 @@
 
  ******************************************************************************
  *
- * Filename: MissingOutputDirForTestsException.java
+ * Filename: QueryJVersionHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The parent folder for the generated tests is not known at
- *              runtime.
+ * Description: 
  *
- * Date: 2013/12/08
- * Time: 16:49
+ * Date: 2014/03/30
+ * Time: 18:41
  *
  */
-package org.acmsl.queryj.templates.packaging.exceptions;
+package org.acmsl.queryj.placeholders;
 
 /*
- * Importing QueryJ-API classes..
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
+import org.acmsl.queryj.api.QueryJTemplateContext;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -47,25 +52,49 @@ import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The parent folder for the generated tests is not known at runtime.
+ *
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/12/08 16:49
+ * Created: 2014/03/30 18:41
  */
 @ThreadSafe
-public class MissingOutputDirForTestsException
-    extends QueryJNonCheckedException
+public class QueryJVersionHandler
+    extends AbstractDecoratedStringHandler<QueryJTemplateContext>
 {
     /**
-     * The serial vension id.
+     * The serial version id.
      */
-    private static final long serialVersionUID = 752770316506222245L;
+    private static final long serialVersionUID = -7009997981120209866L;
 
     /**
-     * Creates a new instance.
+     * Creates a new instance wrapping given context.
+     * @param context the context.
      */
-    public MissingOutputDirForTestsException()
+    public QueryJVersionHandler(@NotNull final QueryJTemplateContext context)
     {
-        super("missing.output-dir-for-tests");
+        super(context);
+    }
+
+    /**
+     * Retrieves "version".
+     * @return such placeholder.
+     */
+    @NotNull
+    @Override
+    public String getPlaceHolder()
+    {
+        return "version";
+    }
+
+
+    /**
+     * Retrieves the QueryJ version.
+     * @return such value.
+     */
+    @Nullable
+    @Override
+    protected String resolveContextValue(@NotNull final QueryJTemplateContext context)
+    {
+        return context.getVersion();
     }
 }

@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ Template Packaging Maven Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,21 +23,21 @@
 
  ******************************************************************************
  *
- * Filename: MissingOutputDirForTestsException.java
+ * Filename: TemplateNameNotAvailableException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The parent folder for the generated tests is not known at
- *              runtime.
+ * Description: Represents the bug when the template name is not longer
+ *              available.
  *
- * Date: 2013/12/08
- * Time: 16:49
+ * Date: 2014/03/30
+ * Time: 19:52
  *
  */
 package org.acmsl.queryj.templates.packaging.exceptions;
 
 /*
- * Importing QueryJ-API classes..
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 
@@ -47,25 +47,25 @@ import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The parent folder for the generated tests is not known at runtime.
+ * Represents the bug when the template name is not longer available.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/12/08 16:49
+ * Created: 2014/03/30 19:52
  */
 @ThreadSafe
-public class MissingOutputDirForTestsException
-    extends QueryJNonCheckedException
+public class TemplateNameNotAvailableException
+    extends TemplatePackagingNonCheckedException
 {
     /**
-     * The serial vension id.
+     * The serial version id.
      */
-    private static final long serialVersionUID = 752770316506222245L;
+    private static final long serialVersionUID = -2712500317340565753L;
 
     /**
-     * Creates a new instance.
+     * Creates a new exception.
      */
-    public MissingOutputDirForTestsException()
+    public TemplateNameNotAvailableException()
     {
-        super("missing.output-dir-for-tests");
+        super("TemplateName.not.available");
     }
 }

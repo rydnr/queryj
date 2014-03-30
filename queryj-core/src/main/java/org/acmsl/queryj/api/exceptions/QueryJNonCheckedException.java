@@ -50,7 +50,6 @@ import org.checkthread.annotations.ThreadSafe;
  */
 import org.jetbrains.annotations.NotNull;
 
-
 /**
  * Non-checked QueryJ exceptions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
@@ -61,6 +60,9 @@ import org.jetbrains.annotations.NotNull;
 public class QueryJNonCheckedException
     extends NonCheckedException
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -8100092770309110856L;
 
     /**
@@ -127,5 +129,4 @@ public class QueryJNonCheckedException
     {
         return QUERYJ_EXCEPTIONS_BUNDLE_PROPERTY;
     }
-
 }

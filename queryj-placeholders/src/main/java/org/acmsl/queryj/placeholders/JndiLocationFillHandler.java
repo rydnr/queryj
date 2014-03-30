@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importign some project classes.
+ * Importing some project classes.
  */
 import org.acmsl.queryj.api.QueryJTemplateContext;
 
@@ -53,13 +53,17 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Resolves "jndi_location" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2012/06/25
+ * @since 3.0
+ * Created: 2012/06/25
  */
 @ThreadSafe
 @SuppressWarnings("unused")
 public class JndiLocationFillHandler
     extends AbstractDecoratedStringHandler<QueryJTemplateContext>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -4111639313234855152L;
 
     /**

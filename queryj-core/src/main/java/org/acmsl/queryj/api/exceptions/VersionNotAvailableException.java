@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,23 +23,18 @@
 
  ******************************************************************************
  *
- * Filename: MissingOutputDirForTestsException.java
+ * Filename: VersionNotAvailableException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The parent folder for the generated tests is not known at
- *              runtime.
+ * Description: Represents the bug when the version information is not longer
+ *              available.
  *
- * Date: 2013/12/08
- * Time: 16:49
+ * Date: 2014/03/30
+ * Time: 18:58
  *
  */
-package org.acmsl.queryj.templates.packaging.exceptions;
-
-/*
- * Importing QueryJ-API classes..
- */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
+package org.acmsl.queryj.api.exceptions;
 
 /*
  * Importing checkthread.org annotations.
@@ -47,25 +42,26 @@ import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The parent folder for the generated tests is not known at runtime.
+ * Represents the bug when the version information is not longer
+ * available.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/12/08 16:49
+ * Created: 2014/03/30 18:58
  */
 @ThreadSafe
-public class MissingOutputDirForTestsException
+public class VersionNotAvailableException
     extends QueryJNonCheckedException
 {
     /**
-     * The serial vension id.
+     * The serial version id.
      */
-    private static final long serialVersionUID = 752770316506222245L;
+    private static final long serialVersionUID = -6861856441887524269L;
 
     /**
      * Creates a new instance.
      */
-    public MissingOutputDirForTestsException()
+    public VersionNotAvailableException()
     {
-        super("missing.output-dir-for-tests");
+        super("Version.not.available");
     }
 }

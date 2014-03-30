@@ -44,6 +44,7 @@ import org.acmsl.queryj.api.exceptions.FileNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.JndiLocationNotAvailableException;
 import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.RepositoryNameNotAvailableException;
+import org.acmsl.queryj.api.exceptions.VersionNotAvailableException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.exceptions.CustomSqlProviderNotAvailableException;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
@@ -51,11 +52,11 @@ import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
+import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
  * Importing Apache Commons Lang classes.
  */
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -477,6 +478,36 @@ public abstract class AbstractTemplateContext
         if (result == null)
         {
             throw new FileNameNotAvailableException();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the version.
+     * @return such information.
+     */
+    @NotNull
+    public String getVersion()
+    {
+        return getVersion(getCommand());
+    }
+
+
+    /**
+     * Retrieves the version.
+     * @param command the command.
+     * @return such information.
+     */
+    @NotNull
+    protected String getVersion(@NotNull final QueryJCommand command)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.VERSION);
+
+        if (result == null)
+        {
+            throw new VersionNotAvailableException();
         }
 
         return result;

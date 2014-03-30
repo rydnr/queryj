@@ -64,6 +64,9 @@ public class TimestampHandler
     extends AbstractFillHandler<String>
     implements NonRelevantFillHandler
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 2312284463910738810L;
 
     /**

@@ -103,7 +103,8 @@ class(defs, C) ::= <<
  * Generator for {@link DefaultTemplateChainProvider}s.
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/packaging/DefaultTemplateChainProvider.stg",
-  timestamp=C.timestamp)>
+  timestamp=C.timestamp,
+  version=C.version)>
  */
 @ThreadSafe
 public class <C.class_name>
