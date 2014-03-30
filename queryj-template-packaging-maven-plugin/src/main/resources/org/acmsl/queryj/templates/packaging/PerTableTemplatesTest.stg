@@ -504,6 +504,8 @@ public class PerTableTemplatesTest
                     QueryJSettings.DISABLE_NOTNULL_ANNOTATIONS, false);
                 new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
                     QueryJSettings.DISABLE_CHECKTHREAD_ANNOTATIONS, false);
+                new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                    QueryJSettings.JNDI_DATASOURCE, "");
 
                 @Nullable final PerTableTemplate\<PerTableTemplateContext> template =
                     templateFactory.createTemplate(
