@@ -1,6 +1,6 @@
 * 2014/03/30
 ** Refactor TemplateContext #459: 
 *** DONE Make queryj-templates tests pass: 1 -> 1
-*** Support QueryJ version in templates: 1 ->
+*** DONE Support QueryJ version in templates: 3 -> 3
 ** Pending:
 *** Move TableTestHelper out of QueryJ Templates
