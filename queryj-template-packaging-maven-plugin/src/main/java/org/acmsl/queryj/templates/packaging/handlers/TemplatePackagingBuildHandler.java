@@ -87,6 +87,9 @@ import java.util.regex.Pattern;
 /**
  * Base build handler for Template Packaging templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @param <T> the template type.
+ * @param <TF> the template factory.
+ * @param <C> the template context.
  * @since 3.0
  * Created: 2013/08/17 11:00
  */
@@ -125,30 +128,7 @@ public abstract class TemplatePackagingBuildHandler
         @NotNull final TemplateDef<String> templateDef,
         @NotNull final QueryJCommand parameters)
     {
-        @NotNull final String templateName = retrieveTemplateName(parameters);
-        @NotNull final String outputPackage = retrieveOutputPackage(parameters);
-
-        @NotNull final File rootDir = retrieveRootDir(parameters);
-
-        @NotNull final String jdbcDriver = retrieveJdbcDriver(parameters);
-        @NotNull final String jdbcUrl = retrieveJdbcUrl(parameters);
-        @NotNull final String jdbcUsername = retrieveJdbcUsername(parameters);
-        @NotNull final String jdbcPassword = retrieveJdbcPassword(parameters);
-//        @NotNull final String version = retrieveVersion(parameters);
-
-        return
-            new DefaultTemplatePackagingContext(
-                templateDef,
-                templateName,
-                buildFilename(templateDef, templateName),
-                outputPackage,
-                rootDir,
-                new File(rootDir.getAbsolutePath()
-                    + File.separator + outputPackage.replaceAll("\\.", File.separator)),
-                jdbcDriver,
-                jdbcUrl,
-                jdbcUsername,
-                jdbcPassword);
+        return new DefaultTemplatePackagingContext(templateDef, parameters);
     }
 
     /**
@@ -167,24 +147,13 @@ public abstract class TemplatePackagingBuildHandler
 
         @NotNull final File rootDir = retrieveRootDir(parameters);
 
-        @NotNull final String jdbcDriver = retrieveJdbcDriver(parameters);
-        @NotNull final String jdbcUrl = retrieveJdbcUrl(parameters);
-        @NotNull final String jdbcUsername = retrieveJdbcUsername(parameters);
-        @NotNull final String jdbcPassword = retrieveJdbcPassword(parameters);
-
         return
             new GlobalTemplateContextImpl(
-                templateName,
                 buildFilename(templateDefs, templateName),
-                outputPackage,
-                rootDir,
-                new File(rootDir.getAbsolutePath()
-                         + File.separator + outputPackage.replaceAll("\\.", File.separator)),
-                jdbcDriver,
-                jdbcUrl,
-                jdbcUsername,
-                jdbcPassword,
-                templateDefs);
+                new File(
+                    rootDir.getAbsolutePath() + File.separator + outputPackage.replaceAll("\\.", File.separator)),
+                templateDefs,
+                parameters);
     }
 
     /**
@@ -317,25 +286,6 @@ public abstract class TemplatePackagingBuildHandler
         if (result == null)
         {
             throw new MissingJdbcUrlAtRuntimeException();
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the JDBC user name.
-     * @param parameters the parameters.
-     * @return the information.
-     */
-    @NotNull
-    public String retrieveJdbcUsername(@NotNull final QueryJCommand parameters)
-    {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(parameters).getSetting(JDBC_USERNAME);
-
-        if (result == null)
-        {
-            throw new MissingJdbcUserNameAtRuntimeException();
         }
 
         return result;

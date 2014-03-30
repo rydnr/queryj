@@ -38,12 +38,16 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.templates.packaging.exceptions.TemplateDefNotAvailableException;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -62,60 +66,57 @@ public class GlobalTemplateContextImpl
     extends AbstractTemplatePackagingContext
     implements GlobalTemplateContext
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -1563568480106519552L;
 
     /**
-     * The list of {@link TemplateDef}s.
-     */
-    @NotNull
-    private List<TemplateDef<String>> m__lTemplateDefs;
-
-    /**
      * Creates a new global context.
-     * @param templateName the template name.
      * @param fileName the file name.
-     * @param packageName the package name.
-     * @param rootDir the root dir.
      * @param outputDir the output dir.
-     * @param jdbcUrl the JDBC url.
-     * @param jdbcUsername the JDBC username.
-     * @param jdbcPassword the JDBC password.
      * @param templateDefs the template definitions.
      */
     public GlobalTemplateContextImpl(
-        @NotNull final String templateName,
         @NotNull final String fileName,
-        @NotNull final String packageName,
-        @NotNull final File rootDir,
         @NotNull final File outputDir,
-        @NotNull final String jdbcDriver,
-        @NotNull final String jdbcUrl,
-        @NotNull final String jdbcUsername,
-        @NotNull final String jdbcPassword,
-        @NotNull final List<TemplateDef<String>> templateDefs)
+        @NotNull final List<TemplateDef<String>> templateDefs,
+        @NotNull final QueryJCommand command)
     {
-        super(null);
-            //templateName, fileName, packageName, rootDir, outputDir, jdbcDriver, jdbcUrl, jdbcUsername, jdbcPassword);
-        immutableSetTemplateDefs(templateDefs);
+        super(command);
+        immutableSetTemplateDefs(templateDefs, command);
+        immutableSetFileName(fileName, command);
+        immutableSetOutputDir(outputDir, command);
+    }
+
+    /**
+     * Specifies the file name.
+     * @param fileName the file name.
+     * @param command the command.
+     */
+    protected final void immutableSetFileName(@NotNull final String fileName, @NotNull final QueryJCommand command)
+    {
+        new QueryJCommandWrapper<String>(command).setSetting("fileName", fileName);
+    }
+
+    /**
+     * Specifies the output dir.
+     * @param outputDir the output dir.
+     * @param command the command.
+     */
+    protected final void immutableSetOutputDir(@NotNull final File outputDir, @NotNull final QueryJCommand command)
+    {
+        new QueryJCommandWrapper<File>(command).setSetting("outputDir", outputDir);
     }
 
     /**
      * Specifies the template defs.
      * @param templateDefs the list of {@link TemplateDef}s.
      */
-    protected final void immutableSetTemplateDefs(@NotNull final List<TemplateDef<String>> templateDefs)
+    protected final void immutableSetTemplateDefs(
+        @NotNull final List<TemplateDef<String>> templateDefs, @NotNull final QueryJCommand command)
     {
-        this.m__lTemplateDefs = templateDefs;
-    }
-
-    /**
-     * Specifies the template defs.
-     * @param templateDefs the list of {@link TemplateDef}s.
-     */
-    @SuppressWarnings("unused")
-    protected void setTemplateDefs(@NotNull final List<TemplateDef<String>> templateDefs)
-    {
-        immutableSetTemplateDefs(templateDefs);
+        new QueryJCommandWrapper<List<TemplateDef<String>>>(command).setSetting("templateDefs", templateDefs);
     }
 
     /**
@@ -126,15 +127,25 @@ public class GlobalTemplateContextImpl
     @Override
     public List<TemplateDef<String>> getTemplateDefs()
     {
-        return m__lTemplateDefs;
+        return getTemplateDefs(getCommand());
     }
 
+    /**
+     * Retrieves the list of {@link TemplateDef}s.
+     * @param command the command.
+     * @return such list.
+     */
     @NotNull
-    @Override
-    public String toString()
+    protected List<TemplateDef<String>> getTemplateDefs(@NotNull final QueryJCommand command)
     {
-        return "{ 'class': 'GlobalTemplateContextImpl', " +
-               "'templateDefs': [ " + m__lTemplateDefs + "], " +
-               "'parent': " + super.toString() + " }";
+        @Nullable final List<TemplateDef<String>> result =
+            new QueryJCommandWrapper<TemplateDef<String>>(command).getListSetting("templateDefs");
+
+        if (result == null)
+        {
+            throw new TemplateDefNotAvailableException();
+        }
+
+        return result;
     }
 }

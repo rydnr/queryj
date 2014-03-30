@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging Maven Plugin
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,19 +36,22 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
+ * Importing QueryJ Core classes.
+ */
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.templates.packaging.exceptions.TemplateDefNotAvailableException;
+
+/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-
-/*
- * Importing JDK classes.
- */
-import java.io.File;
 
 /**
  * Default implementation for TemplatePackagingContext.
@@ -67,57 +70,25 @@ public class DefaultTemplatePackagingContext
     private static final long serialVersionUID = -1034808848836900245L;
 
     /**
-     * The template def.
-     */
-    @NotNull
-    private TemplateDef<String> m__TemplateDef;
-
-    /**
      * Creates a new instance.
-     * @param templateDef the template def.
-     * @param templateName the template name.
-     * @param fileName the file name.
-     * @param packageName the package name.
-     * @param rootDir the root dir.
-     * @param outputDir the output dir.
-     * @param jdbcDriver the JDBC driver.
-     * @param jdbcUrl the JDBC url.
-     * @param jdbcUsername the JDBC username.
-     * @param jdbcPassword the JDBC password.
+     * @param command the command.
      */
     public DefaultTemplatePackagingContext(
-        @NotNull final TemplateDef<String> templateDef,
-        @NotNull final String templateName,
-        @NotNull final String fileName,
-        @NotNull final String packageName,
-        @NotNull final File rootDir,
-        @NotNull final File outputDir,
-        @NotNull final String jdbcDriver,
-        @NotNull final String jdbcUrl,
-        @NotNull final String jdbcUsername,
-        @NotNull final String jdbcPassword)
+        @NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand command)
     {
-        super(null);//templateName, fileName, packageName, rootDir, outputDir, jdbcDriver, jdbcUrl, jdbcUsername, jdbcPassword);
-        immutableSetTemplateDef(templateDef);
+        super(command);
+        immutableSetTemplateDef(templateDef, command);
+        new QueryJCommandWrapper<TemplateDef<String>>(command).setSetting("templateDef", templateDef);
     }
 
     /**
      * Specifies the template def.
      * @param templateDef the template def.
      */
-    protected final void immutableSetTemplateDef(@NotNull final TemplateDef<String> templateDef)
+    protected final void immutableSetTemplateDef(
+        @NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand command)
     {
-        this.m__TemplateDef = templateDef;
-    }
-
-    /**
-     * Specifies the template def.
-     * @param templateDef the template def.
-     */
-    @SuppressWarnings("unused")
-    protected void setTemplateDef(@NotNull final TemplateDef<String> templateDef)
-    {
-        immutableSetTemplateDef(templateDef);
+        new QueryJCommandWrapper<TemplateDef<String>>(command).setSetting("templateDef", templateDef);
     }
 
     /**
@@ -128,15 +99,25 @@ public class DefaultTemplatePackagingContext
     @NotNull
     public TemplateDef<String> getTemplateDef()
     {
-        return this.m__TemplateDef;
+        return getTemplateDef(getCommand());
     }
 
+    /**
+     * Retrieves the template def.
+     * @param command the command.
+     * @return such instance.
+     */
     @NotNull
-    @Override
-    public String toString()
+    protected TemplateDef<String> getTemplateDef(@NotNull final QueryJCommand command)
     {
-        return
-              "{ \"class\": \"" + DefaultTemplatePackagingContext.class.getName() + "\""
-            + "', \"templateDef\": \"" + m__TemplateDef + "\" }";
+        @Nullable final TemplateDef<String> result =
+            new QueryJCommandWrapper<TemplateDef<String>>(command).getSetting("templateDef");
+
+        if (result == null)
+        {
+            throw new TemplateDefNotAvailableException();
+        }
+
+        return result;
     }
 }

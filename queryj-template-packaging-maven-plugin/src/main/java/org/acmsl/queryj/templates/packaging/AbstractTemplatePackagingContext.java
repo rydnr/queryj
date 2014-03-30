@@ -41,23 +41,26 @@ package org.acmsl.queryj.templates.packaging;
 import org.acmsl.queryj.QueryJCommand;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.FileNameNotAvailableException;
-import org.acmsl.queryj.api.exceptions.MissingOutputFolderException;
-import org.acmsl.queryj.api.exceptions.OutputDirIsNotAFolderException;
 import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
+import org.acmsl.queryj.templates.packaging.exceptions.JdbcSettingNotAvailableException;
 import org.acmsl.queryj.templates.packaging.exceptions.OutputDirNotAvailableException;
 import org.acmsl.queryj.templates.packaging.exceptions.RootDirNotAvailableException;
 import org.acmsl.queryj.templates.packaging.exceptions.TemplateNameNotAvailableException;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -85,60 +88,6 @@ public class AbstractTemplatePackagingContext
      */
     @NotNull
     private QueryJCommand m__Command;
-
-    /**
-     * The template name.
-     */
-    @NotNull
-    private String m__strTemplateName;
-
-    /**
-     * The file name.
-     */
-    @NotNull
-    private String m__strFileName;
-
-    /**
-     * The package name.
-     */
-    @NotNull
-    private String m__strPackageName;
-
-    /**
-     * The root dir.
-     */
-    @NotNull
-    private File m__RootDir;
-
-    /**
-     * The output dir.
-     */
-    @NotNull
-    private File m__OutputDir;
-
-    /**
-     * The JDBC driver.
-     */
-    @NotNull
-    private String m__strJdbcDriver;
-
-    /**
-     * The JDBC url.
-     */
-    @NotNull
-    private String m__strJdbcUrl;
-
-    /**
-     * The JDBC username.
-     */
-    @NotNull
-    private String m__strJdbcUsername;
-
-    /**
-     * The JDBC password.
-     */
-    @NotNull
-    private String m__strJdbcPassword;
 
     /**
      * Creates a new instance.
@@ -324,47 +273,126 @@ public class AbstractTemplatePackagingContext
     }
 
     /**
-     * Retrieves the JDBC url.
-     * @return the JDBC url.
+     * Retrieves the JDBC driver.
+     * @return the JDBC driver.
      */
-    @SuppressWarnings("unused")
     @NotNull
     public String getJdbcDriver()
     {
-        return this.m__strJdbcDriver;
+        return getJdbcDriver(getCommand());
+    }
+
+    /**
+     * Retrieves the JDBC driver.
+     * @return the JDBC driver.
+     */
+    @NotNull
+    protected String getJdbcDriver(@NotNull final QueryJCommand command)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting("jdbcDriver");
+
+        if (result == null)
+        {
+            throw
+                new JdbcSettingNotAvailableException(
+                    JdbcSettingNotAvailableException.JdbcSetting.DRIVER);
+        }
+
+        return result;
     }
 
     /**
      * Retrieves the JDBC url.
      * @return the JDBC url.
      */
-    @SuppressWarnings("unused")
     @NotNull
     public String getJdbcUrl()
     {
-        return this.m__strJdbcUrl;
+        return getJdbcUrl(getCommand());
+    }
+
+    /**
+     * Retrieves the JDBC url.
+     * @param command the command.
+     * @return the JDBC url.
+     */
+    @NotNull
+    protected String getJdbcUrl(@NotNull final QueryJCommand command)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting("jdbcUrl");
+
+        if (result == null)
+        {
+            throw
+                new JdbcSettingNotAvailableException(
+                    JdbcSettingNotAvailableException.JdbcSetting.URL);
+        }
+
+        return result;
     }
 
     /**
      * Retrieves the JDBC user name.
      * @return the JDBC user name.
      */
-    @SuppressWarnings("unused")
     @NotNull
     public String getJdbcUsername()
     {
-        return this.m__strJdbcUsername;
+        return getJdbcUsername(getCommand());
     }
 
     /**
-     * Retrieves the JDBC url.
-     * @return the JDBC url.
+     * Retrieves the JDBC user name.
+     * @param command the command.
+     * @return the JDBC user name.
      */
-    @SuppressWarnings("unused")
+    @NotNull
+    protected String getJdbcUsername(@NotNull final QueryJCommand command)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting("jdbcUsername");
+
+        if (result == null)
+        {
+            throw
+                new JdbcSettingNotAvailableException(
+                    JdbcSettingNotAvailableException.JdbcSetting.USERNAME);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the JDBC password.
+     * @return the JDBC password.
+     */
     @NotNull
     public String getJdbcPassword()
     {
-        return this.m__strJdbcPassword;
+        return getJdbcPassword(getCommand());
+    }
+
+    /**
+     * Retrieves the JDBC password.
+     * @param command the command.
+     * @return the JDBC password.
+     */
+    @NotNull
+    protected String getJdbcPassword(@NotNull final QueryJCommand command)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(command).getSetting("jdbcPassword");
+
+        if (result == null)
+        {
+            throw
+                new JdbcSettingNotAvailableException(
+                    JdbcSettingNotAvailableException.JdbcSetting.PASSWORD);
+        }
+
+        return result;
     }
 
     /**
