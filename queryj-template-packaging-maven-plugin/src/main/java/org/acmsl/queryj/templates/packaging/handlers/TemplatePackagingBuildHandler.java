@@ -102,6 +102,9 @@ public abstract class TemplatePackagingBuildHandler
                QueryJCommandHandler<QueryJCommand>,
                TemplatePackagingSettings
 {
+    /**
+     * The regex to match .stg extensions.
+     */
     @NotNull
     private static final Pattern STG_EXT = Pattern.compile("\\.stg$");
 
@@ -128,7 +131,19 @@ public abstract class TemplatePackagingBuildHandler
         @NotNull final TemplateDef<String> templateDef,
         @NotNull final QueryJCommand parameters)
     {
-        return new DefaultTemplatePackagingContext(templateDef, parameters);
+        @NotNull final String templateName = retrieveTemplateName(parameters);
+        @NotNull final String outputPackage = retrieveOutputPackage(parameters);
+        @NotNull final File rootDir = retrieveRootDir(parameters);
+
+        new QueryJCommandWrapper<String>(parameters).setSetting("templateName", templateName);
+        new QueryJCommandWrapper<String>(parameters).setSetting("packageName", outputPackage);
+
+        return
+            new DefaultTemplatePackagingContext(
+                buildFilename(templateDef, templateName),
+                new File(rootDir.getAbsolutePath() + File.separator + outputPackage.replaceAll("\\.", File.separator)),
+                templateDef,
+                parameters);
     }
 
     /**
@@ -146,6 +161,9 @@ public abstract class TemplatePackagingBuildHandler
         @NotNull final String outputPackage = retrieveOutputPackage(parameters);
 
         @NotNull final File rootDir = retrieveRootDir(parameters);
+
+        new QueryJCommandWrapper<String>(parameters).setSetting("templateName", templateName);
+        new QueryJCommandWrapper<String>(parameters).setSetting("packageName", outputPackage);
 
         return
             new GlobalTemplateContextImpl(
@@ -286,6 +304,25 @@ public abstract class TemplatePackagingBuildHandler
         if (result == null)
         {
             throw new MissingJdbcUrlAtRuntimeException();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the JDBC user name.
+     * @param parameters the parameters.
+     * @return the information.
+     */
+    @NotNull
+    public String retrieveJdbcUsername(@NotNull final QueryJCommand parameters)
+    {
+        @Nullable final String result =
+            new QueryJCommandWrapper<String>(parameters).getSetting(JDBC_USERNAME);
+
+        if (result == null)
+        {
+            throw new MissingJdbcUserNameAtRuntimeException();
         }
 
         return result;

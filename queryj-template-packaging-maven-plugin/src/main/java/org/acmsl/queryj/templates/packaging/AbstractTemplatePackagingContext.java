@@ -233,7 +233,7 @@ public class AbstractTemplatePackagingContext
     protected File getRootDir(@NotNull final QueryJCommand command)
     {
         @Nullable final File result =
-            new QueryJCommandWrapper<File>(command).getSetting("rootDir");
+            new QueryJCommandWrapper<File>(command).getSetting(TemplatePackagingSettings.OUTPUT_DIR);
 
         if (result == null)
         {
@@ -352,7 +352,7 @@ public class AbstractTemplatePackagingContext
     protected String getJdbcUsername(@NotNull final QueryJCommand command)
     {
         @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting("jdbcUsername");
+            new QueryJCommandWrapper<String>(command).getSetting("jdbcUserName");
 
         if (result == null)
         {

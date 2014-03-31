@@ -198,7 +198,7 @@ public class AbstractTemplatePackagingContextTest
         new QueryJCommandWrapper<String>(t_Command).setSetting("packageName", packageName);
 
         @NotNull final File rootDir = new File(".");
-        new QueryJCommandWrapper<File>(t_Command).setSetting("rootDir", rootDir);
+        new QueryJCommandWrapper<File>(t_Command).setSetting(TemplatePackagingSettings.OUTPUT_DIR, rootDir);
 
         @NotNull final File outputDir = new File("target");
         new QueryJCommandWrapper<File>(t_Command).setSetting("outputDir", outputDir);
@@ -210,7 +210,7 @@ public class AbstractTemplatePackagingContextTest
         new QueryJCommandWrapper<String>(t_Command).setSetting("jdbcUrl", jdbcUrl);
 
         @NotNull final String jdbcUsername = "jdbc.username";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("jdbcUsername", jdbcUsername);
+        new QueryJCommandWrapper<String>(t_Command).setSetting("jdbcUserName", jdbcUsername);
 
         @NotNull final String jdbcPassword = "jdbc.password";
         new QueryJCommandWrapper<String>(t_Command).setSetting("jdbcPassword", jdbcPassword);

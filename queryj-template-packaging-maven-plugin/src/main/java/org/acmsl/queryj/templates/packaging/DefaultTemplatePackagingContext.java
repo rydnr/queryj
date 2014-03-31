@@ -53,6 +53,8 @@ import org.jetbrains.annotations.Nullable;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+import java.io.File;
+
 /**
  * Default implementation for TemplatePackagingContext.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
@@ -71,14 +73,38 @@ public class DefaultTemplatePackagingContext
 
     /**
      * Creates a new instance.
+     * @param templateDef the template def.
      * @param command the command.
      */
     public DefaultTemplatePackagingContext(
+        @NotNull final String fileName,
+        @NotNull final File outputDir,
         @NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand command)
     {
         super(command);
+        immutableSetFileName(fileName, command);
+        immutableSetOutputDir(outputDir, command);
         immutableSetTemplateDef(templateDef, command);
-        new QueryJCommandWrapper<TemplateDef<String>>(command).setSetting("templateDef", templateDef);
+    }
+
+    /**
+     * Specifies the file name.
+     * @param fileName the file name.
+     */
+    protected final void immutableSetFileName(
+        @NotNull final String fileName, @NotNull final QueryJCommand command)
+    {
+        new QueryJCommandWrapper<String>(command).setSetting("fileName", fileName);
+    }
+
+    /**
+     * Specifies the output dir.
+     * @param outputDir the output dir.
+     */
+    protected final void immutableSetOutputDir(
+        @NotNull final File outputDir, @NotNull final QueryJCommand command)
+    {
+        new QueryJCommandWrapper<File>(command).setSetting("outputDir", outputDir);
     }
 
     /**

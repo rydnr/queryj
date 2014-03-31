@@ -87,6 +87,6 @@ public class TemplateBuildHandlerTemplateFactory
     public TemplateBuildHandlerTemplate<DefaultTemplatePackagingContext> createTemplate(
         @NotNull final DefaultTemplatePackagingContext context)
     {
-        return new TemplateBuildHandlerTemplate<DefaultTemplatePackagingContext>(context);
+        return new TemplateBuildHandlerTemplate<>(context);
     }
 }
