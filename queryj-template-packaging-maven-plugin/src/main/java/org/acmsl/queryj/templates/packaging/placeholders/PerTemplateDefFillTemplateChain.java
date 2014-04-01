@@ -106,10 +106,9 @@ public class PerTemplateDefFillTemplateChain
      */
     @NotNull
     @Override
-    @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final DefaultTemplatePackagingContext context)
     {
-        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(0);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<>(0);
 
         // TODO
 

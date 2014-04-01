@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -43,10 +43,8 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
-import org.acmsl.queryj.api.handlers.FillAdapterHandler;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
-import org.acmsl.queryj.metadata.TableDecorator;
 
 /*
  * Importing some JetBrains annotations.
@@ -92,7 +90,7 @@ public class BasePerRepositoryFillTemplateChain
     public QueryJCommand providePlaceholders(final boolean relevantOnly)
         throws QueryJBuildException
     {
-        return new FillTemplateChainWrapper<PerRepositoryTemplateContext>(this).providePlaceholders(relevantOnly);
+        return new FillTemplateChainWrapper<>(this).providePlaceholders(relevantOnly);
     }
 
     /**
@@ -102,15 +100,13 @@ public class BasePerRepositoryFillTemplateChain
      */
     @NotNull
     @Override
-    @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final PerRepositoryTemplateContext context)
     {
-        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(1);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<>(1);
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerRepositoryTemplateContext, TableListHandler,List<TableDecorator>>(
-                    new TableListHandler(context)));
+            new TemplateContextFillAdapterHandler<>(
+                new TableListHandler(context)));
 
         return result;
     }

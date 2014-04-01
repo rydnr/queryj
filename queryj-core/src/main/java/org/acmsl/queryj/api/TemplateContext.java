@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -79,4 +79,11 @@ public interface TemplateContext
      */
     @NotNull
     String getPackageName();
+
+    /**
+     * Retrieves the version.
+     * @return such information.
+     */
+    @NotNull
+    String getVersion();
 }

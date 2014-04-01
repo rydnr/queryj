@@ -43,6 +43,7 @@ import org.acmsl.queryj.api.QueryJTemplateContext;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.api.TemplateContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,8 +59,8 @@ import org.checkthread.annotations.ThreadSafe;
  * Created: 2014/03/30 18:41
  */
 @ThreadSafe
-public class QueryJVersionHandler
-    extends AbstractDecoratedStringHandler<QueryJTemplateContext>
+public class QueryJVersionHandler<C extends TemplateContext>
+    extends AbstractDecoratedStringHandler<C>
 {
     /**
      * The serial version id.
@@ -70,7 +71,7 @@ public class QueryJVersionHandler
      * Creates a new instance wrapping given context.
      * @param context the context.
      */
-    public QueryJVersionHandler(@NotNull final QueryJTemplateContext context)
+    public QueryJVersionHandler(@NotNull final C context)
     {
         super(context);
     }
@@ -93,7 +94,7 @@ public class QueryJVersionHandler
      */
     @Nullable
     @Override
-    protected String resolveContextValue(@NotNull final QueryJTemplateContext context)
+    protected String resolveContextValue(@NotNull final C context)
     {
         return context.getVersion();
     }

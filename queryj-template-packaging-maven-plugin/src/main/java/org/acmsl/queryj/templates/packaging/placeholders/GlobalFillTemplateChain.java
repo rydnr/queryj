@@ -47,6 +47,7 @@ import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 /*
  * Importing QueryJ Template Packaging classes.
  */
+import org.acmsl.queryj.placeholders.QueryJVersionHandler;
 import org.acmsl.queryj.templates.packaging.GlobalFillTemplateChainWrapper;
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 
@@ -109,7 +110,7 @@ public class GlobalFillTemplateChain
     {
         @NotNull final List<FillHandler<?>> result = new ArrayList<>(0);
 
-        // TODO
+        result.add(new QueryJVersionHandler(context));
 
         return result;
     }

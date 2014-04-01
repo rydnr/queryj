@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing QueryJ-core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.FillTemplateChain;
 import org.acmsl.queryj.api.QueryJTemplateContext;
@@ -62,6 +62,7 @@ import java.util.List;
 /**
  * Wraps a given chain to add generic, stateless placeholders.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @param <C> the context type.
  * @since 3.0
  * Created: 2013/06/11
  */
@@ -85,7 +86,6 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
      */
     @Override
     @NotNull
-    @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final C context)
     {
         @NotNull final List<FillHandler<?>> result = new ArrayList<>(22);
@@ -113,12 +113,16 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
         return
-              "{ \"class\": \"" + FillTemplateChainWrapper.class.getName() + '"'
+              "{ \"class\": \"" + FillTemplateChainWrapper.class.getSimpleName() + '"'
+            + ", \"package\": \"org.acmsl.queryj.placeholders\""
             + ", \"parent\": \"" + super.toString() +  "\" }";
     }
 }

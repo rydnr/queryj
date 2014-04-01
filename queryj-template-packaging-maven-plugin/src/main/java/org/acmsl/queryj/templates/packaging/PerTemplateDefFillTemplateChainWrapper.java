@@ -39,6 +39,7 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing QueryJ Template Packaging classes.
  */
+import org.acmsl.queryj.placeholders.QueryJVersionHandler;
 import org.acmsl.queryj.templates.packaging.placeholders.PerTemplateDefClassNameHandler;
 import org.acmsl.queryj.templates.packaging.placeholders.TemplateDefHandler;
 
@@ -103,7 +104,7 @@ public class PerTemplateDefFillTemplateChainWrapper
      */
     @NotNull
     @Override
-    protected List<?> getHandlers(@NotNull final DefaultTemplatePackagingContext context)
+    protected List<FillHandler<?>> getHandlers(@NotNull final DefaultTemplatePackagingContext context)
     {
         @NotNull final List<FillHandler<?>> result = new ArrayList<>(9);
 
@@ -116,6 +117,7 @@ public class PerTemplateDefFillTemplateChainWrapper
         result.add(new TimestampHandler());
         result.add(new TemplateNameHandler<>(context));
         result.add(new TemplateDefHandler(context));
+        result.add(new QueryJVersionHandler<>(context));
 
         return result;
     }

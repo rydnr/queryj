@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -45,7 +45,6 @@ import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
-import org.acmsl.queryj.metadata.ForeignKeyDecorator;
 
 /*
  * Importing some JetBrains annotations.
@@ -91,7 +90,7 @@ public class BasePerForeignKeyFillTemplateChain
     public QueryJCommand providePlaceholders(final boolean relevantOnly)
         throws QueryJBuildException
     {
-        return new FillTemplateChainWrapper<PerForeignKeyTemplateContext>(this).providePlaceholders(relevantOnly);
+        return new FillTemplateChainWrapper<>(this).providePlaceholders(relevantOnly);
     }
 
     /**
@@ -101,20 +100,17 @@ public class BasePerForeignKeyFillTemplateChain
      */
     @NotNull
     @Override
-    @SuppressWarnings("unchecked")
     protected List<FillHandler<?>> getHandlers(@NotNull final PerForeignKeyTemplateContext context)
     {
-        @NotNull final List<FillHandler<?>> result = new ArrayList<FillHandler<?>>(2);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<>(2);
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerForeignKeyTemplateContext, ForeignKeyHandler,ForeignKeyDecorator>(
-                    new ForeignKeyHandler(context)));
+            new TemplateContextFillAdapterHandler<>(
+                new ForeignKeyHandler(context)));
 
         result.add(
-            new TemplateContextFillAdapterHandler
-                <PerForeignKeyTemplateContext, ForeignKeyAttributeTypeImportsHandler,List<String>>(
-                    new ForeignKeyAttributeTypeImportsHandler(context)));
+            new TemplateContextFillAdapterHandler<>(
+                new ForeignKeyAttributeTypeImportsHandler(context)));
 
         return result;
     }

@@ -40,9 +40,12 @@ package org.acmsl.queryj.templates.packaging;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.QueryJSettings;
+import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.exceptions.FileNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
+import org.acmsl.queryj.api.exceptions.VersionNotAvailableException;
 
 /*
  * Importing QueryJ Template Packaging classes.
@@ -78,7 +81,8 @@ import java.io.Serializable;
  */
 @ThreadSafe
 public abstract class AbstractTemplatePackagingContext
-    implements Serializable
+    implements TemplateContext,
+               Serializable
 {
     /**
      * The serial version id.
@@ -134,6 +138,7 @@ public abstract class AbstractTemplatePackagingContext
      * @param key the key.
      * @param value the value.
      * @param command the command.
+     * @param <T> the type.
      */
     protected final <T> void immutableSetValue(
         @NotNull final String key, @NotNull final T value, @NotNull final QueryJCommand command)
@@ -360,6 +365,26 @@ public abstract class AbstractTemplatePackagingContext
     protected String buildJdbcPasswordKey()
     {
         return TemplatePackagingSettings.JDBC_PASSWORD;
+    }
+
+    /**
+     * Retrieves the version information.
+     * @return such information.
+     */
+    @NotNull
+    public String getVersion()
+    {
+        return getValue(buildVersionKey(), getCommand(), new VersionNotAvailableException());
+    }
+
+    /**
+     * Builds the key for the version.
+     * @return such key.
+     */
+    @NotNull
+    protected String buildVersionKey()
+    {
+        return QueryJSettings.VERSION;
     }
 
     /**

@@ -167,7 +167,11 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
     @Override
     public List<?> getHandlers()
     {
-        return getHandlers(getTemplateContext());
+        @NotNull final List<FillHandler<?>> result = getChain().getHandlers();
+
+        result.addAll(getHandlers(getTemplateContext()));
+
+        return result;
     }
 
     /**
@@ -176,7 +180,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
      * @return such handlers.
      */
     @NotNull
-    protected abstract List<?> getHandlers(@NotNull final C context);
+    protected abstract List<FillHandler<?>> getHandlers(@NotNull final C context);
 
     /**
      * Adds given handler depending on whether it's relevant or not.
@@ -205,12 +209,16 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
         chain.add(actualHandler);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
         return
-              "{ \"class\": \"" + AbstractFillTemplateChain.class.getName() + "\""
+              "{ \"class\": \"" + AbstractFillTemplateChain.class.getSimpleName() + "\""
+            + ", \"package\": \"org.acmsl.queryj.api\""
             + ", \"templateContext\": \"" + templateContext + "\" }";
     }
 }

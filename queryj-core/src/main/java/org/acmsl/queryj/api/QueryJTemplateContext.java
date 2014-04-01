@@ -144,11 +144,4 @@ public interface QueryJTemplateContext
      * @return such setting.
      */
     boolean getDisableCheckthreadAnnotations();
-
-    /**
-     * Retrieves the version.
-     * @return such information.
-     */
-    @NotNull
-    String getVersion();
 }
