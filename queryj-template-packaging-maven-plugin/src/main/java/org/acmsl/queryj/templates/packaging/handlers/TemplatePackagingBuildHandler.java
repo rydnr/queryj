@@ -135,11 +135,10 @@ public abstract class TemplatePackagingBuildHandler
         @NotNull final String outputPackage = retrieveOutputPackage(parameters);
         @NotNull final File rootDir = retrieveRootDir(parameters);
 
-        new QueryJCommandWrapper<String>(parameters).setSetting("templateName", templateName);
-        new QueryJCommandWrapper<String>(parameters).setSetting("packageName", outputPackage);
-
         return
             new DefaultTemplatePackagingContext(
+                templateName,
+                outputPackage,
                 buildFilename(templateDef, templateName),
                 new File(rootDir.getAbsolutePath() + File.separator + outputPackage.replaceAll("\\.", File.separator)),
                 templateDef,
@@ -162,11 +161,10 @@ public abstract class TemplatePackagingBuildHandler
 
         @NotNull final File rootDir = retrieveRootDir(parameters);
 
-        new QueryJCommandWrapper<String>(parameters).setSetting("templateName", templateName);
-        new QueryJCommandWrapper<String>(parameters).setSetting("packageName", outputPackage);
-
         return
             new GlobalTemplateContextImpl(
+                templateName,
+                outputPackage,
                 buildFilename(templateDefs, templateName),
                 new File(
                     rootDir.getAbsolutePath() + File.separator + outputPackage.replaceAll("\\.", File.separator)),

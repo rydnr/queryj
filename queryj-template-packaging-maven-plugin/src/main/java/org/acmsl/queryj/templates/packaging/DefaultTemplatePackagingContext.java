@@ -39,20 +39,25 @@ package org.acmsl.queryj.templates.packaging;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.exceptions.TemplateDefNotAvailableException;
 
 /*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
 import java.io.File;
 
 /**
@@ -73,48 +78,36 @@ public class DefaultTemplatePackagingContext
 
     /**
      * Creates a new instance.
+     * @param templateName the template name.
+     * @param outputPackage the package name.
+     * @param fileName the file name.
+     * @param outputDir the output dir.
      * @param templateDef the template def.
      * @param command the command.
      */
     public DefaultTemplatePackagingContext(
+        @NotNull final String templateName,
+        @NotNull final String outputPackage,
         @NotNull final String fileName,
         @NotNull final File outputDir,
-        @NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand command)
+        @NotNull final TemplateDef<String> templateDef,
+        @NotNull final QueryJCommand command)
     {
         super(command);
-        immutableSetFileName(fileName, command);
-        immutableSetOutputDir(outputDir, command);
-        immutableSetTemplateDef(templateDef, command);
+        immutableSetValue(buildTemplateNameKey(), templateName, command);
+        immutableSetValue(buildPackageNameKey(), outputPackage, command);
+        immutableSetValue(buildFileNameKey(), fileName, command);
+        immutableSetValue(buildOutputDirKey(), outputDir, command);
+        immutableSetValue(buildTemplateDefKey(), templateDef, command);
     }
 
     /**
-     * Specifies the file name.
-     * @param fileName the file name.
+     * {@inheritDoc}
      */
-    protected final void immutableSetFileName(
-        @NotNull final String fileName, @NotNull final QueryJCommand command)
+    @NotNull
+    protected final String buildTemplateDefKey()
     {
-        new QueryJCommandWrapper<String>(command).setSetting("fileName", fileName);
-    }
-
-    /**
-     * Specifies the output dir.
-     * @param outputDir the output dir.
-     */
-    protected final void immutableSetOutputDir(
-        @NotNull final File outputDir, @NotNull final QueryJCommand command)
-    {
-        new QueryJCommandWrapper<File>(command).setSetting("outputDir", outputDir);
-    }
-
-    /**
-     * Specifies the template def.
-     * @param templateDef the template def.
-     */
-    protected final void immutableSetTemplateDef(
-        @NotNull final TemplateDef<String> templateDef, @NotNull final QueryJCommand command)
-    {
-        new QueryJCommandWrapper<TemplateDef<String>>(command).setSetting("templateDef", templateDef);
+        return "templateDef@" + hashCode();
     }
 
     /**
@@ -125,25 +118,6 @@ public class DefaultTemplatePackagingContext
     @NotNull
     public TemplateDef<String> getTemplateDef()
     {
-        return getTemplateDef(getCommand());
-    }
-
-    /**
-     * Retrieves the template def.
-     * @param command the command.
-     * @return such instance.
-     */
-    @NotNull
-    protected TemplateDef<String> getTemplateDef(@NotNull final QueryJCommand command)
-    {
-        @Nullable final TemplateDef<String> result =
-            new QueryJCommandWrapper<TemplateDef<String>>(command).getSetting("templateDef");
-
-        if (result == null)
-        {
-            throw new TemplateDefNotAvailableException();
-        }
-
-        return result;
+        return getValue(buildTemplateDefKey(), getCommand(), new TemplateDefNotAvailableException());
     }
 }

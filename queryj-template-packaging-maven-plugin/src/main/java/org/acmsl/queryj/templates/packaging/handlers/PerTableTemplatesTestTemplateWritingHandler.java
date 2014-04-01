@@ -102,9 +102,7 @@ public class PerTableTemplatesTestTemplateWritingHandler
     protected TemplatePackagingTemplateGenerator<PerTableTemplatesTestTemplate, GlobalTemplateContext> retrieveTemplateGenerator(
         final boolean caching, final int threadCount)
     {
-        return
-            new TemplatePackagingTemplateGenerator
-                <PerTableTemplatesTestTemplate, GlobalTemplateContext>(caching, threadCount);
+        return new TemplatePackagingTemplateGenerator<>(caching, threadCount);
     }
 
     /**

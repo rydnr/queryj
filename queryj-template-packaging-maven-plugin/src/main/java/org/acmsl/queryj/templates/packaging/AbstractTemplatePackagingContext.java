@@ -39,14 +39,16 @@ package org.acmsl.queryj.templates.packaging;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-
-/*
- * Importing QueryJ Core classes.
- */
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.FileNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
+import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.exceptions.JdbcSettingNotAvailableException;
+import org.acmsl.queryj.templates.packaging.exceptions.JdbcSettingNotAvailableException.JdbcSetting;
 import org.acmsl.queryj.templates.packaging.exceptions.OutputDirNotAvailableException;
 import org.acmsl.queryj.templates.packaging.exceptions.RootDirNotAvailableException;
 import org.acmsl.queryj.templates.packaging.exceptions.TemplateNameNotAvailableException;
@@ -75,7 +77,7 @@ import java.io.Serializable;
  * Created: 2013/09/15 06:53
  */
 @ThreadSafe
-public class AbstractTemplatePackagingContext
+public abstract class AbstractTemplatePackagingContext
     implements Serializable
 {
     /**
@@ -128,32 +130,60 @@ public class AbstractTemplatePackagingContext
     }
 
     /**
+     * Annotates a value in the command.
+     * @param key the key.
+     * @param value the value.
+     * @param command the command.
+     */
+    protected final <T> void immutableSetValue(
+        @NotNull final String key, @NotNull final T value, @NotNull final QueryJCommand command)
+    {
+        new QueryJCommandWrapper<T>(command).setSetting(key, value);
+    }
+
+    /**
+     * Retrieves the value.
+     * @param key the key.
+     * @param command the command.
+     * @param exceptionToThrow the exception to throw.
+     * @param <T> the value type.
+     * @return such information.
+     */
+    @NotNull
+    protected <T> T getValue(
+        @NotNull final String key,
+        @NotNull final QueryJCommand command,
+        @NotNull final QueryJNonCheckedException exceptionToThrow)
+    {
+        @Nullable final T result =
+            new QueryJCommandWrapper<T>(command).getSetting(key);
+
+        if (result == null)
+        {
+            throw exceptionToThrow;
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the template name.
      * @return such information.
      */
     @NotNull
     public String getTemplateName()
     {
-        return getTemplateName(getCommand());
+        return getValue(buildTemplateNameKey(), getCommand(), new TemplateNameNotAvailableException());
     }
 
     /**
-     * Retrieves the template name.
-     * @param command the command.
+     * Builds the template name key.
      * @return such information.
      */
     @NotNull
-    protected String getTemplateName(@NotNull final QueryJCommand command)
+    protected String buildTemplateNameKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting("templateName");
-
-        if (result == null)
-        {
-            throw new TemplateNameNotAvailableException();
-        }
-
-        return result;
+        return "templateName@" + hashCode();
     }
 
     /**
@@ -163,26 +193,17 @@ public class AbstractTemplatePackagingContext
     @NotNull
     public String getFileName()
     {
-        return getFileName(getCommand());
+        return getValue(buildFileNameKey(), getCommand(), new FileNameNotAvailableException());
     }
 
     /**
-     * Retrieves the file name.
-     * @param command the command.
-     * @return such information.
+     * Builds a file name key.
+     * @return such key.
      */
     @NotNull
-    protected String getFileName(@NotNull final QueryJCommand command)
+    protected String buildFileNameKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting("fileName");
-
-        if (result == null)
-        {
-            throw new FileNameNotAvailableException();
-        }
-
-        return result;
+        return "fileName@" + hashCode();
     }
 
     /**
@@ -192,26 +213,17 @@ public class AbstractTemplatePackagingContext
     @NotNull
     public String getPackageName()
     {
-        return getPackageName(getCommand());
+        return getValue(buildPackageNameKey(), getCommand(), new PackageNameNotAvailableException());
     }
 
     /**
-     * Retrieves the package name.
-     * @param command the command.
-     * @return such information.
+     * Builds the package name.
+     * @return such value.
      */
     @NotNull
-    protected String getPackageName(@NotNull final QueryJCommand command)
+    protected String buildPackageNameKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting("packageName");
-
-        if (result == null)
-        {
-            throw new PackageNameNotAvailableException();
-        }
-
-        return result;
+        return "packageName@" + hashCode();
     }
 
     /**
@@ -221,26 +233,17 @@ public class AbstractTemplatePackagingContext
     @NotNull
     public File getRootDir()
     {
-        return getRootDir(getCommand());
+        return getValue(buildRootDirKey(), getCommand(), new RootDirNotAvailableException());
     }
 
     /**
-     * Retrieves the root dir.
-     * @param command the command.
-     * @return such folder.
+     * Builds the root dir key.
+    * @return such key.
      */
     @NotNull
-    protected File getRootDir(@NotNull final QueryJCommand command)
+    protected String buildRootDirKey()
     {
-        @Nullable final File result =
-            new QueryJCommandWrapper<File>(command).getSetting(TemplatePackagingSettings.OUTPUT_DIR);
-
-        if (result == null)
-        {
-            throw new RootDirNotAvailableException();
-        }
-
-        return result;
+        return TemplatePackagingSettings.OUTPUT_DIR + "@" + hashCode();
     }
 
     /**
@@ -250,26 +253,17 @@ public class AbstractTemplatePackagingContext
     @NotNull
     public File getOutputDir()
     {
-        return getOutputDir(getCommand());
+        return getValue(buildOutputDirKey(), getCommand(), new OutputDirNotAvailableException());
     }
 
     /**
-     * Retrieves the output dir.
-     * @param command the command.
-     * @return such folder.
+     * Builds the output dir key.
+     * @return such key.
      */
     @NotNull
-    protected File getOutputDir(@NotNull final QueryJCommand command)
+    protected String buildOutputDirKey()
     {
-        @Nullable final File result =
-            new QueryJCommandWrapper<File>(command).getSetting("outputDir");
-
-        if (result == null)
-        {
-            throw new OutputDirNotAvailableException();
-        }
-
-        return result;
+        return "outputDir@" + hashCode();
     }
 
     /**
@@ -279,27 +273,21 @@ public class AbstractTemplatePackagingContext
     @NotNull
     public String getJdbcDriver()
     {
-        return getJdbcDriver(getCommand());
+        return
+            getValue(
+                buildJdbcDriverKey(),
+                getCommand(),
+                new JdbcSettingNotAvailableException(JdbcSettingNotAvailableException.JdbcSetting.DRIVER));
     }
 
     /**
-     * Retrieves the JDBC driver.
-     * @return the JDBC driver.
+     * Builds the JDBC driver key.
+     * @return such key.
      */
     @NotNull
-    protected String getJdbcDriver(@NotNull final QueryJCommand command)
+    protected String buildJdbcDriverKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting("jdbcDriver");
-
-        if (result == null)
-        {
-            throw
-                new JdbcSettingNotAvailableException(
-                    JdbcSettingNotAvailableException.JdbcSetting.DRIVER);
-        }
-
-        return result;
+        return TemplatePackagingSettings.JDBC_DRIVER;
     }
 
     /**
@@ -309,28 +297,21 @@ public class AbstractTemplatePackagingContext
     @NotNull
     public String getJdbcUrl()
     {
-        return getJdbcUrl(getCommand());
+        return
+            getValue(
+                buildJdbcUrlKey(),
+                getCommand(),
+                new JdbcSettingNotAvailableException(JdbcSetting.URL));
     }
 
     /**
-     * Retrieves the JDBC url.
-     * @param command the command.
-     * @return the JDBC url.
+     * Builds the JDBC url key.
+     * @return such key.
      */
     @NotNull
-    protected String getJdbcUrl(@NotNull final QueryJCommand command)
+    protected String buildJdbcUrlKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting("jdbcUrl");
-
-        if (result == null)
-        {
-            throw
-                new JdbcSettingNotAvailableException(
-                    JdbcSettingNotAvailableException.JdbcSetting.URL);
-        }
-
-        return result;
+        return TemplatePackagingSettings.JDBC_URL;
     }
 
     /**
@@ -340,28 +321,21 @@ public class AbstractTemplatePackagingContext
     @NotNull
     public String getJdbcUsername()
     {
-        return getJdbcUsername(getCommand());
+        return
+            getValue(
+                buildJdbcUserNameKey(),
+                getCommand(),
+                new JdbcSettingNotAvailableException(JdbcSetting.USERNAME));
     }
 
     /**
-     * Retrieves the JDBC user name.
-     * @param command the command.
-     * @return the JDBC user name.
+     * Builds the JDBC user name key.
+     * @return such key.
      */
     @NotNull
-    protected String getJdbcUsername(@NotNull final QueryJCommand command)
+    protected String buildJdbcUserNameKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting("jdbcUserName");
-
-        if (result == null)
-        {
-            throw
-                new JdbcSettingNotAvailableException(
-                    JdbcSettingNotAvailableException.JdbcSetting.USERNAME);
-        }
-
-        return result;
+        return TemplatePackagingSettings.JDBC_USERNAME;
     }
 
     /**
@@ -371,28 +345,21 @@ public class AbstractTemplatePackagingContext
     @NotNull
     public String getJdbcPassword()
     {
-        return getJdbcPassword(getCommand());
+        return
+            getValue(
+                buildJdbcPasswordKey(),
+                getCommand(),
+                new JdbcSettingNotAvailableException(JdbcSetting.PASSWORD));
     }
 
     /**
-     * Retrieves the JDBC password.
-     * @param command the command.
-     * @return the JDBC password.
+     * Builds the JDBC password key.
+     * @return such key.
      */
     @NotNull
-    protected String getJdbcPassword(@NotNull final QueryJCommand command)
+    protected String buildJdbcPasswordKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting("jdbcPassword");
-
-        if (result == null)
-        {
-            throw
-                new JdbcSettingNotAvailableException(
-                    JdbcSettingNotAvailableException.JdbcSetting.PASSWORD);
-        }
-
-        return result;
+        return TemplatePackagingSettings.JDBC_PASSWORD;
     }
 
     /**

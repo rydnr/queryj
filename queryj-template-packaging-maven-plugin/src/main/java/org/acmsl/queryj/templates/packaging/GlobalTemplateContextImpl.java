@@ -36,18 +36,24 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.exceptions.TemplateDefNotAvailableException;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -78,45 +84,19 @@ public class GlobalTemplateContextImpl
      * @param templateDefs the template definitions.
      */
     public GlobalTemplateContextImpl(
+        @NotNull final String templateName,
+        @NotNull final String packageName,
         @NotNull final String fileName,
         @NotNull final File outputDir,
         @NotNull final List<TemplateDef<String>> templateDefs,
         @NotNull final QueryJCommand command)
     {
         super(command);
-        immutableSetTemplateDefs(templateDefs, command);
-        immutableSetFileName(fileName, command);
-        immutableSetOutputDir(outputDir, command);
-    }
-
-    /**
-     * Specifies the file name.
-     * @param fileName the file name.
-     * @param command the command.
-     */
-    protected final void immutableSetFileName(@NotNull final String fileName, @NotNull final QueryJCommand command)
-    {
-        new QueryJCommandWrapper<String>(command).setSetting("fileName", fileName);
-    }
-
-    /**
-     * Specifies the output dir.
-     * @param outputDir the output dir.
-     * @param command the command.
-     */
-    protected final void immutableSetOutputDir(@NotNull final File outputDir, @NotNull final QueryJCommand command)
-    {
-        new QueryJCommandWrapper<File>(command).setSetting("outputDir", outputDir);
-    }
-
-    /**
-     * Specifies the template defs.
-     * @param templateDefs the list of {@link TemplateDef}s.
-     */
-    protected final void immutableSetTemplateDefs(
-        @NotNull final List<TemplateDef<String>> templateDefs, @NotNull final QueryJCommand command)
-    {
-        new QueryJCommandWrapper<List<TemplateDef<String>>>(command).setSetting("templateDefs", templateDefs);
+        immutableSetValue(buildTemplateNameKey(), templateName, command);
+        immutableSetValue(buildPackageNameKey(), packageName, command);
+        immutableSetValue(buildTemplateDefsKey(), templateDefs, command);
+        immutableSetValue(buildFileNameKey(), fileName, command);
+        immutableSetValue(buildOutputDirKey(), outputDir, command);
     }
 
     /**
@@ -127,25 +107,16 @@ public class GlobalTemplateContextImpl
     @Override
     public List<TemplateDef<String>> getTemplateDefs()
     {
-        return getTemplateDefs(getCommand());
+        return getValue(buildTemplateDefsKey(), getCommand(), new TemplateDefNotAvailableException());
     }
 
     /**
-     * Retrieves the list of {@link TemplateDef}s.
-     * @param command the command.
-     * @return such list.
+     * Builds a key to retrieve the {@link TemplateDef}s.
+     * @return such key.
      */
     @NotNull
-    protected List<TemplateDef<String>> getTemplateDefs(@NotNull final QueryJCommand command)
+    protected String buildTemplateDefsKey()
     {
-        @Nullable final List<TemplateDef<String>> result =
-            new QueryJCommandWrapper<TemplateDef<String>>(command).getListSetting("templateDefs");
-
-        if (result == null)
-        {
-            throw new TemplateDefNotAvailableException();
-        }
-
-        return result;
+        return "templateDefs@" + hashCode();
     }
 }

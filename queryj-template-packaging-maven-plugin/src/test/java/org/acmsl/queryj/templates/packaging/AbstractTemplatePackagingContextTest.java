@@ -38,10 +38,9 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.api.AbstractTemplateContext;
+import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
 
 /*
  * Importing Apache Commons Configuration classes.
@@ -67,6 +66,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+/*
+ * Importing JDK classes.
+ */
 import java.io.File;
 
 /**
@@ -188,33 +190,36 @@ public class AbstractTemplatePackagingContextTest
         @NotNull final QueryJCommand t_Command =
             new ConfigurationQueryJCommandImpl(new PropertiesConfiguration(), null);
 
+        @NotNull final AbstractTemplatePackagingContext result =
+            new AbstractTemplatePackagingContext(t_Command) {};
+
         @Nullable final String templateName = "template";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("templateName", templateName);
+        result.immutableSetValue(result.buildTemplateNameKey(), templateName, t_Command);
 
         @NotNull final String fileName = "file.name";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("fileName", fileName);
+        result.immutableSetValue(result.buildFileNameKey(), fileName, t_Command);
 
         @NotNull final String packageName = "package.name";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("packageName", packageName);
+        result.immutableSetValue(result.buildPackageNameKey(), packageName, t_Command);
 
         @NotNull final File rootDir = new File(".");
-        new QueryJCommandWrapper<File>(t_Command).setSetting(TemplatePackagingSettings.OUTPUT_DIR, rootDir);
+        result.immutableSetValue(result.buildRootDirKey(), rootDir, t_Command);
 
         @NotNull final File outputDir = new File("target");
-        new QueryJCommandWrapper<File>(t_Command).setSetting("outputDir", outputDir);
+        result.immutableSetValue(result.buildOutputDirKey(), outputDir, t_Command);
 
         @NotNull final String jdbcDriver = "jdbc.driver";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("jdbcDriver", jdbcDriver);
+        result.immutableSetValue(result.buildJdbcDriverKey(), jdbcDriver, t_Command);
 
         @NotNull final String jdbcUrl = "jdbc.url";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("jdbcUrl", jdbcUrl);
+        result.immutableSetValue(result.buildJdbcUrlKey(), jdbcUrl, t_Command);
 
         @NotNull final String jdbcUsername = "jdbc.username";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("jdbcUserName", jdbcUsername);
+        result.immutableSetValue(result.buildJdbcUserNameKey(), jdbcUsername, t_Command);
 
         @NotNull final String jdbcPassword = "jdbc.password";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("jdbcPassword", jdbcPassword);
+        result.immutableSetValue(result.buildJdbcPasswordKey(), jdbcPassword, t_Command);
 
-        return new AbstractTemplatePackagingContext(t_Command) {};
+        return result;
     }
 }
