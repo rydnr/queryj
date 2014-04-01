@@ -39,7 +39,6 @@ package org.acmsl.queryj.api;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.exceptions.StaticValuesNotAvailableException;
 import org.acmsl.queryj.api.exceptions.TableNameNotAvailableException;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -78,7 +77,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class PerTableTemplateContext
-    extends AbstractTemplateContext
+    extends AbstractQueryJTemplateContext
 {
     /**
      * The serial version id.
@@ -97,11 +96,28 @@ public class PerTableTemplateContext
 
     /**
      * Creates a {@link PerTableTemplateContext} with given information.
+     * @param tableName the table name.
+     * @param staticValues the static values.
      * @param command the {@link QueryJCommand}.
      */
-    public PerTableTemplateContext(@NotNull final QueryJCommand command)
+    public PerTableTemplateContext(
+        @NotNull final String tableName,
+        @NotNull final List<Row<String>> staticValues,
+        @NotNull final QueryJCommand command)
     {
         super(command);
+        immutableSetValue(buildTableNameKey(), tableName, getCommand());
+        immutableSetValue(buildStaticValuesKey(), staticValues, getCommand());
+    }
+
+    /**
+     * Retrieves the key for the table name.
+     * @return such key.
+     */
+    @NotNull
+    protected String buildTableNameKey()
+    {
+        return TABLE_NAME + "@" + hashCode();
     }
 
     /**
@@ -111,53 +127,17 @@ public class PerTableTemplateContext
     @NotNull
     public String getTableName()
     {
-        return getTableName(getCommand());
+        return getValue(buildTableNameKey(), getCommand(), new TableNameNotAvailableException());
     }
 
     /**
-     * Retrieves the table name.
-     * @return such name.
+     * Retrieves the static values' key.
+     * @return such key.
      */
     @NotNull
-    protected String getTableName(@NotNull final QueryJCommand command)
+    protected String buildStaticValuesKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(TABLE_NAME);
-
-        if (result == null)
-        {
-            throw new TableNameNotAvailableException();
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the static values.
-     * @return such values.
-     */
-    @NotNull
-    protected final List<Row<String>> immutableGetStaticValues()
-    {
-        return immutableGetStaticValues(getCommand());
-    }
-
-    /**
-     * Retrieves the static values.
-     * @return such values.
-     */
-    @NotNull
-    protected final List<Row<String>> immutableGetStaticValues(@NotNull final QueryJCommand command)
-    {
-        @Nullable final List<Row<String>> result =
-            new QueryJCommandWrapper<Row<String>>(command).getListSetting(STATIC_VALUES);
-
-        if (result == null)
-        {
-            throw new StaticValuesNotAvailableException();
-        }
-
-        return result;
+        return STATIC_VALUES + '@' + hashCode();
     }
 
     /**
@@ -168,7 +148,8 @@ public class PerTableTemplateContext
     @NotNull
     public List<Row<String>> getStaticValues()
     {
-        return new ArrayList<>(immutableGetStaticValues());
+        return
+            new ArrayList<>(getValue(buildStaticValuesKey(), getCommand(), new StaticValuesNotAvailableException()));
     }
 
     /**

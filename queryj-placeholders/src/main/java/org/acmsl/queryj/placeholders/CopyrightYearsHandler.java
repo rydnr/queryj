@@ -66,6 +66,9 @@ public class CopyrightYearsHandler
     extends AbstractFillHandler<Integer[]>
     implements NonRelevantFillHandler
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 1992543204063604784L;
 
     /**

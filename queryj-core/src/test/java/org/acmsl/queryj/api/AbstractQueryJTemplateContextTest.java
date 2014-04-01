@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: AbstractTemplateContextTest.java
+ * Filename: AbstractQueryJTemplateContextTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for AbstractTemplateContext.
+ * Description: Tests for AbstractQueryJTemplateContext.
  *
  * Date: 2014/03/27
  * Time: 21:04
@@ -74,14 +74,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link AbstractTemplateContext}.
+ * Tests for {@link AbstractQueryJTemplateContext}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/03/27 21:04
  */
 @ThreadSafe
 @RunWith(JUnit4.class)
-public class AbstractTemplateContextTest
+public class AbstractQueryJTemplateContextTest
 {
     /**
      * Tests the MetadataManager is available (survives refactorings).
@@ -89,7 +89,7 @@ public class AbstractTemplateContextTest
     @Test
     public void metadataManager_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertNotNull(instance.getMetadataManager());
     }
@@ -100,7 +100,7 @@ public class AbstractTemplateContextTest
     @Test
     public void customSqlProvider_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertNotNull(instance.getCustomSqlProvider());
     }
@@ -111,7 +111,7 @@ public class AbstractTemplateContextTest
     @Test
     public void header_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertEquals("header", instance.getHeader());
     }
@@ -122,7 +122,7 @@ public class AbstractTemplateContextTest
     @Test
     public void decoratorFactory_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertNotNull(instance.getDecoratorFactory());
     }
@@ -144,7 +144,7 @@ public class AbstractTemplateContextTest
     @Test
     public void basePackageName_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertEquals("base.package.name", instance.getBasePackageName());
     }
@@ -155,7 +155,7 @@ public class AbstractTemplateContextTest
     @Test
     public void repositoryName_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertEquals("repository.name", instance.getRepositoryName());
     }
@@ -166,7 +166,7 @@ public class AbstractTemplateContextTest
     @Test
     public void implementMarkerInterfaces_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertFalse(instance.getImplementMarkerInterfaces());
     }
@@ -177,7 +177,7 @@ public class AbstractTemplateContextTest
     @Test
     public void jmx_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertFalse(instance.getImplementMarkerInterfaces());
     }
@@ -188,7 +188,7 @@ public class AbstractTemplateContextTest
     @Test
     public void jndiLocation_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertEquals("jndi:/location", instance.getJndiLocation());
     }
@@ -199,7 +199,7 @@ public class AbstractTemplateContextTest
     @Test
     public void disableGenerationTimestamps_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertTrue(instance.getDisableGenerationTimestamps());
     }
@@ -210,7 +210,7 @@ public class AbstractTemplateContextTest
     @Test
     public void disableNotNullAnnotations_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertTrue(instance.getDisableNotNullAnnotations());
     }
@@ -221,7 +221,7 @@ public class AbstractTemplateContextTest
     @Test
     public void disableCheckthreadAnnotations_is_available()
     {
-        @NotNull final AbstractTemplateContext instance = createContext();
+        @NotNull final AbstractQueryJTemplateContext instance = createContext();
 
         Assert.assertTrue(instance.getDisableCheckthreadAnnotations());
     }
@@ -238,11 +238,11 @@ public class AbstractTemplateContextTest
     }
 
     /**
-     * Retrieves an {@link AbstractTemplateContext}.
+     * Retrieves an {@link AbstractQueryJTemplateContext}.
      * @return such context.
      */
     @NotNull
-    protected AbstractTemplateContext createContext()
+    protected AbstractQueryJTemplateContext createContext()
     {
         @NotNull final QueryJCommand t_Command =
             new ConfigurationQueryJCommandImpl(new PropertiesConfiguration(), null);
@@ -294,20 +294,12 @@ public class AbstractTemplateContextTest
             QueryJSettings.DISABLE_CHECKTHREAD_ANNOTATIONS, disableCheckthreadAnnotations);
 
         @NotNull final String fileName = "file.name";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("fileName", fileName);
 
         return
-            new AbstractTemplateContext(t_Command)
-                {
-                    /**
-                     * {@inheritDoc}
-                     */
-                    @NotNull
-                    @Override
-                    public String getTemplateName()
-                    {
-                        return "";
-                    }
-                };
+            new AbstractQueryJTemplateContext(t_Command)
+                {{
+                    immutableSetValue(buildTemplateNameKey(), "", getCommand());
+                    immutableSetValue(buildFileNameKey(), fileName, getCommand());
+                }};
     }
 }

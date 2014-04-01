@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging Maven Plugin
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,43 +23,60 @@
 
  ******************************************************************************
  *
- * Filename: RootDirNotAvailableException.java
+ * Filename: RootDirNotAvailableExceptionTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Identifies the bug when the root-dir information is lost.
+ * Description: Tests for RootDirNotAvailableException.
  *
  * Date: 2014/03/30
- * Time: 20:22
+ * Time: 20:21
  *
  */
-package org.acmsl.queryj.templates.packaging.exceptions;
+package org.acmsl.queryj.api.exceptions;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JUnit classes.
+ */
+import org.junit.Test;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.Arrays;
+import java.util.Locale;
+
 /**
- * Identifies the bug when the root-dir information is lost.
+ * Tests for {@link RootDirNotAvailableException}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/03/30 20:22
+ * Created: 2014/03/30 20:21
  */
 @ThreadSafe
-public class RootDirNotAvailableException
-    extends TemplatePackagingNonCheckedException
+public class RootDirNotAvailableExceptionTest
 {
     /**
-     * The serial version id.
+     * Tests the message key is defined for Spanish and English.
      */
-    private static final long serialVersionUID = 1517138699849500608L;
-
-    /**
-     * Creates a new instance.
-     */
-    public RootDirNotAvailableException()
+    @Test
+    public void exception_message_is_defined_in_Spanish_and_English()
     {
-        super("RootDir.not.available");
+        @NotNull final RootDirNotAvailableException instance = new RootDirNotAvailableException();
+
+        for (@NotNull final Locale t_Locale : Arrays.asList(new Locale("en"), new Locale("es")))
+        {
+            // throws a MissingResourceException if the key is not declared.
+            instance.getMessage(t_Locale);
+        }
     }
 }

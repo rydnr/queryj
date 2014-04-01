@@ -190,35 +190,29 @@ public class AbstractTemplatePackagingContextTest
         @NotNull final QueryJCommand t_Command =
             new ConfigurationQueryJCommandImpl(new PropertiesConfiguration(), null);
 
-        @NotNull final AbstractTemplatePackagingContext result =
-            new AbstractTemplatePackagingContext(t_Command) {};
-
-        @Nullable final String templateName = "template";
-        result.immutableSetValue(result.buildTemplateNameKey(), templateName, t_Command);
-
+        @NotNull final String templateName = "template";
         @NotNull final String fileName = "file.name";
-        result.immutableSetValue(result.buildFileNameKey(), fileName, t_Command);
-
         @NotNull final String packageName = "package.name";
-        result.immutableSetValue(result.buildPackageNameKey(), packageName, t_Command);
-
         @NotNull final File rootDir = new File(".");
-        result.immutableSetValue(result.buildRootDirKey(), rootDir, t_Command);
-
         @NotNull final File outputDir = new File("target");
-        result.immutableSetValue(result.buildOutputDirKey(), outputDir, t_Command);
-
         @NotNull final String jdbcDriver = "jdbc.driver";
-        result.immutableSetValue(result.buildJdbcDriverKey(), jdbcDriver, t_Command);
-
         @NotNull final String jdbcUrl = "jdbc.url";
-        result.immutableSetValue(result.buildJdbcUrlKey(), jdbcUrl, t_Command);
-
         @NotNull final String jdbcUsername = "jdbc.username";
-        result.immutableSetValue(result.buildJdbcUserNameKey(), jdbcUsername, t_Command);
-
         @NotNull final String jdbcPassword = "jdbc.password";
-        result.immutableSetValue(result.buildJdbcPasswordKey(), jdbcPassword, t_Command);
+
+        @NotNull final AbstractTemplatePackagingContext result =
+            new AbstractTemplatePackagingContext(t_Command)
+            {{
+                immutableSetValue(buildTemplateNameKey(), templateName, t_Command);
+                immutableSetValue(buildFileNameKey(), fileName, t_Command);
+                immutableSetValue(buildPackageNameKey(), packageName, t_Command);
+                immutableSetValue(buildRootDirKey(), rootDir, t_Command);
+                immutableSetValue(buildOutputDirKey(), outputDir, t_Command);
+                immutableSetValue(buildJdbcDriverKey(), jdbcDriver, t_Command);
+                immutableSetValue(buildJdbcUrlKey(), jdbcUrl, t_Command);
+                immutableSetValue(buildJdbcUserNameKey(), jdbcUsername, t_Command);
+                immutableSetValue(buildJdbcPasswordKey(), jdbcPassword, t_Command);
+            }};
 
         return result;
     }

@@ -38,21 +38,13 @@ package org.acmsl.queryj.api;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
-import org.acmsl.queryj.api.exceptions.BasePackageNameNotAvailableException;
-import org.acmsl.queryj.api.exceptions.DecoratorFactoryNotAvailableException;
 import org.acmsl.queryj.api.exceptions.FileNameNotAvailableException;
-import org.acmsl.queryj.api.exceptions.JndiLocationNotAvailableException;
 import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
-import org.acmsl.queryj.api.exceptions.RepositoryNameNotAvailableException;
+import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
+import org.acmsl.queryj.api.exceptions.RootDirNotAvailableException;
+import org.acmsl.queryj.api.exceptions.TemplateNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.VersionNotAvailableException;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.exceptions.CustomSqlProviderNotAvailableException;
-import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.exceptions.MissingOutputDirAtRuntimeException;
 
 /*
  * Importing Apache Commons Lang classes.
@@ -74,8 +66,8 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing some JDK classes.
  */
+import java.io.File;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Abstract implementation of {@link QueryJTemplateContext}.
@@ -85,7 +77,7 @@ import java.util.List;
  */
 @ThreadSafe
 public abstract class AbstractTemplateContext
-    implements QueryJTemplateContext,
+    implements TemplateContext,
                Serializable
 {
     /**
@@ -110,7 +102,7 @@ public abstract class AbstractTemplateContext
 
     /**
      * Creates an {@link AbstractTemplateContext} with given information.
-     * @param command the {@link QueryJCommand} instance.
+     * @param command the {@link org.acmsl.queryj.QueryJCommand} instance.
      */
     protected AbstractTemplateContext(@NotNull final QueryJCommand command)
     {
@@ -147,340 +139,141 @@ public abstract class AbstractTemplateContext
     }
 
     /**
-     * Retrieves the metadata manager.
-     * @return such manager.
-     */
-    @NotNull
-    @Override
-    public MetadataManager getMetadataManager()
-    {
-        return getMetadataManager(getCommand());
-    }
-
-    /**
-     * Retrieves the metadata manager.
+     * Annotates a value in the command.
+     * @param key the key.
+     * @param value the value.
      * @param command the command.
-     * @return such manager.
+     * @param <T> the type.
      */
-    @NotNull
-    protected MetadataManager getMetadataManager(@NotNull final QueryJCommand command)
+    protected final <T> void immutableSetValue(
+        @NotNull final String key, @NotNull final T value, @NotNull final QueryJCommand command)
     {
-        @Nullable final MetadataManager result =
-            new QueryJCommandWrapper<MetadataManager>(command)
-                .getSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER);
-
-        if (result == null)
-        {
-            throw new MetadataManagerNotAvailableException();
-        }
-
-        return result;
+        new QueryJCommandWrapper<T>(command).setSetting(key, value);
     }
 
     /**
-     * Retrieves the custom-sql provider.
-     * @return such provider.
-     */
-    @NotNull
-    @Override
-    public CustomSqlProvider getCustomSqlProvider()
-    {
-        return getCustomSqlProvider(getCommand());
-    }
-
-    /**
-     * Retrieves the custom-sql provider.
+     * Retrieves the value.
+     * @param key the key.
      * @param command the command.
-     * @return such provider.
-     */
-    @NotNull
-    protected CustomSqlProvider getCustomSqlProvider(@NotNull final QueryJCommand command)
-    {
-        @Nullable final CustomSqlProvider result =
-            new QueryJCommandWrapper<CustomSqlProvider>(command).getSetting(
-                CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
-
-        if (result == null)
-        {
-            throw new CustomSqlProviderNotAvailableException();
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the header.
-     * @return the header.
-     */
-    @Nullable
-    @Override
-    public String getHeader()
-    {
-        return getHeader(getCommand());
-    }
-
-    /**
-     * Retrieves the header.
-     * @param command the command.
-     * @return the header.
-     */
-    @Nullable
-    protected String getHeader(@NotNull final QueryJCommand command)
-    {
-        return new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.HEADER_FILE);
-    }
-
-    /**
-     * Retrieves the {@link DecoratorFactory} instance.
-     * @return such instance.
-     */
-    @Override
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return getDecoratorFactory(getCommand());
-    }
-
-    /**
-     * Retrieves the {@link DecoratorFactory} instance.
-     * @return such instance.
-     */
-    @NotNull
-    protected DecoratorFactory getDecoratorFactory(@NotNull final QueryJCommand command)
-    {
-        @Nullable final DecoratorFactory result =
-            new QueryJCommandWrapper<DecoratorFactory>(command).getSetting(DecoratorFactory.class.getName());
-
-        if (result == null)
-        {
-            throw new DecoratorFactoryNotAvailableException();
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the package name.
+     * @param exceptionToThrow the exception to throw.
+     * @param <T> the value type.
      * @return such information.
      */
     @NotNull
-    @Override
-    public String getPackageName()
+    protected <T> T getValue(
+        @NotNull final String key,
+        @NotNull final QueryJCommand command,
+        @NotNull final QueryJNonCheckedException exceptionToThrow)
     {
-        return getPackageName(getCommand());
-    }
-
-    /**
-     * Retrieves the package name.
-     * @param command the command.
-     * @return such information.
-     */
-    @NotNull
-    protected String getPackageName(@NotNull final QueryJCommand command)
-    {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(PACKAGE_NAME);
+        @Nullable final T result =
+            new QueryJCommandWrapper<T>(command).getSetting(key);
 
         if (result == null)
         {
-            throw new PackageNameNotAvailableException();
+            throw exceptionToThrow;
         }
 
         return result;
     }
 
     /**
-     * Retrieves the base package name.
+     * Retrieves the template name.
      * @return such information.
      */
     @NotNull
-    @Override
-    public String getBasePackageName()
+    public String getTemplateName()
     {
-        return getBasePackageName(getCommand());
+        return getValue(buildTemplateNameKey(), getCommand(), new TemplateNameNotAvailableException());
     }
 
     /**
-     * Retrieves the base package name.
-     * @param command the command.
+     * Builds the template name key.
      * @return such information.
      */
     @NotNull
-    protected String getBasePackageName(@NotNull final QueryJCommand command)
+    protected String buildTemplateNameKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.PACKAGE);
-
-        if (result == null)
-        {
-            throw new BasePackageNameNotAvailableException();
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the repository name.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String getRepositoryName()
-    {
-        return getRepositoryName(getCommand());
-    }
-
-    /**
-     * Retrieves the repository name.
-     * @param command the command.
-     * @return such information.
-     */
-    @NotNull
-    protected String getRepositoryName(@NotNull final QueryJCommand command)
-    {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.REPOSITORY);
-
-        if (result == null)
-        {
-            throw new RepositoryNameNotAvailableException();
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves whether to implement marker interfaces.
-     * @return such condition.
-     */
-    @Override
-    public boolean getImplementMarkerInterfaces()
-    {
-        return getBooleanValue(getCommand(), QueryJSettings.IMPLEMENT_MARKER_INTERFACES);
-    }
-
-    /**
-     * Retrieves whether to include JMX support.
-     * @return such information.
-     */
-    @Override
-    public boolean isJmxSupportEnabled()
-    {
-        return getBooleanValue(getCommand(), QueryJSettings.JMX);
-    }
-
-    /**
-     * Retrieves the JNDI location for the {@link javax.sql.DataSource}.
-     * @return such location.
-     */
-    @Override
-    @NotNull
-    public String getJndiLocation()
-    {
-        return getJndiLocation(getCommand());
-    }
-
-    /**
-     * Retrieves the JNDI location for the {@link javax.sql.DataSource}.
-     * @param command the command.
-     * @return such location.
-     */
-    @NotNull
-    protected String getJndiLocation(@NotNull final QueryJCommand command)
-    {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.JNDI_DATASOURCE);
-
-        if (result == null)
-        {
-            throw new JndiLocationNotAvailableException();
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves whether to use generation timestamps or not.
-     * @return such setting.
-     */
-    @Override
-    public boolean getDisableGenerationTimestamps()
-    {
-        return getBooleanValue(getCommand(), QueryJSettings.DISABLE_TIMESTAMPS);
-    }
-
-    /**
-     * Retrieves a boolean value from the command.
-     * @param command the command.
-     * @return such value.
-     */
-    protected boolean getBooleanValue(
-        @NotNull final QueryJCommand command, @NotNull final String key)
-    {
-        final boolean result;
-
-        @Nullable final Boolean aux = new QueryJCommandWrapper<Boolean>(command).getSetting(key);
-
-        if (aux == null)
-        {
-            result = false;
-        }
-        else
-        {
-            result = aux;
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves whether to use NotNull annotations or not.
-     * @return such setting.
-     */
-    @Override
-    public boolean getDisableNotNullAnnotations()
-    {
-        return getBooleanValue(getCommand(), QueryJSettings.DISABLE_NOTNULL_ANNOTATIONS);
-    }
-
-    /**
-     * Retrieves whether to use checkthread.org annotations or not.
-     * @return such setting.
-     */
-    @Override
-    public boolean getDisableCheckthreadAnnotations()
-    {
-        return getBooleanValue(getCommand(), QueryJSettings.DISABLE_CHECKTHREAD_ANNOTATIONS);
+        return "templateName@" + hashCode();
     }
 
     /**
      * Retrieves the file name.
      * @return such information.
      */
-    @Override
     @NotNull
     public String getFileName()
     {
-        return getFileName(getCommand());
+        return getValue(buildFileNameKey(), getCommand(), new FileNameNotAvailableException());
     }
 
     /**
-     * Retrieves the file name.
-     * @param command the command.
+     * Builds a file name key.
+     * @return such key.
+     */
+    @NotNull
+    protected String buildFileNameKey()
+    {
+        return "fileName@" + hashCode();
+    }
+
+    /**
+     * Retrieves the package name.
      * @return such information.
      */
     @NotNull
-    protected String getFileName(@NotNull final QueryJCommand command)
+    public String getPackageName()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(FILE_NAME);
+        return getValue(buildPackageNameKey(), getCommand(), new PackageNameNotAvailableException());
+    }
 
-        if (result == null)
-        {
-            throw new FileNameNotAvailableException();
-        }
+    /**
+     * Builds the package name.
+     * @return such value.
+     */
+    @NotNull
+    protected String buildPackageNameKey()
+    {
+        return "packageName@" + hashCode();
+    }
 
-        return result;
+    /**
+     * Retrieves the root dir.
+     * @return such folder.
+     */
+    @NotNull
+    public File getRootDir()
+    {
+        return getValue(buildRootDirKey(), getCommand(), new RootDirNotAvailableException());
+    }
+
+    /**
+     * Builds the root dir key.
+     * @return such key.
+     */
+    @NotNull
+    protected String buildRootDirKey()
+    {
+        return QueryJSettings.OUTPUT_FOLDER + "@" + hashCode();
+    }
+
+    /**
+     * Retrieves the output dir.
+     * @return such folder.
+     */
+    @NotNull
+    public File getOutputDir()
+    {
+        return getValue(buildOutputDirKey(), getCommand(), new MissingOutputDirAtRuntimeException());
+    }
+
+    /**
+     * Builds the output dir key.
+     * @return such key.
+     */
+    @NotNull
+    protected String buildOutputDirKey()
+    {
+        return "outputDir@" + hashCode();
     }
 
     /**
@@ -511,31 +304,6 @@ public abstract class AbstractTemplateContext
         }
 
         return result;
-    }
-
-    /**
-     * Concatenates given attributes.
-     * @param attributes the attributes.
-     * @return the CSV version of given list.
-     */
-    @NotNull
-    protected String toCsv(@NotNull final List<Attribute<String>> attributes)
-    {
-        @NotNull final StringBuilder result = new StringBuilder();
-
-        for (@Nullable final Attribute<String> t_Attribute : attributes)
-        {
-            if (t_Attribute != null)
-            {
-                if (result.length() > 0)
-                {
-                    result.append(",");
-                }
-                result.append(t_Attribute.getName());
-            }
-        }
-
-        return result.toString();
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,55 +23,43 @@
 
  ******************************************************************************
  *
- * Filename: TemplateNameNotAvailableExceptionTest.java
+ * Filename: RootDirNotAvailableException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Identifies the bug when the root-dir information is lost.
  *
  * Date: 2014/03/30
- * Time: 19:51
+ * Time: 20:22
  *
  */
-package org.acmsl.queryj.templates.packaging.exceptions;
-
-/*
- * Importing JetBrains annotations.
- */
-import org.acmsl.queryj.api.exceptions.BasePackageNameNotAvailableException;
-import org.jetbrains.annotations.NotNull;
+package org.acmsl.queryj.api.exceptions;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.Locale;
 
 /**
- *
+ * Identifies the bug when the root-dir information is lost.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/03/30 19:51
+ * Created: 2014/03/30 20:22
  */
 @ThreadSafe
-public class TemplateNameNotAvailableExceptionTest
+public class RootDirNotAvailableException
+    extends QueryJNonCheckedException
 {
     /**
-     * Tests the message key is defined for Spanish and English.
+     * The serial version id.
      */
-    @Test
-    public void exception_message_is_defined_in_Spanish_and_English()
+    private static final long serialVersionUID = 1517138699849500608L;
+
+    /**
+     * Creates a new instance.
+     */
+    public RootDirNotAvailableException()
     {
-        @NotNull final TemplateNameNotAvailableException instance = new TemplateNameNotAvailableException();
-
-        for (@NotNull final Locale t_Locale : Arrays.asList(new Locale("en"), new Locale("es")))
-        {
-            // throws a MissingResourceException if the key is not declared.
-            instance.getMessage(t_Locale);
-        }
+        super("RootDir.not.available");
     }
-
 }

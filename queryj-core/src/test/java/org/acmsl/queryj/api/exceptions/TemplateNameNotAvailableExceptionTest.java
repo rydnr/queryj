@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging Maven Plugin
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,49 +23,61 @@
 
  ******************************************************************************
  *
- * Filename: TemplateNameNotAvailableException.java
+ * Filename: TemplateNameNotAvailableExceptionTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents the bug when the template name is not longer
- *              available.
+ * Description: Tests for TemplateNameNotAvailableException.
  *
  * Date: 2014/03/30
- * Time: 19:52
+ * Time: 19:51
  *
  */
-package org.acmsl.queryj.templates.packaging.exceptions;
+package org.acmsl.queryj.api.exceptions;
 
 /*
- * Importing QueryJ Core classes.
+ * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JUnit classes.
+ */
+import org.junit.Test;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.Arrays;
+import java.util.Locale;
+
 /**
- * Represents the bug when the template name is not longer available.
+ * Tests for {@link TemplateNameNotAvailableException}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/03/30 19:52
+ * Created: 2014/03/30 19:51
  */
 @ThreadSafe
-public class TemplateNameNotAvailableException
-    extends TemplatePackagingNonCheckedException
+public class TemplateNameNotAvailableExceptionTest
 {
     /**
-     * The serial version id.
+     * Tests the message key is defined for Spanish and English.
      */
-    private static final long serialVersionUID = -2712500317340565753L;
-
-    /**
-     * Creates a new exception.
-     */
-    public TemplateNameNotAvailableException()
+    @Test
+    public void exception_message_is_defined_in_Spanish_and_English()
     {
-        super("TemplateName.not.available");
+        @NotNull final TemplateNameNotAvailableException instance = new TemplateNameNotAvailableException();
+
+        for (@NotNull final Locale t_Locale : Arrays.asList(new Locale("en"), new Locale("es")))
+        {
+            // throws a MissingResourceException if the key is not declared.
+            instance.getMessage(t_Locale);
+        }
     }
+
 }

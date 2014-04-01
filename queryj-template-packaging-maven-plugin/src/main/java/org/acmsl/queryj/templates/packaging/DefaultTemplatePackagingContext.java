@@ -67,7 +67,7 @@ import java.io.File;
  * Created: 2013/08/17 19:05
  */
 @ThreadSafe
-public class DefaultTemplatePackagingContext
+public  class DefaultTemplatePackagingContext
     extends AbstractTemplatePackagingContext
     implements PerTemplateDefTemplateContext
 {

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -72,8 +72,11 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class PerRepositoryTemplateContext
-    extends AbstractTemplateContext
+    extends AbstractQueryJTemplateContext
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 3832140019368840537L;
 
     /**

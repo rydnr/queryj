@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -69,8 +69,11 @@ import org.jetbrains.annotations.Nullable;
  */
 @ThreadSafe
 public class PerCustomResultTemplateContext
-    extends AbstractTemplateContext
+    extends AbstractQueryJTemplateContext
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 5193168262427622240L;
 
     /**

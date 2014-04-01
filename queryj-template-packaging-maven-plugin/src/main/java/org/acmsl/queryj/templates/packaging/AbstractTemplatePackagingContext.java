@@ -39,28 +39,18 @@ package org.acmsl.queryj.templates.packaging;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.QueryJSettings;
-import org.acmsl.queryj.api.TemplateContext;
-import org.acmsl.queryj.api.exceptions.FileNameNotAvailableException;
-import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
-import org.acmsl.queryj.api.exceptions.VersionNotAvailableException;
+import org.acmsl.queryj.api.AbstractTemplateContext;
 
 /*
  * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.exceptions.JdbcSettingNotAvailableException;
 import org.acmsl.queryj.templates.packaging.exceptions.JdbcSettingNotAvailableException.JdbcSetting;
-import org.acmsl.queryj.templates.packaging.exceptions.OutputDirNotAvailableException;
-import org.acmsl.queryj.templates.packaging.exceptions.RootDirNotAvailableException;
-import org.acmsl.queryj.templates.packaging.exceptions.TemplateNameNotAvailableException;
 
 /*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -70,7 +60,6 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
-import java.io.File;
 import java.io.Serializable;
 
 /**
@@ -81,8 +70,8 @@ import java.io.Serializable;
  */
 @ThreadSafe
 public abstract class AbstractTemplatePackagingContext
-    implements TemplateContext,
-               Serializable
+    extends AbstractTemplateContext
+    implements Serializable
 {
     /**
      * The serial version id.
@@ -90,185 +79,12 @@ public abstract class AbstractTemplatePackagingContext
     private static final long serialVersionUID = -7291939701431286380L;
 
     /**
-     * The command.
-     */
-    @NotNull
-    private QueryJCommand m__Command;
-
-    /**
      * Creates a new instance.
      * @param command the command.
      */
     public AbstractTemplatePackagingContext(@NotNull final QueryJCommand command)
     {
-        immutableSetCommand(command);
-    }
-
-    /**
-     * Specifies the name of the template.
-     * @param command such name.
-     */
-    protected final void immutableSetCommand(@NotNull final QueryJCommand command)
-    {
-        this.m__Command = command;
-    }
-
-    /**
-     * Specifies the name of the template.
-     * @param command such name.
-     */
-    @SuppressWarnings("unused")
-    protected void setCommand(@NotNull final QueryJCommand command)
-    {
-        immutableSetCommand(command);
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    @NotNull
-    public QueryJCommand getCommand()
-    {
-        return this.m__Command;
-    }
-
-    /**
-     * Annotates a value in the command.
-     * @param key the key.
-     * @param value the value.
-     * @param command the command.
-     * @param <T> the type.
-     */
-    protected final <T> void immutableSetValue(
-        @NotNull final String key, @NotNull final T value, @NotNull final QueryJCommand command)
-    {
-        new QueryJCommandWrapper<T>(command).setSetting(key, value);
-    }
-
-    /**
-     * Retrieves the value.
-     * @param key the key.
-     * @param command the command.
-     * @param exceptionToThrow the exception to throw.
-     * @param <T> the value type.
-     * @return such information.
-     */
-    @NotNull
-    protected <T> T getValue(
-        @NotNull final String key,
-        @NotNull final QueryJCommand command,
-        @NotNull final QueryJNonCheckedException exceptionToThrow)
-    {
-        @Nullable final T result =
-            new QueryJCommandWrapper<T>(command).getSetting(key);
-
-        if (result == null)
-        {
-            throw exceptionToThrow;
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    @NotNull
-    public String getTemplateName()
-    {
-        return getValue(buildTemplateNameKey(), getCommand(), new TemplateNameNotAvailableException());
-    }
-
-    /**
-     * Builds the template name key.
-     * @return such information.
-     */
-    @NotNull
-    protected String buildTemplateNameKey()
-    {
-        return "templateName@" + hashCode();
-    }
-
-    /**
-     * Retrieves the file name.
-     * @return such information.
-     */
-    @NotNull
-    public String getFileName()
-    {
-        return getValue(buildFileNameKey(), getCommand(), new FileNameNotAvailableException());
-    }
-
-    /**
-     * Builds a file name key.
-     * @return such key.
-     */
-    @NotNull
-    protected String buildFileNameKey()
-    {
-        return "fileName@" + hashCode();
-    }
-
-    /**
-     * Retrieves the package name.
-     * @return such information.
-     */
-    @NotNull
-    public String getPackageName()
-    {
-        return getValue(buildPackageNameKey(), getCommand(), new PackageNameNotAvailableException());
-    }
-
-    /**
-     * Builds the package name.
-     * @return such value.
-     */
-    @NotNull
-    protected String buildPackageNameKey()
-    {
-        return "packageName@" + hashCode();
-    }
-
-    /**
-     * Retrieves the root dir.
-     * @return such folder.
-     */
-    @NotNull
-    public File getRootDir()
-    {
-        return getValue(buildRootDirKey(), getCommand(), new RootDirNotAvailableException());
-    }
-
-    /**
-     * Builds the root dir key.
-    * @return such key.
-     */
-    @NotNull
-    protected String buildRootDirKey()
-    {
-        return TemplatePackagingSettings.OUTPUT_DIR + "@" + hashCode();
-    }
-
-    /**
-     * Retrieves the output dir.
-     * @return such folder.
-     */
-    @NotNull
-    public File getOutputDir()
-    {
-        return getValue(buildOutputDirKey(), getCommand(), new OutputDirNotAvailableException());
-    }
-
-    /**
-     * Builds the output dir key.
-     * @return such key.
-     */
-    @NotNull
-    protected String buildOutputDirKey()
-    {
-        return "outputDir@" + hashCode();
+        super(command);
     }
 
     /**
@@ -368,26 +184,6 @@ public abstract class AbstractTemplatePackagingContext
     }
 
     /**
-     * Retrieves the version information.
-     * @return such information.
-     */
-    @NotNull
-    public String getVersion()
-    {
-        return getValue(buildVersionKey(), getCommand(), new VersionNotAvailableException());
-    }
-
-    /**
-     * Builds the key for the version.
-     * @return such key.
-     */
-    @NotNull
-    protected String buildVersionKey()
-    {
-        return QueryJSettings.VERSION;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @NotNull
@@ -397,6 +193,6 @@ public abstract class AbstractTemplatePackagingContext
         return
               "{ \"class\": \"DefaultTemplatePackagingContext\""
             + ", \"package\": \"org.acmsl.queryj.templates.packaging\""
-            + ", \"command\": " + m__Command +" }";
+            + ", \"parent\": " + super.toString() +" }";
     }
 }
