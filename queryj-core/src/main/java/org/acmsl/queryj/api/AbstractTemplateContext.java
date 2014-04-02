@@ -91,22 +91,52 @@ public abstract class AbstractTemplateContext
     public static final String PACKAGE_NAME = "packageName";
 
     /**
-     * The file name key.
-     */
-    public static final String FILE_NAME = "fileName";
-
-    /**
      * The command.
      */
     private QueryJCommand m__Command;
 
     /**
+     * The pk.
+     */
+    private String m__Pk;
+
+    /**
      * Creates an {@link AbstractTemplateContext} with given information.
      * @param command the {@link org.acmsl.queryj.QueryJCommand} instance.
      */
-    protected AbstractTemplateContext(@NotNull final QueryJCommand command)
+    protected AbstractTemplateContext(@NotNull final String pk, @NotNull final QueryJCommand command)
     {
+        immutableSetPk(pk);
         immutableSetCommand(command);
+    }
+
+    /**
+     * Specifies the pk.
+     * @param pk such pk.
+     */
+    protected final void immutableSetPk(@NotNull final String pk)
+    {
+        this.m__Pk = pk;
+    }
+
+    /**
+     * Specifies the pk.
+     * @param pk such pk.
+     */
+    @SuppressWarnings("unused")
+    protected void setPk(@NotNull final String pk)
+    {
+        immutableSetPk(pk);
+    }
+
+    /**
+     * Retrieves the pk.
+     * @return such information.
+     */
+    @NotNull
+    protected String getPk()
+    {
+        return this.m__Pk;
     }
 
     /**
@@ -148,7 +178,24 @@ public abstract class AbstractTemplateContext
     protected final <T> void immutableSetValue(
         @NotNull final String key, @NotNull final T value, @NotNull final QueryJCommand command)
     {
-        new QueryJCommandWrapper<T>(command).setSetting(key, value);
+        immutableSetValue(key, getPk(), value, command);
+    }
+
+    /**
+     * Annotates a value in the command.
+     * @param key the key.
+     * @param pk the pk.
+     * @param value the value.
+     * @param command the command.
+     * @param <T> the type.
+     */
+    protected final <T> void immutableSetValue(
+        @NotNull final String key,
+        @NotNull final String pk,
+        @NotNull final T value,
+        @NotNull final QueryJCommand command)
+    {
+        new QueryJCommandWrapper<T>(command).setSetting(key + '|' + pk, value);
     }
 
     /**
@@ -313,7 +360,11 @@ public abstract class AbstractTemplateContext
     public int hashCode()
     {
         return
-            new HashCodeBuilder().append(AbstractTemplateContext.class.getName()).append(this.m__Command).toHashCode();
+            new HashCodeBuilder()
+                .append(AbstractTemplateContext.class.getName())
+                .append(this.m__Pk)
+                .append(this.m__Command)
+                .toHashCode();
     }
 
     /**
@@ -332,7 +383,11 @@ public abstract class AbstractTemplateContext
         }
         final AbstractTemplateContext other = (AbstractTemplateContext) obj;
 
-        return new EqualsBuilder().append(this.m__Command, other.m__Command).isEquals();
+        return
+            new EqualsBuilder()
+                .append(this.m__Pk, other.m__Pk)
+                .append(this.m__Command, other.m__Command)
+                .isEquals();
     }
 
     /**
@@ -345,6 +400,7 @@ public abstract class AbstractTemplateContext
         return
               "{ \"class\": \"" + AbstractTemplateContext.class.getSimpleName() + '"'
             + ", \"package\": \"org.acmsl.queryj.api\""
+            + ", \"pk\": \"" + m__Pk + '"'
             + ", \"command\": " + m__Command
             + " }";
     }

@@ -85,29 +85,25 @@ public class PerTableTemplateContext
     private static final long serialVersionUID = -7439946925532182308L;
 
     /**
-     * The table-name key.
-     */
-    public static final String TABLE_NAME = "tableName";
-
-    /**
-     * The static-values key.
-     */
-    public static final String STATIC_VALUES = "staticValues";
-
-    /**
      * Creates a {@link PerTableTemplateContext} with given information.
+     * @param fileName the file name.
+     * @param packageName the package name.
      * @param tableName the table name.
      * @param staticValues the static values.
      * @param command the {@link QueryJCommand}.
      */
     public PerTableTemplateContext(
+        @NotNull final String fileName,
+        @NotNull final String packageName,
         @NotNull final String tableName,
         @NotNull final List<Row<String>> staticValues,
         @NotNull final QueryJCommand command)
     {
-        super(command);
-        immutableSetValue(buildTableNameKey(), tableName, getCommand());
-        immutableSetValue(buildStaticValuesKey(), staticValues, getCommand());
+        super(tableName, command);
+        immutableSetValue(buildFileNameKey(), fileName, command);
+        immutableSetValue(buildPackageNameKey(), packageName, command);
+        immutableSetValue(buildTableNameKey(), tableName, command);
+        immutableSetValue(buildStaticValuesKey(), staticValues, command);
     }
 
     /**
@@ -117,7 +113,7 @@ public class PerTableTemplateContext
     @NotNull
     protected String buildTableNameKey()
     {
-        return TABLE_NAME + "@" + hashCode();
+        return "tableName@" + hashCode();
     }
 
     /**
@@ -137,7 +133,7 @@ public class PerTableTemplateContext
     @NotNull
     protected String buildStaticValuesKey()
     {
-        return STATIC_VALUES + '@' + hashCode();
+        return "staticValues@" + hashCode();
     }
 
     /**
@@ -187,14 +183,19 @@ public class PerTableTemplateContext
         return result.toString();
     }
 
+
     /**
      * {@inheritDoc}
      */
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().appendSuper(super.hashCode()).append(getCommand())
-            .toHashCode();
+        return
+            new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(PerTableTemplateContext.class.getName())
+                .append(this.getCommand())
+                .toHashCode();
     }
 
     /**
@@ -203,20 +204,32 @@ public class PerTableTemplateContext
     @Override
     public boolean equals(@Nullable final Object obj)
     {
+        final boolean result;
+
         if (obj == null)
         {
-            return false;
+            result = false;
         }
-        if (getClass() != obj.getClass())
+        else if (getClass() != obj.getClass())
         {
-            return false;
+            result = false;
         }
-        final PerTableTemplateContext other = (PerTableTemplateContext) obj;
+        else if (obj instanceof PerTableTemplateContext)
+        {
+            final PerTableTemplateContext other = (PerTableTemplateContext) obj;
 
-        return
-            new EqualsBuilder()
-                .appendSuper(super.equals(obj)).append(this.getCommand(), other.getCommand())
-                .isEquals();
+            result =
+                new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(this.getCommand(), other.getCommand())
+                    .isEquals();
+        }
+        else
+        {
+            result = false;
+        }
+
+        return result;
     }
 
     /**
@@ -229,6 +242,6 @@ public class PerTableTemplateContext
         return
               "{ \"class\": \"" + PerTableTemplateContext.class.getSimpleName() + '"'
             + ", \"package\": \"org.acmsl.queryj.api\""
-            + ", \"command\": { " + getCommand() + "} }";
+            + ", \"command\": " + getCommand() + " }";
     }
 }

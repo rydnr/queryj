@@ -151,24 +151,17 @@ public class <C.class_name>
         @NotNull final String tableName,
         @NotNull final List\<Row\<String\>> staticContents)
     {
-        new QueryJCommandWrapper\<DecoratorFactory>(command)
-            .setSetting(DecoratorFactory.class.getName(), decoratorFactory);
-        new QueryJCommandWrapper\<String>(command)
-            .setSetting(PerTableTemplateContext.PACKAGE_NAME, packageName);
-        new QueryJCommandWrapper\<String>(command)
-            .setSetting(PerTableTemplateContext.TABLE_NAME, tableName);
-        new QueryJCommandWrapper\<List\<Row\<String>\>>(command)
-            .setSetting(PerTableTemplateContext.STATIC_VALUES, staticContents);
+        @NotNull final QueryJCommandUtils t_QueryJCommandUtils = QueryJCommandUtils.getInstance();
 
-        @NotNull final QueryJCommandUtils queryJCommandUtils = QueryJCommandUtils.getInstance();
+        @NotNull final <def.type.capitalized>TemplateContext t_Context =
+            new <def.type.capitalized>TemplateContext(
+                retrieveTemplateFileName(tableName, t_QueryJCommandUtils.retrieveMetadataManager(command)),
+                packageName,
+                tableName,
+                staticContents,
+                command);
 
-        new QueryJCommandWrapper\<String>(command)
-            .setSetting(
-                PerTableTemplateContext.FILE_NAME,
-                retrieveTemplateFileName(tableName, queryJCommandUtils.retrieveMetadataManager(command)));
-
-        return
-            new <def.name.noExtension>Template(new <def.type.capitalized>TemplateContext(command));
+        return new <def.name.noExtension>Template(t_Context);
     }
 
     /**

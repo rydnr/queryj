@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging Maven Plugin
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -46,9 +46,16 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.templates.packaging.exceptions.TemplateDefNotAvailableException;
 
 /*
+ * Importing Apache Commons Lang classes.
+ */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
+/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -93,7 +100,7 @@ public  class DefaultTemplatePackagingContext
         @NotNull final TemplateDef<String> templateDef,
         @NotNull final QueryJCommand command)
     {
-        super(command);
+        super(templateName, command);
         immutableSetValue(buildTemplateNameKey(), templateName, command);
         immutableSetValue(buildPackageNameKey(), outputPackage, command);
         immutableSetValue(buildFileNameKey(), fileName, command);
@@ -119,5 +126,53 @@ public  class DefaultTemplatePackagingContext
     public TemplateDef<String> getTemplateDef()
     {
         return getValue(buildTemplateDefKey(), getCommand(), new TemplateDefNotAvailableException());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode()
+    {
+        return
+            new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(DefaultTemplatePackagingContext.class.getName())
+                .append(this.getCommand())
+                .toHashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(@Nullable final Object obj)
+    {
+        final boolean result;
+
+        if (obj == null)
+        {
+            result = false;
+        }
+        else if (getClass() != obj.getClass())
+        {
+            result = false;
+        }
+        else if (obj instanceof DefaultTemplatePackagingContext)
+        {
+            final DefaultTemplatePackagingContext other = (DefaultTemplatePackagingContext) obj;
+
+            result =
+                new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(this.getCommand(), other.getCommand())
+                    .isEquals();
+        }
+        else
+        {
+            result = false;
+        }
+
+        return result;
     }
 }

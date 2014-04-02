@@ -46,9 +46,16 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.templates.packaging.exceptions.TemplateDefNotAvailableException;
 
 /*
+ * Importing Apache Commons Lang classes.
+ */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
+/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -91,7 +98,7 @@ public class GlobalTemplateContextImpl
         @NotNull final List<TemplateDef<String>> templateDefs,
         @NotNull final QueryJCommand command)
     {
-        super(command);
+        super(templateName, command);
         immutableSetValue(buildTemplateNameKey(), templateName, command);
         immutableSetValue(buildPackageNameKey(), packageName, command);
         immutableSetValue(buildTemplateDefsKey(), templateDefs, command);
@@ -118,5 +125,54 @@ public class GlobalTemplateContextImpl
     protected String buildTemplateDefsKey()
     {
         return "templateDefs@" + hashCode();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode()
+    {
+        return
+            new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(GlobalTemplateContextImpl.class.getName())
+                .append(this.getCommand())
+                .toHashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(@Nullable final Object obj)
+    {
+        final boolean result;
+
+        if (obj == null)
+        {
+            result = false;
+        }
+        else if (getClass() != obj.getClass())
+        {
+            result = false;
+        }
+        else if (obj instanceof GlobalTemplateContextImpl)
+        {
+            final GlobalTemplateContextImpl other = (GlobalTemplateContextImpl) obj;
+
+            result =
+                new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(this.getCommand(), other.getCommand())
+                    .isEquals();
+        }
+        else
+        {
+            result = false;
+        }
+
+        return result;
     }
 }

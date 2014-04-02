@@ -181,6 +181,7 @@ public class ConfigurationQueryJCommandImpl
     /**
      * Retrieves the setting for given key.
      * @param key the key.
+     * @param <T> the type.
      * @return the value for such key.
      */
     @Override
@@ -193,8 +194,9 @@ public class ConfigurationQueryJCommandImpl
     /**
      * Retrieves the setting for given key.
      * @param key the key.
-     * @return the value for such key.
      * @param configuration the {@link Configuration configuration} settings.
+     * @param <T> the type.
+     * @return the value for such key.
      */
     @Nullable
     @SuppressWarnings("unchecked")
@@ -207,6 +209,7 @@ public class ConfigurationQueryJCommandImpl
      * Specifies the setting for given key.
      * @param key the key.
      * @param value the value for such key.
+     * @param <T> the type.
      */
     @Override
     public <T> void setSetting(@NotNull final String key, @Nullable final T value)
@@ -219,6 +222,7 @@ public class ConfigurationQueryJCommandImpl
      * @param key the key.
      * @param value the value for such key.
      * @param configuration the {@link Configuration configuration} settings.
+     * @param <T> the type.
      */
     protected <T> void setSetting(
         @NotNull final String key, @Nullable final T value, @NotNull final Configuration configuration)
@@ -344,6 +348,7 @@ public class ConfigurationQueryJCommandImpl
     /**
      * Retrieves the setting for given key.
      * @param key the key.
+     * @param <T> the type.
      * @return the value for such key.
      */
     @Override
@@ -355,6 +360,7 @@ public class ConfigurationQueryJCommandImpl
     /**
      * Retrieves the setting for given key.
      * @param key the key.
+     * @param <T> the type.
      * @return the value for such key.
      */
     @SuppressWarnings("unchecked")
@@ -363,10 +369,46 @@ public class ConfigurationQueryJCommandImpl
         return (T) configuration.getProperty(key);
     }
 
+    /**
+     * Returns a JSON representation of given {@link Configuration}.
+     * @param conf the instance to represent.
+     * @return the JSON string.
+     */
+    @NotNull
+    protected String confToString(@NotNull final Configuration conf)
+    {
+        @NotNull final StringBuilder result = new StringBuilder();
+
+        @NotNull final Iterator<String> t_itKey = conf.getKeys();
+
+        while (t_itKey.hasNext())
+        {
+            @NotNull final String t_strKey = t_itKey.next();
+            result.append(", \"");
+            result.append(t_strKey);
+            result.append("\": \"");
+            result.append(conf.getProperty(t_strKey));
+            result.append('"');
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'QueryJCommand', 'log':" + m__Log + ", configuration='" + m__Configuration + "' }";
+        return
+            "{ \"class\": \"" + ConfigurationQueryJCommandImpl.class.getSimpleName()
+            + ", \"package\": \"org.acmsl.queryj\""
+            + ", \"log\": \"" + m__Log + '"'
+            + ", \"configuration\": "
+            + "{ \"class\": \"" + m__Configuration.getClass().getSimpleName()
+            +    ", \"package\": \"" + m__Configuration.getClass().getPackage().getName() + '"'
+            +    confToString(m__Configuration)
+            + "} }";
     }
 }

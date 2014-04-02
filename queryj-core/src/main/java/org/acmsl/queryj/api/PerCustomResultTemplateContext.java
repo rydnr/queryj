@@ -116,7 +116,7 @@ public class PerCustomResultTemplateContext
         @NotNull final String fileName,
         @NotNull final Result<String> result)
     {
-        super(null);
+        super(null, null);
 
         immutableSetResult(result);
     }

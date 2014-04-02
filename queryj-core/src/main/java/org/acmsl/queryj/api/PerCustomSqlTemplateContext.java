@@ -115,7 +115,7 @@ public class PerCustomSqlTemplateContext
         @NotNull final String fileName,
         @NotNull final Sql<String> sql)
     {
-        super(null);
+        super(null, null);
 
         immutableSetSql(sql);
     }

@@ -1,0 +1,12 @@
+* 2014/04/02:
+** Refactor TemplateContext #459: 
+*** TODO Version keyword not working on final templates: 1
+** Pending:
+*** Move TableTestHelper out of QueryJ Templates
+
+
+ValidationHandler
+Log4JInitializer
+FindTemplateDefs
+ParseTemplateDefs
+TemplateBuildHandler

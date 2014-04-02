@@ -77,11 +77,12 @@ public abstract class AbstractQueryJTemplateContext
 {
     /**
      * Creates an {@link AbstractTemplateContext} with given information.
+     * @param pk the pk.
      * @param command the {@link org.acmsl.queryj.QueryJCommand} instance.
      */
-    protected AbstractQueryJTemplateContext(@NotNull final QueryJCommand command)
+    protected AbstractQueryJTemplateContext(@NotNull final String pk, @NotNull final QueryJCommand command)
     {
-        super(command);
+        super(pk, command);
     }
 
     /**

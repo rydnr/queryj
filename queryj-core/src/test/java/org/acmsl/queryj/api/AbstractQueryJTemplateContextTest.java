@@ -296,7 +296,7 @@ public class AbstractQueryJTemplateContextTest
         @NotNull final String fileName = "file.name";
 
         return
-            new AbstractQueryJTemplateContext(t_Command)
+            new AbstractQueryJTemplateContext(fileName, t_Command)
                 {{
                     immutableSetValue(buildTemplateNameKey(), "", getCommand());
                     immutableSetValue(buildFileNameKey(), fileName, getCommand());

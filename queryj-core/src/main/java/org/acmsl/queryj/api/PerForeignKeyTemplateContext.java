@@ -114,7 +114,7 @@ public class PerForeignKeyTemplateContext
         @NotNull final String fileName,
         @NotNull final ForeignKey<String> foreignKey)
     {
-        super(null);
+        super(null, null);
 
         immutableSetForeignKey(foreignKey);
     }
