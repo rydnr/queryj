@@ -145,7 +145,7 @@ first_line_description(tableName, engine) ::= <<
   @param tableName the table name.
   @param engine the engine.
 !>
-DAO implementation responsible of managing the access to
+DAO implementation responsible of managing the access to <tableName> entities from
 >>
 
 second_line_description(tableName, engine) ::= <<
@@ -155,16 +155,7 @@ second_line_description(tableName, engine) ::= <<
   @param engineName the engine name.
   @param engineVersion the engine version.
 !>
- <tableName> entities from <engine.name>
->>
-
-third_line_description(tableName, engine) ::= <<
-<!
-  Generates a description for the generated file.
-  @param tableName the table name.
-  @param engine the engine.
-!>
-<if(engine.version)>(<engine.version>) <endif>persistence layers.
+entities from <engine.name> <if(engine.version)>(<engine.version>) <endif>persistence layers.
 >>
 
 project_imports(
@@ -293,8 +284,7 @@ classImpl(foreign_keys, table, parent, repository, engine, C) ::= <<
 /**
  * <[
       first_line_description(tableName=table.name, engine=engine),
-      second_line_description(tableName=table.name, engine=engine),
-      third_line_description(tableName=table.name, engine=engine)
+      second_line_description(tableName=table.name, engine=engine)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/DAO.stg", C=C)>
  */

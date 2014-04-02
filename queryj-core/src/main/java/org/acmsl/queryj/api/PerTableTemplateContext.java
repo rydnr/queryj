@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -145,7 +145,8 @@ public class PerTableTemplateContext
     public List<Row<String>> getStaticValues()
     {
         return
-            new ArrayList<>(getValue(buildStaticValuesKey(), getCommand(), new StaticValuesNotAvailableException()));
+            new ArrayList<>(
+                getListValue(buildStaticValuesKey(), getCommand(), new StaticValuesNotAvailableException()));
     }
 
     /**

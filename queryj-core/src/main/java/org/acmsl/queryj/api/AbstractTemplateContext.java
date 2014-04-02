@@ -68,6 +68,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 import java.io.File;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Abstract implementation of {@link QueryJTemplateContext}.
@@ -212,8 +213,93 @@ public abstract class AbstractTemplateContext
         @NotNull final QueryJCommand command,
         @NotNull final QueryJNonCheckedException exceptionToThrow)
     {
-        @Nullable final T result =
-            new QueryJCommandWrapper<T>(command).getSetting(key);
+        return getValue(key, getPk(), command, exceptionToThrow);
+    }
+
+    /**
+     * Retrieves the value.
+     * @param key the key.
+     * @param pk the primary key.
+     * @param command the command.
+     * @param exceptionToThrow the exception to throw.
+     * @param <T> the value type.
+     * @return such information.
+     */
+    @NotNull
+    protected <T> T getValue(
+        @NotNull final String key,
+        @NotNull final String pk,
+        @NotNull final QueryJCommand command,
+        @NotNull final QueryJNonCheckedException exceptionToThrow)
+    {
+        @Nullable final T result;
+
+        @Nullable final T aux =
+            new QueryJCommandWrapper<T>(command).getSetting(key + '|' + pk);
+
+        if (aux == null)
+        {
+            result = new QueryJCommandWrapper<T>(command).getSetting(key);
+        }
+        else
+        {
+            result = aux;
+        }
+
+        if (result == null)
+        {
+            throw exceptionToThrow;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the value.
+     * @param key the key.
+     * @param command the command.
+     * @param exceptionToThrow the exception to throw.
+     * @param <T> the value type.
+     * @return such information.
+     */
+    @NotNull
+    protected <T> List<T> getListValue(
+        @NotNull final String key,
+        @NotNull final QueryJCommand command,
+        @NotNull final QueryJNonCheckedException exceptionToThrow)
+    {
+        return getListValue(key, getPk(), command, exceptionToThrow);
+    }
+
+    /**
+     * Retrieves the value.
+     * @param key the key.
+     * @param pk the primary key.
+     * @param command the command.
+     * @param exceptionToThrow the exception to throw.
+     * @param <T> the value type.
+     * @return such information.
+     */
+    @NotNull
+    protected <T> List<T> getListValue(
+        @NotNull final String key,
+        @NotNull final String pk,
+        @NotNull final QueryJCommand command,
+        @NotNull final QueryJNonCheckedException exceptionToThrow)
+    {
+        @Nullable final List<T> result;
+
+        @Nullable final List<T> aux =
+            new QueryJCommandWrapper<T>(command).getListSetting(key + '|' + pk);
+
+        if (aux == null)
+        {
+            result = new QueryJCommandWrapper<T>(command).getListSetting(key);
+        }
+        else
+        {
+            result = aux;
+        }
 
         if (result == null)
         {
@@ -240,7 +326,7 @@ public abstract class AbstractTemplateContext
     @NotNull
     protected String buildTemplateNameKey()
     {
-        return "templateName@" + hashCode();
+        return "templateName";
     }
 
     /**
@@ -260,7 +346,7 @@ public abstract class AbstractTemplateContext
     @NotNull
     protected String buildFileNameKey()
     {
-        return "fileName@" + hashCode();
+        return "fileName";
     }
 
     /**
@@ -280,7 +366,7 @@ public abstract class AbstractTemplateContext
     @NotNull
     protected String buildPackageNameKey()
     {
-        return "packageName@" + hashCode();
+        return "packageName";
     }
 
     /**
@@ -300,7 +386,7 @@ public abstract class AbstractTemplateContext
     @NotNull
     protected String buildRootDirKey()
     {
-        return QueryJSettings.OUTPUT_FOLDER + "@" + hashCode();
+        return QueryJSettings.OUTPUT_FOLDER;
     }
 
     /**
@@ -320,37 +406,28 @@ public abstract class AbstractTemplateContext
     @NotNull
     protected String buildOutputDirKey()
     {
-        return "outputDir@" + hashCode();
+        return "outputDir";
     }
 
     /**
      * Retrieves the version.
      * @return such information.
      */
+    @Override
     @NotNull
     public String getVersion()
     {
-        return getVersion(getCommand());
+        return getValue(buildVersionKey(), getCommand(), new VersionNotAvailableException());
     }
 
-
     /**
-     * Retrieves the version.
-     * @param command the command.
-     * @return such information.
+     * Builds the version key.
+     * @return such key.
      */
     @NotNull
-    protected String getVersion(@NotNull final QueryJCommand command)
+    protected String buildVersionKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.VERSION);
-
-        if (result == null)
-        {
-            throw new VersionNotAvailableException();
-        }
-
-        return result;
+        return QueryJSettings.VERSION;
     }
 
     /**

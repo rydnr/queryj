@@ -88,7 +88,7 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
     @NotNull
     protected List<FillHandler<?>> getHandlers(@NotNull final C context)
     {
-        @NotNull final List<FillHandler<?>> result = new ArrayList<>(22);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<>(20);
 
         result.add(new AreTimestampsAllowedHandler(context));
         result.add(new ClassNameHandler<>(context));
@@ -109,6 +109,7 @@ public class FillTemplateChainWrapper<C extends QueryJTemplateContext>
         result.add(new TemplateNameHandler<>(context));
         result.add(new UseCheckthreadAnnotationsHandler(context));
         result.add(new UseNotNullAnnotationsHandler(context));
+        result.add(new QueryJVersionHandler<>(context));
 
         return result;
     }

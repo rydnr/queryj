@@ -95,7 +95,7 @@ java_header_impl(year, fileName, description, template, timestamp, version) ::= 
 >>
 
 class_common_javadoc(template, C) ::= <<
- * @author \<a href="http://www.acm-sl.org/projects/queryj">QueryJ <C.version>\</a> <if(template)>(<template>)<endif><if(C.generation_timestamps_enabled)>
+ * @author \<a href="http://www.acm-sl.org/projects/queryj">QueryJ <C.version>\</a> <if(template)>(<template>)<endif><if(C.timestamp)>
  * Created: <C.timestamp><endif>
 >>
 

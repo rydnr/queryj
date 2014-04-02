@@ -15,5 +15,3 @@ filename  builder : <engine.name><tableName.singular.camelCase>DAO.java;
 
 // The package.
 package: <packageName>.dao.rdb.<engine.name.lowercased>;
-
-//disabled;

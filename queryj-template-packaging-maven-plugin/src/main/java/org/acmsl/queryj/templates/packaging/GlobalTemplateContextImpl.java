@@ -98,7 +98,7 @@ public class GlobalTemplateContextImpl
         @NotNull final List<TemplateDef<String>> templateDefs,
         @NotNull final QueryJCommand command)
     {
-        super(templateName, command);
+        super(fileName, command);
         immutableSetValue(buildTemplateNameKey(), templateName, command);
         immutableSetValue(buildPackageNameKey(), packageName, command);
         immutableSetValue(buildTemplateDefsKey(), templateDefs, command);

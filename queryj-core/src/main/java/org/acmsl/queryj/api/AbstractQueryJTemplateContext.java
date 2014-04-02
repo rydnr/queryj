@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: QueryJ-specific template context: used when QueryJ creates
+ *              templates to be consumed by itself afterwards.
  *
  * Date: 2014/04/01
  * Time: 21:26
@@ -36,7 +37,7 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
@@ -44,7 +45,6 @@ import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.BasePackageNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.DecoratorFactoryNotAvailableException;
 import org.acmsl.queryj.api.exceptions.JndiLocationNotAvailableException;
-import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.RepositoryNameNotAvailableException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.exceptions.CustomSqlProviderNotAvailableException;
@@ -54,6 +54,10 @@ import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -62,10 +66,14 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.List;
 
 /**
- *
+ * QueryJ-specific template context: used when QueryJ creates
+ * templates to be consumed by itself afterwards.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/04/01 21:26
@@ -93,27 +101,17 @@ public abstract class AbstractQueryJTemplateContext
     @Override
     public MetadataManager getMetadataManager()
     {
-        return getMetadataManager(getCommand());
+        return getValue(buildMetadataManagerKey(), getCommand(), new MetadataManagerNotAvailableException());
     }
 
     /**
-     * Retrieves the metadata manager.
-     * @param command the command.
-     * @return such manager.
+     * Builds the metadata manager key.
+     * @return such key.
      */
     @NotNull
-    protected MetadataManager getMetadataManager(@NotNull final QueryJCommand command)
+    protected String buildMetadataManagerKey()
     {
-        @Nullable final MetadataManager result =
-            new QueryJCommandWrapper<MetadataManager>(command)
-                .getSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER);
-
-        if (result == null)
-        {
-            throw new MetadataManagerNotAvailableException();
-        }
-
-        return result;
+        return DatabaseMetaDataRetrievalHandler.METADATA_MANAGER;
     }
 
     /**
@@ -124,27 +122,17 @@ public abstract class AbstractQueryJTemplateContext
     @Override
     public CustomSqlProvider getCustomSqlProvider()
     {
-        return getCustomSqlProvider(getCommand());
+        return getValue(buildCustomSqlProviderKey(), getCommand(), new CustomSqlProviderNotAvailableException());
     }
 
     /**
-     * Retrieves the custom-sql provider.
-     * @param command the command.
-     * @return such provider.
+     * Builds the custom-sql provider key.
+     * @return such key.
      */
     @NotNull
-    protected CustomSqlProvider getCustomSqlProvider(@NotNull final QueryJCommand command)
+    protected String buildCustomSqlProviderKey()
     {
-        @Nullable final CustomSqlProvider result =
-            new QueryJCommandWrapper<CustomSqlProvider>(command).getSetting(
-                CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER);
-
-        if (result == null)
-        {
-            throw new CustomSqlProviderNotAvailableException();
-        }
-
-        return result;
+        return CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER;
     }
 
     /**
@@ -177,7 +165,7 @@ public abstract class AbstractQueryJTemplateContext
     @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
-        return getDecoratorFactory(getCommand());
+        return getValue(buildDecoratorFactoryKey(), getCommand(), new DecoratorFactoryNotAvailableException());
     }
 
     /**
@@ -185,47 +173,9 @@ public abstract class AbstractQueryJTemplateContext
      * @return such instance.
      */
     @NotNull
-    protected DecoratorFactory getDecoratorFactory(@NotNull final QueryJCommand command)
+    protected String buildDecoratorFactoryKey()
     {
-        @Nullable final DecoratorFactory result =
-            new QueryJCommandWrapper<DecoratorFactory>(command).getSetting(DecoratorFactory.class.getName());
-
-        if (result == null)
-        {
-            throw new DecoratorFactoryNotAvailableException();
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the package name.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String getPackageName()
-    {
-        return getPackageName(getCommand());
-    }
-
-    /**
-     * Retrieves the package name.
-     * @param command the command.
-     * @return such information.
-     */
-    @NotNull
-    protected String getPackageName(@NotNull final QueryJCommand command)
-    {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(PACKAGE_NAME);
-
-        if (result == null)
-        {
-            throw new PackageNameNotAvailableException();
-        }
-
-        return result;
+        return DecoratorFactory.class.getName();
     }
 
     /**
@@ -236,26 +186,17 @@ public abstract class AbstractQueryJTemplateContext
     @Override
     public String getBasePackageName()
     {
-        return getBasePackageName(getCommand());
+        return getValue(buildBasePackageNameKey(), getCommand(), new BasePackageNameNotAvailableException());
     }
 
     /**
-     * Retrieves the base package name.
-     * @param command the command.
+     * Retrieves the base package name key.
      * @return such information.
      */
     @NotNull
-    protected String getBasePackageName(@NotNull final QueryJCommand command)
+    protected String buildBasePackageNameKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.PACKAGE);
-
-        if (result == null)
-        {
-            throw new BasePackageNameNotAvailableException();
-        }
-
-        return result;
+        return QueryJSettings.PACKAGE;
     }
 
     /**
@@ -266,26 +207,17 @@ public abstract class AbstractQueryJTemplateContext
     @Override
     public String getRepositoryName()
     {
-        return getRepositoryName(getCommand());
+        return getValue(buildRepositoryNameKey(), getCommand(), new RepositoryNameNotAvailableException());
     }
 
     /**
      * Retrieves the repository name.
-     * @param command the command.
      * @return such information.
      */
     @NotNull
-    protected String getRepositoryName(@NotNull final QueryJCommand command)
+    protected String buildRepositoryNameKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.REPOSITORY);
-
-        if (result == null)
-        {
-            throw new RepositoryNameNotAvailableException();
-        }
-
-        return result;
+        return QueryJSettings.REPOSITORY;
     }
 
     /**
@@ -316,26 +248,17 @@ public abstract class AbstractQueryJTemplateContext
     @NotNull
     public String getJndiLocation()
     {
-        return getJndiLocation(getCommand());
+        return getValue(buildJndiLocationKey(), getCommand(), new JndiLocationNotAvailableException());
     }
 
     /**
-     * Retrieves the JNDI location for the {@link javax.sql.DataSource}.
-     * @param command the command.
-     * @return such location.
+     * Retrieves the key of the JNDI location for the {@link javax.sql.DataSource}.
+     * @return such key.
      */
     @NotNull
-    protected String getJndiLocation(@NotNull final QueryJCommand command)
+    protected String buildJndiLocationKey()
     {
-        @Nullable final String result =
-            new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.JNDI_DATASOURCE);
-
-        if (result == null)
-        {
-            throw new JndiLocationNotAvailableException();
-        }
-
-        return result;
+        return QueryJSettings.JNDI_DATASOURCE;
     }
 
     /**
