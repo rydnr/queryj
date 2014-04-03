@@ -15,5 +15,3 @@ filename  builder : <tableName.capitalized>DAO.java;
 
 // The package.
 package: <packageName>.dao;
-
-disabled;

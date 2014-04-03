@@ -83,14 +83,12 @@ import org.springframework.dao.DataAccessException;
  */
 import org.acmsl.commons.patterns.dao.DAO;
 <endif>
-
+<if(table.attributeTypes)>
 /*
  * Importing some JDK classes.
  */
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+<table.attributeTypes:{ t | import <t>;}; separator="\n">
+<endif>
 
 <class(table=table, C=C)>
 >>
@@ -135,10 +133,7 @@ class(table, C) ::= <<
       first_line_description(tableName=table.name),
       second_line_description(tableName=table.name)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/BaseDAO.stg",
-  generation_timestamps_enabled=C.generation_timestamps_enabled,
-  timestamp=C.timestamp)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/BaseDAO.stg", C=C)>
  */
 public interface <table.name.voName>DAO
 <if(C.implement_markers)>
@@ -147,76 +142,61 @@ public interface <table.name.voName>DAO
 
 {
 <if(table.static)>
-    <table.staticContents:{r | <cached_constants(row=r, voName=table.name.voName)}; separator="\n\n">
+    <table.staticContent:{r | <cached_constants(row=r, voName=table.name.voName)>}; separator="\n\n">
 
     /**
      * Retrieves the static (pre-cached) values.
      * @return such information.
      */
-    public List\<<table.name.voName\>> getStaticValues();
+    List\<<table.name.voName\>> getStaticValues();
 
-    <table.staticAttribute:find_constant_methods(
-      attribute=it,
-      primaryKeyAttributes=table.primaryKey,
-      voName=table.name.voName)>
+    <table.attributes:{ a | <find_constant_methods(attribute=a, primaryKeyAttributes=table.primaryKey, voName=table.name.voName)>}; separator="\n\n">
 <endif>
 
-    /**
-     * Retrieves \<code><table.name.voName>\</code> information
-     * filtering by its primary key.
-     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
-     * @return the \<code><table.name.voName>\</code> matching given
-     * primary key.
-     */
-    public <table.name.voName> findByPrimaryKey(
-        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">)
-      throws DataAccessException;
+    <find_by_primary_key(table=table, parent=table.parentTable, repository=C.repository, C=C)>
 
     /**
-     * Persists \<code><table.name.voName>\</code> information.
-     <table.allButExternallyManagedAttributes:attribute_javadoc(
-       name=it.nameLowercased); separator="\n">
+     * Persists {@link <table.name.voName>} information.
+     <table.own.minus.externallyManagedAttributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
     public void insert(
-        <table.allButExternallyManagedAttributes:attribute_declaration(
-          attr=it); separator=",\n">)
+        <table.own.minus.externallyManagedAttributes:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
       throws DataAccessException;
 
     /**
      * Inserts and retrieves the newly-inserted
-     * \<code><table.name.voName>\</code> instance.
-     <table.allButExternallyManagedAttributes:attribute_javadoc(
-       name=it.nameLowercased); separator="\n">
+     * {@link <table.name.voName>} instance.
+     <table.own.minus.externallyManagedAttributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
+     * @return such instance.
      */
     public <table.name.voName> create(
-        <table.allButExternallyManagedAttributes:attribute_declaration(
-          attr=it); separator=",\n">)
+        <table.own.minus.externallyManagedAttributes:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
       throws DataAccessException;
 
     /**
-     * Updates \<code><table.name.voName>\</code> information.
-     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
-     * @return the number of entities updated.
+     * Updates {@link <table.name.voName>} information.
+     <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
+     * @return the number of {@code <table.name>} rows updated.
      */
     public int update(
-        <input.attributes:attribute_declaration(attr=it); separator=",\n">)
+        <table.attributes:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
       throws DataAccessException;
 
     /**
-     * Deletes \<code><table.name.voName>\</code> information.
-     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * Deletes {@link <table.name.voName>} information.
+     <table.primaryKey:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
     public void delete(
-        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">)
+        <table.primaryKey:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
       throws DataAccessException;
 
-    <table.foreignKeys:fk_delete_method(foreignKey=it, table=table); separator="\n">
+    <table.foreignKeys:{ fk | <fk_delete_method(foreignKey=fk, table=table)>}; separator="\n">
 
-    <table.customSelects:custom_select(cs=it); separator="\n">
+    <table.customSelects:{ cs | <custom_select(cs=cs)>}; separator="\n">
 
-    <table.customUpdatesOrInserts:custom_update_or_insert(cs=it); separator="\n">
+    <table.customUpdatesOrInserts:{ cs | <custom_update_or_insert(cs=cs)>}; separator="\n">
 
-    <table.customSelectsForUpdate:custom_select_for_update(cs=it); separator="\n">
+    <table.customSelectsForUpdate:{ cs | <custom_select_for_update(cs=cs)>}; separator="\n">
 }
 >>
 
@@ -229,9 +209,42 @@ cached_constants(row, voName) ::= <<
 /**
  * The <row.name> constant.
  */
-public static final <voName> <row.nameNormalizedUppercased> =
+public static final <voName> <row.name.normalized.uppercased> =
     new <voName>ValueObject(
-        <row.attributes:attribute_specification(attr=it); separator=",\n">);
+        <row.attributes:{ a | <attribute_specification(attr=a)>}; separator=",\n">);
+>>
+
+find_by_primary_key(table, parent, repository, C) ::= <<
+<!
+ Generates the find-by-primary-key methods.
+ @param table the table.
+ @param parent the parent.
+ @param repository the repository.
+ @param C the context.
+!>
+
+/**
+<if(table.voDecorated)>
+ * Retrieves {@link <table.name.voName>Decorator} (table <table.name>) information
+<else>
+ * Retrieves {@link <table.name.voName>} information
+<endif>
+ * filtering by its primary key.
+ <table.primaryKey:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
+<if(table.voDecorated)>
+ * @return the {@link <table.name.voName>Decorator} (table <table.name>) matching given
+<else>
+ * @return the {@link <table.name.voName>} matching given
+<endif>
+ * primary key.
+ */
+<nullable(C=C)>
+<if(table.voDecorated)>
+public <table.name.voName>Decorator findByPrimaryKey(
+<else>
+public <table.name.voName> findByPrimaryKey(
+<endif>
+    <table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">);
 >>
 
 attribute_specification(attr) ::= <<
@@ -252,22 +265,12 @@ find_constant_methods(attribute, primaryKeyAttributes, voName) ::= <<
 /**
  * Loads \<i><attribute.tableName>\</i> information from the constant pool,
  * filtering by <attribute.name>.
- * @param <attribute.nameLowercased> the <attribute.name>
+ * @param <attribute.name.lowercased> the <attribute.name>
  * to filter.
- * @return the \<code><voName>\</code> instance.
+ * @return the {@link <voName>} instance.
  */
-public <voName> findConstantBy<attribute.nameCapitalized>(
-    final <attribute.javaType> <attribute.nameLowercased>);
-
-/**
- * Loads \<i><attribute.tableName>\</i> information from the constant pool,
- * filtering by the primary key.
- <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the \<code><attribute.voName>\</code> instance.
- */
-public <voName> findConstantByPk(
-  <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">);
-
+public <voName> findConstantBy<attribute.name.capitalized>(
+    final <attribute.javaType> <attribute.name.lowercased>);
 >>
 
 fk_delete_method(foreignKey, table) ::= <<
@@ -278,27 +281,25 @@ fk_delete_method(foreignKey, table) ::= <<
 !>
 /**
 <if(foreignKey.allowsNull)>
- * Discards the relation to \<code><foreignKey.targetVoName>\</code> in
- * \<code><foreignKey.sourceVoName>\</code>.
+ * Discards the relation to \<code><foreignKey.target.voName>\</code> in
+ * {@link <foreignKey.source.voName>}.
 <else>
  * Deletes <table.name> information from the persistence layer filtering
  * by given foreign keys.
 <endif>
 
- <foreignKey.attributes:attribute_javadoc(name=it.nameLowercased);
-   separator="\n">
+ <foreignKey.attributes:{ a | <attribute_javadoc(name=a)>}; separator="\n">
  */
 <if(foreignKey.allowsNull)>
-public void discardRelationTo<foreignKey.targetVoName>By<foreignKey.attributes:{attr |<attr.nameCapitalized>};
+public void discardRelationTo<foreignKey.target.voName>By<foreignKey.attributes:{attr |<attr.name.capitalized>};
                                                           separator="And">(
 <else>
-public void deleteBy<foreignKey.attributes:{attr |<attr.nameCapitalized>};
+public void deleteBy<foreignKey.attributes:{attr |<attr.name.capitalized>};
                       separator="And">(
 <endif>
 
 
-    <foreignKey.attributes:primitive_attribute_declaration(attr=it);
-      separator=",\n">);
+    <foreignKey.attributes:{ a | <primitive_attribute_declaration(attr=a)>}; separator=",\n">);
 >>
 
 custom_select(cs) ::= <<
@@ -307,13 +308,13 @@ custom_select(cs) ::= <<
   @param cs the custom select.
 !>
 /**
- * Custom select \<i><cs.id>\</i>:\<br/>
+ * Custom select \<i><cs.id>\</i>:
  * \<b><cs.description>\</b>.
- <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ <cs.parameters:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  */
-public <cs.resultClass> <cs.nameUncapitalized>(
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+public <cs.resultClass> <cs.name.uncapitalized>(
+    <cs.parameters:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
   throws DataAccessException;
 >>
 
@@ -325,10 +326,10 @@ custom_update_or_insert(cs) ::= <<
 /**
  * Custom sql \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ <cs.parameters:{ a | <attribute_javadoc(name=a)>}; separator="\n">
  */
 public void <cs.nameUncapitalized>(
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+    <cs.parameters:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
   throws DataAccessException;
 >>
 
@@ -340,10 +341,10 @@ custom_select_for_update(cs) ::= <<
 /**
  * Custom select for update \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ <cs.parameters:{ a | <attribute_javadoc(name=a)>}; separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  */
-public <cs.resultClass> <cs.nameUncapitalized>(
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
+public <cs.resultClass> <cs.name.uncapitalized>(
+    <cs.parameters:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
   throws DataAccessException;
 >>

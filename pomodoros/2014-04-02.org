@@ -1,6 +1,6 @@
 * 2014/04/02:
 ** Refactor TemplateContext #459: 
-*** TODO Version keyword not working on final templates: 1
+*** DONE Version keyword not working on final templates: 3 -> 3
 ** Pending:
 *** Move TableTestHelper out of QueryJ Templates
 

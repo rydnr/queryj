@@ -324,6 +324,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
      * @return such information.
      */
     <notnull(C=C)>
+    @Override
     public List\<<table.name.voName\>> getStaticValues()
     {
         <notnull(C=C)> final result = new ArrayList\<<table.name.voName>\>(FIXED_CONSTANTS.length);
@@ -338,7 +339,9 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
     <find_constant_by_pk(primaryKey=table.primaryKey, table=table, C=C)>
 <endif>
 
-    <table.own.minus.primaryKey1.minus.readOnlyAttributes:{ attr | <find_constant_methods(attribute=attr, table=table, C=C)>}; separator="\n">
+    <table.own.minus.primaryKey.minus.readOnlyAttributes:{ attr | <find_constant_methods(attribute=attr, table=table, C=C)>}; separator="\n">
+
+    <find_by_primary_key(table=table, parent=parent, repository=repository, C=C)>
 <endif>
     <!
     <insert(table=table, parent=parent, repository=repository, C=C)>
