@@ -1,0 +1,6 @@
+* 2014/04/03:
+** DONE Re-implement BaseDAO.stg #460: 2 -> 2
+** Pending:
+*** Move TableTestHelper out of QueryJ Templates
+*** table.voDecorated returns true
+*** attribute type returns boolean
