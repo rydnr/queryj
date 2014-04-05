@@ -96,11 +96,12 @@ public class CachingResultDecorator
     private Boolean m__bCachedWrappingASingleProperty;
 
     /**
-     * Creates a <code>CachingResultElementDecorator</code> with given instance.
-     * @param result the result element.
-     * @param customSqlProvider the <code>CustomSqlProvider</code>, required
+     * Creates a {@code CachingResultElementDecorator} with given instance.
+     * @param result the {@link Result result element}.
+     * @param customSqlProvider the {@link CustomSqlProvider}, required
      * to decorate referred parameters.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     public CachingResultDecorator(
         @NotNull final Result<String> result,
@@ -192,6 +193,7 @@ public class CachingResultDecorator
      * Retrieves the properties.
      * @return such information.
      */
+    @Override
     @NotNull
     public List<Property<DecoratedString>> getLobProperties()
     {
@@ -238,6 +240,7 @@ public class CachingResultDecorator
      * Checks whether the result is 'implicit' (associated to a table) or not.
      * @return such information.
      */
+    @Override
     @SuppressWarnings("unused")
     public boolean isImplicit()
     {
@@ -285,6 +288,7 @@ public class CachingResultDecorator
      * Retrieves the properties.
      * @return such information.
      */
+    @Override
     @NotNull
     public List<Property<DecoratedString>> getImplicitProperties()
     {

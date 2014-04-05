@@ -722,8 +722,7 @@ public abstract class AbstractAttributeDecorator
         final boolean isBool,
         @NotNull final MetadataTypeUtils metadataTypeUtils)
     {
-        String result =
-            metadataTypeManager.getNativeType(type, allowsNull, isBool);
+        String result = metadataTypeManager.getNativeType(type, allowsNull, isBool);
 
         if  (allowsNull)
         {

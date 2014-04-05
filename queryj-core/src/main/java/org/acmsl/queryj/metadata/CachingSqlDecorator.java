@@ -87,6 +87,11 @@ public class CachingSqlDecorator
     private Boolean m__bWrappedParametersCheck = null;
 
     /**
+     * The cached "is result nullable".
+     */
+    private Boolean m__bIsResultNullable = null;
+
+    /**
      * Creates a <code>CachingSqlDecorator</code> with given information.
      * @param sql the <code>Sql</code> to decorate.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
@@ -182,7 +187,7 @@ public class CachingSqlDecorator
      * @return such information.
      */
     @Override
-    @Nullable
+    @NotNull
     public String getResultClass()
     {
         @Nullable String result = getCachedResultClass();
@@ -247,16 +252,59 @@ public class CachingSqlDecorator
     }
 
     /**
+     * Checks whether the result of this query could be {@code null} or not.
+     *
+     * @return such information.
+     */
+    @Override
+    public boolean isResultNullable()
+    {
+        Boolean result = getCachedIsResultNullable();
+
+        if (result == null)
+        {
+            result = super.isResultNullable();
+            setCachedIsResultNullable(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached information about whether the result
+     * is nullable or not.
+     * @param info such information.
+     */
+    protected void setCachedIsResultNullable(final boolean info)
+    {
+        this.m__bIsResultNullable = info;
+    }
+
+    /**
+     * Retrieves the cached information about whether the result
+     * is nullable or not.
+     * @return such information.
+     */
+    @Nullable
+    protected Boolean getCachedIsResultNullable()
+    {
+        return m__bIsResultNullable;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @NotNull
     @Override
     public String toString()
     {
-        return "CachingSqlDecorator{" +
-               "m__bWrappedParametersCheck=" + m__bWrappedParametersCheck +
-               ", m__cCachedParameters=" + m__cCachedParameters +
-               ", m__strCachedResultClass='" + m__strCachedResultClass + '\'' +
-               '}';
+        return
+              "{ \"class\": \"" + CachingSqlDecorator.class.getSimpleName() + '"'
+            + ", \"wrappedParametersCheck\": " + m__bWrappedParametersCheck
+            + ", \"cachedParameters\": [ " + m__cCachedParameters + ']'
+            + ", \"resultClass\": \"" + m__strCachedResultClass + '"'
+            + ", \"isResultNullable\": " + m__bIsResultNullable
+            + ", \"package\": \"" + CachingSqlDecorator.class.getPackage().getName() + '"'
+            + " }";
     }
 }

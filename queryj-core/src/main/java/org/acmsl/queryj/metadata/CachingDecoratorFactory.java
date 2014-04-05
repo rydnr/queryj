@@ -77,6 +77,9 @@ public class CachingDecoratorFactory
                 Serializable,
                 Singleton
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 8153087339399077188L;
 
     /**
@@ -112,6 +115,7 @@ public class CachingDecoratorFactory
      * @param attribute the attribute.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
+     * @param <V> the value type.
      */
     @Override
     @NotNull

@@ -1,0 +1,6 @@
+* 2014/04/04:
+** DONE Fix attribute type in BaseDAO.stg #462: 1 -> 1
+** TODO table.voDecorated returns true #461: 1 ->
+** DONE Create tickets #461, #462: 1 -> 1
+** Pending:
+*** Move TableTestHelper out of QueryJ Templates

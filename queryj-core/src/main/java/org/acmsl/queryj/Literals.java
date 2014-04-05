@@ -116,6 +116,8 @@ public interface Literals
     String SMALLINT = "smallint";
     String TINYINT_L = "tinyint";
     String SMALLINT_L = "smallint";
-    String VALIDATING = "Validating ";
-    String MALFORMED_PATTERN = "Malformed pattern";
+    String VARCHAR2 = "VARCHAR2";
+    String SHORT_L = "short";
+    String NUMBER_L = "number";
+    String OBJECT_C = "Object";
 }

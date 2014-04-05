@@ -38,6 +38,7 @@ package org.acmsl.queryj.metadata.engines;
 /*
  * Importing EasyMock classes.
  */
+import org.acmsl.queryj.Literals;
 import org.easymock.EasyMock;
 
 /*
@@ -984,56 +985,90 @@ public class JdbcTypeManagerTest
 
         @NotNull final Array t_Array = new Array()
         {
+            /**
+             * {@inheritDoc}
+             */
             @Override public String getBaseTypeName()
             {
                 return null;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override public int getBaseType()
             {
                 return 0;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override public Object getArray()
             {
                 return null;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override public Object getArray(final Map<String, Class<?>> stringClassMap)
             {
                 return null;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override public Object getArray(final long l, final int i)
             {
                 return null;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override public Object getArray(final long l, final int i, final Map<String, Class<?>> stringClassMap)
             {
                 return null;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override public ResultSet getResultSet()
             {
                 return null;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override public ResultSet getResultSet(final Map<String, Class<?>> stringClassMap)
             {
                 return null;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override public ResultSet getResultSet(final long l, final int i)
             {
                 return null;
             }
 
-            @Override public ResultSet getResultSet(final long l, final int i, final Map<String, Class<?>> stringClassMap)
+            /**
+             * {@inheritDoc}
+             */
+            @Override public ResultSet getResultSet(
+                final long l, final int i, final Map<String, Class<?>> stringClassMap)
             {
                 return null;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override public void free()
             {
             }
@@ -1554,7 +1589,7 @@ public class JdbcTypeManagerTest
     {
         @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
 
-        Assert.assertEquals(long.class, instance.getClass("NUMBER"));
+        Assert.assertEquals(long.class, instance.getClass(Literals.NUMBER_U));
     }
 
     /**
@@ -1590,6 +1625,9 @@ public class JdbcTypeManagerTest
         Assert.assertEquals(long.class, instance.toPrimitive(Long.class));
     }
 
+    /**
+     * Tests whether the type "VARCHAR" is recognized correctly.
+     */
     @Test
     public void get_class_int_for_String_works()
     {
@@ -1598,6 +1636,20 @@ public class JdbcTypeManagerTest
         Assert.assertEquals(String.class, instance.getClass(Types.VARCHAR));
     }
 
+    /**
+     * Tests whether the type "VARCHAR2" is recognized correctly.
+     */
+    @Test
+    public void get_class_for_VARCHAR2_works()
+    {
+        @NotNull final JdbcTypeManager instance = new JdbcTypeManager();
+
+        Assert.assertEquals(String.class, instance.getClass(Literals.VARCHAR2));
+    }
+
+    /**
+     * Tests whether BigInt can be used for numeric columns.
+     */
     @Test
     public void bigint_can_be_used_for_numeric_columns()
     {
@@ -1607,6 +1659,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.BIGINT, Types.NUMERIC));
     }
 
+    /**
+     * Tests whether Decimal can be used for numeric columns.
+     */
     @Test
     public void decimal_can_be_used_for_numeric_columns()
     {
@@ -1616,6 +1671,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.DECIMAL, Types.NUMERIC));
     }
 
+    /**
+     * Tests whether VARCHARcan be used for NVARCHAR columns.
+     */
     @Test
     public void varchar_can_be_used_for_nvarchar_columns()
     {
@@ -1625,6 +1683,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.NVARCHAR, Types.VARCHAR));
     }
 
+    /**
+     * Tests whether getSqlType(long) is BigInt.
+     */
     @Test
     public void correct_type_reference_for_longs()
     {
@@ -1634,6 +1695,9 @@ public class JdbcTypeManagerTest
         Assert.assertEquals(instance.getSqlType("long"), Types.BIGINT);
     }
 
+    /**
+     * Tests whether getSqlType(Date) is Date.
+     */
     @Test
     public void correct_type_reference_for_Dates()
     {
@@ -1643,6 +1707,9 @@ public class JdbcTypeManagerTest
         Assert.assertEquals(instance.getSqlType("Date"), Types.DATE);
     }
 
+    /**
+     * Tests whether Double can be used for Numeric columns.
+     */
     @Test
     public void double_can_be_used_for_numeric_columns()
     {
@@ -1652,6 +1719,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.DOUBLE, Types.NUMERIC));
     }
 
+    /**
+     * Tests whether Float can be used for Numeric columns.
+     */
     @Test
     public void float_can_be_used_for_numeric_columns()
     {
@@ -1661,6 +1731,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.FLOAT, Types.NUMERIC));
     }
 
+    /**
+     * Tests whether Integer can be used for Numeric columns.
+     */
     @Test
     public void integer_can_be_used_for_numeric_columns()
     {
@@ -1670,6 +1743,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.INTEGER, Types.NUMERIC));
     }
 
+    /**
+     * Tests whether SmallInt can be used for Numeric columns.
+     */
     @Test
     public void smallint_can_be_used_for_numeric_columns()
     {
@@ -1679,6 +1755,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.SMALLINT, Types.NUMERIC));
     }
 
+    /**
+     * Tests whether TinyInt can be used for Numeric columns.
+     */
     @Test
     public void tinyint_can_be_used_for_numeric_columns()
     {
@@ -1688,6 +1767,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.TINYINT, Types.NUMERIC));
     }
 
+    /**
+     * Tests whether Real can be used for Numeric columns.
+     */
     @Test
     public void real_can_be_used_for_numeric_columns()
     {
@@ -1697,6 +1779,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.REAL, Types.NUMERIC));
     }
 
+    /**
+     * Tests whether Bit can be used for Numeric columns.
+     */
     @Test
     public void bit_can_be_used_for_numeric_columns()
     {
@@ -1706,6 +1791,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.BIT, Types.NUMERIC));
     }
 
+    /**
+     * Tests whether boolean can be used for Numeric columns.
+     */
     @Test
     public void boolean_can_be_used_for_numeric_columns()
     {
@@ -1715,6 +1803,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.BOOLEAN, Types.NUMERIC));
     }
 
+    /**
+     * Tests whether LongNVarchar can be used for char columns.
+     */
     @Test
     public void longnvarchar_can_be_used_for_char_columns()
     {
@@ -1724,6 +1815,9 @@ public class JdbcTypeManagerTest
         Assert.assertTrue(instance.areColumnTypesCompatible(Types.LONGNVARCHAR, Types.CHAR));
     }
 
+    /**
+     * Tests the compatible types for char columns.
+     */
     @Test
     public void types_compatible_with_char_columns()
     {

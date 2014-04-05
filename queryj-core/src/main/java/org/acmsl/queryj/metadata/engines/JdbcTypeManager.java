@@ -174,6 +174,7 @@ public class JdbcTypeManager
     @NotNull protected static final String TINYINT = Literals.TINYINT_L;
     @NotNull protected static final String VARBINARY = "varbinary";
     @NotNull protected static final String VARCHAR = "varchar";
+    @NotNull protected static final String VARCHAR2 = "varchar2";
 
     protected static final Method SET_ARRAY_METHOD;
     protected static final Method SET_ASCII_STREAM_METHOD;
@@ -650,6 +651,8 @@ public class JdbcTypeManager
         CLASS_MAPPING.put(Types.VARCHAR, String.class);
         INVERSE_CLASS_MAPPING.put(String.class, Types.VARCHAR);
         PREPARED_STATEMENT_METHODS.put(Types.VARCHAR, SET_STRING_METHOD);
+
+        TYPE_MAPPING.put(normalizeKey(VARCHAR2), Types.VARCHAR);
     }
 
     /**
@@ -882,15 +885,15 @@ public class JdbcTypeManager
 
         switch (type)
         {
-            case "boolean": result = boolean.class; break;
+            case Literals.BOOLEAN: result = boolean.class; break;
             case "byte": result = byte.class; break;
             case "byte[]": result = byte[].class; break;
             case "Byte[]": result = Byte[].class; break;
-            case "double": result = double.class; break;
-            case "float": result = float.class; break;
+            case Literals.DOUBLE: result = double.class; break;
+            case Literals.FLOAT: result = float.class; break;
             case "int": result = int.class; break;
             case "long": result = long.class; break;
-            case "short": result = short.class; break;
+            case Literals.SHORT_L: result = short.class; break;
             default: result = null; break;
         }
 
@@ -1008,9 +1011,9 @@ public class JdbcTypeManager
         switch (type.getSimpleName())
         {
             case "Boolean": result = boolean.class; break;
-            case "Double": result = double.class; break;
-            case "Float": result = float.class; break;
-            case "Integer": result = int.class; break;
+            case Literals.DOUBLE_C: result = double.class; break;
+            case Literals.FLOAT_C: result = float.class; break;
+            case Literals.INTEGER: result = int.class; break;
             case "Long": result = long.class; break;
             default: result = null; break;
         }

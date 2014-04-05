@@ -102,7 +102,9 @@ public class CustomResultUtils
     /**
      * Checks whether given {@link Result} is implicit or not.
      * @param customResult the {@link Result} to process.
-     * @return <code>true</code> in such case.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return {@code true} in such case.
      */
     public boolean isImplicit(
         @NotNull final Result<String> customResult,
@@ -184,6 +186,7 @@ public class CustomResultUtils
     /**
      * Retrieves the explicitly enabled table names, via environment property. This means
      * no other tables should be processed.
+     * @return such information.
      */
     @NotNull
     protected String[] retrieveExplicitlyEnabledResults()
@@ -207,6 +210,7 @@ public class CustomResultUtils
     /**
      * Retrieves the explicitly disabled custom results, via environment property. This means
      * no other custom results should be processed.
+     * @return such information.
      */
     @NotNull
     protected String[] retrieveExplicitlyDisabledResults()
@@ -288,6 +292,7 @@ public class CustomResultUtils
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
      * @return the table name.
+     * @param <T> the result type.
      */
     @Nullable
     public <T> String retrieveTable(
@@ -308,6 +313,7 @@ public class CustomResultUtils
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
      * @return the table name.
+     * @param <T> the resultId type.
      */
     @Nullable
     public <T> String retrieveTable(
@@ -353,6 +359,7 @@ public class CustomResultUtils
      * @param sql the {@link Sql}.
      * @param metadataManager the database metadata manager.
      * @return the table name.
+     * @param <T> the SQL type.
      */
     @Nullable
     public <T> String retrieveTable(
@@ -422,7 +429,8 @@ public class CustomResultUtils
      * @param tableName the table name.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param metadataUtils the {@link MetadataUtils} instance.
-     * @return <code>true</code> if it should be included.
+     * @return {@code true} if it should be included.
+     * @param <T> the Result type.
      */
     protected <T> boolean matches(
         @NotNull final Result<T> resultElement,
@@ -619,6 +627,7 @@ public class CustomResultUtils
      * Extracts the ValueObject name of given result.
      * @param customResult the {@link Result} instance.
      * @return such class name, or <code>null</code> if it has no declared value.
+     * @param <T> the result type.
      */
     @Nullable
     protected <T> String extractVoName(@NotNull final Result<T> customResult)

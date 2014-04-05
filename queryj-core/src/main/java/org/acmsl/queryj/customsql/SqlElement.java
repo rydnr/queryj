@@ -214,7 +214,7 @@ public class SqlElement<T>
      * @param dynamic the <i>dynamic</i> attribute.
      * @param description the <i>description</i>.
      */
-    protected SqlElement(
+    public SqlElement(
         @NotNull final T id,
         @Nullable final T dao,
         @Nullable final T repositoryScope,
@@ -227,8 +227,14 @@ public class SqlElement<T>
         @NotNull final T description)
     {
         super(id);
-        immutableSetDAO(dao);
-        immutableSetRepositoryScope(repositoryScope);
+        if (dao != null)
+        {
+            immutableSetDAO(dao);
+        }
+        if (repositoryScope != null)
+        {
+            immutableSetRepositoryScope(repositoryScope);
+        }
         immutableSetName(name);
         immutableSetType(type);
         immutableSetCardinality(cardinality);
@@ -245,7 +251,7 @@ public class SqlElement<T>
      * Specifies the <i>dao</i> attribute.
      * @param dao such value.
      */
-    protected final void immutableSetDAO(final T dao)
+    protected final void immutableSetDAO(@NotNull final T dao)
     {
         m__strDAO = dao;
     }
@@ -255,7 +261,7 @@ public class SqlElement<T>
      * @param dao such value.
      */
     @SuppressWarnings("unused")
-    protected void setDao(final T dao)
+    protected void setDao(@NotNull final T dao)
     {
         immutableSetDAO(dao);
     }
@@ -265,7 +271,7 @@ public class SqlElement<T>
      * @return such value.
      */
     @Override
-    @NotNull
+    @Nullable
     public T getDao()
     {
         return m__strDAO;
@@ -276,7 +282,7 @@ public class SqlElement<T>
      * @param repositoryScope such attribute.
      */
     protected final void immutableSetRepositoryScope(
-        final T repositoryScope)
+        @NotNull final T repositoryScope)
     {
         m__strRepositoryScope = repositoryScope;
     }
@@ -286,7 +292,7 @@ public class SqlElement<T>
      * @param repositoryScope such attribute.
      */
     @SuppressWarnings("unused")
-    protected void setRepositoryScope(final T repositoryScope)
+    protected void setRepositoryScope(@NotNull final T repositoryScope)
     {
         immutableSetRepositoryScope(repositoryScope);
     }

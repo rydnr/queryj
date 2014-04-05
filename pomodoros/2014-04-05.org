@@ -1,0 +1,11 @@
+* 2014/04/05:
+** DONE Fix attribute type in BaseDAO.stg #462: 1 -> 3
+** TODO table.voDecorated returns true #461: 1 ->
+** DONE Add SqlDecorator.isResultNullable(): 2 -> 2
+** Pending:
+*** Move TableTestHelper out of QueryJ Templates
+*** CachingTableDecorator#getStaticContent() -> AbstractTableDecorator#getStaticContent() -> getMetadataManager() -> getMetadata() -> getConnection().
+*** DONE Test JdbcMetadataTypeManager.toJdbcType(String type, int length, int precision)
+- NUMBER,
+- VARCHAR2
+

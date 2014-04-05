@@ -89,6 +89,11 @@ public abstract class AbstractTableDecorator
     implements  TableDecorator
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -8629950857964496795L;
+
+    /**
      * The decorated table.
      */
     private Table<String, Attribute<String>, List<Attribute<String>>> m__Table;
@@ -170,8 +175,9 @@ public abstract class AbstractTableDecorator
     }
 
     /**
-     * Creates an <code>AbstractTableDecorator</code> with the following
+     * Creates an {@code AbstractTableDecorator} with the following
      * information.
+     * @param table the {@link Table}.
      * @param name the name.
      * @param primaryKey the primary key.
      * @param attributes the attributes.
@@ -604,7 +610,8 @@ public abstract class AbstractTableDecorator
     /**
      * Checks whether given foreign keys are decorated already or not.
      * @param foreignKeys the {@link ForeignKey} list.
-     * @return <code>true</code> in such case.
+     * @return {@code true} in such case.
+     * @param <V> the value type.
      */
     protected <V> boolean areDecorated(@NotNull final List<ForeignKey<V>> foreignKeys)
     {
@@ -981,7 +988,8 @@ public abstract class AbstractTableDecorator
     /**
      * Retrieves whether the attributes are already decorated or not.
      * @param attributes the {@link Attribute} list.
-     * @return <code>true</code> in such case.
+     * @return {@code true} in such case.
+     * @param <K> the attribute type.
      */
     protected <K> boolean alreadyDecorated(@NotNull final ListDecorator<Attribute<K>> attributes)
     {
@@ -1422,6 +1430,8 @@ public abstract class AbstractTableDecorator
      * Retrieves the dynamic queries.
      * @param tableName the table name.
      * @param sqlDAO the {@link SqlDAO} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the list of dynamic queries.
      */
     @NotNull
@@ -1495,6 +1505,7 @@ public abstract class AbstractTableDecorator
      * @param attributes the attributes.
      * @param toExclude the attributes to exclude.
      * @return such list.
+     * @param <K> the attribute type.
      */
     @SuppressWarnings("unused")
     @NotNull
@@ -1712,6 +1723,8 @@ public abstract class AbstractTableDecorator
 
     /**
      * Retrieves the custom updates or inserts.
+     * @param table the {@link Table}.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return such information.
      */
     @NotNull
@@ -1900,6 +1913,8 @@ public abstract class AbstractTableDecorator
 
     /**
      * Retrieves the list of different results defined for this table (using the referring custom-selects).
+     * @param table the {@link Table}.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return such list.
      */
     @NotNull
@@ -2021,6 +2036,7 @@ public abstract class AbstractTableDecorator
     /**
      * Retrieves the ordered list of the fully-qualified types of given attributes.
      * @param attrs such attributes.
+     * @param typeManager the {@link MetadataTypeManager} instance.
      * @return such list.
      */
     @NotNull

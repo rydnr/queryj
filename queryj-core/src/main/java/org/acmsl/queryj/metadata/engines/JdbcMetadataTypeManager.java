@@ -208,7 +208,7 @@ public class JdbcMetadataTypeManager
                 break;
 
             default:
-                result = "Object";
+                result = Literals.OBJECT_C;
                 break;
         }
 
@@ -357,7 +357,7 @@ public class JdbcMetadataTypeManager
         result.put(Literals.INTEGER_U, t_Long);
         result.put(Literals.NUMERIC_U, t_Long);
         result.put("Number", t_Long);
-        result.put("number", t_Long);
+        result.put(Literals.NUMBER_L, t_Long);
         result.put(Literals.NUMBER_U, t_Long);
         result.put(Literals.BIGINT_U, t_Long);
         result.put("Long", t_Long);
@@ -374,7 +374,7 @@ public class JdbcMetadataTypeManager
         result.put(Literals.TIMESTAMP, t_TimeStamp);
         result.put("CHAR", t_Text);
         result.put(Literals.VARCHAR_U, t_Text);
-        result.put("VARCHAR2", t_Text);
+        result.put(Literals.VARCHAR2, t_Text);
         result.put(Literals.LONGVARCHAR_U, t_Text);
         result.put(Literals.BINARY_U, t_Text);
         result.put(Literals.VARBINARY_U, t_Text);
@@ -634,7 +634,7 @@ public class JdbcMetadataTypeManager
     @Override
     public String getProcedureResultType(final int dataType, final boolean isBool)
     {
-        @Nullable String result = getObjectType(dataType, isBool);
+        @NotNull final String result;
 
         switch  (dataType)
         {
@@ -659,6 +659,7 @@ public class JdbcMetadataTypeManager
                 break;
 
             default:
+                result = getObjectType(dataType, isBool);
                 break;
         }
 
@@ -1648,6 +1649,8 @@ public class JdbcMetadataTypeManager
     /**
      * Retrieves the JDBC type.
      * @param type the type.
+     * @param length the column length.
+     * @param precision the column precision.
      * @return the associated {@link java.sql.Types} constant.
      */
     @Override
@@ -1766,6 +1769,9 @@ public class JdbcMetadataTypeManager
             case Literals.VARCHAR_U:
                 result = Types.VARCHAR;
                 break;
+            case Literals.VARCHAR2:
+                result = Types.VARCHAR;
+                break;
             default:
                 result = Types.OTHER;
                 break;
@@ -1774,13 +1780,16 @@ public class JdbcMetadataTypeManager
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @NotNull
     public String toString()
     {
         return
-              "{ \"class\": \"" + JdbcMetadataTypeManager.class.getName() + '"'
+              "{ \"class\": \"" + JdbcMetadataTypeManager.class.getSimpleName() + '"'
             + ", \"native2JavaTypeMapping\": " + m__mNative2JavaTypeMapping
-            + " }";
+            + ", \"package\": \"" + JdbcMetadataTypeManager.class.getPackage().getName() + "\" }";
     }
 }

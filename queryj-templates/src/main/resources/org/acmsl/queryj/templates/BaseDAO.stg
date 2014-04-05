@@ -119,7 +119,6 @@ project_imports(basePackageName, voName) ::= <<
  * Importing project classes.
  */
 import <basePackageName>.dao.<voName>;
-import <basePackageName>.dao.<voName>ValueObject;
 >>
 
 class(table, C) ::= <<
@@ -148,6 +147,7 @@ public interface <table.name.voName>DAO
      * Retrieves the static (pre-cached) values.
      * @return such information.
      */
+    <notnull(C=C)>
     List\<<table.name.voName\>> getStaticValues();
 
     <table.attributes:{ a | <find_constant_methods(attribute=a, primaryKeyAttributes=table.primaryKey, voName=table.name.voName)>}; separator="\n\n">
@@ -169,6 +169,7 @@ public interface <table.name.voName>DAO
      <table.own.minus.externallyManagedAttributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      * @return such instance.
      */
+    <notnull(C=C)>
     public <table.name.voName> create(
         <table.own.minus.externallyManagedAttributes:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
       throws DataAccessException;
@@ -209,6 +210,7 @@ cached_constants(row, voName) ::= <<
 /**
  * The <row.name> constant.
  */
+<notnull(C=C)>
 public static final <voName> <row.name.normalized.uppercased> =
     new <voName>ValueObject(
         <row.attributes:{ a | <attribute_specification(attr=a)>}; separator=",\n">);
@@ -265,12 +267,12 @@ find_constant_methods(attribute, primaryKeyAttributes, voName) ::= <<
 /**
  * Loads \<i><attribute.tableName>\</i> information from the constant pool,
  * filtering by <attribute.name>.
- * @param <attribute.name.lowercased> the <attribute.name>
- * to filter.
+ * @param <attribute.name.lowercased.uncapitalized> the <attribute.name>
+ * value to filter.
  * @return the {@link <voName>} instance.
  */
-public <voName> findConstantBy<attribute.name.capitalized>(
-    final <attribute.javaType> <attribute.name.lowercased>);
+<nullable(C=C)>
+public <voName> findConstantBy<attribute.name.capitalized>(<if(!attribute.primitive)><notnull(C=C)><else><if(attribute.nullable)><notnull(C=C)><endif><endif>final <attribute.javaType> <attribute.name.lowercased.uncapitalized>);
 >>
 
 fk_delete_method(foreignKey, table) ::= <<
@@ -313,6 +315,7 @@ custom_select(cs) ::= <<
  <cs.parameters:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  */
+<if(cs.resultNullable)><nullable(C=C)><else><if(cs.result.multiple)><notnull(C=C)><endif><endif>
 public <cs.resultClass> <cs.name.uncapitalized>(
     <cs.parameters:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
   throws DataAccessException;

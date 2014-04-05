@@ -33,9 +33,13 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project-specific classes.
+ * Importing ACM S.L. Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.ConnectionFlagsRef;
 import org.acmsl.queryj.customsql.ParameterRef;
@@ -47,17 +51,12 @@ import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultRef;
-
-/*
- * Importing JDK classes.
- */
-import java.util.ArrayList;
-import java.util.List;
+import org.acmsl.queryj.customsql.StatementFlagsRef;
+import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
 
 /*
  * Importing Apache Commons-Logging classes.
  */
-import org.acmsl.queryj.customsql.StatementFlagsRef;
 import org.apache.commons.logging.Log;
 
 /*
@@ -65,6 +64,12 @@ import org.apache.commons.logging.Log;
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Decorates &lt;sql&gt; elements in <i>custom-sql</i> models.
@@ -74,6 +79,11 @@ public abstract class AbstractSqlDecorator
     extends SqlElement<DecoratedString>
     implements  SqlDecorator
 {
+    /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 8016386784936395080L;
+
     /**
      * The wrapped sql element.
      */
@@ -91,9 +101,10 @@ public abstract class AbstractSqlDecorator
 
     /**
      * Creates an <code>AbstractSqlDecorator</code> with given information.
-     * @param sql the <code>Sql</code> to decorate.
-     * @param customSqlProvider the <code>CustomSqlProvider</code>, required
+     * @param sql the {@link Sql} to decorate.
+     * @param customSqlProvider the {@link CustomSqlProvider}, required
      * to decorate referred parameters.
+     * @param metadataManager the {@link MetadataManager} instance.
      */
     public AbstractSqlDecorator(
         @NotNull final Sql<String> sql,
@@ -110,6 +121,7 @@ public abstract class AbstractSqlDecorator
             sql.getValidate(),
             sql.isDynamic(),
             new DecoratedString(sql.getDescription()));
+
         @Nullable final String t_strValue = sql.getValue();
         if (t_strValue != null)
         {
@@ -347,39 +359,45 @@ public abstract class AbstractSqlDecorator
      * Retrieves the result class.
      * @return such information.
      */
-    @Nullable
+    @NotNull
     public String getResultClass()
     {
-        return getResultClass(getDao(), getCardinality(), getResultRef(), getCustomSqlProvider());
+        return getResultClass(getDao(), getRepositoryScope(), getCardinality(), getResultRef(), getCustomSqlProvider());
     }
 
     /**
      * Retrieves the result class.
+     * @param dao the dao name.
+     * @param repository the repository.
      * @param cardinality the cardinality.
      * @param resultRef the result ref.
      * @param customSqlProvider the custom sql provider.
      * @return such information.
      */
-    @Nullable
+    @NotNull
     protected String getResultClass(
-        @NotNull final DecoratedString dao,
+        @Nullable final DecoratedString dao,
+        @Nullable final DecoratedString repository,
         @NotNull final Cardinality cardinality,
         @Nullable final ResultRef resultRef,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        return getResultClass(dao, cardinality, resultRef, customSqlProvider.getSqlResultDAO());
+        return getResultClass(dao, repository, cardinality, resultRef, customSqlProvider.getSqlResultDAO());
     }
 
     /**
      * Retrieves the result class.
+     * @param dao the DAO name.
+     * @param repository the repository.
      * @param cardinality the cardinality.
      * @param resultRef the result ref.
      * @param resultDAO the {@link SqlResultDAO} instance.
      * @return such information.
      */
-    @Nullable
+    @NotNull
     protected String getResultClass(
-        @NotNull final DecoratedString dao,
+        @Nullable final DecoratedString dao,
+        @Nullable final DecoratedString repository,
         @NotNull final Cardinality cardinality,
         @Nullable final ResultRef resultRef,
         @NotNull final SqlResultDAO resultDAO)
@@ -399,7 +417,14 @@ public abstract class AbstractSqlDecorator
             {
                 result.append('<');
             }
-            result.append(dao.getVoName());
+            if (dao != null)
+            {
+                result.append(dao.getVoName());
+            }
+            else if (repository != null)
+            {
+                result.append(repository.getVoName());
+            }
             if (multiple)
             {
                 result.append('>');
@@ -573,6 +598,33 @@ public abstract class AbstractSqlDecorator
         }
 
         result = weight > 50;
+
+        return result;
+    }
+
+    /**
+     * Checks whether the result of this query could be {@code null} or not.
+     * @return such information.
+     */
+    public boolean isResultNullable()
+    {
+        return !isMultiple() && isResultNullable(getResultClass());
+    }
+
+    /**
+     * Checks whether the result of this query could be {@code null} or not.
+     * @param resultClass the result classe.
+     * @return such information.
+     */
+    protected boolean isResultNullable(@NotNull final String resultClass)
+    {
+        final boolean result;
+
+        @NotNull final JdbcTypeManager typeManager = new JdbcTypeManager();
+
+        @NotNull final Class<?> clazz = typeManager.getClass(resultClass);
+
+        result = !typeManager.isPrimitiveWrapper(clazz);
 
         return result;
     }

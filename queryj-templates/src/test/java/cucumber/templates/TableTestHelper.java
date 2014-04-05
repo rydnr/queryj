@@ -325,7 +325,7 @@ public class TableTestHelper
                             Boolean.valueOf(columnEntry.get(TableTestHelper.ALLOWS_NULL)),
                             columnEntry.get(VALUE),
                             Boolean.valueOf(columnEntry.get(READONLY)),
-                            booleanInfo[0] != null,
+                            booleanInfo[0] != null && Boolean.valueOf(booleanInfo[0]),
                             booleanInfo[0],
                             booleanInfo[1],
                             booleanInfo[2]);
@@ -366,9 +366,9 @@ public class TableTestHelper
             new TableValueObject(
                 tableName,
                 comment,
-                new ArrayList<Attribute<String>>(),
-                new ArrayList<Attribute<String>>(),
-                new ArrayList<ForeignKey<String>>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
                 // TODO: Decorate TableValueObject to retrieve the parent table via its name
                 // and the table collection.
                 null, //parentTable,
