@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Test
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,7 +34,7 @@
  * Time: 6:02 AM
  *
  */
-package cucumber.templates.sql;
+package org.acmsl.queryj.test.sql;
 
 /*
  * Importing QueryJ-Core classes.
@@ -43,9 +43,13 @@ import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.SqlResultDAO;
 
 /*
+ * Importing QueryJ Test classes.
+ */
+import org.acmsl.queryj.test.antlr4.JavaParser.NonWildcardTypeArgumentsContext;
+
+/*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.templates.antlr.JavaParser.NonWildcardTypeArgumentsContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

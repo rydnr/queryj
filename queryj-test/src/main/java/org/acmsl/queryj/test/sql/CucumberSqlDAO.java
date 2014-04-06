@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Test
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,7 +33,7 @@
  * Time: 8:43 PM
  *
  */
-package cucumber.templates.sql;
+package org.acmsl.queryj.test.sql;
 
 /*
  * Importing QueryJ-core classes.

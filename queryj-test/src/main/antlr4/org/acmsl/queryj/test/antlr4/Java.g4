@@ -7,16 +7,6 @@
  */
 grammar Java;
 
-@parser::header
-{
-package org.acmsl.queryj.templates.antlr;
-}
-
-@lexer::header
-{
-package org.acmsl.queryj.templates.antlr;
-}
-
 @lexer::members {
   protected boolean enumIsKeyword = true;
   protected boolean assertIsKeyword = true;

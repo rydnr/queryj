@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Test
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,12 +34,12 @@
  * Time: 5:20 AM
  *
  */
-package org.acmsl.queryj.templates.antlr;
+package org.acmsl.queryj.test.antlr4;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Test classes.
  */
-import org.acmsl.queryj.templates.antlr.JavaParser.PackageDeclarationContext;
+import org.acmsl.queryj.test.antlr4.JavaParser.PackageDeclarationContext;
 
 /*
  * Importing JetBrains annotations.
@@ -50,7 +50,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Visits packageDeclaration rules in Java.g4 grammar.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/07/06
+ * @since 3.0
+ * Created: 2013/07/06
  */
 public class JavaPackageVisitor
     extends JavaBaseVisitor<String>

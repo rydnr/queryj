@@ -43,6 +43,7 @@
     <module>queryj-maven</module>
     <module>queryj-template-packaging-maven-plugin</module>
     <module>queryj-placeholders</module>
+    <module>queryj-test</module>
     <module>queryj-templates</module>
   </modules>
 
@@ -119,6 +120,11 @@
         <version>${version.queryj}</version>
       </dependency>
       <dependency>
+        <groupId>org.acmsl.queryj</groupId>
+        <artifactId>queryj-test</artifactId>
+        <version>${version.queryj}</version>
+      </dependency>
+       <dependency>
         <groupId>org.acmsl.queryj</groupId>
         <artifactId>queryj-templates</artifactId>
         <version>${version.queryj}</version>

@@ -1,4 +1,3 @@
 * 2014/04/06:
-** DONE Make pre-existing values visible to templates running from Cucumber features #469: 3 -> 3
-** Pending:
-*** Move TableTestHelper out of QueryJ Templates
+** DONE Make pre-existing values visible to templates running from Cucumber features #463: 3 -> 3
+** TODO Create queryj-test #464: 1 ->

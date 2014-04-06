@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Test
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,12 +34,12 @@
  * Time: 5:26 AM
  *
  */
-package org.acmsl.queryj.templates.antlr;
+package org.acmsl.queryj.test.antlr4;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Test classes.
  */
-import org.acmsl.queryj.templates.antlr.JavaParser.ClassDeclarationContext;
+import org.acmsl.queryj.test.antlr4.JavaParser.ClassDeclarationContext;
 
 /*
  * Importing checkthread.org annotations.
@@ -55,7 +55,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Visits classDeclaration rules in Java.g4 grammar.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/07/06
+ * @since 3.0
+ * Created: 2013/07/06
  */
 @ThreadSafe
 public class JavaRootClassNameVisitor

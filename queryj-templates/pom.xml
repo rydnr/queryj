@@ -30,12 +30,8 @@
   <dependencies>
     <dependency>
       <groupId>org.acmsl.queryj</groupId>
-      <artifactId>queryj-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.acmsl.queryj</groupId>
       <artifactId>queryj-placeholders</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
@@ -51,7 +47,7 @@
     </dependency>
     <dependency>
       <groupId>org.acmsl.queryj</groupId>
-      <artifactId>queryj-sql</artifactId>
+      <artifactId>queryj-test</artifactId>
     </dependency>
     <dependency>
       <groupId>org.acmsl</groupId>
@@ -149,21 +145,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.antlr</groupId>
-        <artifactId>antlr4-maven-plugin</artifactId>
-        <goals>
-          <goal>antlr4</goal>
-        </goals>
-        <configuration>
-          <encoding>UTF-8</encoding>
-          <sourceDirectory>${project.basedir}/src/test/antlr4</sourceDirectory>
-          <listener>${antlr4.listener}</listener>
-          <visitor>${antlr4.visitor}</visitor>
-          <outputDirectory>${project.build.directory}/generated-sources/org/acmsl/queryj/templates/antlr</outputDirectory>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>org.acmsl.queryj</groupId>
         <artifactId>queryj-template-packaging-maven-plugin</artifactId>

@@ -1,5 +1,5 @@
 /*
-                        QueryJ Templates
+                        QueryJ Test
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,13 +33,17 @@
  * Time: 17:25
  *
  */
-package cucumber.templates;
+package org.acmsl.queryj.test;
 
 /*
- * Importing QueryJ Core classes.
+ * Importing QueryJ Test classes.
  */
-import cucumber.templates.sql.CucumberSqlDAO;
-import cucumber.templates.sql.CucumberSqlParameterDAO;
+import org.acmsl.queryj.test.antlr4.JavaLexer;
+import org.acmsl.queryj.test.antlr4.JavaPackageVisitor;
+import org.acmsl.queryj.test.antlr4.JavaParser;
+import org.acmsl.queryj.test.antlr4.JavaRootClassNameVisitor;
+import org.acmsl.queryj.test.sql.CucumberSqlDAO;
+import org.acmsl.queryj.test.sql.CucumberSqlParameterDAO;
 
 /*
  * Importing QueryJ Core classes.
@@ -62,10 +66,6 @@ import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.templates.antlr.JavaLexer;
-import org.acmsl.queryj.templates.antlr.JavaPackageVisitor;
-import org.acmsl.queryj.templates.antlr.JavaParser;
-import org.acmsl.queryj.templates.antlr.JavaRootClassNameVisitor;
 
 /*
  * Importing Java-Commons classes.

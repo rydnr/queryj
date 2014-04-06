@@ -95,6 +95,12 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
+ * Importing QueryJ Test classes.
+ */
+import org.acmsl.queryj.test.AbstractTemplatesTest;
+import org.acmsl.queryj.test.TableTestHelper;
+
+/*
  * Importing project classes.
  */
 <C.templateDefs:{ d | <def_import(d=d)>}; separator="\n">
