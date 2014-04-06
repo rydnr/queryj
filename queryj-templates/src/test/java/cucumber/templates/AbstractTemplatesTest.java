@@ -44,40 +44,33 @@ import cucumber.templates.sql.CucumberSqlParameterDAO;
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.dao.DAOTemplateUtils;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
+import org.acmsl.queryj.metadata.ColumnDAO;
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.TableDAO;
+import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
+import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.SqlDAO;
+import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
+import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.templates.antlr.JavaLexer;
 import org.acmsl.queryj.templates.antlr.JavaPackageVisitor;
 import org.acmsl.queryj.templates.antlr.JavaParser;
 import org.acmsl.queryj.templates.antlr.JavaRootClassNameVisitor;
 
 /*
- * Importing QueryJ-Core classes.
- */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.Parameter;
-import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-
-/*
  * Importing Java-Commons classes.
  */
 import org.acmsl.commons.utils.io.FileUtils;
-
-/*
- * Importing ANTLR classes.
- */
-import org.acmsl.queryj.metadata.MetadataExtractionLogger;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.SqlDAO;
-import org.acmsl.queryj.metadata.SqlParameterDAO;
-import org.acmsl.queryj.metadata.engines.JdbcMetadataManager;
-import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.metadata.vo.Table;
 
 /*
  * Importing ANTLR classes.
@@ -96,9 +89,13 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing JUnit classes.
  */
+import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /*
  * Importing JDK classes.
@@ -108,6 +105,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,6 +121,8 @@ import java.util.Properties;
  * @param <F> the factory class.
  */
 @SuppressWarnings("unused")
+@PrepareForTest(DAOTemplateUtils.class)
+@RunWith(PowerMockRunner.class)
 public abstract class AbstractTemplatesTest<G, F>
 {
     /**
@@ -559,6 +560,9 @@ public abstract class AbstractTemplatesTest<G, F>
         return
             new SqlXmlParserImpl(new ByteArrayInputStream("".getBytes()))
             {
+                /**
+                 * {@inheritDoc}
+                 */
                 @Override
                 @NotNull
                 public SqlDAO getSqlDAO()
@@ -567,9 +571,7 @@ public abstract class AbstractTemplatesTest<G, F>
                 }
 
                 /**
-                 * Retrieves the {@link org.acmsl.queryj.metadata.SqlParameterDAO} instance.
-                 *
-                 * @return such instance.
+                 * {@inheritDoc}
                  */
                 @NotNull
                 @Override
@@ -777,7 +779,7 @@ public abstract class AbstractTemplatesTest<G, F>
     }
 
     /**
-     * Retrieves the {@link org.acmsl.queryj.metadata.DecoratorFactory} instance using given generator.
+     * Retrieves the {@link DecoratorFactory} instance using given generator.
      * @param generator the generator to use.
      * @return the decorator factory.
      */
@@ -785,15 +787,19 @@ public abstract class AbstractTemplatesTest<G, F>
     protected abstract DecoratorFactory retrieveDecoratorFactory(@NotNull final G generator);
 
     /**
-     * Retrieves a {@link org.acmsl.queryj.metadata.MetadataManager} instance.
+     * Retrieves a {@link MetadataManager} instance.
      * @param engineName the name of the engine.
-     * @param table the {@link org.acmsl.queryj.metadata.vo.Table}.
+     * @param table the {@link Table}.
+     * @param staticContent the static content.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return such instance.
      */
     @NotNull
     protected MetadataManager retrieveMetadataManager(
         @NotNull final String engineName,
-	    @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table)
+	    @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table,
+        @NotNull final List<Row<String>> staticContent,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         @NotNull final List<String> tableNames = new ArrayList<>(1);
         tableNames.add(table.getName());
@@ -801,52 +807,22 @@ public abstract class AbstractTemplatesTest<G, F>
 	        new ArrayList<>(1);
         tables.add(table);
 
-        return retrieveMetadataManager(engineName, tableNames, tables);
-    }
-
-    /**
-     * Retrieves a {@link org.acmsl.queryj.metadata.MetadataManager} instance.
-     * @param engineName the name of the engine.
-     * @param table the {@link Table}.
-     * @return such instance.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    protected MetadataManager retrieveMetadataManager(@NotNull final String engineName, @NotNull final String table)
-    {
-        @NotNull final List<String> tableNames = new ArrayList<>(1);
-        tableNames.add(table);
-        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables =
-	    new ArrayList<>(0);
-
-        return retrieveMetadataManager(engineName, tableNames, tables);
-    }
-
-    /**
-     * Retrieves a {@link org.acmsl.queryj.metadata.MetadataManager} instance.
-     * @param engineName the name of the engine.
-     * @return such instance.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    protected MetadataManager retrieveMetadataManager(@NotNull final String engineName)
-    {
-        @NotNull final List<String> tableNames = new ArrayList<>(0);
-        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables =
-	    new ArrayList<>(0);
-
-        return retrieveMetadataManager(engineName, tableNames, tables);
+        return retrieveMetadataManager(engineName, tableNames, tables, staticContent, decoratorFactory);
     }
 
     /**
      * Retrieves a {@link MetadataManager} instance.
      * @param engineName the name of the engine.
      * @param tables the tables.
+     * @param staticContents the static contents.
      * @return such instance.
      */
     @NotNull
     protected MetadataManager retrieveMetadataManager(
-        @NotNull final String engineName, @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables)
+        @NotNull final String engineName,
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables,
+        @NotNull final List<Row<String>> staticContents,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         @NotNull final List<String> tableNames = new ArrayList<>(tables.size());
 
@@ -858,7 +834,7 @@ public abstract class AbstractTemplatesTest<G, F>
             }
         }
 
-        return retrieveMetadataManager(engineName, tableNames, tables);
+        return retrieveMetadataManager(engineName, tableNames, tables, staticContents, decoratorFactory);
     }
 
     /**
@@ -866,26 +842,53 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param engineName the name of the engine.
      * @param tableNames the table names.
      * @param tables the tables.
+     * @param staticContents the static contents.
      * @return such instance.
      */
     @NotNull
     protected MetadataManager retrieveMetadataManager(
-        @NotNull final String engineName, @NotNull final List<String> tableNames,
-        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables)
+        @NotNull final String engineName,
+        @NotNull final List<String> tableNames,
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables,
+        @NotNull final List<Row<String>> staticContents,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        return
-            new JdbcMetadataManager(
-                "fake manager",
-                null, // database metadata
-                new MetadataExtractionLogger(), // extraction listener
-                Literals.CATALOG,
-                Literals.SCHEMA,
-                tableNames,
-                tables,
-                true, // disable table extraction
-                true, // lazy table extraction
-                false, // case sensitive
-                new UndefinedJdbcEngine(engineName, "11")); // engine version
+        @NotNull final MetadataManager result = EasyMock.createNiceMock(MetadataManager.class);
+        @NotNull final DatabaseMetaData metadata = EasyMock.createNiceMock(DatabaseMetaData.class);
+        @NotNull final TableDAO tableDAO = EasyMock.createNiceMock(TableDAO.class);
+        @NotNull final ColumnDAO columnDAO = EasyMock.createNiceMock(ColumnDAO.class);
+
+        EasyMock.expect(result.getMetaData()).andReturn(metadata).anyTimes();
+        EasyMock.expect(result.getName()).andReturn("fake manager").anyTimes();
+        EasyMock.expect(result.getMetadataTypeManager()).andReturn(new JdbcMetadataTypeManager()).anyTimes();
+        EasyMock.expect(result.getTableNames()).andReturn(tableNames).anyTimes();
+        EasyMock.expect(result.getTables()).andReturn(tables).anyTimes();
+        EasyMock.expect(result.isCaseSensitive()).andReturn(false).anyTimes();
+        EasyMock.expect(result.getEngine()).andReturn(new UndefinedJdbcEngine(engineName, "11")).anyTimes();
+        EasyMock.expect(result.getTableDAO()).andReturn(tableDAO).anyTimes();
+        EasyMock.expect(result.getColumnDAO()).andReturn(columnDAO).anyTimes();
+
+        for (@NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table : tables)
+        {
+            try
+            {
+                EasyMock.expect(tableDAO.queryContents(table.getName())).andReturn(staticContents).anyTimes();
+            }
+            catch (@NotNull final SQLException sqlException)
+            {
+                // Forced to define the catch block.
+            }
+            EasyMock.expect(tableDAO.findByName(table.getName())).andReturn(table).anyTimes();
+            EasyMock.expect(tableDAO.findByDAO(table.getName())).andReturn(table).anyTimes();
+            EasyMock.expect(columnDAO.findAllColumns(table.getName())).andReturn(table.getAttributes());
+        }
+
+        EasyMock.replay(result);
+        EasyMock.replay(metadata);
+        EasyMock.replay(tableDAO);
+        EasyMock.replay(columnDAO);
+
+        return result;
     }
 
     /**

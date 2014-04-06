@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -229,10 +229,9 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Creates a <code>TableDecorator</code>.
-     *
+     * Creates a {@link TableDecorator}.
      * @param table the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return the decorated table for the concrete template.
      */
@@ -243,10 +242,28 @@ public class CachingDecoratorFactory
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
+        return createTableDecorator(table, metadataManager, metadataManager.getTableDAO(), customSqlProvider);
+    }
+
+    /**
+     * Creates a {@link TableDecorator}.
+     * @param table the table name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param tableDAO the {@link TableDAO} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @return the decorated table for the concrete template.
+     */
+    @Nullable
+    public TableDecorator createTableDecorator(
+        @NotNull final String table,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final TableDAO tableDAO,
+        @NotNull final CustomSqlProvider customSqlProvider)
+    {
         @Nullable TableDecorator result = null;
 
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
-            metadataManager.getTableDAO().findByName(table);
+            tableDAO.findByName(table);
 
         if (t_Table != null)
         {
@@ -261,6 +278,7 @@ public class CachingDecoratorFactory
      * @param attributes the attributes to decorate.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated version of the attribute list.
+     * @param <V> the original attribute type.
      */
     @NotNull
     @Override

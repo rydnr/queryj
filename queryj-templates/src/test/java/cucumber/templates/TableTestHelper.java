@@ -91,6 +91,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Helper class for per-table Cucumber tests.
@@ -184,6 +185,16 @@ public class TableTestHelper
      * The date format, in English flavor.
      */
     private static final String DATE_FORMAT_EN = "yyyy/MM/DD";
+
+    /**
+     * The starting quote regex.
+     */
+    protected static final Pattern STARTING_QUOTE_REGEX = Pattern.compile("^\"+");
+
+    /**
+     * The ending quote regex.
+     */
+    protected static final Pattern ENDING_QUOTE_REGEX = Pattern.compile("\"+$");
 
     /**
      * Singleton implementation to avoid double-locking check.
@@ -744,12 +755,15 @@ public class TableTestHelper
             }
             else
             {
-                @Nullable final String rowName = retrieveRowName(contents, table);
+
+                List<Attribute<String>> rowValues = fillValues(contents, table.getAttributes());
+
+                @Nullable final String rowName = retrieveRowName(rowValues, table);
 
                 Assert.assertNotNull("Cannot retrieve the row name.", rowName);
 
                 @NotNull final Row<String> row =
-                    new RowValueObject(rowName, tableName, fillValues(contents, table.getAttributes()));
+                    new RowValueObject(rowName, tableName, rowValues);
 
                 rows.add(row);
             }
@@ -819,31 +833,44 @@ public class TableTestHelper
     {
         @NotNull final String result;
 
-        result = value.replace("^\"", "").replace("\"$", "");
+        result =
+            ENDING_QUOTE_REGEX.matcher(
+                STARTING_QUOTE_REGEX.matcher(value).replaceAll(""))
+                .replaceAll("");
 
         return result;
     }
 
     /**
-     * Retrieves the row for given contents.
-     * @param contents the contents.
+     * Retrieves the row name for given contents.
+     * @param rowValues the row contents.
      * @param table the table.
-     * @return the row.
+     * @return the row name.
      */
     @Nullable
     protected String retrieveRowName(
-        @NotNull final String contents, @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table)
+        @NotNull final List<Attribute<String>> rowValues,
+        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table)
     {
-        @NotNull final String result;
+        @Nullable String result = null;
 
-        @Nullable final Attribute<String> attribute = table.getStaticAttribute();
+        @Nullable final Attribute<String> staticAttribute = table.getStaticAttribute();
 
         Assert.assertNotNull(
-            SYNTAX_ERROR_IN_STATIC_CONTENT + contents
+            SYNTAX_ERROR_IN_STATIC_CONTENT
             + ". Static column not found.",
-            attribute);
+            staticAttribute);
 
-        result = attribute.getName();
+        for (@Nullable final Attribute<String> attribute : rowValues)
+        {
+            if (   (attribute != null)
+                && (staticAttribute.getName().equals(attribute.getName())))
+            {
+                result = attribute.getValue();
+                break;
+            }
+        }
+
 
         return result;
     }

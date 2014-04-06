@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,9 +36,10 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
 
 /*
@@ -55,12 +56,14 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.sql.SQLException;
 import java.util.List;
 
 /**
  * Provides the methods to access {@link Table} information.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/06
+ * @since 3.0
+ * Created: 2012/06/06
  */
 public interface TableDAO
     extends DAO
@@ -104,4 +107,13 @@ public interface TableDAO
      */
     @Nullable
     Table<String, Attribute<String>, List<Attribute<String>>> findByDAO(@NotNull final String dao);
+
+    /**
+     * Retrieves the actual contents of given table.
+     * @param tableName the table name.
+     * @return the retrieved rows.
+     */
+    @NotNull
+    List<Row<String>> queryContents(@NotNull final String tableName)
+        throws SQLException;
 }

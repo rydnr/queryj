@@ -122,7 +122,7 @@ public abstract class AbstractRowDecorator
         super(
             new DecoratedString(name),
             new DecoratedString(tableName),
-            new ArrayList<Attribute<DecoratedString>>(attributes.size()));
+            new ArrayList<>(attributes.size()));
 
         immutableSetAttributes(decoratorFactory.decorateAttributes(attributes, metadataManager));
 

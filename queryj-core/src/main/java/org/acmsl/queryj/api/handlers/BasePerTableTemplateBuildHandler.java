@@ -130,8 +130,7 @@ public abstract class BasePerTableTemplateBuildHandler
             metadataManager,
             retrieveTemplateFactory(),
             tableDAO.findAllTables(),
-            CachingDecoratorFactory.getInstance(),
-            DAOTemplateUtils.getInstance());
+            CachingDecoratorFactory.getInstance());
     }
 
     /**
@@ -147,7 +146,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param templateFactory the template factory.
      * @param tables the tables.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      */
     @SuppressWarnings("unchecked")
     protected void buildTemplate(
@@ -155,8 +153,7 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final TF templateFactory,
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
     {
         @NotNull final List<T> t_lTemplates = new ArrayList<>();
@@ -176,11 +173,7 @@ public abstract class BasePerTableTemplateBuildHandler
                         try
                         {
                             t_lStaticContent =
-                                retrieveStaticContent(
-                                    t_Table.getName(),
-                                    metadataManager,
-                                    decoratorFactory,
-                                    daoTemplateUtils);
+                                retrieveStaticContent(t_Table.getName(), metadataManager.getTableDAO());
                         }
                         catch (@Nullable final SQLException cannotRetrieveTableContents)
                         {
@@ -345,12 +338,7 @@ public abstract class BasePerTableTemplateBuildHandler
         {
             try
             {
-                result =
-                    retrieveStaticContent(
-                        tableName,
-                        metadataManager,
-                        decoratorFactory,
-                        DAOTemplateUtils.getInstance());
+                result = retrieveStaticContent(tableName, metadataManager.getTableDAO());
 
                 if (result == null)
                 {
@@ -379,22 +367,15 @@ public abstract class BasePerTableTemplateBuildHandler
     /**
      * Checks whether given table contains static values or not.
      * @param tableName the table name.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the decorator factory.
-     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
+     * @param tableDAO the {@link TableDAO} instance.
      * @return such information.
      */
     @Nullable
     protected List<Row<String>> retrieveStaticContent(
-        @NotNull final String tableName,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final String tableName, @NotNull final TableDAO tableDAO)
       throws  SQLException
     {
-        return
-            daoTemplateUtils.queryContents(
-                tableName, metadataManager, decoratorFactory);
+        return tableDAO.queryContents(tableName);
     }
 
     /**

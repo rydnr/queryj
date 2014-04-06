@@ -187,6 +187,7 @@ public abstract class AbstractRow<V>
      * contained in this instance.
      * @return such information.
      */
+    @NotNull
     @Override
     public String toString()
     {

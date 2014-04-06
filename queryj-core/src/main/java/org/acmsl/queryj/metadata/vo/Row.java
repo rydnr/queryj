@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,6 +33,11 @@
 package org.acmsl.queryj.metadata.vo;
 
 /*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
  * Importing JDK classes.
  */
 import java.io.Serializable;
@@ -41,6 +46,7 @@ import java.util.List;
 /**
  * Represents <i>row</i> entities in the metadata model.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <V> the type.
  */
 public interface Row<V>
     extends  Comparable<Row<V>>,
@@ -50,17 +56,20 @@ public interface Row<V>
      * Retrieves the attribute name.
      * @return such name.
      */
+    @NotNull
     public V getName();
 
     /**
      * Retrieves the table name.
      * @return such information.
      */
-    public V getTableName();
+    @NotNull
+    V getTableName();
 
     /**
      * Retrieves the attributes.
      * @return such information.
      */
+    @NotNull
     public List<Attribute<V>> getAttributes();
 }

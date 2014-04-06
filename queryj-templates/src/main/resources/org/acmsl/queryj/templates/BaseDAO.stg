@@ -69,24 +69,31 @@ sourceImpl(table, C) ::= <<
 <project_imports(
   basePackageName=C.package,
   voName=table.name.voName)>
-
 <checkers_import(C=C)>
-
 /*
  * Importing Spring classes.
  */
 import org.springframework.dao.DataAccessException;
-
 <if(C.implement_markers)>
+
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.dao.DAO;
+
 <endif>
-<if(table.attributeTypes)>
+
+
 /*
- * Importing some JDK classes.
+ * Importing JDK classes.
  */
+<if(table.static)>
+import java.util.Arrays;
+import java.util.Collections;
+<endif>
+import java.util.List;
+
+<if(table.attributeTypes)>
 <table.attributeTypes:{ t | import <t>;}; separator="\n">
 <endif>
 
@@ -144,6 +151,15 @@ public interface <table.name.voName>DAO
     <table.staticContent:{r | <cached_constants(row=r, voName=table.name.voName)>}; separator="\n\n">
 
     /**
+     * The pre-existing {@link <table.name.voName>} values.
+     */
+    <notnull(C=C)>
+    List\<<table.name.voName>\> FIXED_CONSTANTS =
+        Collections.unmodifiableList(
+            Arrays.asList(
+                <table.staticContent:{ r | <r.name.normalized.uppercased>}; separator=",\n">));
+
+    /**
      * Retrieves the static (pre-cached) values.
      * @return such information.
      */
@@ -187,9 +203,8 @@ public interface <table.name.voName>DAO
      * Deletes {@link <table.name.voName>} information.
      <table.primaryKey:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
-    public void delete(
-        <table.primaryKey:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
-      throws DataAccessException;
+    public void delete(<table.primaryKey:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
+        throws DataAccessException;
 
     <table.foreignKeys:{ fk | <fk_delete_method(foreignKey=fk, table=table)>}; separator="\n">
 
@@ -208,7 +223,7 @@ cached_constants(row, voName) ::= <<
  @param voName the value-object name.
 !>
 /**
- * The <row.name> constant.
+ * The <row.name> {@link <voName>}.
  */
 <notnull(C=C)>
 public static final <voName> <row.name.normalized.uppercased> =

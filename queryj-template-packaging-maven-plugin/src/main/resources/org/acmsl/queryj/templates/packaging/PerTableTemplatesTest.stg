@@ -447,6 +447,8 @@ public class PerTableTemplatesTest
 
         Assert.assertNotNull("No template generator found for " + templateName, generator);
 
+        @NotNull final DecoratorFactory decoratorFactory = retrieveDecoratorFactory(generator);
+
         boolean firstTime = true;
         boolean restart = false;
 
@@ -458,12 +460,20 @@ public class PerTableTemplatesTest
             firstTime = false;
 
             @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables =
-                new ArrayList\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>>(tableMap.values());
-
-            @NotNull final MetadataManager metadataManager = retrieveMetadataManager(engine, tables);
+                new ArrayList\<>(tableMap.values());
 
             for (@NotNull final Table\<String, Attribute\<String>, List\<Attribute\<String>\>> table : tables)
             {
+                @Nullable List\<Row\<String\>> tableRows = rows.get(table.getName());
+
+                if (tableRows == null)
+                {
+                    tableRows = new ArrayList\<>(0);
+                }
+
+                @NotNull final MetadataManager metadataManager =
+                    retrieveMetadataManager(engine, table, tableRows, decoratorFactory);
+
                 @Nullable final PerTableTemplateFactory\<? extends PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext> templateFactory =
                     retrieveTemplateFactory(templateName);
 
@@ -471,13 +481,6 @@ public class PerTableTemplatesTest
 
                 @NotNull final String packageName =
                     resolvePackage(PACKAGE_MAPPINGS.get(templateName), resolveEngine(engine));
-
-                @Nullable List\<Row\<String\>> tableRows = rows.get(table.getName());
-
-                if (tableRows == null)
-                {
-                    tableRows = new ArrayList\<Row\<String\>>(0);
-                }
 
                 @NotNull final QueryJCommand t_Command =
                     new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
@@ -687,7 +690,7 @@ public class PerTableTemplatesTest
             t_strJdbcUserName,
             t_strJdbcPassword,
             retrieveCustomSqlProvider(getSqlList(), getParameters()),
-            retrieveMetadataManager(engineName, t_lTableNames, t_lTables));
+            retrieveMetadataManager(engineName, t_lTableNames, t_lTables, new ArrayList\<>(0), null));
     }
 
     /**

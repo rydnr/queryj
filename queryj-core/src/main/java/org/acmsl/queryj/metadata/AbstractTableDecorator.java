@@ -1,5 +1,5 @@
 /*
-                        QueryJ-Core
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                         chous@acm-sl.org
@@ -52,7 +52,6 @@ import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.LazyAttribute;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.api.dao.DAOTemplateUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -1315,16 +1314,30 @@ public abstract class AbstractTableDecorator
     @NotNull
     public List<Row<DecoratedString>> getStaticContent()
     {
+        return getStaticContent(getTable(), getMetadataManager());
+    }
+
+    /**
+     * Retrieves the static content.
+     * @param table the table.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected List<Row<DecoratedString>> getStaticContent(
+        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table,
+        @NotNull final MetadataManager metadataManager)
+    {
         List<Row<DecoratedString>> result = null;
 
         try
         {
             result =
                 retrieveStaticContent(
-                    getTable().getName(),
-                    getMetadataManager(),
-                    getDecoratorFactory(),
-                    DAOTemplateUtils.getInstance());
+                    table.getName(),
+                    metadataManager,
+                    metadataManager.getTableDAO(),
+                    getDecoratorFactory());
         }
         catch (@NotNull final SQLException invalidQuery)
         {
@@ -1366,31 +1379,21 @@ public abstract class AbstractTableDecorator
      * @param tableName the table name.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the decorator factory.
-     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return such information.
      */
     @NotNull
     protected List<Row<DecoratedString>> retrieveStaticContent(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final TableDAO tableDAO,
+        @NotNull final DecoratorFactory decoratorFactory)
         throws SQLException
     {
         @NotNull final List<Row<DecoratedString>> result;
 
-        @Nullable final List<Row<String>> aux =
-            daoTemplateUtils.queryContents(
-                tableName, metadataManager, decoratorFactory);
+        @NotNull final List<Row<String>> aux = tableDAO.queryContents(tableName);
 
-        if (aux == null)
-        {
-            result = new ArrayList<>(0);
-        }
-        else
-        {
-            result = decorate(aux, metadataManager, decoratorFactory);
-        }
+        result = decorate(aux, metadataManager, decoratorFactory);
 
         return result;
     }
@@ -2067,10 +2070,9 @@ public abstract class AbstractTableDecorator
     }
 
     /**
-     * Retrieves the string representation.
-     *
-     * @return such text.
+     * {@inheritDoc}
      */
+    @NotNull
     @Override
     public String toString()
     {

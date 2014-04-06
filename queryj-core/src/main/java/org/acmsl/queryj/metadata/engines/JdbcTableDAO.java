@@ -145,7 +145,7 @@ public class JdbcTableDAO
         @NotNull final String target)
     {
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> result =
-            new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(1);
+            new ArrayList<>(1);
 
         final boolean t_bCaseSensitive = getMetadataManager().isCaseSensitive();
 
@@ -176,6 +176,4 @@ public class JdbcTableDAO
 
         return result;
     }
-
-
 }
