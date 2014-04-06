@@ -36,15 +36,13 @@
       <groupId>org.acmsl.queryj</groupId>
       <artifactId>queryj-core</artifactId>
     </dependency>
-
-    <dependency>
-      <groupId>org.acmsl.queryj</groupId>
-      <artifactId>queryj-maven</artifactId>
-    </dependency>
-
     <dependency>
       <groupId>org.acmsl.queryj</groupId>
       <artifactId>queryj-placeholders</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.acmsl.queryj</groupId>
+      <artifactId>queryj-maven</artifactId>
     </dependency>
 
     <dependency>
@@ -55,12 +53,6 @@
     <dependency>
       <groupId>org.acmsl</groupId>
       <artifactId>acmsl-commons</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -84,8 +76,32 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>org.antlr</groupId>
-      <artifactId>antlr</artifactId>
+      <artifactId>antlr4-annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr4-runtime</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>ST4</artifactId>
     </dependency>
     <dependency>
       <groupId>com.jetbrains</groupId>
