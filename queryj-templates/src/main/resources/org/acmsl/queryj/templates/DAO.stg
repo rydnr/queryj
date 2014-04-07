@@ -327,11 +327,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
     @Override
     public List\<<table.name.voName\>> getStaticValues()
     {
-        <notnull(C=C)> final result = new ArrayList\<<table.name.voName>\>(FIXED_CONSTANTS.length);
-
-        result.addAll(Arrays.asList(FIXED_CONSTANTS));
-
-        return result;
+        return FIXED_CONSTANTS;
     }
 
 <if(table.primaryKey)>
@@ -1624,17 +1620,16 @@ find_constant_methods(attribute, table, C) ::= <<
   @param table the table.
 !>
 /**
- * Loads \<i><table.name>\</i> information from the constant pool,
+ * Loads \<i><table.name>\</i> information from the pre-existing constants,
  * filtering by \<i><attribute.name>\</i>.
  * @param <attribute.name.lowercased> the \<i><attribute.name>\</i>
  * to filter.
  * @return the {@link <table.name.voName>} instance.
  */
 <notnull(C=C)>
-public List\<<table.name.voName>\> findConstantsBy<attribute.name.capitalized>(
-    <type_checker(attribute=attribute, C=C)>final <attribute.javaType> <attribute.name.lowercased>)
+public List\<<table.name.voName>\> findConstantsBy<attribute.name.capitalized>(<if(!attribute.primitive)><if(!attribute.primitiveWrapper)><notnull(C=C)><else><if(attribute.nullable)><notnull(C=C)><endif><endif><endif>final <attribute.primitiveType> <attribute.name.lowercased.uncapitalized>);
 {
-    <notnull(C=C)>final List\<<table.name.voName>\> result = new ArrayList\<<table.name.voName>\>(FIXED_CONSTANTS.length);
+    <notnull(C=C)>final List\<<table.name.voName>\> result = new ArrayList\<<table.name.voName>\>(FIXED_CONSTANTS.size());
 
     for  (<nullable(C=C)>final <table.name.voName> item : FIXED_CONSTANTS)
     {
