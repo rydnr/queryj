@@ -83,7 +83,8 @@ import org.checkthread.annotations.ThreadSafe;
  * @goal package-templates
  * @execute phase="generate-sources"
  * @threadSafe
- * @since 2013/06/16
+ * @since 3.0
+ * Created: 2013/06/16
  */
 @SuppressWarnings("unused")
 @ThreadSafe

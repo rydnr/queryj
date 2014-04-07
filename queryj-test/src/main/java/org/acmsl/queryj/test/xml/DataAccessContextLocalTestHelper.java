@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Test
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,10 +34,10 @@
  * Time: 8:50 PM
  *
  */
-package cucumber.templates.xml;
+package org.acmsl.queryj.test.xml;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.xml.UntrimmedCallMethodRule;
 
@@ -72,7 +72,8 @@ import java.io.IOException;
 /**
  * Provides some logic for testing DataAccessContextLocal templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/05/25
+ * @since 3.0
+ * Created: 2013/05/25
  */
 public class DataAccessContextLocalTestHelper
     implements Singleton

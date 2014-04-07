@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Test
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,26 +23,26 @@
 
  ******************************************************************************
  *
- * Filename: PropertyElementFactory.java
+ * Filename: BeanElementFactory.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Creates PropertyElements.
+ * Description: Creates BeanElements.
  *
  * Date: 5/25/13
- * Time: 8:42 PM
+ * Time: 8:25 PM
  *
  */
-package cucumber.templates.xml;
+package org.acmsl.queryj.test.xml;
 
 /*
- * Importing Digester classes.
+ * Importing some Digester classes.
  */
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.ObjectCreationFactory;
 
 /*
- * Importing Jetbrains annotations.
+ * Importing some Jetbrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,15 +53,16 @@ import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 
 /**
- * Creates PropertyElements.
+ * Creates {@link BeanElement}s.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/05/25
+ * @since 3.0
+ * Created: 2013/05/25
  */
-public class PropertyElementFactory
+public class BeanElementFactory
     implements ObjectCreationFactory
 {
     /**
-     * The Digester instance.
+     * The digester instance.
      */
     private Digester m__Digester;
 
@@ -71,13 +72,15 @@ public class PropertyElementFactory
      *
      * @param attributes the element's attributes
      */
+    @NotNull
     @Override
     public Object createObject(@NotNull final Attributes attributes)
         throws Exception
     {
-        final @Nullable String t_strName = attributes.getValue("name");
+        final @Nullable String t_strId = attributes.getValue("id");
+        final @Nullable String t_strClass = attributes.getValue("class");
 
-        return new PropertyElement(t_strName);
+        return new BeanElement(t_strId, t_strClass);
     }
 
     /**
@@ -85,6 +88,7 @@ public class PropertyElementFactory
      * {@link org.apache.commons.digester.FactoryCreateRule} upon initialization.
      */
     @Override
+    @Nullable
     public Digester getDigester()
     {
         return m__Digester;
@@ -92,7 +96,7 @@ public class PropertyElementFactory
 
     /**
      * <p>Set the {@link org.apache.commons.digester.Digester} to allow the implementation to do logging,
-     * classloading based on the digester's classloader, etc.
+     * classloading based on the Digester's classloader, etc.
      *
      * @param digester parent Digester object.
      */
@@ -105,6 +109,8 @@ public class PropertyElementFactory
     @Override
     public String toString()
     {
-        return "PropertyElementFactory{ digester=" + getDigester() + " }";
+        return
+            "BeanElementFactory{ digester=" + getDigester() + " }";
     }
 }
+
