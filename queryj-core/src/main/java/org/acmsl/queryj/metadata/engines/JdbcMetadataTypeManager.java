@@ -909,7 +909,7 @@ public class JdbcMetadataTypeManager
     @Override
     public String getSmartObjectRetrievalType(final int dataType, final boolean isBool)
     {
-        @Nullable final String result;
+        @NotNull final String result;
 
         if (isBool)
         {
@@ -1079,7 +1079,7 @@ public class JdbcMetadataTypeManager
     @Override
     public String getConstantName(final int dataType)
     {
-        @Nullable final String result;
+        @NotNull final String result;
 
         switch (dataType)
         {
@@ -1186,6 +1186,7 @@ public class JdbcMetadataTypeManager
             case Types.BINARY:
             case Types.VARBINARY:
             case Types.LONGVARBINARY:
+            case Types.CLOB:
                 result = true;
                 break;
 
@@ -1435,13 +1436,18 @@ public class JdbcMetadataTypeManager
     @Override
     public boolean isPrimitiveWrapper(@NotNull final String dataType)
     {
-        boolean result = false;
+        final boolean result;
 
-        if  (   (Literals.INTEGER.equals(dataType))
-             || ("Long".equals(dataType))
-             || (Literals.DOUBLE_C.equals(dataType)))
+        if  (   (Integer.class.getSimpleName().equals(dataType))
+             || (Long.class.getSimpleName().equals(dataType))
+             || (Float.class.getSimpleName().equals(dataType))
+             || (Double.class.getSimpleName().equals(dataType)))
         {
             result = true;
+        }
+        else
+        {
+            result = false;
         }
 
         return result;
@@ -1464,6 +1470,7 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return <code>true</code> if such data type can be managed as a
      * Clob.
+     * @param <T> the type.
      */
     @Override
     public <T> boolean isClob(@NotNull final T dataType)
@@ -1480,7 +1487,7 @@ public class JdbcMetadataTypeManager
     @Override
     public boolean isBlob(final int dataType)
     {
-        return (dataType == Types.CLOB);
+        return (dataType == Types.BLOB);
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
-                        QueryJ-Core
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,7 +34,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.vo.Attribute;
 
@@ -42,12 +42,12 @@ import org.acmsl.queryj.metadata.vo.Attribute;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Adds a simple caching mechanism while decorating <code>Attribute</code>
@@ -58,6 +58,9 @@ import org.jetbrains.annotations.Nullable;
 public class CachingAttributeDecorator
     extends  AbstractAttributeDecorator
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 7937414826592045025L;
 
     /**
@@ -111,6 +114,11 @@ public class CachingAttributeDecorator
     private DecoratedString m__strCachedType;
 
     /**
+     * Whether is a primitive wrapper.
+     */
+    private Boolean m__bCachedIsPrimitiveWrapper;
+
+    /**
      * Creates a <code>CachingAttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
@@ -156,8 +164,7 @@ public class CachingAttributeDecorator
      * @return <code>false</code> if no primitive matches.
      */
     @Override
-    @Nullable
-    public Boolean isPrimitive()
+    public boolean isPrimitive()
     {
         Boolean result = getCachedIsPrimitive();
 
@@ -165,6 +172,53 @@ public class CachingAttributeDecorator
         {
             result = super.isPrimitive();
             setCachedIsPrimitive(result);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Specifies the cached <code>isPrimitive</code> value.
+     * @param value the value to cache.
+     */
+    protected final void immutableSetCachedIsPrimitiveWrapper(
+        final Boolean value)
+    {
+        m__bCachedIsPrimitiveWrapper = value;
+    }
+
+    /**
+     * Specifies the cached <code>isPrimitive</code> value.
+     * @param value the value to cache.
+     */
+    protected void setCachedIsPrimitiveWrapper(final Boolean value)
+    {
+        immutableSetCachedIsPrimitiveWrapper(value);
+    }
+
+    /**
+     * Retrieves the cached <code>isPrimitive</code> value.
+     * @return such value.
+     */
+    public Boolean getCachedIsPrimitiveWrapper()
+    {
+        return m__bCachedIsPrimitiveWrapper;
+    }
+
+    /**
+     * Retrieves whether this attribute can be modelled as a primitive or not.
+     * @return <code>false</code> if no primitive matches.
+     */
+    @Override
+    public boolean isPrimitiveWrapper()
+    {
+        Boolean result = getCachedIsPrimitiveWrapper();
+
+        if  (result == null)
+        {
+            result = super.isPrimitiveWrapper();
+            setCachedIsPrimitiveWrapper(result);
         }
 
         return result;
@@ -582,6 +636,9 @@ public class CachingAttributeDecorator
         return m__strCachedType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
@@ -589,7 +646,6 @@ public class CachingAttributeDecorator
         return
               "{ \"class\": \"" + CachingAttributeDecorator.class.getName() + '"'
             + ", \"super\": " + super.toString()
-/*
             + ", \"cachedIsClob\": \"" + m__bCachedIsClob + '"'
             + ", \"cachedIsPrimitive\" : " + m__bCachedIsPrimitive
             + ", \"cachedObjectType\" : " + m__strCachedObjectType
@@ -600,7 +656,7 @@ public class CachingAttributeDecorator
             + ", \"cachedStatementSetterFieldType\" : \"" + m__strCachedStatementSetterFieldType + '"'
             + ", \"cachedNumberSmallerThanInt\" : " + m__bCachedNumberSmallerThanInt
             + ", \"cachedType\" : '" + m__strCachedType + '"'
-*/
+            + ", \"cachedPrimitiveWrapper\" : '" + m__bCachedIsPrimitiveWrapper + '"'
             + " }";
     }
 }

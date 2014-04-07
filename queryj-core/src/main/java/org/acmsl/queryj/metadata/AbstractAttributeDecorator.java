@@ -304,10 +304,9 @@ public abstract class AbstractAttributeDecorator
      * Retrieves whether this attribute can be modelled as a primitive or not.
      * @return <code>false</code> if no primitive matches.
      */
-    @Nullable
-    public Boolean isPrimitive()
+    public boolean isPrimitive()
     {
-        return isPrimitive(getTypeId(), getMetadataTypeManager());
+        return isPrimitive(getTypeId(), retrieveType(), isNullable(), getMetadataTypeManager());
     }
 
     /**
@@ -316,13 +315,49 @@ public abstract class AbstractAttributeDecorator
      * @param metadataTypeManager the metadata type manager.
      * @return <code>false</code> if no primitive matches.
      */
-    @Nullable
-    protected Boolean isPrimitive(
-        final int type, @NotNull final MetadataTypeManager metadataTypeManager)
+    protected boolean isPrimitive(
+        final int typeId,
+        @NotNull final String type,
+        final boolean nullable,
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
-        return
-            (metadataTypeManager.isPrimitive(type))
-            ?  Boolean.TRUE : Boolean.FALSE;
+        final boolean result;
+
+        if (metadataTypeManager.isPrimitive(typeId))
+        {
+            result = true;
+        }
+        else if (   !(nullable)
+                 && (metadataTypeManager.isPrimitiveWrapper(type)))
+        {
+            result = true;
+        }
+        else
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves whether the type of this attribute is a primitive wrapper or not.
+     * @return {@code true} in such case.
+     */
+    public boolean isPrimitiveWrapper()
+    {
+        return isPrimitiveWrapper(retrieveType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether given type is a primitive wrapper or not.
+     * @param type the type.
+     * @param metadataTypeManager the {@link MetadataTypeManager}.
+     * @return {@code true} in such case.
+     */
+    protected boolean isPrimitiveWrapper(final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isPrimitiveWrapper(type);
     }
 
     /**
@@ -645,6 +680,57 @@ public abstract class AbstractAttributeDecorator
     }
 
     /**
+     * Retrieves the primitive type of the attribute, converting to a primitive if possible, even if it's nullable.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getPrimitiveType()
+    {
+        return
+            getPrimitiveType(
+                getTypeId(),
+                retrieveType(),
+                isNullable(),
+                isBoolean(),
+                getPrecision(),
+                getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves the primitive type of the attribute, converting to a primitive if possible, even if it's nullable.
+     * @param typeId the id of the type.
+     * @param type the type.
+     * @param isNullable whether the attribute allows nulls.
+     * @param isBool whether is a boolean attribute.
+     * @param precision the precision.
+     * @param metadataTypeManager the {@link MetadataTypeManager}.
+     * @return such information.
+     */
+    @NotNull
+    protected String getPrimitiveType(
+        final int typeId,
+        @NotNull final String type,
+        final boolean isNullable,
+        final boolean isBool,
+        final int precision,
+        @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        @Nullable final String result;
+
+        if (isPrimitive(typeId, type, isNullable, metadataTypeManager))
+        {
+            result = metadataTypeManager.getNativeType(typeId, false, isBool, precision);
+        }
+        else
+        {
+            result = getObjectType();
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the Java type of the property.
      * @param type the type.
      * @param metadataManager the <code>MetadataManager</code>
@@ -774,6 +860,9 @@ public abstract class AbstractAttributeDecorator
         return value == null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
@@ -781,19 +870,23 @@ public abstract class AbstractAttributeDecorator
         return
               "{ \"class\": \"" + AbstractAttributeDecorator.class.getName() + "\""
             + ", \"attribute\": " + this.m__Attribute
-/*
             + ", \"metadataManager\": " + this.m__MetadataManager
             + ", \"metadataTypeManager\": " + this.m__MetadataTypeManager
-*/
             + " }";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
         return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.m__Attribute).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj)
     {

@@ -36,7 +36,7 @@
 package org.acmsl.queryj.metadata.engines;
 
 /*
- * Importing QueryJ classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.Literals;
 
@@ -76,5 +76,60 @@ public class JdbcMetadataTypeManagerTest
         @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
 
         Assert.assertEquals(Types.VARCHAR, instance.toJdbcType(Literals.VARCHAR2, 10, 0));
+    }
+
+    /**
+     * Tests isString() works for {@code Types.CLOB}.
+     */
+    @Test
+    public void isString_works_for_CLOB()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertTrue(instance.isString(Types.CLOB));
+    }
+
+    /**
+     * Tests whether isPrimitiveWrapper() knows about Integer class.
+     */
+    @Test
+    public void isPrimitiveWrapper_works_for_Integer()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertTrue(instance.isPrimitiveWrapper(Integer.class.getSimpleName()));
+    }
+
+    /**
+     * Tests whether isPrimitiveWrapper() knows about Long class.
+     */
+    @Test
+    public void isPrimitiveWrapper_works_for_Long()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertTrue(instance.isPrimitiveWrapper(Long.class.getSimpleName()));
+    }
+
+    /**
+     * Tests whether isPrimitiveWrapper() knows about Double class.
+     */
+    @Test
+    public void isPrimitiveWrapper_works_for_Double()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertTrue(instance.isPrimitiveWrapper(Double.class.getSimpleName()));
+    }
+
+    /**
+     * Tests whether isPrimitiveWrapper() knows about Float class.
+     */
+    @Test
+    public void isPrimitiveWrapper_works_for_Float()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertTrue(instance.isPrimitiveWrapper(Float.class.getSimpleName()));
     }
 }

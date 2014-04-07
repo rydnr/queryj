@@ -175,7 +175,7 @@ public interface <table.name.voName>DAO
      * Persists {@link <table.name.voName>} information.
      <table.own.minus.externallyManagedAttributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
-    public void insert(
+    void insert(
         <table.own.minus.externallyManagedAttributes:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
       throws DataAccessException;
 
@@ -186,7 +186,7 @@ public interface <table.name.voName>DAO
      * @return such instance.
      */
     <notnull(C=C)>
-    public <table.name.voName> create(
+    <table.name.voName> create(
         <table.own.minus.externallyManagedAttributes:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
       throws DataAccessException;
 
@@ -195,7 +195,7 @@ public interface <table.name.voName>DAO
      <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      * @return the number of {@code <table.name>} rows updated.
      */
-    public int update(
+    int update(
         <table.attributes:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
       throws DataAccessException;
 
@@ -203,7 +203,7 @@ public interface <table.name.voName>DAO
      * Deletes {@link <table.name.voName>} information.
      <table.primaryKey:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
-    public void delete(<table.primaryKey:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
+    void delete(<table.primaryKey:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
         throws DataAccessException;
 
     <table.foreignKeys:{ fk | <fk_delete_method(foreignKey=fk, table=table)>}; separator="\n">
@@ -226,7 +226,7 @@ cached_constants(row, voName) ::= <<
  * The <row.name> {@link <voName>}.
  */
 <notnull(C=C)>
-public static final <voName> <row.name.normalized.uppercased> =
+static final <voName> <row.name.normalized.uppercased> =
     new <voName>ValueObject(
         <row.attributes:{ a | <attribute_specification(attr=a)>}; separator=",\n">);
 >>
@@ -257,11 +257,10 @@ find_by_primary_key(table, parent, repository, C) ::= <<
  */
 <nullable(C=C)>
 <if(table.voDecorated)>
-public <table.name.voName>Decorator findByPrimaryKey(
+<table.name.voName>Decorator findByPrimaryKey(<table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">);
 <else>
-public <table.name.voName> findByPrimaryKey(
+<table.name.voName> findByPrimaryKey(<table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">);
 <endif>
-    <table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">);
 >>
 
 attribute_specification(attr) ::= <<
@@ -287,7 +286,7 @@ find_constant_methods(attribute, primaryKeyAttributes, voName) ::= <<
  * @return the {@link <voName>} instance.
  */
 <nullable(C=C)>
-public <voName> findConstantBy<attribute.name.capitalized>(<if(!attribute.primitive)><notnull(C=C)><else><if(attribute.nullable)><notnull(C=C)><endif><endif>final <attribute.javaType> <attribute.name.lowercased.uncapitalized>);
+<voName> findConstantBy<attribute.name.capitalized>(<if(!attribute.primitive)><if(!attribute.primitiveWrapper)><notnull(C=C)><else><if(attribute.nullable)><notnull(C=C)><endif><endif><endif>final <attribute.primitiveType> <attribute.name.lowercased.uncapitalized>);
 >>
 
 fk_delete_method(foreignKey, table) ::= <<
@@ -308,10 +307,10 @@ fk_delete_method(foreignKey, table) ::= <<
  <foreignKey.attributes:{ a | <attribute_javadoc(name=a)>}; separator="\n">
  */
 <if(foreignKey.allowsNull)>
-public void discardRelationTo<foreignKey.target.voName>By<foreignKey.attributes:{attr |<attr.name.capitalized>};
+void discardRelationTo<foreignKey.target.voName>By<foreignKey.attributes:{attr |<attr.name.capitalized>};
                                                           separator="And">(
 <else>
-public void deleteBy<foreignKey.attributes:{attr |<attr.name.capitalized>};
+void deleteBy<foreignKey.attributes:{attr |<attr.name.capitalized>};
                       separator="And">(
 <endif>
 
@@ -331,7 +330,7 @@ custom_select(cs) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  */
 <if(cs.resultNullable)><nullable(C=C)><else><if(cs.result.multiple)><notnull(C=C)><endif><endif>
-public <cs.resultClass> <cs.name.uncapitalized>(
+<cs.resultClass> <cs.name.uncapitalized>(
     <cs.parameters:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
   throws DataAccessException;
 >>
@@ -362,7 +361,7 @@ custom_select_for_update(cs) ::= <<
  <cs.parameters:{ a | <attribute_javadoc(name=a)>}; separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  */
-public <cs.resultClass> <cs.name.uncapitalized>(
+<cs.resultClass> <cs.name.uncapitalized>(
     <cs.parameters:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
   throws DataAccessException;
 >>
