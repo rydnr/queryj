@@ -38,21 +38,13 @@
     </dependency>
     <dependency>
       <groupId>org.acmsl.queryj</groupId>
-      <artifactId>queryj-placeholders</artifactId>
+      <artifactId>queryj-template-packaging</artifactId>
+      <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>org.acmsl.queryj</groupId>
-      <artifactId>queryj-maven</artifactId>
-    </dependency>
-
     <dependency>
       <groupId>org.checkthread</groupId>
       <artifactId>checkthread-annotations</artifactId>
       <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.acmsl</groupId>
-      <artifactId>acmsl-commons</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -65,53 +57,13 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-logging</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>commons-configuration</groupId>
       <artifactId>commons-configuration</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>antlr4-annotations</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>antlr4-runtime</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>ST4</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.jetbrains</groupId>
       <artifactId>annotations</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-      <optional>true</optional>
     </dependency>
   </dependencies>
 
@@ -121,22 +73,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
       </plugin>
-
-      <plugin>
-        <groupId>org.antlr</groupId>
-        <artifactId>antlr4-maven-plugin</artifactId>
-        <goals>
-          <goal>antlr4</goal>
-        </goals>
-        <configuration>
-          <encoding>UTF-8</encoding>
-          <sourceDirectory>${project.basedir}/src/main/antlr4</sourceDirectory>
-          <listener>false</listener>
-          <visitor>true</visitor>
-          <outputDirectory>${project.build.directory}/generated-sources/org/acmsl/queryj/templates/packaging/antlr</outputDirectory>
-        </configuration>
-      </plugin>
-
     </plugins>
   </build>
 

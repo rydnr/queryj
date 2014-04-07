@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                 QueryJ Template Packaging Maven Plugin
 
     Copyright (C) 2013-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -28,12 +28,18 @@
  * Author: Jose San Leandro Armendariz.
  *
  * Description: Generates required QueryJ boilerplate from user-provided
- *              templates.
+ *              templates, via Maven.
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.templates.packaging.maven;
 
 /*
- * Importing some QueryJ-Core classes.
+ * Importing QueryJ Template Packaging Plugin.
+ */
+import org.acmsl.queryj.templates.packaging.TemplatePackagingChain;
+import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
+
+/*
+ * Importing some QueryJ Core classes.
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
@@ -78,7 +84,7 @@ import java.io.InputStream;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Generates required QueryJ boilerplate from user-provided templates.
+ * Generates required QueryJ boilerplate from user-provided templates, via Maven.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @goal package-templates
  * @execute phase="generate-sources"

@@ -2,4 +2,5 @@
 ** DONE Write tickets for testing clobs and inheritance: 1 -> 1
 ** TODO Test / fix clobs #465: 3 ->
 ** TODO Test / fix inheritance #466: 4 ->
-** TODO Nest QueryJ versions in msg-workflow: 2 ->
+** TODO Nest QueryJ versions in msg-manager: 2 ->
+** DONE Organize template-packaging module #467: 1 ->
