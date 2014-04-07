@@ -38,9 +38,13 @@
 package org.acmsl.queryj.metadata.vo;
 
 /*
- * Importing project classes.
+ * Importing ACM SL Commons classes.
  */
 import org.acmsl.commons.utils.ToStringUtils;
+
+/*
+ * Importing Apache Commons Lang classes.
+ */
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -55,12 +59,18 @@ import org.checkthread.annotations.ThreadSafe;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Abstract logic-less implementation of <code>Table</code> interface.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @param <V> the value type.
+ * @param <A> the attribute type.
+ * @param <L> the list type.
  */
 @ThreadSafe
 public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>>
@@ -97,7 +107,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     private List<ForeignKey<V>> m__lForeignKeys;
 
     /**
-     * The attribute used to lamel static rows.
+     * The attribute used to label static rows.
      */
     private A m__Static;
 

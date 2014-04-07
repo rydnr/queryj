@@ -4,3 +4,4 @@
 ** TODO Test / fix inheritance #466: 4 ->
 ** TODO Nest QueryJ versions in msg-manager: 2 -> 1
 ** DONE Organize template-packaging module #467: 1 -> 1
+** DONE Simplify @NotNull for primitive attributes #468: 1 -> 1

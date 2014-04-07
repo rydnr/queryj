@@ -264,8 +264,8 @@ public class TableTestHelper
                     tableEntry.get(Literals.COMMENT),
                     tableEntry.get(PARENT_TABLE),
                     tableEntry.get(STATIC),
-                    isNullOrBlank(tableEntry.get(DECORATED)),
-                    isNullOrBlank(tableEntry.get(RELATIONSHIP)));
+                    !isNullOrBlank(tableEntry.get(DECORATED)) && Boolean.TRUE.equals(tableEntry.get(DECORATED)),
+                    !isNullOrBlank(tableEntry.get(RELATIONSHIP)) && Boolean.TRUE.equals(tableEntry.get(RELATIONSHIP)));
         }
 
         return result;

@@ -365,6 +365,8 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
     <extractors(table=table, parent=parent, repository=repository, C=C)>
 
     <inner_transaction_callbacks(table=table, parent=parent, repository=repository, C=C)>
+
+    <helper_methods()>
 }
 >>
 
@@ -1909,5 +1911,30 @@ public static class <attr.name.capitalized>ResultSetExtractor
 
         return result;
     }
+}
+>>
+
+helper_methods() ::= <<
+<! Some helper methods !>
+/**
+ * Creates a new {@link TransactionTemplate} using given {@link DataSource}.
+ * @param dataSource the database data source.
+ * @return the new transaction template.
+ */
+<notnull(C=C)>
+protected TransactionTemplate createTransactionTemplate(<notnull(C=C)>final DataSource dataSource)
+{
+    return createTransactionTemplate(new DataSourceTransactionManager(dataSource));
+}
+
+/**
+ * Creates a new {@link TransactionTemplate} using given {@link TransactionManager}.
+ * @param transactionManager the transaction manager.
+ * @return the new transaction template.
+ */
+<notnull(C=C)>
+protected TransactionTemplate createTransactionTemplate(<notnull(C=C)>final TransactionManager transactionManager)
+{
+    return new TransactionTemplate(transactionManager);
 }
 >>

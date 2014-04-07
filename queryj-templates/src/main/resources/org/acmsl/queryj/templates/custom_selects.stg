@@ -67,89 +67,26 @@ public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.nam
     throws DataAccessException
 <endif>
 {
-    <notnull(C=C)>final String t_strSql = auditSql(<cs.id.normalized.uppercased>_SQL);
+    <notnull(C=C)>final String sql = auditSql(<cs.id.normalized.uppercased>_SQL);
+
+    <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory =
+        new PreparedStatementCreatorFactory(sql);
+
+    <cs.parameters:{ p | <custom_select_parameter_type_specification(
+      type=p.sqlType)>}; separator="\n">
 
     return
         <cs.name.uncapitalized>(
             <cs.parameters:{p | <p.name.lowercased>,}; separator="\n">
-            t_strSql,
-            new PreparedStatementCreatorFactory(t_strSql),
+            sql,
+            preparedStatementCreatorFactory,
             new Object[<if(!cs.parameters)>0],
             <else>]
             {
                 <cs.parameters:{ p | <custom_select_parameter_value(p=p)>}; separator=",\n">
             },
             <endif>
-            getDataSource());
-}
-
-/**
- * Custom select \<i><cs.id>\</i>:\<br/>
- * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(attr=p)>}; separator="\n">
- * @param sql the SQL.
- * @param preparedStatementCreatorFactory the
- * {@link PreparedStatementCreatorFactory} instance
- * specific for this operation.
- * @param params the query parameters.
- * @param dataSource the {@link DataSource{@link  instance.
-<if(cs.resultRef)>
- * @return the {@link <cs.resultClass>} information retrieved.
-<else>
- * @return the {@link <cs.dao.voName>} information retrieved.
-<endif>
- */
-<custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
-protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(
-    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p, C=C)>}; separator="\n">
-    <notnull(C=C)>final String sql,
-    <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
-    <nullable(C=C)>final Object[] params,
-    <notnull(C=C)>final DataSource dataSource)
-  throws DataAccessException
-{
-    return
-        <cs.name.uncapitalized>(
-            <cs.parameters:{ p | <p.name.lowercased>,}; separator="\n">
-            sql,
-            preparedStatementCreatorFactory,
-            params,
-            new DataSourceTransactionManager(dataSource));
-}
-
-/**
- * Custom select \<i><cs.id>\</i>:\<br/>
- * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(attr=p)>}; separator="\n">
- * @param sql the SQL.
- * @param preparedStatementCreatorFactory the
- * {@link PreparedStatementCreatorFactory} instance
- * specific for this operation.
- * @param params the query parameters.
- * @param transactionManager the {@link PlatformTransactionManager{@link
- * instance.
-<if(cs.resultRef)>
- * @return the {@link <cs.resultClass>} information retrieved.
-<else>
- * @return the {@link <cs.dao.voName>} information retrieved.
-<endif>
- */
-<custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
-protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(
-    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p, C=C)>}; separator="\n">
-    <notnull(C=C)>final String sql,
-    <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
-    <nullable(C=C)>final Object[] params,
-    <notnull(C=C)>final PlatformTransactionManager transactionManager)
-  throws DataAccessException
-{
-    return
-        <cs.name.uncapitalized>(
-            <cs.parameters:{ p | <p.name.lowercased>,}; separator="\n">
-            sql,
-            preparedStatementCreatorFactory,
-            params,
-            new TransactionTemplate(transactionManager),
+            createTransactionTemplate(getDataSource()),
             getDAOListener());
 }
 
@@ -188,9 +125,6 @@ protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.
     preparedStatementCreatorFactory.setReturnGeneratedKeys(..);
     preparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
     */
-
-    <cs.parameters:{ p | <custom_select_parameter_type_specification(
-      type=p.sqlType)>}; separator="\n">
 
     result =
         <custom_select_template_call(sql=cs, result=cs.result, table=table, C=C)>
@@ -534,7 +468,7 @@ custom_select_return_cast(cs, table, result, C) ::= <<
 >>
 
 custom_select_return_nullable_maybe(cs, result, C) ::= <<
-<if(!cs.multiple)><if(cs.resultRef)><if(result.wrappingASingleProperty)><result.properties:{property|<if(property.object)><nullable(C=C)><endif>}><endif><endif><endif>
+<if(cs.multiple)><notnull(C=C)><else><if(cs.resultRef)><if(result.wrappingASingleProperty)><result.properties:{property|<if(property.object)><nullable(C=C)><endif>}><else><nullable(C=C)><endif><else><nullable(C=C)><endif><endif>
 >>
 
 attribute_declaration(attr, C) ::= <<
