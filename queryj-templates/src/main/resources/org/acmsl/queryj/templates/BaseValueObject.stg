@@ -42,7 +42,7 @@ import "queryj.stg"
 
 source(C) ::= <<
 <!
-  Defines the rules to generate value object interfaces.
+  Defines the rules to generate abstract value object implementations.
   @param C the context.
 !>
 <sourceImpl(table=C.table, C=C)>
@@ -50,7 +50,7 @@ source(C) ::= <<
 
 sourceImpl(table, C) ::= <<
 <!
-  Defines the rules to generate value object interfaces.
+  Defines the rules to generate abstract value object implementations.
   @param table the table.
   @param C the context.
 !>
@@ -65,12 +65,15 @@ sourceImpl(table, C) ::= <<
   template="org/acmsl/queryj/templates/BaseValueObject.stg",
   C=C)><endif>
 <package_declaration(p=C.package)>
-
-<imports(table=table)>
+<checkers_import(C=C)>
 /*
- * Importing some JDK classes.
+ * Importing JDK classes.
  */
 import java.io.Serializable;
+<if(table.attributeTypes)>
+<table.attributeTypes:{ t | import <t>;}; separator="\n">
+<endif>
+
 
 <class(table=table, C=C)>
 >>
@@ -80,7 +83,7 @@ description(table) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-<if(table.comment.empty)>ValueObject for <table.name> information.<else><table.comment><endif>
+<if(table.comment.empty)>Base class for <table.name> value objects.<else><table.comment><endif>
 >>
 
 imports(table) ::= <<
@@ -104,22 +107,268 @@ class(table, C) ::= <<
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/BaseValueObject.stg", C=C)>
  */
-public interface <table.name.voName>
+<class_annotations(C=C)>
+public abstract class Abstract<table.name.voName>
     extends Serializable
 {
-    <table.attributes:getter(); separator="\n\n">
+    /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = <C.serialVersionUID>L;
+
+    <table.attributes:{ a | <attribute_declaration(attribute=a)>}; separator="\n\n">
+
+    /**
+     * Creates an \<code>Abstract<table.name.voName>ValueObject\</code> instance.
+     <table.attributes:{ a | <attribute_javadoc(attribute=a)>}; separator="\n">
+     */
+    public Abstract<table.name.voName>ValueObject(
+        <table.attributes:{ a | <attribute_method_declaration(attribute=a)>};
+          separator=",\n">)
+    {
+        <table.attributes:{ a | <immutable_setter_call(attribute=a)>};
+          separator="\n">
+    }
+
+    <table.attributes:{ a | <attribute_accessors(attribute=a)>};
+     separator="\n\n">
+
+    <equals_method(table=table, C=C)>
+
+    <hashcode_method(table=table, C=C)>
+
+    <tostring_method(table=table, C=C)>
 }
 >>
 
-getter(attribute) ::= <<
+attribute_declaration(attribute) ::= <<
+<!
+ Writes the declaration for given attribute.
+ @param attribute the attribute.
+!>
+/**
+ * The \<i><attribute.name>\</i> value.
+ */
+<if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>
+private <attribute.javaType> m__<attribute.name.capitalized>;
+>>
+
+attribute_javadoc(attribute) ::= <<
+<!
+ Writes the Javadoc for given attribute.
+ @param attribute the attribute.
+!>
+* @param <attribute.name.uncapitalized> the \<i><attribute.name.capitalized>\</i> value.
+>>
+
+attribute_method_declaration(attribute) ::= <<
+<!
+ Writes the method declaration for given attribute.
+ @param attribute the attribute.
+!><if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>final <attribute.javaType> <attribute.name.uncapitalized>
+>>
+
+immutable_setter_call(attribute) ::= <<
+<!
+ Writes the method call for the immutable setter of given attribute.
+ @param attribute the attribute.
+!>
+<if(!attribute.strictlyPrimitive)><if(attribute.nullable)>
+if (<attribute.name.uncapitalized> != null)
+{
+    immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);
+}<else>immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);<endif>
+<else>immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);<endif>
+>>
+
+attribute_accessors(attribute) ::= <<
+<!
+ Writes the accessors for given attribute.
+ @param attribute the attribute.
+!>
+<attribute_setter(attribute=attribute)>
+
+<attribute_getter(attribute=attribute)>
+>>
+
+attribute_setter(attribute) ::= <<
+<!
+ Writes the setter for given attribute.
+ @param attribute the attribute.
+!>
+/**
+ * Specifies the \<i><attribute.name>\</i> value.
+ * @param value such information.
+ */
+protected final void immutableSet<attribute.name.capitalized>(<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>final <attribute.javaType> value)
+{
+    this.m__<attribute.name.capitalized> = value;
+}
+
+/**
+ * Specifies the \<i><attribute.name>\</i> value.
+ * @param value such information.
+ */
+@SuppressWarnings("unused")
+protected void set<attribute.name.capitalized>(<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>final <attribute.javaType> value)
+{
+    immutableSet<attribute.name.capitalized>(value);
+}
+>>
+
+attribute_getter(attribute) ::= <<
 <!
  Writes the getter for given attribute.
  @param attribute the attribute.
 !>
 /**
- * <if(attribute.comment)><attribute.comment><else>Retrieves the \<i\><attribute.name>\</i\> value<endif>.
+ * Retrieves the \<i><attribute.name>\</i> value.
  * @return such information.
  */
-<if(!attribute.primitive)><if(attribute.nullable)>@Nullable<else>@NotNull<endif><endif>
-<attribute.javaType> get<attribute.name.capitalized>();
+<if(attribute.allowsNull)>
+<if(!attribute.strictlyPrimitive)><nullable(C=C)><endif>
+protected final <attribute.objectType> immutableGet<attribute.name.capitalized>()
+<else>
+<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>
+protected final <attribute.javaType> immutableGet<attribute.name.capitalized>()
+<endif>
+{
+    return m__<attribute.name.capitalized>;
+}
+
+/**
+ * Retrieves the \<i><attribute.name>\</i> value.
+ * @return such information.
+ */
+@Override
+<if(attribute.allowsNull)>
+<if(!attribute.strictlyPrimitive)><nullable(C=C)><endif>
+public <attribute.objectType> get<attribute.name.capitalized>()
+<else>
+<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>
+public <attribute.javaType> get<attribute.name.capitalized>()
+<endif>
+{
+<if(attribute.date)>
+    Date result = immutableGet<attribute.name.capitalized>();
+
+    if  (result != null)
+    {
+        result = new Date(result.getTime());
+    }
+
+    return result;
+<else>
+    return immutableGet<attribute.name.capitalized>();
+<endif>
+}
+>>
+
+equals_method(table, C) ::= <<
+<! Generates the equals(Object) method !>
+/**
+ * Checks whether given object is semantically equivalent to this one.
+ * @param other the other object to compare to.
+ * @return {@code true} if and only if they're equivalent.
+ */
+@Override
+public boolean equals(<nullable(C=C)>final Object other)
+{
+    final boolean result;
+
+    if (other instanceof <table.name.voName>)
+    {
+        <notnull(C=C)>final <table.name.voName> candidate = (<table.name.voName>) other;
+
+        <table.attributes:{ a | <attribute_equals(attribute=a)>}; separator="">
+        result =
+            <table.attributes:{ a |<a.name.uncapitalized>Match}; separator="\n&& ">;
+    }
+    else
+    {
+        result = false;
+    }
+
+    return result;
+}
+>>
+
+attribute_equals(attribute) ::= <<
+<! Generates the contribution of each attribute to the equals method. !>
+<if(attribute.strictlyPrimitive)>
+final boolean <attribute.name.uncapitalized>Match = (this.m__<attribute.name.capitalized> == candidate.get<attribute.name.capitalized>());
+<else><if(attribute.allowsNull)>
+final boolean <attribute.name.uncapitalized>Match =
+    (   (this.m__<attribute.name.capitalized> != null)
+     && (this.m__<attribute.name.capitalized>.equals(candidate.get<attribute.name.capitalized>())));
+<else>
+final boolean <attribute.name.uncapitalized>Match = this.m__<attribute.name.capitalized>.equals(candidate.get<attribute.name.capitalized>());<endif><endif>
+>>
+
+attribute_equals(attribute) ::= <<
+<! Generates the final check in the equals method, for each attribute. !>
+<attribute.name.uncapitalized>Mach
+>>
+
+hashcode_method(table, C) ::= <<
+<! Generates the hashcode() method !>
+/**
+ * Retrieves the hashcode which identifies this instance
+ * from any other one.
+ * @return the unique (among instances of this class) value.
+ */
+@Override
+public int hashcode()
+{
+    final int result;
+
+    final int classHashCode = Abstract<table.name.voName>.class.hashcode();
+
+    <table.attributes:{ a | <attribute_hashcode(attribute=a)>}; separator="\n">
+
+    result =
+          classHashCode
+        <table.attributes:{ a |+ <a.name.uncapitalized>HashCode}; separator="\n">;
+
+    return result;
+}
+>>
+
+attribute_hashcode(attribute) ::= <<
+<! Generates the hashcode contribution for each attribute. !>
+<if(attribute.strictlyPrimitive)>
+final int <attribute.name.uncapitalized>HashCode = ("" + this.m__<attribute.name.capitalized>).hashcode();<else>
+<if(attribute.allowsNull)>final int <attribute.name.uncapitalized>HashCode;
+if (this.m__<attribute.name.capitalized> == null)
+{
+    <attribute.name.uncapitalized>HashCode = 0;
+}
+else
+{
+     <attribute.name.uncapitalized>HashCode = this.m__<attribute.name.capitalized>.hashCode();
+}<else>final int <attribute.name.uncapitalized>HashCode = this.m__<attribute.name.capitalized>.hashCode();<endif><endif>
+>>
+
+tostring_method(table, C) ::= <<
+<! Generates the toString() method !>
+/**
+ * {@inheritdoc}
+ */
+@Override
+public String toString()
+{
+    StringBuilder result = new StringBuilder("{ \class\": \"Abstract<table.name.voName>");
+
+    <table.attributes:{ a | <attribute_toString(attribute=a)>}; separator="\n">
+
+    result.append(", \"package\": \"<C.package>\" }");
+
+    return result.toString();
+}
+>>
+
+attribute_toString(attribute) ::= <<
+<! Generates the code to include given attribute within the toString() method. !>
+result.append("\", \"<a.name.capitalized>\": \"");
+result.append(this.m__<a.name.capitalized>);
 >>

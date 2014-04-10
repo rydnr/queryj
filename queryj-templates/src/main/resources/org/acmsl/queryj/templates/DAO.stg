@@ -288,7 +288,7 @@ classImpl(foreign_keys, table, parent, repository, engine, C) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/DAO.stg", C=C)>
  */
-@ThreadSafe
+<class_annotations(C=C)>
 public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.voName>DAO
   extends     <repository.capitalized>JdbcTemplate
   implements  <table.name.voName>DAO

@@ -75,7 +75,7 @@ import org.acmsl.commons.patterns.dao.ValueObject;
 
 <endif>
 /*
- * Importing some JDK classes.
+ * Importing JDK classes.
  */
 import java.io.Serializable;
 <if(table.attributeTypes)>
@@ -128,6 +128,6 @@ getter(attribute) ::= <<
  * <if(attribute.comment)><attribute.comment><else>Retrieves the \<i\><attribute.name>\</i\> value<endif>.
  * @return such information.
  */
-<if(!attribute.strictlyPrimitive)><if(attribute.nullable)>@Nullable<else>@NotNull<endif><endif>
+<if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>
 <attribute.javaType> get<attribute.name.capitalized>();
 >>

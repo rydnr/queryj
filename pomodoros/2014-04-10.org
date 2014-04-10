@@ -17,11 +17,9 @@
 *** Custom query related templates?
 
 ** Implement those templates ASAP:
-*** DONE ValueObject.stg: 4 -> 4
-*** BaseValueObject.stg: 2 ->
-*** ValueObjectFactory.stg: 1 ->
-*** BaseDAO.stg: 1 ->
-*** DAO.stg: 1 ->
+*** DONE ValueObject.stg #469: 4 -> 4
+*** DONE BaseValueObject.stg #470: 3 -> 3
+*** ValueObjectFactory.stg #471: 1 ->
 *** AttributesStatementSetter.stg: 1 ->
 
 ** Nest QueryJs, overriding only such templates

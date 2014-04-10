@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.TemplateContext;
 
@@ -60,8 +60,15 @@ import org.checkthread.annotations.ThreadSafe;
 public class SerialVersionUIDHandler<C extends TemplateContext>
     extends AbstractTemplateContextFillHandler<C, Long>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 5264190641654884625L;
 
+    /**
+     * Creates a new instance for given context.
+     * @param context the context.
+     */
     public SerialVersionUIDHandler(@NotNull final C context)
     {
         super(context);
@@ -87,6 +94,6 @@ public class SerialVersionUIDHandler<C extends TemplateContext>
     @Override
     public Long getValue(@NotNull final C context)
     {
-        return (long) context.getTemplateName().hashCode();
+        return (long) context.getFileName().hashCode();
     }
 }

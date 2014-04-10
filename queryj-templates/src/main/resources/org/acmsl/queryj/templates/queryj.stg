@@ -131,8 +131,8 @@ List\<<result.classValue>\> result = null;
 
 >>
 
-class_annotations() ::= <<
-<if(checkthread_annotations_enabled)>@org.checkthread.annotations.ThreadSafe<endif>
+class_annotations(C) ::= <<
+<if(C.checkthread_annotations_enabled)>@org.checkthread.annotations.ThreadSafe<endif>
 >>
 
 find_constant_check_attribute(attribute) ::= <<
