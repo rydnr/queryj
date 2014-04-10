@@ -148,3 +148,10 @@ import_template(type) ::= <<
 !>
 import <type>;
 >>
+
+attribute_method_declaration(attribute) ::= <<
+<!
+ Writes the method declaration for given attribute.
+ @param attribute the attribute.
+!><if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>final <attribute.javaType> <attribute.name.uncapitalized>
+>>

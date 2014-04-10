@@ -161,13 +161,6 @@ attribute_javadoc(attribute) ::= <<
 * @param <attribute.name.uncapitalized> the \<i><attribute.name.capitalized>\</i> value.
 >>
 
-attribute_method_declaration(attribute) ::= <<
-<!
- Writes the method declaration for given attribute.
- @param attribute the attribute.
-!><if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>final <attribute.javaType> <attribute.name.uncapitalized>
->>
-
 immutable_setter_call(attribute) ::= <<
 <!
  Writes the method call for the immutable setter of given attribute.

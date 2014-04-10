@@ -104,6 +104,6 @@ attribute_javadoc(attr) ::= <<
   Writes the Javadoc for a attribute parameter.
   @param name the name of the attribute.
 !>
-* @param <attr.name.uncapitalized> the \<i><attr.name>\</i> value.
+<if(attr.comment.empty)>* @param <attr.name.uncapitalized> the \<i><attr.name>\</i> value.<else>* @param <attr.name.uncapitalized> <attr.comment>.<endif>
 >>
 

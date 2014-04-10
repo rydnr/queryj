@@ -1,0 +1,152 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: ValueObjectFactory.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate value object factories.
+//
+//
+group ValueObjectFactory;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+  Defines the rules to generate value object factories.
+  @param C the context.
+!>
+<sourceImpl(table=C.table, C=C)>
+>>
+
+sourceImpl(table, C) ::= <<
+<!
+  Defines the rules to generate value object factories.
+  @param table the table.
+  @param C the context.
+!>
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description(table=table)
+  ],
+  template="org/acmsl/queryj/templates/ValueObjectFactory.stg",
+  C=C)><endif>
+<package_declaration(p=C.package)>
+<checkers_import(C=C)>
+<if(table.attributeTypes)>
+/*
+ * Importing JDK classes.
+ */
+<table.attributeTypes:{ t | import <t>;}; separator="\n">
+<endif>
+
+<class(table=table, C=C)>
+>>
+
+description(table) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param table the table.
+!>
+Abstract factory implementation for <table.name> value objects.
+>>
+
+imports(table) ::= <<
+<!
+  Generates the imports for the attributes' types.
+  @param table the table.
+!>
+<table.attributeTypes:{ t | import <t>;} ; separator="\n">
+>>
+
+class(table, C) ::= <<
+<!
+ Generates the class body.
+ @param table the table.
+ @param C the context.
+!>
+/**
+ * <[
+      description(table=table)
+    ]:{line |<line>}; separator="\n * ">
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/ValueObjectFactory.stg", C=C)>
+ */
+<class_annotations(C=C)>
+public class <table.name.voName>ValueObjectFactory
+{
+    /**
+     * Singleton implemented to avoid the double-check locking.
+     */
+    private static class <table.name.voName>ValueObjectFactorySingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final <table.name.ame>ValueObjectFactory SINGLETON =
+            new <table.name.voName>ValueObjectFactory();
+    }
+
+    /**
+     * Public constructor to allow reflective instantiation.
+     */
+    public <table.name.voName>ValueObjectFactory() {}
+
+    /**
+     * Retrieves a \<code><table.name.voName>ValueObjectFactory\</code>
+     * instance.
+     * @return such instance.
+     */
+    public static <table.name.voName>ValueObjectFactory getInstance()
+    {
+        return <table.name.voName>ValueObjectFactorySingletonContainer.SINGLETON;
+    }
+
+    /**
+     * Creates a new {@link <table.name.voName>ValueObject} instance.
+     <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
+     * @return the new value object.
+     */
+    public <table.name.voName> create<table.name.voName>(
+        <table.attributes:{ a | <attribute_method_declaration(attribute=a)>};
+          separator=",\n">)
+    {
+        return
+            new <table.name.voName>ValueObject(
+                <table.attributes:{ a | <a.name.uncapitalized>}; separator=",\n">);
+    }
+}
+>>
