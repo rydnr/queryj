@@ -590,4 +590,24 @@ public class DecoratedString
 
         return new DecoratedString(result);
     }
+
+    /**
+     * Checks whether the value is empty.
+     * @return {@code true} in such case.
+     */
+    public boolean isEmpty()
+    {
+        return isEmpty(getValue(), StringUtils.getInstance());
+    }
+
+    /**
+     * Checks whether the value is empty.
+     * @param value the value.
+     * @param stringUtils the {@link StringUtils} instance..
+     * @return {@code true} in such case.
+     */
+    protected boolean isEmpty(@NotNull final String value, @NotNull final StringUtils stringUtils)
+    {
+        return stringUtils.isEmpty(value);
+    }
 }

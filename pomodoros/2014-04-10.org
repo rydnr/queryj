@@ -1,0 +1,28 @@
+* 2014/04/10:
+** TODO Test / fix clobs #465: 3 ->
+** TODO Test / fix inheritance #466: 4 ->
+** TODO Nest QueryJ versions in msg-manager: 2 ->
+
+* GOAL : Deliver QueryJ 3.0 ASAP
+** Find out which templates are affected by the order of columns: 
+*** DONE ValueObject.stg
+*** DONE BaseValueObject.stg
+*** TODO ValueObjectFactory.stg
+*** TODO BaseDAO.stg 
+*** TODO DAO.stg
+*** TODO AttributesStatementSetter.stg
+*** DONE ResultSetExtractor.stg
+*** DONE PkStatementSetter.stg
+*** DONE FkStatementSetter.stg -> Depends on FK mgmt
+*** Custom query related templates?
+
+** Implement those templates ASAP:
+*** DONE ValueObject.stg: 4 -> 4
+*** BaseValueObject.stg: 2 ->
+*** ValueObjectFactory.stg: 1 ->
+*** BaseDAO.stg: 1 ->
+*** DAO.stg: 1 ->
+*** AttributesStatementSetter.stg: 1 ->
+
+** Nest QueryJs, overriding only such templates
+

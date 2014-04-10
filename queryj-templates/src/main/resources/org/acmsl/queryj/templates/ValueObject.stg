@@ -29,7 +29,7 @@
 //
 //***************************************************************************
 //
-// Filename: BaseValueObject.stg
+// Filename: ValueObject.stg
 //
 // Author: Jose San Leandro Armendariz
 //
@@ -62,15 +62,26 @@ sourceImpl(table, C) ::= <<
   [
     description(table=table)
   ],
-  template="org/acmsl/queryj/templates/BaseValueObject.stg",
+  template="org/acmsl/queryj/templates/ValueObject.stg",
   C=C)><endif>
 <package_declaration(p=C.package)>
+<checkers_import(C=C)>
+<if(C.implement_markers)>
 
-<imports(table=table)>
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.dao.ValueObject;
+
+<endif>
 /*
  * Importing some JDK classes.
  */
 import java.io.Serializable;
+<if(table.attributeTypes)>
+<table.attributeTypes:{ t | import <t>;}; separator="\n">
+<endif>
+
 
 <class(table=table, C=C)>
 >>
@@ -80,15 +91,7 @@ description(table) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-<if(table.comment.empty)>ValueObject for <table.name> information.<else><table.comment><endif>
->>
-
-imports(table) ::= <<
-<!
-  Generates the imports for the attributes' types.
-  @param table the table.
-!>
-<table.attributeTypes:{ t | import <t>;} ; separator="\n">
+<if(table.comment.empty)>ValueObject for <table.name>.<else><table.comment><endif>
 >>
 
 class(table, C) ::= <<
@@ -105,7 +108,12 @@ class(table, C) ::= <<
   template="org/acmsl/queryj/templates/BaseValueObject.stg", C=C)>
  */
 public interface <table.name.voName>
+<if(C.implement_markers)>
+    extends  ValueObject,
+             Serializable
+<else>
     extends Serializable
+<endif>
 {
     <table.attributes:getter(); separator="\n\n">
 }
@@ -120,6 +128,6 @@ getter(attribute) ::= <<
  * <if(attribute.comment)><attribute.comment><else>Retrieves the \<i\><attribute.name>\</i\> value<endif>.
  * @return such information.
  */
-<if(!attribute.primitive)><if(attribute.nullable)>@Nullable<else>@NotNull<endif><endif>
+<if(!attribute.strictlyPrimitive)><if(attribute.nullable)>@Nullable<else>@NotNull<endif><endif>
 <attribute.javaType> get<attribute.name.capitalized>();
 >>

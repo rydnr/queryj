@@ -50,7 +50,7 @@ source(C) ::= <<
 
 sourceImpl(table, C) ::= <<
 <!
-  Generates a DAOFactory database implementation source file.
+  Generates a BaseDAO interface source file.
   @param table the table.
   @param C the context.
 !>

@@ -301,6 +301,29 @@ public abstract class AbstractAttributeDecorator
     }
 
     /**
+     * Checks whether the attribute is strictly primitive.
+     * @return such information.
+     */
+    public boolean isStrictlyPrimitive()
+    {
+        return isStrictlyPrimitive(getTypeId(), isNullable(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether this attribute can be modelled as a primitive or not.
+     * @param typeId the attribute type.
+     * @param metadataTypeManager the metadata type manager.
+     * @return <code>false</code> if no primitive matches.
+     */
+    protected boolean isStrictlyPrimitive(
+        final int typeId,
+        final boolean nullable,
+        @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return !nullable && metadataTypeManager.isPrimitive(typeId);
+    }
+
+    /**
      * Retrieves whether this attribute can be modelled as a primitive or not.
      * @return <code>false</code> if no primitive matches.
      */
@@ -311,7 +334,9 @@ public abstract class AbstractAttributeDecorator
 
     /**
      * Retrieves whether this attribute can be modelled as a primitive or not.
+     * @param typeId the id of the type.
      * @param type the attribute type.
+     * @param nullable whether the attribute accepts nulls.
      * @param metadataTypeManager the metadata type manager.
      * @return <code>false</code> if no primitive matches.
      */
@@ -323,7 +348,7 @@ public abstract class AbstractAttributeDecorator
     {
         final boolean result;
 
-        if (metadataTypeManager.isPrimitive(typeId))
+        if (isStrictlyPrimitive(typeId, nullable, metadataTypeManager))
         {
             result = true;
         }
