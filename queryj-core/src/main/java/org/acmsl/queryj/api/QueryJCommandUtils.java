@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Some helper methods dealing with QueryJ commands.
  *
  * Date: 2014/03/29
  * Time: 08:00
@@ -36,24 +36,32 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing JetBrains annotations.
+ * Importing ACM S.L. Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /**
- *
+ * Some helper methods dealing with QueryJ {@link QueryJCommand commands}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/03/29 08:00
@@ -77,7 +85,7 @@ public class QueryJCommandUtils
      * Default constructor. There's no real requirement to force the user
      * to use only the getInstance() method.
      */
-    protected QueryJCommandUtils() {};
+    protected QueryJCommandUtils() {}
 
     /**
      * Retrieves the singleton instance.
