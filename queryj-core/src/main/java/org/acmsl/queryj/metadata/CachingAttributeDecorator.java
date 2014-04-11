@@ -644,7 +644,7 @@ public class CachingAttributeDecorator
     public String toString()
     {
         return
-              "{ \"class\": \"" + CachingAttributeDecorator.class.getName() + '"'
+              "{ \"class\": \"" + CachingAttributeDecorator.class.getSimpleName() + '"'
             + ", \"super\": " + super.toString()
             + ", \"cachedIsClob\": \"" + m__bCachedIsClob + '"'
             + ", \"cachedIsPrimitive\" : " + m__bCachedIsPrimitive
@@ -655,8 +655,9 @@ public class CachingAttributeDecorator
             + ", \"cachedQueryJFieldType\" : \"" + m__strCachedQueryJFieldType + '"'
             + ", \"cachedStatementSetterFieldType\" : \"" + m__strCachedStatementSetterFieldType + '"'
             + ", \"cachedNumberSmallerThanInt\" : " + m__bCachedNumberSmallerThanInt
-            + ", \"cachedType\" : '" + m__strCachedType + '"'
-            + ", \"cachedPrimitiveWrapper\" : '" + m__bCachedIsPrimitiveWrapper + '"'
+            + ", \"cachedType\" : \"" + m__strCachedType + '"'
+            + ", \"cachedPrimitiveWrapper\" : \"" + m__bCachedIsPrimitiveWrapper + '"'
+            + ", \"package\" : \"" + CachingAttributeDecorator.class.getPackage().getName() + '"'
             + " }";
     }
 }

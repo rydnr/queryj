@@ -89,6 +89,10 @@ import javax.sql.DataSource;
 <if(table.attributeTypes)>
 <table.attributeTypes:{ t | import <t>;}; separator="\n">
 <endif>
+<if(table.containsClobs)>
+import java.io.Writer;
+import java.sql.Clob;
+<endif>
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -249,10 +253,7 @@ public class <table.name.voName>AttributesStatementSetter
     public void setValues(<notnull(C=C)>final PreparedStatement preparedStatement)
         throws  SQLException
     {
-        setValues(
-            preparedStatement,
-            getValues(),
-            isUpdateOperation());
+        setValues(preparedStatement, getValues(), isUpdateOperation());
     }
 
     /**
@@ -293,9 +294,8 @@ public class <table.name.voName>AttributesStatementSetter
         if (update)
         {
             <table.externallyManagedAttributes:{ a | <attribute_preparedstatement_specification(attr=a)>}; separator="\n">
-        }
-<  endif>
-
+        }<
+   endif>
         <table.own.minus.externallyManagedAttributes:{ a | <attribute_preparedstatement_specification(attr=a)>}; separator="\n">
     }
 
@@ -319,21 +319,30 @@ attribute_member_declaration(attribute) ::= <<
 private <attribute.javaType> <attribute.name.uncapitalized>;
 >>
 
-
 attribute_preparedstatement_specification(attr) ::= <<
 <!
  Generates the code to specify the attribute into the PreparedStatement.
  @param attr the attribute.
 !>
+
 <if(!attr.clob)><if(attr.allowsNull)>if  (<attr.name.uncapitalized> == null)
 {
-    preparedStatement.setNull(index++, Types.<attr.sqlType>);
+    preparedStatement.setNull(index++, Types.<attr.constantName>);
 }
 else
 {
-    preparedStatement.set<attr.objectType>(index++, indirect_template(name=attr.objectType + _to_primitive);
-}<else>preparedStatement.set<attr.objectType>(index++, <attr.name.uncapitalized>);
-<endif><endif>
+    preparedStatement.set<attr.objectType>(index++, <attribute_to_primitive(attribute=attr)>);
+}<else>
+preparedStatement.set<attr.objectType>(index++, <attr.name.uncapitalized>);<endif
+><else><clob_specification(attribute=attr)><endif>
+>>
+
+clob_specification(attribute) ::= <<
+<! Deals with Clob attributes !>
+<notnull(C=C)>final Clob <attribute.name.uncapitalized>Clob = preparedStatement.getConnection().createClob();
+<notnull(C=C)>final Writer clobWriter = <attribute.name.uncapitalized>Clob.setCharacterStream(1);
+clobWriter.write(<attribute.name.uncapitalized>);
+preparedStatement.setClob(index++, <attribute.name.uncapitalized>Clob);
 >>
 
 equals_method(table, C) ::= <<
@@ -424,7 +433,9 @@ public String toString()
     result.append(", \"update\": ");
     result.append(this.m__UpdateOperation);
 
-    result.append(", \"package\": \"<C.package>\" }");
+    result.append(", \"package\": \"");
+    result.append(<table.name.voName>AttributesStatementSetter.class.getPackage().getName());
+    result.append("\" }");
 
     return result.toString();
 }

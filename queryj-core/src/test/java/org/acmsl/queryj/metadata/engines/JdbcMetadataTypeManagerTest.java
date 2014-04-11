@@ -132,4 +132,433 @@ public class JdbcMetadataTypeManagerTest
 
         Assert.assertTrue(instance.isPrimitiveWrapper(Float.class.getSimpleName()));
     }
+
+    /**
+     * Checks whether getConstantName() works for ARRAYs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_ARRAYs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("ARRAY", instance.getConstantName(Types.ARRAY));
+    }
+
+    /**
+     * Checks whether getConstantName() works for BIGINTs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_BIGINTs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals(Literals.BIGINT_U, instance.getConstantName(Types.BIGINT));
+    }
+
+    /**
+     * Checks whether getConstantName() works for BINARYs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_BINARYs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals(Literals.BINARY_U, instance.getConstantName(Types.BINARY));
+    }
+
+    /**
+     * Checks whether getConstantName() works for BITs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_BITs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("BIT", instance.getConstantName(Types.BIT));
+    }
+
+    /**
+     * Checks whether getConstantName() works for BLOBs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_BLOBs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("BLOB", instance.getConstantName(Types.BLOB));
+    }
+
+    /**
+     * Checks whether getConstantName() works for BOOLEANs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_BOOLEANs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("BOOLEAN", instance.getConstantName(Types.BOOLEAN));
+    }
+
+    /**
+     * Checks whether getConstantName() works for CHARs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_CHARs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("CHAR", instance.getConstantName(Types.CHAR));
+    }
+
+    /**
+     * Checks whether getConstantName() works for CLOBs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_CLOBs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("CLOB", instance.getConstantName(Types.CLOB));
+    }
+
+    /**
+     * Checks whether getConstantName() works for DATALINKs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_DATALINKs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("DATALINK", instance.getConstantName(Types.DATALINK));
+    }
+
+    /**
+     * Checks whether getConstantName() works for DATEs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_DATEs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("DATE", instance.getConstantName(Types.DATE));
+    }
+
+    /**
+     * Checks whether getConstantName() works for DECIMALs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_DECIMALs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("DECIMAL", instance.getConstantName(Types.DECIMAL));
+    }
+
+    /**
+     * Checks whether getConstantName() works for DISTINCTs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_DISTINCTs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("DISTINCT", instance.getConstantName(Types.DISTINCT));
+    }
+
+    /**
+     * Checks whether getConstantName() works for DOUBLEs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_DOUBLEs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("DOUBLE", instance.getConstantName(Types.DOUBLE));
+    }
+
+    /**
+     * Checks whether getConstantName() works for FLOATs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_FLOATs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("FLOAT", instance.getConstantName(Types.FLOAT));
+    }
+
+    /**
+     * Checks whether getConstantName() works for INTEGERs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_INTEGERs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("INTEGER", instance.getConstantName(Types.INTEGER));
+    }
+
+    /**
+     * Checks whether getConstantName() works for JAVA_OBJECTs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_JAVA_OBJECTs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("JAVA_OBJECT", instance.getConstantName(Types.JAVA_OBJECT));
+    }
+
+    /**
+     * Checks whether getConstantName() works for LONGNVARCHARs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_LONGNVARCHARs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("LONGNVARCHAR", instance.getConstantName(Types.LONGNVARCHAR));
+    }
+
+    /**
+     * Checks whether getConstantName() works for LONGVARBINARYs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_LONGVARBINARYs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("LONGVARBINARY", instance.getConstantName(Types.LONGVARBINARY));
+    }
+
+    /**
+     * Checks whether getConstantName() works for LONGVARCHARs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_LONGVARCHARs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("LONGVARCHAR", instance.getConstantName(Types.LONGVARCHAR));
+    }
+
+    /**
+     * Checks whether getConstantName() works for NCHARs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_NCHARs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("NCHAR", instance.getConstantName(Types.NCHAR));
+    }
+
+    /**
+     * Checks whether getConstantName() works for NCLOBs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_NCLOBs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("NCLOB", instance.getConstantName(Types.NCLOB));
+    }
+
+    /**
+     * Checks whether getConstantName() works for NULLs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_NULLs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("NULL", instance.getConstantName(Types.NULL));
+    }
+
+    /**
+     * Checks whether getConstantName() works for NUMERICs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_NUMERICs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("NUMERIC", instance.getConstantName(Types.NUMERIC));
+    }
+
+    /**
+     * Checks whether getConstantName() works for NVARCHARs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_NVARCHARs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("NVARCHAR", instance.getConstantName(Types.NVARCHAR));
+    }
+
+    /**
+     * Checks whether getConstantName() works for OTHERs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_OTHERs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("OTHER", instance.getConstantName(Types.OTHER));
+    }
+
+    /**
+     * Checks whether getConstantName() works for REALs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_REALs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("REAL", instance.getConstantName(Types.REAL));
+    }
+
+    /**
+     * Checks whether getConstantName() works for REFs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_REFs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("REF", instance.getConstantName(Types.REF));
+    }
+
+    /**
+     * Checks whether getConstantName() works for REF_CURSORs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_REF_CURSORs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("REF_CURSOR", instance.getConstantName(Types.REF_CURSOR));
+    }
+
+    /**
+     * Checks whether getConstantName() works for ROWIDs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_ROWIDs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("ROWID", instance.getConstantName(Types.ROWID));
+    }
+
+    /**
+     * Checks whether getConstantName() works for SMALLINTs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_SMALLINTs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("SMALLINT", instance.getConstantName(Types.SMALLINT));
+    }
+
+    /**
+     * Checks whether getConstantName() works for SQLXMLs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_SQLXMLs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("SQLXML", instance.getConstantName(Types.SQLXML));
+    }
+
+    /**
+     * Checks whether getConstantName() works for STRUCTs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_STRUCTs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("STRUCT", instance.getConstantName(Types.STRUCT));
+    }
+
+    /**
+     * Checks whether getConstantName() works for TIMEs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_TIMEs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("TIME", instance.getConstantName(Types.TIME));
+    }
+
+    /**
+     * Checks whether getConstantName() works for TIME_WITH_TIMEZONEs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_TIME_WITH_TIMEZONEs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("TIME_WITH_TIMEZONE", instance.getConstantName(Types.TIME_WITH_TIMEZONE));
+    }
+
+    /**
+     * Checks whether getConstantName() works for TIMESTAMPs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_TIMESTAMPs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("TIMESTAMP", instance.getConstantName(Types.TIMESTAMP));
+    }
+
+    /**
+     * Checks whether getConstantName() works for TIMESTAMP_WITH_TIMEZONEs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_TIMESTAMP_WITH_TIMEZONEs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("TIMESTAMP_WITH_TIMEZONE", instance.getConstantName(Types.TIMESTAMP_WITH_TIMEZONE));
+    }
+
+    /**
+     * Checks whether getConstantName() works for TINYINTs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_TINYINTs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("TINYINT", instance.getConstantName(Types.TINYINT));
+    }
+
+    /**
+     * Checks whether getConstantName() works for VARBINARYs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_VARBINARYs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("VARBINARY", instance.getConstantName(Types.VARBINARY));
+    }
+
+    /**
+     * Checks whether getConstantName() works for VARCHARs.
+     */
+    @Test
+    public void getConstantName_retrieves_the_correct_constant_for_VARCHARs()
+    {
+        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
+
+        Assert.assertEquals("VARCHAR", instance.getConstantName(Types.VARCHAR));
+    }
 }

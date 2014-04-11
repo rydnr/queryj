@@ -42,6 +42,11 @@ import org.acmsl.queryj.metadata.vo.Attribute;
  */
 import org.acmsl.commons.patterns.Decorator;
 
+/*
+ * Importing Jetbrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Defines the ways an <code>Attribute</code> can be decorated.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -58,19 +63,19 @@ public interface AttributeDecorator
 
     /**
      * Retrieves whether the attribute is a clob or not.
-     * return such information.
+     * @return such information.
      */
     public boolean isClob();
 
     /**
      * Retrieves whether the attribute is a string or not.
-     * return such information.
+     * @return such information.
      */
     public boolean isString();
 
     /**
      * Retrieves whether the attribute is a date or not.
-     * return such information.
+     * @return such information.
      */
     public boolean isDate();
 
@@ -82,9 +87,24 @@ public interface AttributeDecorator
     public boolean isNumberSmallerThanInt();
 
     /**
-     * Retrieves the attribute type, as a {@link java.sql.Types}'s constant.
+     * Retrieves whether the attribute is numeric or not.
+     * @return such information.
+     */
+    public boolean isNumeric();
+
+    /**
+     * Retrieves the attribute type, as a {@link java.sql.Types}'s constant value.
      * @return such information.
      */
     @SuppressWarnings("unused")
     int getJavaSqlType();
+
+    /**
+     * Retrieves the attribute type, as a {@link java.sql.Types}'s constant name.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    String getConstantName();
+
 }
