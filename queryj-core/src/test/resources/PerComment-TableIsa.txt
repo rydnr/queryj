@@ -1,0 +1,1 @@
+My table @isa parent_table
