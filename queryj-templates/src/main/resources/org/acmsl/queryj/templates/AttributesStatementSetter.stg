@@ -259,7 +259,7 @@ public class <table.name.voName>AttributesStatementSetter
     /**
      * Specifies the values on given {@link PreparedStatement}
      * @param preparedStatement the prepared statement.
-     * @param values the {@link <table.vo.name>} instance.
+     * @param values the {@link <table.voName>} instance.
      * @param update whether it's an update operation.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      */
