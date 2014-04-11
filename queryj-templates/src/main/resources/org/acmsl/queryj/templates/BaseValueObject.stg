@@ -120,7 +120,7 @@ public abstract class Abstract<table.name.voName>
 
     /**
      * Creates an \<code>Abstract<table.name.voName>ValueObject\</code> instance.
-     <table.attributes:{ a | <attribute_javadoc(attribute=a)>}; separator="\n">
+     <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
     public Abstract<table.name.voName>ValueObject(
         <table.attributes:{ a | <attribute_method_declaration(attribute=a)>};
@@ -138,122 +138,6 @@ public abstract class Abstract<table.name.voName>
     <hashcode_method(table=table, C=C)>
 
     <tostring_method(table=table, C=C)>
-}
->>
-
-attribute_declaration(attribute) ::= <<
-<!
- Writes the declaration for given attribute.
- @param attribute the attribute.
-!>
-/**
- * The \<i><attribute.name>\</i> value.
- */
-<if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>
-private <attribute.javaType> m__<attribute.name.capitalized>;
->>
-
-attribute_javadoc(attribute) ::= <<
-<!
- Writes the Javadoc for given attribute.
- @param attribute the attribute.
-!>
-* @param <attribute.name.uncapitalized> the \<i><attribute.name.capitalized>\</i> value.
->>
-
-immutable_setter_call(attribute) ::= <<
-<!
- Writes the method call for the immutable setter of given attribute.
- @param attribute the attribute.
-!>
-<if(!attribute.strictlyPrimitive)><if(attribute.nullable)>
-if (<attribute.name.uncapitalized> != null)
-{
-    immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);
-}<else>immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);<endif>
-<else>immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);<endif>
->>
-
-attribute_accessors(attribute) ::= <<
-<!
- Writes the accessors for given attribute.
- @param attribute the attribute.
-!>
-<attribute_setter(attribute=attribute)>
-
-<attribute_getter(attribute=attribute)>
->>
-
-attribute_setter(attribute) ::= <<
-<!
- Writes the setter for given attribute.
- @param attribute the attribute.
-!>
-/**
- * Specifies the \<i><attribute.name>\</i> value.
- * @param value such information.
- */
-protected final void immutableSet<attribute.name.capitalized>(<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>final <attribute.javaType> value)
-{
-    this.m__<attribute.name.capitalized> = value;
-}
-
-/**
- * Specifies the \<i><attribute.name>\</i> value.
- * @param value such information.
- */
-@SuppressWarnings("unused")
-protected void set<attribute.name.capitalized>(<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>final <attribute.javaType> value)
-{
-    immutableSet<attribute.name.capitalized>(value);
-}
->>
-
-attribute_getter(attribute) ::= <<
-<!
- Writes the getter for given attribute.
- @param attribute the attribute.
-!>
-/**
- * Retrieves the \<i><attribute.name>\</i> value.
- * @return such information.
- */
-<if(attribute.allowsNull)>
-<if(!attribute.strictlyPrimitive)><nullable(C=C)><endif>
-protected final <attribute.objectType> immutableGet<attribute.name.capitalized>()
-<else>
-<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>
-protected final <attribute.javaType> immutableGet<attribute.name.capitalized>()
-<endif>
-{
-    return m__<attribute.name.capitalized>;
-}
-
-/**
- * Retrieves the \<i><attribute.name>\</i> value.
- * @return such information.
- */
-@Override
-<if(attribute.allowsNull)>
-<if(!attribute.strictlyPrimitive)><nullable(C=C)><endif>
-public <attribute.objectType> get<attribute.name.capitalized>()
-<else>
-<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>
-public <attribute.javaType> get<attribute.name.capitalized>()
-<endif>
-{
-<if(attribute.date)>
-    Date result = immutableGet<attribute.name.capitalized>();
-
-    if  (result != null)
-    {
-        result = new Date(result.getTime());
-    }
-
-    return result;
-<else>
-    return immutableGet<attribute.name.capitalized>();
-<endif>
 }
 >>
 

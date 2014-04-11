@@ -1,0 +1,431 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: AttributesStatementSetter.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate AttributesStatementSetter
+//              implementations.
+//
+//
+group AttributesStatementSetter;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+  Defines the rules to generate AttributesStatementSetter implementations.
+  @param C the context.
+!>
+<sourceImpl(table=C.table, C=C)>
+>>
+
+sourceImpl(table, C) ::= <<
+<!
+  Defines the rules to generate AttributesStatementSetter implementations.
+  @param table the table.
+  @param C the context.
+!>
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description(table=table)
+  ],
+  template="org/acmsl/queryj/templates/AttributesStatementSetter.stg",
+  C=C)><endif>
+<package_declaration(p=C.package)>
+
+<project_imports(
+  basePackageName=C.project_package,
+  voSubpackageName=typeInitMap.voSubpackageName,
+  voName=table.name.voName)>
+
+/*
+ * Importing Spring classes.
+ */
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+<checkers_import(C=C)>
+/*
+ * Importing JDK extension classes
+ */
+import javax.sql.DataSource;
+
+/*
+ * Importing JDK classes.
+ */
+<if(table.attributeTypes)>
+<table.attributeTypes:{ t | import <t>;}; separator="\n">
+<endif>
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
+
+/*
+ * Importing Apache Commons Logging classes
+ */
+import org.apache.commons.logging.LogFactory;
+
+<class(table=table, C=C)>
+>>
+
+project_imports(
+  basePackageName, voSubpackageName, voName) ::= <<
+<!
+ Generates the project imports.
+ @param basePackageName the base package name.
+ @param voSubpackageName the value-object subpackage name.
+ @param voName the value-object name.
+!>
+/*
+ * Importing project classes.
+ */
+import <basePackageName>.<voSubpackageName>.<voName>;
+import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
+>>
+
+first_line_description(table) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param table the table.
+!>
+Specifies the PreparedStatement values required
+>>
+
+second_line_description(table) ::= <<
+<!
+  Generates the second line of the generated file description.
+  @param table the table.
+!>
+to perform any <table.name> operation expecting the
+>>
+
+third_line_description(table) ::= <<
+<!
+  Generates the third line of the generated file description.
+  @param table the table.
+!>
+complete attribute set.
+>>
+
+class(table, C) ::= <<
+<!
+ Generates the class body.
+ @param table the table.
+ @param C the context.
+!>
+/**
+ * <[
+      first_line_description(table=table),
+      second_line_description(table=table),
+      third_line_description(table=table)
+    ]:{line |<line>}; separator="\n * ">
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/AttributesStatementSetter.stg", C=C)>
+ */
+<class_annotations(C=C)>
+public class <table.name.voName>AttributesStatementSetter
+{
+    /**
+     * An attribute container.
+     */
+    <notnull(C=C)>
+    private <table.name.voName> m__Values;
+
+    /**
+     * The \<i>update\</i> operation.
+     */
+    private boolean m__bUpdateOperation;
+
+    /**
+     * Creates a \<code><table.name.voName>AttributesStatementSetter\</code>
+     * instance.
+     * @param values the {@link <table.name.voName>} instance.
+     * @param updateOperation whether the operation is an update.
+     */
+    public <table.name.voName>AttributesStatementSetter(
+        <notnull(C=C)>final <table.name.voName> values,
+        final boolean updateOperation)
+    {
+        immutableSetValues(values);
+        immutableSetUpdateOperation(updateOperation);
+    }
+
+    /**
+     * Specifies the values.
+     * @param values the {@link <table.name.voName>} instance.
+     */
+    protected final void immutableSetValues(<notnull(C=C)>final <table.name.voName> values)
+    {
+        this.m__Values = values;
+    }
+
+    /**
+     * Specifies the values.
+     * @param values the {@link <table.name.voName>} instance.
+     */
+    @SuppressWarnings("unused")
+    protected void setValues(<notnull(C=C)>final <table.name.voName> values)
+    {
+        immutableSetValues(values);
+    }
+
+    /**
+     * Retrieves the values.
+     * @return such {@link <table.name.voName>} instance.
+     */
+    <notnull(C=C)>
+    public <table.name.voName> getValues()
+    {
+        return this.m__Values;
+    }
+
+    /**
+     * Specifies whether the operation is an update or not.
+     * @param updateOperation such information.
+     */
+    protected final void immutableSetUpdateOperation(
+        final boolean updateOperation)
+    {
+        m__bUpdateOperation = updateOperation;
+    }
+
+    /**
+     * Specifies whether the operation is an update or not.
+     * @param updateOperation such information.
+     */
+    protected void setUpdateOperation(final boolean updateOperation)
+    {
+        immutableSetUpdateOperation(updateOperation);
+    }
+
+    /**
+     * Retrieves whether the operation is an update or not.
+     * @return such information.
+     */
+    public boolean isUpdateOperation()
+    {
+        return m__bUpdateOperation;
+    }
+
+    /**
+     * Specifies the values on given {@link PreparedStatement}
+     * @param preparedStatement the prepared statement.
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+     */
+    @Override
+    public void setValues(<notnull(C=C)>final PreparedStatement preparedStatement)
+        throws  SQLException
+    {
+        setValues(
+            preparedStatement,
+            getValues(),
+            isUpdateOperation());
+    }
+
+    /**
+     * Specifies the values on given {@link PreparedStatement}
+     * @param preparedStatement the prepared statement.
+     * @param values the {@link <table.vo.name>} instance.
+     * @param update whether it's an update operation.
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+     */
+    protected void setValues(
+        <notnull(C=C)>final PreparedStatement preparedStatement,
+        <notnull(C=C)>final <table.name.voName> values,
+        final boolean update)
+        throws  SQLException
+    {
+        setValues(
+            preparedStatement,
+            <table.attributes:{ attr | values.get<attr.name.capitalized>()}; separator=",\n">,
+            isUpdateOperation());
+    }
+
+    /**
+     * Specifies the values on given {@link PreparedStatement}
+     * @param preparedStatement the prepared statement.
+     <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
+     * @param update whether it's an update operation.
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+     */
+    protected void setValues(
+        <notnull(C=C)>final PreparedStatement preparedStatement,
+        <table.attributes:{a | <attribute_method_parameter_declaration(attribute=a)>}; separator=",\n">,
+        final boolean update)
+        throws  SQLException
+    {
+        int index = 1;
+
+<  if(table.externallyManagedAttributes)>
+        if (update)
+        {
+            <table.externallyManagedAttributes:{ a | <attribute_preparedstatement_specification(attr=a)>}; separator="\n">
+        }
+<  endif>
+
+        <table.own.minus.externallyManagedAttributes:{ a | <attribute_preparedstatement_specification(attr=a)>}; separator="\n">
+    }
+
+    <equals_method(table=table, C=C)>
+
+    <hashcode_method(table=table, C=C)>
+
+    <tostring_method(table=table, C=C)>
+}
+>>
+
+attribute_member_declaration(attribute) ::= <<
+<!
+ Generates the member declaration for a concrete attribute.
+ @param attribute the attribute.
+!>
+/**
+ * <if(attribute.comment.empty)>The \<i><attribute.name>\</i> information<else><attribute.comment><endif>.
+ */
+<if(!attribute.strictlyPrimitive)><if(attribute.allowsNull)><nullable(C=C)><else><notnull(C=C)><endif><endif>
+private <attribute.javaType> <attribute.name.uncapitalized>;
+>>
+
+
+attribute_preparedstatement_specification(attr) ::= <<
+<!
+ Generates the code to specify the attribute into the PreparedStatement.
+ @param attr the attribute.
+!>
+<if(!attr.clob)><if(attr.allowsNull)>if  (<attr.name.uncapitalized> == null)
+{
+    preparedStatement.setNull(index++, Types.<attr.sqlType>);
+}
+else
+{
+    preparedStatement.set<attr.objectType>(index++, indirect_template(name=attr.objectType + _to_primitive);
+}<else>preparedStatement.set<attr.objectType>(index++, <attr.name.uncapitalized>);
+<endif><endif>
+>>
+
+equals_method(table, C) ::= <<
+<! Generates the equals(Object) method !>
+/**
+ * Checks whether given object is semantically equivalent to this one.
+ * @param other the other object to compare to.
+ * @return {@code true} if and only if they're equivalent.
+ */
+@Override
+public boolean equals(<nullable(C=C)>final Object other)
+{
+    final boolean result;
+
+    if (other instanceof <table.name.voName>AttributesStatementSetter)
+    {
+        <notnull(C=C)>final <table.name.voName>AttributesStatementSetter> candidate =
+            (<table.name.voName>AttributesStatementSetter) other;
+
+        result = equals(getValues(), isUpdateOperation(), candidate.getValues(), candidate.isUpdateOperation());
+    }
+    else
+    {
+        result = false;
+    }
+
+    return result;
+}
+
+/**
+ * Checks whether the state information provided match.
+ * @param myValues my {@code <table.name.voName>} values..
+ * @param myUpdate whether it's an update operation.
+ * @param hisValues his {@code <table.name.voName>} values.
+ * @param hisUpdate whether his it's an update operation.
+ * @return {@code true} if and only if both sets are equivalent.
+ */
+protected boolean equals(
+    <notnull(C=C)>final <table.name.voName> myValues,
+    final boolean myUpdate,
+    <notnull(C=C)>final <table.name.voName> hisValues,
+    final boolean hisUpdate)
+{
+    return
+           (myUpdate == hisUpdate)
+        && (myValues.equals(hisValues));
+}
+>>
+
+hashcode_method(table, C) ::= <<
+<! Generates the hashcode() method !>
+/**
+ * Retrieves the hashcode which identifies this instance
+ * from any other one.
+ * @return the unique (among instances of this class) value.
+ */
+@Override
+public int hashcode()
+{
+    final int result;
+
+    final int classHashCode = <table.name.voName>AttributesStatementSetter.class.hashcode();
+
+    final int valuesHashCode = this.m__Values.hashcode();
+
+    final int updateHashCode = Boolean.valueOf(this.m__bUpdateOperation).hashcode();
+
+    result = classHashCode + valuesHashCode + updateHashCode;
+
+    return result;
+}
+>>
+
+tostring_method(table, C) ::= <<
+<! Generates the toString() method !>
+/**
+ * Generates a JSON-compatible representation of this instance.
+ * @return such text.
+ */
+@Override
+public String toString()
+{
+    <notnull(C=C)>final StringBuilder result =
+        new StringBuilder("{ \class\": \"<table.name.voName>AttributesStatementSetter");
+
+    result.append("\", \"values\": ");
+    result.append(this.m__Values);
+    result.append(", \"update\": ");
+    result.append(this.m__UpdateOperation);
+
+    result.append(", \"package\": \"<C.package>\" }");
+
+    return result.toString();
+}
+>>

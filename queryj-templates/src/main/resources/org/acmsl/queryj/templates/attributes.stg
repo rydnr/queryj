@@ -1,0 +1,155 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: attributes.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines common templates for attributes.
+//
+group attributes;
+
+attribute_method_parameter_declaration(attribute) ::= <<
+<!
+ Writes the method parameter declaration for given attribute.
+ @param attribute the attribute.
+!>
+<if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>final <attribute.javaType> <attribute.name.uncapitalized>
+>>
+
+attribute_declaration(attribute) ::= <<
+<!
+ Writes the declaration for given attribute.
+ @param attribute the attribute.
+!>
+/**
+ * The \<i><attribute.name>\</i> value.
+ */
+<if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>
+private <attribute.javaType> m__<attribute.name.capitalized>;
+>>
+
+immutable_setter_call(attribute) ::= <<
+<!
+ Writes the method call for the immutable setter of given attribute.
+ @param attribute the attribute.
+!>
+<if(!attribute.strictlyPrimitive)><if(attribute.nullable)>
+if (<attribute.name.uncapitalized> != null)
+{
+    immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);
+}<else>immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);<endif>
+<else>immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);<endif>
+>>
+
+attribute_accessors(attribute) ::= <<
+<!
+ Writes the accessors for given attribute.
+ @param attribute the attribute.
+!>
+<attribute_setter(attribute=attribute)>
+
+<attribute_getter(attribute=attribute)>
+>>
+
+attribute_setter(attribute) ::= <<
+<!
+ Writes the setter for given attribute.
+ @param attribute the attribute.
+!>
+/**
+ * Specifies the \<i><attribute.name>\</i> value.
+ * @param value such information.
+ */
+protected final void immutableSet<attribute.name.capitalized>(<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>final <attribute.javaType> value)
+{
+    this.m__<attribute.name.capitalized> = value;
+}
+
+/**
+ * Specifies the \<i><attribute.name>\</i> value.
+ * @param value such information.
+ */
+@SuppressWarnings("unused")
+protected void set<attribute.name.capitalized>(<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>final <attribute.javaType> value)
+{
+    immutableSet<attribute.name.capitalized>(value);
+}
+>>
+
+attribute_getter(attribute) ::= <<
+<!
+ Writes the getter for given attribute.
+ @param attribute the attribute.
+!>
+/**
+ * Retrieves the \<i><attribute.name>\</i> value.
+ * @return such information.
+ */
+<if(attribute.allowsNull)>
+<if(!attribute.strictlyPrimitive)><nullable(C=C)><endif>
+protected final <attribute.objectType> immutableGet<attribute.name.capitalized>()
+<else>
+<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>
+protected final <attribute.javaType> immutableGet<attribute.name.capitalized>()
+<endif>
+{
+    return m__<attribute.name.capitalized>;
+}
+
+/**
+ * Retrieves the \<i><attribute.name>\</i> value.
+ * @return such information.
+ */
+@Override
+<if(attribute.allowsNull)>
+<if(!attribute.strictlyPrimitive)><nullable(C=C)><endif>
+public <attribute.objectType> get<attribute.name.capitalized>()
+<else>
+<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>
+public <attribute.javaType> get<attribute.name.capitalized>()
+<endif>
+{
+<if(attribute.date)>
+    Date result = immutableGet<attribute.name.capitalized>();
+
+    if  (result != null)
+    {
+        result = new Date(result.getTime());
+    }
+
+    return result;
+<else>
+    return immutableGet<attribute.name.capitalized>();
+<endif>
+}
+>>
+

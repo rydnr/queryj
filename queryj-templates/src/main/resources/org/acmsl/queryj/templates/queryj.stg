@@ -42,6 +42,7 @@ import "type_checkers.stg"
 import "javadoc.stg"
 import "custom_selects.stg"
 import "callbacks.stg"
+import "attributes.stg"
 
 typeInitMap ::= [
   "empty":"",

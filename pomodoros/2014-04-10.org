@@ -19,8 +19,8 @@
 ** Implement those templates ASAP:
 *** DONE ValueObject.stg #469: 4 -> 4
 *** DONE BaseValueObject.stg #470: 3 -> 3
-*** ValueObjectFactory.stg #471: 1 ->
-*** AttributesStatementSetter.stg: 1 ->
+*** DONE ValueObjectFactory.stg #471: 1 -> 1
+*** TODO AttributesStatementSetter.stg #472: 1 ->
 
 ** Nest QueryJs, overriding only such templates
 

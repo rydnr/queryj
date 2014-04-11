@@ -36,14 +36,14 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.metadata.DecoratedString;
 
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.DecoratedString;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -54,13 +54,17 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Is able to resolve "project_package" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/23
+ * @since 3.0
+ * Created: 2012/05/23
  */
 @SuppressWarnings("unused")
 @ThreadSafe
 public class ProjectPackageHandler
     extends AbstractTemplateContextFillHandler<QueryJTemplateContext, DecoratedString>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -6033273825952509723L;
 
     /**
