@@ -46,7 +46,7 @@ attribute_method_parameter_declaration(attribute, prefix) ::= <<
 <if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>final <attribute.javaType> <if(prefix)><prefix><attribute.name.capitalized><else><attribute.name.uncapitalized><endif>
 >>
 
-attribute_declaration(attribute, C=C) ::= <<
+attribute_declaration(attribute, C) ::= <<
 <!
  Writes the declaration for given attribute.
  @param attribute the attribute.

@@ -116,21 +116,21 @@ public abstract class Abstract<table.name.voName>
      */
     private static final long serialVersionUID = <C.serialVersionUID>L;
 
-    <table.attributes:{ a | <attribute_declaration(attribute=a)>}; separator="\n\n">
+    <table.attributes:{ a | <attribute_declaration(attribute=a, C=C)>}; separator="\n\n">
 
     /**
      * Creates an \<code>Abstract<table.name.voName>ValueObject\</code> instance.
      <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
     public Abstract<table.name.voName>ValueObject(
-        <table.attributes:{ a | <attribute_method_declaration(attribute=a)>};
+        <table.attributes:{ a | <attribute_method_declaration(attribute=a, C=C)>};
           separator=",\n">)
     {
         <table.attributes:{ a | <immutable_setter_call(attribute=a)>};
           separator="\n">
     }
 
-    <table.attributes:{ a | <attribute_accessors(attribute=a)>};
+    <table.attributes:{ a | <attribute_accessors(attribute=a, C=C)>};
      separator="\n\n">
 
     <equals_method(table=table, C=C)>
