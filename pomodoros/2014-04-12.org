@@ -17,7 +17,7 @@
 **** Custom query related templates?
 
 *** Implement those templates ASAP:
-**** TODO PkStatementSetter.stg #472: 3 -> 3
+**** TODO PkStatementSetter.stg #473: 3 -> 3
 **** TODO FkStatementSetter.stg: 3 ->
 **** Nest QueryJs, overriding only such templates
 
