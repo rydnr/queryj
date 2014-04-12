@@ -470,35 +470,3 @@ custom_select_return_cast(cs, table, result, C) ::= <<
 custom_select_return_nullable_maybe(cs, result, C) ::= <<
 <if(cs.multiple)><notnull(C=C)><else><if(cs.resultRef)><if(result.wrappingASingleProperty)><result.properties:{property|<if(property.object)><nullable(C=C)><endif>}><else><nullable(C=C)><endif><else><nullable(C=C)><endif><endif>
 >>
-
-attribute_declaration(attr, C) ::= <<
-<!
-  Writes the parameter declaration for a concrete attribute.
-  @param attr the attribute.
-!>
-<type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.uncapitalized>
->>
-
-attribute_declaration_impl(attr, C) ::= <<
-<!
-  Writes the parameter declaration for a concrete attribute.
-  @param attr the attribute.
-!>
-<type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.uncapitalized>
->>
-
-attribute_isolated_declaration(attr, C) ::= <<
-<!
-  Writes the parameter declaration for a concrete attribute, isolated.
-  @param attr the attribute.
-!>
-<attribute_declaration(attr=attr, C=C)>,
->>
-
-attribute_isolated_declaration_impl(attr, C) ::= <<
-<!
-  Writes the parameter declaration for a concrete attribute.
-  @param attr the attribute.
-!>
-<type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.lowercased>,
->>

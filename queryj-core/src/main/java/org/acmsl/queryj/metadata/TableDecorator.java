@@ -39,7 +39,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
@@ -114,4 +114,11 @@ public interface TableDecorator
      */
     @NotNull
     List<DecoratedString> getAttributeTypes();
+
+    /**
+     * Retrieves the metadata manager.
+     * @return such instance.
+     */
+    @NotNull
+    MetadataManager getMetadataManager();
 }

@@ -203,6 +203,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param rootFolder the root folder.
      * @param charset the file encoding.
      * @param fileUtils the {@link org.acmsl.commons.utils.io.FileUtils} instance.
+     * @return whether it gets written to disk.
      */
     protected boolean write(
         final boolean caching,
@@ -232,9 +233,11 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param caching whether template caching is enabled.
      * @param fileName the file name.
      * @param outputDir the output folder.
+     * @param rootFolder the root folder.
      * @param charset the {@link Charset} to use.
      * @param fileUtils the {@link FileUtils} instance.
      * @param log the {@link Log} instance.
+     * @return whether it gets written to disk.
      */
     protected boolean generate(
         @NotNull final N template,
@@ -332,6 +335,8 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * Tries to read the hash from disk.
      * @param fileName  the file name.
      * @param outputDir the output folder.
+     * @param rootFolder the root folder.
+     * @param charset the charset.
      * @param fileUtils the {@link org.acmsl.commons.utils.io.FileUtils} instance.
      * @return the hash, if found.
      */
@@ -474,6 +479,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param hashValue the content to write
      * @param fileName the file name.
      * @param outputDir the output dir.
+     * @param rootFolder the root folder.
      * @param charset the charset.
      * @param fileUtils the {@link FileUtils} instance.
      */
@@ -492,6 +498,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     /**
      * Computes the hash of given content.
      * @param relevantContent the content.
+     * @param charset the charset.
      * @return the hash.
      */
     @NotNull

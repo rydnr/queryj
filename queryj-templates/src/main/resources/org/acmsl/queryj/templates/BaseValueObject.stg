@@ -170,23 +170,6 @@ public boolean equals(<nullable(C=C)>final Object other)
 }
 >>
 
-attribute_equals(attribute) ::= <<
-<! Generates the contribution of each attribute to the equals method. !>
-<if(attribute.strictlyPrimitive)>
-final boolean <attribute.name.uncapitalized>Match = (this.m__<attribute.name.capitalized> == candidate.get<attribute.name.capitalized>());
-<else><if(attribute.allowsNull)>
-final boolean <attribute.name.uncapitalized>Match =
-    (   (this.m__<attribute.name.capitalized> != null)
-     && (this.m__<attribute.name.capitalized>.equals(candidate.get<attribute.name.capitalized>())));
-<else>
-final boolean <attribute.name.uncapitalized>Match = this.m__<attribute.name.capitalized>.equals(candidate.get<attribute.name.capitalized>());<endif><endif>
->>
-
-attribute_equals(attribute) ::= <<
-<! Generates the final check in the equals method, for each attribute. !>
-<attribute.name.uncapitalized>Mach
->>
-
 hashcode_method(table, C) ::= <<
 <! Generates the hashcode() method !>
 /**
@@ -211,21 +194,6 @@ public int hashcode()
 }
 >>
 
-attribute_hashcode(attribute) ::= <<
-<! Generates the hashcode contribution for each attribute. !>
-<if(attribute.strictlyPrimitive)>
-final int <attribute.name.uncapitalized>HashCode = ("" + this.m__<attribute.name.capitalized>).hashcode();<else>
-<if(attribute.allowsNull)>final int <attribute.name.uncapitalized>HashCode;
-if (this.m__<attribute.name.capitalized> == null)
-{
-    <attribute.name.uncapitalized>HashCode = 0;
-}
-else
-{
-     <attribute.name.uncapitalized>HashCode = this.m__<attribute.name.capitalized>.hashCode();
-}<else>final int <attribute.name.uncapitalized>HashCode = this.m__<attribute.name.capitalized>.hashCode();<endif><endif>
->>
-
 tostring_method(table, C) ::= <<
 <! Generates the toString() method !>
 /**
@@ -242,10 +210,4 @@ public String toString()
 
     return result.toString();
 }
->>
-
-attribute_toString(attribute) ::= <<
-<! Generates the code to include given attribute within the toString() method. !>
-result.append("\", \"<a.name.capitalized>\": \"");
-result.append(this.m__<a.name.capitalized>);
 >>

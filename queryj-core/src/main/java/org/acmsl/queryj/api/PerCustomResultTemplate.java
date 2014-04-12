@@ -57,6 +57,7 @@ public interface PerCustomResultTemplate<C extends PerCustomResultTemplateContex
      * Builds a context-specific exception.
      * @param context  the context.
      * @param template the {@link ST} instance.
+     * @param actualException the actual exception.
      * @return the specific {@link InvalidTemplateException} for the template.
      */
     @SuppressWarnings("unused")

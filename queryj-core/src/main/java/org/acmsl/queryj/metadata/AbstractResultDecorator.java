@@ -647,6 +647,7 @@ public abstract class AbstractResultDecorator
 
     /**
      * Checks whether given object is semantically equal to given instance.
+     * @param result the {@link Result}.
      * @param object the object to compare to.
      * @return the result of such comparison.
      */

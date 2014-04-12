@@ -465,6 +465,30 @@ public class PerTableTemplatesTest
         {
             firstTime = false;
 
+            @NotNull final QueryJCommand t_Command =
+                new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+
+            new QueryJCommandWrapper\<CustomSqlProvider>(t_Command).setSetting(
+                CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, sqlProvider);
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                QueryJSettings.PACKAGE, BASE_PACKAGE_NAME);
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                QueryJSettings.REPOSITORY, "acme");
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                QueryJSettings.HEADER_FILE, "");
+            new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
+                QueryJSettings.DISABLE_TIMESTAMPS, false);
+            new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
+                QueryJSettings.IMPLEMENT_MARKER_INTERFACES, false);
+            new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
+                QueryJSettings.DISABLE_NOTNULL_ANNOTATIONS, false);
+            new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
+                QueryJSettings.DISABLE_CHECKTHREAD_ANNOTATIONS, false);
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                QueryJSettings.JNDI_DATASOURCE, "");
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                QueryJSettings.VERSION, "<C.version>");
+
             @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables =
                 new ArrayList\<>(tableMap.values());
 
@@ -480,44 +504,21 @@ public class PerTableTemplatesTest
                 @NotNull final MetadataManager metadataManager =
                     retrieveMetadataManager(engine, table, tableRows, decoratorFactory);
 
+                new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
+                    DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
+
                 @Nullable final PerTableTemplateFactory\<? extends PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext> templateFactory =
                     retrieveTemplateFactory(templateName);
 
                 Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
                 @NotNull final String packageName =
-                    resolvePackage(PACKAGE_MAPPINGS.get(templateName), resolveEngine(engine));
-
-                @NotNull final QueryJCommand t_Command =
-                    new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
-
-                new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
-                    DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
-                new QueryJCommandWrapper\<CustomSqlProvider>(t_Command).setSetting(
-                    CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, sqlProvider);
-                new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                    QueryJSettings.PACKAGE, BASE_PACKAGE_NAME);
-                new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                    QueryJSettings.REPOSITORY, "acme");
-                new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                    QueryJSettings.HEADER_FILE, "");
-                new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
-                    QueryJSettings.DISABLE_TIMESTAMPS, false);
-                new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
-                    QueryJSettings.IMPLEMENT_MARKER_INTERFACES, false);
-                new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
-                    QueryJSettings.DISABLE_NOTNULL_ANNOTATIONS, false);
-                new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
-                    QueryJSettings.DISABLE_CHECKTHREAD_ANNOTATIONS, false);
-                new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                    QueryJSettings.JNDI_DATASOURCE, "");
-                new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                    QueryJSettings.VERSION, "<C.version>");
+                    resolvePackage(PACKAGE_MAPPINGS.get(templateName), table.getName(), resolveEngine(engine));
 
                 @Nullable final PerTableTemplate\<PerTableTemplateContext> template =
                     templateFactory.createTemplate(
                         t_Command,
-                        retrieveDecoratorFactory(generator),
+                        decoratorFactory,
                         packageName,
                         table.getName(),
                         tableRows);
@@ -623,16 +624,21 @@ public class PerTableTemplatesTest
     /**
      * Resolves the package.
      * @param packageTemplate the package template.
+     * @param tableName the table name.
      * @param engine the engine.
      * @return the actual package.
      */
     @NotNull
-    protected String resolvePackage(@NotNull final String packageTemplate, @NotNull final Engine\<String> engine)
+    protected String resolvePackage(
+        @NotNull final String packageTemplate,
+        @NotNull final String tableName,
+        @NotNull final Engine\<String> engine)
     {
         @NotNull final String result;
 
         @NotNull final ST template = new ST(packageTemplate);
         template.add(Literals.PACKAGE_NAME, new DecoratedString(BASE_PACKAGE_NAME));
+        template.add(Literals.TABLE_NAME, new DecoratedString(tableName));
         template.add(Literals.ENGINE, new EngineDecorator(engine));
 
         result = template.render();

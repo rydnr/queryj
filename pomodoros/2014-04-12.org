@@ -1,4 +1,4 @@
-* 2014/04/11:
+* 2014/04/12:
 ** DONE Test / fix clobs #465: 3 -> 1
 ** TODO Test / fix inheritance #466: 4 ->
 ** TODO Nest QueryJ versions in msg-manager: 2 ->
@@ -12,11 +12,12 @@
 **** TODO DAO.stg
 **** DONE AttributesStatementSetter.stg
 **** DONE ResultSetExtractor.stg
-**** DONE PkStatementSetter.stg
-**** DONE FkStatementSetter.stg -> Depends on FK mgmt
+**** TODO PkStatementSetter.stg
+**** TODO FkStatementSetter.stg -> Depends on FK mgmt
 **** Custom query related templates?
 
 *** Implement those templates ASAP:
-**** DONE AttributesStatementSetter.stg #472: 5 -> 5
+**** TODO PkStatementSetter.stg #472: 1 ->
+**** TODO FkStatementSetter.stg: 3 ->
 **** Nest QueryJs, overriding only such templates
 

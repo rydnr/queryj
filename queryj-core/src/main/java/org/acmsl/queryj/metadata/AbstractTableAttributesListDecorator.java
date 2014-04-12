@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description:
+ * Description: Provides some common logic for table list decorators.
  *
  * Date: 2013/12/30
  * Time: 11:00
@@ -60,10 +60,11 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
+import java.sql.Types;
 import java.util.List;
 
 /**
- *
+ * Provides some common logic for table list decorators.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/12/30 11:00
@@ -253,7 +254,27 @@ public abstract class AbstractTableAttributesListDecorator
     @Override
     public List<DecoratedString> getAttributeTypes()
     {
-        throw new RuntimeException(INVALID_OPERATION);
+        return
+            getAttributeTypes(
+                getItems(),
+                getMetadataManager().getMetadataTypeManager(),
+                TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the types of the attributes.
+     * @param items such items.
+     * @param metadataTypManager the {@link MetadataTypeManager} instance.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
+     * @return their types.
+     */
+    @NotNull
+    protected List<DecoratedString> getAttributeTypes(
+        @NotNull final List<Attribute<DecoratedString>> items,
+        @NotNull final MetadataTypeManager metadataTypManager,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
+    {
+        return tableDecoratorHelper.getAttributeTypes(items, metadataTypManager);
     }
 
     // Table implementation
@@ -345,6 +366,39 @@ public abstract class AbstractTableAttributesListDecorator
     public boolean isVoDecorated()
     {
         return getTable().isVoDecorated();
+    }
+
+    /**
+     * Checks whether the items include any Clob attribute.
+     * @return {@code true} in such case.
+     */
+    public boolean getContainsClobs()
+    {
+        return contains(getItems(), Types.CLOB);
+    }
+
+    /**
+     * Checks whether given attributes include any of a certain type.
+     * @param attributes the attributes.
+     * @param typeId the type id.
+     * @return {@code true} in such case.
+     */
+    protected boolean contains(
+        @NotNull final List<Attribute<DecoratedString>> attributes, final int typeId)
+    {
+        boolean result = false;
+
+        for (@Nullable final Attribute<DecoratedString> attribute : attributes)
+        {
+            if (   (attribute != null)
+                && (attribute.getTypeId() == typeId))
+            {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
     }
 
     /**

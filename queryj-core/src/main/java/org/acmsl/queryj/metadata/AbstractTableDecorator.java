@@ -297,8 +297,9 @@ public abstract class AbstractTableDecorator
      * Retrieves the metadata manager.
      * @return such instance.
      */
+    @Override
     @NotNull
-    protected MetadataManager getMetadataManager()
+    public MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
     }
@@ -2033,40 +2034,27 @@ public abstract class AbstractTableDecorator
     @NotNull
     public List<DecoratedString> getAttributeTypes()
     {
-        return getAttributeTypes(getAttributes(), getMetadataManager().getMetadataTypeManager());
+        return
+            getAttributeTypes(
+                getAttributes(),
+                getMetadataManager().getMetadataTypeManager(),
+                TableDecoratorHelper.getInstance());
     }
 
     /**
      * Retrieves the ordered list of the fully-qualified types of given attributes.
      * @param attrs such attributes.
      * @param typeManager the {@link MetadataTypeManager} instance.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return such list.
      */
     @NotNull
     protected List<DecoratedString> getAttributeTypes(
         @NotNull final List<Attribute<DecoratedString>> attrs,
-        @NotNull final MetadataTypeManager typeManager)
+        @NotNull final MetadataTypeManager typeManager,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull final List<DecoratedString> result = new ArrayList<>(attrs.size());
-
-        for (@Nullable final Attribute<DecoratedString> attr: attrs)
-        {
-            if (attr != null)
-            {
-                @Nullable final String importType =
-                    typeManager.getImport(
-                        typeManager.getJavaType(attr.getType().getValue()));
-
-                if (importType != null)
-                {
-                    result.add(new DecoratedString(importType));
-                }
-            }
-        }
-
-        Collections.sort(result);
-
-        return result;
+        return tableDecoratorHelper.getAttributeTypes(attrs, typeManager);
     }
 
     /**

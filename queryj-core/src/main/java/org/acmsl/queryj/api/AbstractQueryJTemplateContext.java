@@ -274,6 +274,7 @@ public abstract class AbstractQueryJTemplateContext
     /**
      * Retrieves a boolean value from the command.
      * @param command the command.
+     * @param key the key.
      * @return such value.
      */
     protected boolean getBooleanValue(

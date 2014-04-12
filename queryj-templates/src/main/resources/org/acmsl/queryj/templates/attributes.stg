@@ -37,24 +37,50 @@
 //
 group attributes;
 
-attribute_method_parameter_declaration(attribute) ::= <<
+attribute_method_parameter_declaration(attribute, prefix) ::= <<
 <!
  Writes the method parameter declaration for given attribute.
  @param attribute the attribute.
+ @param prefix the prefix.
 !>
-<if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>final <attribute.javaType> <attribute.name.uncapitalized>
+<if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>final <attribute.javaType> <if(prefix)><prefix><attribute.name.capitalized><else><attribute.name.uncapitalized><endif>
 >>
 
-attribute_declaration(attribute) ::= <<
+attribute_declaration(attribute, C=C) ::= <<
 <!
  Writes the declaration for given attribute.
  @param attribute the attribute.
+ @param context the context.
 !>
 /**
  * The \<i><attribute.name>\</i> value.
  */
 <if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>
 private <attribute.javaType> m__<attribute.name.capitalized>;
+>>
+
+attribute_declaration_impl(attr, C) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute.
+  @param attr the attribute.
+!>
+<type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.uncapitalized>
+>>
+
+attribute_isolated_declaration(attr, C) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute, isolated.
+  @param attr the attribute.
+!>
+<attribute_declaration(attr=attr, C=C)>,
+>>
+
+attribute_isolated_declaration_impl(attr, C) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute.
+  @param attr the attribute.
+!>
+<type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.lowercased>,
 >>
 
 immutable_setter_call(attribute) ::= <<
@@ -159,4 +185,63 @@ attribute_to_primitive(attribute) ::= <<
     ><attribute.name.uncapitalized><
  else><if(attribute.string)
     ><attribute.name.uncapitalized><endif><endif>
+>>
+
+attribute_preparedstatement_specification(attr) ::= <<
+<!
+ Generates the code to specify the attribute into the PreparedStatement.
+ @param attr the attribute.
+!>
+
+<if(!attr.clob)><if(attr.allowsNull)>if  (<attr.name.uncapitalized> == null)
+{
+    preparedStatement.setNull(index++, Types.<attr.constantName>);
+}
+else
+{
+    preparedStatement.set<attr.objectType>(index++, <attribute_to_primitive(attribute=attr)>);
+}<else>
+preparedStatement.set<attr.objectType>(index++, <attr.name.uncapitalized>);<endif
+><else><clob_specification(attribute=attr)><endif>
+>>
+
+clob_specification(attribute) ::= <<
+<! Deals with Clob attributes !>
+<notnull(C=C)>final Clob <attribute.name.uncapitalized>Clob = preparedStatement.getConnection().createClob();
+<notnull(C=C)>final Writer clobWriter = <attribute.name.uncapitalized>Clob.setCharacterStream(1);
+clobWriter.write(<attribute.name.uncapitalized>);
+preparedStatement.setClob(index++, <attribute.name.uncapitalized>Clob);
+>>
+
+attribute_equals(attribute) ::= <<
+<! Generates the contribution of each attribute to the equals method. !>
+<if(attribute.strictlyPrimitive)>
+final boolean <attribute.name.uncapitalized>Match = (this.m__<attribute.name.capitalized> == candidate.get<attribute.name.capitalized>());
+<else><if(attribute.allowsNull)>
+final boolean <attribute.name.uncapitalized>Match =
+    (   (this.m__<attribute.name.capitalized> != null)
+     && (this.m__<attribute.name.capitalized>.equals(candidate.get<attribute.name.capitalized>())));
+<else>
+final boolean <attribute.name.uncapitalized>Match = this.m__<attribute.name.capitalized>.equals(candidate.get<attribute.name.capitalized>());<endif><endif>
+>>
+
+attribute_hashcode(attribute) ::= <<
+<! Generates the hashcode contribution for each attribute. !>
+<if(attribute.strictlyPrimitive)>
+final int <attribute.name.uncapitalized>HashCode = ("" + this.m__<attribute.name.capitalized>).hashcode();<else>
+<if(attribute.allowsNull)>final int <attribute.name.uncapitalized>HashCode;
+if (this.m__<attribute.name.capitalized> == null)
+{
+    <attribute.name.uncapitalized>HashCode = 0;
+}
+else
+{
+     <attribute.name.uncapitalized>HashCode = this.m__<attribute.name.capitalized>.hashCode();
+}<else>final int <attribute.name.uncapitalized>HashCode = this.m__<attribute.name.capitalized>.hashCode();<endif><endif>
+>>
+
+attribute_toString(attribute) ::= <<
+<! Generates the code to include given attribute within the toString() method. !>
+result.append("\", \"<a.name.capitalized>\": \"");
+result.append(this.m__<a.name.capitalized>);
 >>

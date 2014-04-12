@@ -1,5 +1,5 @@
 /*
-                        QueryJ-Core
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -59,8 +59,6 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -194,20 +192,6 @@ public class TableAttributesListDecorator
         return getTable().getPrimaryKey();
     }
 
-    // TODO: remove me
-    /**
-     * {@inheritDoc}
-     */
-    public List<Attribute<DecoratedString>> getPrimaryKey1()
-    {
-        List<Object> a = new ArrayList<>(2);
-
-        Object[] b = { 1, 2, 3};
-        a.addAll(Arrays.asList(b));
-
-        return getPrimaryKey();
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -263,6 +247,16 @@ public class TableAttributesListDecorator
     public boolean isRelationship()
     {
         return getTable().isRelationship();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public MetadataManager getMetadataManager()
+    {
+        return getTable().getMetadataManager();
     }
 
     /**

@@ -372,7 +372,12 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param metadataManager the {@link MetadataManager} instance.
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @param explicitTables the {@link AntTablesElement} instance.
+     * @param tableMap the table map.
+     * @param tableNameMap the table name map.
      * @param fieldMap a map to store field information.
+     * @param fieldFkMap the field fk map.
+     * @param fieldNameMap the field name map.
+     * @param attributeMap the attribute map.
      */
     protected void processExplicitSchema(
         @SuppressWarnings("unused") @NotNull final QueryJCommand parameters,
@@ -734,7 +739,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
     }
 
     /**
-     * Extracts the procedures..
+     * Extracts the procedures.
+     * @param tables the tables.
      * @param extractedMap the already-extracted information.
      * @param metadataManager the database metadata manager.
      * @param tableKey the key to store the tables.
@@ -823,6 +829,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
     /**
      * Retrieves the database product name.
+     * @param parameters the parameters.
      * @return such name.
      */
     @Nullable
@@ -844,6 +851,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
     /**
      * Retrieves the database product version.
+     * @param parameters the parameters.
      * @return such version.
      */
     @Nullable
@@ -864,6 +872,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
     /**
      * Retrieves the database major version.
+     * @param parameters the parameters.
      * @return such version.
      */
     public int retrieveDatabaseMajorVersion(@NotNull final QueryJCommand parameters)
@@ -883,6 +892,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
     /**
      * Retrieves the database minor version.
+     * @param parameters the parameters.
      * @return such version.
      */
     public int retrieveDatabaseMinorVersion(@NotNull final QueryJCommand parameters)
@@ -1003,6 +1013,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
     /**
      * Retrieves whether the database engine is case sensitive or not.
+     * @param caseSensitive the case sensitiveness.
      * @param parameters the parameters.
      */
     @SuppressWarnings("unchecked")
@@ -1013,6 +1024,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
     /**
      * Builds a database metadata manager.
+     * @param parameters the parameters.
      * @param tables the tables.
      * @param metaData the database metadata.
      * @param catalog the database catalog.
@@ -1098,6 +1110,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Retrieves the flag which indicates whether the metadata extraction
      * has been done already.
      * @param parameters the parameter map.
+     * @return such condition.
      */
     protected boolean retrieveAlreadyDoneFlag(@NotNull final QueryJCommand parameters)
     {
@@ -1175,6 +1188,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
     /**
      * Builds the table fields key.
+     * @param key the key.
      * @return the map key.
      */
     @NotNull

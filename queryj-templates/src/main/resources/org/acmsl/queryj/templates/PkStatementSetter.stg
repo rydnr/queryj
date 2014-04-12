@@ -29,21 +29,21 @@
 //
 //***************************************************************************
 //
-// Filename: AttributesStatementSetter.stg
+// Filename: PkStatementSetter.stg
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate AttributesStatementSetter
+// Description: Defines the rules to generate PkStatementSetter
 //              implementations.
 //
 //
-group AttributesStatementSetter;
+group PkStatementSetter;
 
 import "queryj.stg"
 
 source(C) ::= <<
 <!
-  Defines the rules to generate AttributesStatementSetter implementations.
+  Defines the rules to generate PkStatementSetter implementations.
   @param C the context.
 !>
 <sourceImpl(table=C.table, C=C)>
@@ -51,7 +51,7 @@ source(C) ::= <<
 
 sourceImpl(table, C) ::= <<
 <!
-  Defines the rules to generate AttributesStatementSetter implementations.
+  Defines the rules to generate PkStatementSetter implementations.
   @param table the table.
   @param C the context.
 !>
@@ -63,7 +63,7 @@ sourceImpl(table, C) ::= <<
   [
     description(table=table)
   ],
-  template="org/acmsl/queryj/templates/AttributesStatementSetter.stg",
+  template="org/acmsl/queryj/templates/PkStatementSetter.stg",
   C=C)><endif>
 <package_declaration(p=C.package)>
 
@@ -86,10 +86,10 @@ import javax.sql.DataSource;
 /*
  * Importing JDK classes.
  */
-<if(table.attributeTypes)>
-<table.attributeTypes:{ t | import <t>;}; separator="\n">
+<if(table.primaryKey.attributeTypes)>
+<table.primaryKey.attributeTypes:{ t | import <t>;}; separator="\n">
 <endif>
-<if(table.containsClobs)>
+<if(table.primaryKey.containsClobs)>
 import java.io.Writer;
 import java.sql.Clob;
 <endif>
@@ -140,7 +140,7 @@ third_line_description(table) ::= <<
   Generates the third line of the generated file description.
   @param table the table.
 !>
-complete attribute set.
+primary key.
 >>
 
 class(table, C) ::= <<
@@ -156,17 +156,13 @@ class(table, C) ::= <<
       third_line_description(table=table)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(
-  template="org/acmsl/queryj/templates/AttributesStatementSetter.stg", C=C)>
+  template="org/acmsl/queryj/templates/PkStatementSetter.stg", C=C)>
  */
 <class_annotations(C=C)>
-public class <table.name.voName>AttributesStatementSetter
+public class <table.name.voName>PkStatementSetter
     implements  PreparedStatementSetter
 {
-    /**
-     * An attribute container.
-     */
-    <notnull(C=C)>
-    private <table.name.voName> m__Values;
+    <table.primaryKey:{ a | <attribute_declaration(attribute=a, C=C)>}; separator="\n">
 
     /**
      * The \<i>update\</i> operation.
@@ -174,47 +170,20 @@ public class <table.name.voName>AttributesStatementSetter
     private boolean m__bUpdateOperation;
 
     /**
-     * Creates a \<code><table.name.voName>AttributesStatementSetter\</code>
+     * Creates a \<code><table.name.voName>PkStatementSetter\</code>
      * instance.
-     * @param values the {@link <table.name.voName>} instance.
+     <table.primaryKey:{ a |<attribute_javadoc(attr=a)>}; separator="\n">
      * @param updateOperation whether the operation is an update.
      */
-    public <table.name.voName>AttributesStatementSetter(
-        <notnull(C=C)>final <table.name.voName> values,
+    public <table.name.voName>PkStatementSetter(
+        <table.primaryKey:{ a | <attribute_method_parameter_declaration(attribute=a, prefix="")>}; separator=",\n">,
         final boolean updateOperation)
     {
-        immutableSetValues(values);
+        <table.primaryKey:{ a | immutableSet<a.name.capitalized>(<a.name.uncapitalized>);}; separator="\n">
         immutableSetUpdateOperation(updateOperation);
     }
 
-    /**
-     * Specifies the values.
-     * @param values the {@link <table.name.voName>} instance.
-     */
-    protected final void immutableSetValues(<notnull(C=C)>final <table.name.voName> values)
-    {
-        this.m__Values = values;
-    }
-
-    /**
-     * Specifies the values.
-     * @param values the {@link <table.name.voName>} instance.
-     */
-    @SuppressWarnings("unused")
-    protected void setValues(<notnull(C=C)>final <table.name.voName> values)
-    {
-        immutableSetValues(values);
-    }
-
-    /**
-     * Retrieves the values.
-     * @return such {@link <table.name.voName>} instance.
-     */
-    <notnull(C=C)>
-    public <table.name.voName> getValues()
-    {
-        return this.m__Values;
-    }
+    <table.primaryKey:{ a | <attribute_accessors(attribute=a)>}; separator="\n">
 
     /**
      * Specifies whether the operation is an update or not.
@@ -253,50 +222,34 @@ public class <table.name.voName>AttributesStatementSetter
     public void setValues(<notnull(C=C)>final PreparedStatement preparedStatement)
         throws  SQLException
     {
-        setValues(preparedStatement, getValues(), isUpdateOperation());
-    }
-
-    /**
-     * Specifies the values on given {@link PreparedStatement}
-     * @param preparedStatement the prepared statement.
-     * @param values the {@link <table.name.voName>} instance.
-     * @param update whether it's an update operation.
-     * @throws SQLException intercepted by \<i>Spring\</i>.
-     */
-    protected void setValues(
-        <notnull(C=C)>final PreparedStatement preparedStatement,
-        <notnull(C=C)>final <table.name.voName> values,
-        final boolean update)
-        throws  SQLException
-    {
         setValues(
             preparedStatement,
-            <table.attributes:{ attr | values.get<attr.name.capitalized>()}; separator=",\n">,
+            <table.primaryKey:{ a | get<a.name.capitalized>(),}; separator="\n">
             isUpdateOperation());
     }
 
     /**
      * Specifies the values on given {@link PreparedStatement}
      * @param preparedStatement the prepared statement.
-     <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
+     <table.primaryKey:{ a |<attribute_javadoc(attr=a)>}; separator="\n">
      * @param update whether it's an update operation.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      */
     protected void setValues(
         <notnull(C=C)>final PreparedStatement preparedStatement,
-        <table.attributes:{a | <attribute_method_parameter_declaration(attribute=a)>}; separator=",\n">,
+        <table.primaryKey:{ a | <attribute_method_parameter_declaration(attribute=a, prefix="")>}; separator=",\n">,
         final boolean update)
         throws  SQLException
     {
         int index = 1;
 
-<  if(table.externallyManagedAttributes)>
+<  if(table.externallyManaged.only.primaryKey)>
         if (update)
         {
-            <table.externallyManagedAttributes:{ a | <attribute_preparedstatement_specification(attr=a)>}; separator="\n">
+            <table.externallyManaged.only.primaryKey:{ a | <attribute_preparedstatement_specification(attr=a)>}; separator="\n">
         }<
    endif>
-        <table.own.minus.externallyManagedAttributes:{ a | <attribute_preparedstatement_specification(attr=a)>}; separator="\n">
+        <table.primaryKey.minus.externallyManaged:{ a | <attribute_preparedstatement_specification(attr=a)>}; separator="\n">
     }
 
     <equals_method(table=table, C=C)>
@@ -319,12 +272,15 @@ public boolean equals(<nullable(C=C)>final Object other)
 {
     final boolean result;
 
-    if (other instanceof <table.name.voName>AttributesStatementSetter)
+    if (other instanceof <table.name.voName>PkStatementSetter)
     {
-        <notnull(C=C)>final <table.name.voName>AttributesStatementSetter> candidate =
+        <notnull(C=C)>final <table.name.voName>PkStatementSetter> candidate =
             (<table.name.voName>AttributesStatementSetter) other;
 
-        result = equals(getValues(), isUpdateOperation(), candidate.getValues(), candidate.isUpdateOperation());
+        <table.primaryKey:{ a | <attribute_equals(attribute=a)>}; separator="">
+        result =
+                (isUpdateOperation() == candidate.isUpdateOperation())
+            <table.primaryKey:{ a |&& <a.name.uncapitalized>Match}; separator="\n">;
     }
     else
     {
@@ -332,25 +288,6 @@ public boolean equals(<nullable(C=C)>final Object other)
     }
 
     return result;
-}
-
-/**
- * Checks whether the state information provided match.
- * @param myValues my {@code <table.name.voName>} values..
- * @param myUpdate whether it's an update operation.
- * @param hisValues his {@code <table.name.voName>} values.
- * @param hisUpdate whether his it's an update operation.
- * @return {@code true} if and only if both sets are equivalent.
- */
-protected boolean equals(
-    <notnull(C=C)>final <table.name.voName> myValues,
-    final boolean myUpdate,
-    <notnull(C=C)>final <table.name.voName> hisValues,
-    final boolean hisUpdate)
-{
-    return
-           (myUpdate == hisUpdate)
-        && (myValues.equals(hisValues));
 }
 >>
 
@@ -366,13 +303,16 @@ public int hashcode()
 {
     final int result;
 
-    final int classHashCode = <table.name.voName>AttributesStatementSetter.class.hashcode();
+    final int classHashCode = Abstract<table.name.voName>.class.hashcode();
 
-    final int valuesHashCode = this.m__Values.hashcode();
+    <table.primaryKey:{ a | <attribute_hashcode(attribute=a)>}; separator="\n">
 
-    final int updateHashCode = Boolean.valueOf(this.m__bUpdateOperation).hashcode();
+    final int updateHashCode = Boolean.valueOf(isUpdateOperation()).hashcode();
 
-    result = classHashCode + valuesHashCode + updateHashCode;
+    result =
+          classHashCode
+        <table.primaryKey:{ a |+ <a.name.uncapitalized>HashCode}; separator="\n">
+        + updateHashCode;
 
     return result;
 }
@@ -388,16 +328,13 @@ tostring_method(table, C) ::= <<
 public String toString()
 {
     <notnull(C=C)>final StringBuilder result =
-        new StringBuilder("{ \class\": \"<table.name.voName>AttributesStatementSetter");
+        new StringBuilder("{ \class\": \"<table.name.voName>PkStatementSetter");
 
-    result.append("\", \"values\": ");
-    result.append(this.m__Values);
+    <table.primaryKey:{ a | <attribute_toString(attribute=a)>}; separator="\n">
+
     result.append(", \"update\": ");
     result.append(this.m__UpdateOperation);
-
-    result.append(", \"package\": \"");
-    result.append(<table.name.voName>AttributesStatementSetter.class.getPackage().getName());
-    result.append("\" }");
+    result.append(", \"package\": \"<C.package>\" }");
 
     return result.toString();
 }

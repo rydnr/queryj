@@ -227,6 +227,7 @@ public class BindQueryParametersHandler
     /**
      * Binds the parameters to given statement.
      * @param parameter the {@link Parameter}.
+     * @param parameterIndex the parameter index.
      * @param sql the sql.
      * @param statement the prepared statement.
      * @param typeManager the metadata type manager.
@@ -346,6 +347,8 @@ public class BindQueryParametersHandler
      * @param parameterIndex the index of the parameter.
      * @param type the parameter type.
      * @param sql the sql.
+     * @param parameterClasses the parameter classes.
+     * @return the method.
      */
     @NotNull
     protected Method retrievePreparedStatementMethod(
@@ -395,6 +398,7 @@ public class BindQueryParametersHandler
      * @param typeClass the class of the parameter type.
      * @param sql the {@link Sql}.
      * @param conversionUtils the {@link ConversionUtils} instance.
+     * @param <T> the type.
      * @return the validation value.
      */
     @SuppressWarnings("unchecked")
@@ -729,6 +733,7 @@ public class BindQueryParametersHandler
      * Retrieves the method to call.
      * @param instanceClass the instance class.
      * @param methodName the method name.
+     * @param parameterClasses the parameter classes.
      * @return the <code>Method</code> instance.
      */
     @NotNull
