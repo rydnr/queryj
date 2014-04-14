@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,22 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: TemplateWritingHandlerTemplate.java
+ * Filename: ForeignKeyNotAvailableException.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro
  *
- * Description: Template to build QueryJ's writing handler sources.
+ * Description: Thrown whenever a ForeignKey is expected but it's not
+ *              available, which is a bug.
  *
- * Date: 2013/08/16
- * Time: 09:31
+ * Created: 2014/04/14 17:04
  *
  */
-package org.acmsl.queryj.templates.packaging;
-
-/*
- * Importing JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
+package org.acmsl.queryj.api.exceptions;
 
 /*
  * Importing checkthread.org annotations.
@@ -46,38 +41,26 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Template to build QueryJ's writing handler sources.
+ * Thrown whenever a {@link org.acmsl.queryj.metadata.vo.ForeignKey} is expected
+ * but it's not available, which is a bug.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/16 09/31
+ * Created 2014/04/14
  */
 @ThreadSafe
-public class TemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
-    extends AbstractTemplatePackagingTemplate<C>
+public class ForeignKeyNotAvailableException
+    extends QueryJNonCheckedException
 {
     /**
      * The serial version id.
      */
-    private static final long serialVersionUID = 2464272892781177697L;
+    private static final long serialVersionUID = -7142576551876642009L;
 
     /**
-     * Creates a TemplateWritingHandlerTemplate instance.
-     * @param context the {@link TemplatePackagingContext context}.
+     * Creates a new instance.
      */
-    public TemplateWritingHandlerTemplate(@NotNull final C context)
+    public ForeignKeyNotAvailableException()
     {
-        super(context);
-    }
-
-    /**
-     * Retrieves the template name.
-     *
-     * @return such name.
-     */
-    @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return Literals.TEMPLATE_WRITING_HANDLER;
+        super("ForeignKey.not.available");
     }
 }

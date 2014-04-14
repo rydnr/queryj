@@ -33,12 +33,14 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.PerForeignKeyTemplate;
 import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.api.PerForeignKeyTemplateGenerator;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
@@ -81,46 +83,31 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
         @NotNull final C context,
         @NotNull final File rootDir,
         @NotNull final QueryJCommand parameters)
-    {
-        return retrieveOutputDir(context.getForeignKey().getSourceTableName(), parameters);
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param tableName the table name.
-     * @param parameters the parameter map.
-     * @return such folder.
-     */
-    @NotNull
-    protected File retrieveOutputDir(
-        @NotNull final String tableName, @NotNull final QueryJCommand parameters)
+      throws QueryJBuildException
     {
         return
             retrieveOutputDir(
-                retrieveProductName(parameters),
+                retrieveEngine(parameters, retrieveDatabaseMetaData(parameters)),
                 retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
-                tableName,
-                retrieveUseSubfoldersFlag(parameters),
-                PackageUtils.getInstance());
+                context.getForeignKey().getSourceTableName(),
+                retrieveUseSubfoldersFlag(parameters));
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @param projectOutputDir the project output dir.
      * @param projectPackage the project package.
      * @param tableName the table name.
      * @param subFolders whether to use sub folders or not.
-     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      */
     @NotNull
     protected abstract File retrieveOutputDir(
-        @NotNull final String engineName,
+        @NotNull final Engine<String> engine,
         @NotNull final File projectOutputDir,
         final String projectPackage,
         @NotNull final String tableName,
-        final boolean subFolders,
-        @NotNull final PackageUtils packageUtils);
+        final boolean subFolders);
 }

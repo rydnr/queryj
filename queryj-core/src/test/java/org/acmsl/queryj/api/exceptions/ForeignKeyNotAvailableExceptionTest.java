@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,17 +23,16 @@
 
  ******************************************************************************
  *
- * Filename: TemplateWritingHandlerTemplate.java
+ * Filename: ForeignKeyNotAvailableExceptionTest.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro
  *
- * Description: Template to build QueryJ's writing handler sources.
+ * Description: Tests for ForeignKeyNotAvailableException.
  *
- * Date: 2013/08/16
- * Time: 09:31
+ * Created: 2014/04/14 17:01
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.api.exceptions;
 
 /*
  * Importing JetBrains annotations.
@@ -41,43 +40,39 @@ package org.acmsl.queryj.templates.packaging;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JUnit classes.
  */
-import org.checkthread.annotations.ThreadSafe;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.Arrays;
+import java.util.Locale;
 
 /**
- * Template to build QueryJ's writing handler sources.
+ * Tests for {@link ForeignKeyNotAvailableException}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/16 09/31
+ * Created 2014/04/14
  */
-@ThreadSafe
-public class TemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
-    extends AbstractTemplatePackagingTemplate<C>
+@RunWith(JUnit4.class)
+public class ForeignKeyNotAvailableExceptionTest
 {
     /**
-     * The serial version id.
+     * Tests the message key is defined for Spanish and English.
      */
-    private static final long serialVersionUID = 2464272892781177697L;
-
-    /**
-     * Creates a TemplateWritingHandlerTemplate instance.
-     * @param context the {@link TemplatePackagingContext context}.
-     */
-    public TemplateWritingHandlerTemplate(@NotNull final C context)
+    @Test
+    public void exception_message_is_defined_in_Spanish_and_English()
     {
-        super(context);
-    }
+        @NotNull final ForeignKeyNotAvailableException instance = new ForeignKeyNotAvailableException();
 
-    /**
-     * Retrieves the template name.
-     *
-     * @return such name.
-     */
-    @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return Literals.TEMPLATE_WRITING_HANDLER;
+        for (@NotNull final Locale t_Locale : Arrays.asList(new Locale("en"), new Locale("es")))
+        {
+            // throws a MissingResourceException if the key is not declared.
+            instance.getMessage(t_Locale);
+        }
     }
 }

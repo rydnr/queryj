@@ -142,7 +142,7 @@ public class FindTemplateDefsHandler
             t_lTotalDefFiles.addAll(t_lDefFiles);
         }
 
-        new QueryJCommandWrapper<List<File>>(command).setSetting(DEF_FILES, t_lTotalDefFiles);;
+        new QueryJCommandWrapper<List<File>>(command).setSetting(DEF_FILES, t_lTotalDefFiles);
 
         return false;
     }

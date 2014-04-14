@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,14 +23,13 @@
 
  ******************************************************************************
  *
- * Filename: TemplateWritingHandlerTemplate.java
+ * Filename: PerForeignKeyTemplateFactoryTemplate.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro
  *
- * Description: Template to build QueryJ's writing handler sources.
+ * Description: Represents foreign key-specific template factory templates.
  *
- * Date: 2013/08/16
- * Time: 09:31
+ * Created: 2014/04/14 18:35
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -46,38 +45,37 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Template to build QueryJ's writing handler sources.
+ * Represents foreign key-specific template factory templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/16 09/31
+ * Created 2014/04/14
  */
 @ThreadSafe
-public class TemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
-    extends AbstractTemplatePackagingTemplate<C>
+public class PerForeignKeyTemplateFactoryTemplate<C extends TemplatePackagingContext>
+    extends TemplateFactoryTemplate<C>
 {
     /**
      * The serial version id.
      */
-    private static final long serialVersionUID = 2464272892781177697L;
+    private static final long serialVersionUID = 904196154795056613L;
 
     /**
-     * Creates a TemplateWritingHandlerTemplate instance.
-     * @param context the {@link TemplatePackagingContext context}.
+     * Creates a new instance.
+     * @param context the template context.
      */
-    public TemplateWritingHandlerTemplate(@NotNull final C context)
+    public PerForeignKeyTemplateFactoryTemplate(@NotNull final C context)
     {
         super(context);
     }
 
     /**
      * Retrieves the template name.
-     *
-     * @return such name.
+     * @return "PerForeignKeyTemplateFactory".
      */
     @NotNull
     @Override
     public String getTemplateName()
     {
-        return Literals.TEMPLATE_WRITING_HANDLER;
+        return "PerForeignKeyTemplateFactory";
     }
 }

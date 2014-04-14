@@ -1,0 +1,17 @@
+/*
+ * FkStatementSetter template metadata.
+ */
+// The template name (the filename).
+name : FkStatementSetter.stg;
+
+// The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-sql.
+type : per-foreign-key;
+
+// The output flavor.
+output: Java;
+
+// The filename builder.
+filename  builder : <tableName.capitalized>FkStatementSetter.java;
+
+// The package.
+package: <packageName>.dao.rdb.<tableName.normalized.lowercased>;

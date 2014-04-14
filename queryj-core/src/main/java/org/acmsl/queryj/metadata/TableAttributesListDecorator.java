@@ -158,7 +158,7 @@ public class TableAttributesListDecorator
     @Override
     public List<DecoratedString> getAttributeTypes()
     {
-        throw new RuntimeException(INVALID_OPERATION);
+        return super.getAttributeTypes();
     }
 
     // Table implementation

@@ -37,11 +37,10 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.api.exceptions.ForeignKeyNotAvailableException;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
 /*
@@ -54,7 +53,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -76,81 +74,49 @@ public class PerForeignKeyTemplateContext
     private static final long serialVersionUID = 1350908613901423440L;
 
     /**
-     * The result.
-     */
-    private ForeignKey<String> m__ForeignKey;
-
-    /**
      * Creates a {@link PerForeignKeyTemplateContext} with given information.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param header the header.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param implementMarkerInterfaces whether to implement marker interfaces or not.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param fileName the file name.
+     * @param packageName the package name.
      * @param foreignKey the {@link ForeignKey} instance.
+     * @param command the {@link QueryJCommand} instance.
      */
     public PerForeignKeyTemplateContext(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @Nullable final String header,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
         @NotNull final String fileName,
-        @NotNull final ForeignKey<String> foreignKey)
+        @NotNull final String packageName,
+        @NotNull final ForeignKey<String> foreignKey,
+        @NotNull final QueryJCommand command)
     {
-        super(null, null);
+        super("fk" + foreignKey.getFkName(), command);
 
-        immutableSetForeignKey(foreignKey);
+        immutableSetValue(buildFileNameKey(), fileName, command);
+        immutableSetValue(buildPackageNameKey(), packageName, command);
+        immutableSetValue(buildForeignKeyKey(), foreignKey, command);
     }
 
     /**
-     * Specifies the foreign key.
-     * @param foreignKey the foreign key.
+     * Retrieves the key to access the foreign key.
+     * @return such information.
      */
-    protected final void immutableSetForeignKey(@NotNull final ForeignKey<String> foreignKey)
+    @NotNull
+    public String buildForeignKeyKey()
     {
-        m__ForeignKey = foreignKey;
-    }
-
-    /**
-     * Specifies the foreign key.
-     * @param foreignKey the foreign key.
-     */
-    @SuppressWarnings("unused")
-    protected void setForeignKey(@NotNull final ForeignKey<String> foreignKey)
-    {
-        immutableSetForeignKey(foreignKey);
+        return "foreignKey@" + hashCode();
     }
 
     /**
      * Retrieves the foreign key.
-     * @return such information.
+     * @return such {@link ForeignKey} instance.
      */
     @NotNull
     public ForeignKey<String> getForeignKey()
     {
-        return m__ForeignKey;
+        return getValue(buildForeignKeyKey(), getCommand(), new ForeignKeyNotAvailableException());
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
     public String getTemplateName()
     {
@@ -177,34 +143,38 @@ public class PerForeignKeyTemplateContext
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.m__ForeignKey).toHashCode();
+        return new HashCodeBuilder().appendSuper(super.hashCode()).append(PerForeignKeyTemplate.class).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj)
     {
-        if (obj == null)
-        {
-            return false;
-        }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final PerForeignKeyTemplateContext other = (PerForeignKeyTemplateContext) obj;
-        return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.m__ForeignKey, other.m__ForeignKey)
-            .isEquals();
+        return
+               (obj != null)
+            && (getClass() == obj.getClass())
+            && (new EqualsBuilder().appendSuper(super.equals(obj)).isEquals());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'PerForeignKeyTemplateContext'" +
-               ", 'foreignKey': " + m__ForeignKey +
-               " }";
+        return
+              "{ \"class\": \"PerForeignKeyTemplateContext\""
+            + ", \"super\": " + super.toString()
+            + ", \"package\": \"org.acmsl.queryj.api\""
+            + " }";
     }
 }

@@ -1,0 +1,166 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: FkStatementSetter.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate FkStatementSetter
+//              implementations.
+//
+//
+group FkStatementSetter;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+  Defines the rules to generate FkStatementSetter implementations.
+  @param C the context.
+!>
+<sourceImpl(fk=C.foreignKey, C=C)>
+>>
+
+sourceImpl(fk, C) ::= <<
+<!
+  Defines the rules to generate FkStatementSetter implementations.
+  @param foreignKey the foreign key.
+  @param C the context.
+!>
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description(fk=fk)
+  ],
+  template="org/acmsl/queryj/templates/FkStatementSetter.stg",
+  C=C)><endif>
+<package_declaration(p=C.package)>
+
+<project_imports(
+  basePackageName=C.project_package,
+  voSubpackageName=typeInitMap.voSubpackageName,
+  voName=table.name.voName)>
+
+/*
+ * Importing Spring classes.
+ */
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+<checkers_import(C=C)>
+/*
+ * Importing JDK extension classes
+ */
+import javax.sql.DataSource;
+
+/*
+ * Importing JDK classes.
+ */
+<if(fk.attributeTypes)>
+<fk.attributeTypes:{ t | import <t>;}; separator="\n">
+<endif>
+<if(fk.containsClobs)>
+import java.io.Writer;
+import java.sql.Clob;
+<endif>
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
+
+/*
+ * Importing Apache Commons Logging classes
+ */
+import org.apache.commons.logging.LogFactory;
+
+<class(fk=fk, C=C)>
+>>
+
+project_imports(
+  basePackageName, voSubpackageName, voName) ::= <<
+<!
+ Generates the project imports.
+ @param basePackageName the base package name.
+ @param voSubpackageName the value-object subpackage name.
+ @param voName the value-object name.
+!>
+/*
+ * Importing project classes.
+ */
+import <basePackageName>.<voSubpackageName>.<voName>;
+>>
+
+first_line_description(fk) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param table the table.
+!>
+Specifies the PreparedStatement values associated to
+>>
+
+second_line_description(fk) ::= <<
+<!
+ Generates the second line of the generated file description.
+ @param fk the foreign key.
+!>
+the foreign key between <fk.source> and <fk.target>
+>>
+
+third_line_description(fk) ::= <<
+<!
+ Generates the third line of the generated file description.
+ @param fk the foreign key.
+!>
+(<fk.attributes:{ a | <a.name>}; separator=", ">).
+>>
+
+class(fk, C) ::= <<
+<!
+ Generates the class body.
+ @param fk the foreign key.
+ @param C the context.
+!>
+/**
+ * <[
+      first_line_description(fk=fk),
+      second_line_description(fk=fk),
+      third_line_description(fk=fk)
+    ]:{line |<line>}; separator="\n * ">
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/FkStatementSetter.stg", C=C)>
+ */
+<class_annotations(C=C)>
+public class <fk.source.voName>By<fk.target.voName>StatementSetter
+    implements  PreparedStatementSetter
+{
+}
+>>

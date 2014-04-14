@@ -58,6 +58,13 @@ public interface Template<T extends TemplateContext>
     T getTemplateContext();
 
     /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    String getTemplateName();
+
+    /**
      * Generates the output source code.
      * @param relevantOnly whether to include only relevant placeholders.
      * @return such output.

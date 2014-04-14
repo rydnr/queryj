@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,61 +23,46 @@
 
  ******************************************************************************
  *
- * Filename: TemplateWritingHandlerTemplate.java
+ * Filename: PerForeignKeyTemplateFactoryTemplateTest.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro
  *
- * Description: Template to build QueryJ's writing handler sources.
+ * Description: Tests for PerForeignKeyTemplateFactoryTemplate.
  *
- * Date: 2013/08/16
- * Time: 09:31
+ * Created: 2014/04/14 18:32
  *
  */
 package org.acmsl.queryj.templates.packaging;
-
-/*
- * Importing JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.easymock.EasyMock;
+import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * Template to build QueryJ's writing handler sources.
+ * Tests for {@link PerForeignKeyTemplateFactoryTemplate}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/16 09/31
+ * Created 2014/04/14
  */
 @ThreadSafe
-public class TemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
-    extends AbstractTemplatePackagingTemplate<C>
+public class PerForeignKeyTemplateFactoryTemplateTest
 {
     /**
-     * The serial version id.
+     * Checks whether getTemplateName() returns the correct template name.
      */
-    private static final long serialVersionUID = 2464272892781177697L;
-
-    /**
-     * Creates a TemplateWritingHandlerTemplate instance.
-     * @param context the {@link TemplatePackagingContext context}.
-     */
-    public TemplateWritingHandlerTemplate(@NotNull final C context)
+    @Test
+    public void getTemplateName_returns_the_correct_template_name()
     {
-        super(context);
-    }
+        @NotNull final DefaultTemplatePackagingContext context =
+            EasyMock.createNiceMock(DefaultTemplatePackagingContext.class);
 
-    /**
-     * Retrieves the template name.
-     *
-     * @return such name.
-     */
-    @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return Literals.TEMPLATE_WRITING_HANDLER;
+        @NotNull final PerForeignKeyTemplateFactoryTemplate instance =
+            new PerForeignKeyTemplateFactoryTemplate<>(context);
+
+        Assert.assertEquals("PerForeignKeyTemplateFactory", instance.getTemplateName());
     }
 }

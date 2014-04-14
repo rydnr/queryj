@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,11 +34,9 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
 /*
@@ -50,10 +48,11 @@ import org.acmsl.commons.patterns.Factory;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents entities able to create per-<i>foreign key</i> templates.
+ * @param <T> the template.
+ * @param <C> the context.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface PerForeignKeyTemplateFactory
@@ -62,35 +61,14 @@ public interface PerForeignKeyTemplateFactory
 {
     /**
      * Creates a per-<i>foreign key</i> template.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker interfaces.
-     * @param jmx whether to include JMX support.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param foreignKey the foreign key.
+     * @param command the {@link QueryJCommand} instance.
+     * @return the new template.
      */
     @NotNull
     T createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @Nullable final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
-        @NotNull final ForeignKey<String> foreignKey);
+        @NotNull final ForeignKey<String> foreignKey,
+        @NotNull final QueryJCommand command);
 }

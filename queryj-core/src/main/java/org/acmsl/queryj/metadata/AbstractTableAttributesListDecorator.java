@@ -264,17 +264,17 @@ public abstract class AbstractTableAttributesListDecorator
     /**
      * Retrieves the types of the attributes.
      * @param items such items.
-     * @param metadataTypManager the {@link MetadataTypeManager} instance.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return their types.
      */
     @NotNull
     protected List<DecoratedString> getAttributeTypes(
         @NotNull final List<Attribute<DecoratedString>> items,
-        @NotNull final MetadataTypeManager metadataTypManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        return tableDecoratorHelper.getAttributeTypes(items, metadataTypManager);
+        return tableDecoratorHelper.getAttributeTypes(items, metadataTypeManager);
     }
 
     // Table implementation

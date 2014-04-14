@@ -223,7 +223,9 @@ public abstract class BasePerTableTemplateBuildHandler
      * @return the package name.
      */
     protected String retrievePackage(
-        @NotNull final String tableName, @NotNull final Engine<String> engine, @NotNull final QueryJCommand parameters)
+        @NotNull final String tableName,
+        @NotNull final Engine<String> engine,
+        @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         return
@@ -246,7 +248,8 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final String tableName,
         @NotNull final Engine<String> engine,
         @NotNull final String projectPackage,
-        @NotNull final PackageUtils packageUtils) throws QueryJBuildException;
+        @NotNull final PackageUtils packageUtils)
+      throws QueryJBuildException;
 
     /**
      * Stores the template collection in given attribute map.
@@ -353,7 +356,7 @@ public abstract class BasePerTableTemplateBuildHandler
                 @Nullable final Log t_Log =
                     UniqueLogFactory.getLog(
                         BasePerTableTemplateBuildHandler.class);
-                
+
                 if  (t_Log != null)
                 {
                     t_Log.error(
