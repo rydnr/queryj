@@ -15,3 +15,5 @@ filename  builder : PerForeignKeyTemplatesTest.java;
 
 // The package.
 package: cucumber.templates;
+
+disabled;
