@@ -23,7 +23,7 @@
 
  ******************************************************************************
  *
- * Filename: QueryJChain.java
+ * Filename: TemplatePackagingChain.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -33,14 +33,11 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing some QueryJ-Core classes.
+ * Importing some QueryJ Core classes.
  */
 import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.templates.packaging.handlers.DefaultTemplateChainProviderTemplateHandlerBundle;
-import org.acmsl.queryj.templates.packaging.handlers.PerTableTemplatesFeatureTemplateHandlerBundle;
-import org.acmsl.queryj.templates.packaging.handlers.PerTableTemplatesTestTemplateHandlerBundle;
 import org.acmsl.queryj.tools.QueryJChain;
 import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
@@ -48,8 +45,11 @@ import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 /*
  * Importing some QueryJ Template Packaging classes.
  */
+import org.acmsl.queryj.templates.packaging.handlers.DefaultTemplateChainProviderTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.FindTemplateDefsHandler;
 import org.acmsl.queryj.templates.packaging.handlers.ParseTemplateDefsHandler;
+import org.acmsl.queryj.templates.packaging.handlers.PerForeignKeyTemplatesTestTemplateHandlerBundle;
+import org.acmsl.queryj.templates.packaging.handlers.PerTableTemplatesTestTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateBuildHandlerTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateGeneratorTemplateHandlerBundle;
@@ -124,6 +124,10 @@ public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJComman
         chain.add((CH) new PerTableTemplatesTestTemplateHandlerBundle());
 
 //        chain.add((CH) new PerTableTemplatesFeatureTemplateHandlerBundle());
+
+        chain.add((CH) new PerForeignKeyTemplatesTestTemplateHandlerBundle());
+
+//        chain.add((CH) new PerForeignKeyTemplatesFeatureTemplateHandlerBundle());
 
         chain.add((CH) new DefaultTemplateChainProviderTemplateHandlerBundle());
 

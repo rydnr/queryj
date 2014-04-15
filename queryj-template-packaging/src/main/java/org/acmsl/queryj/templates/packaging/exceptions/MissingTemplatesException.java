@@ -36,11 +36,6 @@
 package org.acmsl.queryj.templates.packaging.exceptions;
 
 /*
- * Importing QueryJ-API classes.
- */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
-
-/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -58,8 +53,11 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class MissingTemplatesException
-    extends QueryJNonCheckedException
+    extends TemplatePackagingNonCheckedException
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -9045757439117602937L;
 
     /**

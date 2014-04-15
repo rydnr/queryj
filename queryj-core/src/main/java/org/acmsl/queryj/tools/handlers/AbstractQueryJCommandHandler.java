@@ -183,6 +183,7 @@ public abstract class AbstractQueryJCommandHandler
     /**
      * Retrieves the database metadata manager from the attribute map.
      * @param parameters the parameter map.
+     * @param queryJCommandUtils the {@link QueryJCommandUtils} instance.
      * @return the manager.
      */
     @NotNull

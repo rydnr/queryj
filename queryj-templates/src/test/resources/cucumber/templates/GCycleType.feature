@@ -1,6 +1,6 @@
 Feature: G_CYCLE_TYPES code compiles
 
-  Scenario Outline: G_CYCLE_TYPES-specific templates compile
+  Scenario Outline: Templates bound to G_CYCLE_TYPES table templates compile
 
     Given the following tables:
     |    table     | parent table | decorated | relationship |   static    |

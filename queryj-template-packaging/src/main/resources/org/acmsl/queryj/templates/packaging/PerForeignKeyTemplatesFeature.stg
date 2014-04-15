@@ -1,0 +1,91 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: PerForeignKeyTemplatesFeature.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate PerForeignKeyTemplates.feature
+//              Cucumber tests
+//
+group PerForeignKeyTemplatesFeature;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+  Generates PerForeignKeyTemplates.feature files.
+!>
+<sourceImpl(fk=C.foreignKey, C=C)>
+>>
+sourceImpl(fk, C) ::= <<
+<!
+  Generates PerForeignKeyTemplates.feature files.
+!>
+Feature: <fk.sourceTableName> foreign keys code compiles
+
+  Scenario Outline: Templates bound to <fk.sourceTableName>' foreign keys compile
+
+    Given the table containing the foreign key is:
+    |    table     | parent table | decorated | relationship |   static    |
+    | <fk.sourceTable.name> | <fk.sourceTable.parent> | <fk.sourceTable.decorated> | <fk.sourceTabel.relationship> | <fk.sourceTable.static> |
+
+    And the table containing the foreign key has the following columns:
+    |     table    |         column        | type      | pk    | allows null | readonly |   sequence    | keyword | boolean | length | precision |
+    <fk.sourceTable.primaryKey:{ a |<cucumber_pk_declaration(attribute=a)>}; separator="\n">
+    <fk.sourceTable.own.minus.primaryKey:{ a |<cucumber_nonpk_declaration(attribute=a)>}; separator="\n">
+
+    And the foreign key is:
+    | source table | source columns | target table | allows null |
+    | <fk.sourceTable.name>| <fk.attributes:{a | <a.name>}; separator=", ">| <fk.targetTable.name> | <fk.nullable> |
+
+    When I generate with per-foreign key \<template>.stg for Oracle
+
+    Then the generated per-foreign key \<output> file compiles successfully
+
+    Examples:
+      | template           | output                            |
+      <C.templateDefs:{ d | <indirect_template(def=d, engineName="Oracle", tableName="User")>}; separator="\n">
+>>
+
+indirect_template(def, engineName, tableName) ::= <<
+| <def.name; format="%-30s"> | <(def.filenameRule)(engineName, tableName)> |
+>>
+
+cucumber_nonpk_declaration(attribute) ::= <<
+<! Declares the attribute metadata in Cucumber format !>
+| <attribute.table.name> | <attribute.name> | <attribute.type> | false | <attribute.nullable> | <attribute.readOnly> | <attribute.sequence> | <attribute.keyword> | <attribute.boolean> | <attribute.length> | <attribute.precision> |
+>>
+
+cucumber_pk_declaration(attribute) ::= <<
+<! Declares the attribute metadata in Cucumber format !>
+| <attribute.table.name> | <attribute.name> | <attribute.type> | true | <attribute.nullable> | <attribute.readOnly> | <attribute.sequence> | <attribute.keyword> | <attribute.boolean> | <attribute.length> | <attribute.precision> |
+>>
