@@ -60,10 +60,25 @@ import org.jetbrains.annotations.NotNull;
 @ThreadSafe
 public enum TemplateDefType
 {
+    /**
+     * Per table.
+     */
     PER_TABLE("per-table"),
+    /**
+     * Per repository.
+     */
     PER_REPOSITORY("per-repository"),
+    /**
+     * Per custom result.
+     */
     PER_CUSTOM_RESULT("per-custom-result"),
+    /**
+     * Per foreign key.
+     */
     PER_FOREIGN_KEY("per-foreign-key"),
+    /**
+     * Per custom SQL.
+     */
     PER_SQL("per-sql");
 
     /**
@@ -103,6 +118,51 @@ public enum TemplateDefType
     }
 
     /**
+     * Checks whether this type identifies per-table template defs.
+     * @return {@code true} in such case.
+     */
+    public boolean isPerTable()
+    {
+        return PER_TABLE.getType().equals(getType());
+    }
+
+    /**
+     * Checks whether this type identifies per-repository template defs.
+     * @return {@code true} in such case.
+     */
+    public boolean isPerRepository()
+    {
+        return PER_REPOSITORY.getType().equals(getType());
+    }
+
+    /**
+     * Checks whether this type identifies per-sql template defs.
+     * @return {@code true} in such case.
+     */
+    public boolean isPerSql()
+    {
+        return PER_SQL.getType().equals(getType());
+    }
+
+    /**
+     * Checks whether this type identifies per-foreign key template defs.
+     * @return {@code true} in such case.
+     */
+    public boolean isPerForeignKey()
+    {
+        return PER_FOREIGN_KEY.getType().equals(getType());
+    }
+
+    /**
+     * Checks whether this type identifies per-custom result template defs.
+     * @return {@code true} in such case.
+     */
+    public boolean isPerCustomResult()
+    {
+        return PER_CUSTOM_RESULT.getType().equals(getType());
+    }
+
+    /**
      * Retrieves a capitalized version.
      * @return the type, capitalized.
      */
@@ -112,10 +172,17 @@ public enum TemplateDefType
         return new DecoratedString(getType()).getCapitalized().getValue();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'TemplateDefType', 'type': '" + this.m__strType + "' }";
+        return
+            "{ \"class\": \"" + TemplateDefType.class.getSimpleName() + '"'
+            + ", \"type\": \"" + this.m__strType + '"'
+            + ", \"package\": \"" + TemplateDefType.class.getPackage().getName()
+            + "\" }";
     }
 }
