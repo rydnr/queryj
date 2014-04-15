@@ -205,7 +205,7 @@ public class PerTableTemplatesTest
     {
         super();
 
-        <defs:{ d | <if(!d.disabled)><if(d.perTable)><generator_mapping(def=d)><endif><endif>}; separator="\n">
+        <defs:{ d | <if(!d.disabled)><if(d.type.perTable)><generator_mapping(def=d)><endif><endif>}; separator="\n">
     }
 
     /**
