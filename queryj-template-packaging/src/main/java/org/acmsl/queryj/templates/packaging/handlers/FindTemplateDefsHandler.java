@@ -134,7 +134,7 @@ public class FindTemplateDefsHandler
             {
                 if (t_lDefFiles.size() > 0)
                 {
-                    log.error(
+                    log.info(
                         "Found " + t_lDefFiles.size() + " template def files in " + t_BaseFolder.getAbsolutePath());
                 }
             }

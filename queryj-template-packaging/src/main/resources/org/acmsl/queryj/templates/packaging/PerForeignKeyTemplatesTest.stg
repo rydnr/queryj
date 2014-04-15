@@ -64,17 +64,11 @@ source(C) ::= <<
 import org.acmsl.queryj.api.AbstractTemplate;
 import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.api.PerTableTemplate;
-import org.acmsl.queryj.api.PerTableTemplateContext;
-import org.acmsl.queryj.api.PerTableTemplateFactory;
-import org.acmsl.queryj.api.PerTableTemplateGenerator;
+import org.acmsl.queryj.api.PerForeignKeyTemplate;
+import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
+import org.acmsl.queryj.api.PerForeignKeyTemplateFactory;
+import org.acmsl.queryj.api.PerForeignKeyTemplateGenerator;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.RetrieveQueryHandler;
-import org.acmsl.queryj.customsql.Parameter;
-import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.DecoratorFactory;
@@ -82,28 +76,21 @@ import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
 import org.acmsl.queryj.metadata.engines.oracle.OracleEngine;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.metadata.vo.Row;
-import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
  * Importing QueryJ Test classes.
  */
 import org.acmsl.queryj.test.AbstractTemplatesTest;
-import org.acmsl.queryj.test.TableTestHelper;
+import org.acmsl.queryj.test.ForeignKeyTestHelper;
 
 /*
  * Importing project classes.
  */
-<C.templateDefs:{ d | <def_import(d=d)>}; separator="\n">
+<C.templateDefs:{ d | <if(d.type.perForeignKey)><def_import(d=d)><endif>}; separator="\n">
 
 /*
  * Importing Apache Commons Logging classes.
@@ -151,13 +138,9 @@ import org.junit.Assert;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 <class(defs=C.templateDefs, C=C)>
 >>
@@ -228,7 +211,7 @@ public class PerForeignKeyTemplatesTest
      */
     protected void defineInputForeignKeys(
         @NotNull final DataTable tableInfo,
-        @NotNull final Map\<String, ForeignKey\<String> foreignKeys,
+        @NotNull final List\<ForeignKey\<String\>> foreignKeys,
         @NotNull final ForeignKeyTestHelper helper)
     {
         helper.defineInputForeignKeys(tableInfo, foreignKeys);
@@ -254,7 +237,7 @@ public class PerForeignKeyTemplatesTest
      */
     protected List\<ForeignKey\<String\>> defineInputColumns(
         @NotNull final DataTable columnInfo,
-        @NotNull final Map\<String, ForeignKey\<String\>> foreignKeys,
+        @NotNull final List\<ForeignKey\<String\>> foreignKeys,
         @NotNull final ForeignKeyTestHelper helper)
     {
         return helper.defineInputColumns(columnInfo, foreignKeys);
@@ -306,14 +289,14 @@ public class PerForeignKeyTemplatesTest
      * Generates a file with the information from the feature.
      * @param templateName the template.
      * @param engine the engine name.
-     * @param foreignKeyMap the foreign key map.
+     * @param foreignKeys the foreign keys.
      * @param outputFiles the output files.
      */
     @SuppressWarnings("unchecked")
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
-        @NotNull final Map\<String, ForeignKey\<String\>> foreignKeyMap,
+        @NotNull final List\<ForeignKey\<String\>> foreignKeys,
         @NotNull final Map\<String, File> outputFiles)
     {
         @Nullable final PerForeignKeyTemplateGenerator\<PerForeignKeyTemplate\<PerForeignKeyTemplateContext>, PerForeignKeyTemplateContext> generator =
@@ -337,8 +320,6 @@ public class PerForeignKeyTemplatesTest
             @NotNull final QueryJCommand t_Command =
                 new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
 
-            new QueryJCommandWrapper\<CustomSqlProvider>(t_Command).setSetting(
-                CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, sqlProvider);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.PACKAGE, BASE_PACKAGE_NAME);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
@@ -358,17 +339,8 @@ public class PerForeignKeyTemplatesTest
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.VERSION, "<C.version>");
 
-            @NotNull final List\<ForeignKey\<String\>> foreignKeys =
-                new ArrayList\<>(foreignKeyMap.values());
-
-            for (@NotNull final ForeignKey\<String\>> foreignKey: foreignKeys)
+            for (@NotNull final ForeignKey\<String> foreignKey: foreignKeys)
             {
-                @NotNull final MetadataManager metadataManager =
-                    retrieveMetadataManager(engine, foreignKey, decoratorFactory);
-
-                new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
-                    DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
-
                 @Nullable final PerForeignKeyTemplateFactory\<? extends PerForeignKeyTemplate\<PerForeignKeyTemplateContext>, PerForeignKeyTemplateContext> templateFactory =
                     retrieveTemplateFactory(templateName);
 
@@ -380,11 +352,7 @@ public class PerForeignKeyTemplatesTest
                         foreignKey.getSourceTableName(), resolveEngine(engine));
 
                 @Nullable final PerForeignKeyTemplate\<PerForeignKeyTemplateContext> template =
-                    templateFactory.createTemplate(
-                        t_Command,
-                        decoratorFactory,
-                        packageName,
-                        foreignKey);
+                    templateFactory.createTemplate(packageName, foreignKey, t_Command);
 
                 Assert.assertNotNull("No template found for " + templateName, template);
 
@@ -451,7 +419,7 @@ public class PerForeignKeyTemplatesTest
                 }
 
                 outputFiles.put(
-                    foreignKey.getName(),
+                    foreignKey.getFkName(),
                     new File(outputDir, template.getTemplateContext().getFileName()));
             }
         }
