@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerRepositoryTemplatesTestTemplateTest.java
+ * Filename: PerCustomResultTemplatesTestTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerRepositoryTemplatesTestTemplate.
+ * Description: Used to generate sources using PerCustomResultTemplatesTest.stg.
  *
  * Date: 2014/04/16
- * Time: 16:19
+ * Time: 16:29
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -38,38 +38,45 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
-import org.easymock.EasyMock;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerRepositoryTemplatesTestTemplate}.
+ * Used to generate sources using PerCustomResultTemplatesTest.stg.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/04/16 16:19
+ * Created: 2014/04/16 16:29
  */
-@RunWith(JUnit4.class)
-public class PerRepositoryTemplatesTestTemplateTest
+@ThreadSafe
+public class PerCustomResultTemplatesTestTemplate
+    extends AbstractTemplatePackagingTemplate<GlobalTemplateContext>
 {
     /**
-     * Checks the template name is correct.
+     * The serial version id.
      */
-    @Test
-    public void templateName_is_correct()
+    private static final long serialVersionUID = -2715229233728578876L;
+
+    /**
+     * Builds a PerCustomResultTemplatesTest using given context.
+     * @param context the {@link GlobalTemplateContext}.
+     */
+    public PerCustomResultTemplatesTestTemplate(@NotNull final GlobalTemplateContext context)
     {
-        @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
+        super(context);
+    }
 
-        @NotNull final PerRepositoryTemplatesTestTemplate instance =
-            new PerRepositoryTemplatesTestTemplate(context);
-
-        Assert.assertEquals(Literals.PER_REPOSITORY_TEMPLATES_TEST, instance.getTemplateName());
+    /**
+     * Retrieves the template name.
+     * @return "PerCustomResultTemplatesTest";
+     */
+    @NotNull
+    @Override
+    public String getTemplateName()
+    {
+        return Literals.PER_CUSTOM_RESULT_TEMPLATES_TEST;
     }
 }

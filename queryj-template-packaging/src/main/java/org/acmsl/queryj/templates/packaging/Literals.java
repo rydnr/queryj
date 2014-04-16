@@ -129,4 +129,8 @@ public interface Literals
      * String literal: "PerRepositoryTemplatesTest".
      */
     String PER_REPOSITORY_TEMPLATES_TEST = "PerRepositoryTemplatesTest";
+    /**
+     * String literal: "PerCustomResultTemplatesTest".
+     */
+    String PER_CUSTOM_RESULT_TEMPLATES_TEST = "PerCustomResultTemplatesTest";
 }

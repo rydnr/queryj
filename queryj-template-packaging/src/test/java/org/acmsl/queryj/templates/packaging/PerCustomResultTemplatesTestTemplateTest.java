@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerRepositoryTemplatesTestTemplateTest.java
+ * Filename: PerCustomResultTemplatesTestTemplateTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerRepositoryTemplatesTestTemplate.
+ * Description: Tests for PerCustomResultTemplatesTestTemplate.
  *
  * Date: 2014/04/16
- * Time: 16:19
+ * Time: 16:27
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -38,26 +38,25 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
-import org.easymock.EasyMock;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JUnit/EasyMock classes.
  */
-import org.checkthread.annotations.ThreadSafe;
+import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerRepositoryTemplatesTestTemplate}.
+ * Tests for {@link PerCustomResultTemplatesTestTemplate}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/04/16 16:19
+ * Created: 2014/04/16 16:27
  */
 @RunWith(JUnit4.class)
-public class PerRepositoryTemplatesTestTemplateTest
+public class PerCustomResultTemplatesTestTemplateTest
 {
     /**
      * Checks the template name is correct.
@@ -67,9 +66,9 @@ public class PerRepositoryTemplatesTestTemplateTest
     {
         @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
 
-        @NotNull final PerRepositoryTemplatesTestTemplate instance =
-            new PerRepositoryTemplatesTestTemplate(context);
+        @NotNull final PerCustomResultTemplatesTestTemplate instance =
+            new PerCustomResultTemplatesTestTemplate(context);
 
-        Assert.assertEquals(Literals.PER_REPOSITORY_TEMPLATES_TEST, instance.getTemplateName());
+        Assert.assertEquals(Literals.PER_CUSTOM_RESULT_TEMPLATES_TEST, instance.getTemplateName());
     }
 }
