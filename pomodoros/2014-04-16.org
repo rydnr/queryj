@@ -1,0 +1,47 @@
+* 2014/04/16:
+** TODO #475: Support per-repository templates: 3 -> 
+** TODO #476: Support per-custom result templates: 3 ->  
+** TODO #477: Support per-sql templates: 3 -> 
+* Notes:
+** Each of #474, #475, #476, #477 requires:
+*** PerXXXTemplatesFeatureTemplate
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerXXXTemplatesFeatureTemplateFactory
+*** PerXXXTemplatesTestTemplate
+*** PerXXXTemplatesTestTemplateFactory
+*** PerXXXTemplatesTestTemplateBuildHandler
+*** PerXXXTemplatesTestTemplateHandlerBundle
+*** PerXXXTemplatesTestTemplateWritingHandler
+*** PerXXXTemplateFactory.stg
+*** PerXXXTemplatesFeature.stg
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerXXXTemplatesFeature.stg.def
+*** PerXXXTemplatesTest.stg
+*** PerXXXTemplateWritingHandler.stg
+*** XXXTestHelper
+*** Add PerXXXTemplatesTestTemplateHandlerBundle to TemplatePackagingChain
+*** Add case to TemplateFactoryTemplateFactory
+*** Add case to TemplateWritingHandlerTemplateFactory
+** GOAL : Deliver QueryJ 3.0 ASAP
+*** Find out which templates are affected by the order of columns: 
+**** DONE ValueObject.stg
+**** DONE BaseValueObject.stg
+**** DONE ValueObjectFactory.stg
+**** TODO BaseDAO.stg 
+**** TODO DAO.stg
+**** DONE AttributesStatementSetter.stg
+**** DONE ResultSetExtractor.stg
+**** TODO PkStatementSetter.stg
+**** TODO FkStatementSetter.stg -> Depends on FK mgmt
+**** Custom query related templates?
+
+*** Implement those templates ASAP:
+**** DONE PkStatementSetter.stg #473: 3 -> 3
+**** TODO FkStatementSetter.stg: 3 ->
+**** Nest QueryJs, overriding only such templates

@@ -1,0 +1,93 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: PerSqlTemplatesFeature.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate PerSqlTemplates.feature
+//              Cucumber tests
+//
+group PerSqlTemplatesFeature;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+  Generates PerSqlTemplates.feature files.
+!>
+<sourceImpl(sql=C.sql, C=C)>
+>>
+
+sourceImpl(sql, C) ::= <<
+<!
+  Generates PerSqlTemplates.feature files.
+  @param sql the SQL.
+  @param C the context.
+!>
+Feature: Per-SQL templates
+
+  Scenario Outline: Per-SQL templates compile for a type 1 table
+
+    Given the following query:
+      | id | name | dao | type | matches | value | validate |
+      | <sql.id> | <sql.name> | <sql.dao>| <sql.type> | <sql.matches> | <sql.value> | <sql.validate> |
+
+    And the following query parameters:
+      | id | sql | index | type | name | validation-value |
+      <sql.parameters:{p | <cucumber_parameter_specification(parameter=p)>}; separator="\n">
+
+    And the following columns for the tables involved:
+    |     table    |         column        | type      | pk    | allows null | readonly |   sequence    | keyword | boolean | length | precision |
+    <C.tables:{t | <t.attributes:{ a | <cucumber_column_specification(attribute=a)>}; separator="\n">}; separator="\n">
+
+    When I generate with per-SQL \<template>.stg for Oracle
+
+    Then the generated per-SQL \<output> file compiles successfully
+
+    Examples:
+      | template           | output                            |
+      <C.templateDefs:{ d | <indirect_template(def=d, engineName="Oracle", tableName="User")>}; separator="\n">
+>>
+
+indirect_template(def, engineName, tableName) ::= <<
+| <def.name; format="%-30s"> | <(def.filenameRule)(engineName, tableName)> |
+>>
+
+cucumber_parameter_specification(parameter) ::= <<
+<! Generates the specification for a parameter !>
+| <parameter.id> | <parameter.sql> | <parameter.index> | <parameter.type> | <parameter.name> | <parameter.validationValue> |
+>>
+
+cucumber_column_specification(attribute) ::= <<
+<! Generates the specification for a column !>
+| <attribute.table> | <attribute.name> | <attribute.type> | <attribute.pk> | <attribute.nullable> | <attribute.readonly> | <attribute.sequence> | <attribute.keyword> | <attribute.length> | <attribute.precision> |
+>>
