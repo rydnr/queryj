@@ -23,44 +23,53 @@
 
  ******************************************************************************
  *
- * Filename: MissingOutputDirForTestsException.java
+ * Filename: MissingOutputDirForTestsExceptionTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The parent folder for the generated tests is not known at
- *              runtime.
+ * Description: Tests for MissingOutputDirForTestsException.
  *
- * Date: 2013/12/08
- * Time: 16:49
+ * Date: 2014/04/16
+ * Time: 22:23
  *
  */
 package org.acmsl.queryj.templates.packaging.exceptions;
 
 /*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Locale;
 
 /**
- * The parent folder for the generated tests is not known at runtime.
+ * Tests for {@link MissingOutputDirForTestsException}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/12/08 16:49
+ * Created: 2014/04/16 22:23
  */
 @ThreadSafe
-public class MissingOutputDirForTestsException
-    extends TemplatePackagingNonCheckedException
+public class MissingOutputDirForTestsExceptionTest
 {
     /**
-     * The serial vension id.
+     * Tests the message key is defined for Spanish and English.
      */
-    private static final long serialVersionUID = 752770316506222245L;
-
-    /**
-     * Creates a new instance.
-     */
-    public MissingOutputDirForTestsException()
+    @Test
+    public void exception_message_is_defined_in_Spanish_and_English()
     {
-        super("missing.output-dir-for-tests");
+        @NotNull final MissingOutputDirForTestsException instance = new MissingOutputDirForTestsException();
+
+        for (@NotNull final Locale t_Locale : Arrays.asList(new Locale("en"), new Locale("es")))
+        {
+            // throws a MissingResourceException if the key is not declared.
+            instance.getMessage(t_Locale);
+        }
     }
 }

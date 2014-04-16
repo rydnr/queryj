@@ -25,7 +25,7 @@
 **** DONE #476
 **** DONE #477
 *** PerXXXTemplatesTestTemplateBuildHandler
-**** TODO #474
+**** DONE #474
 **** TODO #475
 **** TODO #476
 **** TODO #477
