@@ -56,6 +56,11 @@ public class PerSqlTemplatesTestTemplate
     extends AbstractTemplatePackagingTemplate<GlobalTemplateContext>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 7595860163174134085L;
+
+    /**
      * Builds a PerSqlTemplatesTest using given context.
      * @param context the {@link GlobalTemplateContext}.
      */
