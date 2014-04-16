@@ -1,5 +1,5 @@
 /*
-                        QueryJ Core
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -35,6 +35,9 @@
  */
 package org.acmsl.queryj.templates.packaging;
 
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -45,6 +48,7 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Represents foreign key-specific template writing handler templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @param <C> the context type.
  * @since 3.0
  * Created 2014/04/14
  */
@@ -74,6 +78,6 @@ public class PerForeignKeyTemplateWritingHandlerTemplate<C extends TemplatePacka
     @Override
     public String getTemplateName()
     {
-        return "PerForeignKeyTemplateWritingHandler";
+        return Literals.PER_FOREIGN_KEY_TEMPLATE_WRITING_HANDLER;
     }
 }

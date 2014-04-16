@@ -1,0 +1,19 @@
+/*
+ * PerRepositoryTemplatesFeature template metadata.
+ */
+// The template name (the filename).
+name : PerRepositoryTemplatesFeature.stg;
+
+// The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-sql.
+type : per-repository;
+
+// The output flavor.
+output: Cucumber;
+
+// The filename builder.
+filename  builder : PerRepositoryTemplates.feature;
+
+// The package.
+package: cucumber.templates;
+
+disabled;

@@ -1,5 +1,5 @@
 /*
-                        QueryJ Core
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,10 +33,10 @@
  *
  */
 package org.acmsl.queryj.templates.packaging;
+
 /*
- * Importing checkthread.org annotations.
+ * Importing JUnit/EasyMock classes.
  */
-import org.checkthread.annotations.ThreadSafe;
 import org.easymock.EasyMock;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
@@ -48,7 +48,6 @@ import org.junit.Test;
  * @since 3.0
  * Created 2014/04/14
  */
-@ThreadSafe
 public class PerForeignKeyTemplateFactoryTemplateTest
 {
     /**
@@ -63,6 +62,6 @@ public class PerForeignKeyTemplateFactoryTemplateTest
         @NotNull final PerForeignKeyTemplateFactoryTemplate instance =
             new PerForeignKeyTemplateFactoryTemplate<>(context);
 
-        Assert.assertEquals("PerForeignKeyTemplateFactory", instance.getTemplateName());
+        Assert.assertEquals(Literals.PER_FOREIGN_KEY_TEMPLATE_FACTORY, instance.getTemplateName());
     }
 }

@@ -23,13 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerForeignKeyTemplateWritingHandlerTemplateTest.java
+ * Filename: PerRepositoryTemplatesFeatureTemplateTest.java
  *
- * Author: Jose San Leandro
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerForeignKeyTemplateWritingHandlerTemplate.
+ * Description: Tests for PerRepositoryTemplatesFeatureTemplate.
  *
- * Created: 2014/04/14 15:34
+ * Date: 2014/04/16
+ * Time: 06:01
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -49,26 +50,39 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerForeignKeyTemplateWritingHandlerTemplate}.
+ * Tests for {@link PerRepositoryTemplatesFeatureTemplate}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created 2014/04/14
+ * Created: 2014/04/16 06:01
  */
 @RunWith(JUnit4.class)
-public class PerForeignKeyTemplateWritingHandlerTemplateTest
+public class PerRepositoryTemplatesFeatureTemplateTest
 {
     /**
-     * Checks whether getTemplateName() returns the correct template name.
+     * Checks the template name is correct.
      */
     @Test
-    public void getTemplateName_returns_the_correct_template_name()
+    public void templateName_is_correct()
     {
-        @NotNull final DefaultTemplatePackagingContext context =
-            EasyMock.createNiceMock(DefaultTemplatePackagingContext.class);
+        @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
 
-        @NotNull final PerForeignKeyTemplateWritingHandlerTemplate instance =
-            new PerForeignKeyTemplateWritingHandlerTemplate<>(context);
+        @NotNull final PerRepositoryTemplatesFeatureTemplate instance =
+            new PerRepositoryTemplatesFeatureTemplate(context);
 
-        Assert.assertEquals(Literals.PER_FOREIGN_KEY_TEMPLATE_WRITING_HANDLER, instance.getTemplateName());
+        Assert.assertEquals(Literals.PER_REPOSITORY_TEMPLATES_FEATURE, instance.getTemplateName());
+    }
+
+    /**
+     * Checks whether the group is found.
+     */
+    @Test
+    public void group_is_available()
+    {
+        @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
+
+        @NotNull final PerRepositoryTemplatesFeatureTemplate instance =
+            new PerRepositoryTemplatesFeatureTemplate(context);
+
+        Assert.assertNotNull(instance.retrieveGroup());
     }
 }

@@ -49,18 +49,68 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public interface Literals
 {
+    /**
+     * String literal: "repository".
+     */
     String REPOSITORY = org.acmsl.queryj.Literals.REPOSITORY;
+    /**
+     * String literal: "cucumber.templates".
+     */
     String CUCUMBER_TEMPLATES = "cucumber.templates";
+    /**
+     * String literal: "PerTableTemplatesTest".
+     */
     String PER_TABLE_TEMPLATES_TEST = "PerTableTemplatesTest";
+    /**
+     * String literal: "PerForeignKeyTemplatesTest".
+     */
     String PER_FOREIGN_KEY_TEMPLATES_TEST = "PerForeignKeyTemplatesTest";
+    /**
+     * String literal: "TemplateBuildHandler".
+     */
     String TEMPLATE_BUILD_HANDLER = "TemplateBuildHandler";
+    /**
+     * String literal: ".handlers".
+     */
     String DOT_HANDLERS = ".handlers";
+    /**
+     * String literal: "TemplateFactory".
+     */
     String TEMPLATE_FACTORY = "TemplateFactory";
+    /**
+     * String literal: "TemplateGenerator".
+     */
     String TEMPLATE_GENERATOR = "TemplateGenerator";
+    /**
+     * String literal: "TemplateHandlerBundle".
+     */
     String TEMPLATE_HANDLER_BUNDLE = "TemplateHandlerBundle";
+    /**
+     * String literal: "TemplateWritingHandler".
+     */
     String TEMPLATE_WRITING_HANDLER = "TemplateWritingHandler";
+    /**
+     * String literal: "PerTableTemplatesFeature".
+     */
     String PER_TABLE_TEMPLATES_FEATURE = "PerTableTemplatesFeature";
+    /**
+     * String literal: "package".
+     */
     String PACKAGE = org.acmsl.queryj.Literals.PACKAGE;
+    /**
+     * String literal: "org/acmsl/queryj/templates/packaging/".
+     */
     String ORG_ACMSL_QUERYJ_TEMPLATES_PACKAGING = "org/acmsl/queryj/templates/packaging/";
+    /**
+     * String literal: "PerForeignKeyTemplateFactory".
+     */
     String PER_FOREIGN_KEY_TEMPLATE_FACTORY = "PerForeignKeyTemplateFactory";
+    /**
+     * String literal: "PerRepositoryTemplatesFeature".
+     */
+    String PER_REPOSITORY_TEMPLATES_FEATURE = "PerRepositoryTemplatesFeature";
+    /**
+     * String literal: "PerForeignKeyTemplateWritingHandler".
+     */
+    String PER_FOREIGN_KEY_TEMPLATE_WRITING_HANDLER = "PerForeignKeyTemplateWritingHandler";
 }
