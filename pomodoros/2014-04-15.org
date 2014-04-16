@@ -1,5 +1,5 @@
 * 2014/04/15:
-** TODO #474: Support per-fk templates: 8 -> 8
+** DONE #474: Support per-fk templates: 8 -> 8
 
 * Notes:
 ** GOAL : Deliver QueryJ 3.0 ASAP

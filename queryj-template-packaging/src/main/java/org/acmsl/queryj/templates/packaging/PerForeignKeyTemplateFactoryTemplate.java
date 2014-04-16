@@ -47,6 +47,7 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Represents foreign key-specific template factory templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @param <C> the context.
  * @since 3.0
  * Created 2014/04/14
  */
@@ -76,6 +77,6 @@ public class PerForeignKeyTemplateFactoryTemplate<C extends TemplatePackagingCon
     @Override
     public String getTemplateName()
     {
-        return "PerForeignKeyTemplateFactory";
+        return Literals.PER_FOREIGN_KEY_TEMPLATE_FACTORY;
     }
 }

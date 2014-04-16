@@ -69,6 +69,6 @@ public class PerForeignKeyTemplateWritingHandlerTemplateTest
         @NotNull final PerForeignKeyTemplateWritingHandlerTemplate instance =
             new PerForeignKeyTemplateWritingHandlerTemplate<>(context);
 
-        Assert.assertEquals("PerForeignKeyTemplateWritingHandler", instance.getTemplateName());
+        Assert.assertEquals(Literals.PER_FOREIGN_KEY_TEMPLATE_WRITING_HANDLER, instance.getTemplateName());
     }
 }

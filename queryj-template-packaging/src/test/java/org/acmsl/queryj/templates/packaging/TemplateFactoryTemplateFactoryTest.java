@@ -82,7 +82,7 @@ public class TemplateFactoryTemplateFactoryTest
     @Test
     public void createTemplate_returns_the_correct_template_for_a_per_repository_template()
     {
-        testCreateTemplate(TemplateDefType.PER_REPOSITORY, "TemplateFactory");
+        testCreateTemplate(TemplateDefType.PER_REPOSITORY, Literals.TEMPLATE_FACTORY);
     }
 
     /**
@@ -92,7 +92,7 @@ public class TemplateFactoryTemplateFactoryTest
     @Test
     public void createTemplate_returns_the_correct_template_for_a_per_table_template()
     {
-        testCreateTemplate(TemplateDefType.PER_TABLE, "TemplateFactory");
+        testCreateTemplate(TemplateDefType.PER_TABLE, Literals.TEMPLATE_FACTORY);
     }
 
     /**
@@ -102,7 +102,7 @@ public class TemplateFactoryTemplateFactoryTest
     @Test
     public void createTemplate_returns_the_correct_template_for_a_per_foreign_key_template()
     {
-        testCreateTemplate(TemplateDefType.PER_FOREIGN_KEY, "PerForeignKeyTemplateFactory");
+        testCreateTemplate(TemplateDefType.PER_FOREIGN_KEY, Literals.PER_FOREIGN_KEY_TEMPLATE_FACTORY);
     }
 
     /**
@@ -112,6 +112,6 @@ public class TemplateFactoryTemplateFactoryTest
     @Test
     public void createTemplate_returns_the_correct_template_for_a_per_custom_result_template()
     {
-        testCreateTemplate(TemplateDefType.PER_CUSTOM_RESULT, "TemplateFactory");
+        testCreateTemplate(TemplateDefType.PER_CUSTOM_RESULT, Literals.TEMPLATE_FACTORY);
     }
 }

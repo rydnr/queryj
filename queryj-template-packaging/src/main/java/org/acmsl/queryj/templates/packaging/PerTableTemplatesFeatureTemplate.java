@@ -42,7 +42,7 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 
