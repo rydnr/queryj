@@ -125,4 +125,8 @@ public interface Literals
      * String literal: "PerForeignKeyTemplatesFeature".
      */
     String PER_FOREIGN_KEY_TEMPLATES_FEATURE = "PerForeignKeyTemplatesFeature";
+    /**
+     * String literal: "PerRepositoryTemplatesTest".
+     */
+    String PER_REPOSITORY_TEMPLATES_TEST = "PerRepositoryTemplatesTest";
 }

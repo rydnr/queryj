@@ -15,28 +15,71 @@
 **** DONE #476
 **** DONE #477
 *** PerXXXTemplatesTestTemplate
-**** TODO #474
+**** DONE #474
+**** DONE #475
+**** TODO #476
+**** TODO #477
 *** PerXXXTemplatesTestTemplateFactory
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 *** PerXXXTemplatesTestTemplateBuildHandler
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 *** PerXXXTemplatesTestTemplateHandlerBundle
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 *** PerXXXTemplatesTestTemplateWritingHandler
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 *** PerXXXTemplatesFeature.stg
-**** DONE #474
-**** DONE #475
-**** DONE #476
-**** DONE #477
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 *** PerXXXTemplatesFeature.stg.def
-**** DONE #474
-**** DONE #475
-**** DONE #476
-**** DONE #477
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 
 *** PerxxxTemplatesTest.stg
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 *** PerXXXTemplateWritingHandler.stg
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 *** XXXTestHelper
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 *** Add PerXXXTemplatesTestTemplateHandlerBundle to TemplatePackagingChain
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 *** Add case to TemplateFactoryTemplateFactory
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 *** Add case to TemplateWritingHandlerTemplateFactory
+**** TODO #474
+**** TODO #475
+**** TODO #476
+**** TODO #477
 ** GOAL : Deliver QueryJ 3.0 ASAP
 *** Find out which templates are affected by the order of columns: 
 **** DONE ValueObject.stg
