@@ -1,0 +1,80 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: PerRepositoryTemplatesFeature.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate PerRepositoryTemplates.feature
+//              Cucumber tests
+//
+group PerRepositoryTemplatesFeature;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+  Generates PerRepositoryTemplates.feature files.
+!>
+<sourceImpl(repository=C.repository, tables=C.tables, C=C)>
+>>
+
+sourceImpl(repository, tables, C) ::= <<
+<!
+  Generates PerRepositoryTemplates.feature files.
+  @param repository the repository.
+  @param tables the tables.
+!>
+Feature: <repository>-wide classes compile
+
+  Scenario Outline: Templates bound to <C.repository> compile
+
+    Given the repository whose name is \<repository>, composed of :
+    | table | parent table | decorated | relationship |   static    |
+    <tables:{ t | <cucumber_table_declaration(table=t)>}; separator="\n">
+
+    When I use the repository-wide \<template>.stg for Oracle
+
+    Then the generated repository-wide \<output> file compiles successfully
+
+    Examples:
+      | template           | output                            |
+      <C.templateDefs:{ d | <indirect_template(def=d, engineName="Oracle", tableName="User")>}; separator="\n">
+>>
+
+indirect_template(def, engineName, tableName) ::= <<
+| <def.name; format="%-30s"> | <(def.filenameRule)(engineName, tableName)> |
+>>
+
+cucumber_table_declaration(attribute) ::= <<
+<! Declares the table metadata in Cucumber format !>
+| <table.name> | <table.parent> | <table.decorated> | <table.relationship> | <table.static> |
+>>

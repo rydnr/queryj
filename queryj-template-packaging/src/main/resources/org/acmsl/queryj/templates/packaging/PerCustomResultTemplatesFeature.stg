@@ -1,0 +1,88 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: PerCustomResultTemplatesFeature.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate
+//              PerCustomResultTemplates.feature Cucumber tests
+//
+group PerCustomResultTemplatesFeature;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+  Generates PerCustomResultTemplates.feature files.
+!>
+<sourceImpl(result=C.result, C=C)>
+>>
+
+sourceImpl(result, C) ::= <<
+<!
+  Generates PerCustomResultTemplates.feature files.
+  @param result the custom result.
+!>
+Feature: Classes associated to custom results compile
+
+  Scenario Outline: Custom result templates work
+
+    Given the following custom result:
+    | result | dao | type |
+    | <result:{ r | <cucumber_custom_result_declaration(result=r)>}; separator="\n">
+
+    And the following custom result properties:
+    | name | type |
+    | <result.properties:{ p | <cucumber_property_declaration(property=p)>}; separator="\n">
+
+    When I use the custom result template \<template>.stg for Oracle
+
+    Then the generated custom result-specific \<output> file compiles successfully
+
+    Examples:
+      | template           | output                            |
+      <C.templateDefs:{ d | <indirect_template(def=d, engineName="Oracle", tableName="User")>}; separator="\n">
+>>
+
+indirect_template(def, engineName, tableName) ::= <<
+| <def.name; format="%-30s"> | <(def.filenameRule)(engineName, tableName)> |
+>>
+
+cucumber_custom_result_declaration(attribute) ::= <<
+<! Declares the custom result metadata in Cucumber format !>
+| <result.id> | <result.dao> | <result.type> |
+>>
+
+cucumber_property_declaration(attribute) ::= <<
+<! Declares the property metadata in Cucumber format !>
+| <property.id> | <property.type> |
+>>
