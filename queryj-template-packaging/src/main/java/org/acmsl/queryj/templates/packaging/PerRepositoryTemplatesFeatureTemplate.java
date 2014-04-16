@@ -62,26 +62,17 @@ public class PerRepositoryTemplatesFeatureTemplate
     extends AbstractTemplatePackagingTemplate<GlobalTemplateContext>
 {
     /**
-     * Builds a PerTableTemplatesFeature using given context.
-     * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext}.
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 7986340064857909415L;
+
+    /**
+     * Builds a {@code PerRepositoryTemplatesFeature} using given context.
+     * @param context the {@link GlobalTemplateContext}.
      */
     public PerRepositoryTemplatesFeatureTemplate(@NotNull final GlobalTemplateContext context)
     {
         super(context);
-    }
-
-    /**
-     * Retrieves the StringTemplate group for "PerRepositoryTemplatesFeature.stg".
-     * @return such {@link org.stringtemplate.v4.STGroup group}.
-     */
-    @Nullable
-    @Override
-    public STGroup retrieveGroup()
-    {
-        return
-            retrieveGroup(
-                "org/acmsl/queryj/templates/packaging/PerRepositoryTemplatesFeature.stg",
-                Arrays.asList(org.acmsl.queryj.Literals.ORG_ACMSL_QUERYJ_TEMPLATES));
     }
 
     /**
