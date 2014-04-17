@@ -38,6 +38,8 @@ package org.acmsl.queryj.test;
 /*
  * Importing QueryJ Test classes.
  */
+import org.acmsl.queryj.customsql.Property;
+import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.test.antlr4.JavaLexer;
 import org.acmsl.queryj.test.antlr4.JavaPackageVisitor;
 import org.acmsl.queryj.test.antlr4.JavaParser;
@@ -192,6 +194,16 @@ public abstract class AbstractTemplatesTest<G, F>
     private Map<String, List<Row<String>>> m__mRows;
 
     /**
+     * The custom results.
+     */
+    private Map<String, Result<String>> m__mResults;
+
+    /**
+     * The properties.
+     */
+    private Map<String, List<Property<String>>> m__mProperties;
+
+    /**
      * The engine name.
      */
     private String m__strEngineName;
@@ -227,6 +239,8 @@ public abstract class AbstractTemplatesTest<G, F>
         immutableSetSqlList(new ArrayList<>());
         immutableSetParameters(new HashMap<>());
         immutableSetRows(new HashMap<>());
+        immutableSetResults(new HashMap<>());
+        immutableSetProperties(new HashMap<>());
     }
 
     /**
@@ -263,7 +277,8 @@ public abstract class AbstractTemplatesTest<G, F>
      * Specifies the tables.
      * @param tables the tables.
      */
-    protected final void immutableSetTables(@NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
+    protected final void immutableSetTables(
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
         m__mTables = tables;
     }
@@ -404,6 +419,64 @@ public abstract class AbstractTemplatesTest<G, F>
     protected Map<String, List<Row<String>>> getRows()
     {
         return this.m__mRows;
+    }
+
+    /**
+     * Specifies the results.
+     * @param results the results.
+     */
+    protected final void immutableSetResults(@NotNull final Map<String, Result<String>> results)
+    {
+        m__mResults = results;
+    }
+
+    /**
+     * Specifies the results.
+     * @param results the results.
+     */
+    @SuppressWarnings("unused")
+    protected void setResults(@NotNull final Map<String, Result<String>> results)
+    {
+        immutableSetResults(results);
+    }
+
+    /**
+     * Retrieves the tables.
+     * @return such information.
+     */
+    @NotNull
+    protected Map<String, Result<String>> getResults()
+    {
+        return m__mResults;
+    }
+
+    /**
+     * Specifies the properties.
+     * @param properties the properties.
+     */
+    protected final void immutableSetProperties(@NotNull final Map<String, List<Property<String>>> properties)
+    {
+        m__mProperties = properties;
+    }
+
+    /**
+     * Specifies the properties.
+     * @param properties the properties.
+     */
+    @SuppressWarnings("unused")
+    protected void setProperties(@NotNull final Map<String, List<Property<String>>> properties)
+    {
+        immutableSetProperties(properties);
+    }
+
+    /**
+     * Retrieves the tables.
+     * @return such information.
+     */
+    @NotNull
+    protected Map<String, List<Property<String>>> getProperties()
+    {
+        return m__mProperties;
     }
 
     /**
@@ -1055,6 +1128,10 @@ public abstract class AbstractTemplatesTest<G, F>
         result.append(m__mParameters);
         result.append(", rows=");
         result.append(m__mRows);
+        result.append(", results=");
+        result.append(m__mResults);
+        result.append(", properties=");
+        result.append(m__mProperties);
         result.append(", engineName=");
         result.append(m__strEngineName);
         result.append(", jdbcDriver=");

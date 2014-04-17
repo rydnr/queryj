@@ -101,12 +101,12 @@ public class CustomResultTestHelper
      * Defines the input results based on the information provided by the
      * feature.
      * @param tableInfo the information about the results.
-     * @param tables the table collection.
+     * @param results the result collection.
      */
     @SuppressWarnings("unused")
     public void defineInputResults(
         @NotNull final DataTable tableInfo,
-        @NotNull final Map<String, Result<String>> tables)
+        @NotNull final Map<String, Result<String>> results)
     {
         @NotNull final List<Map<String, String>> tableEntries = tableInfo.asMaps();
 
@@ -118,7 +118,7 @@ public class CustomResultTestHelper
 
             if (result != null)
             {
-                tables.put(result.getId(), result);
+                results.put(result.getId(), result);
             }
         }
     }
@@ -159,24 +159,37 @@ public class CustomResultTestHelper
      * Defines the input properties based on the information provided by the
      * feature.
      * @param tableInfo the information about the properties.
+     * @param results the custom results.
      * @param properties the properties collection.
      */
     @SuppressWarnings("unused")
     public void defineInputProperties(
         @NotNull final DataTable tableInfo,
-        @NotNull final Map<String, Property<String>> properties)
+        @NotNull final Map<String, Result<String>> results,
+        @NotNull final Map<String, List<Property<String>>> properties)
     {
-        @NotNull final List<Map<String, String>> tableEntries = tableInfo.asMaps();
+        @NotNull final List<Map<String, String>> propertyEntries = tableInfo.asMaps();
 
         @Nullable Property<String> property;
 
-        for (@NotNull final Map<String, String> tableEntry: tableEntries)
+        for (@Nullable final Result<String> result: results.values())
         {
-            property = convertToProperty(tableEntry);
-
-            if (property != null)
+            if (result != null)
             {
-                properties.put(property.getId(), property);
+                @Nullable final List<Property<String>> propertyList = properties.get(result.getId());
+
+                if (propertyList != null)
+                {
+                    for (@NotNull final Map<String, String> propertyEntry: propertyEntries)
+                    {
+                        property = convertToProperty(propertyEntry);
+
+                        if (property != null)
+                        {
+                            propertyList.add(property);
+                        }
+                    }
+                }
             }
         }
     }

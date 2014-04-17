@@ -120,4 +120,5 @@ public interface Literals
     String SHORT_L = "short";
     String NUMBER_L = "number";
     String OBJECT_C = "Object";
+    String RESULT_NAME = "resultName";
 }

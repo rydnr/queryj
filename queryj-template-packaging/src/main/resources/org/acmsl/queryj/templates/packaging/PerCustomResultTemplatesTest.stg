@@ -71,10 +71,8 @@ import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.RetrieveQueryHandler;
-import org.acmsl.queryj.customsql.Parameter;
-import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.Property;
+import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.DecoratorFactory;
@@ -83,22 +81,16 @@ import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
 import org.acmsl.queryj.metadata.engines.oracle.OracleEngine;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.metadata.vo.Row;
-import org.acmsl.queryj.metadata.vo.result;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
  * Importing QueryJ Test classes.
  */
 import org.acmsl.queryj.test.AbstractTemplatesTest;
-import org.acmsl.queryj.test.resultTestHelper;
+import org.acmsl.queryj.test.CustomResultTestHelper;
 
 /*
  * Importing project classes.
@@ -123,8 +115,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 /*
  * Importing Cucumber classes.
  */
-import cucumber.api.Dataresult;
-import cucumber.api.java.en.And;
+import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -141,8 +132,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing JUnit classes.
+ * Importing JUnit/EasyMock classes.
  */
+import org.easymock.EasyMock;
 import org.junit.Assert;
 
 /*
@@ -151,13 +143,9 @@ import org.junit.Assert;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 <class(defs=C.templateDefs, C=C)>
 >>
@@ -175,8 +163,9 @@ def_import(d) ::= <<
   Generates the imports for a given TemplateDef.
   @param d the template def.
 !>
+<if(d.type.perCustomResult)>
 import org.acmsl.queryj.templates.<d.name>TemplateFactory;
-import org.acmsl.queryj.templates.<d.name>TemplateGenerator;
+import org.acmsl.queryj.templates.<d.name>TemplateGenerator;<endif>
 >>
 
 class(defs, C) ::= <<
@@ -227,7 +216,7 @@ public class PerCustomResultTemplatesTest
      */
     protected void defineInputResults(
         @NotNull final DataTable resultInfo,
-        @NotNull final Map\<String, CustomResult\<String\>> results,
+        @NotNull final Map\<String, Result\<String\>> results,
         @NotNull final CustomResultTestHelper helper)
     {
         helper.defineInputResults(resultInfo, results);
@@ -242,22 +231,24 @@ public class PerCustomResultTemplatesTest
     @Given("^Given the following properties:$")
     public void defineInputProperties(@NotNull final DataTable propertiesInfo)
     {
-        defineInputProperties(resultInfo, getResults(), CustomResultTestHelper.getInstance());
+        defineInputProperties(propertiesInfo, getResults(), getProperties(), CustomResultTestHelper.getInstance());
     }
 
     /**
      * Defines the input properties based on the information provided by the
      * feature.
      * @param propertiesInfo the information about the properties.
+     * @param results the results.
      * @param properties the properties.
      * @param helper the {@link CustomResultTestHelper} instance.
      */
-    protected void defineInputResults(
-        @NotNull final DataTable resultInfo,
-        @NotNull final Map\<String, CustomResult\<String\>> results,
+    protected void defineInputProperties(
+        @NotNull final DataTable propertiesInfo,
+        @NotNull final Map\<String, Result\<String\>> results,
+        @NotNull final Map\<String, List\<Property\<String>\>> properties,
         @NotNull final CustomResultTestHelper helper)
     {
-        helper.defineInputProperties(propertiesInfo, properties);
+        helper.defineInputProperties(propertiesInfo, results, properties);
     }
 
     /**
@@ -285,7 +276,7 @@ public class PerCustomResultTemplatesTest
      * @param templateName the template.
      * @param engine the engine name.
      * @param resultMap the result map.
-     * @param rows the rows.
+     * @param propertyMap the property map.
      * @param outputFiles the output files.
      * @param sqlProvider the {@link CustomSqlProvider} instance.
      */
@@ -293,8 +284,8 @@ public class PerCustomResultTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
-        @NotNull final Map\<String, CustomResult\<String\>> resultMap,
-        @NotNull final Map\<String, List\<Property\<String>\>> properties,
+        @NotNull final Map\<String, Result\<String\>> resultMap,
+        @NotNull final Map\<String, List\<Property\<String>\>> propertyMap,
         @NotNull final Map\<String, File> outputFiles,
         @NotNull final CustomSqlProvider sqlProvider)
     {
@@ -340,107 +331,113 @@ public class PerCustomResultTemplatesTest
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.VERSION, "<C.version>");
 
-            @NotNull final List\<result\<String, Attribute\<String>, List\<Attribute\<String\>>\>> results =
-                new ArrayList\<>(resultMap.values());
+            @NotNull final List\<Result\<String\>> results = new ArrayList\<>(resultMap.values());
 
-            for (@NotNull final result\<String, Attribute\<String>, List\<Attribute\<String>\>> result : results)
+            for (@Nullable final Result\<String> result : results)
             {
-                @Nullable List\<Row\<String\>> resultRows = rows.get(result.getName());
-
-                if (resultRows == null)
+                if (result == null)
                 {
-                    resultRows = new ArrayList\<>(0);
+                    Assert.fail("Null result found");
                 }
-
-                @NotNull final MetadataManager metadataManager =
-                    retrieveMetadataManager(engine, result, resultRows, decoratorFactory);
-
-                new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
-                    DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
-
-                @Nullable final PerCustomResultTemplateFactory\<? extends PerCustomResultTemplate\<PerCustomResultTemplateContext>, PerCustomResultTemplateContext> templateFactory =
-                    retrieveTemplateFactory(templateName);
-
-                Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
-
-                @NotNull final String packageName =
-                    resolvePackage(PACKAGE_MAPPINGS.get(templateName), result.getName(), resolveEngine(engine));
-
-                @Nullable final PerCustomResultTemplate\<PerCustomResultTemplateContext> template =
-                    templateFactory.createTemplate(
-                        t_Command,
-                        decoratorFactory,
-                        packageName,
-                        result.getName(),
-                        properties);
-
-                Assert.assertNotNull("No template found for " + templateName, template);
-
-                File outputDir = null;
-
-                try
+                else
                 {
-                    rootFolder.create();
+                    @Nullable List\<Property\<String\>> properties = propertyMap.get(result.getId());
 
-                    @NotNull final String[] packages = packageName.split("\\\.");
-                    @NotNull final StringBuilder folder = new StringBuilder();
-
-                    for (@NotNull final String pkg : packages)
+                    if (properties == null)
                     {
-                        folder.append(File.separator);
-                        folder.append(pkg);
+                        properties = new ArrayList\<>(0);
                     }
 
-                    outputDir = new File(rootFolder.getRoot().getAbsolutePath().concat(folder.toString()));
+                    @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
+                        // retrieveMetadataManager(engine, result, properties, decoratorFactory);
 
-                    outputDir.mkdirs();
-                }
-                catch (@NotNull final IOException ioException)
-                {
-                    Assert.fail(ioException.getMessage());
-                }
+                    new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
+                        DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
 
-                if (!outputDir.exists())
-                {
-                    Assert.fail("Cannot create folder: " + outputDir.getAbsolutePath());
-                }
+                    @Nullable final PerCustomResultTemplateFactory\<? extends PerCustomResultTemplate\<PerCustomResultTemplateContext>, PerCustomResultTemplateContext> templateFactory =
+                        retrieveTemplateFactory(templateName);
 
-                UniqueLogFactory.initializeInstance(LogFactory.getLog(PerCustomResultTemplatesTest.class));
+                    Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
-                ((AbstractTemplate) template).setDebugMode(true);
+                    @NotNull final String packageName =
+                        resolvePackage(PACKAGE_MAPPINGS.get(templateName), result.getId(), resolveEngine(engine));
 
-                try
-                {
-                    generator.write(
-                        template,
-                        outputDir,
-                        rootFolder.getRoot(),
-                        Charset.defaultCharset());
-                }
-                catch (@NotNull final IOException ioException)
-                {
-                    if (failCause == null)
+                    @Nullable final PerCustomResultTemplate\<PerCustomResultTemplateContext> template =
+                        templateFactory.createTemplate(
+                            t_Command,
+                            decoratorFactory,
+                            packageName,
+                            result.getId(),
+                            properties);
+
+                    Assert.assertNotNull("No template found for " + templateName, template);
+
+                    File outputDir = null;
+
+                    try
                     {
-                        failCause = ioException.getMessage();
-                    }
-                    restart = false;
-                }
-                catch (@NotNull final DevelopmentModeException debugging)
-                {
-                    restart = true;
-                }
-                catch (@NotNull final QueryJBuildException queryjBuildException)
-                {
-                    if (failCause == null)
-                    {
-                        failCause = queryjBuildException.getMessage();
-                    }
-                    restart = false;
-                }
+                        rootFolder.create();
 
-                outputFiles.put(
-                    result.getName(),
-                    new File(outputDir, template.getTemplateContext().getFileName()));
+                        @NotNull final String[] packages = packageName.split("\\\.");
+                        @NotNull final StringBuilder folder = new StringBuilder();
+
+                        for (@NotNull final String pkg : packages)
+                        {
+                            folder.append(File.separator);
+                            folder.append(pkg);
+                        }
+
+                        outputDir = new File(rootFolder.getRoot().getAbsolutePath().concat(folder.toString()));
+
+                        outputDir.mkdirs();
+                    }
+                    catch (@NotNull final IOException ioException)
+                    {
+                        Assert.fail(ioException.getMessage());
+                    }
+
+                    if (!outputDir.exists())
+                    {
+                        Assert.fail("Cannot create folder: " + outputDir.getAbsolutePath());
+                    }
+
+                    UniqueLogFactory.initializeInstance(LogFactory.getLog(PerCustomResultTemplatesTest.class));
+
+                    ((AbstractTemplate) template).setDebugMode(true);
+
+                    try
+                    {
+                        generator.write(
+                            template,
+                            outputDir,
+                            rootFolder.getRoot(),
+                            Charset.defaultCharset());
+                    }
+                    catch (@NotNull final IOException ioException)
+                    {
+                        if (failCause == null)
+                        {
+                            failCause = ioException.getMessage();
+                        }
+                        restart = false;
+                    }
+                    catch (@NotNull final DevelopmentModeException debugging)
+                    {
+                        restart = true;
+                    }
+                    catch (@NotNull final QueryJBuildException queryjBuildException)
+                    {
+                        if (failCause == null)
+                        {
+                            failCause = queryjBuildException.getMessage();
+                        }
+                        restart = false;
+                    }
+
+                    outputFiles.put(
+                        result.getId(),
+                        new File(outputDir, template.getTemplateContext().getFileName()));
+                }
             }
         }
 

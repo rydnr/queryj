@@ -124,7 +124,7 @@ public class <C.class_name>
      */
     @NotNull
     @Override
-    protected <def.name.noExtension>TemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
+    public <def.name.noExtension>TemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
         return new <def.name.noExtension>TemplateGenerator(caching, threadCount);
     }
@@ -134,7 +134,7 @@ public class <C.class_name>
      */
     @NotNull
     @Override
-    protected List\<<def.name.noExtension>Template> retrieveTemplates(@NotNull final QueryJCommand parameters)
+    public List\<<def.name.noExtension>Template> retrieveTemplates(@NotNull final QueryJCommand parameters)
     {
         @NotNull final List\<<def.name.noExtension>Template> result;
 
