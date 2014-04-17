@@ -77,7 +77,6 @@ import java.util.List;
  * Writing handler for {@link PerForeignKeyTemplatesTestTemplate}s.
  * @author <a href="http://www.acm-sl.org/projects/queryj">QueryJ's Template Packaging 3.0-SNAPSHOT</a>
  * Generation template: org/acmsl/templates/packaging/TemplateWritingHandler.stg
-
  */
 @ThreadSafe
 public class PerForeignKeyTemplatesTestTemplateWritingHandler
