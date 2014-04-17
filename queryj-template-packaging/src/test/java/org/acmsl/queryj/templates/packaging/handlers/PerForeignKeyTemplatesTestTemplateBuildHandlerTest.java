@@ -96,6 +96,7 @@ public class PerForeignKeyTemplatesTestTemplateBuildHandlerTest
     /**
      * Tests whether retrieveTemplateName() works.
      */
+    @Override
     @Test
     public void retrieveTemplateName_works()
     {
@@ -105,6 +106,7 @@ public class PerForeignKeyTemplatesTestTemplateBuildHandlerTest
     /**
      * Checks whether storeTemplate() binds the template to the command.
      */
+    @Override
     @Test
     public void storeTemplate_stores_the_templates_in_the_command()
     {
@@ -116,6 +118,7 @@ public class PerForeignKeyTemplatesTestTemplateBuildHandlerTest
      * Checks whether retrieveTemplateFactory() retrieves
      * {@link PerForeignKeyTemplatesTestTemplateFactory}.
      */
+    @Override
     @Test
     public void retrieveTemplateFactory_retrieves_the_correct_factory()
     {

@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerRepositoryTemplatesTestTemplateBuildHandlerTest.java
+ * Filename: PerCustomResultTemplatesTestTemplateBuildHandlerTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerRepositoryTemplatesTestTemplateBuildHandler.
+ * Description: Tests for PerCustomResultTemplatesTestTemplateBuildHandler.
  *
  * Date: 2014/04/17
- * Time: 07:27
+ * Time: 08:05
  *
  */
 package org.acmsl.queryj.templates.packaging.handlers;
@@ -39,8 +39,8 @@ package org.acmsl.queryj.templates.packaging.handlers;
  * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.Literals;
-import org.acmsl.queryj.templates.packaging.PerRepositoryTemplatesTestTemplate;
-import org.acmsl.queryj.templates.packaging.PerRepositoryTemplatesTestTemplateFactory;
+import org.acmsl.queryj.templates.packaging.PerCustomResultTemplatesTestTemplate;
+import org.acmsl.queryj.templates.packaging.PerCustomResultTemplatesTestTemplateFactory;
 
 /*
  * Importing JetBrains annotations.
@@ -48,7 +48,7 @@ import org.acmsl.queryj.templates.packaging.PerRepositoryTemplatesTestTemplateFa
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing JUnit/EasyMock classes.
+ * Importing checkthread.org annotations.
  */
 import org.easymock.EasyMock;
 import org.junit.Test;
@@ -56,39 +56,38 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerRepositoryTemplatesTestTemplateBuildHandler}.
+ * Tests for {@link PerCustomResultTemplatesTestTemplateBuildHandler}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/04/17 07:27
+ * Created: 2014/04/17 08:05
  */
 @RunWith(JUnit4.class)
-public class PerRepositoryTemplatesTestTemplateBuildHandlerTest
-    extends AbstractTemplatesTestTemplateBuildHandlerTest
-                <PerRepositoryTemplatesTestTemplateBuildHandler,
-                 PerRepositoryTemplatesTestTemplate,
-                    PerRepositoryTemplatesTestTemplateFactory>
+public class PerCustomResultTemplatesTestTemplateBuildHandlerTest
+    extends AbstractTemplatesTestTemplateBuildHandlerTest<
+                PerCustomResultTemplatesTestTemplateBuildHandler,
+                PerCustomResultTemplatesTestTemplate,
+                PerCustomResultTemplatesTestTemplateFactory>
 {
     /**
      * Creates a new build handler instance.
-     *
      * @return such new instance.
      */
-    @Override
     @NotNull
-    protected PerRepositoryTemplatesTestTemplateBuildHandler createInstance()
+    @Override
+    protected PerCustomResultTemplatesTestTemplateBuildHandler createInstance()
     {
-        return new PerRepositoryTemplatesTestTemplateBuildHandler();
+        return new PerCustomResultTemplatesTestTemplateBuildHandler();
     }
 
     /**
      * Retrieves a new template mock.
      * @return such mock.
      */
-    @Override
     @NotNull
-    protected PerRepositoryTemplatesTestTemplate createTemplateMock()
+    @Override
+    protected PerCustomResultTemplatesTestTemplate createTemplateMock()
     {
-        return EasyMock.createNiceMock(PerRepositoryTemplatesTestTemplate.class);
+        return EasyMock.createNiceMock(PerCustomResultTemplatesTestTemplate.class);
     }
 
     /**
@@ -98,7 +97,7 @@ public class PerRepositoryTemplatesTestTemplateBuildHandlerTest
     @Test
     public void retrieveTemplateName_works()
     {
-        retrieveTemplateName_works(Literals.PER_REPOSITORY_TEMPLATES_TEST);
+        retrieveTemplateName_works(Literals.PER_CUSTOM_RESULT_TEMPLATES_TEST);
     }
 
     /**
@@ -109,18 +108,19 @@ public class PerRepositoryTemplatesTestTemplateBuildHandlerTest
     public void storeTemplate_stores_the_templates_in_the_command()
     {
         storeTemplate_stores_the_templates_in_the_command(
-            PerRepositoryTemplatesTestTemplateBuildHandler.TEMPLATES_KEY);
+            PerCustomResultTemplatesTestTemplateBuildHandler.TEMPLATES_KEY);
     }
 
     /**
      * Checks whether retrieveTemplateFactory() retrieves
-     * {@link org.acmsl.queryj.templates.packaging.PerRepositoryTemplatesTestTemplateFactory}.
+     * {@link org.acmsl.queryj.templates.packaging.PerCustomResultTemplatesFeatureTemplateFactory}.
      */
     @Override
     @Test
     public void retrieveTemplateFactory_retrieves_the_correct_factory()
     {
         retrieveTemplateFactory_retrieves_the_correct_factory(
-            PerRepositoryTemplatesTestTemplateFactory.getInstance());
+            PerCustomResultTemplatesTestTemplateFactory.getInstance());
     }
+
 }

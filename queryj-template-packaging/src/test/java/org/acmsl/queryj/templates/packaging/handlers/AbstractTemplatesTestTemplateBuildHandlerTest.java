@@ -50,6 +50,7 @@ import org.acmsl.queryj.templates.packaging.AbstractTemplatePackagingTemplate;
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.acmsl.queryj.templates.packaging.Literals;
 import org.acmsl.queryj.templates.packaging.PerRepositoryTemplatesTestTemplate;
+import org.acmsl.queryj.templates.packaging.PerRepositoryTemplatesTestTemplateFactory;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateFactory;
 
@@ -112,6 +113,11 @@ public abstract class AbstractTemplatesTestTemplateBuildHandlerTest
     /**
      * Tests whether retrieveTemplateName() works.
      */
+    public abstract void retrieveTemplateName_works();
+
+    /**
+     * Tests whether retrieveTemplateName() works.
+     */
     protected void retrieveTemplateName_works(@NotNull final String templateName)
     {
         @NotNull final BH instance = createInstance();
@@ -120,6 +126,11 @@ public abstract class AbstractTemplatesTestTemplateBuildHandlerTest
 
         Assert.assertEquals(templateName, instance.retrieveTemplateName(command));
     }
+
+    /**
+     * Checks whether storeTemplate() binds the template to the command.
+     */
+    public abstract void storeTemplate_stores_the_templates_in_the_command();
 
     /**
      * Checks whether storeTemplate() binds the template to the command.
@@ -138,6 +149,12 @@ public abstract class AbstractTemplatesTestTemplateBuildHandlerTest
 
         Assert.assertEquals(template, command.getSetting(commandKey));
     }
+
+    /**
+     * Checks whether retrieveTemplateFactory() retrieves
+     * {@link org.acmsl.queryj.templates.packaging.PerRepositoryTemplatesTestTemplateFactory}.
+     */
+    public abstract void retrieveTemplateFactory_retrieves_the_correct_factory();
 
     /**
      * Checks whether retrieveTemplateFactory() retrieves a &lt;TF&gt; instance.
