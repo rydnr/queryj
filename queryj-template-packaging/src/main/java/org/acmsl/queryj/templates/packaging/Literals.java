@@ -149,4 +149,8 @@ public interface Literals
      * String literal: "PerSqlTemplateFactory".
      */
     String PER_SQL_TEMPLATE_FACTORY = "PerSqlTemplateFactory";
+    /**
+     * String literal: "PerRepositoryTemplateWritingHandler".
+     */
+    String PER_REPOSITORY_TEMPLATE_WRITING_HANDLER = "PerRepositoryTemplateWritingHandler";
 }

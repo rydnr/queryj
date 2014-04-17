@@ -82,7 +82,7 @@ public class TemplateWritingHandlerTemplateFactoryTest
     @Test
     public void createTemplate_returns_the_correct_template_for_a_per_repository_template()
     {
-        testCreateTemplate(TemplateDefType.PER_REPOSITORY, Literals.TEMPLATE_WRITING_HANDLER);
+        testCreateTemplate(TemplateDefType.PER_REPOSITORY, Literals.PER_REPOSITORY_TEMPLATE_WRITING_HANDLER);
     }
 
     /**
@@ -113,5 +113,15 @@ public class TemplateWritingHandlerTemplateFactoryTest
     public void createTemplate_returns_the_correct_template_for_a_per_custom_result_template()
     {
         testCreateTemplate(TemplateDefType.PER_CUSTOM_RESULT, Literals.TEMPLATE_WRITING_HANDLER);
+    }
+
+    /**
+     * Checks whether the createTemplate() method returns the correct template
+     * for a per-sql type.
+     */
+    @Test
+    public void createTemplate_returns_the_correct_template_for_a_per_sql_template()
+    {
+        testCreateTemplate(TemplateDefType.PER_SQL, Literals.TEMPLATE_WRITING_HANDLER);
     }
 }
