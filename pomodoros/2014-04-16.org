@@ -31,7 +31,7 @@
 **** DONE #477
 *** PerXXXTemplatesTestTemplateHandlerBundle
 **** TODO #474
-**** TODO #475
+**** DONE #475
 **** TODO #476
 **** TODO #477
 *** PerXXXTemplatesTestTemplateWritingHandler
