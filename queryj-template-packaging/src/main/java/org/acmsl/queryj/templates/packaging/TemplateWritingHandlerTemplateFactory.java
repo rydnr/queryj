@@ -100,6 +100,9 @@ public class TemplateWritingHandlerTemplateFactory
             case PER_REPOSITORY:
                 result = new PerRepositoryTemplateWritingHandlerTemplate<>(context);
                 break;
+            case PER_CUSTOM_RESULT:
+                result = new PerCustomResultTemplateWritingHandlerTemplate<>(context);
+                break;
             default:
                 result = new TemplateWritingHandlerTemplate<>(context);
         }

@@ -87,12 +87,12 @@
 *** Implement PerXXXTemplateWritingHandlerTemplate
 **** DONE #474
 **** DONE #475
-**** TODO #476
+**** DONE #476
 **** TODO #477
 *** Add case to TemplateWritingHandlerTemplateFactory
 **** DONE #474
 **** DONE #475
-**** TODO #476
+**** DONE #476
 **** TODO #477
 ** GOAL : Deliver QueryJ 3.0 ASAP
 *** Find out which templates are affected by the order of columns: 
