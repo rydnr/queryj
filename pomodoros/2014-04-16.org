@@ -62,7 +62,7 @@
 *** PerXXXTemplateWritingHandler.stg
 **** DONE #474
 **** DONE #475
-**** TODO #476
+**** DONE #476
 **** TODO #477
 *** XXXTestHelper
 **** TODO #474
