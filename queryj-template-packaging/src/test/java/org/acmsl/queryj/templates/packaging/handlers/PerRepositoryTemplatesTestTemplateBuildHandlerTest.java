@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerTableTemplatesTestTemplateBuildHandlerTest.java
+ * Filename: PerRepositoryTemplatesTestTemplateBuildHandlerTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerTableTemplatesTestTemplateBuildHandler.
+ * Description: Tests for PerRepositoryTemplatesTestTemplateBuildHandler.
  *
- * Date: 2014/04/16
- * Time: 21:50
+ * Date: 2014/04/17
+ * Time: 07:27
  *
  */
 package org.acmsl.queryj.templates.packaging.handlers;
@@ -39,8 +39,8 @@ package org.acmsl.queryj.templates.packaging.handlers;
  * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.Literals;
-import org.acmsl.queryj.templates.packaging.PerTableTemplatesTestTemplate;
-import org.acmsl.queryj.templates.packaging.PerTableTemplatesTestTemplateFactory;
+import org.acmsl.queryj.templates.packaging.PerRepositoryTemplatesTestTemplate;
+import org.acmsl.queryj.templates.packaging.PerRepositoryTemplatesTestTemplateFactory;
 
 /*
  * Importing JetBrains annotations.
@@ -56,38 +56,39 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerTableTemplatesTestTemplateBuildHandler}.
+ * Tests for {@link PerRepositoryTemplatesTestTemplateBuildHandler}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/04/16 21:50
+ * Created: 2014/04/17 07:27
  */
 @RunWith(JUnit4.class)
-public class PerTableTemplatesTestTemplateBuildHandlerTest
-    extends AbstractTemplatesTestTemplateBuildHandlerTest<
-                PerTableTemplatesTestTemplateBuildHandler,
-                PerTableTemplatesTestTemplate,
-                PerTableTemplatesTestTemplateFactory>
+public class PerRepositoryTemplatesTestTemplateBuildHandlerTest
+    extends AbstractTemplatesTestTemplateBuildHandlerTest
+                <PerRepositoryTemplatesTestTemplateBuildHandler,
+                 PerRepositoryTemplatesTestTemplate,
+                    PerRepositoryTemplatesTestTemplateFactory>
 {
     /**
      * Creates a new build handler instance.
+     *
      * @return such new instance.
      */
-    @NotNull
     @Override
-    protected PerTableTemplatesTestTemplateBuildHandler createInstance()
+    @NotNull
+    protected PerRepositoryTemplatesTestTemplateBuildHandler createInstance()
     {
-        return new PerTableTemplatesTestTemplateBuildHandler();
+        return new PerRepositoryTemplatesTestTemplateBuildHandler();
     }
 
     /**
      * Retrieves a new template mock.
      * @return such mock.
      */
-    @NotNull
     @Override
-    protected PerTableTemplatesTestTemplate createTemplateMock()
+    @NotNull
+    protected PerRepositoryTemplatesTestTemplate createTemplateMock()
     {
-        return EasyMock.createNiceMock(PerTableTemplatesTestTemplate.class);
+        return EasyMock.createNiceMock(PerRepositoryTemplatesTestTemplate.class);
     }
 
     /**
@@ -96,7 +97,7 @@ public class PerTableTemplatesTestTemplateBuildHandlerTest
     @Test
     public void retrieveTemplateName_works()
     {
-        retrieveTemplateName_works(Literals.PER_TABLE_TEMPLATES_TEST);
+        retrieveTemplateName_works(Literals.PER_REPOSITORY_TEMPLATES_TEST);
     }
 
     /**
@@ -106,17 +107,17 @@ public class PerTableTemplatesTestTemplateBuildHandlerTest
     public void storeTemplate_stores_the_templates_in_the_command()
     {
         storeTemplate_stores_the_templates_in_the_command(
-            PerTableTemplatesTestTemplateBuildHandler.TEMPLATES_KEY);
+            PerRepositoryTemplatesTestTemplateBuildHandler.TEMPLATES_KEY);
     }
 
     /**
      * Checks whether retrieveTemplateFactory() retrieves
-     * {@link PerTableTemplatesTestTemplateFactory}.
+     * {@link org.acmsl.queryj.templates.packaging.PerRepositoryTemplatesTestTemplateFactory}.
      */
     @Test
     public void retrieveTemplateFactory_retrieves_the_correct_factory()
     {
         retrieveTemplateFactory_retrieves_the_correct_factory(
-            PerTableTemplatesTestTemplateFactory.getInstance());
+            PerRepositoryTemplatesTestTemplateFactory.getInstance());
     }
 }
