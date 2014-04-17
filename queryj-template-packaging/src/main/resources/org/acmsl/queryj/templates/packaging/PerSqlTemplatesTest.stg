@@ -217,18 +217,20 @@ public class PerSqlTemplatesTest
     @Given("^Given the following custom result:$")
     public void defineInputResults(@NotNull final DataTable resultInfo)
     {
-        defineInputResults(resultInfo, getResults(), SqlTestHelper.getInstance());
+        defineInputResults(resultInfo, getResults(), CustomResultTestHelper.getInstance());
     }
 
     /**
      * Defines the input results based on the information provided by the
      * feature.
      * @param resultInfo the information about the results.
+     * @param results the custom results.
+     * @param helper the {@link CustomResultTestHelper} instance.
      */
     protected void defineInputResults(
         @NotNull final DataTable resultInfo,
         @NotNull final Map\<String, Sql\<String\>> results,
-        @NotNull final SqlTestHelper helper)
+        @NotNull final CustomResultTestHelper helper)
     {
         helper.defineInputResults(resultInfo, results);
     }
