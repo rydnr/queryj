@@ -74,9 +74,14 @@
 **** DONE #475
 **** DONE #476
 **** DONE #477
+*** Implement PerXXXTemplateFactoryTemplate
+**** DONE #474
+**** DONE #475
+**** TODO #476
+**** TODO #477
 *** Add case to TemplateFactoryTemplateFactory
-**** TODO #474
-**** TODO #475
+**** DONE #474
+**** DONE #475
 **** TODO #476
 **** TODO #477
 *** Add case to TemplateWritingHandlerTemplateFactory

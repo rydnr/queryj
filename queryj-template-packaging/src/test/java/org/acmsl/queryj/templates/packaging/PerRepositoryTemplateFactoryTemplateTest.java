@@ -23,13 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerForeignKeyTemplateFactoryTemplateTest.java
+ * Filename: PerRepositoryTemplateFactoryTemplateTest.java
  *
- * Author: Jose San Leandro
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerForeignKeyTemplateFactoryTemplate.
+ * Description: Tests for PerRepositoryTemplateFactoryTemplate.
  *
- * Created: 2014/04/14 18:32
+ * Date: 2014/04/17
+ * Time: 12:07
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -49,13 +50,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerForeignKeyTemplateFactoryTemplate}.
+ * Tests for {@link PerRepositoryTemplateFactoryTemplate}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created 2014/04/14
+ * Created: 2014/04/17 12:07
  */
 @RunWith(JUnit4.class)
-public class PerForeignKeyTemplateFactoryTemplateTest
+public class PerRepositoryTemplateFactoryTemplateTest
 {
     /**
      * Checks whether getTemplateName() returns the correct template name.
@@ -66,9 +67,9 @@ public class PerForeignKeyTemplateFactoryTemplateTest
         @NotNull final DefaultTemplatePackagingContext context =
             EasyMock.createNiceMock(DefaultTemplatePackagingContext.class);
 
-        @NotNull final PerForeignKeyTemplateFactoryTemplate instance =
-            new PerForeignKeyTemplateFactoryTemplate<>(context);
+        @NotNull final PerRepositoryTemplateFactoryTemplate instance =
+            new PerRepositoryTemplateFactoryTemplate<>(context);
 
-        Assert.assertEquals(Literals.PER_FOREIGN_KEY_TEMPLATE_FACTORY, instance.getTemplateName());
+        Assert.assertEquals(Literals.PER_REPOSITORY_TEMPLATE_FACTORY, instance.getTemplateName());
     }
 }

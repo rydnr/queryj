@@ -137,4 +137,8 @@ public interface Literals
      * String literal: "PerSqlTemplatesTest".
      */
     String PER_SQL_TEMPLATES_TEST = "PerSqlTemplatesTest";
+    /**
+     * String literal: "PerRepositoryTemplateFactory".
+     */
+    String PER_REPOSITORY_TEMPLATE_FACTORY = "PerRepositoryTemplateFactory";
 }

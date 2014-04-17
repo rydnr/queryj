@@ -23,13 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerForeignKeyTemplateFactoryTemplateTest.java
+ * Filename: PerRepositoryTemplateFactoryTemplate.java
  *
  * Author: Jose San Leandro
  *
- * Description: Tests for PerForeignKeyTemplateFactoryTemplate.
+ * Description: Represents foreign key-specific template factory templates.
  *
- * Created: 2014/04/14 18:32
+ * Date: 2014/04/17
+ * Time: 12:09
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -40,35 +41,43 @@ package org.acmsl.queryj.templates.packaging;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing JUnit/EasyMock classes.
+ * Importing checkthread.org annotations.
  */
-import org.easymock.EasyMock;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Tests for {@link PerForeignKeyTemplateFactoryTemplate}.
+ * Represents foreign key-specific template factory templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @param <C> the context.
  * @since 3.0
- * Created 2014/04/14
+ * Created: 2014/04/17 12:09
  */
-@RunWith(JUnit4.class)
-public class PerForeignKeyTemplateFactoryTemplateTest
+@ThreadSafe
+public class PerRepositoryTemplateFactoryTemplate<C extends TemplatePackagingContext>
+    extends TemplateFactoryTemplate<C>
 {
     /**
-     * Checks whether getTemplateName() returns the correct template name.
+     * The serial version id.
      */
-    @Test
-    public void getTemplateName_returns_the_correct_template_name()
+    private static final long serialVersionUID = -6864648420741642410L;
+
+    /**
+     * Creates a new instance.
+     * @param context the template context.
+     */
+    public PerRepositoryTemplateFactoryTemplate(@NotNull final C context)
     {
-        @NotNull final DefaultTemplatePackagingContext context =
-            EasyMock.createNiceMock(DefaultTemplatePackagingContext.class);
+        super(context);
+    }
 
-        @NotNull final PerForeignKeyTemplateFactoryTemplate instance =
-            new PerForeignKeyTemplateFactoryTemplate<>(context);
-
-        Assert.assertEquals(Literals.PER_FOREIGN_KEY_TEMPLATE_FACTORY, instance.getTemplateName());
+    /**
+     * Retrieves the template name.
+     * @return "PerRepositoryTemplateFactory".
+     */
+    @NotNull
+    @Override
+    public String getTemplateName()
+    {
+        return Literals.PER_REPOSITORY_TEMPLATE_FACTORY;
     }
 }

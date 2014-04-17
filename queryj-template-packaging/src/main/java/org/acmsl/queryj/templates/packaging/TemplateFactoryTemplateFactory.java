@@ -96,6 +96,9 @@ public class TemplateFactoryTemplateFactory
             case PER_FOREIGN_KEY:
                 result = new PerForeignKeyTemplateFactoryTemplate<>(context);
                 break;
+            case PER_REPOSITORY:
+                result = new PerRepositoryTemplateFactoryTemplate<>(context);
+                break;
             default:
                 result = new TemplateFactoryTemplate<>(context);
         }
