@@ -40,19 +40,23 @@
 **** DONE #476
 **** DONE #477
 *** PerXXXTemplatesFeature.stg
-**** TODO #474
-**** TODO #475
-**** TODO #476
-**** TODO #477
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
 *** PerXXXTemplatesFeature.stg.def
-**** TODO #474
-**** TODO #475
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerxxxTemplatesTest.stg
+**** DONE #474
+**** DONE #475
 **** TODO #476
 **** TODO #477
-
-*** PerxxxTemplatesTest.stg
-**** TODO #474
-**** TODO #475
+*** PerxxxTemplatesTest.stg.def
+**** DONE #474
+**** DONE #475
 **** TODO #476
 **** TODO #477
 *** PerXXXTemplateWritingHandler.stg

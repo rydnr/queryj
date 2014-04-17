@@ -1,0 +1,635 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: PerRepositoryTemplatesTest.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate PerRepositoryTemplatesTest
+//              implementations.
+//
+group PerRepositoryTemplatesTest;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+  Generates PerRepositoryTemplatesTest implementations.
+!>
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description()
+  ],
+  template="org/acmsl/queryj/templates/PerRepositoryTemplatesTest.stg",
+  C=C)><endif>
+
+<package_declaration(packageName="cucumber.templates")>
+<checkers_import()>
+
+/*
+ * Importing QueryJ Core classes.
+ */
+import org.acmsl.queryj.api.AbstractTemplate;
+import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.PerRepositoryTemplate;
+import org.acmsl.queryj.api.PerRepositoryTemplateContext;
+import org.acmsl.queryj.api.PerRepositoryTemplateFactory;
+import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
+import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
+import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
+import org.acmsl.queryj.customsql.handlers.customsqlvalidation.RetrieveQueryHandler;
+import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.DecoratedString;
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.engines.EngineDecorator;
+import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
+import org.acmsl.queryj.metadata.engines.oracle.OracleEngine;
+import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.ForeignKey;
+import org.acmsl.queryj.metadata.vo.Row;
+import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.QueryJSettings;
+import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+
+/*
+ * Importing QueryJ Test classes.
+ */
+import org.acmsl.queryj.test.AbstractTemplatesTest;
+import org.acmsl.queryj.test.TableTestHelper;
+
+/*
+ * Importing project classes.
+ */
+<C.templateDefs:{ d | <def_import(d=d)>}; separator="\n">
+
+/*
+ * Importing Apache Commons Logging classes.
+ */
+import org.apache.commons.configuration.PropertiesConfiguration;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
+
+/*
+ * Importing ACM-SL Commons classes.
+ */
+import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
+ * Importing Cucumber classes.
+ */
+import cucumber.api.DataTable;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+
+/*
+ * Importing Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
+
+/*
+ * Importing Jetbrains Annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing JUnit classes.
+ */
+import org.junit.Assert;
+
+/*
+ * Importing JDK classes.
+ */
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+<class(defs=C.templateDefs, C=C)>
+>>
+
+description() ::= <<
+<!
+  Generates a description for the generated file.
+  @param tableName the table name.
+!>
+Cucumber tests for per-table templates.
+>>
+
+def_import(d) ::= <<
+<!
+  Generates the imports for a given TemplateDef.
+  @param d the template def.
+!>
+import org.acmsl.queryj.templates.<d.name>TemplateFactory;
+import org.acmsl.queryj.templates.<d.name>TemplateGenerator;
+>>
+
+class(defs, C) ::= <<
+<!
+ Generates the class body.
+ @param defs the template defs.
+ @param C the context.
+!>
+/**
+ * <description()>
+<class_common_javadoc(
+  template="org/acmsl/queryj/dao/PerRepositoryTemplatesTest.stg",
+  generation_timestamps_enabled=C.generation_timestamps_enabled,
+  timestamp=C.timestamp,
+  version=C.version)>
+ */
+public class PerRepositoryTemplatesTest
+    extends AbstractTemplatesTest\<
+                PerRepositoryTemplateGenerator\<? extends PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext>,
+                PerRepositoryTemplateFactory\<? extends PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext\>>
+{
+    /**
+     * Creates an instance.
+     */
+    public PerRepositoryTemplatesTest()
+    {
+        super();
+
+        <defs:{ d | <if(!d.disabled)><if(d.type.PerRepository)><generator_mapping(def=d)><endif><endif>}; separator="\n">
+    }
+
+    /**
+     * Defines the input tables based on the information provided by the
+     * feature.
+     * @param tableInfo the information about the tables.
+     */
+    @SuppressWarnings("unused")
+    @Given("^Given the repository whose name is \<repository>, composed of:$")
+    public void defineInputTables(@NotNull final DataTable tableInfo)
+    {
+        defineInputTables(tableInfo, getTables(), RepositoryTestHelper.getInstance());
+    }
+
+    /**
+     * Defines the input tables based on the information provided by the
+     * feature.
+     * @param tableInfo the information about the tables.
+     */
+    protected void defineInputTables(
+        @NotNull final DataTable tableInfo,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables,
+        @NotNull final RepositoryTestHelper helper)
+    {
+        helper.defineInputTables(tableInfo, tables);
+    }
+
+    /**
+     * Generates a file with the information from the feature.
+     * @param template the template.
+     * @param engine the engine.
+     */
+    @SuppressWarnings("unused")
+    @When("^When I use the repository-wide (.*).stg for (.*)$")
+    public void generateFile(@NotNull final String template, @NotNull final String engine)
+    {
+        setEngineName(engine);
+
+        generateFile(
+            template,
+            engine,
+            getTables(),
+            getRows(),
+            getOutputFiles(),
+            retrieveCustomSqlProvider(getSqlList(), getParameters()));
+    }
+
+    /**
+     * Generates a file with the information from the feature.
+     * @param templateName the template.
+     * @param engine the engine name.
+     * @param tableMap the table map.
+     * @param rows the rows.
+     * @param outputFiles the output files.
+     * @param sqlProvider the {@link CustomSqlProvider} instance.
+     */
+    @SuppressWarnings("unchecked")
+    protected void generateFile(
+        @NotNull final String templateName,
+        @NotNull final String engine,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tableMap,
+        @NotNull final Map\<String, List\<Row\<String>\>> rows,
+        @NotNull final Map\<String, File> outputFiles,
+        @NotNull final CustomSqlProvider sqlProvider)
+    {
+        @Nullable final PerRepositoryTemplateGenerator\<PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext> generator =
+            (PerRepositoryTemplateGenerator\<PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext>) retrieveTemplateGenerator(
+                templateName);
+
+        Assert.assertNotNull("No template generator found for " + templateName, generator);
+
+        @NotNull final DecoratorFactory decoratorFactory = retrieveDecoratorFactory(generator);
+
+        boolean firstTime = true;
+        boolean restart = false;
+
+        @Nullable String failCause = null;
+
+        while (   (firstTime)
+               || (restart))
+        {
+            firstTime = false;
+
+            @NotNull final QueryJCommand t_Command =
+                new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+
+            new QueryJCommandWrapper\<CustomSqlProvider>(t_Command).setSetting(
+                CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, sqlProvider);
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                QueryJSettings.PACKAGE, BASE_PACKAGE_NAME);
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                QueryJSettings.REPOSITORY, "acme");
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                QueryJSettings.HEADER_FILE, "");
+            new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
+                QueryJSettings.DISABLE_TIMESTAMPS, false);
+            new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
+                QueryJSettings.IMPLEMENT_MARKER_INTERFACES, false);
+            new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
+                QueryJSettings.DISABLE_NOTNULL_ANNOTATIONS, false);
+            new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
+                QueryJSettings.DISABLE_CHECKTHREAD_ANNOTATIONS, false);
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                QueryJSettings.JNDI_DATASOURCE, "");
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                QueryJSettings.VERSION, "<C.version>");
+
+            @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables =
+                new ArrayList\<>(tableMap.values());
+
+            for (@NotNull final Table\<String, Attribute\<String>, List\<Attribute\<String>\>> table : tables)
+            {
+                @Nullable List\<Row\<String\>> tableRows = rows.get(table.getName());
+
+                if (tableRows == null)
+                {
+                    tableRows = new ArrayList\<>(0);
+                }
+
+                @NotNull final MetadataManager metadataManager =
+                    retrieveMetadataManager(engine, table, tableRows, decoratorFactory);
+
+                new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
+                    DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
+
+                @Nullable final PerRepositoryTemplateFactory\<? extends PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext> templateFactory =
+                    retrieveTemplateFactory(templateName);
+
+                Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
+
+                @NotNull final String packageName =
+                    resolvePackage(PACKAGE_MAPPINGS.get(templateName), table.getName(), resolveEngine(engine));
+
+                @Nullable final PerRepositoryTemplate\<PerRepositoryTemplateContext> template =
+                    templateFactory.createTemplate(
+                        t_Command,
+                        decoratorFactory,
+                        packageName,
+                        table.getName(),
+                        tableRows);
+
+                Assert.assertNotNull("No template found for " + templateName, template);
+
+                File outputDir = null;
+
+                try
+                {
+                    rootFolder.create();
+
+                    @NotNull final String[] packages = packageName.split("\\\.");
+                    @NotNull final StringBuilder folder = new StringBuilder();
+
+                    for (@NotNull final String pkg : packages)
+                    {
+                        folder.append(File.separator);
+                        folder.append(pkg);
+                    }
+
+                    outputDir = new File(rootFolder.getRoot().getAbsolutePath().concat(folder.toString()));
+
+                    outputDir.mkdirs();
+                }
+                catch (@NotNull final IOException ioException)
+                {
+                    Assert.fail(ioException.getMessage());
+                }
+
+                if (!outputDir.exists())
+                {
+                    Assert.fail("Cannot create folder: " + outputDir.getAbsolutePath());
+                }
+
+                UniqueLogFactory.initializeInstance(LogFactory.getLog(PerRepositoryTemplatesTest.class));
+
+                ((AbstractTemplate) template).setDebugMode(true);
+
+                try
+                {
+                    generator.write(
+                        template,
+                        outputDir,
+                        rootFolder.getRoot(),
+                        Charset.defaultCharset());
+                }
+                catch (@NotNull final IOException ioException)
+                {
+                    if (failCause == null)
+                    {
+                        failCause = ioException.getMessage();
+                    }
+                    restart = false;
+                }
+                catch (@NotNull final DevelopmentModeException debugging)
+                {
+                    restart = true;
+                }
+                catch (@NotNull final QueryJBuildException queryjBuildException)
+                {
+                    if (failCause == null)
+                    {
+                        failCause = queryjBuildException.getMessage();
+                    }
+                    restart = false;
+                }
+
+                outputFiles.put(
+                    table.getName(),
+                    new File(outputDir, template.getTemplateContext().getFileName()));
+            }
+        }
+
+        if (failCause != null)
+        {
+            Assert.fail(failCause);
+        }
+    }
+
+    /**
+     * Checks the generated file compiles.
+     * @param outputName the name of the output file.
+     */
+    @SuppressWarnings("unused")
+    @Then("^Then the generated repository-wide (.*) file compiles successfully")
+    public void checkGeneratedFileCompiles(@NotNull final String outputName)
+    {
+        checkGeneratedFilesCompile(outputName, getOutputFiles());
+    }
+
+    /**
+     * Retrieves the {@link DecoratorFactory} instance using given generator.
+     * @param generator the generator to use.
+     * @return the decorator factory.
+     */
+    @NotNull
+    @Override
+    protected DecoratorFactory retrieveDecoratorFactory(
+        @NotNull final PerRepositoryTemplateGenerator\<? extends PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext> generator)
+    {
+        return generator.getDecoratorFactory();
+    }
+
+    /**
+     * Resolves the engine.
+     * @param name the engine name.
+     * @return the {@link Engine}.
+     */
+    @NotNull
+    protected Engine\<String> resolveEngine(@NotNull final String name)
+    {
+        @NotNull final Engine\<String> result;
+
+        if (name.equalsIgnoreCase(Literals.ORACLE))
+        {
+            result = new OracleEngine("unknown");
+        }
+        else
+        {
+            result = new UndefinedJdbcEngine(name, "unknown");
+        }
+
+        return result;
+    }
+
+    /**
+     * Resolves the package.
+     * @param packageTemplate the package template.
+     * @param tableName the table name.
+     * @param engine the engine.
+     * @return the actual package.
+     */
+    @NotNull
+    protected String resolvePackage(
+        @NotNull final String packageTemplate,
+        @NotNull final String tableName,
+        @NotNull final Engine\<String> engine)
+    {
+        @NotNull final String result;
+
+        @NotNull final ST template = new ST(packageTemplate);
+        template.add(Literals.PACKAGE_NAME, new DecoratedString(BASE_PACKAGE_NAME));
+        template.add(Literals.TABLE_NAME, new DecoratedString(tableName));
+        template.add(Literals.ENGINE, new EngineDecorator(engine));
+
+        result = template.render();
+
+        return result;
+    }
+
+    /**
+     * Checks the queries pass the validation against a real database.
+     * @param values the JDBC settings.
+     */
+    @SuppressWarnings("unused")
+    @Then("^the queries are validated correctly using the following database:$")
+    public void validateQueries(@NotNull final DataTable values)
+    {
+        validateQueries(values, getEngineName(), TableTestHelper.getInstance());
+    }
+
+    /**
+     * Checks the queries pass the validation against a real database.
+     * @param values the JDBC settings.
+     * @param engineName the engine name.
+     * @param helper the {@link TableTestHelper} instance.
+     */
+    protected void validateQueries(
+        @NotNull final DataTable values,
+        @Nullable final String engineName,
+        @NotNull final TableTestHelper helper)
+    {
+        Assert.assertNotNull(engineName, "engine name cannot be null");
+
+        @Nullable final String t_strJdbcDriver = helper.retrieveJdbcDriver(values);
+        Assert.assertNotNull(t_strJdbcDriver, "JDBC driver is null");
+
+        @Nullable final String t_strJdbcUrl = helper.retrieveJdbcUrl(values);
+        Assert.assertNotNull(t_strJdbcUrl, "JDBC url is null");
+
+        @Nullable final String t_strJdbcUserName = helper.retrieveJdbcUserName(values);
+        Assert.assertNotNull(t_strJdbcUserName, "JDBC user name is null");
+
+        @Nullable final String t_strJdbcPassword = helper.retrieveJdbcPassword(values);
+        Assert.assertNotNull(t_strJdbcPassword, "JDBC password is null");
+
+        setJdbcDriver(t_strJdbcDriver);
+        setJdbcUrl(t_strJdbcUrl);
+        setJdbcUserName(t_strJdbcUserName);
+        setJdbcPassword(t_strJdbcPassword);
+
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> t_mTables = getTables();
+        @NotNull final Set\<String> t_TableNameSet = t_mTables.keySet();
+        @NotNull final List\<String> t_lTableNames = new ArrayList\<>(t_TableNameSet.size());
+        @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> t_lTables =
+            new ArrayList\<>(t_TableNameSet.size());
+        t_lTableNames.addAll(t_TableNameSet);
+        t_lTables.addAll(t_mTables.values());
+
+        validateQueries(
+            getSqlList(),
+            t_strJdbcDriver,
+            t_strJdbcUrl,
+            t_strJdbcUserName,
+            t_strJdbcPassword,
+            retrieveCustomSqlProvider(getSqlList(), getParameters()),
+            retrieveMetadataManager(engineName, t_lTableNames, t_lTables, new ArrayList\<>(0), null));
+    }
+
+    /**
+     * Checks the queries pass the validation against a real database.
+     * @param sqlList the queries to validate.
+     * @param jdbcDriver the JDBC driver.
+     * @param jdbcUrl the JDBC URL.
+     * @param jdbcUserName the JDBC user name.
+     * @param jdbcPassword the JDBC password.
+     * @param provider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     */
+    protected void validateQueries(
+        @NotNull final List\<Sql\<String\>> sqlList,
+        @NotNull final String jdbcDriver,
+        @NotNull final String jdbcUrl,
+        @NotNull final String jdbcUserName,
+        @NotNull final String jdbcPassword,
+        @NotNull final CustomSqlProvider provider,
+        @NotNull final MetadataManager metadataManager)
+    {
+        @Nullable Connection connection = null;
+
+        try
+        {
+            connection =
+                new JdbcConnectionOpeningHandler().openConnection(
+                    jdbcDriver, jdbcUrl, jdbcUserName, jdbcPassword);
+
+            @NotNull final QueryJCommand t_Parameters =
+                new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+
+            new QueryJCommandWrapper\<Connection>(t_Parameters)
+                .setSetting(JdbcConnectionOpeningHandler.JDBC_CONNECTION, connection);
+            new QueryJCommandWrapper\<MetadataManager>(t_Parameters)
+                .setSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
+            new QueryJCommandWrapper\<CustomSqlProvider>(t_Parameters)
+                .setSetting(CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, provider);
+            new QueryJCommandWrapper\<File>(t_Parameters)
+                .setSetting(
+                    ParameterValidationHandler.OUTPUT_FOLDER,
+                    this.createTempFolder(String.valueOf(new Date().getTime())));
+            new QueryJCommandWrapper\<List\<Sql\<String>\>>(t_Parameters)
+                .setSetting(RetrieveQueryHandler.SQL_LIST, sqlList);
+
+            new CustomSqlValidationHandler().handle(t_Parameters);
+        }
+        catch (@NotNull final QueryJBuildException cannotValidateQuery)
+        {
+            Assert.fail(cannotValidateQuery.getMessage());
+        }
+        catch (@NotNull final IOException cannotCreateTemporaryFolder)
+        {
+            Assert.fail(cannotCreateTemporaryFolder.getMessage());
+        }
+        finally
+        {
+            if (connection != null)
+            {
+                try
+                {
+                    connection.close();
+                }
+                catch (@NotNull final SQLException cannotCloseConnection)
+                {
+                    Assert.fail(cannotCloseConnection.getMessage());
+                }
+            }
+        }
+    }
+}
+>>
+
+generator_mapping(def) ::= <<
+<!
+ Generates the call to add the generator and factory of the def to the general mappings.
+ @param def the template def.
+!>
+GENERATOR_MAPPINGS.put("<def.name>", new <def.name>TemplateGenerator(false, 1));
+FACTORY_MAPPINGS.put("<def.name>", <def.name>TemplateFactory.getInstance());
+PACKAGE_MAPPINGS.put("<def.name>", "<def.packageName>");
+>>

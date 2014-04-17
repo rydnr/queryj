@@ -57,7 +57,7 @@ Feature: <repository>-wide classes compile
 
   Scenario Outline: Templates bound to <C.repository> compile
 
-    Given the repository whose name is \<repository>, composed of :
+    Given the repository whose name is \<repository>, composed of:
     | table | parent table | decorated | relationship |   static    |
     <tables:{ t | <cucumber_table_declaration(table=t)>}; separator="\n">
 
