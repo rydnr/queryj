@@ -141,4 +141,8 @@ public interface Literals
      * String literal: "PerRepositoryTemplateFactory".
      */
     String PER_REPOSITORY_TEMPLATE_FACTORY = "PerRepositoryTemplateFactory";
+    /**
+     * String literal: "PerCustomResultTemplateFactory".
+     */
+    String PER_CUSTOM_RESULT_TEMPLATE_FACTORY = "PerCustomResultTemplateFactory";
 }

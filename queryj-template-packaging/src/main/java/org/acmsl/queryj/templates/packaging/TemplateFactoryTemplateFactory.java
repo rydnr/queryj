@@ -99,6 +99,9 @@ public class TemplateFactoryTemplateFactory
             case PER_REPOSITORY:
                 result = new PerRepositoryTemplateFactoryTemplate<>(context);
                 break;
+            case PER_CUSTOM_RESULT:
+                result = new PerCustomResultTemplateFactoryTemplate<>(context);
+                break;
             default:
                 result = new TemplateFactoryTemplate<>(context);
         }
