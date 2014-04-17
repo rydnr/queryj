@@ -90,13 +90,10 @@ public class DefaultTemplateChainProviderTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected TemplatePackagingTemplateGenerator<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>, GlobalTemplateContext> retrieveTemplateGenerator(
+    public TemplatePackagingTemplateGenerator<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>, GlobalTemplateContext> retrieveTemplateGenerator(
         final boolean caching, final int threadCount)
     {
-        return
-            new TemplatePackagingTemplateGenerator
-                <DefaultTemplateChainProviderTemplate<GlobalTemplateContext>,
-                 GlobalTemplateContext>(caching, threadCount);
+        return new TemplatePackagingTemplateGenerator<>(caching, threadCount);
     }
 
     /**
@@ -106,7 +103,7 @@ public class DefaultTemplateChainProviderTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected List<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>> retrieveTemplates(
+    public List<DefaultTemplateChainProviderTemplate<GlobalTemplateContext>> retrieveTemplates(
         @NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {

@@ -99,7 +99,7 @@ public class PerTableTemplatesTestTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected TemplatePackagingTemplateGenerator<PerTableTemplatesTestTemplate, GlobalTemplateContext> retrieveTemplateGenerator(
+    public TemplatePackagingTemplateGenerator<PerTableTemplatesTestTemplate, GlobalTemplateContext> retrieveTemplateGenerator(
         final boolean caching, final int threadCount)
     {
         return new TemplatePackagingTemplateGenerator<>(caching, threadCount);
@@ -110,7 +110,7 @@ public class PerTableTemplatesTestTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected List<PerTableTemplatesTestTemplate> retrieveTemplates(@NotNull final QueryJCommand parameters)
+    public List<PerTableTemplatesTestTemplate> retrieveTemplates(@NotNull final QueryJCommand parameters)
     {
         @NotNull final List<PerTableTemplatesTestTemplate> result;
 

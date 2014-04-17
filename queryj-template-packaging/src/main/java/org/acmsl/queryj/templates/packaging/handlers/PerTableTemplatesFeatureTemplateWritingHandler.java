@@ -94,10 +94,10 @@ public class PerTableTemplatesFeatureTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected TemplatePackagingTemplateGenerator<PerTableTemplatesFeatureTemplate, GlobalTemplateContext> retrieveTemplateGenerator(
+    public TemplatePackagingTemplateGenerator<PerTableTemplatesFeatureTemplate, GlobalTemplateContext> retrieveTemplateGenerator(
         final boolean caching, final int threadCount)
     {
-        return new TemplatePackagingTemplateGenerator<PerTableTemplatesFeatureTemplate, GlobalTemplateContext>(caching, threadCount);
+        return new TemplatePackagingTemplateGenerator<>(caching, threadCount);
     }
 
     /**
@@ -105,7 +105,7 @@ public class PerTableTemplatesFeatureTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected List<PerTableTemplatesFeatureTemplate> retrieveTemplates(@NotNull final QueryJCommand parameters)
+    public List<PerTableTemplatesFeatureTemplate> retrieveTemplates(@NotNull final QueryJCommand parameters)
     {
         @NotNull final List<PerTableTemplatesFeatureTemplate> result;
 

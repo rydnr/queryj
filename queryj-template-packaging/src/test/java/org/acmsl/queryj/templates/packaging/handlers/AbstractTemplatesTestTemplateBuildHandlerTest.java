@@ -113,6 +113,7 @@ public abstract class AbstractTemplatesTestTemplateBuildHandlerTest
     /**
      * Tests whether retrieveTemplateName() works.
      */
+    @SuppressWarnings("unused")
     public abstract void retrieveTemplateName_works();
 
     /**
@@ -130,6 +131,7 @@ public abstract class AbstractTemplatesTestTemplateBuildHandlerTest
     /**
      * Checks whether storeTemplate() binds the template to the command.
      */
+    @SuppressWarnings("unused")
     public abstract void storeTemplate_stores_the_templates_in_the_command();
 
     /**

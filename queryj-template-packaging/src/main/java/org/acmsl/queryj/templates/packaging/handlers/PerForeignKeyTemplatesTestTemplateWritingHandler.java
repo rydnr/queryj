@@ -46,24 +46,20 @@ package org.acmsl.queryj.templates.packaging.handlers;
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
-import org.acmsl.queryj.api.handlers.BasePerForeignKeyTemplateWritingHandler;
-import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 
 /*
  * Importing QueryJ Template Packaging classes.
  */
+import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.acmsl.queryj.templates.packaging.PerForeignKeyTemplatesTestTemplate;
+import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.packaging.PerTableTemplatesTestTemplate;
-import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
-import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,8 +71,6 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -105,7 +99,7 @@ public class PerForeignKeyTemplatesTestTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected TemplatePackagingTemplateGenerator<PerForeignKeyTemplatesTestTemplate, GlobalTemplateContext> retrieveTemplateGenerator(
+    public TemplatePackagingTemplateGenerator<PerForeignKeyTemplatesTestTemplate, GlobalTemplateContext> retrieveTemplateGenerator(
         final boolean caching, final int threadCount)
     {
         return new TemplatePackagingTemplateGenerator<>(caching, threadCount);
@@ -116,7 +110,7 @@ public class PerForeignKeyTemplatesTestTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected List<PerForeignKeyTemplatesTestTemplate> retrieveTemplates(@NotNull final QueryJCommand parameters)
+    public List<PerForeignKeyTemplatesTestTemplate> retrieveTemplates(@NotNull final QueryJCommand parameters)
     {
         @NotNull final List<PerForeignKeyTemplatesTestTemplate> result;
 

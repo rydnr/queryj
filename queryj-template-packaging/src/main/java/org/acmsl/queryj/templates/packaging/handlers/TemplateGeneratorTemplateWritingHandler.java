@@ -89,7 +89,7 @@ public class TemplateGeneratorTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected TemplatePackagingTemplateGenerator<TemplateGeneratorTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>
+    public TemplatePackagingTemplateGenerator<TemplateGeneratorTemplate<DefaultTemplatePackagingContext>, DefaultTemplatePackagingContext>
         retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
         return new TemplatePackagingTemplateGenerator<>(caching, threadCount);
@@ -100,7 +100,7 @@ public class TemplateGeneratorTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected List<TemplateGeneratorTemplate<DefaultTemplatePackagingContext>> retrieveTemplates(
+    public List<TemplateGeneratorTemplate<DefaultTemplatePackagingContext>> retrieveTemplates(
         @NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {
