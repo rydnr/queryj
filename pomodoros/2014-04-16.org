@@ -1,7 +1,7 @@
 * 2014/04/16:
-** TODO #475: Support per-repository templates: 3 -> 
-** TODO #476: Support per-custom result templates: 3 ->  
-** TODO #477: Support per-sql templates: 3 -> 
+** TODO #475: Support per-repository templates: 4 -> 1
+** TODO #476: Support per-custom result templates: 4 ->  
+** TODO #477: Support per-sql templates: 4 -> 
 * Notes:
 ** Each of #474, #475, #476, #477 requires:
 *** PerXXXTemplatesFeatureTemplate

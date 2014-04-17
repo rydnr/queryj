@@ -36,20 +36,11 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing Apache Commons Configuration classes.
+ * Importing QueryJ Template Packaging classes.
  */
-import org.apache.commons.configuration.PropertiesConfiguration;
-
-/*
- * Importing QueryJ Core classes.
- */
-import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
-import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.templates.packaging.Literals;
 import org.acmsl.queryj.templates.packaging.PerForeignKeyTemplatesTestTemplate;
 import org.acmsl.queryj.templates.packaging.PerForeignKeyTemplatesTestTemplateFactory;
-import org.acmsl.queryj.templates.packaging.TemplateDef;
 
 /*
  * Importing JetBrains annotations.
@@ -65,16 +56,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing JUnit/EasyMock classes.
  */
 import org.easymock.EasyMock;
-import org.junit.Assert;
 import org.junit.Test;
-
-/*
- * Importing JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Tests for {@link PerForeignKeyTemplatesTestTemplateBuildHandler}.
@@ -84,19 +66,40 @@ import java.util.List;
  */
 @ThreadSafe
 public class PerForeignKeyTemplatesTestTemplateBuildHandlerTest
+    extends AbstractTemplatesTestTemplateBuildHandlerTest<
+                PerForeignKeyTemplatesTestTemplateBuildHandler,
+                PerForeignKeyTemplatesTestTemplate,
+                PerForeignKeyTemplatesTestTemplateFactory>
 {
+    /**
+     * Creates a new build handler instance.
+     * @return such new instance.
+     */
+    @NotNull
+    @Override
+    protected PerForeignKeyTemplatesTestTemplateBuildHandler createInstance()
+    {
+        return new PerForeignKeyTemplatesTestTemplateBuildHandler();
+    }
+
+    /**
+     * Retrieves a new template mock.
+     * @return such mock.
+     */
+    @NotNull
+    @Override
+    protected PerForeignKeyTemplatesTestTemplate createTemplateMock()
+    {
+        return EasyMock.createNiceMock(PerForeignKeyTemplatesTestTemplate.class);
+    }
+
     /**
      * Tests whether retrieveTemplateName() works.
      */
     @Test
     public void retrieveTemplateName_works()
     {
-        @NotNull final PerForeignKeyTemplatesTestTemplateBuildHandler instance =
-            new PerForeignKeyTemplatesTestTemplateBuildHandler();
-
-        @NotNull final QueryJCommand command = EasyMock.createNiceMock(QueryJCommand.class);
-
-        Assert.assertEquals(Literals.PER_FOREIGN_KEY_TEMPLATES_TEST, instance.retrieveTemplateName(command));
+        retrieveTemplateName_works(Literals.PER_FOREIGN_KEY_TEMPLATES_TEST);
     }
 
     /**
@@ -105,18 +108,8 @@ public class PerForeignKeyTemplatesTestTemplateBuildHandlerTest
     @Test
     public void storeTemplate_stores_the_templates_in_the_command()
     {
-        @NotNull final PerForeignKeyTemplatesTestTemplateBuildHandler instance =
-            new PerForeignKeyTemplatesTestTemplateBuildHandler();
-
-        @NotNull final QueryJCommand command =
-            new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
-
-        @NotNull final PerForeignKeyTemplatesTestTemplate template =
-            EasyMock.createNiceMock(PerForeignKeyTemplatesTestTemplate.class);
-
-        instance.storeTemplate(template, command);
-
-        Assert.assertEquals(template, command.getSetting(PerForeignKeyTemplatesTestTemplateBuildHandler.TEMPLATES_KEY));
+        storeTemplate_stores_the_templates_in_the_command(
+            PerForeignKeyTemplatesTestTemplateBuildHandler.TEMPLATES_KEY);
     }
 
     /**
@@ -126,44 +119,7 @@ public class PerForeignKeyTemplatesTestTemplateBuildHandlerTest
     @Test
     public void retrieveTemplateFactory_retrieves_the_correct_factory()
     {
-        @NotNull final PerForeignKeyTemplatesTestTemplateBuildHandler instance =
-            new PerForeignKeyTemplatesTestTemplateBuildHandler();
-
-        Assert.assertEquals(PerForeignKeyTemplatesTestTemplateFactory.getInstance(), instance.retrieveTemplateFactory());
-    }
-
-    /**
-     * Checks whether the output package is the Cucumber's.
-     */
-    @Test
-    public void retrieveOutputPackage_returns_the_cucumber_package()
-    {
-        @NotNull final PerForeignKeyTemplatesTestTemplateBuildHandler instance =
-            new PerForeignKeyTemplatesTestTemplateBuildHandler();
-
-        @NotNull final QueryJCommand command = EasyMock.createNiceMock(QueryJCommand.class);
-
-        Assert.assertEquals(Literals.CUCUMBER_TEMPLATES, instance.retrieveOutputPackage(command));
-    }
-
-    /**
-     * Checks whether buildContext() builds a global context.
-     */
-    @Test
-    public void buildContext_builds_a_global_context()
-        throws IOException
-    {
-        @NotNull final PerForeignKeyTemplatesTestTemplateBuildHandler instance =
-            new PerForeignKeyTemplatesTestTemplateBuildHandler();
-
-        @NotNull final QueryJCommand command =
-            new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
-
-        new QueryJCommandWrapper<File>(command).setSetting(
-            PerForeignKeyTemplatesTestTemplate.OUTPUT_DIR_FOR_TESTS, new File("/"));
-
-        @NotNull final List<TemplateDef<String>> templateDefs = new ArrayList<>(0);
-
-        Assert.assertNotNull(instance.buildContext(templateDefs, command));
+        retrieveTemplateFactory_retrieves_the_correct_factory(
+            PerForeignKeyTemplatesTestTemplateFactory.getInstance());
     }
 }
