@@ -1,0 +1,196 @@
+//;-*- mode: stringtemplate -*-
+//
+//                   QueryJ's Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: PerRepositoryTemplateWritingHandler.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate QueryJ's
+//              PerRepositoryTemplateWritingHandlers.
+//
+group PerRepositoryTemplateWritingHandler;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+  Generates a PerRepositoryTemplateWritingHandler source file.
+  @param C the context.
+!>
+<sourceImpl(def=C.templateDef, C=C)>
+>>
+
+sourceImpl(def, C) ::= <<
+<!
+  Generates a PerRepositoryTemplateWritingHandler source file.
+  @param def the template def.
+  @param C the context.
+!>
+<java_header(
+  description=[ "Writing handler for ", def.name.capitalized, "Templates." ],
+  description_oneline=true,
+  filename=C.class_name,
+  template="org/acmsl/queryj/templates/packaging/PerRepositoryTemplateWritingHandler.stg",
+   C=C)>
+<package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
+
+/*
+ * Importing QueryJ-Core classes.
+ */
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
+import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateWritingHandler;
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.tools.PackageUtils;
+
+/*
+ * Importing custom templates.
+ */
+import org.acmsl.queryj.templates.<def.name.noExtension>Template;
+import org.acmsl.queryj.templates.<def.name.noExtension>TemplateGenerator;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+<class(def=def, C=C)>
+>>
+
+class(def, C) ::= <<
+/**
+ * Writing handler for {@link <def.name.noExtension>Template}s.
+<class_common_javadoc(
+  template="org/acmsl/templates/packaging/TemplateWritingHandler.stg",
+  timestamp=C.timestamp,
+  version=C.version)>
+ */
+@ThreadSafe
+public class <C.class_name>
+    extends Base<def.type.capitalized>TemplateWritingHandler\<
+                <def.name.noExtension>Template,
+                <def.type.capitalized>TemplateContext,
+                <def.name.noExtension>TemplateGenerator>
+{
+    /**
+     * Creates a new writing handler for {@link <def.name.noExtension>Template templates}.
+     */
+    public <C.class_name>() {}
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    protected <def.name.noExtension>TemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
+    {
+        return new <def.name.noExtension>TemplateGenerator(caching, threadCount);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    protected List\<<def.name.noExtension>Template> retrieveTemplates(@NotNull final QueryJCommand parameters)
+    {
+        @NotNull final List\<<def.name.noExtension>Template> result;
+
+        @Nullable final List\<<def.name.noExtension>Template> aux =
+            new QueryJCommandWrapper\<List\<<def.name.noExtension>Template\>>(parameters)
+                .getSetting(<def.name.noExtension>TemplateBuildHandler.TEMPLATES_KEY);
+
+        if (aux == null)
+        {
+            result = new ArrayList\<<def.name.noExtension>Template>(0);
+        }
+        else
+        {
+            result = aux;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param engine the engine.
+     * @param projectOutputDir the project output dir.
+     * @param projectPackage the project package.
+     * @param tableName the source table name.
+     * @param subFolders whether to use sub folders or not.
+     * @return such folder.
+     */
+    @NotNull
+    @Override
+    protected File retrieveOutputDir(
+        @NotNull final Engine\<String> engine,
+        @NotNull final File projectOutputDir,
+        final String projectPackage,
+        @NotNull final String tableName,
+        final boolean subFolders)
+    {
+        @NotNull final File result;
+
+        @NotNull final String packageName =
+            <def.name.noExtension>TemplateBuildHandler.buildPackageName(
+                tableName, engine, projectPackage);
+
+        @NotNull final String[] pieces = packageName.split("\\\.");
+
+        @NotNull final StringBuilder aux = new StringBuilder();
+
+        for (@NotNull final String piece : pieces)
+        {
+            aux.append(File.separator);
+            aux.append(piece);
+        }
+
+        result = new File(projectOutputDir.getAbsolutePath() + aux.toString());
+
+        return result;
+    }
+}
+>>
