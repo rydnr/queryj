@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Helper class for per-foreign key Cucumber tests.
+ * Description: Helper class for per-repository Cucumber tests.
  *
  * Date: 2014/04/17
  * Time: 11:33
@@ -46,7 +46,7 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Helper class for per-foreign key Cucumber tests.
+ * Helper class for per-repository Cucumber tests.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/04/17 11:33
