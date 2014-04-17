@@ -48,7 +48,10 @@ import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.templates.packaging.handlers.DefaultTemplateChainProviderTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.FindTemplateDefsHandler;
 import org.acmsl.queryj.templates.packaging.handlers.ParseTemplateDefsHandler;
+import org.acmsl.queryj.templates.packaging.handlers.PerCustomResultTemplatesTestTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.PerForeignKeyTemplatesTestTemplateHandlerBundle;
+import org.acmsl.queryj.templates.packaging.handlers.PerRepositoryTemplatesTestTemplateHandlerBundle;
+import org.acmsl.queryj.templates.packaging.handlers.PerSqlTemplatesTestTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.PerTableTemplatesTestTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateBuildHandlerTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateFactoryTemplateHandlerBundle;
@@ -77,6 +80,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Defines the steps performed by QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 3.0
+ * @param <CH> the command handler type.
  */
 @ThreadSafe
 public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJCommand>>
@@ -128,6 +132,18 @@ public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJComman
         chain.add((CH) new PerForeignKeyTemplatesTestTemplateHandlerBundle());
 
 //        chain.add((CH) new PerForeignKeyTemplatesFeatureTemplateHandlerBundle());
+
+        chain.add((CH) new PerRepositoryTemplatesTestTemplateHandlerBundle());
+
+//        chain.add((CH) new PerRepositoryTemplatesFeatureTemplateHandlerBundle());
+
+        chain.add((CH) new PerCustomResultTemplatesTestTemplateHandlerBundle());
+
+//        chain.add((CH) new PerCustomResultTemplatesFeatureTemplateHandlerBundle());
+
+        chain.add((CH) new PerSqlTemplatesTestTemplateHandlerBundle());
+
+//        chain.add((CH) new PerSqlTemplatesFeatureTemplateHandlerBundle());
 
         chain.add((CH) new DefaultTemplateChainProviderTemplateHandlerBundle());
 
