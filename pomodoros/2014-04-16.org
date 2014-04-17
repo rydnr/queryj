@@ -88,12 +88,12 @@
 **** DONE #474
 **** DONE #475
 **** DONE #476
-**** TODO #477
+**** DONE #477
 *** Add case to TemplateWritingHandlerTemplateFactory
 **** DONE #474
 **** DONE #475
 **** DONE #476
-**** TODO #477
+**** DONE #477
 ** GOAL : Deliver QueryJ 3.0 ASAP
 *** Find out which templates are affected by the order of columns: 
 **** DONE ValueObject.stg
