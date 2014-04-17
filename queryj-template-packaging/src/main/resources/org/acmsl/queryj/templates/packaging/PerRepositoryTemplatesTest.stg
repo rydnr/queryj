@@ -217,18 +217,20 @@ public class PerRepositoryTemplatesTest
     @Given("^Given the repository whose name is \<repository>, composed of:$")
     public void defineInputTables(@NotNull final DataTable tableInfo)
     {
-        defineInputTables(tableInfo, getTables(), RepositoryTestHelper.getInstance());
+        defineInputTables(tableInfo, getTables(), TableTestHelper.getInstance());
     }
 
     /**
      * Defines the input tables based on the information provided by the
      * feature.
      * @param tableInfo the information about the tables.
+     * @param tables the tables.
+     * @param helper the {@link TableTestHelper} instance.
      */
     protected void defineInputTables(
         @NotNull final DataTable tableInfo,
         @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables,
-        @NotNull final RepositoryTestHelper helper)
+        @NotNull final TableTestHelper helper)
     {
         helper.defineInputTables(tableInfo, tables);
     }
