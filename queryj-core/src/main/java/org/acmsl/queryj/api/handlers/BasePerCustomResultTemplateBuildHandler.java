@@ -34,7 +34,7 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
@@ -76,6 +76,9 @@ import java.util.List;
 
 /**
  * Builds all templates to generate sources for each custom result.
+ * @param <T> the template type.
+ * @param <C> the context type.
+ * @param <TF> the template factory type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
@@ -112,26 +115,12 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     public boolean handle(@NotNull final QueryJCommand parameters)
         throws QueryJBuildException
     {
-        final boolean result;
+        buildTemplates(
+            parameters,
+            retrieveMetadataManager(parameters),
+            retrieveCustomSqlProvider(parameters));
 
-        @Nullable final MetadataManager t_MetadataManager =
-            retrieveMetadataManager(parameters);
-
-        if (t_MetadataManager != null)
-        {
-            buildTemplates(
-                parameters,
-                t_MetadataManager,
-                retrieveCustomSqlProvider(parameters));
-
-            result = false;
-        }
-        else
-        {
-            result = true;
-        }
-
-        return result;
+        return false;
     }
 
     /**
@@ -153,15 +142,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
             customSqlProvider,
             retrieveTemplateFactory(),
             CachingDecoratorFactory.getInstance(),
-            retrieveProjectPackage(parameters),
-            retrieveTableRepositoryName(parameters),
-            retrieveHeader(parameters),
-            retrieveImplementMarkerInterfaces(parameters),
-            retrieveJmx(parameters),
-            retrieveJNDILocation(parameters),
-            retrieveDisableGenerationTimestamps(parameters),
-            retrieveDisableNotNullAnnotations(parameters),
-            retrieveDisableCheckthreadAnnotations(parameters),
             retrieveCustomResults(parameters, customSqlProvider, isDuplicatedResultsAllowed()),
             CustomResultUtils.getInstance());
     }
@@ -189,15 +169,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param templateFactory the {@link org.acmsl.queryj.api.TemplateFactory} instance.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param projectPackage the project package.
-     * @param repository the repository.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker interfaces.
-     * @param jmx whether to enable JMX support.
-     * @param jndiLocation the JNDI location.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param resultElements the {@link Result} list.
      * @param customResultUtils the {@link CustomResultUtils} instance.
      */
@@ -209,15 +180,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
         @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @Nullable final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
         @NotNull final List<Result<String>> resultElements,
         @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
@@ -236,8 +198,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 {
                     t_Template =
                         templateFactory.createTemplate(
-                            customSqlProvider,
-                            metadataManager,
+                            parameters,
                             decoratorFactory,
                             retrievePackage(
                                 t_ResultElement,
@@ -245,16 +206,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                                 metadataManager,
                                 metadataManager.getEngine(),
                                 parameters),
-                            projectPackage,
-                            repository,
-                            header,
-                            implementMarkerInterfaces,
-                            jmx,
-                            jndiLocation,
-                            disableGenerationTimestamps,
-                            disableNotNullAnnotations,
-                            disableCheckthreadAnnotations,
-                            t_ResultElement);
+                            t_ResultElement,
+                            customSqlProvider.getSqlPropertyDAO().findByResult(t_ResultElement.getId()));
 
                     if  (   (t_Template != null)
                          && (!t_lTemplates.contains(t_Template)))

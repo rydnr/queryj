@@ -1,0 +1,12 @@
+* 2014/04/18:
+** Each of #474, #475, #476, #477 requires:
+*** Fix PerXXXTemplate class:
+**** TODO #474: 1 ->
+**** TODO #475: 1 ->
+**** DONE #476: 1 -> 1
+**** TODO #477: 1 ->
+*** Fix PerXXXTemplatesTest generated code:
+**** TODO #474: 2 ->
+**** TODO #475: 2 ->
+**** DONE #476: 2 -> 2
+**** TODO #477: 2 ->   

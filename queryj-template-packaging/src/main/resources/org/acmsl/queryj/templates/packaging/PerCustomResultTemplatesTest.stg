@@ -367,7 +367,7 @@ public class PerCustomResultTemplatesTest
                             t_Command,
                             decoratorFactory,
                             packageName,
-                            result.getId(),
+                            result,
                             properties);
 
                     Assert.assertNotNull("No template found for " + templateName, template);

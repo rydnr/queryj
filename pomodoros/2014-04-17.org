@@ -1,0 +1,113 @@
+* 2014/04/16:
+** DONE #475: Support per-repository templates: 4 -> 4
+** DONE #476: Support per-custom result templates: 5 -> 5
+** DONE #477: Support per-sql templates: 4 -> 4
+* Notes:
+** Each of #474, #475, #476, #477 requires:
+*** PerXXXTemplatesFeatureTemplate
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerXXXTemplatesFeatureTemplateFactory
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerXXXTemplatesTestTemplate
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerXXXTemplatesTestTemplateFactory
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerXXXTemplatesTestTemplateBuildHandler
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerXXXTemplatesTestTemplateHandlerBundle
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerXXXTemplatesTestTemplateWritingHandler
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerXXXTemplatesFeature.stg
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerXXXTemplatesFeature.stg.def
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerxxxTemplatesTest.stg
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerxxxTemplatesTest.stg.def
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** PerXXXTemplateWritingHandler.stg
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** XXXTestHelper
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** Add PerXXXTemplatesTestTemplateHandlerBundle to TemplatePackagingChain
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** Implement PerXXXTemplateFactoryTemplate
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** Add case to TemplateFactoryTemplateFactory
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** Implement PerXXXTemplateWritingHandlerTemplate
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+*** Add case to TemplateWritingHandlerTemplateFactory
+**** DONE #474
+**** DONE #475
+**** DONE #476
+**** DONE #477
+** GOAL : Deliver QueryJ 3.0 ASAP
+*** Find out which templates are affected by the order of columns: 
+**** DONE ValueObject.stg
+**** DONE BaseValueObject.stg
+**** DONE ValueObjectFactory.stg
+**** TODO BaseDAO.stg 
+**** TODO DAO.stg
+**** DONE AttributesStatementSetter.stg
+**** DONE ResultSetExtractor.stg
+**** TODO PkStatementSetter.stg
+**** TODO FkStatementSetter.stg -> Depends on FK mgmt
+**** Custom query related templates?
+
+*** Implement those templates ASAP:
+**** DONE PkStatementSetter.stg #473: 3 -> 3
+**** TODO FkStatementSetter.stg: 3 ->
+**** Nest QueryJs, overriding only such templates

@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,12 +34,12 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -52,9 +52,17 @@ import org.acmsl.commons.patterns.Factory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
+import java.util.List;
+
 /**
  * Represents entities able to create per-<i>custom result</i> templates.
+ * @param <T> the template type.
+ * @param <C> the context type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @since 3.0
  */
 public interface PerCustomResultTemplateFactory
     <T extends PerCustomResultTemplate<C>, C extends PerCustomResultTemplateContext>
@@ -62,36 +70,18 @@ public interface PerCustomResultTemplateFactory
 {
     /**
      * Creates a per-<i>custom result</i> template.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param metadataManager the {@link MetadataManager} instance.
+     * @param command the {@link QueryJCommand}.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker interfaces or not.
-     * @param jmx whether to include JMX support.
-     * @param jndiLocation the JNDI path for the {@link javax.sql.DataSource}.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param customResult the custom result.
+     * @param properties the properties.
      * @return the template.
      */
     @Nullable
     public T createTemplate(
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
+        @NotNull final QueryJCommand command,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @Nullable final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
-        @NotNull final Result<String> customResult);
+        @NotNull final Result<String> customResult,
+        @NotNull final List<Property<String>> properties);
 }
