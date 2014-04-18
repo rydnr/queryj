@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesTestTemplateWritingHandler.java
+ * Filename: PerCustomSqlTemplatesTestTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writing handler for PerSqlTemplatesTestTemplates.
+ * Description: Writing handler for PerCustomSqlTemplatesTestTemplates.
  *
  * Date: 2014/04/17
  * Time: 10:15
@@ -45,7 +45,7 @@ import org.acmsl.queryj.QueryJCommandWrapper;
  * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
-import org.acmsl.queryj.templates.packaging.PerSqlTemplatesTestTemplate;
+import org.acmsl.queryj.templates.packaging.PerCustomSqlTemplatesTestTemplate;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
 import org.acmsl.queryj.templates.packaging.exceptions.MissingTemplatesException;
 
@@ -66,22 +66,22 @@ import org.checkthread.annotations.ThreadSafe;
 import java.util.List;
 
 /**
- * Writing handler for {@link PerSqlTemplatesTestTemplate}s.
+ * Writing handler for {@link PerCustomSqlTemplatesTestTemplate}s.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/04/17 10:15
  */
 @ThreadSafe
-public class PerSqlTemplatesTestTemplateWritingHandler
+public class PerCustomSqlTemplatesTestTemplateWritingHandler
     extends TemplatePackagingTestWritingHandler
-                <PerSqlTemplatesTestTemplate,
+                <PerCustomSqlTemplatesTestTemplate,
                     GlobalTemplateContext,
-                    TemplatePackagingTemplateGenerator<PerSqlTemplatesTestTemplate, GlobalTemplateContext>>
+                    TemplatePackagingTemplateGenerator<PerCustomSqlTemplatesTestTemplate, GlobalTemplateContext>>
 {
     /**
-     * Creates a new writing handler for {@link PerSqlTemplatesTestTemplate templates}.
+     * Creates a new writing handler for {@link PerCustomSqlTemplatesTestTemplate templates}.
      */
-    public PerSqlTemplatesTestTemplateWritingHandler() {}
+    public PerCustomSqlTemplatesTestTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.
@@ -91,7 +91,7 @@ public class PerSqlTemplatesTestTemplateWritingHandler
      */
     @NotNull
     @Override
-    public TemplatePackagingTemplateGenerator<PerSqlTemplatesTestTemplate, GlobalTemplateContext> retrieveTemplateGenerator(
+    public TemplatePackagingTemplateGenerator<PerCustomSqlTemplatesTestTemplate, GlobalTemplateContext> retrieveTemplateGenerator(
         final boolean caching, final int threadCount)
     {
         return new TemplatePackagingTemplateGenerator<>(caching, threadCount);
@@ -102,13 +102,13 @@ public class PerSqlTemplatesTestTemplateWritingHandler
      */
     @NotNull
     @Override
-    public List<PerSqlTemplatesTestTemplate> retrieveTemplates(@NotNull final QueryJCommand parameters)
+    public List<PerCustomSqlTemplatesTestTemplate> retrieveTemplates(@NotNull final QueryJCommand parameters)
     {
-        @NotNull final List<PerSqlTemplatesTestTemplate> result;
+        @NotNull final List<PerCustomSqlTemplatesTestTemplate> result;
 
-        @Nullable final List<PerSqlTemplatesTestTemplate> aux =
-            new QueryJCommandWrapper<PerSqlTemplatesTestTemplate>(parameters)
-                .getListSetting(PerSqlTemplatesTestTemplateBuildHandler.TEMPLATES_KEY);
+        @Nullable final List<PerCustomSqlTemplatesTestTemplate> aux =
+            new QueryJCommandWrapper<PerCustomSqlTemplatesTestTemplate>(parameters)
+                .getListSetting(PerCustomSqlTemplatesTestTemplateBuildHandler.TEMPLATES_KEY);
 
         if (aux == null)
         {

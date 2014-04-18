@@ -4,8 +4,8 @@
 // The template name (the filename).
 name : PerCustomResultTemplatesTest.stg;
 
-// The type of template: per-table, per-CustomResult, per-foreign-key, per-custom-result, per-sql.
-type : per-CustomResult;
+// The type of template: per-table, per-CustomResult, per-foreign-key, per-custom-result, per-custom-sql.
+type : per-custom-result;
 
 // The output flavor.
 output: Java;

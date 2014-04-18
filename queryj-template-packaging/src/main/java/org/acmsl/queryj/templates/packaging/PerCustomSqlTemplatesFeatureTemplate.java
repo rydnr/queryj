@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,22 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: MissingResultException.java
+ * Filename: PerCustomSqlTemplatesFeatureTemplate.java
  *
- * Author: Jose San Leandro Armendariz (chous)
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Represents the situation in which a custom SQL does not define the result.
+ * Description: Used to generate sources using PerSqlTemplatesFeature.stg.
  *
- * Date: 6/11/13
- * Time: 7:50 PM
+ * Date: 2014/04/16
+ * Time: 11:55
  *
  */
-package org.acmsl.queryj.api.exceptions;
-
-/*
- * Importing project classes.
- */
-import org.acmsl.queryj.customsql.Sql;
+package org.acmsl.queryj.templates.packaging;
 
 /*
  * Importing JetBrains annotations.
@@ -51,34 +46,37 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Represents the situation in which a custom SQL does not define the result.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * Used to generate sources using PerCustomSqlTemplatesFeature.stg.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/06/11
+ * Created: 2014/04/16 11:55
  */
 @ThreadSafe
-public class MissingResultException
-    extends QueryJNonCheckedException
+public class PerCustomSqlTemplatesFeatureTemplate
+    extends AbstractTemplatePackagingTemplate<GlobalTemplateContext>
 {
     /**
      * The serial version id.
      */
-    private static final long serialVersionUID = 7969992085829051936L;
+    private static final long serialVersionUID = 185269394913835018L;
 
     /**
-     * Creates an instance with given context.
-     * @param sql the {@link Sql}.
+     * Creates a new {@code PerCustomSqlTemplatesFeatureTemplate}.
+     * @param context the {@link GlobalTemplateContext context}.
      */
-    public MissingResultException(@NotNull final Sql<?> sql)
+    public PerCustomSqlTemplatesFeatureTemplate(@NotNull final GlobalTemplateContext context)
     {
-        super("missing.result", new Object[] { sql.getId() } );
+        super(context);
     }
 
     /**
-     * Creates an instance.
+     * Retrieves the template name.
+     * @return "PerSqlTemplatesFeature".
      */
-    public MissingResultException()
+    @NotNull
+    @Override
+    public String getTemplateName()
     {
-        super("CustomResult.not.available");
+        return Literals.PER_CUSTOM_SQL_TEMPLATES_FEATURE;
     }
 }

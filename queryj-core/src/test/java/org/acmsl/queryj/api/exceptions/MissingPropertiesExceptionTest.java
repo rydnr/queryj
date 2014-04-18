@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,22 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesTestTemplateHandlerBundle.java
+ * Filename: MissingPropertiesExceptionTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Handler bundle for PerSqlTemplatesTestTemplates.
+ * Description: Tests for MissingPropertiesException.
  *
- * Date: 2014/04/17
- * Time: 10:24
+ * Date: 2014/04/18
+ * Time: 14:05
  *
  */
-package org.acmsl.queryj.templates.packaging.handlers;
+package org.acmsl.queryj.api.exceptions;
 
 /*
- * Importing QueryJ Core classes.
+ * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.api.handlers.TemplateHandlerBundle;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -46,25 +46,22 @@ import org.acmsl.queryj.api.handlers.TemplateHandlerBundle;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Handler bundle for {@link org.acmsl.queryj.templates.packaging.PerSqlTemplatesTestTemplate}s.
+ * Tests for {@link MissingPropertiesException}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/04/17 10:24
+ * Created: 2014/04/18 14:05
  */
 @ThreadSafe
-public class PerSqlTemplatesTestTemplateHandlerBundle
-    extends TemplateHandlerBundle<
-    PerSqlTemplatesTestTemplateBuildHandler, PerSqlTemplatesTestTemplateWritingHandler>
+public class MissingPropertiesExceptionTest
+    extends AbstractExceptionTest<MissingPropertiesException>
 {
     /**
-     * Builds a bundle consisting of
-     * {@link PerSqlTemplatesTestTemplateBuildHandler}
-     * and {@link PerSqlTemplatesTestTemplateWritingHandler}.
+     * {@inheritDoc}
      */
-    public PerSqlTemplatesTestTemplateHandlerBundle()
+    @NotNull
+    @Override
+    protected MissingPropertiesException createInstance()
     {
-        super(
-            new PerSqlTemplatesTestTemplateBuildHandler(),
-            new PerSqlTemplatesTestTemplateWritingHandler());
+        return new MissingPropertiesException();
     }
 }

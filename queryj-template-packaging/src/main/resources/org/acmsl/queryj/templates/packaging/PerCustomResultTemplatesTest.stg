@@ -452,7 +452,7 @@ public class PerCustomResultTemplatesTest
      * @param outputName the name of the output file.
      */
     @SuppressWarnings("unused")
-    @Then("^Then the generated result-wide (.*) file compiles successfully")
+    @Then("^the generated custom result-specific (.*) file compiles successfully")
     public void checkGeneratedFileCompiles(@NotNull final String outputName)
     {
         checkGeneratedFilesCompile(outputName, getOutputFiles());

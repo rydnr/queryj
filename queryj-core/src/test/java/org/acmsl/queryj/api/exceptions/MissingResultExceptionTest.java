@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,24 +23,46 @@
 
  ******************************************************************************
  *
- * Filename: BasePerCustomSqlTemplateGenerator.java
+ * Filename: MissingResultExceptionTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create per-sql templates.
+ * Description: Tests for MissingResultException.
+ *
+ * Date: 2014/04/18
+ * Time: 13:55
  *
  */
-package org.acmsl.queryj.api;
+package org.acmsl.queryj.api.exceptions;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
+ * Importing JUnit classes.
+ */
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
- * Represents entities able to write per-sql templates.
- * @param <N> the template type.
- * @param <C> the template context type.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
- * @since 2.0
+ * Tests for {@link MissingResultException}.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 3.0
+ * Created: 2014/04/18 13:55
  */
-public interface PerCustomSqlTemplateGenerator<N extends PerCustomSqlTemplate<C>, C extends PerCustomSqlTemplateContext>
-    extends   TemplateGenerator<N, C>,
-              PerCustomSqlTemplateFactory<N, C>
+@RunWith(JUnit4.class)
+public class MissingResultExceptionTest
+    extends AbstractExceptionTest<MissingResultException>
 {
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    protected MissingResultException createInstance()
+    {
+        return new MissingResultException();
+    }
 }

@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesFeatureTemplateFactoryTest.java
+ * Filename: PerCustomSqlTemplatesFeatureTemplateFactoryTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerSqlTemplatesFeatureTemplateFactory.
+ * Description: Tests for PerCustomSqlTemplatesFeatureTemplateFactory.
  *
  * Date: 2014/04/16
  * Time: 15:50
@@ -55,13 +55,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerSqlTemplatesFeatureTemplateFactory}.
+ * Tests for {@link PerCustomSqlTemplatesFeatureTemplateFactory}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/04/16 15:50
  */
 @RunWith(JUnit4.class)
-public class PerSqlTemplatesFeatureTemplateFactoryTest
+public class PerCustomSqlTemplatesFeatureTemplateFactoryTest
 {
     /**
      * Tests whether the createTemplate() method returns null.
@@ -71,8 +71,8 @@ public class PerSqlTemplatesFeatureTemplateFactoryTest
     {
         @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
 
-        @NotNull final PerSqlTemplatesFeatureTemplateFactory instance =
-            PerSqlTemplatesFeatureTemplateFactory.getInstance();
+        @NotNull final PerCustomSqlTemplatesFeatureTemplateFactory instance =
+            PerCustomSqlTemplatesFeatureTemplateFactory.getInstance();
 
         Assert.assertNotNull(instance.createTemplate(context));
     }
@@ -83,11 +83,11 @@ public class PerSqlTemplatesFeatureTemplateFactoryTest
     @Test
     public void retrieveTemplateFileName_retrieves_the_fixed_value()
     {
-        @NotNull final PerSqlTemplatesFeatureTemplateFactory instance =
-            PerSqlTemplatesFeatureTemplateFactory.getInstance();
+        @NotNull final PerCustomSqlTemplatesFeatureTemplateFactory instance =
+            PerCustomSqlTemplatesFeatureTemplateFactory.getInstance();
 
         Assert.assertEquals(
-            "PerSqlTemplates.feature",
+            "PerCustomSqlTemplates.feature",
             instance.retrieveTemplateFileName("repo", new UndefinedJdbcEngine("unknown", "1.0")));
     }
 }

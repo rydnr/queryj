@@ -39,10 +39,12 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.api.exceptions.MissingPropertiesException;
+import org.acmsl.queryj.api.exceptions.MissingResultException;
+import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
  * Importing some Apache Commons Lang builder classes.
@@ -59,7 +61,11 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.List;
 
 /**
  * Context information required by templates customized for each {@link Result}
@@ -77,67 +83,36 @@ public class PerCustomResultTemplateContext
     private static final long serialVersionUID = 5193168262427622240L;
 
     /**
-     * The result.
-     */
-    private Result<String> m__Result;
-
-    /**
      * Creates a {@link PerCustomResultTemplateContext} with given information.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param header the header.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param implementMarkerInterfaces whether to implement marker interfaces or not.
-     * @param jmx whether to include JMX support.
-     * @param jndiLocation the JNDI location.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param fileName the file name.
+     * @param packageName the package name.
      * @param result the {@link Result} instance.
+     * @param properties the properties.
+     * @param command the command.
      */
     public PerCustomResultTemplateContext(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @Nullable final String header,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
         @NotNull final String fileName,
-        @NotNull final Result<String> result)
+        @NotNull final String packageName,
+        @NotNull final Result<String> result,
+        @NotNull final List<Property<String>> properties,
+        @NotNull final QueryJCommand command)
     {
-        super(null, null);
+        super(result.getId(), command);
 
-        immutableSetResult(result);
+        immutableSetValue(buildFileNameKey(), fileName, command);
+        immutableSetValue(buildPackageNameKey(), packageName, command);
+        immutableSetValue(buildResultKey(), result, command);
+        immutableSetValue(buildPropertiesKey(), properties, command);
     }
 
     /**
-     * Specifies the result.
-     * @param result the custom result.
+     * Retrieves the result key.
+     * @return "resultName".
      */
-    protected final void immutableSetResult(@NotNull final Result<String> result)
+    @NotNull
+    public String buildResultKey()
     {
-        m__Result = result;
-    }
-
-    /**
-     * Specifies the result.
-     * @param result the custom result.
-     */
-    @SuppressWarnings("unused")
-    protected void setResult(@NotNull final Result<String> result)
-    {
-        immutableSetResult(result);
+        return Literals.RESULT_NAME;
     }
 
     /**
@@ -147,7 +122,27 @@ public class PerCustomResultTemplateContext
     @NotNull
     public Result<String> getResult()
     {
-        return m__Result;
+        return getValue(buildResultKey(), getCommand(), new MissingResultException());
+    }
+
+    /**
+     * Retrieves the properties key.
+     * @return "properties".
+     */
+    @NotNull
+    protected String buildPropertiesKey()
+    {
+        return "properties.for." + getPk();
+    }
+
+    /**
+     * Retrieves the properties.
+     * @return the list of properties.
+     */
+    @NotNull
+    public List<Property<String>> getProperties()
+    {
+        return getListValue(buildPropertiesKey(), getCommand(), new MissingPropertiesException());
     }
 
     /**
@@ -178,12 +173,18 @@ public class PerCustomResultTemplateContext
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.m__Result).toHashCode();
+        return new HashCodeBuilder().appendSuper(super.hashCode()).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj)
     {
@@ -196,14 +197,20 @@ public class PerCustomResultTemplateContext
             return false;
         }
         final PerCustomResultTemplateContext other = (PerCustomResultTemplateContext) obj;
-        return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.m__Result, other.m__Result).isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(obj)).isEquals();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'PerCustomResultTemplateContext', " +
-               ", 'result': " + m__Result + " }";
+        return
+              "{ \"class\": \"" + PerCustomResultTemplateContext.class.getSimpleName() + '"'
+            + ", \"result\": " + getResult()
+            +", \"properties\": " + getProperties()
+            + " }";
     }
 }

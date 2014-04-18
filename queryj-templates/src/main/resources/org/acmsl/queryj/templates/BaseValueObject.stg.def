@@ -4,7 +4,7 @@
 // The template name (the filename).
 name : BaseValueObject.stg;
 
-// The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-sql.
+// The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-custom-sql.
 type : per-table;
 
 // The output flavor.

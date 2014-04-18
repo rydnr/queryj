@@ -118,9 +118,9 @@ public interface Literals
      */
     String PER_CUSTOM_RESULT_TEMPLATES_FEATURE = "PerCustomResultTemplatesFeature";
     /**
-     * String literal: "PerSqlTemplatesFeature".
+     * String literal: "PerCustomSqlTemplatesFeature".
      */
-    String PER_SQL_TEMPLATES_FEATURE = "PerSqlTemplatesFeature";
+    String PER_CUSTOM_SQL_TEMPLATES_FEATURE = "PerCustomSqlTemplatesFeature";
     /**
      * String literal: "PerForeignKeyTemplatesFeature".
      */
@@ -134,9 +134,9 @@ public interface Literals
      */
     String PER_CUSTOM_RESULT_TEMPLATES_TEST = "PerCustomResultTemplatesTest";
     /**
-     * String literal: "PerSqlTemplatesTest".
+     * String literal: "PerCustomSqlTemplatesTest".
      */
-    String PER_SQL_TEMPLATES_TEST = "PerSqlTemplatesTest";
+    String PER_CUSTOM_SQL_TEMPLATES_TEST = "PerCustomSqlTemplatesTest";
     /**
      * String literal: "PerRepositoryTemplateFactory".
      */
@@ -146,9 +146,9 @@ public interface Literals
      */
     String PER_CUSTOM_RESULT_TEMPLATE_FACTORY = "PerCustomResultTemplateFactory";
     /**
-     * String literal: "PerSqlTemplateFactory".
+     * String literal: "PerCustomSqlTemplateFactory".
      */
-    String PER_SQL_TEMPLATE_FACTORY = "PerSqlTemplateFactory";
+    String PER_CUSTOM_SQL_TEMPLATE_FACTORY = "PerCustomSqlTemplateFactory";
     /**
      * String literal: "PerRepositoryTemplateWritingHandler".
      */
@@ -158,7 +158,7 @@ public interface Literals
      */
     String PER_CUSTOM_RESULT_TEMPLATE_WRITING_HANDLER = "PerCustomResultTemplateWritingHandler";
     /**
-     * String literal: "PerSqlTemplateWritingHandler".
+     * String literal: "PerCustomSqlTemplateWritingHandler".
      */
-    String PER_SQL_TEMPLATE_WRITING_HANDLER = "PerSqlTemplateWritingHandler";
+    String PER_CUSTOM_SQL_TEMPLATE_WRITING_HANDLER = "PerCustomSqlTemplateWritingHandler";
 }

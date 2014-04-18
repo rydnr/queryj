@@ -23,13 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplateWritingHandlerTemplateTest.java
+ * Filename: PerCustomSqlTemplatesTestTemplateTest.java
  *
- * Author: Jose San Leandro
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerSqlTemplateWritingHandlerTemplate.
+ * Description: Tests for PerCustomSqlTemplatesTestTemplate.
  *
- * Created: 2014/04/17 12:39
+ * Date: 2014/04/16
+ * Time: 20:59
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -37,7 +38,6 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
-import org.checkthread.annotations.ThreadSafe;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -50,26 +50,26 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerSqlTemplateWritingHandlerTemplate}.
+ * Tests for {@link PerCustomSqlTemplatesTestTemplate}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created 2014/04/17 12:39
+ * Created: 2014/04/16 20:59
  */
 @RunWith(JUnit4.class)
-public class PerSqlTemplateWritingHandlerTemplateTest
+public class PerCustomSqlTemplatesTestTemplateTest
 {
     /**
-     * Checks whether getTemplateName() returns the correct template name.
+     * Checks the template name is correct.
      */
     @Test
-    public void getTemplateName_returns_the_correct_template_name()
+    public void templateName_is_correct()
     {
-        @NotNull final DefaultTemplatePackagingContext context =
-            EasyMock.createNiceMock(DefaultTemplatePackagingContext.class);
+        @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
 
-        @NotNull final PerSqlTemplateWritingHandlerTemplate instance =
-            new PerSqlTemplateWritingHandlerTemplate<>(context);
+        @NotNull final PerCustomSqlTemplatesTestTemplate instance =
+            new PerCustomSqlTemplatesTestTemplate(context);
 
-        Assert.assertEquals(Literals.PER_SQL_TEMPLATE_WRITING_HANDLER, instance.getTemplateName());
+        Assert.assertEquals(Literals.PER_CUSTOM_SQL_TEMPLATES_TEST, instance.getTemplateName());
     }
+
 }

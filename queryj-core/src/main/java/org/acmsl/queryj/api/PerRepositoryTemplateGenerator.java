@@ -34,10 +34,12 @@ package org.acmsl.queryj.api;
 
 /**
  * Represents entities able to write per-repository templates.
+ * @param <N> the template type.
+ * @param <C> the template context type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface PerRepositoryTemplateGenerator
-    <N extends AbstractBasePerRepositoryTemplate<C>, C extends PerRepositoryTemplateContext>
+    <N extends PerRepositoryTemplate<C>, C extends PerRepositoryTemplateContext>
     extends TemplateGenerator<N, C>
 {
 }

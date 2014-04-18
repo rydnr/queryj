@@ -23,54 +23,48 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplateFactoryTemplateTest.java
+ * Filename: PerCustomSqlTemplatesTestTemplateHandlerBundle.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerSqlTemplateFactoryTemplate.
+ * Description: Handler bundle for PerCustomSqlTemplatesTestTemplates.
  *
- * Date: 2014/04/21
- * Time: 12:07
+ * Date: 2014/04/17
+ * Time: 10:24
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
+ */
+import org.acmsl.queryj.api.handlers.TemplateHandlerBundle;
+
+/*
+ * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing JUnit/EasyMock classes.
- */
-import org.easymock.EasyMock;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerSqlTemplateFactoryTemplate}.
+ * Handler bundle for {@link org.acmsl.queryj.templates.packaging.PerCustomSqlTemplatesTestTemplate}s.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/04/17 12:21
+ * Created: 2014/04/17 10:24
  */
-@RunWith(JUnit4.class)
-public class PerSqlTemplateFactoryTemplateTest
+@ThreadSafe
+public class PerCustomSqlTemplatesTestTemplateHandlerBundle
+    extends TemplateHandlerBundle<
+    PerCustomSqlTemplatesTestTemplateBuildHandler, PerCustomSqlTemplatesTestTemplateWritingHandler>
 {
     /**
-     * Checks whether getTemplateName() returns the correct template name.
+     * Builds a bundle consisting of
+     * {@link PerCustomSqlTemplatesTestTemplateBuildHandler}
+     * and {@link PerCustomSqlTemplatesTestTemplateWritingHandler}.
      */
-    @Test
-    public void getTemplateName_returns_the_correct_template_name()
+    public PerCustomSqlTemplatesTestTemplateHandlerBundle()
     {
-        @NotNull final DefaultTemplatePackagingContext context =
-            EasyMock.createNiceMock(DefaultTemplatePackagingContext.class);
-
-        @NotNull final PerSqlTemplateFactoryTemplate instance =
-            new PerSqlTemplateFactoryTemplate<>(context);
-
-        Assert.assertEquals(Literals.PER_SQL_TEMPLATE_FACTORY, instance.getTemplateName());
+        super(
+            new PerCustomSqlTemplatesTestTemplateBuildHandler(),
+            new PerCustomSqlTemplatesTestTemplateWritingHandler());
     }
 }

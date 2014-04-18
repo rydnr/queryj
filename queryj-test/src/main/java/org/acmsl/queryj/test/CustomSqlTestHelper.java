@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Test
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,22 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: MissingResultException.java
+ * Filename: CustomSqlTestHelper.java
  *
- * Author: Jose San Leandro Armendariz (chous)
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Represents the situation in which a custom SQL does not define the result.
+ * Description: Helper class for per-SQL Cucumber tests.
  *
- * Date: 6/11/13
- * Time: 7:50 PM
+ * Date: 2014/04/17
+ * Time: 11:57
  *
  */
-package org.acmsl.queryj.api.exceptions;
-
-/*
- * Importing project classes.
- */
-import org.acmsl.queryj.customsql.Sql;
+package org.acmsl.queryj.test;
 
 /*
  * Importing JetBrains annotations.
@@ -51,34 +46,34 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Represents the situation in which a custom SQL does not define the result.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * Helper class for per-SQL Cucumber tests.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/06/11
+ * Created: 2014/04/17 11:57
  */
 @ThreadSafe
-public class MissingResultException
-    extends QueryJNonCheckedException
+public class CustomSqlTestHelper
 {
-    /**
-     * The serial version id.
-     */
-    private static final long serialVersionUID = 7969992085829051936L;
 
     /**
-     * Creates an instance with given context.
-     * @param sql the {@link Sql}.
+     * Singleton implementation to avoid double-locking check.
      */
-    public MissingResultException(@NotNull final Sql<?> sql)
+    protected static final class SqlTestHelperSingletonContainer
     {
-        super("missing.result", new Object[] { sql.getId() } );
+        /**
+         * The actual singleton.
+         */
+        public static final CustomSqlTestHelper SINGLETON = new CustomSqlTestHelper();
     }
 
     /**
-     * Creates an instance.
+     * Retrieves the singleton instance.
+     *
+     * @return such instance.
      */
-    public MissingResultException()
+    @NotNull
+    public static CustomSqlTestHelper getInstance()
     {
-        super("CustomResult.not.available");
+        return SqlTestHelperSingletonContainer.SINGLETON;
     }
 }

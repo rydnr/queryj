@@ -37,9 +37,12 @@ package org.acmsl.queryj.api;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
+
+/*
+ * Importing QueryJ Core classes.
+ */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -47,14 +50,12 @@ import org.acmsl.queryj.metadata.MetadataManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
-
 /**
  * Represents entities able to create per-repository templates.
+ * @param <T> the template type.
+ * @param <C> the template context type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @since 2.0
  */
 public interface PerRepositoryTemplateFactory
     <T extends AbstractBasePerRepositoryTemplate<C>, C extends PerRepositoryTemplateContext>
@@ -62,36 +63,16 @@ public interface PerRepositoryTemplateFactory
 {
     /**
      * Creates a {@link T} instance with given information.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param header the file header.
-     * @param packageName the package name.
-     * @param projectPackage the project's base package.
      * @param repository the repository name.
-     * @param implementMarkerInterfaces whether to implement marker interfaces.
-     * @param jmx whether to enable JMX.
-     * @param tableNames the list of table names.
-     * @param jndiLocation the JNDI location of the data source.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
+     * @param packageName the package name.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param command the {@link QueryJCommand command}.
      * @return the new template.
      */
     @Nullable
     public T createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
-        @NotNull final String projectPackage,
         @NotNull final String repository,
-        @Nullable final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations);
+        @NotNull final String packageName,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final QueryJCommand command);
 }

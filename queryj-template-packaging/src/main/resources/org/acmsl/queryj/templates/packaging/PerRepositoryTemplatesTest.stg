@@ -294,12 +294,15 @@ public class PerRepositoryTemplatesTest
             @NotNull final QueryJCommand t_Command =
                 new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
 
+            // TODO: repository
+            @NotNull final String repository = "acme";
+
             new QueryJCommandWrapper\<CustomSqlProvider>(t_Command).setSetting(
                 CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, sqlProvider);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.PACKAGE, BASE_PACKAGE_NAME);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                QueryJSettings.REPOSITORY, "acme");
+                QueryJSettings.REPOSITORY, repository);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.HEADER_FILE, "");
             new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
@@ -318,105 +321,92 @@ public class PerRepositoryTemplatesTest
             @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables =
                 new ArrayList\<>(tableMap.values());
 
-            for (@NotNull final Table\<String, Attribute\<String>, List\<Attribute\<String>\>> table : tables)
+            // TODO
+            @NotNull final MetadataManager metadataManager = null;
+                //retrieveMetadataManager(engine, table, tableRows, decoratorFactory);
+
+            new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
+                DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
+
+            @Nullable final PerRepositoryTemplateFactory\<? extends PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext> templateFactory =
+                retrieveTemplateFactory(templateName);
+
+            Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
+
+            @NotNull final String packageName =
+                resolvePackage(PACKAGE_MAPPINGS.get(templateName), repository, resolveEngine(engine));
+
+            @Nullable final PerRepositoryTemplate\<PerRepositoryTemplateContext> template =
+                templateFactory.createTemplate(
+                    repository, packageName, decoratorFactory, t_Command);
+
+            Assert.assertNotNull("No template found for " + templateName, template);
+
+            File outputDir = null;
+
+            try
             {
-                @Nullable List\<Row\<String\>> tableRows = rows.get(table.getName());
+                rootFolder.create();
 
-                if (tableRows == null)
+                @NotNull final String[] packages = packageName.split("\\\.");
+                @NotNull final StringBuilder folder = new StringBuilder();
+
+                for (@NotNull final String pkg : packages)
                 {
-                    tableRows = new ArrayList\<>(0);
+                    folder.append(File.separator);
+                    folder.append(pkg);
                 }
 
-                @NotNull final MetadataManager metadataManager =
-                    retrieveMetadataManager(engine, table, tableRows, decoratorFactory);
+                outputDir = new File(rootFolder.getRoot().getAbsolutePath().concat(folder.toString()));
 
-                new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
-                    DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
-
-                @Nullable final PerRepositoryTemplateFactory\<? extends PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext> templateFactory =
-                    retrieveTemplateFactory(templateName);
-
-                Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
-
-                @NotNull final String packageName =
-                    resolvePackage(PACKAGE_MAPPINGS.get(templateName), table.getName(), resolveEngine(engine));
-
-                @Nullable final PerRepositoryTemplate\<PerRepositoryTemplateContext> template =
-                    templateFactory.createTemplate(
-                        t_Command,
-                        decoratorFactory,
-                        packageName,
-                        table.getName(),
-                        tableRows);
-
-                Assert.assertNotNull("No template found for " + templateName, template);
-
-                File outputDir = null;
-
-                try
-                {
-                    rootFolder.create();
-
-                    @NotNull final String[] packages = packageName.split("\\\.");
-                    @NotNull final StringBuilder folder = new StringBuilder();
-
-                    for (@NotNull final String pkg : packages)
-                    {
-                        folder.append(File.separator);
-                        folder.append(pkg);
-                    }
-
-                    outputDir = new File(rootFolder.getRoot().getAbsolutePath().concat(folder.toString()));
-
-                    outputDir.mkdirs();
-                }
-                catch (@NotNull final IOException ioException)
-                {
-                    Assert.fail(ioException.getMessage());
-                }
-
-                if (!outputDir.exists())
-                {
-                    Assert.fail("Cannot create folder: " + outputDir.getAbsolutePath());
-                }
-
-                UniqueLogFactory.initializeInstance(LogFactory.getLog(PerRepositoryTemplatesTest.class));
-
-                ((AbstractTemplate) template).setDebugMode(true);
-
-                try
-                {
-                    generator.write(
-                        template,
-                        outputDir,
-                        rootFolder.getRoot(),
-                        Charset.defaultCharset());
-                }
-                catch (@NotNull final IOException ioException)
-                {
-                    if (failCause == null)
-                    {
-                        failCause = ioException.getMessage();
-                    }
-                    restart = false;
-                }
-                catch (@NotNull final DevelopmentModeException debugging)
-                {
-                    restart = true;
-                }
-                catch (@NotNull final QueryJBuildException queryjBuildException)
-                {
-                    if (failCause == null)
-                    {
-                        failCause = queryjBuildException.getMessage();
-                    }
-                    restart = false;
-                }
-
-                outputFiles.put(
-                    table.getName(),
-                    new File(outputDir, template.getTemplateContext().getFileName()));
+                outputDir.mkdirs();
             }
+            catch (@NotNull final IOException ioException)
+            {
+                Assert.fail(ioException.getMessage());
+            }
+
+            if (!outputDir.exists())
+            {
+                Assert.fail("Cannot create folder: " + outputDir.getAbsolutePath());
+            }
+
+            UniqueLogFactory.initializeInstance(LogFactory.getLog(PerRepositoryTemplatesTest.class));
+
+            ((AbstractTemplate) template).setDebugMode(true);
+
+            try
+            {
+                generator.write(
+                    template,
+                    outputDir,
+                    rootFolder.getRoot(),
+                    Charset.defaultCharset());
+            }
+            catch (@NotNull final IOException ioException)
+            {
+                if (failCause == null)
+                {
+                    failCause = ioException.getMessage();
+                }
+                restart = false;
+            }
+            catch (@NotNull final DevelopmentModeException debugging)
+            {
+                restart = true;
+            }
+            catch (@NotNull final QueryJBuildException queryjBuildException)
+            {
+                if (failCause == null)
+                {
+                    failCause = queryjBuildException.getMessage();
+                }
+                restart = false;
+            }
+
+            outputFiles.put(
+                repository,
+                new File(outputDir, template.getTemplateContext().getFileName()));
         }
 
         if (failCause != null)

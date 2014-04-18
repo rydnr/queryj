@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesFeatureTemplateFactory.java
+ * Filename: PerCustomSqlTemplatesFeatureTemplateFactory.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Factory for PerSqlTemplatesFeatureTemplates.
+ * Description: Factory for PerCustomSqlTemplatesFeatureTemplates.
  *
  * Date: 2014/04/16
  * Time: 15:53
@@ -65,14 +65,14 @@ import org.checkthread.annotations.ThreadSafe;
 import org.stringtemplate.v4.ST;
 
 /**
- * Factory for {@link PerSqlTemplatesFeatureTemplate}s.
+ * Factory for {@link PerCustomSqlTemplatesFeatureTemplate}s.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/04/16 15:53
  */
 @ThreadSafe
-public class PerSqlTemplatesFeatureTemplateFactory
-    implements TemplatePackagingTemplateFactory<PerSqlTemplatesFeatureTemplate, GlobalTemplateContext>,
+public class PerCustomSqlTemplatesFeatureTemplateFactory
+    implements TemplatePackagingTemplateFactory<PerCustomSqlTemplatesFeatureTemplate, GlobalTemplateContext>,
                Singleton
 {
     /**
@@ -83,8 +83,8 @@ public class PerSqlTemplatesFeatureTemplateFactory
         /**
          * The actual singleton.
          */
-        public static final PerSqlTemplatesFeatureTemplateFactory SINGLETON =
-            new PerSqlTemplatesFeatureTemplateFactory();
+        public static final PerCustomSqlTemplatesFeatureTemplateFactory SINGLETON =
+            new PerCustomSqlTemplatesFeatureTemplateFactory();
     }
 
     /**
@@ -92,7 +92,7 @@ public class PerSqlTemplatesFeatureTemplateFactory
      * @return such instance.
      */
     @NotNull
-    public static PerSqlTemplatesFeatureTemplateFactory getInstance()
+    public static PerCustomSqlTemplatesFeatureTemplateFactory getInstance()
     {
         return PerSqlTemplatesFeatureTemplateFactorySingletonContainer.SINGLETON;
     }
@@ -105,9 +105,9 @@ public class PerSqlTemplatesFeatureTemplateFactory
      */
     @Nullable
     @Override
-    public PerSqlTemplatesFeatureTemplate createTemplate(@NotNull final GlobalTemplateContext context)
+    public PerCustomSqlTemplatesFeatureTemplate createTemplate(@NotNull final GlobalTemplateContext context)
     {
-        return new PerSqlTemplatesFeatureTemplate(context);
+        return new PerCustomSqlTemplatesFeatureTemplate(context);
     }
 
     /**
@@ -136,7 +136,7 @@ public class PerSqlTemplatesFeatureTemplateFactory
         @NotNull final String result;
 
         @NotNull final ST template =
-            new ST("PerSqlTemplates.feature");
+            new ST("PerCustomSqlTemplates.feature");
 
         template.add(Literals.REPOSITORY, new DecoratedString(repository));
         template.add(org.acmsl.queryj.Literals.ENGINE, new EngineDecorator(engine));

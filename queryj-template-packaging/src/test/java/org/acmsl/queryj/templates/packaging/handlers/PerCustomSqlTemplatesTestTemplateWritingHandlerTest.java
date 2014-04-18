@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesTestTemplateWritingHandlerTest.java
+ * Filename: PerCustomSqlTemplatesTestTemplateWritingHandlerTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerSqlTemplatesTestTemplateWritingHandler.
+ * Description: Tests for PerCustomSqlTemplatesTestTemplateWritingHandler.
  *
  * Date: 2014/04/17
  * Time: 10:14
@@ -39,8 +39,8 @@ package org.acmsl.queryj.templates.packaging.handlers;
  * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
-import org.acmsl.queryj.templates.packaging.PerSqlTemplatesTestTemplate;
-import org.acmsl.queryj.templates.packaging.PerSqlTemplatesTestTemplateFactory;
+import org.acmsl.queryj.templates.packaging.PerCustomSqlTemplatesTestTemplate;
+import org.acmsl.queryj.templates.packaging.PerCustomSqlTemplatesTestTemplateFactory;
 
 /*
  * Importing JetBrains annotations.
@@ -55,18 +55,18 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerSqlTemplatesTestTemplateWritingHandler}.
+ * Tests for {@link PerCustomSqlTemplatesTestTemplateWritingHandler}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/04/17 10:14
  */
 @RunWith(JUnit4.class)
-public class PerSqlTemplatesTestTemplateWritingHandlerTest
+public class PerCustomSqlTemplatesTestTemplateWritingHandlerTest
     extends AbstractTemplatesTestTemplateWritingHandlerTest<
-    PerSqlTemplatesTestTemplateWritingHandler,
-    PerSqlTemplatesTestTemplateBuildHandler,
-    PerSqlTemplatesTestTemplate,
-    PerSqlTemplatesTestTemplateFactory,
+    PerCustomSqlTemplatesTestTemplateWritingHandler,
+    PerCustomSqlTemplatesTestTemplateBuildHandler,
+    PerCustomSqlTemplatesTestTemplate,
+    PerCustomSqlTemplatesTestTemplateFactory,
     GlobalTemplateContext>
 {
     /**
@@ -75,9 +75,9 @@ public class PerSqlTemplatesTestTemplateWritingHandlerTest
      */
     @NotNull
     @Override
-    protected PerSqlTemplatesTestTemplateBuildHandler createBuildHandlerInstance()
+    protected PerCustomSqlTemplatesTestTemplateBuildHandler createBuildHandlerInstance()
     {
-        return new PerSqlTemplatesTestTemplateBuildHandler();
+        return new PerCustomSqlTemplatesTestTemplateBuildHandler();
     }
 
     /**
@@ -86,9 +86,9 @@ public class PerSqlTemplatesTestTemplateWritingHandlerTest
      */
     @NotNull
     @Override
-    protected PerSqlTemplatesTestTemplateWritingHandler createInstance()
+    protected PerCustomSqlTemplatesTestTemplateWritingHandler createInstance()
     {
-        return new PerSqlTemplatesTestTemplateWritingHandler();
+        return new PerCustomSqlTemplatesTestTemplateWritingHandler();
     }
 
     /**
@@ -97,8 +97,8 @@ public class PerSqlTemplatesTestTemplateWritingHandlerTest
      */
     @NotNull
     @Override
-    protected PerSqlTemplatesTestTemplate createTemplateMock()
+    protected PerCustomSqlTemplatesTestTemplate createTemplateMock()
     {
-        return EasyMock.createNiceMock(PerSqlTemplatesTestTemplate.class);
+        return EasyMock.createNiceMock(PerCustomSqlTemplatesTestTemplate.class);
     }
 }

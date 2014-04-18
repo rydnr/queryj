@@ -51,7 +51,7 @@ import org.acmsl.queryj.templates.packaging.handlers.ParseTemplateDefsHandler;
 import org.acmsl.queryj.templates.packaging.handlers.PerCustomResultTemplatesTestTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.PerForeignKeyTemplatesTestTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.PerRepositoryTemplatesTestTemplateHandlerBundle;
-import org.acmsl.queryj.templates.packaging.handlers.PerSqlTemplatesTestTemplateHandlerBundle;
+import org.acmsl.queryj.templates.packaging.handlers.PerCustomSqlTemplatesTestTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.PerTableTemplatesTestTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateBuildHandlerTemplateHandlerBundle;
 import org.acmsl.queryj.templates.packaging.handlers.TemplateFactoryTemplateHandlerBundle;
@@ -141,7 +141,7 @@ public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJComman
 
 //        chain.add((CH) new PerCustomResultTemplatesFeatureTemplateHandlerBundle());
 
-        chain.add((CH) new PerSqlTemplatesTestTemplateHandlerBundle());
+        chain.add((CH) new PerCustomSqlTemplatesTestTemplateHandlerBundle());
 
 //        chain.add((CH) new PerSqlTemplatesFeatureTemplateHandlerBundle());
 

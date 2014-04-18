@@ -79,7 +79,7 @@ public enum TemplateDefType
     /**
      * Per custom SQL.
      */
-    PER_SQL("per-sql");
+    PER_CUSTOM_SQL("per-custom-sql");
 
     /**
      * The type.
@@ -141,7 +141,7 @@ public enum TemplateDefType
      */
     public boolean isPerSql()
     {
-        return PER_SQL.getType().equals(getType());
+        return PER_CUSTOM_SQL.getType().equals(getType());
     }
 
     /**

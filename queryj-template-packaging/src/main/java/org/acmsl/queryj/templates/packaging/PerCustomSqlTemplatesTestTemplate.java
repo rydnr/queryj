@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesFeatureTemplateTest.java
+ * Filename: PerCustomSqlTemplatesTestTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerSqlTemplatesFeatureTemplate.
+ * Description: Used to generate sources using PerCustomSqlTemplatesTest.stg.
  *
  * Date: 2014/04/16
- * Time: 11:52
+ * Time: 21:03
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -38,53 +38,45 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
-import org.easymock.EasyMock;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerSqlTemplatesFeatureTemplate}
+ * Used to generate sources using PerCustomSqlTemplatesTest.stg.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/04/16 11:52
+ * Created: 2014/04/16 21:03
  */
-@RunWith(JUnit4.class)
-public class PerSqlTemplatesFeatureTemplateTest
+@ThreadSafe
+public class PerCustomSqlTemplatesTestTemplate
+    extends AbstractTemplatePackagingTemplate<GlobalTemplateContext>
 {
     /**
-     * Checks the template name is correct.
+     * The serial version id.
      */
-    @Test
-    public void templateName_is_correct()
+    private static final long serialVersionUID = 7595860163174134085L;
+
+    /**
+     * Builds a PerSqlTemplatesTest using given context.
+     * @param context the {@link GlobalTemplateContext}.
+     */
+    public PerCustomSqlTemplatesTestTemplate(@NotNull final GlobalTemplateContext context)
     {
-        @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
-
-        @NotNull final PerSqlTemplatesFeatureTemplate instance =
-            new PerSqlTemplatesFeatureTemplate(context);
-
-        Assert.assertEquals(Literals.PER_SQL_TEMPLATES_FEATURE, instance.getTemplateName());
+        super(context);
     }
 
     /**
-     * Checks whether the group is found.
+     * Retrieves the template name.
+     * @return "PerSqlTemplatesTest";
      */
-    @Test
-    public void group_is_available()
+    @NotNull
+    @Override
+    public String getTemplateName()
     {
-        @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
-
-        @NotNull final PerSqlTemplatesFeatureTemplate instance =
-            new PerSqlTemplatesFeatureTemplate(context);
-
-        Assert.assertNotNull(instance.retrieveGroup());
+        return Literals.PER_CUSTOM_SQL_TEMPLATES_TEST;
     }
-
 }

@@ -29,20 +29,20 @@
 //
 //***************************************************************************
 //
-// Filename: PerSqlTemplatesTest.stg
+// Filename: PerCustomSqlTemplatesTest.stg
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate PerSqlTemplatesTest
+// Description: Defines the rules to generate PerCustomSqlTemplatesTest
 //              implementations.
 //
-group PerSqlTemplatesTest;
+group PerCustomSqlTemplatesTest;
 
 import "common.stg"
 
 source(C) ::= <<
 <!
-  Generates PerSqlTemplatesTest implementations.
+  Generates PerCustomSqlTemplatesTest implementations.
 !>
 <if(C.header)>
 <C.header>
@@ -52,7 +52,7 @@ source(C) ::= <<
   [
     description()
   ],
-  template="org/acmsl/queryj/templates/PerSqlTemplatesTest.stg",
+  template="org/acmsl/queryj/templates/PerCustomSqlTemplatesTest.stg",
   C=C)><endif>
 
 <package_declaration(packageName="cucumber.templates")>
@@ -64,16 +64,17 @@ source(C) ::= <<
 import org.acmsl.queryj.api.AbstractTemplate;
 import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.api.PerSqlTemplate;
-import org.acmsl.queryj.api.PerSqlTemplateContext;
-import org.acmsl.queryj.api.PerSqlTemplateFactory;
-import org.acmsl.queryj.api.PerSqlTemplateGenerator;
+import org.acmsl.queryj.api.PerCustomSqlTemplate;
+import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
+import org.acmsl.queryj.api.PerCustomSqlTemplateFactory;
+import org.acmsl.queryj.api.PerCustomSqlTemplateGenerator;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.customsql.handlers.customsqlvalidation.RetrieveQueryHandler;
 import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.DecoratedString;
@@ -86,7 +87,7 @@ import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
-import org.acmsl.queryj.metadata.vo.result;
+import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
@@ -98,7 +99,9 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
  * Importing QueryJ Test classes.
  */
 import org.acmsl.queryj.test.AbstractTemplatesTest;
-import org.acmsl.queryj.test.resultTestHelper;
+import org.acmsl.queryj.test.CustomResultTestHelper;
+import org.acmsl.queryj.test.CustomSqlTestHelper;
+import org.acmsl.queryj.test.TableTestHelper;
 
 /*
  * Importing project classes.
@@ -123,7 +126,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 /*
  * Importing Cucumber classes.
  */
-import cucumber.api.Dataresult;
+import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -188,20 +191,20 @@ class(defs, C) ::= <<
 /**
  * <description()>
 <class_common_javadoc(
-  template="org/acmsl/queryj/dao/PerSqlTemplatesTest.stg",
+  template="org/acmsl/queryj/dao/PerCustomSqlTemplatesTest.stg",
   generation_timestamps_enabled=C.generation_timestamps_enabled,
   timestamp=C.timestamp,
   version=C.version)>
  */
-public class PerSqlTemplatesTest
+public class PerCustomSqlTemplatesTest
     extends AbstractTemplatesTest\<
-                PerSqlTemplateGenerator\<? extends PerSqlTemplate\<PerSqlTemplateContext>, PerSqlTemplateContext>,
-                PerSqlTemplateFactory\<? extends PerSqlTemplate\<PerSqlTemplateContext>, PerSqlTemplateContext\>>
+                PerCustomSqlTemplateGenerator\<? extends PerCustomSqlTemplate\<PerCustomSqlTemplateContext>, PerCustomSqlTemplateContext>,
+                PerCustomSqlTemplateFactory\<? extends PerCustomSqlTemplate\<PerCustomSqlTemplateContext>, PerCustomSqlTemplateContext\>>
 {
     /**
      * Creates an instance.
      */
-    public PerSqlTemplatesTest()
+    public PerCustomSqlTemplatesTest()
     {
         super();
 
@@ -209,38 +212,11 @@ public class PerSqlTemplatesTest
     }
 
     /**
-     * Defines the input results based on the information provided by the
-     * feature.
-     * @param resultInfo the information about the results.
-     */
-    @SuppressWarnings("unused")
-    @Given("^Given the following custom result:$")
-    public void defineInputResults(@NotNull final DataTable resultInfo)
-    {
-        defineInputResults(resultInfo, getResults(), CustomResultTestHelper.getInstance());
-    }
-
-    /**
-     * Defines the input results based on the information provided by the
-     * feature.
-     * @param resultInfo the information about the results.
-     * @param results the custom results.
-     * @param helper the {@link CustomResultTestHelper} instance.
-     */
-    protected void defineInputResults(
-        @NotNull final DataTable resultInfo,
-        @NotNull final Map\<String, Sql\<String\>> results,
-        @NotNull final CustomResultTestHelper helper)
-    {
-        helper.defineInputResults(resultInfo, results);
-    }
-
-    /**
      * Defines SQL sentences via cucumber features.
      * @param values such information.
      */
     @SuppressWarnings("unused")
-    @And("^the following query:$")
+    @Given("^Given the following custom query:$")
     public void defineSql(@NotNull final DataTable values)
     {
         setSqlList(defineSql(values, TableTestHelper.getInstance()));
@@ -263,7 +239,7 @@ public class PerSqlTemplatesTest
      * @param values such information.
      */
     @SuppressWarnings("unused")
-    @And("^the following query parameters:$")
+    @And("^the following custom query parameters:$")
     public void defineParameters(@NotNull final DataTable values)
     {
         setParameters(defineParameters(values, getSqlList(), TableTestHelper.getInstance()));
@@ -322,8 +298,8 @@ public class PerSqlTemplatesTest
         generateFile(
             template,
             engine,
-            getResults(),
-            getProperties(),
+            getTables(),
+            getSqlList(),
             getOutputFiles(),
             retrieveCustomSqlProvider(getSqlList(), getParameters()));
     }
@@ -332,8 +308,8 @@ public class PerSqlTemplatesTest
      * Generates a file with the information from the feature.
      * @param templateName the template.
      * @param engine the engine name.
-     * @param resultMap the result map.
-     * @param rows the rows.
+     * @param tableMap the table map.
+     * @param sqlList the custom queries.
      * @param outputFiles the output files.
      * @param sqlProvider the {@link CustomSqlProvider} instance.
      */
@@ -341,13 +317,13 @@ public class PerSqlTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
-        @NotNull final Map\<String, Sql\<String\>> resultMap,
-        @NotNull final Map\<String, List\<Property\<String>\>> properties,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tableMap,
+        @NotNull final List\<Sql\<String\>> sqlList,
         @NotNull final Map\<String, File> outputFiles,
         @NotNull final CustomSqlProvider sqlProvider)
     {
-        @Nullable final PerSqlTemplateGenerator\<PerSqlTemplate\<PerSqlTemplateContext>, PerSqlTemplateContext> generator =
-            (PerSqlTemplateGenerator\<PerSqlTemplate\<PerSqlTemplateContext>, PerSqlTemplateContext>) retrieveTemplateGenerator(
+        @Nullable final PerCustomSqlTemplateGenerator\<PerCustomSqlTemplate\<PerCustomSqlTemplateContext>, PerCustomSqlTemplateContext> generator =
+            (PerCustomSqlTemplateGenerator\<PerCustomSqlTemplate\<PerCustomSqlTemplateContext>, PerCustomSqlTemplateContext>) retrieveTemplateGenerator(
                 templateName);
 
         Assert.assertNotNull("No template generator found for " + templateName, generator);
@@ -388,39 +364,31 @@ public class PerSqlTemplatesTest
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.VERSION, "<C.version>");
 
-            @NotNull final List\<result\<String, Attribute\<String>, List\<Attribute\<String\>>\>> results =
-                new ArrayList\<>(resultMap.values());
-
-            for (@NotNull final result\<String, Attribute\<String>, List\<Attribute\<String>\>> result : results)
+            for (@NotNull final Sql\<String> sql : sqlList)
             {
-                @Nullable List\<Row\<String\>> resultRows = rows.get(result.getName());
-
-                if (resultRows == null)
-                {
-                    resultRows = new ArrayList\<>(0);
-                }
+                @NotNull final Table\<String, Attribute\<String>, List\<Attribute\<String>\>> table =
+                    tableMap.get(sql.getDao());
 
                 @NotNull final MetadataManager metadataManager =
-                    retrieveMetadataManager(engine, result, resultRows, decoratorFactory);
+                    retrieveMetadataManager(engine, table, new ArrayList\<Row\<String\>>(0), decoratorFactory);
 
                 new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
                     DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
 
-                @Nullable final PerSqlTemplateFactory\<? extends PerSqlTemplate\<PerSqlTemplateContext>, PerSqlTemplateContext> templateFactory =
+                @Nullable final PerCustomSqlTemplateFactory\<? extends PerCustomSqlTemplate\<PerCustomSqlTemplateContext>, PerCustomSqlTemplateContext> templateFactory =
                     retrieveTemplateFactory(templateName);
 
                 Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
                 @NotNull final String packageName =
-                    resolvePackage(PACKAGE_MAPPINGS.get(templateName), result.getName(), resolveEngine(engine));
+                    resolvePackage(PACKAGE_MAPPINGS.get(templateName), sql.getId(), resolveEngine(engine));
 
-                @Nullable final PerSqlTemplate\<PerSqlTemplateContext> template =
+                @Nullable final PerCustomSqlTemplate\<PerCustomSqlTemplateContext> template =
                     templateFactory.createTemplate(
-                        t_Command,
-                        decoratorFactory,
+                        sql,
                         packageName,
-                        result.getName(),
-                        properties);
+                        decoratorFactory,
+                        t_Command);
 
                 Assert.assertNotNull("No template found for " + templateName, template);
 
@@ -453,7 +421,7 @@ public class PerSqlTemplatesTest
                     Assert.fail("Cannot create folder: " + outputDir.getAbsolutePath());
                 }
 
-                UniqueLogFactory.initializeInstance(LogFactory.getLog(PerSqlTemplatesTest.class));
+                UniqueLogFactory.initializeInstance(LogFactory.getLog(PerCustomSqlTemplatesTest.class));
 
                 ((AbstractTemplate) template).setDebugMode(true);
 
@@ -487,7 +455,7 @@ public class PerSqlTemplatesTest
                 }
 
                 outputFiles.put(
-                    result.getName(),
+                    sql.getId(),
                     new File(outputDir, template.getTemplateContext().getFileName()));
             }
         }
@@ -503,7 +471,7 @@ public class PerSqlTemplatesTest
      * @param outputName the name of the output file.
      */
     @SuppressWarnings("unused")
-    @Then("^Then the generated result-wide (.*) file compiles successfully")
+    @Then("^Then the generated per-SQL (.*) file compiles successfully")
     public void checkGeneratedFileCompiles(@NotNull final String outputName)
     {
         checkGeneratedFilesCompile(outputName, getOutputFiles());
@@ -517,7 +485,7 @@ public class PerSqlTemplatesTest
     @NotNull
     @Override
     protected DecoratorFactory retrieveDecoratorFactory(
-        @NotNull final PerSqlTemplateGenerator\<? extends PerSqlTemplate\<PerSqlTemplateContext>, PerSqlTemplateContext> generator)
+        @NotNull final PerCustomSqlTemplateGenerator\<? extends PerCustomSqlTemplate\<PerCustomSqlTemplateContext>, PerCustomSqlTemplateContext> generator)
     {
         return generator.getDecoratorFactory();
     }

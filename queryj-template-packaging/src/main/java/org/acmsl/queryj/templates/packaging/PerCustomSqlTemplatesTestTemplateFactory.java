@@ -23,15 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplateWritingHandlerTemplate.java
+ * Filename: PerCustomSqlTemplatesTestTemplateFactory.java
  *
- * Author: Jose San Leandro
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Represents repository-specific template writing handler
- *              templates.
+ * Description: Factory for PerCustomSqlTemplatesTestTemplates.
  *
- * Date: 2014/04/17
- * Time: 12:40
+ * Date: 2014/04/16
+ * Time: 21:46
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -39,46 +38,57 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents repository-specific template writing handler templates.
+ * Factory for {@link PerCustomSqlTemplatesTestTemplate}s.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
- * @param <C> the context type.
  * @since 3.0
- * Created: 2014/04/17 12:40
+ * Created: 2014/04/16 21:46
  */
 @ThreadSafe
-public class PerSqlTemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
-    extends TemplateWritingHandlerTemplate<C>
+public class PerCustomSqlTemplatesTestTemplateFactory
+    implements TemplatePackagingTemplateFactory<PerCustomSqlTemplatesTestTemplate, GlobalTemplateContext>,
+               Singleton
 {
     /**
-     * The serial version id.
+     * Singleton instance to avoid double-locking check.
      */
-    private static final long serialVersionUID = 9155822586951927678L;
-
-    /**
-     * Creates a new instance using given context.
-     * @param context the context.
-     */
-    public PerSqlTemplateWritingHandlerTemplate(@NotNull final C context)
+    protected static final class PerSqlTemplatesTestTemplateFactorySingletonContainer
     {
-        super(context);
+        /**
+         * The actual singleton.
+         */
+        public static final PerCustomSqlTemplatesTestTemplateFactory SINGLETON =
+            new PerCustomSqlTemplatesTestTemplateFactory();
     }
 
     /**
-     * Retrieves the template name.
-     * @return "PerSqlTemplateWritingHandler".
+     * Retrieves the singleton instance.
+     * @return such instance.
      */
     @NotNull
-    @Override
-    public String getTemplateName()
+    public static PerCustomSqlTemplatesTestTemplateFactory getInstance()
     {
-        return Literals.PER_SQL_TEMPLATE_WRITING_HANDLER;
+        return PerSqlTemplatesTestTemplateFactorySingletonContainer.SINGLETON;
+    }
+
+    /**
+     * Generates a template.
+     * @param context the context.
+     * @return such template.
+     */
+    @Nullable
+    @Override
+    public PerCustomSqlTemplatesTestTemplate createTemplate(@NotNull final GlobalTemplateContext context)
+    {
+        return new PerCustomSqlTemplatesTestTemplate(context);
     }
 }

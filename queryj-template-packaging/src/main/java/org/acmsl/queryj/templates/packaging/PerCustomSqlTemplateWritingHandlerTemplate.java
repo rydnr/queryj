@@ -1,5 +1,5 @@
 /*
-                        QueryJ Test
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,17 +23,18 @@
 
  ******************************************************************************
  *
- * Filename: SqlTestHelper.java
+ * Filename: PerCustomSqlTemplateWritingHandlerTemplate.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro
  *
- * Description: Helper class for per-SQL Cucumber tests.
+ * Description: Represents SQL-specific template writing handler
+ *              templates.
  *
  * Date: 2014/04/17
- * Time: 11:57
+ * Time: 12:40
  *
  */
-package org.acmsl.queryj.test;
+package org.acmsl.queryj.templates.packaging;
 
 /*
  * Importing JetBrains annotations.
@@ -46,34 +47,38 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Helper class for per-SQL Cucumber tests.
+ * Represents SQL-specific template writing handler templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @param <C> the context type.
  * @since 3.0
- * Created: 2014/04/17 11:57
+ * Created: 2014/04/17 12:40
  */
 @ThreadSafe
-public class SqlTestHelper
+public class PerCustomSqlTemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
+    extends TemplateWritingHandlerTemplate<C>
 {
+    /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 9155822586951927678L;
 
     /**
-     * Singleton implementation to avoid double-locking check.
+     * Creates a new instance using given context.
+     * @param context the context.
      */
-    protected static final class SqlTestHelperSingletonContainer
+    public PerCustomSqlTemplateWritingHandlerTemplate(@NotNull final C context)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final SqlTestHelper SINGLETON = new SqlTestHelper();
+        super(context);
     }
 
     /**
-     * Retrieves the singleton instance.
-     *
-     * @return such instance.
+     * Retrieves the template name.
+     * @return "PerSqlTemplateWritingHandler".
      */
     @NotNull
-    public static SqlTestHelper getInstance()
+    @Override
+    public String getTemplateName()
     {
-        return SqlTestHelperSingletonContainer.SINGLETON;
+        return Literals.PER_CUSTOM_SQL_TEMPLATE_WRITING_HANDLER;
     }
 }

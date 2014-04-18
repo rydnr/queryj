@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesTestTemplateBuildHandlerTest.java
+ * Filename: PerCustomSqlTemplatesTestTemplateBuildHandlerTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerSqlTemplatesTestTemplateBuildHandler.
+ * Description: Tests for PerCustomSqlTemplatesTestTemplateBuildHandler.
  *
  * Date: 2014/04/17
  * Time: 08:15
@@ -39,8 +39,8 @@ package org.acmsl.queryj.templates.packaging.handlers;
  * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.Literals;
-import org.acmsl.queryj.templates.packaging.PerSqlTemplatesTestTemplate;
-import org.acmsl.queryj.templates.packaging.PerSqlTemplatesTestTemplateFactory;
+import org.acmsl.queryj.templates.packaging.PerCustomSqlTemplatesTestTemplate;
+import org.acmsl.queryj.templates.packaging.PerCustomSqlTemplatesTestTemplateFactory;
 
 /*
  * Importing JetBrains annotations.
@@ -56,17 +56,17 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerSqlTemplatesTestTemplateBuildHandler}.
+ * Tests for {@link PerCustomSqlTemplatesTestTemplateBuildHandler}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/04/17 08:15
  */
 @RunWith(JUnit4.class)
-public class PerSqlTemplatesTestTemplateBuildHandlerTest
+public class PerCustomSqlTemplatesTestTemplateBuildHandlerTest
     extends AbstractTemplatesTestTemplateBuildHandlerTest
-                <PerSqlTemplatesTestTemplateBuildHandler,
-                    PerSqlTemplatesTestTemplate,
-                    PerSqlTemplatesTestTemplateFactory>
+                <PerCustomSqlTemplatesTestTemplateBuildHandler,
+                    PerCustomSqlTemplatesTestTemplate,
+                    PerCustomSqlTemplatesTestTemplateFactory>
 {
     /**
      * Creates a new build handler instance.
@@ -75,9 +75,9 @@ public class PerSqlTemplatesTestTemplateBuildHandlerTest
      */
     @Override
     @NotNull
-    protected PerSqlTemplatesTestTemplateBuildHandler createInstance()
+    protected PerCustomSqlTemplatesTestTemplateBuildHandler createInstance()
     {
-        return new PerSqlTemplatesTestTemplateBuildHandler();
+        return new PerCustomSqlTemplatesTestTemplateBuildHandler();
     }
 
     /**
@@ -86,9 +86,9 @@ public class PerSqlTemplatesTestTemplateBuildHandlerTest
      */
     @Override
     @NotNull
-    protected PerSqlTemplatesTestTemplate createTemplateMock()
+    protected PerCustomSqlTemplatesTestTemplate createTemplateMock()
     {
-        return EasyMock.createNiceMock(PerSqlTemplatesTestTemplate.class);
+        return EasyMock.createNiceMock(PerCustomSqlTemplatesTestTemplate.class);
     }
 
     /**
@@ -98,7 +98,7 @@ public class PerSqlTemplatesTestTemplateBuildHandlerTest
     @Test
     public void retrieveTemplateName_works()
     {
-        retrieveTemplateName_works(Literals.PER_SQL_TEMPLATES_TEST);
+        retrieveTemplateName_works(Literals.PER_CUSTOM_SQL_TEMPLATES_TEST);
     }
 
     /**
@@ -109,18 +109,18 @@ public class PerSqlTemplatesTestTemplateBuildHandlerTest
     public void storeTemplate_stores_the_templates_in_the_command()
     {
         storeTemplate_stores_the_templates_in_the_command(
-            PerSqlTemplatesTestTemplateBuildHandler.TEMPLATES_KEY);
+            PerCustomSqlTemplatesTestTemplateBuildHandler.TEMPLATES_KEY);
     }
 
     /**
      * Checks whether retrieveTemplateFactory() retrieves
-     * {@link org.acmsl.queryj.templates.packaging.PerSqlTemplatesTestTemplateFactory}.
+     * {@link org.acmsl.queryj.templates.packaging.PerCustomSqlTemplatesTestTemplateFactory}.
      */
     @Override
     @Test
     public void retrieveTemplateFactory_retrieves_the_correct_factory()
     {
         retrieveTemplateFactory_retrieves_the_correct_factory(
-            PerSqlTemplatesTestTemplateFactory.getInstance());
+            PerCustomSqlTemplatesTestTemplateFactory.getInstance());
     }
 }

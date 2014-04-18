@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesTestTemplateFactoryTest.java
+ * Filename: PerCustomSqlTemplatesFeatureTemplateTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerSqlTemplatesTestTemplateFactory.
+ * Description: Tests for PerCustomSqlTemplatesFeatureTemplate.
  *
  * Date: 2014/04/16
- * Time: 21:44
+ * Time: 11:52
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -44,32 +44,46 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing checkthread.org annotations.
  */
-import org.checkthread.annotations.ThreadSafe;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link PerSqlTemplatesTestTemplateFactory}.
+ * Tests for {@link PerCustomSqlTemplatesFeatureTemplate}
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/04/16 21:44
+ * Created: 2014/04/16 11:52
  */
 @RunWith(JUnit4.class)
-public class PerSqlTemplatesTestTemplateFactoryTest
+public class PerCustomSqlTemplatesFeatureTemplateTest
 {
     /**
-     * Tests whether createTemplate() creates a template.
+     * Checks the template name is correct.
      */
     @Test
-    public void createTemplate_creates_a_new_template()
+    public void templateName_is_correct()
     {
-        @NotNull final PerSqlTemplatesTestTemplateFactory instance =
-            PerSqlTemplatesTestTemplateFactory.getInstance();
-
         @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
 
-        Assert.assertNotNull(instance.createTemplate(context));
+        @NotNull final PerCustomSqlTemplatesFeatureTemplate instance =
+            new PerCustomSqlTemplatesFeatureTemplate(context);
+
+        Assert.assertEquals(Literals.PER_CUSTOM_SQL_TEMPLATES_FEATURE, instance.getTemplateName());
     }
+
+    /**
+     * Checks whether the group is found.
+     */
+    @Test
+    public void group_is_available()
+    {
+        @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
+
+        @NotNull final PerCustomSqlTemplatesFeatureTemplate instance =
+            new PerCustomSqlTemplatesFeatureTemplate(context);
+
+        Assert.assertNotNull(instance.retrieveGroup());
+    }
+
 }

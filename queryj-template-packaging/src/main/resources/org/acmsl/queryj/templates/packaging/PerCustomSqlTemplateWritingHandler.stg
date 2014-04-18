@@ -29,20 +29,20 @@
 //
 //***************************************************************************
 //
-// Filename: PerSqlTemplateWritingHandler.stg
+// Filename: PerCustomSqlTemplateWritingHandler.stg
 //
 // Author: Jose San Leandro Armendariz
 //
 // Description: Defines the rules to generate QueryJ's
-//              PerSqlTemplateWritingHandlers.
+//              PerCustomSqlTemplateWritingHandlers.
 //
-group PerSqlTemplateWritingHandler;
+group PerCustomSqlTemplateWritingHandler;
 
 import "common.stg"
 
 source(C) ::= <<
 <!
-  Generates a PerSqlTemplateWritingHandler source file.
+  Generates a PerCustomSqlTemplateWritingHandler source file.
   @param C the context.
 !>
 <sourceImpl(def=C.templateDef, C=C)>
@@ -50,7 +50,7 @@ source(C) ::= <<
 
 sourceImpl(def, C) ::= <<
 <!
-  Generates a PerSqlTemplateWritingHandler source file.
+  Generates a PerCustomSqlTemplateWritingHandler source file.
   @param def the template def.
   @param C the context.
 !>
@@ -58,7 +58,7 @@ sourceImpl(def, C) ::= <<
   description=[ "Writing handler for ", def.name.capitalized, "Templates." ],
   description_oneline=true,
   filename=C.class_name,
-  template="org/acmsl/queryj/templates/packaging/PerSqlTemplateWritingHandler.stg",
+  template="org/acmsl/queryj/templates/packaging/PerCustomSqlTemplateWritingHandler.stg",
    C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
 
@@ -103,7 +103,7 @@ class(def, C) ::= <<
 /**
  * Writing handler for {@link <def.name.noExtension>Template}s.
 <class_common_javadoc(
-  template="org/acmsl/templates/packaging/PerSqlTemplateWritingHandler.stg",
+  template="org/acmsl/templates/packaging/PerCustomSqlTemplateWritingHandler.stg",
   timestamp=C.timestamp,
   version=C.version)>
  */

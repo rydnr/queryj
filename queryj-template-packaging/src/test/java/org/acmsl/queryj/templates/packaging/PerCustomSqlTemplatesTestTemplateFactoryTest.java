@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplateFactoryTemplate.java
+ * Filename: PerCustomSqlTemplatesTestTemplateFactoryTest.java
  *
- * Author: Jose San Leandro
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Represents foreign key-specific template factory templates.
+ * Description: Tests for PerCustomSqlTemplatesTestTemplateFactory.
  *
- * Date: 2014/04/17
- * Time: 12:23
+ * Date: 2014/04/16
+ * Time: 21:44
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -38,46 +38,37 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
+import org.easymock.EasyMock;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
-import org.checkthread.annotations.ThreadSafe;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
- * Represents foreign key-specific template factory templates.
+ * Tests for {@link PerCustomSqlTemplatesTestTemplateFactory}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
- * @param <C> the context.
  * @since 3.0
- * Created: 2014/04/17 12:23
+ * Created: 2014/04/16 21:44
  */
-@ThreadSafe
-public class PerSqlTemplateFactoryTemplate<C extends TemplatePackagingContext>
-    extends TemplateFactoryTemplate<C>
+@RunWith(JUnit4.class)
+public class PerCustomSqlTemplatesTestTemplateFactoryTest
 {
     /**
-     * The serial version id.
+     * Tests whether createTemplate() creates a template.
      */
-    private static final long serialVersionUID = -4060477890430335951L;
-
-    /**
-     * Creates a new instance.
-     * @param context the template context.
-     */
-    public PerSqlTemplateFactoryTemplate(@NotNull final C context)
+    @Test
+    public void createTemplate_creates_a_new_template()
     {
-        super(context);
-    }
+        @NotNull final PerCustomSqlTemplatesTestTemplateFactory instance =
+            PerCustomSqlTemplatesTestTemplateFactory.getInstance();
 
-    /**
-     * Retrieves the template name.
-     * @return "PerSqlTemplateFactory".
-     */
-    @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return Literals.PER_SQL_TEMPLATE_FACTORY;
+        @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
+
+        Assert.assertNotNull(instance.createTemplate(context));
     }
 }

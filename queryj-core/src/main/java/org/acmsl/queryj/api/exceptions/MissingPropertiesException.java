@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,22 +23,18 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesFeatureTemplate.java
+ * Filename: MissingPropertiesException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Used to generate sources using PerSqlTemplatesFeature.stg.
+ * Description: Thrown whenever the list of properties in a per-custom result
+ *              context is lost somehow at runtime.
  *
- * Date: 2014/04/16
- * Time: 11:55
+ * Date: 2014/04/18
+ * Time: 14:06
  *
  */
-package org.acmsl.queryj.templates.packaging;
-
-/*
- * Importing JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
+package org.acmsl.queryj.api.exceptions;
 
 /*
  * Importing checkthread.org annotations.
@@ -46,37 +42,26 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Used to generate sources using PerSqlTemplatesFeature.stg.
+ * Thrown whenever the list of {@link org.acmsl.queryj.customsql.Property properties} in a
+ * per-custom result context is lost somehow at runtime.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/04/16 11:55
+ * Created: 2014/04/18 14:06
  */
 @ThreadSafe
-public class PerSqlTemplatesFeatureTemplate
-    extends AbstractTemplatePackagingTemplate<GlobalTemplateContext>
+public class MissingPropertiesException
+    extends QueryJNonCheckedException
 {
     /**
      * The serial version id.
      */
-    private static final long serialVersionUID = 185269394913835018L;
+    private static final long serialVersionUID = 1839016219904167370L;
 
     /**
-     * Creates a new {@code PerSqlTemplatesFeatureTemplate}.
-     * @param context the {@link GlobalTemplateContext context}.
+     * Creates a new instance.
      */
-    public PerSqlTemplatesFeatureTemplate(@NotNull final GlobalTemplateContext context)
+    public MissingPropertiesException()
     {
-        super(context);
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return "PerSqlTemplatesFeature".
-     */
-    @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return Literals.PER_SQL_TEMPLATES_FEATURE;
+        super("CustomResultProperties.not.available");
     }
 }

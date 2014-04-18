@@ -63,15 +63,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing chechthread.org annotations.
  */
-import java.util.List;
+import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Builds a per-repository template using database metadata.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
+@ThreadSafe
 public abstract class BasePerRepositoryTemplateBuildHandler
     <T extends AbstractBasePerRepositoryTemplate<C>,
      C extends PerRepositoryTemplateContext,
@@ -116,16 +117,10 @@ public abstract class BasePerRepositoryTemplateBuildHandler
 
         buildTemplate(
             parameters,
-            t_MetadataManager,
             retrieveCustomSqlProvider(parameters),
             retrieveTemplateFactory(),
             retrievePackage(t_MetadataManager.getEngine(), projectPackage, PackageUtils.getInstance()),
-            projectPackage,
             retrieveTableRepositoryName(parameters),
-            retrieveHeader(parameters),
-            retrieveImplementMarkerInterfaces(parameters),
-            retrieveJmx(parameters),
-            retrieveJNDILocation(parameters),
             CachingDecoratorFactory.getInstance());
 
         return false;
@@ -134,55 +129,30 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
      * @param packageName the package name.
-     * @param projectPackage the project package.
      * @param repository the repository.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker interfaces.
-     * @param jmx whether to support JMX or not.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     @SuppressWarnings("unchecked")
     protected void buildTemplate(
         @NotNull final QueryJCommand parameters,
-        @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
         @NotNull final String packageName,
-        @NotNull final String projectPackage,
         @NotNull final String repository,
-        @Nullable final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
         @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
     {
         if (isGenerationEnabled(customSqlProvider, parameters))
         {
-            @NotNull final List<String> t_lTableNames = metadataManager.getTableDAO().findAllTableNames();
-
             @Nullable final T t_Template =
                 createTemplate(
-                    metadataManager,
-                    customSqlProvider,
                     decoratorFactory,
                     templateFactory,
                     packageName,
-                    projectPackage,
                     repository,
-                    header,
-                    implementMarkerInterfaces,
-                    jmx,
-                    t_lTableNames,
-                    jndiLocation,
-                    retrieveDisableGenerationTimestamps(parameters),
-                    retrieveDisableNotNullAnnotations(parameters),
-                    retrieveDisableCheckthreadAnnotations(parameters),
                     parameters);
 
             if (t_Template != null)
@@ -207,59 +177,26 @@ public abstract class BasePerRepositoryTemplateBuildHandler
 
     /**
      * Uses the factory to create the template.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param templateFactory the template factory.
-     * @param projectPackage the base package.
      * @param packageName the package name.
      * @param repository the repository.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker interfaces.
-     * @param jmx whether to support JMX or not.
-     * @param tableNames the table names.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @return the template.
      */
-    @SuppressWarnings("unused")
     @Nullable
     protected T createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TF templateFactory,
         @NotNull final String packageName,
-        @NotNull final String projectPackage,
         @NotNull final String repository,
-        @Nullable final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
         @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         return
             templateFactory.createTemplate(
-                metadataManager,
-                customSqlProvider,
-                decoratorFactory,
-                packageName,
-                projectPackage,
                 repository,
-                header,
-                implementMarkerInterfaces,
-                jmx,
-                tableNames,
-                jndiLocation,
-                disableGenerationTimestamps,
-                disableNotNullAnnotations,
-                disableCheckthreadAnnotations);
+                packageName,
+                decoratorFactory,
+                parameters);
     }
 
     /**

@@ -36,9 +36,9 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -49,36 +49,28 @@ import org.acmsl.commons.patterns.Factory;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents entities able to create per-<i>custom sql</i> templates.
+ * @param <T> the template type.
+ * @param <C> the template context.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @since 2.0
  */
 public interface PerCustomSqlTemplateFactory<T extends PerCustomSqlTemplate<C>, C extends PerCustomSqlTemplateContext>
-    extends  Factory
+    extends Factory
 {
     /**
      * Creates a per-<i>custom sql</i> template.
      * @param sql the sql.
-     * @param customSqlProvider the custom sql provider.
-     * @param metadataManager the database metadata manager.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the file header.
+     * @param decoratorFactory the {@link DecoratorFactory}.
+     * @param command the {@link QueryJCommand}.
      */
     @NotNull
     public T createTemplate(
         @NotNull final Sql<String> sql,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @Nullable final String engineVersion,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @Nullable final String header);
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final QueryJCommand command);
 }

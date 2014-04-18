@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesTestTemplateFactory.java
+ * Filename: PerCustomSqlTemplateFactoryTemplate.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro
  *
- * Description: Factory for PerSqlTemplatesTestTemplates.
+ * Description: Represents SQL-specific template factory templates.
  *
- * Date: 2014/04/16
- * Time: 21:46
+ * Date: 2014/04/17
+ * Time: 12:23
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -38,57 +38,46 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * Factory for {@link PerSqlTemplatesTestTemplate}s.
+ * Represents SQL-specific template factory templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @param <C> the context.
  * @since 3.0
- * Created: 2014/04/16 21:46
+ * Created: 2014/04/17 12:23
  */
 @ThreadSafe
-public class PerSqlTemplatesTestTemplateFactory
-    implements TemplatePackagingTemplateFactory<PerSqlTemplatesTestTemplate, GlobalTemplateContext>,
-               Singleton
+public class PerCustomSqlTemplateFactoryTemplate<C extends TemplatePackagingContext>
+    extends TemplateFactoryTemplate<C>
 {
     /**
-     * Singleton instance to avoid double-locking check.
+     * The serial version id.
      */
-    protected static final class PerSqlTemplatesTestTemplateFactorySingletonContainer
+    private static final long serialVersionUID = -4060477890430335951L;
+
+    /**
+     * Creates a new instance.
+     * @param context the template context.
+     */
+    public PerCustomSqlTemplateFactoryTemplate(@NotNull final C context)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final PerSqlTemplatesTestTemplateFactory SINGLETON =
-            new PerSqlTemplatesTestTemplateFactory();
+        super(context);
     }
 
     /**
-     * Retrieves the singleton instance.
-     * @return such instance.
+     * Retrieves the template name.
+     * @return "PerSqlTemplateFactory".
      */
     @NotNull
-    public static PerSqlTemplatesTestTemplateFactory getInstance()
-    {
-        return PerSqlTemplatesTestTemplateFactorySingletonContainer.SINGLETON;
-    }
-
-    /**
-     * Generates a template.
-     * @param context the context.
-     * @return such template.
-     */
-    @Nullable
     @Override
-    public PerSqlTemplatesTestTemplate createTemplate(@NotNull final GlobalTemplateContext context)
+    public String getTemplateName()
     {
-        return new PerSqlTemplatesTestTemplate(context);
+        return Literals.PER_CUSTOM_SQL_TEMPLATE_FACTORY;
     }
 }

@@ -37,26 +37,32 @@ package org.acmsl.queryj.api.handlers;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseInformationException;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.PerCustomSqlTemplate;
+import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
+import org.acmsl.queryj.api.PerCustomSqlTemplateFactory;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
-import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseInformationException;
-import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.metadata.SqlDAO;
-import org.acmsl.queryj.api.PerCustomSqlTemplate;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.SqlElement;
+import org.acmsl.queryj.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.api.PerCustomSqlTemplateFactory;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /*
  * Importing some JDK classes.
@@ -68,9 +74,12 @@ import java.util.List;
 
 /**
  * Builds all templates to generate sources for each custom SQL.
+ * @param <T> the template type.
+ * @param <C> the template context type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @since 2.0
  */
-@SuppressWarnings("unused")
+@ThreadSafe
 public abstract class BasePerCustomSqlTemplateBuildHandler
     <T extends PerCustomSqlTemplate<C>, C extends PerCustomSqlTemplateContext>
     extends    AbstractQueryJCommandHandler
@@ -115,11 +124,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
     {
         try
         {
-            buildTemplates(
-                parameters,
-                metaData.getDatabaseProductName(),
-                retrieveDatabaseProductVersion(metaData),
-                fixQuote(metaData.getIdentifierQuoteString()));
+            buildTemplates(parameters, metaData.getDatabaseProductName());
         }
         catch  (@NotNull final SQLException sqlException)
         {
@@ -132,21 +137,15 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * Builds the templates.
      * @param parameters the parameters.
      * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
      */
     protected void buildTemplates(
         @NotNull final QueryJCommand parameters,
-        @NotNull final String engineName,
-        @Nullable final String engineVersion,
-        @NotNull final String quote)
+        @NotNull final String engineName)
       throws  QueryJBuildException
     {
         buildTemplates(
             parameters,
             engineName,
-            engineVersion,
-            quote,
             retrieveMetadataManager(parameters),
             retrieveCustomSqlProvider(parameters));
     }
@@ -155,16 +154,12 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * Builds the templates
      * @param parameters the parameters.
      * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom SQL provider.
      */
     protected void buildTemplates(
         @NotNull final QueryJCommand parameters,
         @NotNull final String engineName,
-        @Nullable final String engineVersion,
-        @NotNull final String quote,
         @Nullable final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider)
       throws  QueryJBuildException
@@ -174,16 +169,9 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
             buildTemplates(
                 parameters,
                 engineName,
-                engineVersion,
-                quote,
-                metadataManager,
-                customSqlProvider,
                 retrieveTemplateFactory(),
-                retrieveProjectPackage(parameters),
-                retrieveTableRepositoryName(parameters),
-                retrieveCustomSql(
-                    parameters, customSqlProvider, metadataManager),
-                retrieveHeader(parameters));
+                CachingDecoratorFactory.getInstance(),
+                retrieveCustomSql(parameters, customSqlProvider, metadataManager));
         }
     }
     
@@ -198,33 +186,19 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * Builds the templates.
      * @param parameters the parameters.
      * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
-     * @param projectPackage the project package.
-     * @param repository the repository.
+     * @param decoratorFactory the {@link DecoratorFactory}.
      * @param sqlElements the custom SQL elements.
-     * @param header the header.
      */
     protected void buildTemplates(
         @NotNull final QueryJCommand parameters,
         @NotNull final String engineName,
-        @Nullable final String engineVersion,
-        @NotNull final String quote,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final PerCustomSqlTemplateFactory<T, C> templateFactory,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final List<Sql<String>> sqlElements,
-        @Nullable final String header)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final List<Sql<String>> sqlElements)
       throws  QueryJBuildException
     {
         @NotNull final List<T> t_lTemplates = new ArrayList<>(sqlElements.size());
-
-        @Nullable final SqlElement<String> t_SqlElement = null;
 
         for (@Nullable final Sql<String> t_Sql : sqlElements)
         {
@@ -233,14 +207,9 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
                 t_lTemplates.add(
                     templateFactory.createTemplate(
                         t_Sql,
-                        customSqlProvider,
-                        metadataManager,
                         retrievePackage(t_Sql, engineName, parameters),
-                        engineName,
-                        engineVersion,
-                        projectPackage,
-                        repository,
-                        header));
+                        decoratorFactory,
+                        parameters));
             }
         }
 

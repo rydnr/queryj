@@ -29,27 +29,27 @@
 //
 //***************************************************************************
 //
-// Filename: PerSqlTemplatesFeature.stg
+// Filename: PerCustomSqlTemplatesFeature.stg
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate PerSqlTemplates.feature
+// Description: Defines the rules to generate PerCustomSqlTemplates.feature
 //              Cucumber tests
 //
-group PerSqlTemplatesFeature;
+group PerCustomSqlTemplatesFeature;
 
 import "common.stg"
 
 source(C) ::= <<
 <!
-  Generates PerSqlTemplates.feature files.
+  Generates PerCustomSqlTemplates.feature files.
 !>
 <sourceImpl(sql=C.sql, C=C)>
 >>
 
 sourceImpl(sql, C) ::= <<
 <!
-  Generates PerSqlTemplates.feature files.
+  Generates PerCustomSqlTemplates.feature files.
   @param sql the SQL.
   @param C the context.
 !>
@@ -57,11 +57,11 @@ Feature: Per-SQL templates
 
   Scenario Outline: Per-SQL templates compile for a type 1 table
 
-    Given the following query:
+    Given the following custom query:
       | id | name | dao | type | matches | value | validate |
       | <sql.id> | <sql.name> | <sql.dao>| <sql.type> | <sql.matches> | <sql.value> | <sql.validate> |
 
-    And the following query parameters:
+    And the following custom query parameters:
       | id | sql | index | type | name | validation-value |
       <sql.parameters:{p | <cucumber_parameter_specification(parameter=p)>}; separator="\n">
 

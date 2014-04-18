@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesTestTemplateBuildHandler.java
+ * Filename: PerCustomSqlTemplatesTestTemplateBuildHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Build handler for PerSqlTemplatesTestTemplates.
+ * Description: Build handler for PerCustomSqlTemplatesTestTemplates.
  *
  * Date: 2014/04/17
  * Time: 08:17
@@ -46,8 +46,8 @@ import org.acmsl.queryj.QueryJCommandWrapper;
  */
 import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.acmsl.queryj.templates.packaging.Literals;
-import org.acmsl.queryj.templates.packaging.PerSqlTemplatesTestTemplate;
-import org.acmsl.queryj.templates.packaging.PerSqlTemplatesTestTemplateFactory;
+import org.acmsl.queryj.templates.packaging.PerCustomSqlTemplatesTestTemplate;
+import org.acmsl.queryj.templates.packaging.PerCustomSqlTemplatesTestTemplateFactory;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 
 /*
@@ -66,16 +66,16 @@ import org.checkthread.annotations.ThreadSafe;
 import java.util.List;
 
 /**
- * Build handler for {@link PerSqlTemplatesTestTemplate}s.
+ * Build handler for {@link PerCustomSqlTemplatesTestTemplate}s.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/04/17 08:17
  */
 @ThreadSafe
-public class PerSqlTemplatesTestTemplateBuildHandler
+public class PerCustomSqlTemplatesTestTemplateBuildHandler
     extends TemplatePackagingTestBuildHandler
-                <PerSqlTemplatesTestTemplate,
-                    PerSqlTemplatesTestTemplateFactory,
+                <PerCustomSqlTemplatesTestTemplate,
+                    PerCustomSqlTemplatesTestTemplateFactory,
                     GlobalTemplateContext>
 {
     /**
@@ -84,19 +84,19 @@ public class PerSqlTemplatesTestTemplateBuildHandler
     @NotNull static final String TEMPLATES_KEY = "PerSqlTemplatesTest_templates";
 
     /**
-     * Creates a {@code PerSqlTemplatesTestTemplateBuildHandler}.
+     * Creates a {@code PerCustomSqlTemplatesTestTemplateBuildHandler}.
      */
-    public PerSqlTemplatesTestTemplateBuildHandler() {}
+    public PerCustomSqlTemplatesTestTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.
-     * @return the {@link PerSqlTemplatesTestTemplateFactory} instance.
+     * @return the {@link PerCustomSqlTemplatesTestTemplateFactory} instance.
      */
     @Override
     @NotNull
-    protected PerSqlTemplatesTestTemplateFactory retrieveTemplateFactory()
+    protected PerCustomSqlTemplatesTestTemplateFactory retrieveTemplateFactory()
     {
-        return PerSqlTemplatesTestTemplateFactory.getInstance();
+        return PerCustomSqlTemplatesTestTemplateFactory.getInstance();
     }
 
     /**
@@ -134,7 +134,7 @@ public class PerSqlTemplatesTestTemplateBuildHandler
     @Override
     protected String retrieveTemplateName(@NotNull final QueryJCommand parameters)
     {
-        return Literals.PER_SQL_TEMPLATES_TEST;
+        return Literals.PER_CUSTOM_SQL_TEMPLATES_TEST;
     }
 
     /**
@@ -142,10 +142,10 @@ public class PerSqlTemplatesTestTemplateBuildHandler
      */
     @Override
     protected void storeTemplate(
-        @NotNull final PerSqlTemplatesTestTemplate template,
+        @NotNull final PerCustomSqlTemplatesTestTemplate template,
         @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper<PerSqlTemplatesTestTemplate>(parameters)
+        new QueryJCommandWrapper<PerCustomSqlTemplatesTestTemplate>(parameters)
             .setSetting(TEMPLATES_KEY, template);
     }
 }

@@ -23,14 +23,13 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesTestTemplate.java
+ * Filename: PerCustomSqlTemplateWritingHandlerTemplateTest.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro
  *
- * Description: Used to generate sources using PerSqlTemplatesTest.stg.
+ * Description: Tests for PerCustomSqlTemplateWritingHandlerTemplate.
  *
- * Date: 2014/04/16
- * Time: 21:03
+ * Created: 2014/04/17 12:39
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -41,42 +40,35 @@ package org.acmsl.queryj.templates.packaging;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JUnit/EasyMock classes.
  */
-import org.checkthread.annotations.ThreadSafe;
+import org.easymock.EasyMock;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
- * Used to generate sources using PerSqlTemplatesTest.stg.
+ * Tests for {@link PerCustomSqlTemplateWritingHandlerTemplate}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/04/16 21:03
+ * Created 2014/04/17 12:39
  */
-@ThreadSafe
-public class PerSqlTemplatesTestTemplate
-    extends AbstractTemplatePackagingTemplate<GlobalTemplateContext>
+@RunWith(JUnit4.class)
+public class PerCustomSqlTemplateWritingHandlerTemplateTest
 {
     /**
-     * The serial version id.
+     * Checks whether getTemplateName() returns the correct template name.
      */
-    private static final long serialVersionUID = 7595860163174134085L;
-
-    /**
-     * Builds a PerSqlTemplatesTest using given context.
-     * @param context the {@link GlobalTemplateContext}.
-     */
-    public PerSqlTemplatesTestTemplate(@NotNull final GlobalTemplateContext context)
+    @Test
+    public void getTemplateName_returns_the_correct_template_name()
     {
-        super(context);
-    }
+        @NotNull final DefaultTemplatePackagingContext context =
+            EasyMock.createNiceMock(DefaultTemplatePackagingContext.class);
 
-    /**
-     * Retrieves the template name.
-     * @return "PerSqlTemplatesTest";
-     */
-    @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return Literals.PER_SQL_TEMPLATES_TEST;
+        @NotNull final PerCustomSqlTemplateWritingHandlerTemplate instance =
+            new PerCustomSqlTemplateWritingHandlerTemplate<>(context);
+
+        Assert.assertEquals(Literals.PER_CUSTOM_SQL_TEMPLATE_WRITING_HANDLER, instance.getTemplateName());
     }
 }

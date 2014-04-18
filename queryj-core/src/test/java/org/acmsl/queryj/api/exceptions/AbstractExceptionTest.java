@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,17 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: PerSqlTemplatesTestTemplateTest.java
+ * Filename: AbstractExceptionTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for PerSqlTemplatesTestTemplate.
+ * Description: Common tests for all exceptions.
  *
- * Date: 2014/04/16
- * Time: 20:59
+ * Date: 2014/04/18
+ * Time: 13:56
  *
  */
-package org.acmsl.queryj.templates.packaging;
+package org.acmsl.queryj.api.exceptions;
 
 /*
  * Importing JetBrains annotations.
@@ -41,35 +41,50 @@ package org.acmsl.queryj.templates.packaging;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing JUnit/EasyMock classes.
+ * Importing checkthread.org annotations.
  */
-import org.easymock.EasyMock;
-import org.junit.Assert;
+import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JUnit classes.
+ */
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.Arrays;
+import java.util.Locale;
 
 /**
- * Tests for {@link PerSqlTemplatesTestTemplate}.
+ * Common tests for all exceptions.
+ * @param <E> the exception type.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/04/16 20:59
+ * Created: 2014/04/18 13:56
  */
-@RunWith(JUnit4.class)
-public class PerSqlTemplatesTestTemplateTest
+@ThreadSafe
+public abstract class AbstractExceptionTest<E extends QueryJNonCheckedException>
 {
     /**
-     * Checks the template name is correct.
+     * Tests the message key is defined for Spanish and English.
      */
     @Test
-    public void templateName_is_correct()
+    public void exception_message_is_defined_in_Spanish_and_English()
     {
-        @NotNull final GlobalTemplateContext context = EasyMock.createNiceMock(GlobalTemplateContext.class);
+        @NotNull final E instance = createInstance();
 
-        @NotNull final PerSqlTemplatesTestTemplate instance =
-            new PerSqlTemplatesTestTemplate(context);
-
-        Assert.assertEquals(Literals.PER_SQL_TEMPLATES_TEST, instance.getTemplateName());
+        for (@NotNull final Locale t_Locale : Arrays.asList(new Locale("en"), new Locale("es")))
+        {
+            // throws a MissingResourceException if the key is not declared.
+            instance.getMessage(t_Locale);
+        }
     }
 
+    /**
+     * Creates a new exception.
+     * @return such instance.
+     */
+    @NotNull
+    protected abstract E createInstance();
 }
