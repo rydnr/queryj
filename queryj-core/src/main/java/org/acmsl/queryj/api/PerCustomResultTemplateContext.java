@@ -49,6 +49,7 @@ import org.acmsl.queryj.customsql.Result;
 /*
  * Importing some Apache Commons Lang builder classes.
  */
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -84,22 +85,21 @@ public class PerCustomResultTemplateContext
 
     /**
      * Creates a {@link PerCustomResultTemplateContext} with given information.
-     * @param fileName the file name.
      * @param packageName the package name.
      * @param result the {@link Result} instance.
      * @param properties the properties.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param command the command.
      */
     public PerCustomResultTemplateContext(
-        @NotNull final String fileName,
         @NotNull final String packageName,
         @NotNull final Result<String> result,
         @NotNull final List<Property<String>> properties,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final QueryJCommand command)
     {
-        super(result.getId(), command);
+        super(result.getId(), decoratorFactory, command);
 
-        immutableSetValue(buildFileNameKey(), fileName, command);
         immutableSetValue(buildPackageNameKey(), packageName, command);
         immutableSetValue(buildResultKey(), result, command);
         immutableSetValue(buildPropertiesKey(), properties, command);

@@ -41,6 +41,7 @@ package org.acmsl.queryj.api;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.ForeignKeyNotAvailableException;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
 /*
@@ -75,20 +76,19 @@ public class PerForeignKeyTemplateContext
 
     /**
      * Creates a {@link PerForeignKeyTemplateContext} with given information.
-     * @param fileName the file name.
      * @param packageName the package name.
      * @param foreignKey the {@link ForeignKey} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param command the {@link QueryJCommand} instance.
      */
     public PerForeignKeyTemplateContext(
-        @NotNull final String fileName,
         @NotNull final String packageName,
         @NotNull final ForeignKey<String> foreignKey,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final QueryJCommand command)
     {
-        super("fk" + foreignKey.getFkName(), command);
+        super("fk" + foreignKey.getFkName(), decoratorFactory, command);
 
-        immutableSetValue(buildFileNameKey(), fileName, command);
         immutableSetValue(buildPackageNameKey(), packageName, command);
         immutableSetValue(buildForeignKeyKey(), foreignKey, command);
     }

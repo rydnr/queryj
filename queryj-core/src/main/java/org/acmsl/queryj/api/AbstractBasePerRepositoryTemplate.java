@@ -58,6 +58,11 @@ public abstract class AbstractBasePerRepositoryTemplate<C extends PerRepositoryT
     implements PerRepositoryTemplate<C>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 5710204685901261111L;
+
+    /**
      * Builds a <code>PerRepositoryTemplate</code> using given
      * information.
      * @param context the {@link PerRepositoryTemplateContext} instance.

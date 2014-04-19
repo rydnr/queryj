@@ -43,7 +43,6 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.BasePackageNameNotAvailableException;
-import org.acmsl.queryj.api.exceptions.DecoratorFactoryNotAvailableException;
 import org.acmsl.queryj.api.exceptions.JndiLocationNotAvailableException;
 import org.acmsl.queryj.api.exceptions.RepositoryNameNotAvailableException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
@@ -84,13 +83,22 @@ public abstract class AbstractQueryJTemplateContext
     implements QueryJTemplateContext
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -3671360539593632338L;
+
+    /**
      * Creates an {@link AbstractTemplateContext} with given information.
      * @param pk the pk.
+     * @param decoratorFactory the {@link DecoratorFactory}.
      * @param command the {@link org.acmsl.queryj.QueryJCommand} instance.
      */
-    protected AbstractQueryJTemplateContext(@NotNull final String pk, @NotNull final QueryJCommand command)
+    protected AbstractQueryJTemplateContext(
+        @NotNull final String pk,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final QueryJCommand command)
     {
-        super(pk, command);
+        super(pk, decoratorFactory, command);
     }
 
     /**
@@ -155,27 +163,6 @@ public abstract class AbstractQueryJTemplateContext
     protected String getHeader(@NotNull final QueryJCommand command)
     {
         return new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.HEADER_FILE);
-    }
-
-    /**
-     * Retrieves the {@link org.acmsl.queryj.metadata.DecoratorFactory} instance.
-     * @return such instance.
-     */
-    @Override
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return getValue(buildDecoratorFactoryKey(), getCommand(), new DecoratorFactoryNotAvailableException());
-    }
-
-    /**
-     * Retrieves the {@link DecoratorFactory} instance.
-     * @return such instance.
-     */
-    @NotNull
-    protected String buildDecoratorFactoryKey()
-    {
-        return DecoratorFactory.class.getName();
     }
 
     /**

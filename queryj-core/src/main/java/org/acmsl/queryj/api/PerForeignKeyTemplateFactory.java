@@ -37,6 +37,7 @@ package org.acmsl.queryj.api;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
 /*
@@ -63,12 +64,14 @@ public interface PerForeignKeyTemplateFactory
      * Creates a per-<i>foreign key</i> template.
      * @param packageName the package name.
      * @param foreignKey the foreign key.
+     * @param decoratorFactory the {@link DecoratorFactory}.
      * @param command the {@link QueryJCommand} instance.
      * @return the new template.
      */
     @NotNull
     T createTemplate(
-        @NotNull final String packageName,
         @NotNull final ForeignKey<String> foreignKey,
+        @NotNull final String packageName,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final QueryJCommand command);
 }

@@ -62,6 +62,11 @@ public abstract class AbstractBasePerCustomResultTemplate<C extends PerCustomRes
     implements PerCustomResultTemplate<C>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -99725148750022562L;
+
+    /**
      * Builds a <code>AbstractBasePerCustomResultTemplate</code> using
      * given information.
      */

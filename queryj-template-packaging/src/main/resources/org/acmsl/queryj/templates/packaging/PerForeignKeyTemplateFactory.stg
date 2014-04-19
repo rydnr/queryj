@@ -141,25 +141,28 @@ public class <C.class_name>
     @Override
     @NotNull
     public <def.name.noExtension>Template createTemplate(
-        @NotNull final String packageName,
         @NotNull final ForeignKey\<String> foreignKey,
+        @NotNull final String packageName,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final QueryJCommand command)
     {
-        return createTemplate(packageName, foreignKey, command, QueryJCommandUtils.getInstance());
+        return createTemplate(foreignKey, packageName, decoratorFactory, command, QueryJCommandUtils.getInstance());
     }
 
     /**
      * Creates a per-\<i>foreign key\</i> template.
-     * @param packageName the package name.
      * @param foreignKey the foreign key.
+     * @param packageName the package name.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param command the {@link QueryJCommand} instance.
      * @param queryJCommandUtils the {@link QueryJCommandUtils} instance.
      * @return the new template.
      */
     @NotNull
     protected <def.name.noExtension>Template createTemplate(
-        @NotNull final String packageName,
         @NotNull final ForeignKey\<String> foreignKey,
+        @NotNull final String packageName,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final QueryJCommand command,
         @NotNull final QueryJCommandUtils queryJCommandUtils)
     {
@@ -168,8 +171,9 @@ public class <C.class_name>
                 retrieveTemplateFileName(
                     foreignKey.getSourceTableName(),
                     queryJCommandUtils.retrieveMetadataManager(command)),
-                packageName,
                 foreignKey,
+                packageName,
+                decoratorFactory,
                 command);
 
         return new <def.name.noExtension>Template(t_Context);

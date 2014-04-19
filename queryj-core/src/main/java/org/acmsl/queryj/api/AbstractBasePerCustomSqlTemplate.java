@@ -63,6 +63,11 @@ public abstract class AbstractBasePerCustomSqlTemplate<C extends PerCustomSqlTem
     implements PerCustomSqlTemplate<C>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -6186058337317961956L;
+
+    /**
      * Builds a <code>AbstractBasePerCustomSqlTemplate</code> using
      * given context.
      * @param context the {@link PerCustomSqlTemplateContext} instance.

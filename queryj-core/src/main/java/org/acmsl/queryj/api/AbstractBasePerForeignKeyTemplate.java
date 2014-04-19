@@ -72,6 +72,11 @@ public abstract class AbstractBasePerForeignKeyTemplate<C extends PerForeignKeyT
     implements PerForeignKeyTemplate<C>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 1563076773989211806L;
+
+    /**
      * Builds a <code>AbstractBasePerForeignKeyTemplate</code> using
      * given information.
      * @param context the {@link PerForeignKeyTemplateContext} instance.

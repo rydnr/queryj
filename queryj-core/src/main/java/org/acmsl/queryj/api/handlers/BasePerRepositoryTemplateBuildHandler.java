@@ -63,14 +63,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing chechthread.org annotations.
+ * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Builds a per-repository template using database metadata.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 2.0
+ * @param <T> the template class.
+ * @param <C> the template context class.
+ * @param <TF> the template factory class.
  */
 @ThreadSafe
 public abstract class BasePerRepositoryTemplateBuildHandler
@@ -164,6 +167,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
 
     /**
      * Checks whether template generation is enabled for this kind of template.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param parameters the command.
      * @return <code>true</code> in such case.
      */
     @SuppressWarnings("unchecked")
@@ -177,9 +182,11 @@ public abstract class BasePerRepositoryTemplateBuildHandler
 
     /**
      * Uses the factory to create the template.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param templateFactory the template factory.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param parameters the command.
      * @return the template.
      */
     @Nullable

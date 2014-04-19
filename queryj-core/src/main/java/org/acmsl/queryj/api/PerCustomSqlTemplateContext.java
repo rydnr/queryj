@@ -115,7 +115,8 @@ public class PerCustomSqlTemplateContext
         @NotNull final String fileName,
         @NotNull final Sql<String> sql)
     {
-        super(null, null);
+        // TODO
+        super(null, null, null);
 
         immutableSetSql(sql);
     }
@@ -159,12 +160,18 @@ public class PerCustomSqlTemplateContext
         return getSql().getId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
         return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.m__Sql).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj)
     {
@@ -180,6 +187,9 @@ public class PerCustomSqlTemplateContext
         return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.m__Sql, other.m__Sql).isEquals();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

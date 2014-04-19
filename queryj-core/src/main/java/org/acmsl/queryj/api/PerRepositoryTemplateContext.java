@@ -68,7 +68,8 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Context used by per-repository templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/20
+ * @since 2.0
+ * Created: 2012/05/20
  */
 @ThreadSafe
 public class PerRepositoryTemplateContext
@@ -118,7 +119,8 @@ public class PerRepositoryTemplateContext
         final boolean disableCheckthreadAnnotations,
         @NotNull final String fileName)
     {
-        super(null, null);
+        // TODO
+        super(null, null, null);
 
         immutableSetTableNames(tableNames);
     }

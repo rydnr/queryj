@@ -35,6 +35,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
@@ -44,6 +45,7 @@ import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.acmsl.queryj.api.exceptions.RootDirNotAvailableException;
 import org.acmsl.queryj.api.exceptions.TemplateNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.VersionNotAvailableException;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.exceptions.MissingOutputDirAtRuntimeException;
 
 /*
@@ -89,7 +91,7 @@ public abstract class AbstractTemplateContext
     /**
      * The package name key.
      */
-    public static final String PACKAGE_NAME = "packageName";
+    public static final String PACKAGE_NAME = Literals.PACKAGE_NAME;
 
     /**
      * The command.
@@ -102,12 +104,23 @@ public abstract class AbstractTemplateContext
     private String m__Pk;
 
     /**
+     * The decorator factory.
+     */
+    private DecoratorFactory m__DecoratorFactory;
+
+    /**
      * Creates an {@link AbstractTemplateContext} with given information.
+     * @param pk something unique to the template.
+     * @param decoratorFactory the {@link DecoratorFactory} instance..
      * @param command the {@link org.acmsl.queryj.QueryJCommand} instance.
      */
-    protected AbstractTemplateContext(@NotNull final String pk, @NotNull final QueryJCommand command)
+    protected AbstractTemplateContext(
+        @NotNull final String pk,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final QueryJCommand command)
     {
         immutableSetPk(pk);
+        immutableSetDecoratorFactory(decoratorFactory);
         immutableSetCommand(command);
     }
 
@@ -138,6 +151,35 @@ public abstract class AbstractTemplateContext
     protected String getPk()
     {
         return this.m__Pk;
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     */
+    protected final void immutableSetDecoratorFactory(@NotNull final DecoratorFactory decoratorFactory)
+    {
+        this.m__DecoratorFactory = decoratorFactory;
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     */
+    @SuppressWarnings("unused")
+    protected void setDecoratorFactory(@NotNull final DecoratorFactory decoratorFactory)
+    {
+        immutableSetDecoratorFactory(decoratorFactory);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return the {@link DecoratorFactory} instance.
+     */
+    @NotNull
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return this.m__DecoratorFactory;
     }
 
     /**
@@ -353,6 +395,7 @@ public abstract class AbstractTemplateContext
      * Retrieves the package name.
      * @return such information.
      */
+    @Override
     @NotNull
     public String getPackageName()
     {
@@ -366,7 +409,7 @@ public abstract class AbstractTemplateContext
     @NotNull
     protected String buildPackageNameKey()
     {
-        return "packageName";
+        return PACKAGE_NAME;
     }
 
     /**
@@ -440,6 +483,7 @@ public abstract class AbstractTemplateContext
             new HashCodeBuilder()
                 .append(AbstractTemplateContext.class.getName())
                 .append(this.m__Pk)
+                .append(this.m__DecoratorFactory)
                 .append(this.m__Command)
                 .toHashCode();
     }
@@ -463,6 +507,7 @@ public abstract class AbstractTemplateContext
         return
             new EqualsBuilder()
                 .append(this.m__Pk, other.m__Pk)
+                .append(this.m__DecoratorFactory, other.m__DecoratorFactory)
                 .append(this.m__Command, other.m__Command)
                 .isEquals();
     }
@@ -476,9 +521,10 @@ public abstract class AbstractTemplateContext
     {
         return
               "{ \"class\": \"" + AbstractTemplateContext.class.getSimpleName() + '"'
-            + ", \"package\": \"org.acmsl.queryj.api\""
             + ", \"pk\": \"" + m__Pk + '"'
+            + ", \"decoratorFactory\": " + m__DecoratorFactory
             + ", \"command\": " + m__Command
+            + ", \"package\": \"org.acmsl.queryj.api\""
             + " }";
     }
 }
