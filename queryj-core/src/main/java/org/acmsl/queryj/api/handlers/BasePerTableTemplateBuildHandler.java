@@ -42,7 +42,6 @@ import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.api.PerTableTemplate;
 import org.acmsl.queryj.api.PerTableTemplateFactory;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.engines.Engine;
@@ -51,7 +50,6 @@ import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.api.dao.DAOTemplateUtils;
 import org.acmsl.queryj.api.MetaLanguageUtils;
 
 /*
@@ -92,7 +90,7 @@ public abstract class BasePerTableTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
-     * Creates a {@link BasePerTableTemplateBuildHandler} instance.
+     * Creates a {@code BasePerTableTemplateBuildHandler} instance.
      */
     protected BasePerTableTemplateBuildHandler() {}
 
@@ -129,8 +127,7 @@ public abstract class BasePerTableTemplateBuildHandler
             parameters,
             metadataManager,
             retrieveTemplateFactory(),
-            tableDAO.findAllTables(),
-            CachingDecoratorFactory.getInstance());
+            tableDAO.findAllTables());
     }
 
     /**
@@ -145,15 +142,13 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param metadataManager the database metadata manager.
      * @param templateFactory the template factory.
      * @param tables the tables.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     @SuppressWarnings("unchecked")
     protected void buildTemplate(
         @NotNull final QueryJCommand parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final TF templateFactory,
-        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables)
       throws  QueryJBuildException
     {
         @NotNull final List<T> t_lTemplates = new ArrayList<>();
@@ -197,9 +192,10 @@ public abstract class BasePerTableTemplateBuildHandler
                     t_Template =
                         createTemplate(
                             templateFactory,
-                            decoratorFactory,
+                            /*
                             retrievePackage(
                                 t_Table.getName(), metadataManager.getEngine(), parameters),
+                            */
                             t_Table.getName(),
                             t_lStaticContent,
                             parameters);
@@ -262,8 +258,6 @@ public abstract class BasePerTableTemplateBuildHandler
     /**
      * Creates a template with required information.
      * @param templateFactory the {@link org.acmsl.queryj.api.PerTableTemplateFactory} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
      * @param tableName the table name.
      * @param staticContents the table's static contents (optional).
      * @param parameters the parameter map.
@@ -272,20 +266,12 @@ public abstract class BasePerTableTemplateBuildHandler
     @Nullable
     protected T createTemplate(
         @NotNull final TF templateFactory,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
         @NotNull final String tableName,
         @NotNull final List<Row<String>> staticContents,
         @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
-        return
-            templateFactory.createTemplate(
-                parameters,
-                decoratorFactory,
-                packageName,
-                tableName,
-                staticContents);
+        return templateFactory.createTemplate(tableName, staticContents, parameters);
     }
 
     /**

@@ -36,6 +36,7 @@ package org.acmsl.queryj.api;
 /**
  * Identifies all test templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <T> the template context type.
  */
 @SuppressWarnings("unused")
 public interface TestTemplate<T extends TemplateContext>

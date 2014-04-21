@@ -39,6 +39,7 @@ import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
+import org.acmsl.queryj.api.exceptions.DecoratorFactoryNotAvailableException;
 import org.acmsl.queryj.api.exceptions.FileNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
@@ -104,23 +105,13 @@ public abstract class AbstractTemplateContext
     private String m__Pk;
 
     /**
-     * The decorator factory.
-     */
-    private DecoratorFactory m__DecoratorFactory;
-
-    /**
      * Creates an {@link AbstractTemplateContext} with given information.
      * @param pk something unique to the template.
-     * @param decoratorFactory the {@link DecoratorFactory} instance..
      * @param command the {@link org.acmsl.queryj.QueryJCommand} instance.
      */
-    protected AbstractTemplateContext(
-        @NotNull final String pk,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final QueryJCommand command)
+    protected AbstractTemplateContext(@NotNull final String pk, @NotNull final QueryJCommand command)
     {
         immutableSetPk(pk);
-        immutableSetDecoratorFactory(decoratorFactory);
         immutableSetCommand(command);
     }
 
@@ -151,35 +142,6 @@ public abstract class AbstractTemplateContext
     protected String getPk()
     {
         return this.m__Pk;
-    }
-
-    /**
-     * Specifies the decorator factory.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     */
-    protected final void immutableSetDecoratorFactory(@NotNull final DecoratorFactory decoratorFactory)
-    {
-        this.m__DecoratorFactory = decoratorFactory;
-    }
-
-    /**
-     * Specifies the decorator factory.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     */
-    @SuppressWarnings("unused")
-    protected void setDecoratorFactory(@NotNull final DecoratorFactory decoratorFactory)
-    {
-        immutableSetDecoratorFactory(decoratorFactory);
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return the {@link DecoratorFactory} instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return this.m__DecoratorFactory;
     }
 
     /**
@@ -356,6 +318,7 @@ public abstract class AbstractTemplateContext
      * @return such information.
      */
     @NotNull
+    @Override
     public String getTemplateName()
     {
         return getValue(buildTemplateNameKey(), getCommand(), new TemplateNameNotAvailableException());
@@ -363,12 +326,12 @@ public abstract class AbstractTemplateContext
 
     /**
      * Builds the template name key.
-     * @return such information.
+     * @return "templateName".
      */
     @NotNull
     protected String buildTemplateNameKey()
     {
-        return "templateName";
+        return Literals.TEMPLATE_NAME;
     }
 
     /**
@@ -376,6 +339,7 @@ public abstract class AbstractTemplateContext
      * @return such information.
      */
     @NotNull
+    @Override
     public String getFileName()
     {
         return getValue(buildFileNameKey(), getCommand(), new FileNameNotAvailableException());
@@ -383,12 +347,12 @@ public abstract class AbstractTemplateContext
 
     /**
      * Builds a file name key.
-     * @return such key.
+     * @return "fileName".
      */
     @NotNull
     protected String buildFileNameKey()
     {
-        return "fileName";
+        return Literals.FILE_NAME;
     }
 
     /**
@@ -473,6 +437,27 @@ public abstract class AbstractTemplateContext
         return QueryJSettings.VERSION;
     }
 
+
+    /**
+     * Retrieves the {@link DecoratorFactory} instance.
+     * @return such instance.
+     */
+    @NotNull
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return getValue(buildDecoratorFactoryKey(), getCommand(), new DecoratorFactoryNotAvailableException());
+    }
+
+    /**
+     * Retrieves the key to retrieve the {@link DecoratorFactory} from the command.
+     * @return such key.
+     */
+    @NotNull
+    protected String buildDecoratorFactoryKey()
+    {
+        return DecoratorFactory.class.getName();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -483,7 +468,6 @@ public abstract class AbstractTemplateContext
             new HashCodeBuilder()
                 .append(AbstractTemplateContext.class.getName())
                 .append(this.m__Pk)
-                .append(this.m__DecoratorFactory)
                 .append(this.m__Command)
                 .toHashCode();
     }
@@ -507,7 +491,6 @@ public abstract class AbstractTemplateContext
         return
             new EqualsBuilder()
                 .append(this.m__Pk, other.m__Pk)
-                .append(this.m__DecoratorFactory, other.m__DecoratorFactory)
                 .append(this.m__Command, other.m__Command)
                 .isEquals();
     }
@@ -522,7 +505,6 @@ public abstract class AbstractTemplateContext
         return
               "{ \"class\": \"" + AbstractTemplateContext.class.getSimpleName() + '"'
             + ", \"pk\": \"" + m__Pk + '"'
-            + ", \"decoratorFactory\": " + m__DecoratorFactory
             + ", \"command\": " + m__Command
             + ", \"package\": \"org.acmsl.queryj.api\""
             + " }";

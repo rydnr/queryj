@@ -41,7 +41,6 @@ package org.acmsl.queryj.api;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.ForeignKeyNotAvailableException;
-import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
 /*
@@ -75,21 +74,16 @@ public class PerForeignKeyTemplateContext
     private static final long serialVersionUID = 1350908613901423440L;
 
     /**
-     * Creates a {@link PerForeignKeyTemplateContext} with given information.
-     * @param packageName the package name.
+     * Creates a {@code PerForeignKeyTemplateContext} with given information.
      * @param foreignKey the {@link ForeignKey} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param command the {@link QueryJCommand} instance.
      */
     public PerForeignKeyTemplateContext(
-        @NotNull final String packageName,
         @NotNull final ForeignKey<String> foreignKey,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final QueryJCommand command)
     {
-        super("fk" + foreignKey.getFkName(), decoratorFactory, command);
+        super("fk" + foreignKey.getFkName(), command);
 
-        immutableSetValue(buildPackageNameKey(), packageName, command);
         immutableSetValue(buildForeignKeyKey(), foreignKey, command);
     }
 

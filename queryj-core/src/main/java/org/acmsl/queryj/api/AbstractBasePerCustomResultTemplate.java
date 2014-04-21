@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -35,7 +35,7 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing some project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.exceptions.InvalidPerCustomResultTemplateException;
@@ -55,6 +55,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Logic-less container for all templates to be processed once per custom result.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <C> the template context type.
+ * @since 2.0
  */
 @SuppressWarnings("unused")
 public abstract class AbstractBasePerCustomResultTemplate<C extends PerCustomResultTemplateContext>
@@ -69,6 +71,7 @@ public abstract class AbstractBasePerCustomResultTemplate<C extends PerCustomRes
     /**
      * Builds a <code>AbstractBasePerCustomResultTemplate</code> using
      * given information.
+     * @param context the context.
      */
     @SuppressWarnings("unused")
     public AbstractBasePerCustomResultTemplate(@NotNull final C context)

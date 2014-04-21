@@ -363,12 +363,7 @@ public class PerCustomResultTemplatesTest
                         resolvePackage(PACKAGE_MAPPINGS.get(templateName), result.getId(), resolveEngine(engine));
 
                     @Nullable final PerCustomResultTemplate\<PerCustomResultTemplateContext> template =
-                        templateFactory.createTemplate(
-                            t_Command,
-                            decoratorFactory,
-                            packageName,
-                            result,
-                            properties);
+                        templateFactory.createTemplate(result, properties, t_Command);
 
                     Assert.assertNotNull("No template found for " + templateName, template);
 

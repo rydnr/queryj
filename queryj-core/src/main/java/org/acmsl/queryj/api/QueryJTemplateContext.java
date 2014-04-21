@@ -79,13 +79,6 @@ public interface QueryJTemplateContext
     String getHeader();
 
     /**
-     * Retrieves the {@link DecoratorFactory} instance.
-     * @return such instance.
-     */
-    @NotNull
-    DecoratorFactory getDecoratorFactory();
-
-    /**
      * Retrieves the package name.
      * @return such information.
      */

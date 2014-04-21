@@ -33,9 +33,13 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.Literals;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +53,7 @@ import java.util.Map;
  * Represents generic templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 2.0
+ * @param <C> the template context.
  */
 public abstract class AbstractQueryJTemplate<C extends QueryJTemplateContext>
     extends AbstractTemplate<C>
@@ -56,6 +61,9 @@ public abstract class AbstractQueryJTemplate<C extends QueryJTemplateContext>
                 DefaultThemeConstants,
                 Serializable
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -8374041537939183395L;
 
     /**
@@ -132,14 +140,17 @@ public abstract class AbstractQueryJTemplate<C extends QueryJTemplateContext>
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @NotNull
     public String toString()
     {
         return
-              "{ \"class\": \"" + AbstractQueryJTemplate.class.getName() + '"'
+              "{ \"class\": \"" + AbstractQueryJTemplate.class.getSimpleName() + '"'
             + ", \"cachedProcessedHeader\": \"" + m__strCachedProcessedHeader + '"'
             + Literals.JSON_PARENT_ATTR + super.toString()
-            + " }";
+            + ", \"package\": \"org.acmsl.queryj.api\" }";
     }
 }

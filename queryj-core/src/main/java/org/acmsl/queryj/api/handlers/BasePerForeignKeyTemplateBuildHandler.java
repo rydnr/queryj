@@ -42,7 +42,6 @@ import org.acmsl.queryj.api.PerForeignKeyTemplate;
 import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.api.PerForeignKeyTemplateFactory;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -73,7 +72,6 @@ import java.util.List;
  * @param <C> the template context class.
  * @param <TF> the template factory class.
  */
-@SuppressWarnings("unused")
 public abstract class BasePerForeignKeyTemplateBuildHandler
     <T extends PerForeignKeyTemplate<C>,
      C extends PerForeignKeyTemplateContext,
@@ -108,7 +106,6 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         buildTemplates(
             parameters,
             t_MetadataManager,
-            retrieveCustomSqlProvider(parameters),
             retrieveTemplateFactory());
 
         result = false;
@@ -120,13 +117,11 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * Builds the templates.
      * @param parameters the parameters.
      * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param templateFactory the template factory.
      */
     protected void buildTemplates(
         @NotNull final QueryJCommand parameters,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory)
       throws  QueryJBuildException
     {
@@ -134,8 +129,6 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             parameters,
             metadataManager,
             templateFactory,
-            retrieveProjectPackage(parameters),
-            retrieveDecoratorFactory(),
             retrieveForeignKeys(parameters, metadataManager));
     }
 
@@ -161,16 +154,12 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param parameters the parameters.
      * @param metadataManager the database metadata manager.
      * @param templateFactory the template factory.
-     * @param projectPackage the project package.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param foreignKeys the foreign keys.
      */
     protected void buildTemplates(
         @NotNull final QueryJCommand parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final TF templateFactory,
-        @NotNull final String projectPackage,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final List<ForeignKey<String>> foreignKeys)
       throws  QueryJBuildException
     {
@@ -184,11 +173,12 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                 t_lTemplates.add(
                     templateFactory.createTemplate(
                         t_ForeignKey,
+                        /*
                         retrievePackage(
                             t_ForeignKey.getSourceTableName(),
                             metadataManager.getEngine(),
                             parameters),
-                        decoratorFactory,
+                        */
                         parameters));
             }
         }

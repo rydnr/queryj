@@ -95,16 +95,14 @@ public class PerCustomResultTemplateContextTest
             new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
 
         @NotNull final PerCustomResultTemplateContext instance =
-            new PerCustomResultTemplateContext(
-                "packageName", result, properties, CachingDecoratorFactory.getInstance(), command);
+            new PerCustomResultTemplateContext(result, properties, command);
 
         Assert.assertEquals(properties, instance.getProperties());
 
         @NotNull final Result<String> result2 = new ResultElement<>("id2", "class");
 
         @NotNull final PerCustomResultTemplateContext instance2 =
-            new PerCustomResultTemplateContext(
-                "packageName", result2, new ArrayList<>(0), CachingDecoratorFactory.getInstance(), command);
+            new PerCustomResultTemplateContext(result2, new ArrayList<>(0), command);
 
         Assert.assertEquals(properties, instance.getProperties());
         Assert.assertNotEquals(properties, instance2.getProperties());

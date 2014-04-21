@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Base logic for all templates to be processed once per custom SQL.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <C> the template context type.
  */
 public interface PerCustomSqlTemplate<C extends PerCustomSqlTemplateContext>
     extends QueryJTemplate<C>

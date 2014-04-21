@@ -207,8 +207,9 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
                 t_lTemplates.add(
                     templateFactory.createTemplate(
                         t_Sql,
+                        /*
                         retrievePackage(t_Sql, engineName, parameters),
-                        decoratorFactory,
+                        */
                         parameters));
             }
         }

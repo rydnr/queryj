@@ -48,7 +48,6 @@ import org.acmsl.queryj.api.exceptions.RepositoryNameNotAvailableException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.exceptions.CustomSqlProviderNotAvailableException;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
@@ -88,17 +87,14 @@ public abstract class AbstractQueryJTemplateContext
     private static final long serialVersionUID = -3671360539593632338L;
 
     /**
-     * Creates an {@link AbstractTemplateContext} with given information.
+     * Creates an {@code AbstractTemplateContext} with given information.
      * @param pk the pk.
-     * @param decoratorFactory the {@link DecoratorFactory}.
      * @param command the {@link org.acmsl.queryj.QueryJCommand} instance.
      */
     protected AbstractQueryJTemplateContext(
-        @NotNull final String pk,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final QueryJCommand command)
+        @NotNull final String pk, @NotNull final QueryJCommand command)
     {
-        super(pk, decoratorFactory, command);
+        super(pk, command);
     }
 
     /**

@@ -38,10 +38,8 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.api.AbstractBasePerRepositoryTemplate;
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
@@ -66,6 +64,8 @@ import org.jetbrains.annotations.Nullable;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+import java.util.List;
 
 /**
  * Builds a per-repository template using database metadata.
@@ -103,28 +103,12 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
     {
-        return handle(command, retrieveProjectPackage(command));
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param projectPackage the project package.
-     * @return <code>true</code> if the chain should be stopped.
-     */
-    protected boolean handle(@NotNull final QueryJCommand parameters, @NotNull final String projectPackage)
-        throws  QueryJBuildException
-    {
-        @NotNull final MetadataManager t_MetadataManager =
-            retrieveMetadataManager(parameters);
-
         buildTemplate(
-            parameters,
-            retrieveCustomSqlProvider(parameters),
+            command,
+            retrieveCustomSqlProvider(command),
             retrieveTemplateFactory(),
-            retrievePackage(t_MetadataManager.getEngine(), projectPackage, PackageUtils.getInstance()),
-            retrieveTableRepositoryName(parameters),
-            CachingDecoratorFactory.getInstance());
+            retrieveTableRepositoryName(command),
+            retrieveMetadataManager(command));
 
         return false;
     }
@@ -134,28 +118,25 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param parameters the parameters.
      * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
-     * @param packageName the package name.
      * @param repository the repository.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      */
     @SuppressWarnings("unchecked")
     protected void buildTemplate(
         @NotNull final QueryJCommand parameters,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
-        @NotNull final String packageName,
         @NotNull final String repository,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
         if (isGenerationEnabled(customSqlProvider, parameters))
         {
             @Nullable final T t_Template =
                 createTemplate(
-                    decoratorFactory,
                     templateFactory,
-                    packageName,
                     repository,
+                    metadataManager.getTableDAO().findAllTableNames(),
                     parameters);
 
             if (t_Template != null)
@@ -182,27 +163,24 @@ public abstract class BasePerRepositoryTemplateBuildHandler
 
     /**
      * Uses the factory to create the template.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param templateFactory the template factory.
-     * @param packageName the package name.
      * @param repository the repository.
+     * @param tableNames the table names.
      * @param parameters the command.
      * @return the template.
      */
     @Nullable
     protected T createTemplate(
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TF templateFactory,
-        @NotNull final String packageName,
         @NotNull final String repository,
+        @NotNull final List<String> tableNames,
         @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
         return
             templateFactory.createTemplate(
                 repository,
-                packageName,
-                decoratorFactory,
+                tableNames,
                 parameters);
     }
 

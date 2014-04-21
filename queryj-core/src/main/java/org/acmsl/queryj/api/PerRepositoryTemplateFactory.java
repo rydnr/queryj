@@ -50,6 +50,8 @@ import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * Represents entities able to create per-repository templates.
  * @param <T> the template type.
@@ -64,15 +66,13 @@ public interface PerRepositoryTemplateFactory
     /**
      * Creates a {@link T} instance with given information.
      * @param repository the repository name.
-     * @param packageName the package name.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param tableNames the table names.
      * @param command the {@link QueryJCommand command}.
      * @return the new template.
      */
     @Nullable
     public T createTemplate(
         @NotNull final String repository,
-        @NotNull final String packageName,
-        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final List<String> tableNames,
         @NotNull final QueryJCommand command);
 }

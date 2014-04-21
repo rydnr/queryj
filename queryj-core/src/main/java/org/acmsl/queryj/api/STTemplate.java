@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -43,27 +43,20 @@ import org.stringtemplate.v4.STGroup;
 /*
  * Importing some JetBrains annotations.
  */
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/*
- * <a href="http://www.stringtemplate.org>StringTemplate</a>-specific templates.
+/**
+ * StringTemplate-specific templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * @param <C> the template context type.
  */
-public interface STTemplate<T extends TemplateContext>
-    extends  Template<T>
+public interface STTemplate<C extends TemplateContext>
+    extends  Template<C>
 {
     /**
      * Retrieves the template group.
      * @return such group.
      */
-    public @Nullable
-    STGroup retrieveGroup();
-
-    /**
-     * Retrieves the template name.
-     * @return such name.
-     */
-    public @NotNull
-    String getTemplateName();
+    @Nullable
+    public STGroup retrieveGroup();
 }

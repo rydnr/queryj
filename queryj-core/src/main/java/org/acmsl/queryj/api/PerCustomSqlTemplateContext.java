@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,12 +37,10 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
  * Importing some Apache Commons-Lang classes.
@@ -81,42 +79,13 @@ public class PerCustomSqlTemplateContext
     private Sql<String> m__Sql;
 
     /**
-     * Creates a {@link PerCustomSqlTemplateContext} with given information.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param header the header.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param implementMarkerInterfaces whether to implement marker interfaces or not.
-     * @param jmx whether to include support for JMX or not.
-     * @param jndiLocation the JNDI location.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
-     * @param fileName the file name.
+     * Creates a {@code PerCustomSqlTemplateContext} with given information.
      * @param sql the {@link Sql} instance.
+     * @param command the {@link QueryJCommand} instance.
      */
-    public PerCustomSqlTemplateContext(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @Nullable final String header,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName,
-        @NotNull final Sql<String> sql)
+    public PerCustomSqlTemplateContext(@NotNull final Sql<String> sql, @NotNull final QueryJCommand command)
     {
-        // TODO
-        super(null, null, null);
+        super(sql.getId(), command);
 
         immutableSetSql(sql);
     }
@@ -173,7 +142,7 @@ public class PerCustomSqlTemplateContext
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final Object obj)
+    public boolean equals(@Nullable final Object obj)
     {
         if (obj == null)
         {
@@ -195,7 +164,8 @@ public class PerCustomSqlTemplateContext
     public String toString()
     {
         return
-              "{ \"class\": \"" + PerCustomSqlTemplateContext.class.getName() + '"'
-            + ", \"sql\": " + m__Sql + " }";
+              "{ \"class\": \"" + PerCustomSqlTemplateContext.class.getSimpleName() + '"'
+            + ", \"sql\": " + m__Sql
+            + ", \"package\": \"org.acmsl.queryj.api\" }";
     }
 }

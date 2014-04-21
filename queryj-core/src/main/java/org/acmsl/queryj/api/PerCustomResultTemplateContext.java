@@ -49,7 +49,6 @@ import org.acmsl.queryj.customsql.Result;
 /*
  * Importing some Apache Commons Lang builder classes.
  */
-import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -85,22 +84,17 @@ public class PerCustomResultTemplateContext
 
     /**
      * Creates a {@link PerCustomResultTemplateContext} with given information.
-     * @param packageName the package name.
      * @param result the {@link Result} instance.
      * @param properties the properties.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param command the command.
      */
     public PerCustomResultTemplateContext(
-        @NotNull final String packageName,
         @NotNull final Result<String> result,
         @NotNull final List<Property<String>> properties,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final QueryJCommand command)
     {
-        super(result.getId(), decoratorFactory, command);
+        super(result.getId(), command);
 
-        immutableSetValue(buildPackageNameKey(), packageName, command);
         immutableSetValue(buildResultKey(), result, command);
         immutableSetValue(buildPropertiesKey(), properties, command);
     }
@@ -196,7 +190,6 @@ public class PerCustomResultTemplateContext
         {
             return false;
         }
-        final PerCustomResultTemplateContext other = (PerCustomResultTemplateContext) obj;
         return new EqualsBuilder().appendSuper(super.equals(obj)).isEquals();
     }
 
@@ -210,7 +203,7 @@ public class PerCustomResultTemplateContext
         return
               "{ \"class\": \"" + PerCustomResultTemplateContext.class.getSimpleName() + '"'
             + ", \"result\": " + getResult()
-            +", \"properties\": " + getProperties()
-            + " }";
+            + ", \"properties\": " + getProperties()
+            + ", \"package\": \"org.acmsl.queryj.api\" }";
     }
 }

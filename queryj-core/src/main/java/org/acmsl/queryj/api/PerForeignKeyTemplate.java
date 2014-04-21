@@ -35,6 +35,7 @@ package org.acmsl.queryj.api;
 /**
  * Base logic for all per-fk templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <C> the template context type.
  */
 public interface PerForeignKeyTemplate<C extends PerForeignKeyTemplateContext>
     extends  QueryJTemplate<C>

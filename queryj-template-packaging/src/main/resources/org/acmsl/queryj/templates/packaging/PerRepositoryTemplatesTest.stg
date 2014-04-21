@@ -338,7 +338,7 @@ public class PerRepositoryTemplatesTest
 
             @Nullable final PerRepositoryTemplate\<PerRepositoryTemplateContext> template =
                 templateFactory.createTemplate(
-                    repository, packageName, decoratorFactory, t_Command);
+                    repository, metadataManager.getTableDAO().findAllTableNames(), t_Command);
 
             Assert.assertNotNull("No template found for " + templateName, template);
 

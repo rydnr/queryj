@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -45,13 +45,10 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/08/15 08/45
+ * @param <C> the template context type.
  */
 @ThreadSafe
 public interface QueryJTemplate<C extends QueryJTemplateContext>
     extends Template<C>
 {
-    /**
-     * The DAO group.
-     */
-    String DAO_GROUP = "org/acmsl/queryj/dao/";
 }

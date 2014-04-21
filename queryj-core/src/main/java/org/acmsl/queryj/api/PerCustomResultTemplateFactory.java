@@ -39,7 +39,6 @@ package org.acmsl.queryj.api;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.metadata.DecoratorFactory;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -71,17 +70,13 @@ public interface PerCustomResultTemplateFactory
     /**
      * Creates a per-<i>custom result</i> template.
      * @param command the {@link QueryJCommand}.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
      * @param customResult the custom result.
      * @param properties the properties.
      * @return the template.
      */
     @Nullable
     public T createTemplate(
-        @NotNull final QueryJCommand command,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
         @NotNull final Result<String> customResult,
-        @NotNull final List<Property<String>> properties);
+        @NotNull final List<Property<String>> properties,
+        @NotNull final QueryJCommand command);
 }

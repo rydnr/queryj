@@ -39,9 +39,7 @@ package org.acmsl.queryj.api.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
-import org.acmsl.queryj.api.exceptions.CannotCreateCustomResultTemplateException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.api.exceptions.QueryJException;
 import org.acmsl.queryj.api.PerCustomResultTemplate;
 import org.acmsl.queryj.api.PerCustomResultTemplateFactory;
 import org.acmsl.queryj.customsql.CustomResultUtils;
@@ -194,31 +192,32 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 && (isGenerationAllowedForResult(
                         t_ResultElement, customSqlProvider, metadataManager, customResultUtils)))
             {
+                t_Template =
+                    templateFactory.createTemplate(
+                        t_ResultElement,
+                        customSqlProvider.getSqlPropertyDAO().findByResult(t_ResultElement.getId()),
+                        parameters);
+
+                    /*
                 try
                 {
-                    t_Template =
-                        templateFactory.createTemplate(
-                            parameters,
-                            decoratorFactory,
-                            retrievePackage(
-                                t_ResultElement,
-                                customSqlProvider,
-                                metadataManager,
-                                metadataManager.getEngine(),
-                                parameters),
-                            t_ResultElement,
-                            customSqlProvider.getSqlPropertyDAO().findByResult(t_ResultElement.getId()));
-
-                    if  (   (t_Template != null)
-                         && (!t_lTemplates.contains(t_Template)))
-                    {
-                        t_lTemplates.add(t_Template);
-                    }
+                    retrievePackage(
+                        t_ResultElement,
+                        customSqlProvider,
+                        metadataManager,
+                        metadataManager.getEngine(),
+                        parameters),
                 }
                 catch  (@NotNull final QueryJException queryjException)
                 {
                     throw
                         new CannotCreateCustomResultTemplateException(t_ResultElement, queryjException);
+                }
+                    */
+                if  (   (t_Template != null)
+                     && (!t_lTemplates.contains(t_Template)))
+                {
+                    t_lTemplates.add(t_Template);
                 }
             }
         }

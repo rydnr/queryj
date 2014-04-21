@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,7 +34,7 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.exceptions.InvalidPerRepositoryTemplateException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
@@ -52,6 +52,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Logic-less container for all templates to be processed once per repository.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <C> the template context.
  */
 public abstract class AbstractBasePerRepositoryTemplate<C extends PerRepositoryTemplateContext>
     extends AbstractQueryJTemplate<C>

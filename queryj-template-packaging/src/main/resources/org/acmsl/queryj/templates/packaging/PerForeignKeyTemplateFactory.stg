@@ -142,39 +142,10 @@ public class <C.class_name>
     @NotNull
     public <def.name.noExtension>Template createTemplate(
         @NotNull final ForeignKey\<String> foreignKey,
-        @NotNull final String packageName,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final QueryJCommand command)
     {
-        return createTemplate(foreignKey, packageName, decoratorFactory, command, QueryJCommandUtils.getInstance());
-    }
-
-    /**
-     * Creates a per-\<i>foreign key\</i> template.
-     * @param foreignKey the foreign key.
-     * @param packageName the package name.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param command the {@link QueryJCommand} instance.
-     * @param queryJCommandUtils the {@link QueryJCommandUtils} instance.
-     * @return the new template.
-     */
-    @NotNull
-    protected <def.name.noExtension>Template createTemplate(
-        @NotNull final ForeignKey\<String> foreignKey,
-        @NotNull final String packageName,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final QueryJCommand command,
-        @NotNull final QueryJCommandUtils queryJCommandUtils)
-    {
         @NotNull final <def.type.capitalized>TemplateContext t_Context =
-            new <def.type.capitalized>TemplateContext(
-                retrieveTemplateFileName(
-                    foreignKey.getSourceTableName(),
-                    queryJCommandUtils.retrieveMetadataManager(command)),
-                foreignKey,
-                packageName,
-                decoratorFactory,
-                command);
+            new <def.type.capitalized>TemplateContext(foreignKey, command);
 
         return new <def.name.noExtension>Template(t_Context);
     }

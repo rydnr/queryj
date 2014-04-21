@@ -33,7 +33,7 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
@@ -41,12 +41,15 @@ import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents any kind of templates.
+ * @param <T> the template context type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @since 2.0
  */
 public interface Template<T extends TemplateContext>
 {

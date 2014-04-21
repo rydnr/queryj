@@ -33,11 +33,10 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Row;
 
 /*
@@ -62,18 +61,14 @@ public interface PerTableTemplateFactory<T extends PerTableTemplate<C>, C extend
 {
     /**
      * Generates a <i>per-table</i> template.
-     * @param command the command.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
      * @param tableName the table name.
      * @param staticContents the table's static contents (optional).
+     * @param command the command.
      * @return a template.
      */
     @Nullable
     public T createTemplate(
-        @NotNull final QueryJCommand command,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
         @NotNull final String tableName,
-        @NotNull final List<Row<String>> staticContents);
+        @NotNull final List<Row<String>> staticContents,
+        @NotNull final QueryJCommand command);
 }

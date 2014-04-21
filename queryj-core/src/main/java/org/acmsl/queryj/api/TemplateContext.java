@@ -38,6 +38,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -86,4 +87,11 @@ public interface TemplateContext
      */
     @NotNull
     String getVersion();
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such {@link DecoratorFactory factory}.
+     */
+    @NotNull
+    DecoratorFactory getDecoratorFactory();
 }

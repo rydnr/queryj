@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,7 +34,7 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing some project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.exceptions.InvalidPerForeignKeyTemplateException;
@@ -65,6 +65,7 @@ import java.util.Collection;
 /**
  * Logic-less container for all templates to be processed once per custom Foreign Key.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <C> the template context type.
  */
 @SuppressWarnings("unused")
 public abstract class AbstractBasePerForeignKeyTemplate<C extends PerForeignKeyTemplateContext>

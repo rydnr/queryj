@@ -36,11 +36,9 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.QueryJCommand;
 
 /*
  * Importing some Apache Commons-Lang classes.
@@ -87,40 +85,16 @@ public class PerRepositoryTemplateContext
 
     /**
      * Creates the template context with required information.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param header the header.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
      * @param repositoryName the repository name.
-     * @param implementMarkerInterfaces whether to implement marker interfaces.
-     * @param jmx whether to include JMX support.
      * @param tableNames the table names.
-     * @param jndiLocation the JNDI location of the data source.
-     * @param disableGenerationTimestamps whether to disable generation timestamps.
-     * @param disableNotNullAnnotations whether to disable NotNull annotations.
-     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
+     * @param command the command.
      */
     public PerRepositoryTemplateContext(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @Nullable final String header,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
         @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation,
-        final boolean disableGenerationTimestamps,
-        final boolean disableNotNullAnnotations,
-        final boolean disableCheckthreadAnnotations,
-        @NotNull final String fileName)
+        @NotNull final QueryJCommand command)
     {
-        // TODO
-        super(null, null, null);
+        super(repositoryName, command);
 
         immutableSetTableNames(tableNames);
     }
@@ -161,7 +135,7 @@ public class PerRepositoryTemplateContext
     @NotNull
     public List<String> getTableNames()
     {
-        return new ArrayList<String>(immutableGetTableNames());
+        return new ArrayList<>(immutableGetTableNames());
     }
 
     /**
@@ -174,14 +148,20 @@ public class PerRepositoryTemplateContext
         return getRepositoryName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
         return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.m__lTableNames).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean equals(final Object obj)
+    public boolean equals(@Nullable final Object obj)
     {
         if (obj == null)
         {
@@ -196,13 +176,17 @@ public class PerRepositoryTemplateContext
             .isEquals();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'PerRepositoryTemplateContext'," +
-               " 'tableNames': [" + m__lTableNames + "], " +
-               " parent: " + super.toString() +
-               '}';
+        return
+              "{ \"class\": \"" + PerRepositoryTemplateContext.class.getSimpleName() + '"'
+            + ", \"tableNames'\": [" + m__lTableNames + "], "
+            + ", \"parent\": " + super.toString()
+            + ", \"package\": \"org.acmsl.queryj.api\" }";
     }
 }

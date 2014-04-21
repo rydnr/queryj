@@ -36,7 +36,7 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
@@ -102,6 +102,7 @@ import java.util.ServiceLoader;
 
 /**
  * Common logic for all templates.
+ * @param <C> the context type.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/08/15 08/24
@@ -120,6 +121,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         DEFAULT_ST_ERROR_LISTENER =
         new STErrorListener()
         {
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void compileTimeError(@NotNull final STMessage stMessage)
             {
@@ -131,6 +135,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 }
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void runTimeError(@NotNull final STMessage stMessage)
             {
@@ -142,6 +149,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 }
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void IOError(@NotNull final STMessage stMessage)
             {
@@ -153,6 +163,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 }
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void internalError(@NotNull final STMessage stMessage)
             {
@@ -164,6 +177,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 }
             }
         };
+
+    /**
+     * String literal: "-Xrunjdwp:transport".
+     */
     public static final String XRUNJDWP_TRANSPORT = "-Xrunjdwp:transport";
 
     /**
@@ -223,7 +240,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param context the context.
      * @param placeholderPackage the package of the placeholder classes.
      */
-    protected AbstractTemplate(@NotNull final C context, @NotNull final String placeholderPackage)
+    protected AbstractTemplate(
+        @NotNull final C context, @NotNull final String placeholderPackage)
     {
         immutableSetTemplateContext(context);
         immutableSetPlaceholderPackage(placeholderPackage);
@@ -589,6 +607,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
             traceANTLRClassLoadingIssues();
         }
 
+        /**
+         * {@inheritDoc}
+         */
+        @NotNull
         @Override
         public String toString()
         {
@@ -1001,12 +1023,18 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @NotNull final ST template,
         @NotNull final Throwable actualException);
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
-        return "{ \"class\": \"AbstractTemplate" +
-               "\", \"templateContext\": \"" + this.m__TemplateContext +
-               "\", \"placeholderPackage\": \"" + this.m__strPlaceholderPackage + "\" }";
+        return
+              "{ \"class\": \"AbstractTemplate" + '"'
+            + ", \"templateContext\": " + this.m__TemplateContext
+            + ", \"placeholderPackage\": \"" + this.m__strPlaceholderPackage + '"'
+            + ", \"debug\": " + this.m__bDebug
+            + ", \"package\": \"org.acmsl.queryj.api\" }";
     }
 }

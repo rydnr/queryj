@@ -50,6 +50,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Identifies all per-table templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <C> the template context type.
  */
 public interface PerTableTemplate<C extends PerTableTemplateContext>
     extends  QueryJTemplate<C>

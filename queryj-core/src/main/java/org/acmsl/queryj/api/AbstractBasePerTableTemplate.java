@@ -29,7 +29,7 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.api.exceptions.InvalidPerTableTemplateException;
@@ -49,6 +49,7 @@ import org.jetbrains.annotations.NotNull;
  * Contains the elements required to create any template of any type,
  * associated to each table.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <C> the template context type.
  */
 public abstract class AbstractBasePerTableTemplate<C extends PerTableTemplateContext>
     extends AbstractQueryJTemplate<C>
@@ -99,14 +100,6 @@ public abstract class AbstractBasePerTableTemplate<C extends PerTableTemplateCon
     {
         return Literals.GENERATING + templateName + " for " + tableName + ".";
     }
-
-    /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    @NotNull
-    public abstract String getTemplateName();
-
 
     /**
      * Builds a context-specific exception.
