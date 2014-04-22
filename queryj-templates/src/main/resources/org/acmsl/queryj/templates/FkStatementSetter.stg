@@ -161,7 +161,7 @@ class(fk, C) ::= <<
 <class_annotations(C=C)>
 public class <fk.source.name.voName>By<fk.target.name.voName>StatementSetter
     implements  PreparedStatementSetter
-{aoeu
+{
     <fk.attributes:{ a | <attribute_declaration(attribute=a, C=C)>}; separator="\n">
 }
 >>

@@ -493,6 +493,7 @@
             <useFile>false</useFile>
             <!--parallel>classes</parallel>
             <threadCount>2</threadCount-->
+            <argLine>-Dqueryjroot=${queryjroot}</argLine>
           </configuration>
         </plugin>
 

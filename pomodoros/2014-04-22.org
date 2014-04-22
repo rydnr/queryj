@@ -1,5 +1,5 @@
 * 2014/04/22
-** TODO FkStatementSetter #478: 4 -> 1
-** TODO DataAccessManager template #479: 6 ->
+** DONE FkStatementSetter #478: 4 -> 6
+** TODO DataAccessManager template #479: 6 -> 
 *** Check filename of per-fk cucumber feature
 *** Generate real per-fk cucumber feature
