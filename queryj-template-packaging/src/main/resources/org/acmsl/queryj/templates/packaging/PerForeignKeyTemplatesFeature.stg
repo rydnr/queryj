@@ -54,18 +54,20 @@ Feature: <fk.sourceTableName> foreign keys code compiles
 
   Scenario Outline: Templates bound to <fk.sourceTableName>' foreign keys compile
 
-    Given the table containing the foreign key is:
-    |    table     | parent table | decorated | relationship |   static    |
-    | <fk.sourceTable.name> | <fk.sourceTable.parent> | <fk.sourceTable.decorated> | <fk.sourceTabel.relationship> | <fk.sourceTable.static> |
+    Given the following foreign key:
+    | source | column(s)| destination | allows null |
+    | <fk.sourceTable.name> | <fk.attributes:{a | <a.name>}; separator=", "> | <fk.targetTable.name> | <fk.allowsNull> |
 
-    And the table containing the foreign key has the following columns:
+    And the referred tables are:
+    |    table     | parent table | decorated | relationship |   static    |
+    | <fk.sourceTable.name> | <fk.sourceTable.parent> | <fk.sourceTable.decorated> | <fk.sourceTable.relationship> | <fk.sourceTable.static> |
+    | <fk.targetTable.name> | <fk.targetTable.parent> | <fk.targetTable.decorated> | <fk.targetTable.relationship> | <fk.targetTable.static> |
+
+    And the tables' columns are:
     |     table    |         column        | type      | pk    | allows null | readonly |   sequence    | keyword | boolean | length | precision |
     <fk.sourceTable.primaryKey:{ a |<cucumber_pk_declaration(attribute=a)>}; separator="\n">
     <fk.sourceTable.own.minus.primaryKey:{ a |<cucumber_nonpk_declaration(attribute=a)>}; separator="\n">
-
-    And the foreign key is:
-    | source table | source columns | target table | allows null |
-    | <fk.sourceTable.name>| <fk.attributes:{a | <a.name>}; separator=", ">| <fk.targetTable.name> | <fk.nullable> |
+    <fk.targetTable.primaryKey:{ a |<cucumber_pk_declaration(attribute=a)>}; separator="\n">
 
     When I generate with per-foreign key \<template>.stg for Oracle
 

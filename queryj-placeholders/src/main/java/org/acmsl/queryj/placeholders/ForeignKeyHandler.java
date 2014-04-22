@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.CachingForeignKeyDecorator;
 import org.acmsl.queryj.metadata.ForeignKeyDecorator;
@@ -56,14 +56,17 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Is able to resolve {@link ForeignKey} placeholders in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/24
+ * @since 3.0
+ * Created: 2012/05/24
  */
 @SuppressWarnings("unused")
 @ThreadSafe
 public class ForeignKeyHandler
     extends AbstractTemplateContextFillHandler<PerForeignKeyTemplateContext, ForeignKeyDecorator>
 {
-
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -8241292451651391465L;
 
     /**

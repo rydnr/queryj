@@ -46,7 +46,7 @@ source(C) ::= <<
   Defines the rules to generate FkStatementSetter implementations.
   @param C the context.
 !>
-<sourceImpl(fk=C.foreignKey, C=C)>
+<sourceImpl(fk=C.foreign_key, C=C)>
 >>
 
 sourceImpl(fk, C) ::= <<
@@ -70,7 +70,7 @@ sourceImpl(fk, C) ::= <<
 <project_imports(
   basePackageName=C.project_package,
   voSubpackageName=typeInitMap.voSubpackageName,
-  voName=table.name.voName)>
+  voName=fk.source.name.voName)>
 
 /*
  * Importing Spring classes.
@@ -132,7 +132,7 @@ second_line_description(fk) ::= <<
  Generates the second line of the generated file description.
  @param fk the foreign key.
 !>
-the foreign key between <fk.source> and <fk.target>
+the foreign key between <fk.source.name> and <fk.target.name>
 >>
 
 third_line_description(fk) ::= <<
@@ -159,8 +159,9 @@ class(fk, C) ::= <<
   template="org/acmsl/queryj/templates/FkStatementSetter.stg", C=C)>
  */
 <class_annotations(C=C)>
-public class <fk.source.voName>By<fk.target.voName>StatementSetter
+public class <fk.source.name.voName>By<fk.target.name.voName>StatementSetter
     implements  PreparedStatementSetter
 {
+    <fk.attributes:{ a | <attribute_declaration(attr=a, C=C)>}; separator="\n">
 }
 >>

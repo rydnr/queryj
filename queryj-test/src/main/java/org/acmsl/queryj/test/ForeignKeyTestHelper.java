@@ -39,15 +39,23 @@ package org.acmsl.queryj.test;
  * Importing JetBrains annotations.
  */
 import cucumber.api.DataTable;
+import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.AttributeIncompleteValueObject;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
+import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
+import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Helper class for per-foreign key Cucumber tests.
@@ -80,28 +88,110 @@ public class ForeignKeyTestHelper
     }
 
     /**
-     * Defines the foreign keys based on the Cucumber information given.
-     * @param tableInfo the Cucumber table.
+     * Defines a foreign key based on the Cucumber information given.
+     * @param fkInfo the Cucumber table.
      * @param foreignKeys the list to fill with the foreign keys.
+     * @param tables the table information (needed to provide additional
+     * metadata about the foreign key attributes.
      */
-    public void defineInputForeignKeys(
-        @NotNull final DataTable tableInfo, @NotNull final List<ForeignKey<String>> foreignKeys)
+    public void defineInputForeignKey(
+        @NotNull final DataTable fkInfo,
+        @NotNull final List<ForeignKey<String>> foreignKeys,
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
-        // TODO
+        @NotNull final List<Map<String, String>> fkEntries = fkInfo.asMaps();
+
+        @Nullable ForeignKey<String> foreignKey;
+
+        for (@NotNull final Map<String, String> fkEntry : fkEntries)
+        {
+            foreignKey = convertToForeignKey(fkEntry, tables);
+
+            if (foreignKey != null)
+            {
+                foreignKeys.add(foreignKey);
+            }
+        }
+
     }
 
     /**
-     * Defines the input columns, based on the Cucumber table given.
-     * @param columnInfo the Cucumber table.
-     * @param foreignKeys the foreign keys.
-     * @return the foreign keys.
+     * Converts given foreign key described in a Cucumber feature, to a {@link ForeignKey}.
+     * @param fkEntry the Cucumber information.
+     * @param tables the table information (needed to provide additional
+     * metadata about the foreign key attributes.
+     * @return the {@link ForeignKey}.
      */
-    @NotNull
-    public List<ForeignKey<String>> defineInputColumns(
-        @NotNull final DataTable columnInfo, @NotNull final List<ForeignKey<String>> foreignKeys)
+    @Nullable
+    protected ForeignKey<String> convertToForeignKey(
+        @NotNull final Map<String, String> fkEntry,
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
-        // TODO
-        return foreignKeys;
+        @Nullable final ForeignKey<String> result;
+
+        @Nullable final String sourceTable = fkEntry.get("source");
+        @Nullable final String sourceColumns = fkEntry.get("column(s)");
+
+        @Nullable final String targetTable = fkEntry.get("target");
+        @Nullable final boolean allowsNull = Boolean.valueOf(fkEntry.get("allows null"));
+        @NotNull final List<Attribute<String>> columns = fromCsv(sourceColumns, sourceTable, allowsNull, tables);
+
+        if (   (sourceTable != null)
+            && (columns.size() > 0)
+            && (targetTable != null))
+        {
+            result =
+                new ForeignKeyValueObject(
+                    sourceTable, columns, targetTable, allowsNull);
+        }
+        else
+        {
+            result = null;
+        }
+
+        return result;
     }
 
+    /**
+     * Parses given list of columns to a list of {@link Attribute}s.
+     * @param sourceColumns the column names.
+     * @param sourceTable the source table.
+     * @param allowsNull whether it allows null.
+     * @param tables the table information (needed to provide additional
+     * metadata about the foreign key attributes.
+     * @return the attribute list.
+     */
+    @NotNull
+    protected List<Attribute<String>> fromCsv(
+        @Nullable final String sourceColumns,
+        @Nullable final String sourceTable,
+        final boolean allowsNull,
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
+    {
+        @NotNull final List<Attribute<String>> result = new ArrayList<>();
+
+        if (sourceTable != null)
+        {
+            @NotNull final StringTokenizer tokenizer =
+                new StringTokenizer(sourceColumns, ",");
+
+            while (tokenizer.hasMoreTokens())
+            {
+                result.add(
+                    new AttributeIncompleteValueObject(
+                        tokenizer.nextToken(),
+                        -1,
+                        "",
+                        sourceTable,
+                        "",
+                        0,
+                        0,
+                        0,
+                        allowsNull,
+                        null));
+            }
+        }
+
+        return result;
+    }
 }

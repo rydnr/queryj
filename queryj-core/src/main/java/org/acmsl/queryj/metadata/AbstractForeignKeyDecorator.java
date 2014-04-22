@@ -289,7 +289,7 @@ public abstract class AbstractForeignKeyDecorator
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @NotNull final List<Attribute<K>> result = new ArrayList<Attribute<K>>(attributes.size());
+        @NotNull final List<Attribute<K>> result = new ArrayList<>(attributes.size());
 
         for (@Nullable final Attribute<V> t_Attribute : attributes)
         {
@@ -388,6 +388,7 @@ public abstract class AbstractForeignKeyDecorator
 
     /**
      * Checks whether this foreign key allows null or not.
+     * @param <V> the attribute type.
      * @return such condition.
      */
     protected <V> boolean isNullable(@NotNull final List<Attribute<V>> attributes)

@@ -66,9 +66,9 @@ sourceImpl(def, C) ::= <<
  * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateFactory;
-import org.acmsl.queryj.api.QueryJCommandUtils;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.engines.EngineDecorator;
@@ -146,6 +146,14 @@ public class <C.class_name>
     {
         @NotNull final <def.type.capitalized>TemplateContext t_Context =
             new <def.type.capitalized>TemplateContext(foreignKey, command);
+
+        @NotNull final String t_strFileName =
+            retrieveTemplateFileName(
+                foreignKey.getSourceTableName(),
+                t_Context.getMetadataManager());
+
+        new QueryJCommandWrapper\<String>(command).setSetting(
+            Literals.FILE_NAME, t_strFileName);
 
         return new <def.name.noExtension>Template(t_Context);
     }

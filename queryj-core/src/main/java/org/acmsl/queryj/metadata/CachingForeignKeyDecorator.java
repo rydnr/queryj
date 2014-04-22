@@ -236,13 +236,17 @@ public class CachingForeignKeyDecorator
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @NotNull
     public String toString()
     {
-        return "CachingForeignKeyDecorator{" +
-               "cachedSource=" + m__CachedSource +
-               ", cachedTarget=" + m__CachedTarget +
-               '}';
+        return
+              "{ \"class\": \"CachingForeignKeyDecorator\""
+            + ", \"cachedSource\": \"" + m__CachedSource + '"'
+            + ", \"cachedTarget\": \"" + m__CachedTarget + '"'
+            + " }";
     }
 }

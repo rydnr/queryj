@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.metadata.DecoratedString;
@@ -53,6 +53,7 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Is able to resolve "package" placeholders.
+ * @param <C> the template context type.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 3.0
  * Created: 2013/05/05
