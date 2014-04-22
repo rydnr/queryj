@@ -188,6 +188,18 @@
               </sources>
             </configuration>
           </execution>
+          <!--execution>
+            <id>add-resource</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>add-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>${project.basedir}/src/main/resources/</resource>
+              </resources>
+            </configuration>
+          </execution-->
           <execution>
             <id>add-test-source</id>
             <phase>generate-test-sources</phase>
@@ -201,10 +213,25 @@
               </sources>
             </configuration>
           </execution>
+          <!--execution>
+            <id>add-test-resource</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>add-test-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>${project.basedir}/src/main/resources/</resource>
+              </resources>
+            </configuration>
+          </execution-->
         </executions>
       </plugin>
    </plugins>
    <testResources>
+     <testResource>
+       <directory>${project.basedir}/src/main/resources/</directory>
+     </testResource>
      <testResource>
        <directory>${project.basedir}/src/test/resources/</directory>
      </testResource>
@@ -213,6 +240,4 @@
      </testResource>
    </testResources>
   </build>
-
-
 </project>

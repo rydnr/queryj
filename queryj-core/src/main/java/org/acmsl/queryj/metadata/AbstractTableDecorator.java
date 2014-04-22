@@ -2063,7 +2063,7 @@ public abstract class AbstractTableDecorator
      */
     public boolean getContainsClobs()
     {
-        return containClobs(getAttributes(), getMetadataManager().getMetadataTypeManager());
+        return containClobs(getAttributes(), getMetadataManager().getMetadataTypeManager(), TableDecoratorHelper.getInstance());
     }
 
     /**
@@ -2074,21 +2074,10 @@ public abstract class AbstractTableDecorator
      */
     protected boolean containClobs(
         @NotNull final ListDecorator<Attribute<DecoratedString>> attributes,
-        @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        boolean result = false;
-
-        for (@Nullable final Attribute<DecoratedString> attribute : attributes)
-        {
-            if (   (attribute != null)
-                && (metadataTypeManager.isClob(attribute.getTypeId())))
-            {
-                result = true;
-                break;
-            }
-        }
-
-        return result;
+        return tableDecoratorHelper.containClobs(attributes, metadataTypeManager);
     }
 
     /**

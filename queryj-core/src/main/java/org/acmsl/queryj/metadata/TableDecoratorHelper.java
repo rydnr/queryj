@@ -372,4 +372,28 @@ public class TableDecoratorHelper
         return result;
     }
 
+    /**
+     * Checks whether any attribute is a clob.
+     * @param attributes the {@link Attribute}s.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return {@code true} in such case.
+     */
+    public boolean containClobs(
+        @NotNull final List<Attribute<DecoratedString>> attributes,
+        @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        boolean result = false;
+
+        for (@Nullable final Attribute<DecoratedString> attribute : attributes)
+        {
+            if (   (attribute != null)
+                && (metadataTypeManager.isClob(attribute.getTypeId())))
+            {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
 }

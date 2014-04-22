@@ -104,7 +104,7 @@ public abstract class AbstractForeignKeyDecorator
     {
         super(
             new DecoratedString(foreignKey.getSourceTableName()),
-            new ArrayList<Attribute<DecoratedString>>(0),
+            new ArrayList<>(0),
             new DecoratedString(foreignKey.getTargetTableName()),
             foreignKey.isNullable());
         immutableSetAttributes(
@@ -115,7 +115,6 @@ public abstract class AbstractForeignKeyDecorator
         immutableSetCustomSqlProvider(customSqlProvider);
 
         immutableSetForeignKey(foreignKey);
-
     }
 
     /**
@@ -506,6 +505,59 @@ public abstract class AbstractForeignKeyDecorator
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the list of attribute types.
+     * @return such list.
+     */
+    @NotNull
+    public List<DecoratedString> getAttributeTypes()
+    {
+        return
+            getAttributeTypes(
+                getAttributes(),
+                getMetadataManager().getMetadataTypeManager(),
+                TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the list of attribute types.
+     * @param attributes the attributes.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
+     * @return such list.
+     */
+    @NotNull
+    protected List<DecoratedString> getAttributeTypes(
+        @NotNull final List<Attribute<DecoratedString>> attributes,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
+    {
+        return tableDecoratorHelper.getAttributeTypes(attributes, metadataTypeManager);
+    }
+
+    /**
+     * Checks whether any attribute is a clob.
+     * @return {@code true} in such case.
+     */
+    public boolean getContainsClobs()
+    {
+        return containClobs(getAttributes(), getMetadataManager().getMetadataTypeManager(), TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Checks whether any attribute is a clob.
+     * @param attributes the {@link Attribute}s.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return {@code true} in such case.
+     */
+    protected boolean containClobs(
+        @NotNull final List<Attribute<DecoratedString>> attributes,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
+    {
+        return tableDecoratorHelper.containClobs(attributes, metadataTypeManager);
     }
 
     /**

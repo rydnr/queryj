@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -67,8 +67,11 @@ import org.checkthread.annotations.ThreadSafe;
 public class CachingForeignKeyDecorator
     extends  AbstractForeignKeyDecorator
 {
-
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -34906355516994108L;
+
     /**
      * The cached source table.
      */
@@ -159,9 +162,9 @@ public class CachingForeignKeyDecorator
 
     /**
      * Retrieves the source table.
-     *
      * @return such information.
      */
+    @Nullable
     @Override
     public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> getSource()
     {
@@ -218,6 +221,7 @@ public class CachingForeignKeyDecorator
      * @return such information.
      */
     @Override
+    @Nullable
     public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> getTarget()
     {
         @Nullable Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> result =
