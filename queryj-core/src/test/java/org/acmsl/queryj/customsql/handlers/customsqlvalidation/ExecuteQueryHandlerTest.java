@@ -80,6 +80,7 @@ import java.sql.SQLException;
 @RunWith(JUnit4.class)
 public class ExecuteQueryHandlerTest
 {
+    @SuppressWarnings("unchecked")
     @Test
     public void a_valid_query_executes_correctly()
         throws QueryJBuildException, SQLException
@@ -94,7 +95,7 @@ public class ExecuteQueryHandlerTest
 
         sql.setValue("select sysdate from dual where ? = 'A'");
 
-        @NotNull final Parameter parameter = new ParameterElement("id", 1, "id", "String", "1");
+        @NotNull final Parameter parameter = new ParameterElement<String, String>("id", 1, "id", "String", "1");
         sql.add(new ParameterRefElement("id"));
 
         new QueryJCommandWrapper<Sql<String>>(parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, sql);

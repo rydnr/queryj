@@ -214,9 +214,9 @@ public class ForeignKeyTestHelperTest
         Assert.assertEquals("long", attribute.getType());
         Assert.assertEquals("G_CYCLE_TYPES", attribute.getTableName());
         Assert.assertNull(attribute.getComment());
-        Assert.assertEquals(1, attribute.getLength());
-        Assert.assertEquals(10, attribute.getPrecision());
         Assert.assertEquals(1, attribute.getOrdinalPosition());
+        Assert.assertEquals(10, attribute.getLength());
+        Assert.assertEquals(1, attribute.getPrecision());
         Assert.assertNull(attribute.getKeyword());
         Assert.assertNull(attribute.getRetrievalQuery());
         Assert.assertNull(attribute.getSequence());

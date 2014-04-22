@@ -36,22 +36,32 @@
 package org.acmsl.queryj.test;
 
 /*
- * Importing JetBrains annotations.
+ * Importing Cucumber classes.
  */
 import cucumber.api.DataTable;
+
+/*
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.metadata.vo.AttributeIncompleteValueObject;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
 import org.acmsl.queryj.metadata.vo.Table;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -112,7 +122,6 @@ public class ForeignKeyTestHelper
                 foreignKeys.add(foreignKey);
             }
         }
-
     }
 
     /**
@@ -134,7 +143,7 @@ public class ForeignKeyTestHelper
 
         @Nullable final String targetTable = fkEntry.get("target");
         @Nullable final boolean allowsNull = Boolean.valueOf(fkEntry.get("allows null"));
-        @NotNull final List<Attribute<String>> columns = fromCsv(sourceColumns, sourceTable, allowsNull, tables);
+        @NotNull final List<Attribute<String>> columns = fromCsv(sourceColumns, sourceTable, tables.get(sourceTable));
 
         if (   (sourceTable != null)
             && (columns.size() > 0)
@@ -156,8 +165,7 @@ public class ForeignKeyTestHelper
      * Parses given list of columns to a list of {@link Attribute}s.
      * @param sourceColumns the column names.
      * @param sourceTable the source table.
-     * @param allowsNull whether it allows null.
-     * @param tables the table information (needed to provide additional
+     * @param table the table information (needed to provide additional
      * metadata about the foreign key attributes.
      * @return the attribute list.
      */
@@ -165,8 +173,7 @@ public class ForeignKeyTestHelper
     protected List<Attribute<String>> fromCsv(
         @Nullable final String sourceColumns,
         @Nullable final String sourceTable,
-        final boolean allowsNull,
-        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
+        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table)
     {
         @NotNull final List<Attribute<String>> result = new ArrayList<>();
 
@@ -177,18 +184,42 @@ public class ForeignKeyTestHelper
 
             while (tokenizer.hasMoreTokens())
             {
-                result.add(
-                    new AttributeIncompleteValueObject(
-                        tokenizer.nextToken(),
-                        -1,
-                        "",
-                        sourceTable,
-                        "",
-                        0,
-                        0,
-                        0,
-                        allowsNull,
-                        null));
+                @Nullable final Attribute<String> attribute =
+                    findAttribute(tokenizer.nextToken(), table);
+
+                if (attribute != null)
+                {
+                    result.add(attribute);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the attribute matching given name.
+     * @param name the name.
+     * @param table the table.
+     * @return such attribute, or {@code null} if not found.
+     */
+    @Nullable
+    protected Attribute<String> findAttribute(
+        @NotNull final String name,
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> table)
+    {
+        @Nullable Attribute<String> result = null;
+
+        if (table != null)
+        {
+            for (@Nullable final Attribute<String> attribute : table.getAttributes())
+            {
+                if (   (attribute != null)
+                    && (attribute.getName().equals(name)))
+                {
+                    result = attribute;
+                    break;
+                }
             }
         }
 
