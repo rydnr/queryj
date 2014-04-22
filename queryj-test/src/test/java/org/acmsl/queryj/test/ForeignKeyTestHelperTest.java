@@ -229,4 +229,92 @@ public class ForeignKeyTestHelperTest
         Assert.assertNull(attribute.getBooleanNull());
 
     }
+
+    /**
+     * Tests whether defineInputForeignKey() builds a foreign key which
+     * lazily uses the Table information passed in order to provide the metadata
+     * about each one of the attributes.
+     */
+    @Test
+    public void defineInputForeignKeys_uses_attributes_which_lazy_load_their_contents()
+    {
+        @NotNull final ForeignKeyTestHelper instance = ForeignKeyTestHelper.getInstance();
+
+        @NotNull final String[] columnNames = { "source", "column(s)", "target", "allows null" };
+        @NotNull final Map<String, String> row = new HashMap<>(4);
+        row.put("source", "G_CYCLE_TYPES");
+        row.put("column(s)", "G_FIRST_DRAW_TYPE_ID");
+        row.put("target", "G_DRAWS");
+        row.put("allows null", "false");
+        @NotNull final List<?> data = Arrays.asList(row);
+        @NotNull final DataTable dataTable = DataTable.create(data, Locale.getDefault(), columnNames);
+
+        @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>();
+
+        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table =
+            new TableIncompleteValueObject("G_CYCLE_TYPES", "")
+            {
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                @NotNull
+                public List<Attribute<String>> getAttributes()
+                {
+                    return
+                        Arrays.<Attribute<String>>asList(
+                            new AttributeValueObject(
+                                "G_FIRST_DRAW_TYPE_ID",
+                                Types.BIGINT,
+                                "long",
+                                "G_CYCLE_TYPES",
+                                null,
+                                1,
+                                10,
+                                1,
+                                null,
+                                null,
+                                null,
+                                false,
+                                null,
+                                false,
+                                false,
+                                null,
+                                null,
+                                null));
+                };
+            };
+
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tableMap =
+            new HashMap<>(1);
+        instance.defineInputForeignKey(dataTable, foreignKeys, tableMap);
+
+        Assert.assertTrue(foreignKeys.size() == 1);
+
+        // The table map is filled after the foreign key is built.
+        tableMap.put("G_CYCLE_TYPES", table);
+
+        @NotNull final List<Attribute<String>> attributes = foreignKeys.get(0).getAttributes();
+        Assert.assertTrue(attributes.size() == 1);
+        @NotNull final Attribute<String> attribute = attributes.get(0);
+        Assert.assertEquals("G_FIRST_DRAW_TYPE_ID", attribute.getName());
+        Assert.assertEquals(Types.BIGINT, attribute.getTypeId());
+        Assert.assertEquals("long", attribute.getType());
+        Assert.assertEquals("G_CYCLE_TYPES", attribute.getTableName());
+        Assert.assertNull(attribute.getComment());
+        Assert.assertEquals(1, attribute.getOrdinalPosition());
+        Assert.assertEquals(10, attribute.getLength());
+        Assert.assertEquals(1, attribute.getPrecision());
+        Assert.assertNull(attribute.getKeyword());
+        Assert.assertNull(attribute.getRetrievalQuery());
+        Assert.assertNull(attribute.getSequence());
+        Assert.assertNull(attribute.getValue());
+        Assert.assertFalse(attribute.isReadOnly());
+        Assert.assertFalse(attribute.isNullable());
+        Assert.assertFalse(attribute.isBoolean());
+        Assert.assertNull(attribute.getBooleanTrue());
+        Assert.assertNull(attribute.getBooleanFalse());
+        Assert.assertNull(attribute.getBooleanNull());
+
+    }
 }

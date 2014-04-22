@@ -208,21 +208,24 @@ public class PerForeignKeyTemplatesTest
     @Given("^the following foreign key:$")
     public void defineInputForeignKey(@NotNull final DataTable fkInfo)
     {
-        defineInputForeignKey(fkInfo, getForeignKeys(), ForeignKeyTestHelper.getInstance());
+        defineInputForeignKey(fkInfo, getForeignKeys(), getTables(), ForeignKeyTestHelper.getInstance());
     }
 
     /**
      * Defines the foreign keys based on the information provided by the
      * feature.
      * @param fkInfo the information about the foreign key.
+     * @param foreignKeys the foreign keys.
+     * @param tables the tables.
      * @param helper the {@link ForeignKeyTestHelper} instance.
      */
     protected void defineInputForeignKey(
         @NotNull final DataTable fkInfo,
         @NotNull final List\<ForeignKey\<String\>> foreignKeys,
+        @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables,
         @NotNull final ForeignKeyTestHelper helper)
     {
-        helper.defineInputForeignKey(fkInfo, foreignKeys);
+        helper.defineInputForeignKey(fkInfo, foreignKeys, tables);
     }
 
     /**

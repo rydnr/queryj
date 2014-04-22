@@ -43,6 +43,7 @@ import cucumber.api.DataTable;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.api.exceptions.AttributeNotAvailableException;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
@@ -143,7 +144,7 @@ public class ForeignKeyTestHelper
 
         @Nullable final String targetTable = fkEntry.get("target");
         @Nullable final boolean allowsNull = Boolean.valueOf(fkEntry.get("allows null"));
-        @NotNull final List<Attribute<String>> columns = fromCsv(sourceColumns, sourceTable, tables.get(sourceTable));
+        @NotNull final List<Attribute<String>> columns = fromCsv(sourceColumns, sourceTable, tables);
 
         if (   (sourceTable != null)
             && (columns.size() > 0)
@@ -165,7 +166,7 @@ public class ForeignKeyTestHelper
      * Parses given list of columns to a list of {@link Attribute}s.
      * @param sourceColumns the column names.
      * @param sourceTable the source table.
-     * @param table the table information (needed to provide additional
+     * @param tables the table information (needed to provide additional
      * metadata about the foreign key attributes.
      * @return the attribute list.
      */
@@ -173,7 +174,7 @@ public class ForeignKeyTestHelper
     protected List<Attribute<String>> fromCsv(
         @Nullable final String sourceColumns,
         @Nullable final String sourceTable,
-        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table)
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
         @NotNull final List<Attribute<String>> result = new ArrayList<>();
 
@@ -184,8 +185,15 @@ public class ForeignKeyTestHelper
 
             while (tokenizer.hasMoreTokens())
             {
+                @NotNull final String attributeName = tokenizer.nextToken();
+
+                @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> table =
+                    tables.get(sourceTable);
+
                 @Nullable final Attribute<String> attribute =
-                    findAttribute(tokenizer.nextToken(), table);
+                    table == null
+                    ? createLazyAttribute(attributeName, sourceTable, tables)
+                    : findAttribute(attributeName, table);
 
                 if (attribute != null)
                 {
@@ -195,6 +203,269 @@ public class ForeignKeyTestHelper
         }
 
         return result;
+    }
+
+    protected Attribute<String> createLazyAttribute(
+        @NotNull final String attributeName,
+        @NotNull final String sourceTable,
+        @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
+
+    {
+        return
+            new Attribute<String>()
+            {
+                @NotNull
+                protected Attribute<String> resolveAttribute()
+                {
+                    @Nullable final Attribute<String> result = findAttribute(attributeName, tables.get(sourceTable));
+
+                    if (result == null)
+                    {
+                        throw new AttributeNotAvailableException(attributeName, sourceTable);
+                    }
+
+                    return result;
+                }
+
+                @NotNull
+                @Override
+                public String getName()
+                {
+                    return attributeName;
+                }
+
+                @Override
+                public int getTypeId()
+                {
+                    final int result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getTypeId();
+
+                    return result;
+                }
+
+                @NotNull
+                @Override
+                public String getType()
+                {
+                    @NotNull final String result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getType();
+
+                    return result;
+                }
+
+                @NotNull
+                @Override
+                public String getTableName()
+                {
+                    return sourceTable;
+                }
+
+                @Nullable
+                @Override
+                public String getComment()
+                {
+                    @Nullable final String result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getComment();
+
+                    return result;
+                }
+
+                @Override
+                public boolean isExternallyManaged()
+                {
+                    final boolean result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.isExternallyManaged();
+
+                    return result;
+                }
+
+                @Nullable
+                @Override
+                public String getKeyword()
+                {
+                    @Nullable final String result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getKeyword();
+
+                    return result;
+                }
+
+                @Nullable
+                @Override
+                public String getRetrievalQuery()
+                {
+                    @Nullable final String result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getRetrievalQuery();
+
+                    return result;
+                }
+
+                @Override
+                public boolean isNullable()
+                {
+                    final boolean result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.isNullable();
+
+                    return result;
+                }
+
+                @Nullable
+                @Override
+                public String getValue()
+                {
+                    @Nullable final String result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getValue();
+
+                    return result;
+                }
+
+                @Override
+                public boolean isReadOnly()
+                {
+                    final boolean result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.isReadOnly();
+
+                    return result;
+}
+
+                @Override
+                public boolean isBoolean()
+                {
+                    final boolean result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.isBoolean();
+
+                    return result;
+                }
+
+                @Nullable
+                @Override
+                public String getBooleanTrue()
+                {
+                    @Nullable final String result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getBooleanTrue();
+
+                    return result;
+                }
+
+                @Nullable
+                @Override
+                public String getBooleanFalse()
+                {
+                    @Nullable final String result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getBooleanFalse();
+
+                    return result;
+                }
+
+                @Nullable
+                @Override
+                public String getBooleanNull()
+                {
+                    @Nullable final String result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getBooleanNull();
+
+                    return result;
+                }
+
+                @Override
+                public int getOrdinalPosition()
+                {
+                    final int result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getOrdinalPosition();
+
+                    return result;
+                }
+
+                @Override
+                public int getLength()
+                {
+                    final int result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getLength();
+
+                    return result;
+                }
+
+                @Override
+                public int getPrecision()
+                {
+                    final int result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getPrecision();
+
+                    return result;
+                }
+
+                @Nullable
+                @Override
+                public String getSequence()
+                {
+                    @Nullable final String result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.getSequence();
+
+                    return result;
+                }
+
+                @Override
+                public int compareTo(final Attribute<String> o)
+                {
+                    final int result;
+
+                    @NotNull final Attribute<String> attribute = resolveAttribute();
+
+                    result = attribute.compareTo(o);
+
+                    return result;
+                }
+            };
     }
 
     /**

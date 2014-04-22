@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,18 +23,23 @@
 
  ******************************************************************************
  *
- * Filename: MissingJdbcUrlException.java
+ * Filename: AttributeNotAvailableException.java
  *
- * Author: Jose San Leandro Armendariz (chous)
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Represents the error when the JDBC URL information is
- *              missing.
+ * Description: Used to represent exceptional situations in which a
+ *              lazily-loaded attribute is not resolvable at runtime.
  *
- * Date: 6/14/13
- * Time: 6:11 AM
+ * Date: 2014/04/22
+ * Time: 13:32
  *
  */
 package org.acmsl.queryj.api.exceptions;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -42,24 +47,28 @@ package org.acmsl.queryj.api.exceptions;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Represents the error when the JDBC URL information is missing.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/14
+ * Used to represent exceptional situations in which a lazily-loaded attribute
+ * is not resolvable at runtime.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 3.0
+ * Created: 2014/04/22 13:32
  */
 @ThreadSafe
-public class MissingJdbcUrlException
-    extends QueryJBuildException
+public class AttributeNotAvailableException
+    extends QueryJNonCheckedException
 {
     /**
      * The serial version id.
      */
-    private static final long serialVersionUID = -3841755051591751766L;
+    private static final long serialVersionUID = -2830064648254267166L;
 
     /**
-     * Creates an empty instance.
+     * Creates a new instance.
+     * @param attributeName the attribute name.
+     * @param tableName the table name.
      */
-    public MissingJdbcUrlException()
+    public AttributeNotAvailableException(@NotNull final String attributeName, @NotNull final String tableName)
     {
-        super("jdbc-url.not.specified", new Object[0]);
+        super("Attribute.not.available", new String[] { attributeName, tableName});
     }
 }
