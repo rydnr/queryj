@@ -52,7 +52,6 @@ import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing some JetBrains annotations.
@@ -65,6 +64,9 @@ import org.jetbrains.annotations.Nullable;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.List;
 
 /**
@@ -186,16 +188,16 @@ public abstract class BasePerRepositoryTemplateBuildHandler
 
     /**
      * Retrieves the package name.
+     * @param repository the repositony.
      * @param engine the engine.
      * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      */
     @NotNull
     protected abstract String retrievePackage(
+        @NotNull final String repository,
         @NotNull final Engine<String> engine,
-        @NotNull final String projectPackage,
-        @NotNull final PackageUtils packageUtils);
+        @NotNull final String projectPackage);
 
     /**
      * Stores the template in given attribute map.

@@ -87,6 +87,17 @@ public class TemplateBuildHandlerTemplateFactory
     public TemplateBuildHandlerTemplate<DefaultTemplatePackagingContext> createTemplate(
         @NotNull final DefaultTemplatePackagingContext context)
     {
-        return new TemplateBuildHandlerTemplate<>(context);
+        @NotNull final TemplateBuildHandlerTemplate<DefaultTemplatePackagingContext> result;
+
+        switch (TemplateDefType.getEnumFromString(context.getTemplateDef().getType().getType()))
+        {
+            case PER_REPOSITORY:
+                result = new PerRepositoryTemplateBuildHandlerTemplate<>(context);
+                break;
+            default:
+                result = new TemplateBuildHandlerTemplate<>(context);
+        }
+
+        return result;
     }
 }

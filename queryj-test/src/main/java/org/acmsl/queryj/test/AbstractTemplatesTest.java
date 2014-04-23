@@ -118,7 +118,8 @@ import java.util.Properties;
 /**
  * Generic stuff for template tests.
  * @author <a href="chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/05/05
+ * @since 3.0
+ * Created: 2013/05/05
  * @param <G> the generator class.
  * @param <F> the factory class.
  */
@@ -227,6 +228,11 @@ public abstract class AbstractTemplatesTest<G, F>
      * The JDBC password for validating queries.
      */
     private String m__strJdbcPassword;
+
+    /**
+     * The repository name.
+     */
+    private String m__strRepository;
 
     /**
      * Creates an empty instance.
@@ -620,6 +626,35 @@ public abstract class AbstractTemplatesTest<G, F>
     }
 
     /**
+     * Specifies the repository.
+     * @param repo such name.
+     */
+    protected final void immutableSetRepository(@NotNull final String repo)
+    {
+        this.m__strRepository = repo;
+    }
+
+    /**
+     * Specifies the repository.
+     * @param repo such name.
+     */
+    @SuppressWarnings("unused")
+    protected void setRepository(@NotNull final String repo)
+    {
+        immutableSetRepository(repo);
+    }
+
+    /**
+     * Retrieves the repository name.
+     * @return such name.
+     */
+    @Nullable
+    public String getRepository()
+    {
+        return this.m__strRepository;
+    }
+
+    /**
      * Retrieves a {@link org.acmsl.queryj.customsql.CustomSqlProvider} instance adapted for given result.
      * @param sqlList the list of {@link Sql}.
      * @param parameters the {@link Parameter} map.
@@ -940,6 +975,8 @@ public abstract class AbstractTemplatesTest<G, F>
         EasyMock.expect(result.getEngine()).andReturn(new UndefinedJdbcEngine(engineName, "11")).anyTimes();
         EasyMock.expect(result.getTableDAO()).andReturn(tableDAO).anyTimes();
         EasyMock.expect(result.getColumnDAO()).andReturn(columnDAO).anyTimes();
+        EasyMock.expect(tableDAO.findAllTables()).andReturn(tables).anyTimes();
+        EasyMock.expect(tableDAO.findAllTableNames()).andReturn(tableNames).anyTimes();
 
         for (@NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table : tables)
         {
@@ -1107,42 +1144,44 @@ public abstract class AbstractTemplatesTest<G, F>
     public String toString()
     {
         @NotNull final StringBuilder result =
-            new StringBuilder("AbstractTemplatesTest{ FACTORY_MAPPINGS=");
+            new StringBuilder("{ \"class\": \"AbstractTemplatesTest\", \"FACTORY_MAPPINGS\": ");
 
         result.append(FACTORY_MAPPINGS);
-        result.append(", GENERATOR_MAPPINGS=");
+        result.append("\", \"GENERATOR_MAPPINGS\": \"");
         result.append(GENERATOR_MAPPINGS);
-        result.append(", PACKAGE_MAPPINGS=");
+        result.append("\", \"PACKAGE_MAPPINGS\": \"");
         result.append(PACKAGE_MAPPINGS);
-        result.append(", rootFolder=");
+        result.append("\", \"rootFolder\": \"");
         result.append(rootFolder);
-        result.append(", outputFiles=");
+        result.append("\", \"outputFiles\": \"");
         result.append(m__mOutputFiles);
-        result.append(", tables=");
+        result.append("\", \"tables\": \"");
         result.append(m__mTables);
-        result.append(", foreignKeys=");
+        result.append("\", \"foreignKeys\": \"");
         result.append(m__lForeignKeys);
-        result.append(", sqlList=");
+        result.append("\", \"sqlList\": \"");
         result.append(m__lSql);
-        result.append(", sqlParameters=");
+        result.append("\", \"sqlParameters\": \"");
         result.append(m__mParameters);
-        result.append(", rows=");
+        result.append("\", \"rows\": \"");
         result.append(m__mRows);
-        result.append(", results=");
+        result.append("\", \"results\": \"");
         result.append(m__mResults);
-        result.append(", properties=");
+        result.append("\", \"properties\": \"");
         result.append(m__mProperties);
-        result.append(", engineName=");
+        result.append("\", \"engineName\": \"");
         result.append(m__strEngineName);
-        result.append(", jdbcDriver=");
+        result.append("\", \"jdbcDriver\": \"");
         result.append(m__strJdbcDriver);
-        result.append(", jdbcUrl=");
+        result.append("\", \"jdbcUrl\": \"");
         result.append(m__strJdbcUrl);
-        result.append(", jdbcUserName=");
+        result.append("\", \"jdbcUserName\": \"");
         result.append(m__strJdbcUserName);
-        result.append(", jdbcPassword=");
+        result.append("\", \"jdbcPassword\": \"");
         result.append(m__strJdbcPassword);
-        result.append("}");
+        result.append("\", \"repository\": \"");
+        result.append(m__strRepository);
+        result.append("\" }");
 
         return result.toString();
     }

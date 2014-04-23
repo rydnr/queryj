@@ -1,0 +1,304 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: DataAccessManager.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate DataAccessManager facades.
+//
+//
+group DataAccessManager;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+  Defines the rules to generate DataAccessManager facades.
+  @param C the context.
+!>
+<sourceImpl(repository=C.repository, tables=C.tables, C=C)>
+>>
+
+sourceImpl(repository, tables, C) ::= <<
+<!
+  Defines the rules to generate DataAccessManager facades.
+  @param repository the repository name.
+  @param tables the tables.
+  @param C the context.
+!>
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description(repository=repository)
+  ],
+  template="org/acmsl/queryj/templates/DataAccessManager.stg",
+  C=C)><endif>
+<package_declaration(p=C.package)>
+<checkers_import(C=C)>
+<if(C.implement_markers)>
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.dao.DataAccessManager;
+
+<endif>
+
+<class(repository=repository, tables=tables, C=C)>
+>>
+
+description(repository) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param repository the repository.
+!>
+DataAccessManager facade for <repository> repository.
+>>
+
+class(repository, tables, C) ::= <<
+<!
+ Generates the class body.
+ @param repository the repository.
+ @param tables the tables.
+ @param C the context.
+!>
+/**
+ * <[
+      description(repository=repository)
+    ]:{line |<line>}; separator="\n * ">
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/DataAccessManager.stg", C=C)>
+ */
+public class <repository.capitalized>DataAccessManager
+<if(C.implement_markers)>
+    extends  DataAccessManager,
+             Serializable
+<else>
+    extends Serializable
+<endif>
+{
+    <tables:{ t | <dao_attribute_declaration(table=t, C=C)>}; separator="\n\n">
+
+<if(C.repository_dao)>
+    <repository_dao_attribute_declaration(repository=repository, C=C)>
+<endif>
+
+    /**
+     * Public constructor to allow reflective access.
+     */
+    public <repository.capitalized>DataAccessManager() {};
+
+    /**
+     * Singleton implementation to avoid double-checked locking.
+     */
+    private static final class <repository.capitalized>DataAccessManagerSingletonContainer
+    {
+        private static final <repository.capitalized>DataAccessManager SINGLETON =
+            new <repository.capitalized>DataAccessManager();
+    }
+
+    /**
+     * Retrieves a {@code <repository.capitalized>DataAccessManager} instance.
+     * @return such instance.
+     */
+    public static <repository.capitalized>DataAccessManager getInstance()
+    {
+        return <repository.capitalized>DataAccessManagerSingletonContainer.SINGLETON;
+    }
+
+    <tables:{ t | <dao_methods(table=t, C=C)>}; separator="\n\n">
+<if(C.repository_dao)>
+    <repository_dao_methods(repository=repository, C=C)>
+<endif>
+}
+>>
+
+dao_attribute_declaration(table, C) ::= <<
+<!
+ Generates the attribute declaration for each DAO.
+ @param table the table.
+ @param C the context.
+!>
+/**
+ * The {@link <table.name.voName>DAO} reference (cached whereas Manager
+ * instance is not garbage collected).
+ */
+<nullable(C=C)>
+private <table.name.voName>DAO m__<table.name.voName>DAO;
+>>
+
+repository_dao_attribute_declaration(repository, C) ::= <<
+<!
+ Generates the attribute declaration for the repository DAO.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * The {@link <repository.capitalized>DAO} reference (cached whereas Manager
+ * instance is not garbage collected).
+ */
+<nullable(C=C)>
+private <repository.capitalized>DAO m__<repository.capitalized>DAO;
+>>
+
+dao_methods(table, C) ::= <<
+<!
+ Generates the DAO-specific methods for each table.
+ @param table the table.
+ @param C the context.
+!>
+/**
+ * Specifies the new {@link <table.name.voName>DAO} reference to keep.
+ * @param dao the new DAO.
+ */
+protected void set<table.name.voName>DAOReference(<notnull(C=C)>final <table.name.voName>DAO dao)
+{
+    m__<table.name.voName>DAO = dao;
+}
+
+/**
+ * Retrieves the existing {@link <table.name.voName>DAO} reference.
+ * @return a DAO instance for accessing <table.name> information.
+ */
+<nullable(C=C)>
+protected <table.name.voName>DAO get<table.name.voName>DAOReference()
+{
+    return m__<table.name.voName>DAO;
+}
+
+/**
+ * Retrieves a {@link <table.name.voName>DAO}.
+ * @return a DAO instance for accessing <table.name> information.
+ */
+<notnull(C=C)>
+public <table.name.voName>DAO get<table.name.voName>DAO()
+{
+    <notnull(C=C)>final <table.name.voName>DAO result;
+
+    <nullable(C=C)><table.name.voName>DAO aux = get<table.name.voName>DAOReference();
+
+    if  (result == null)
+    {
+        <notnull(C=C)>final <table.name.voName>DAOFactory t_<table.name.voName>DAOFactory =
+            <table.name.voName>DAOFactory.getInstance();
+
+        if  (t_<table.name.voName>DAOFactory != null)
+        {
+            aux = t_<table.name.voName>DAOFactory.create<table.name.voName>DAO();
+
+            if (aux != null)
+            {
+                set<table.name.voName>DAOReference(aux);
+            }
+        }
+    }
+
+    if (aux == null)
+    {
+        throw new RuntimeException("<table.name.voName>DAO not available!");
+    }
+    else
+    {
+        result = aux;
+    }
+
+    return result;
+}
+>>
+
+repository_dao_methods(repository, C=C) ::= <<
+<!
+ Generates the methods for the repository DAO.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * Specifies the new {@code <repository.capitalized>DAO} reference to keep.
+ * @param dao the new DAO.
+ */
+protected void set<repository.capitalized>DAOReference(<notnull(C=C)>final <repository.capitalized>DAO dao)
+{
+    m__<repository.capitalized>DAO = dao;
+}
+
+/**
+ * Retrieves the existing {@code <repository.capitalized>DAO} reference.
+ * @return a DAO instance for accessing the <repository>-wide DAO.
+ */
+<nullable(C=C)>
+protected <repository.capitalized>DAO get<repository.capitalized>DAOReference()
+{
+    return m__<repository.capitalized>DAO;
+}
+
+/**
+ * Retrieves a {@code <repository.capitalized>DAO}.
+ * @return a DAO instance for accessing the <repository>-wide DAO.
+ */
+<notnull(C=C)>
+public <repository.capitalized>DAO get<repository.capitalized>DAO()
+{
+    <notnull(C=C)><repository.capitalized>DAO result;
+
+    <nullable(C=C)><repository.capitalized>DAO aux = get<repository.capitalized>DAOReference();
+
+    if  (aux == null)
+    {
+        <notnull(C=C)>final <repository.capitalized>DAOFactory t_<repository.capitalized>DAOFactory =
+            <repository.capitalized>DAOFactory.getInstance();
+
+        if  (t_<repository.capitalized>DAOFactory != null)
+        {
+            aux = t_<repository.capitalized>DAOFactory.create<repository.capitalized>DAO();
+
+            if (aux != null)
+            {
+                set<repository.capitalized>DAOReference(result);
+            }
+        }
+    }
+
+    if (aux == null)
+    {
+        throw new RuntimeException("<repository.capitalized>DAO is not available!");
+    }
+    else
+    {
+        result = aux;
+    }
+
+    return result;
+}
+>>

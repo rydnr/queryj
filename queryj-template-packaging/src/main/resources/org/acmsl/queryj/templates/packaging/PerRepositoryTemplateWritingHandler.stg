@@ -70,7 +70,6 @@ import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateWritingHa
 import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing custom templates.
@@ -132,51 +131,34 @@ public class <C.class_name>
     /**
      * {@inheritDoc}
      */
-    @NotNull
+    @Nullable
     @Override
-    public List\<<def.name.noExtension>Template> retrieveTemplates(@NotNull final QueryJCommand parameters)
+    public <def.name.noExtension>Template retrieveTemplate(@NotNull final QueryJCommand parameters)
     {
-        @NotNull final List\<<def.name.noExtension>Template> result;
-
-        @Nullable final List\<<def.name.noExtension>Template> aux =
-            new QueryJCommandWrapper\<List\<<def.name.noExtension>Template\>>(parameters)
-                .getSetting(<def.name.noExtension>TemplateBuildHandler.TEMPLATES_KEY);
-
-        if (aux == null)
-        {
-            result = new ArrayList\<<def.name.noExtension>Template>(0);
-        }
-        else
-        {
-            result = aux;
-        }
-
-        return result;
+        return
+            new QueryJCommandWrapper\<<def.name.noExtension>Template>(parameters)
+                .getSetting(<def.name.noExtension>TemplateBuildHandler.TEMPLATE_KEY);
     }
 
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param engine the engine.
-     * @param projectOutputDir the project output dir.
-     * @param projectPackage the project package.
-     * @param tableName the source table name.
-     * @param subFolders whether to use sub folders or not.
-     * @return such folder.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
     protected File retrieveOutputDir(
+        @NotNull final String repository,
+        @NotNull final <def.type.capitalized>TemplateContext context,
+        @NotNull final File projectFolder,
         @NotNull final Engine\<String> engine,
-        @NotNull final File projectOutputDir,
-        final String projectPackage,
-        @NotNull final String tableName,
-        final boolean subFolders)
+        @NotNull final QueryJCommand parameters)
     {
         @NotNull final File result;
 
+        @NotNull final String projectPackage = retrieveProjectPackage(parameters);
+
         @NotNull final String packageName =
             <def.name.noExtension>TemplateBuildHandler.buildPackageName(
-                tableName, engine, projectPackage);
+                repository, engine, projectPackage);
 
         @NotNull final String[] pieces = packageName.split("\\\.");
 
@@ -188,7 +170,7 @@ public class <C.class_name>
             aux.append(piece);
         }
 
-        result = new File(projectOutputDir.getAbsolutePath() + aux.toString());
+        result = new File(projectFolder.getAbsolutePath() + aux.toString());
 
         return result;
     }

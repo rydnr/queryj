@@ -214,9 +214,10 @@ public class PerRepositoryTemplatesTest
      * @param tableInfo the information about the tables.
      */
     @SuppressWarnings("unused")
-    @Given("^Given the repository whose name is \<repository>, composed of:$")
-    public void defineInputTables(@NotNull final DataTable tableInfo)
+    @Given("^the repository whose name is (.*), composed of:$")
+    public void defineInputTables(@NotNull final String repository, @NotNull final DataTable tableInfo)
     {
+        setRepository(repository);
         defineInputTables(tableInfo, getTables(), TableTestHelper.getInstance());
     }
 
@@ -241,7 +242,7 @@ public class PerRepositoryTemplatesTest
      * @param engine the engine.
      */
     @SuppressWarnings("unused")
-    @When("^When I use the repository-wide (.*).stg for (.*)$")
+    @When("^I use the repository-wide (.*).stg for (.*)$")
     public void generateFile(@NotNull final String template, @NotNull final String engine)
     {
         setEngineName(engine);
@@ -249,8 +250,8 @@ public class PerRepositoryTemplatesTest
         generateFile(
             template,
             engine,
+            getRepository(),
             getTables(),
-            getRows(),
             getOutputFiles(),
             retrieveCustomSqlProvider(getSqlList(), getParameters()));
     }
@@ -259,8 +260,8 @@ public class PerRepositoryTemplatesTest
      * Generates a file with the information from the feature.
      * @param templateName the template.
      * @param engine the engine name.
+     * @param repository the repository.
      * @param tableMap the table map.
-     * @param rows the rows.
      * @param outputFiles the output files.
      * @param sqlProvider the {@link CustomSqlProvider} instance.
      */
@@ -268,8 +269,8 @@ public class PerRepositoryTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
+        @NotNull final String repository,
         @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tableMap,
-        @NotNull final Map\<String, List\<Row\<String>\>> rows,
         @NotNull final Map\<String, File> outputFiles,
         @NotNull final CustomSqlProvider sqlProvider)
     {
@@ -294,13 +295,14 @@ public class PerRepositoryTemplatesTest
             @NotNull final QueryJCommand t_Command =
                 new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
 
-            // TODO: repository
-            @NotNull final String repository = "acme";
-
+            new QueryJCommandWrapper\<DecoratorFactory>(t_Command).setSetting(
+                DecoratorFactory.class.getName(), decoratorFactory);
             new QueryJCommandWrapper\<CustomSqlProvider>(t_Command).setSetting(
                 CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, sqlProvider);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.PACKAGE, BASE_PACKAGE_NAME);
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                Literals.PACKAGE_NAME, BASE_PACKAGE_NAME + ".dao"); // hard-coded in parent. could be retrieved from the feature file
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.REPOSITORY, repository);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
@@ -321,9 +323,8 @@ public class PerRepositoryTemplatesTest
             @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables =
                 new ArrayList\<>(tableMap.values());
 
-            // TODO
-            @NotNull final MetadataManager metadataManager = null;
-                //retrieveMetadataManager(engine, table, tableRows, decoratorFactory);
+            @NotNull final MetadataManager metadataManager =
+                retrieveMetadataManager(engine, tables, new ArrayList\<>(0), decoratorFactory);
 
             new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
                 DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
@@ -385,10 +386,8 @@ public class PerRepositoryTemplatesTest
             }
             catch (@NotNull final IOException ioException)
             {
-                if (failCause == null)
-                {
-                    failCause = ioException.getMessage();
-                }
+                failCause = ioException.getMessage();
+
                 restart = false;
             }
             catch (@NotNull final DevelopmentModeException debugging)
@@ -397,10 +396,8 @@ public class PerRepositoryTemplatesTest
             }
             catch (@NotNull final QueryJBuildException queryjBuildException)
             {
-                if (failCause == null)
-                {
-                    failCause = queryjBuildException.getMessage();
-                }
+                failCause = queryjBuildException.getMessage();
+
                 restart = false;
             }
 
@@ -420,7 +417,7 @@ public class PerRepositoryTemplatesTest
      * @param outputName the name of the output file.
      */
     @SuppressWarnings("unused")
-    @Then("^Then the generated repository-wide (.*) file compiles successfully")
+    @Then("^the generated repository-wide (.*) file compiles successfully")
     public void checkGeneratedFileCompiles(@NotNull final String outputName)
     {
         checkGeneratedFilesCompile(outputName, getOutputFiles());

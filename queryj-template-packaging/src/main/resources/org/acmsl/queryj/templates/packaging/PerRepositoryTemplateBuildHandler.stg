@@ -1,0 +1,194 @@
+//;-*- mode: stringtemplate -*-
+//
+//                   QueryJ's Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: PerRepositoryTemplateBuildHandler.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate QueryJ's
+//              PerRepositoryTemplateBuildHandlers.
+//
+group TemplateBuildHandler;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+  Generates a PerRepositoryTemplateBuildHandler source file.
+  @param C the context.
+!>
+<sourceImpl(def=C.templateDef, C=C)>
+>>
+
+sourceImpl(def, C) ::= <<
+<!
+  Generates a PerRepositoryTemplateBuildHandler source file.
+  @param def the template def.
+  @param C the context.
+!>
+<java_header(
+  description=[ "Build handler for ", def.name.capitalized, "Templates." ],
+  description_oneline=true,
+  filename=C.class_name,
+  template="org/acmsl/queryj/templates/packaging/PerRepositoryTemplateBuildHandler.stg",
+  C=C)>
+<package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
+
+/*
+ * Importing QueryJ-Core classes.
+ */
+import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateBuildHandler;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.DecoratedString;
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.engines.EngineDecorator;
+import org.acmsl.queryj.tools.PackageUtils;
+
+/*
+ * Importing custom templates.
+ */
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
+import org.acmsl.queryj.templates.<def.name.noExtension>Template;
+import org.acmsl.queryj.templates.<def.name.noExtension>TemplateFactory;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.List;
+
+<class(def=def, C=C)>
+>>
+
+class(def, C) ::= <<
+/**
+ * Build handler for {@link org.acmsl.queryj.templates.<def.name.noExtension>Template}s.
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/packaging/PerRepositoryTemplateBuildHandler.stg",
+  timestamp=C.timestamp,
+  version=C.version)>
+ */
+@ThreadSafe
+public class <C.class_name>
+    extends Base<def.type.capitalized>TemplateBuildHandler\<
+                <def.name.noExtension>Template,
+                <def.type.capitalized>TemplateContext,
+                <def.name.noExtension>TemplateFactory>
+{
+    /**
+     * The key to access the templates in the command.
+     */
+    @NotNull static final String TEMPLATE_KEY = "<def.name>_template";
+
+    /**
+     * Creates a {@code <def.name.capitalized>TemplateBuildHandler}.
+     */
+    public <C.class_name>() {}
+
+    /**
+     * Retrieves the template factory.
+     * @return the {@link <def.name.noExtension>TemplateFactory} instance.
+     */
+    @Override
+    @NotNull
+    protected <def.name.noExtension>TemplateFactory retrieveTemplateFactory()
+    {
+        return <def.name.noExtension>TemplateFactory.getInstance();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    protected String retrievePackage(
+        @NotNull final String repository,
+        @NotNull final Engine\<String> engine,
+        @NotNull final String projectPackage)
+    {
+        return buildPackageName(repository, engine, projectPackage);
+    }
+
+    /**
+     * Builds the actual package name.
+     * @param repository the repository.
+     * @param engine the engine.
+     * @param projectPackage the project package.
+     * @return the package name.
+     */
+    @NotNull
+    static String buildPackageName(
+        @NotNull final String repository,
+        @SuppressWarnings("unused") @NotNull final Engine\<String> engine,
+        @SuppressWarnings("unused") @NotNull final String projectPackage)
+    {
+        @NotNull final String result;
+
+        @NotNull final ST packageTemplate = new ST("<def.packageName>");
+
+        packageTemplate.add(Literals.REPOSITORY, new DecoratedString(repository));
+        packageTemplate.add(Literals.PACKAGE_NAME, new DecoratedString(projectPackage));
+        packageTemplate.add(Literals.ENGINE, new EngineDecorator(engine));
+
+        result = packageTemplate.render();
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void storeTemplate(
+        @NotNull final <def.name.noExtension>Template template,
+        @NotNull final QueryJCommand parameters)
+    {
+        new QueryJCommandWrapper\<<def.name.noExtension>Template>(parameters)
+            .setSetting(TEMPLATE_KEY, template);
+    }
+}
+>>

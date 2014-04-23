@@ -39,17 +39,21 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
 import org.acmsl.queryj.api.AbstractBasePerRepositoryTemplate;
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
-import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.metadata.engines.Engine;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Writes <i>per-repository</i> templates.
@@ -70,40 +74,70 @@ public abstract class BasePerRepositoryTemplateWritingHandler
     /**
      * {@inheritDoc}
      */
+    @NotNull
+    public List<T> retrieveTemplates(@NotNull final QueryJCommand parameters)
+        throws QueryJBuildException
+    {
+        @NotNull final List<T> result;
+
+        @Nullable final T template = retrieveTemplate(parameters);
+
+        if (template == null)
+        {
+            result = new ArrayList<>(0);
+        }
+        else
+        {
+            result = new ArrayList<>(1);
+            result.add(template);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the template from the command.
+     * @param parameters the parameters.
+     * @return the template.
+     */
+    @Nullable
+    protected abstract T retrieveTemplate(@NotNull final QueryJCommand parameters)
+        throws QueryJBuildException;
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @NotNull
     protected File retrieveOutputDir(
         @NotNull final C context,
         @NotNull final File rootDir,
         @NotNull final QueryJCommand parameters)
+        throws QueryJBuildException
     {
         return
             retrieveOutputDir(
+                retrieveTableRepositoryName(parameters),
+                context,
                 rootDir,
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters),
-                retrieveProductName(parameters),
-                parameters,
-                PackageUtils.getInstance());
+                retrieveEngine(parameters, retrieveDatabaseMetaData(parameters)),
+                parameters);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param repository the repository name.
+     * @param context the context.
      * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
-     * using a different package naming scheme.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      */
     @NotNull
     protected abstract File retrieveOutputDir(
+        @NotNull final String repository,
+        @NotNull final C context,
         @NotNull final File projectFolder,
-        @NotNull final String projectPackage,
-        final boolean useSubfolders,
-        @NotNull final String engineName,
-        @NotNull final QueryJCommand parameters,
-        @NotNull final PackageUtils packageUtils);
+        @NotNull final Engine<String> engine,
+        @NotNull final QueryJCommand parameters);
 }
