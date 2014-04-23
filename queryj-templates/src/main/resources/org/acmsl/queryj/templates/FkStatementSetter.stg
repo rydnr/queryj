@@ -163,5 +163,130 @@ public class <fk.source.name.voName>By<fk.target.name.voName>StatementSetter
     implements  PreparedStatementSetter
 {
     <fk.attributes:{ a | <attribute_declaration(attribute=a, C=C)>}; separator="\n">
+
+    /**
+     * Creates a {@code <fk.source.name.voName>By<fk.target.name.voName>StatementSetter}
+     * instance.
+     <fk.attributes:{ a |<attribute_javadoc(attr=a)>}; separator="\n">
+     */
+    public <fk.source.name.voName>By<fk.target.name.voName>StatementSetter(
+        <fk.attributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
+    {
+        <fk.attributes:{ attr | immutableSet<attr.name.capitalized>(<attr.name.uncapitalized>);};
+          separator="\n">
+    }
+
+    <fk.attributes:{ a | <attribute_accessors(attribute=a)>}; separator="\n">
+
+    /**
+     * Specifies the values on given {@link PreparedStatement}.
+     * @param preparedStatement the prepared statement.
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+     */
+    @Override
+    public void setValues(<notnull(C=C)>final PreparedStatement preparedStatement)
+        throws  SQLException
+    {
+        setValues(
+            preparedStatement,
+            <fk.attributes:{attr | get<attr.name.capitalized>()}; separator=",\n">);
+    }
+
+    /**
+     * Specifies the values on given {@link PreparedStatement}.
+     * @param preparedStatement the prepared statement.
+     <fk.attributes:{ a |<attribute_javadoc(attr=a)>}; separator="\n">
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+     */
+    protected void setValues(
+        <notnull(C=C)>final PreparedStatement preparedStatement,
+        <fk.attributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
+      throws  SQLException
+    {
+        int index = 1;
+
+        <fk.attributes:{ a | <attribute_preparedstatement_specification(attr=a)>}; separator="\n">
+    }
+
+    <equals_method(fk=fk, C=C)>
+
+    <hashcode_method(fk=fk, C=C)>
+
+    <tostring_method(fk=fk, C=C)>
+}
+>>
+
+equals_method(fk, C) ::= <<
+<! Generates the equals(Object) method !>
+/**
+ * Checks whether given object is semantically equivalent to this one.
+ * @param other the other object to compare to.
+ * @return {@code true} if and only if they're equivalent.
+ */
+@Override
+public boolean equals(<nullable(C=C)>final Object other)
+{
+    final boolean result;
+
+    if (other instanceof <fk.source.name.voName>By<fk.target.name.voName>StatementSetter)
+    {
+        <notnull(C=C)>final <fk.source.name.voName>By<fk.target.name.voName>StatementSetter candidate =
+            (<fk.source.name.voName>By<fk.target.name.voName>StatementSetter) other;
+
+        <fk.attributes:{ a | <attribute_equals(attribute=a)>}; separator="">
+        result =
+            <fk.attributes:{ a |<a.name.uncapitalized>Match}; separator="&& \n">;
+    }
+    else
+    {
+        result = false;
+    }
+
+    return result;
+}
+>>
+
+hashcode_method(fk, C) ::= <<
+<! Generates the hashCode() method !>
+/**
+ * Retrieves the hash code which identifies this instance
+ * from any other one.
+ * @return the unique (among instances of this class) value.
+ */
+@Override
+public int hashCode()
+{
+    final int result;
+
+    final int classHashCode = <fk.source.name.voName>By<fk.target.name.voName>StatementSetter.class.hashCode();
+
+    <fk.attributes:{ a | <attribute_hashcode(attribute=a)>}; separator="\n">
+
+    result =
+          classHashCode
+        <fk.attributes:{ a |+ <a.name.uncapitalized>HashCode}; separator="\n">;
+
+    return result;
+}
+>>
+
+tostring_method(fk, C) ::= <<
+<! Generates the toString() method !>
+/**
+ * Generates a JSON-compatible representation of this instance.
+ * @return such text.
+ */
+<notnull(C=C)>
+@Override
+public String toString()
+{
+    <notnull(C=C)>final StringBuilder result =
+        new StringBuilder("{ \class\": \"<<fk.source.name.voName>By<fk.target.name.voName>StatementSetter");
+
+    <fk.attributes:{ a | <attribute_toString(attribute=a)>}; separator="\n">
+
+    result.append(", \"package\": \"<C.package>\" }");
+
+    return result.toString();
 }
 >>

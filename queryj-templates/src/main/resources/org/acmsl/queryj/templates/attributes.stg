@@ -37,13 +37,14 @@
 //
 group attributes;
 
-attribute_method_parameter_declaration(attribute, prefix) ::= <<
+attribute_method_parameter_declaration(attribute, usePrefix, prefix, C) ::= <<
 <!
  Writes the method parameter declaration for given attribute.
  @param attribute the attribute.
+ @param usePrefix whether to use a prefix or not.
  @param prefix the prefix.
 !>
-<if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>final <attribute.javaType> <if(prefix)><prefix><attribute.name.capitalized><else><attribute.name.uncapitalized><endif>
+<if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>final <attribute.javaType> <if(usePrefix)><prefix><attribute.name.capitalized><else><attribute.name.uncapitalized><endif>
 >>
 
 attribute_declaration(attribute, C) ::= <<
@@ -228,7 +229,7 @@ final boolean <attribute.name.uncapitalized>Match = this.m__<attribute.name.capi
 attribute_hashcode(attribute) ::= <<
 <! Generates the hashcode contribution for each attribute. !>
 <if(attribute.strictlyPrimitive)>
-final int <attribute.name.uncapitalized>HashCode = ("" + this.m__<attribute.name.capitalized>).hashcode();<else>
+final int <attribute.name.uncapitalized>HashCode = ("" + this.m__<attribute.name.capitalized>).hashCode();<else>
 <if(attribute.allowsNull)>final int <attribute.name.uncapitalized>HashCode;
 if (this.m__<attribute.name.capitalized> == null)
 {
