@@ -1,0 +1,388 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: DAOChooser.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate DAOChooser facades.
+//
+//
+group DAOChooser;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+  Defines the rules to generate DAOChooser facades.
+  @param C the context.
+!>
+<sourceImpl(repository=C.repository, tables=C.tables, C=C)>
+>>
+
+sourceImpl(repository, tables, C) ::= <<
+<!
+  Defines the rules to generate DAOChooser facades.
+  @param repository the repository name.
+  @param tables the tables.
+  @param C the context.
+!>
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description(repository=repository)
+  ],
+  template="org/acmsl/queryj/templates/DAOChooser.stg",
+  C=C)><endif>
+<package_declaration(p=C.package)>
+<checkers_import(C=C)>
+<if(C.implement_markers)>
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.dao.DAOChooser;
+
+<endif>
+
+<class(repository=repository, tables=tables, C=C)>
+>>
+
+description(repository) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param repository the repository.
+!>
+DAOChooser facade for <repository> repository.
+>>
+
+class(repository, tables, C) ::= <<
+<!
+ Generates the class body.
+ @param repository the repository.
+ @param tables the tables.
+ @param C the context.
+!>
+/**
+ * <[
+      description(repository=repository)
+    ]:{line |<line>}; separator="\n * ">
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/DAOChooser.stg", C=C)>
+ */
+public class <repository.capitalized>DAOChooser
+<if(C.implement_markers)>
+    extends  DAOChooser,
+             Serializable
+<else>
+    extends Serializable
+<endif>
+{
+
+    /**
+     * Public constructor to allow reflective access.
+     */
+    public <repository.capitalized>DAOChooser() {};
+
+    /**
+     * Singleton implementation to avoid double-checked locking.
+     */
+    private static final class <repository.capitalized>DAOChooserSingletonContainer
+    {
+        private static final <repository.capitalized>DAOChooser SINGLETON =
+            new <repository.capitalized>DAOChooser();
+    }
+
+    /**
+     * Retrieves a {@code <repository.capitalized>DAOChooser} instance.
+     * @return such instance.
+     */
+    <notnull(C=C)>
+    public static <repository.capitalized>DAOChooser getInstance()
+    {
+        return <repository.capitalized>DAOChooserSingletonContainer.SINGLETON;
+    }
+
+    <tables:{ t | <dao_constant(table=t, repository=repository, C=C)>}; separator="\n\n">
+<if(C.repository_dao)>
+    <repository_dao_constant(repository=repository, C=C)>
+<endif>
+
+    /**
+     * The configuration settings.
+     */
+    <notnull(C=C)>
+    private static final String PROPERTIES_FILE = "queryj-<repository.lowercased>.properties";
+
+    /**
+     * The configuration settings.
+     */
+    private Properties m__Properties;
+
+    /**
+     * Public constructor to allow reflective access.
+     */
+    public <repository.capitalized>DAOChooser() {};
+
+    /**
+     * Retrieves a {@code <repository.capitalized>DAOChooser} instance.
+     * @return such instance.
+     */
+    <notnull(C=C)>
+    public static <repository.capitalized>DAOChooser getInstance()
+    {
+        return <repository.capitalized>DAOChooserSingletonContainer.SINGLETON;
+    }
+
+    /**
+     * Specifies the properties.
+     * @param properties the new properties.
+     */
+    protected final void immutableSetProperties(<notnull(C=C)>final Properties properties)
+    {
+        m__Properties = properties;
+    }
+
+    /**
+     * Specifies the properties.
+     * @param properties the new properties.
+     */
+    protected void setProperties(<notnull(C=C)>final Properties properties)
+    {
+        immutableSetProperties(properties);
+    }
+
+    /**
+     * Retrieves the configuration settings.
+     * @return the properties.
+     */
+    <notnull(C=C)>
+    protected final Properties immutableGetProperties()
+    {
+        <nullable(C=C)>final Properties result = getProperties();
+
+        if  (result == null)
+        {
+            result = new Properties();
+            loadProperties(result);
+            immutableSetProperties(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the properties.
+     * @return such information.
+     */
+     <nullable(C=C)>
+     protected Properties getProperties()
+     {
+         return m__Properties;
+     };
+
+    /**
+     * Retrieves a concrete property.
+     * @param key the property key.
+     * @return the configuration value associated to such setting.
+     */
+    <nullable(C=C)>
+    protected String getProperty(<notnull(C=C)>final String key)
+    {
+        // This is safe since immutableGetProperties() is final and ensures
+        // a new object if the instance's is null.
+        return immutableGetProperties().getProperty(key);
+    }
+
+    /**
+     * Loads the configuration from a property file.
+     * @param properties where to store the settings.
+     */
+    protected synchronized void loadProperties(<notnull(C=C)>final Properties properties)
+    {
+        if  (properties != null)
+        {
+            InputStream t_isProperties = null;
+
+            // Loading properties
+            try
+            {
+                // try classpath
+                t_isProperties =
+                    <repository.capitalized>DAOChooser.class.getClassLoader().getResourceAsStream(
+                        "/" + PROPERTIES_FILE);
+
+                if  (t_isProperties == null)
+                {
+                    // try local
+                    t_isProperties =
+                        <repository.capitalized>DAOChooser.class.getClassLoader().getResourceAsStream(
+                            PROPERTIES_FILE);
+                }
+
+                if  (t_isProperties != null)
+                {
+                    properties.load(t_isProperties);
+                }
+                else
+                {
+                     try
+                     {
+                         LogFactory.getLog(<repository.capitalized>DAOChooser.class).warn(
+                               "Couldn't find the property file: "
+                             + PROPERTIES_FILE);
+                     }
+                     catch  (final Throwable throwable)
+                     {
+                         // class-loading problem.
+                     }
+                }
+            }
+            catch  (final IOException ioException)
+            {
+                try
+                {
+                     LogFactory.getLog(<repository.capitalized>DAOChooser.class).warn(
+                          "Couldn't find the property file: "
+                        + PROPERTIES_FILE,
+                        ioException);
+                }
+                catch  (final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+            }
+        }
+        else
+        {
+            try
+            {
+                LogFactory.getLog(<repository.capitalized>DAOChooser.class).warn(
+                    "Properties object not valid!");
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
+        }
+    }
+
+    <tables:{t | <dao_factory_getters(table=t, repository=repository, C=C)>}; separator="\n\n">
+
+<if(C.repository_dao)>
+    <repository_dao_factory_getters(repository=repository, C=C)>
+<endif>
+}
+>>
+
+dao_constant(table, repository, C) ::= <<
+<!
+ Writes the constant declaration for each table.
+ @param table the table.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * Used to retrieve the value of \<i\><repository.lowercased>.<table.name.normalized.lowercased>.dao\</i\>
+ * from the configuration layer.
+ */
+<notnull(C=C)>
+public static final String <repository.uppercased>_<table.name.voName.uppercased>_DAO_KEY =
+    "<repository.lowercased>.<table.name.voName.lowercased>.dao";
+>>
+
+repository_dao_constant(repository, C) ::= <<
+<!
+ Writes the constant declaration for the repository DAO.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * Used to retrieve the value of \<i\><repository.lowercased>.dao\</i\>
+ * from the configuration layer.
+ */
+<notnull(C=C)>
+public static final String <repository.uppercased>_DAO_KEY =
+    "<repository.lowercased>.dao";
+>>
+
+dao_factory_getters(table, repository, C) ::= <<
+<!
+ Generates the getter methods to retrieve the class names of the
+ concrete DAOFactory implementations.
+ @param table the table.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * Retrieves the {@link <table.name.voName>DAOFactory} class name.
+ * @return such class name.
+ */
+<notnull(C=C)>
+public String get<table.name.voName>DAOFactoryClassName()
+{
+    <nullable(C=C)>final String result = getProperty(<repository.uppercased>_<table.name.voName.uppercased>_DAO_KEY);
+
+    if (result == null)
+    {
+        throw new RuntimeException(<repository.uppercased>_<table.name.voName.uppercased>_DAO_KEY + " not defined!");
+    }
+
+    return result;
+}
+>>
+
+repository_dao_factory_getters(repository, C) ::= <<
+<!
+ Generates the getter methods to retrieve the class names of the
+ repository DAOFactory implementation.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * Retrieves the {@link <repository.capitalized>DAOFactory} class name.
+ * @return such class name.
+ */
+<notnull(C=C)>
+public String get<repository.capitalized>DAOFactoryClassName()
+{
+    <nullable(C=C)>final String result = getProperty(<repository.uppercased>_DAO_KEY);
+    if (result == null)
+    {
+        throw new RuntimeException(<repository.uppercased>_<table.voName.uppercased>_DAO_KEY + " not defined!");
+    }
+
+    return result;
+}
+>>

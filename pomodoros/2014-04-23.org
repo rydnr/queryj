@@ -1,5 +1,6 @@
 * 2014/04/23
 ** DONE FkStatementSetter #478: 1 -> 1
 ** DONE DataAccessManager template #480: 6 -> 6
+** DONE DAOChooser template #481: 1 -> 1
 *** Check filename of per-fk cucumber feature
 *** Generate real per-fk cucumber feature

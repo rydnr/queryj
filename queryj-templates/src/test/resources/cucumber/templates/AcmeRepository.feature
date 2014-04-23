@@ -13,4 +13,5 @@ Feature: Acme-wide classes compile
 
   Examples:
     | template | output |
-    | DataAccessManager| AcmeDataAccessManager.java |
+    | DAOChooser | AcmeDAOChooser.java |
+#    | DataAccessManager| AcmeDataAccessManager.java |
