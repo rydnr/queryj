@@ -99,7 +99,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     private int m__iThreadCount = 1;
 
     /**
-     * Creates an {@link AbstractTemplateGenerator} with given settings.
+     * Creates an {@code AbstractTemplateGenerator} with given settings.
      * @param caching whether to support caching or not.
      * @param threadCount the number of threads to use.
      */
@@ -194,7 +194,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
                 FileUtils.getInstance());
     }
 
-    /**
+    /**                                               N
      * Writes a table template to disk.
      * @param caching whether to use caching or not.
      * @param template the table template to write.

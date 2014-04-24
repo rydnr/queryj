@@ -207,7 +207,7 @@ public class <fk.source.name.voName>By<fk.target.name.voName>StatementSetter
     {
         int index = 1;
 
-        <fk.attributes:{ a | <attribute_preparedstatement_specification(attr=a)>}; separator="\n">
+        <fk.attributes:{ a | <attribute_preparedstatement_specification(attr=a, C=C)>}; separator="\n">
     }
 
     <equals_method(fk=fk, C=C)>

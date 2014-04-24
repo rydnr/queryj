@@ -81,7 +81,7 @@ import java.io.Serializable;
 <endif>
 
 
-<class(table=table, C=C)>
+<class(table=table, repository=C.repository, C=C)>
 >>
 
 description(table) ::= <<
@@ -107,9 +107,17 @@ class(table, repository, C) ::= <<
   template="org/acmsl/queryj/templates/ResultSetExtractor.stg", C=C)>
  */
 public class <table.name.voName>ResultSetExtractor
-    implements  ResultSetExtractor,
-                <repository.capitalized>TableRepository
+    extends <repository.voName>ResultSetExtractor\<<table.name.voName>\>
 {
+    /**
+     * Creates a new instance.
+     * @param listener the {@link <repository.voName>DAOListener} instance.
+     */
+    public <table.name.voName>ResultSetExtractor(<nullable(C=C)>final <repository.voName>DAOListener listener)
+    {
+        super(listener);
+    }
+
     <defaultExtractor(table=table, repository=repository, C=C)>
 
 }
@@ -125,6 +133,7 @@ defaultExtractor(table, repository, C) ::= <<
 /**
  * Extracts {@link <table.name.voName>} information from given result set.
  * @param resultSet the result set.
+ * @param listener the {@link <repository.voName>DAOListener} instance.
  * @return the {@code <table.name.voName>} or
  * {@code null} if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
@@ -132,18 +141,19 @@ defaultExtractor(table, repository, C) ::= <<
  * custom exception.
  */
 <notnull(C=C)>
-public Object extractData(<notnull(C=C)>final ResultSet resultSet)
+protected <table.name.voName> extractData(
+    <notnull(C=C)>final ResultSet resultSet,
+    <nullable(C=C)>final <repository.voName>DAOListener listener)
     throws  SQLException,
             DataAccessException
 {
-    return
-        extractData(
-            resultSet, <table.name.voName>ValueObjectFactory.getInstance());
+    return extractData(resultSet, listener, <table.name.voName>ValueObjectFactory.getInstance());
 }
 
 /**
  * Extracts {@link <table.name.voName>} information from given result set.
  * @param resultSet the result set.
+ * @param listener the {@link <repository.voName>DAOListener} instance.
  * @param factory the {@link <table.name.voName>ValueObjectFactory}
  * instance.
  * @return the {@code <table.name.voName>} or
@@ -155,6 +165,7 @@ public Object extractData(<notnull(C=C)>final ResultSet resultSet)
 <notnull(C=C)>
 protected <table.name.voName> extractData(
     <notnull(C=C)>final ResultSet resultSet,
+    <nullable(C=C)>final <repository.voName>DAOListener listener,
     <notnull(C=C)>final <table.name.voName>ValueObjectFactory factory)
   throws  SQLException,
           DataAccessException
@@ -163,15 +174,25 @@ protected <table.name.voName> extractData(
 
     if  (resultSet.next())
     {
-        <table.attributes:{ a| <nullable_attribute_extraction(attr=a, table=table, repository=repository, C=C)>}; separator="\n">
+        if (listener != null)
+        {
+            daoListener.resultSetMovedForward(this);
+        }
 
         result =
             factory.create<table.name.voName>(
-                <table.attributes:{a | <attribute_extraction(attr=a)>}; separator=",\n">);
+                <table.attributes:{a | <attribute_resultset_retrieval(attr=a, C=C)>}; separator=",\n">);
+
+        if  (daoListener != null)
+        {
+            daoListener.resultSetClosed(this);
+        }
     }
     else
     {
+        // TODO: check it this is exceptional or not.
         throw new RuntimeException("No more data to extract!");
+        //result = null;
     }
 
     return result;

@@ -78,6 +78,9 @@ public abstract class AbstractQueryJTemplateGenerator<N extends QueryJTemplate<C
         return CachingDecoratorFactory.getInstance();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
