@@ -54,6 +54,7 @@ sourceImpl(table, C) ::= <<
   @param table the table.
   @param C the context.
 !>
+/*
 <if(C.header)>
 <C.header>
 <else>
@@ -64,6 +65,7 @@ sourceImpl(table, C) ::= <<
   ],
   template="org/acmsl/queryj/templates/BaseValueObject.stg",
   C=C)><endif>
+*/
 <package_declaration(p=C.package)>
 <checkers_import(C=C)>
 /*

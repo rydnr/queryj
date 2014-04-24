@@ -13,5 +13,6 @@ Feature: Acme-wide classes compile
 
   Examples:
     | template | output |
-    | DAOChooser | AcmeDAOChooser.java |
+    | ConfigurationProperties | queryj-acme.properties |
+#    | DAOChooser | AcmeDAOChooser.java |
 #    | DataAccessManager| AcmeDataAccessManager.java |

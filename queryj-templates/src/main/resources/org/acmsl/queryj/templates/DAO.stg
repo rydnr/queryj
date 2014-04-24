@@ -54,6 +54,7 @@ sourceImpl(table, engine, C) ::= <<
   @param table the table.
   @param C the context.
 !>
+/*
 <if(C.header)>
 <C.header>
 <else>
@@ -66,6 +67,7 @@ sourceImpl(table, engine, C) ::= <<
   ],
   template="org/acmsl/queryj/dao/DAO.stg",
   C=C)><endif>
+*/
 <package_declaration(p=C.package)>
 
 <project_imports(
