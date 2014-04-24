@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerRepositoryTemplateFactoryTemplate.java
+ * Filename: PerTableTemplateFactoryTemplate.java
  *
- * Author: Jose San Leandro
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Represents repository-specific template factory templates.
+ * Description: Represents table-specific template factory templates.
  *
- * Date: 2014/04/17
- * Time: 12:09
+ * Date: 2014/04/24
+ * Time: 12:45
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -46,38 +46,37 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Represents repository-specific template factory templates.
+ * Represents table-specific template factory templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
- * @param <C> the context.
  * @since 3.0
- * Created: 2014/04/17 12:09
+ * Created: 2014/04/24 12:45
  */
 @ThreadSafe
-public class PerRepositoryTemplateFactoryTemplate<C extends TemplatePackagingContext>
+public class PerTableTemplateFactoryTemplate<C extends TemplatePackagingContext>
     extends TemplateFactoryTemplate<C>
 {
     /**
      * The serial version id.
      */
-    private static final long serialVersionUID = -6864648420741642410L;
+    private static final long serialVersionUID = 753437683427320384L;
 
     /**
      * Creates a new instance.
      * @param context the template context.
      */
-    public PerRepositoryTemplateFactoryTemplate(@NotNull final C context)
+    public PerTableTemplateFactoryTemplate(@NotNull final C context)
     {
         super(context);
     }
 
     /**
      * Retrieves the template name.
-     * @return "PerRepositoryTemplateFactory".
+     * @return "PerTableTemplateFactory".
      */
     @NotNull
     @Override
     public String getTemplateName()
     {
-        return Literals.PER_REPOSITORY_TEMPLATE_FACTORY;
+        return Literals.PER_TABLE_TEMPLATE_FACTORY;
     }
 }

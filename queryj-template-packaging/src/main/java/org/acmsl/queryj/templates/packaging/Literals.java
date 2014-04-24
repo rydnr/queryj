@@ -165,4 +165,8 @@ public interface Literals
      * String literal: "PerRepositoryTemplateBuildHandler".
      */
     String PER_REPOSITORY_TEMPLATE_BUILD_HANDLER = "PerRepositoryTemplateBuildHandler";
+    /**
+     * String literal: "PerTableTemplateFactory".
+     */
+    String PER_TABLE_TEMPLATE_FACTORY = "PerTableTemplateFactory";
 }

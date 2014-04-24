@@ -692,8 +692,6 @@ public class TableTestHelper
             }
             catch (@NotNull final ParseException invalidEnglishDate)
             {
-                LogFactory.getLog(TableTestHelper.class).debug(
-                    "Cannot convert " + validationValue + " to a Date", invalidEnglishDate);
             }
         }
 

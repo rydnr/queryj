@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerRepositoryTemplateFactoryTemplate.java
+ * Filename: PerTableTemplateFactoryTemplateTest.java
  *
- * Author: Jose San Leandro
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Represents repository-specific template factory templates.
+ * Description: Tests for PerTableTemplateFactoryTemplate.
  *
- * Date: 2014/04/17
- * Time: 12:09
+ * Date: 2014/04/24
+ * Time: 12:42
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -41,43 +41,35 @@ package org.acmsl.queryj.templates.packaging;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JUnit/EasyMock classes.
  */
-import org.checkthread.annotations.ThreadSafe;
+import org.easymock.EasyMock;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
- * Represents repository-specific template factory templates.
+ * Tests for {@link PerTableTemplateFactoryTemplate}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
- * @param <C> the context.
  * @since 3.0
- * Created: 2014/04/17 12:09
+ * Created: 2014/04/24 12:42
  */
-@ThreadSafe
-public class PerRepositoryTemplateFactoryTemplate<C extends TemplatePackagingContext>
-    extends TemplateFactoryTemplate<C>
+@RunWith(JUnit4.class)
+public class PerTableTemplateFactoryTemplateTest
 {
     /**
-     * The serial version id.
+     * Checks whether getTemplateName() returns the correct template name.
      */
-    private static final long serialVersionUID = -6864648420741642410L;
-
-    /**
-     * Creates a new instance.
-     * @param context the template context.
-     */
-    public PerRepositoryTemplateFactoryTemplate(@NotNull final C context)
+    @Test
+    public void getTemplateName_returns_the_correct_template_name()
     {
-        super(context);
-    }
+        @NotNull final DefaultTemplatePackagingContext context =
+            EasyMock.createNiceMock(DefaultTemplatePackagingContext.class);
 
-    /**
-     * Retrieves the template name.
-     * @return "PerRepositoryTemplateFactory".
-     */
-    @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return Literals.PER_REPOSITORY_TEMPLATE_FACTORY;
+        @NotNull final PerTableTemplateFactoryTemplate instance =
+            new PerTableTemplateFactoryTemplate<>(context);
+
+        Assert.assertEquals(Literals.PER_TABLE_TEMPLATE_FACTORY, instance.getTemplateName());
     }
 }

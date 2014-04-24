@@ -283,7 +283,7 @@ tostring_method(fk, C) ::= <<
 public String toString()
 {
     <notnull(C=C)>final StringBuilder result =
-        new StringBuilder("{ \class\": \"<<fk.source.name.voName>By<fk.target.name.voName>StatementSetter");
+        new StringBuilder("{ \class\": \"<fk.source.name.voName>By<fk.target.name.voName>StatementSetter");
 
     <fk.attributes:{ a | <attribute_toString(attribute=a)>}; separator="\n">
 

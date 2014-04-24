@@ -1,0 +1,187 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: ValueObject.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate ResultSetExtractor
+//              implementations.
+//
+//
+group ResultSetExtractor;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+  Defines the rules to generate ResultSetExtractor implementations.
+  @param C the context.
+!>
+<sourceImpl(table=C.table, C=C)>
+>>
+
+sourceImpl(table, C) ::= <<
+<!
+  Defines the rules to generate ResultSetExtractor implementations.
+  @param table the table.
+  @param C the context.
+!>
+/*
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description(table=table)
+  ],
+  template="org/acmsl/queryj/templates/ResultSetExtractor.stg",
+  C=C)><endif>
+*/
+<package_declaration(p=C.package)>
+<checkers_import(C=C)>
+<if(C.implement_markers)>
+
+<endif>
+/*
+ * Importing JDK classes.
+ */
+import java.io.Serializable;
+<if(table.attributeTypes)>
+<table.attributeTypes:{ t | import <t>;}; separator="\n">
+<endif>
+
+
+<class(table=table, C=C)>
+>>
+
+description(table) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param result the custom result.
+!>
+{@link ResultSetExtractor} implementation for <table.name>.
+>>
+
+class(table, repository, C) ::= <<
+<!
+ Generates the class body.
+ @param table the table.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * <[
+      description(table=table)
+    ]:{line |<line>}; separator="\n * ">
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/ResultSetExtractor.stg", C=C)>
+ */
+public class <table.name.voName>ResultSetExtractor
+    implements  ResultSetExtractor,
+                <repository.capitalized>TableRepository
+{
+    <defaultExtractor(table=table, repository=repository, C=C)>
+
+}
+>>
+
+defaultExtractor(table, repository, C) ::= <<
+<!
+ Generates the default logic for the extractor.
+ @param table the table.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * Extracts {@link <table.name.voName>} information from given result set.
+ * @param resultSet the result set.
+ * @return the {@code <table.name.voName>} or
+ * {@code null} if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i\>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ */
+<notnull(C=C)>
+public Object extractData(<notnull(C=C)>final ResultSet resultSet)
+    throws  SQLException,
+            DataAccessException
+{
+    return
+        extractData(
+            resultSet, <table.name.voName>ValueObjectFactory.getInstance());
+}
+
+/**
+ * Extracts {@link <table.name.voName>} information from given result set.
+ * @param resultSet the result set.
+ * @param factory the {@link <table.name.voName>ValueObjectFactory}
+ * instance.
+ * @return the {@code <table.name.voName>} or
+ * {@code null} if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ */
+<notnull(C=C)>
+protected <table.name.voName> extractData(
+    <notnull(C=C)>final ResultSet resultSet,
+    <notnull(C=C)>final <table.name.voName>ValueObjectFactory factory)
+  throws  SQLException,
+          DataAccessException
+{
+    <nullable(C=C)>final <table.name.voName> result;
+
+    if  (resultSet.next())
+    {
+        <table.attributes:{ a| <nullable_attribute_extraction(attr=a, table=table, repository=repository, C=C)>}; separator="\n">
+
+        result =
+            factory.create<table.name.voName>(
+                <table.attributes:{a | <attribute_extraction(attr=a)>}; separator=",\n">);
+    }
+    else
+    {
+        throw new RuntimeException("No more data to extract!");
+    }
+
+    return result;
+}
+>>
+
+nullable_attribute_extraction(attr, table, repository, C) ::= <<
+<attr.name>
+>>
+
+attribute_extraction(attr, table, repository, C) ::= <<
+<attr.name>
+>>
