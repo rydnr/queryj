@@ -1,19 +1,17 @@
 /*
- * ResultSetExtractor template metadata.
+ * BaseResultSetExtractor template metadata.
  */
 // The template name (the filename).
-name : ResultSetExtractor.stg;
+name : BaseResultSetExtractor.stg;
 
 // The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-custom-sql.
-type : per-table;
+type : per-repository;
 
 // The output flavor.
 output: Java;
 
 // The filename builder.
-filename  builder : <tableName.voName>ResultSetExtractor.java;
+filename builder : <repository.capitalized>ResultSetExtractor.java;
 
 // The package.
-package: <packageName>.dao.rdb.<engine.name.lowercased>;
-
-disabled;
+package: <packageName>.dao;

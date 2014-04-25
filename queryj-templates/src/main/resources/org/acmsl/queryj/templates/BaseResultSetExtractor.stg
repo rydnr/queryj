@@ -1,0 +1,191 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: BaseResultSetExtractor.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate BaseResultSetExtractor
+//              implementations.
+//
+//
+group BaseResultSetExtractor;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+  Defines the rules to generate BaseResultSetExtractor implementations.
+  @param C the context.
+!>
+<sourceImpl(repository=C.repository, tables=C.tables, C=C)>
+>>
+
+sourceImpl(repository, tables, C) ::= <<
+<!
+  Defines the rules to generate BaseResultSetExtractor implementations.
+  @param repository the repository name.
+  @param tables the tables.
+  @param C the context.
+!>
+/*
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description(repository=repository)
+  ],
+  template="org/acmsl/queryj/templates/BaseResultSetExtractor.stg",
+  C=C)><endif>
+*/
+<package_declaration(p=C.package)>
+<checkers_import(C=C)>
+<if(C.implement_markers)>
+
+<endif>
+
+/*
+ * Importing JDK classes.
+ */
+import java.io.Serializable;
+
+<class(repository=repository, tables=tables, C=C)>
+>>
+
+description(repository) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param repository the repository.
+!>
+BaseResultSetExtractor implementation for <repository> repository.
+>>
+
+class(repository, tables, C) ::= <<
+<!
+ Generates the class body.
+ @param repository the repository.
+ @param tables the tables.
+ @param C the context.
+!>
+/**
+ * <[
+      description(repository=repository)
+    ]:{line |<line>}; separator="\n * ">
+ * @param \<V> the value object type.
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/BaseResultSetExtractor.stg", C=C)>
+ */
+public abstract class <repository.capitalized>BaseResultSetExtractor\<V>
+    implements Serializable
+{
+    /**
+     * The DAO listener.
+     */
+    <nullable(C=C)>
+    private <repository.capitalized>DAOListener m__DAOListener;
+
+    /**
+     * Creates a new instance.
+     * @param listener the {@link <repository.capitalized>DAOListener} instance.
+     */
+    protected <repository.capitalized>BaseResultSetExtractor(
+        <nullable(C=C)>final <repository.capitalized>DAOListener listener)
+    {
+        immutableSetDAOListener(listener);
+    }
+
+    /**
+     * Specifies the DAO listener.
+     * @param listener the {@link <repository.capitalized>DAOListener} instance.
+     */
+    protected final void immutableSetDAOListener(
+        <nullable(C=C)>final <repository.capitalized>DAOListener listener)
+    {
+        this.m__DAOListener = listener;
+    }
+
+    /**
+     * Specifies the DAO listener.
+     * @param listener the {@link <repository.capitalized>DAOListener} instance.
+     */
+    @SuppressWarnings("unused")
+    protected void setDAOListener(
+        <nullable(C=C)>final <repository.capitalized>DAOListener listener)
+    {
+        this.m__DAOListener = listener;
+    }
+
+    /**
+     * Specifies the DAO listener.
+     * @param listener the {@link <repository.capitalized>DAOListener} instance.
+     */
+    <nullable(C=C)>
+    public <repository.capitalized>DAOListener getDAOListener()
+    {
+        return this.m__DAOListener;
+    }
+
+    /**
+     * Extracts &lt;V&gt; information from given result set.
+     * @param resultSet the result set.
+     * @return the &lt;V&gt; instance, or {@code null} if the operation returned no data.
+     * @throws SQLException intercepted by \<i>Spring\</i\>.
+     * @throws DataAccessException with information about any
+     * custom exception.
+     */
+    <notnull(C=C)>
+    public Object extractData(
+        <notnull(C=C)>final ResultSet resultSet)
+        throws  SQLException,
+                DataAccessException
+    {
+        return extractData(resultSet, getDAOListener());
+    }
+
+    /**
+     * Extracts &lt;V&gt; information from given result set.
+     * @param resultSet the result set.
+     * @param listener the {@link <repository.voName>DAOListener} instance.
+     * @return the &lt;V&gt; instance, or {@code null} if the operation returned no data.
+     * @throws SQLException intercepted by \<i>Spring\</i\>.
+     * @throws DataAccessException with information about any
+     * custom exception.
+     */
+    <notnull(C=C)>
+    protected abstract V extractData(
+        <notnull(C=C)>final ResultSet resultSet,
+        <nullable(C=C)>final <repository.voName>DAOListener listener)
+        throws  SQLException,
+                DataAccessException;
+}
+>>
