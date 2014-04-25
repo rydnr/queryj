@@ -67,10 +67,12 @@ sourceImpl(def, C) ::= <<
  */
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateWritingHandler;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing custom templates.
@@ -156,27 +158,35 @@ public class <C.class_name>
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param customResult the custom result.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param projectFolder the project folder.
      * @param engine the engine.
-     * @param projectOutputDir the project output dir.
-     * @param projectPackage the project package.
-     * @param tableName the source table name.
-     * @param subFolders whether to use sub folders or not.
+     * @param parameters the parameter map.
      * @return such folder.
      */
-    @NotNull
     @Override
+    @NotNull
     protected File retrieveOutputDir(
+        @NotNull final Result\<String> customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final File projectFolder,
         @NotNull final Engine\<String> engine,
-        @NotNull final File projectOutputDir,
-        final String projectPackage,
-        @NotNull final String tableName,
-        final boolean subFolders)
+        @NotNull final QueryJCommand parameters)
     {
         @NotNull final File result;
 
         @NotNull final String packageName =
             <def.name.noExtension>TemplateBuildHandler.buildPackageName(
-                tableName, engine, projectPackage);
+                customResult,
+                customSqlProvider,
+                metadataManager,
+                engine,
+                retrieveDecoratorFactory(parameters),
+                retrieveProjectPackage(parameters),
+                parameters);
 
         @NotNull final String[] pieces = packageName.split("\\\.");
 
@@ -188,7 +198,7 @@ public class <C.class_name>
             aux.append(piece);
         }
 
-        result = new File(projectOutputDir.getAbsolutePath() + aux.toString());
+        result = new File(projectFolder.getAbsolutePath() + aux.toString());
 
         return result;
     }

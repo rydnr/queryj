@@ -29,20 +29,20 @@
 //
 //***************************************************************************
 //
-// Filename: PerTableTemplateFactory.stg
+// Filename: PerCustomResultTemplateFactory.stg
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate QueryJ's per-table template
-//              factories.
+// Description: Defines the rules to generate QueryJ's per custom result
+//              template factories.
 //
-group PerTableTemplateFactory;
+group PerCustomResultTemplateFactory;
 
 import "common.stg"
 
 source(C) ::= <<
 <!
- Generates a per-table TemplateFactory source file.
+ Generates a per-custom result TemplateFactory source file.
  @param C the context.
  !>
 <sourceImpl(def=C.templateDef, C=C)>
@@ -50,7 +50,7 @@ source(C) ::= <<
 
 sourceImpl(def, C) ::= <<
 <!
-  Generates a per-table TemplateFactory source file.
+  Generates a per-custom result TemplateFactory source file.
   @param def the template def.
   @param C the context.
 !>
@@ -58,7 +58,7 @@ sourceImpl(def, C) ::= <<
   description=[ "Factory for ", def.name.capitalized, "Templates." ],
   description_oneline=true,
   filename=C.class_name,
-  template="org/acmsl/queryj/templates/packaging/PerTableTemplateFactory.stg",
+  template="org/acmsl/queryj/templates/packaging/PerCustomResultTemplateFactory.stg",
   C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates")>
 
@@ -69,13 +69,14 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateFactory;
-import org.acmsl.queryj.api.QueryJCommandUtils;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Property;
+import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.metadata.CachingResultDecorator;
 import org.acmsl.queryj.Literals;
-import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Row;
 
 /*
  * Importing some ACM-SL Java Commons classes.
@@ -109,7 +110,7 @@ class(def, C) ::= <<
 /**
  * Factory for {@link <def.name.noExtension>Template}s.
 <class_common_javadoc(
-  template="org/acmsl/queryj/templates/packaging/PerTableTemplateFactory.stg",
+  template="org/acmsl/queryj/templates/packaging/PerCustomResultTemplateFactory.stg",
   timestamp=C.timestamp,
   version=C.version)>
  */
@@ -146,14 +147,19 @@ public class <C.class_name>
     @Override
     @NotNull
     public <def.name.noExtension>Template createTemplate(
-        @NotNull final String tableName,
-        @NotNull final List\<Row\<String\>> staticContents,
+        @NotNull final Result\<String> customResult,
+        @NotNull final List\<Property\<String\>> properties,
         @NotNull final QueryJCommand command)
     {
         @NotNull final <def.type.capitalized>TemplateContext t_Context =
-            new <def.type.capitalized>TemplateContext(tableName, staticContents, command);
+            new <def.type.capitalized>TemplateContext(customResult, properties, command);
 
-        @NotNull final String t_strFileName = retrieveTemplateFileName(tableName, t_Context.getMetadataManager());
+        @NotNull final String t_strFileName =
+            retrieveTemplateFileName(
+                customResult,
+                t_Context.getCustomSqlProvider(),
+                t_Context.getMetadataManager(),
+                t_Context.getDecoratorFactory());
 
         new QueryJCommandWrapper\<String>(command).setSetting(
             Literals.FILE_NAME, t_strFileName);
@@ -163,20 +169,30 @@ public class <C.class_name>
 
     /**
      * Retrieves the file name of the template.
-     * @param tableName the table name.
+     * @param customResult the custom result.
      * @param metadataManager the {@link MetadataManager} instance.
      * @return the file name.
      */
     @NotNull
     public String retrieveTemplateFileName(
-        @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
+        @NotNull final Result\<String> customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         @NotNull final String result;
 
         @NotNull final ST template =
             new ST("<def.filenameBuilder>");
 
-        template.add(Literals.TABLE_NAME, new DecoratedString(tableName));
+        template.add(
+            Literals.RESULT,
+            new CachingResultDecorator(
+                customResult,
+                customSqlProvider,
+                metadataManager,
+                decoratorFactory));
+
         template.add(Literals.ENGINE, new EngineDecorator(metadataManager.getEngine()));
 
         result = template.render();

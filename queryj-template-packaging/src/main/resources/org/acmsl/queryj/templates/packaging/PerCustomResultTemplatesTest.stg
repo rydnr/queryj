@@ -116,6 +116,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing Cucumber classes.
  */
 import cucumber.api.DataTable;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -203,7 +204,7 @@ public class PerCustomResultTemplatesTest
      * @param resultInfo the information about the results.
      */
     @SuppressWarnings("unused")
-    @Given("^Given the following custom result:$")
+    @Given("^the following custom result:$")
     public void defineInputResults(@NotNull final DataTable resultInfo)
     {
         defineInputResults(resultInfo, getResults(), CustomResultTestHelper.getInstance());
@@ -228,7 +229,7 @@ public class PerCustomResultTemplatesTest
      * @param propertiesInfo the information about the properties.
      */
     @SuppressWarnings("unused")
-    @Given("^Given the following properties:$")
+    @And("^the following custom result properties:$")
     public void defineInputProperties(@NotNull final DataTable propertiesInfo)
     {
         defineInputProperties(propertiesInfo, getResults(), getProperties(), CustomResultTestHelper.getInstance());
@@ -257,7 +258,7 @@ public class PerCustomResultTemplatesTest
      * @param engine the engine.
      */
     @SuppressWarnings("unused")
-    @When("^When I use the custom result template (.*) for (.*)$")
+    @When("^I use the custom result template (.*) for (.*)$")
     public void generateFile(@NotNull final String template, @NotNull final String engine)
     {
         setEngineName(engine);
@@ -293,7 +294,9 @@ public class PerCustomResultTemplatesTest
             (PerCustomResultTemplateGenerator\<PerCustomResultTemplate\<PerCustomResultTemplateContext>, PerCustomResultTemplateContext>) retrieveTemplateGenerator(
                 templateName);
 
-        Assert.assertNotNull("No template generator found for " + templateName, generator);
+        Assert.assertNotNull(
+            "No template generator found for " + templateName + ". Does " + templateName + ".stg exist?",
+            generator);
 
         @NotNull final DecoratorFactory decoratorFactory = retrieveDecoratorFactory(generator);
 
@@ -310,10 +313,14 @@ public class PerCustomResultTemplatesTest
             @NotNull final QueryJCommand t_Command =
                 new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
 
+            new QueryJCommandWrapper\<DecoratorFactory>(t_Command).setSetting(
+                DecoratorFactory.class.getName(), decoratorFactory);
             new QueryJCommandWrapper\<CustomSqlProvider>(t_Command).setSetting(
                 CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, sqlProvider);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.PACKAGE, BASE_PACKAGE_NAME);
+            new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                Literals.PACKAGE_NAME, "<def.template>");
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.REPOSITORY, "acme");
             new QueryJCommandWrapper\<String>(t_Command).setSetting(

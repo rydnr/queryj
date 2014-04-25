@@ -116,7 +116,7 @@ public class TemplateBuildHandlerTemplateFactoryTest
     @Test
     public void createTemplate_returns_the_correct_template_for_a_per_custom_result_template()
     {
-        testCreateTemplate(TemplateDefType.PER_CUSTOM_RESULT, Literals.TEMPLATE_BUILD_HANDLER);
+        testCreateTemplate(TemplateDefType.PER_CUSTOM_RESULT, Literals.PER_CUSTOM_RESULT_TEMPLATE_BUILD_HANDLER);
     }
 
     /**

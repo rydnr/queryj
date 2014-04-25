@@ -344,7 +344,9 @@ public class PerForeignKeyTemplatesTest
             (PerForeignKeyTemplateGenerator\<PerForeignKeyTemplate\<PerForeignKeyTemplateContext>, PerForeignKeyTemplateContext>) retrieveTemplateGenerator(
                 templateName);
 
-        Assert.assertNotNull("No template generator found for " + templateName, generator);
+        Assert.assertNotNull(
+            "No template generator found for " + templateName + ". Does " + templateName + ".stg exist?",
+            generator);
 
         @NotNull final DecoratorFactory decoratorFactory = retrieveDecoratorFactory(generator);
 

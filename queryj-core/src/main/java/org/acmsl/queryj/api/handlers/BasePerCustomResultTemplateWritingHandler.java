@@ -33,7 +33,7 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.PerCustomResultTemplateGenerator;
@@ -43,7 +43,7 @@ import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.metadata.engines.Engine;
 
 /*
  * Importing Jetbrains annotations.
@@ -57,6 +57,9 @@ import java.io.File;
 
 /**
  * Writes <i>per-custom-result</i> templates.
+ * @param <T> the template type.
+ * @param <C> the template context type.
+ * @param <TG> the template generator type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerCustomResultTemplateWritingHandler
@@ -121,11 +124,8 @@ public abstract class BasePerCustomResultTemplateWritingHandler
                 customSqlProvider,
                 metadataManager,
                 retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters),
-                retrieveProductName(parameters),
-                parameters,
-                PackageUtils.getInstance());
+                retrieveEngine(parameters, retrieveDatabaseMetaData(parameters)),
+                parameters);
     }
 
     /**
@@ -134,12 +134,9 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @param customSqlProvider the custom sql provider.
      * @param metadataManager the metadata manager.
      * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubFolders whether to use subFolders for tests, or
      * using a different package naming scheme.
-     * @param engineName the engine name.
+     * @param engine the engine.
      * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      */
     @NotNull
@@ -148,10 +145,6 @@ public abstract class BasePerCustomResultTemplateWritingHandler
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final File projectFolder,
-        @NotNull final String projectPackage,
-        final boolean useSubFolders,
-        @NotNull final String engineName,
-        @NotNull final QueryJCommand parameters,
-        @NotNull final PackageUtils packageUtils)
-      throws  QueryJBuildException;
+        @NotNull final Engine<String> engine,
+        @NotNull final QueryJCommand parameters);
 }

@@ -88,7 +88,7 @@ Feature: Per-table templates
       | g_draw_types | 2, "El_Gordo",     1 |
       | g_draw_types | 3, "Primitiva",    1 |
 
-    When I generate with per-table \<template>.stg for Oracle
+    When I generate with per-table \<template> for Oracle
 
     Then the generated per-table \<output> file compiles successfully
 

@@ -1,0 +1,205 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: CustomResultSetExtractor.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate CustomResultSetExtractor
+//              implementations.
+//
+//
+group ResultSetExtractor;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+  Defines the rules to generate CustomResultSetExtractor implementations.
+  @param C the context.
+!>
+<sourceImpl(result=C.result, C=C)>
+>>
+
+sourceImpl(result, C) ::= <<
+<!
+  Defines the rules to generate CustomResultSetExtractor implementations.
+  @param result the result.
+  @param C the context.
+!>
+/*
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description(table=table)
+  ],
+  template="org/acmsl/queryj/templates/CustomResultSetExtractor.stg",
+  C=C)><endif>
+*/
+<package_declaration(p=C.package)>
+<checkers_import(C=C)>
+<if(C.implement_markers)>
+
+<endif>
+/*
+ * Importing JDK classes.
+ */
+import java.io.Serializable;
+<if(table.attributeTypes)>
+<table.attributeTypes:{ t | import <t>;}; separator="\n">
+<endif>
+
+
+<class(result=result, repository=C.repository, C=C)>
+>>
+
+description(result) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param result the custom result.
+!>
+{@link ResultSetExtractor} implementation for <result.name> result.
+>>
+
+class(result, repository, C) ::= <<
+<!
+ Generates the class body.
+ @param result the result.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * <[
+      description(result=result)
+    ]:{line |<line>}; separator="\n * ">
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/CustomResultSetExtractor.stg", C=C)>
+ */
+public class <result.name.voName>ResultSetExtractor
+    extends <repository.voName>ResultSetExtractor\<<result.name.voName>\>
+{
+    /**
+     * Creates a new instance.
+     * @param listener the {@link <repository.voName>DAOListener} instance.
+     */
+    public <result.name.voName>ResultSetExtractor(<nullable(C=C)>final <repository.voName>DAOListener listener)
+    {
+        super(listener);
+    }
+}
+>>
+
+defaultExtractor(table, repository, C) ::= <<
+<!
+ Generates the default logic for the extractor.
+ @param table the table.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * Extracts {@link <table.name.voName>} information from given result set.
+ * @param resultSet the result set.
+ * @param listener the {@link <repository.voName>DAOListener} instance.
+ * @return the {@code <table.name.voName>} or
+ * {@code null} if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i\>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ */
+<notnull(C=C)>
+protected <table.name.voName> extractData(
+    <notnull(C=C)>final ResultSet resultSet,
+    <nullable(C=C)>final <repository.voName>DAOListener listener)
+    throws  SQLException,
+            DataAccessException
+{
+    return extractData(resultSet, listener, <table.name.voName>ValueObjectFactory.getInstance());
+}
+
+/**
+ * Extracts {@link <table.name.voName>} information from given result set.
+ * @param resultSet the result set.
+ * @param listener the {@link <repository.voName>DAOListener} instance.
+ * @param factory the {@link <table.name.voName>ValueObjectFactory}
+ * instance.
+ * @return the {@code <table.name.voName>} or
+ * {@code null} if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ */
+<notnull(C=C)>
+protected <table.name.voName> extractData(
+    <notnull(C=C)>final ResultSet resultSet,
+    <nullable(C=C)>final <repository.voName>DAOListener listener,
+    <notnull(C=C)>final <table.name.voName>ValueObjectFactory factory)
+  throws  SQLException,
+          DataAccessException
+{
+    <nullable(C=C)>final <table.name.voName> result;
+
+    if  (resultSet.next())
+    {
+        if (listener != null)
+        {
+            daoListener.resultSetMovedForward(this);
+        }
+
+        result =
+            factory.create<table.name.voName>(
+                <table.attributes:{a | <attribute_resultset_retrieval(attr=a, C=C)>}; separator=",\n">);
+
+        if  (daoListener != null)
+        {
+            daoListener.resultSetClosed(this);
+        }
+    }
+    else
+    {
+        // TODO: check it this is exceptional or not.
+        throw new RuntimeException("No more data to extract!");
+        //result = null;
+    }
+
+    return result;
+}
+>>
+
+nullable_attribute_extraction(attr, table, repository, C) ::= <<
+<attr.name>
+>>
+
+attribute_extraction(attr, table, repository, C) ::= <<
+<attr.name>
+>>

@@ -1,0 +1,17 @@
+/*
+ * PerCustomResultTemplatesFeature template metadata.
+ */
+// The template name (the filename).
+name : PerCustomResultTemplatesFeature.stg;
+
+// The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-custom-sql.
+type : per-custom-result;
+
+// The output flavor.
+output: Cucumber;
+
+// The filename builder.
+filename  builder : PerCustomResultTemplateBuildHandler.java;
+
+// The package.
+package: org.acmsl.queryj.templates.handlers;

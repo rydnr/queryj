@@ -61,7 +61,7 @@ Feature: <repository>-wide classes compile
     | table | parent table | decorated | relationship |   static    |
     <tables:{ t | <cucumber_table_declaration(table=t)>}; separator="\n">
 
-    When I use the repository-wide \<template>.stg for Oracle
+    When I use the repository-wide \<template> for Oracle
 
     Then the generated repository-wide \<output> file compiles successfully
 

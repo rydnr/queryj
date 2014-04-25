@@ -269,42 +269,13 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @return the package name.
      */
     @ThreadSafe
-    protected String retrievePackage(
+    protected abstract String retrievePackage(
         @NotNull final Result<String> customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final Engine<String> engine,
         @NotNull final QueryJCommand parameters)
-      throws  QueryJBuildException
-    {
-        return
-            retrievePackage(
-                customResult,
-                customSqlProvider,
-                metadataManager,
-                engine.getName(),
-                retrieveProjectPackage(parameters),
-                PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the package name.
-     * @param customResult the custom result.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param metadataManager the database metadata manager.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the {@link PackageUtils} instance.
-     * @return the package name.
-     */
-    @ThreadSafe
-    protected abstract String retrievePackage(
-        @NotNull final Result<String> customResult,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final String engineName,
-        @NotNull final String projectPackage,
-        @NotNull final PackageUtils packageUtils);
+      throws  QueryJBuildException;
 
     /**
      * Stores the template collection in given attribute map.
