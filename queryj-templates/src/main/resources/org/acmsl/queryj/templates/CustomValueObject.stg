@@ -103,11 +103,11 @@ class(result, repository, C) ::= <<
       description(result=result)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(
-  template="org/acmsl/queryj/templates/CustomResultSetExtractor.stg", C=C)>
+  template="org/acmsl/queryj/templates/CustomValueObject.stg", C=C)>
  */
 public interface <result.id.voName>
     extends Serializable
 {
-    <result.properties:{ p | <property_getter(property=p, C=C)>}; separator="\n\n">
+    <result.properties:{ p | <property_getter_interface(property=p, C=C)>}; separator="\n\n">
 }
 >>

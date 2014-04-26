@@ -84,7 +84,7 @@ attribute_isolated_declaration_impl(attr, C) ::= <<
 <type_checker(attribute=attr, C=C)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.name.lowercased>,
 >>
 
-immutable_setter_call(attribute) ::= <<
+attribute_immutable_setter_call(attribute) ::= <<
 <!
  Writes the method call for the immutable setter of given attribute.
  @param attribute the attribute.
@@ -267,6 +267,6 @@ else
 
 attribute_toString(attribute) ::= <<
 <! Generates the code to include given attribute within the toString() method. !>
-result.append("\", \"<a.name.capitalized>\": \"");
-result.append(this.m__<a.name.capitalized>);
+result.append("\", \"<attribute.name.capitalized>\": \"");
+result.append(this.m__<attribute.name.capitalized>);
 >>

@@ -1,0 +1,201 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: CustomBaseValueObject.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate CustomBaseValueObject
+//              implementations.
+//
+//
+group CustomBaseValueObject;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+  Defines the rules to generate CustomBaseValueObject implementations.
+  @param C the context.
+!>
+<sourceImpl(result=C.result, C=C)>
+>>
+
+sourceImpl(result, C) ::= <<
+<!
+  Defines the rules to generate CustomBaseValueObject implementations.
+  @param result the result.
+  @param C the context.
+!>
+/*
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description(result=result)
+  ],
+  template="org/acmsl/queryj/templates/CustomBaseValueObject.stg",
+  C=C)><endif>
+*/
+<package_declaration(p=C.package)>
+<checkers_import(C=C)>
+<if(C.implement_markers)>
+
+<endif>
+<if(result.propertyTypes)>
+/*
+ * Importing JDK classes.
+ */
+<result.propertyTypes:{ t | import <t>;}; separator="\n">
+<endif>
+
+<class(result=result, repository=C.repository, C=C)>
+>>
+
+description(result) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param result the custom result.
+!>
+{@link <result.id.voName>} value objects as required by some custom queries.
+>>
+
+class(result, repository, C) ::= <<
+<!
+ Generates the class body.
+ @param result the result.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * <[
+      description(result=result)
+    ]:{line |<line>}; separator="\n * ">
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/CustomBaseValueObject.stg", C=C)>
+ */
+public abstract class Abstract<result.id.voName>
+    implements <result.id.voName>
+{
+    <result.properties:{ p | <property_isolated_declaration(property=p, C=C)>}; separator="\n\n">
+
+    /**
+     * Creates a new {@code Abstract<result.id.voName>}.
+     <result.properties:{ p | <property_javadoc(property=p)>}; separator="\n">
+     */
+    public Abstract<result.id.voName>(
+        <result.properties:{ p | <property_method_parameter_declaration(property=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
+    {
+        <result.properties:{ p | <immutable_property_setter_call(property=p)>}; separator="\n">
+    }
+
+    <result.properties:{ p | <property_accessors(property=p, C=C)>}; separator="\n">
+
+    <equals_method(result=result, C=C)>
+
+    <hashcode_method(result=result, C=C)>
+
+    <tostring_method(result=result, C=C)>
+}
+>>
+
+equals_method(result, C) ::= <<
+<! Generates the equals(Object) method !>
+/**
+ * Checks whether given object is semantically equivalent to this one.
+ * @param other the other object to compare to.
+ * @return {@code true} if and only if they're equivalent.
+ */
+@Override
+public boolean equals(<nullable(C=C)>final Object other)
+{
+    final boolean result;
+
+    if (other instanceof <result.id.voName>)
+    {
+        <notnull(C=C)>final <result.id.voName> candidate = (<result.id.voName>) other;
+
+        <result.properties:{ p | <property_equals(property=p)>}; separator="">
+        result =
+            <result.properties:{ p |<p.id.uncapitalized>Match}; separator="\n&& ">;
+    }
+    else
+    {
+        result = false;
+    }
+
+    return result;
+}
+>>
+
+hashcode_method(result, C) ::= <<
+<! Generates the hashcode() method !>
+/**
+ * Retrieves the hashcode which identifies this instance
+ * from any other one.
+ * @return the unique (among instances of this class) value.
+ */
+@Override
+public int hashCode()
+{
+    final int result;
+
+    final int classHashCode = Abstract<result.id.voName>.class.hashCode();
+
+    <result.properties:{ p | <property_hashcode(property=p)>}; separator="\n">
+
+    result =
+          classHashCode
+        <result.properties:{ p |+ <p.id.uncapitalized>HashCode}; separator="\n">;
+
+    return result;
+}
+>>
+
+tostring_method(result, C) ::= <<
+<! Generates the toString() method !>
+/**
+ * {@inheritdoc}
+ */
+@Override
+public String toString()
+{
+    <notnull(C=C)>final StringBuilder result = new StringBuilder("{ \class\": \"Abstract<result.id.voName>");
+
+    <result.properties:{ p | <property_toString(property=p)>}; separator="\n">
+
+    result.append(", \"package\": \"<C.package>\" }");
+
+    return result.toString();
+}
+>>
