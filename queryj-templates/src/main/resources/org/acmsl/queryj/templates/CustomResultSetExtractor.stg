@@ -37,7 +37,7 @@
 //              implementations.
 //
 //
-group ResultSetExtractor;
+group CustomResultSetExtractor;
 
 import "queryj.stg"
 

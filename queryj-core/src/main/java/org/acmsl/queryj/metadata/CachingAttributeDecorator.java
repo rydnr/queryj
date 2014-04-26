@@ -119,8 +119,8 @@ public class CachingAttributeDecorator
     private Boolean m__bCachedIsPrimitiveWrapper;
 
     /**
-     * Creates a <code>CachingAttributeDecorator</code> with the
-     * <code>Attribute</code> to decorate.
+     * Creates a {@code CachingAttributeDecorator} with the
+     * {@link Attribute} to decorate.
      * @param attribute the attribute.
      * @param metadataManager the metadata manager.
      */

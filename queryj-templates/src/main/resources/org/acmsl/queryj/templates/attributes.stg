@@ -97,20 +97,21 @@ if (<attribute.name.uncapitalized> != null)
 <else>immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);<endif>
 >>
 
-attribute_accessors(attribute) ::= <<
+attribute_accessors(attribute, C) ::= <<
 <!
  Writes the accessors for given attribute.
  @param attribute the attribute.
 !>
-<attribute_setter(attribute=attribute)>
+<attribute_setter(attribute=attribute, C=C)>
 
-<attribute_getter(attribute=attribute)>
+<attribute_getter(attribute=attribute, C=C)>
 >>
 
-attribute_setter(attribute) ::= <<
+attribute_setter(attribute, C) ::= <<
 <!
  Writes the setter for given attribute.
  @param attribute the attribute.
+ @param C the context.
 !>
 /**
  * Specifies the \<i><attribute.name>\</i> value.
@@ -132,10 +133,11 @@ protected void set<attribute.name.capitalized>(<if(!attribute.strictlyPrimitive)
 }
 >>
 
-attribute_getter(attribute) ::= <<
+attribute_getter(attribute, C) ::= <<
 <!
  Writes the getter for given attribute.
  @param attribute the attribute.
+ @param C the context.
 !>
 /**
  * Retrieves the \<i><attribute.name>\</i> value.
