@@ -66,7 +66,9 @@ public class CurrentYearHandler
     extends AbstractFillHandler<String>
     implements NonRelevantFillHandler
 {
-
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 3601964012509602628L;
 
     /**

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,7 +33,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.exceptions.NullAttributeWhenConvertingToPropertyException;
 import org.acmsl.queryj.customsql.CustomResultUtils;
@@ -45,11 +45,11 @@ import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.tools.DebugUtils;
 
 /*
  * Importing Apache Commons Logging classes.
  */
-import org.acmsl.queryj.tools.DebugUtils;
 import org.apache.commons.logging.LogFactory;
 
 /*
@@ -77,7 +77,8 @@ import java.util.List;
 @ThreadSafe
 public abstract class AbstractResultDecorator
     extends  ResultElement<DecoratedString>
-    implements  ResultDecorator
+    implements  Result<DecoratedString>,
+                ResultDecorator
 {
     /**
      * The result element.
@@ -591,6 +592,37 @@ public abstract class AbstractResultDecorator
     }
 
     /**
+     * Retrieves the ordered list of the fully-qualified attribute types.
+     * @return such list.
+     */
+    @Override
+    @NotNull
+    public List<DecoratedString> getPropertyTypes()
+    {
+        return
+            getPropertyTypes(
+                getProperties(),
+                getMetadataManager().getMetadataTypeManager(),
+                TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the ordered list of the fully-qualified types of given attributes.
+     * @param properties such attributes.
+     * @param typeManager the {@link MetadataTypeManager} instance.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
+     * @return such list.
+     */
+    @NotNull
+    protected List<DecoratedString> getPropertyTypes(
+        @NotNull final List<Property<DecoratedString>> properties,
+        @NotNull final MetadataTypeManager typeManager,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
+    {
+        return tableDecoratorHelper.getPropertyTypes(properties, typeManager);
+    }
+
+    /**
      * Provides a text representation of the information
      * contained in given instance.
      * @return such information.
@@ -599,12 +631,13 @@ public abstract class AbstractResultDecorator
     @NotNull
     public String toString()
     {
-        return "AbstractResultDecorator{" +
-               "customSqlProvider=" + m__CustomSqlProvider +
-               ",result=" + m__Result +
-               ",metadataManager=" + m__MetadataManager +
-               ",decoratorFactory=" + m__DecoratorFactory +
-               '}';
+        return
+              "{ \"class\": \"AbstractResultDecorator\""
+            + ", \"result\": " + m__Result
+            + ", \"customSqlProvider\": " + m__CustomSqlProvider
+            + ", \"metadataManager\": " + m__MetadataManager
+            + ", \"decoratorFactory\": " + m__DecoratorFactory
+            + " }";
     }
 
     /**

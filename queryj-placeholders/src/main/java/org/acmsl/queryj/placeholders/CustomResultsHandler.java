@@ -80,7 +80,7 @@ public class CustomResultsHandler
     private static final long serialVersionUID = 6281653014442667192L;
 
     /**
-     * Creates a new {@link CustomResultsHandler} to resolve placeholders with information
+     * Creates a new {@code CustomResultsHandler} to resolve placeholders with information
      * in given {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      * @param context the context.
      */

@@ -269,7 +269,8 @@ public class PerCustomResultTemplatesTest
             getResults(),
             getProperties(),
             getOutputFiles(),
-            retrieveCustomSqlProvider(getSqlList(), getParameters()));
+            retrieveCustomSqlProviderForResults(
+                new ArrayList\<Result\<String\>>(getResults().values()), getProperties()));
     }
 
     /**
@@ -320,7 +321,7 @@ public class PerCustomResultTemplatesTest
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.PACKAGE, BASE_PACKAGE_NAME);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                Literals.PACKAGE_NAME, "<def.template>");
+                Literals.PACKAGE_NAME, BASE_PACKAGE_NAME); // TODO: FIXME (<def.packageName>)
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.REPOSITORY, "acme");
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
@@ -355,8 +356,8 @@ public class PerCustomResultTemplatesTest
                         properties = new ArrayList\<>(0);
                     }
 
-                    @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
-                        // retrieveMetadataManager(engine, result, properties, decoratorFactory);
+                    @NotNull final MetadataManager metadataManager =
+                        retrieveMetadataManager(engine, result, properties, decoratorFactory);
 
                     new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
                         DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);

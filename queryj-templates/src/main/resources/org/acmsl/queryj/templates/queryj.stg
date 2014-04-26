@@ -43,6 +43,7 @@ import "javadoc.stg"
 import "custom_selects.stg"
 import "callbacks.stg"
 import "attributes.stg"
+import "properties.stg"
 
 typeInitMap ::= [
   "empty":"",

@@ -41,6 +41,7 @@ package org.acmsl.queryj.test.sql;
  */
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.customsql.PropertyRef;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
 
@@ -55,6 +56,8 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Minimal {@link SqlPropertyDAO} implementation on top of a list of {@link Property properties}
@@ -70,31 +73,31 @@ public class CucumberSqlPropertyDAO
     /**
      * The list of properties.
      */
-    private List<Property<String>> m__Properties;
+    private Map<String, List<Property<String>>> m__Properties;
 
     /**
-     * The custom result.
+     * The custom results.
      */
-    private Result<String> m__CustomResult;
+    private List<Result<String>> m__lCustomResults;
 
     /**
      * Creates an instance with given properties and result.
      * @param properties the properties.
-     * @param result the result.
+     * @param results the results.
      */
     @SuppressWarnings("unused")
     public CucumberSqlPropertyDAO(
-        @NotNull final List<Property<String>> properties, @NotNull final Result<String> result)
+        @NotNull final Map<String, List<Property<String>>> properties, @NotNull final List<Result<String>> results)
     {
         immutableSetProperties(properties);
-        immutableSetResult(result);
+        immutableSetResults(results);
     }
 
     /**
      * Specifies the list of {@link Property properties}.
      * @param properties such list.
      */
-    protected final void immutableSetProperties(@NotNull final List<Property<String>> properties)
+    protected final void immutableSetProperties(@NotNull final Map<String, List<Property<String>>> properties)
     {
         this.m__Properties = properties;
     }
@@ -104,7 +107,7 @@ public class CucumberSqlPropertyDAO
      * @param properties such list.
      */
     @SuppressWarnings("unused")
-    protected final void setProperties(@NotNull final List<Property<String>> properties)
+    protected final void setProperties(@NotNull final Map<String, List<Property<String>>> properties)
     {
         immutableSetProperties(properties);
     }
@@ -114,38 +117,38 @@ public class CucumberSqlPropertyDAO
      * @return such list.
      */
     @NotNull
-    protected List<Property<String>> getProperties()
+    protected Map<String, List<Property<String>>> getProperties()
     {
         return this.m__Properties;
     }
 
     /**
-     * Specifies the custom result.
-     * @param result such result.
+     * Specifies the custom results.
+     * @param results such results.
      */
-    protected final void immutableSetResult(@NotNull final Result<String> result)
+    protected final void immutableSetResults(@NotNull final List<Result<String>> results)
     {
-        this.m__CustomResult = result;
+        this.m__lCustomResults = results;
     }
 
     /**
-     * Specifies the custom result.
-     * @param result such result.
+     * Specifies the custom results.
+     * @param results such results.
      */
     @SuppressWarnings("unused")
-    protected void setResult(@NotNull final Result<String> result)
+    protected void setResult(@NotNull final List<Result<String>> results)
     {
-        immutableSetResult(result);
+        immutableSetResults(results);
     }
 
     /**
-     * Retrieves the custom result.
-     * @return such result.
+     * Retrieves the custom results.
+     * @return such results.
      */
     @NotNull
-    protected Result<String> getResult()
+    protected List<Result<String>> getResults()
     {
-        return m__CustomResult;
+        return m__lCustomResults;
     }
 
     /**
@@ -170,16 +173,22 @@ public class CucumberSqlPropertyDAO
      */
     @Nullable
     protected Property<String> findByPrimaryKey(
-        @NotNull final String id, @NotNull final List<Property<String>> properties)
+        @NotNull final String id, @NotNull final Map<String, List<Property<String>>> properties)
     {
         @Nullable Property<String> result = null;
 
-        for (@NotNull final Property<String> property : properties)
+        for (@Nullable final List<Property<String>> propertyList: properties.values())
         {
-            if (id.equals(property.getId()))
+            if (propertyList != null)
             {
-                result = property;
-                break;
+                for (@NotNull final Property<String> property : propertyList)
+                {
+                    if (id.equals(property.getId()))
+                    {
+                        result = property;
+                        break;
+                    }
+                }
             }
         }
 
@@ -196,7 +205,7 @@ public class CucumberSqlPropertyDAO
     @Override
     public List<Property<String>> findByResult(@NotNull final String resultId)
     {
-        return findByResult(resultId, getProperties(), getResult());
+        return findByResult(resultId, getProperties(), getResults());
     }
 
     /**
@@ -204,20 +213,37 @@ public class CucumberSqlPropertyDAO
      * {@link Result}.
      * @param resultId the {@link Result} identifier.
      * @param properties the properties.
-     * @param customResult the custom result.
+     * @param customResults the custom results.
      * @return the list of properties associated to given {@link Result}.
      */
     @NotNull
     protected List<Property<String>> findByResult(
         @NotNull final String resultId,
-        @NotNull final List<Property<String>> properties,
-        @NotNull final Result<String> customResult)
+        @NotNull final Map<String, List<Property<String>>> properties,
+        @NotNull final List<Result<String>> customResults)
     {
-        @NotNull List<Property<String>> result = properties;
+        @NotNull final List<Property<String>> result = new ArrayList<>();
 
-        if (!resultId.equals(customResult.getId()))
+        @Nullable final Result<String> customResult =
+            new CucumberSqlResultDAO(customResults).findByPrimaryKey(resultId);
+
+        if (customResult != null)
         {
-            result = new ArrayList<>(0);
+            for (@Nullable final Property<String> property : properties.get(resultId))
+            {
+                if (property != null)
+                {
+                    for (@Nullable final PropertyRef propertyRef : customResult.getPropertyRefs())
+                    {
+                        if (   (propertyRef != null)
+                            && (propertyRef.getId().equals(property.getId())))
+                        {
+                            result.add(property);
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         return result;
@@ -257,17 +283,26 @@ public class CucumberSqlPropertyDAO
         final int index,
         @NotNull final String type,
         final boolean nullable,
-        @NotNull final List<Property<String>> properties)
+        @NotNull final Map<String, List<Property<String>>> properties)
     {
-        properties.add(new PropertyElement<>(id, columnName, index, type, nullable));
+        // we don't know the result :(
+        for (@NotNull final Entry<String, List<Property<String>>> entry : properties.entrySet())
+        {
+            entry.getValue().add(new PropertyElement<>(id, columnName, index, type, nullable));
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {
-        return "CucumberSqlPropertyDAO{" +
-               "customResult=" + m__CustomResult +
-               ", properties=" + m__Properties +
-               '}';
+        return
+              "{ \"class\": \"CucumberSqlPropertyDAO\""
+            + ", \"customResults\": " + m__lCustomResults
+            + ", \"properties\": " + m__Properties
+            + ", \"package\": \"org.acmsl.queryj.test.sql\""
+            + "  }";
     }
 }

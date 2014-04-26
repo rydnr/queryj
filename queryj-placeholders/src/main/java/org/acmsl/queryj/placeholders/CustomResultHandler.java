@@ -63,9 +63,15 @@ import org.checkthread.annotations.ThreadSafe;
 public class CustomResultHandler
     extends AbstractTemplateContextFillHandler<PerCustomResultTemplateContext, ResultDecorator>
 {
-
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -1257476640731147692L;
 
+    /**
+     * Creates a new instance.
+     * @param context the {@link PerCustomResultTemplateContext context}.
+     */
     public CustomResultHandler(@NotNull final PerCustomResultTemplateContext context)
     {
         super(context);

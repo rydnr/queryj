@@ -225,15 +225,15 @@ attribute_resultset_retrieval(attr, C) ::= <<
  @param attr the attribute.
  @param C the context.
 !>
-<if(!attr.clob)>resultSet.get<attr.objectType>("<attr.name>")<else><clob_resultset_retrieval(attribute=attr, C=C)><endif>
+<if(!attr.clob)>resultSet.get<attr.objectType>("<attr.name>")<else><clob_attribute_resultset_retrieval(attribute=attr, C=C)><endif>
 >>
 
-clob_resultset_retrieval(attribute, C) ::= <<
+clob_attribute_resultset_retrieval(attribute, C) ::= <<
 <!
  Deals with Clob attributes
  @param attr the attribute.
  @param C the context.
- !>preparedStatement.getClob("<attribute.name>")
+ !>resultSet.getClob("<attribute.name>")
  >>
 
 attribute_equals(attribute) ::= <<

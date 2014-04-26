@@ -38,8 +38,11 @@ package org.acmsl.queryj.test;
 /*
  * Importing QueryJ Test classes.
  */
+import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.metadata.SqlPropertyDAO;
+import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.test.antlr4.JavaLexer;
 import org.acmsl.queryj.test.antlr4.JavaPackageVisitor;
 import org.acmsl.queryj.test.antlr4.JavaParser;
@@ -77,6 +80,8 @@ import org.acmsl.commons.utils.io.FileUtils;
 /*
  * Importing ANTLR classes.
  */
+import org.acmsl.queryj.test.sql.CucumberSqlPropertyDAO;
+import org.acmsl.queryj.test.sql.CucumberSqlResultDAO;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
@@ -110,6 +115,7 @@ import java.nio.charset.Charset;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -691,6 +697,42 @@ public abstract class AbstractTemplatesTest<G, F>
     }
 
     /**
+     * Retrieves a {@link org.acmsl.queryj.customsql.CustomSqlProvider} instance adapted for given result.
+     * @param results the list of {@link Sql}.
+     * @param properties the {@link Parameter} map.
+     * @return such instance.
+     */
+    @NotNull
+    protected CustomSqlProvider retrieveCustomSqlProviderForResults(
+        @NotNull final List<Result<String>> results,
+        @NotNull final Map<String, List<Property<String>>> properties)
+    {
+        return
+            new SqlXmlParserImpl(new ByteArrayInputStream("".getBytes()))
+            {
+                /**
+                 * {@inheritDoc}
+                 */
+                @Override
+                @NotNull
+                public SqlResultDAO getSqlResultDAO()
+                {
+                    return new CucumberSqlResultDAO(results);
+                }
+
+                /**
+                 * {@inheritDoc}
+                 */
+                @NotNull
+                @Override
+                public SqlPropertyDAO getSqlPropertyDAO()
+                {
+                    return new CucumberSqlPropertyDAO(properties, results);
+                }
+            };
+    }
+
+    /**
      * Sets up the Java parser.
      * @param javaFile the Java contents to parse.
      * @return the {@link JavaParser} instance.
@@ -923,6 +965,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param engineName the name of the engine.
      * @param tables the tables.
      * @param staticContents the static contents.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return such instance.
      */
     @NotNull
@@ -951,6 +994,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param tableNames the table names.
      * @param tables the tables.
      * @param staticContents the static contents.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return such instance.
      */
     @NotNull
@@ -992,6 +1036,55 @@ public abstract class AbstractTemplatesTest<G, F>
             EasyMock.expect(tableDAO.findByDAO(table.getName())).andReturn(table).anyTimes();
             EasyMock.expect(columnDAO.findAllColumns(table.getName())).andReturn(table.getAttributes());
         }
+
+        EasyMock.replay(result);
+        EasyMock.replay(metadata);
+        EasyMock.replay(tableDAO);
+        EasyMock.replay(columnDAO);
+
+        return result;
+    }
+
+    /**
+     * Retrieves a {@link MetadataManager} instance.
+     * @param engineName the name of the engine.
+     * @param customResult the custom result.
+     * @param properties the properties.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return such instance.
+     */
+    @NotNull
+    protected MetadataManager retrieveMetadataManager(
+        @NotNull final String engineName,
+        @NotNull final Result<String> customResult,
+        @NotNull final List<Property<String>> properties,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        @NotNull final MetadataManager result = EasyMock.createNiceMock(MetadataManager.class);
+        @NotNull final DatabaseMetaData metadata = EasyMock.createNiceMock(DatabaseMetaData.class);
+        @NotNull final TableDAO tableDAO = EasyMock.createNiceMock(TableDAO.class);
+        @NotNull final ColumnDAO columnDAO = EasyMock.createNiceMock(ColumnDAO.class);
+        @Nullable final String resultClass = customResult.getClassValue();
+        @NotNull final List<String> tableNames =
+            resultClass != null
+            ? Arrays.asList(StringUtils.getInstance().unCapitalize(resultClass, "_"))
+            : new ArrayList<>(0);
+        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table =
+            EasyMock.createNiceMock(Table.class);
+        @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables =
+            Arrays.asList(table);
+
+        EasyMock.expect(result.getMetaData()).andReturn(metadata).anyTimes();
+        EasyMock.expect(result.getName()).andReturn("fake manager").anyTimes();
+        EasyMock.expect(result.getMetadataTypeManager()).andReturn(new JdbcMetadataTypeManager()).anyTimes();
+        EasyMock.expect(result.getTableNames()).andReturn(tableNames).anyTimes();
+        EasyMock.expect(result.getTables()).andReturn(tables).anyTimes();
+        EasyMock.expect(result.isCaseSensitive()).andReturn(false).anyTimes();
+        EasyMock.expect(result.getEngine()).andReturn(new UndefinedJdbcEngine(engineName, "11")).anyTimes();
+        EasyMock.expect(result.getTableDAO()).andReturn(tableDAO).anyTimes();
+        EasyMock.expect(result.getColumnDAO()).andReturn(columnDAO).anyTimes();
+        EasyMock.expect(tableDAO.findAllTables()).andReturn(tables).anyTimes();
+        EasyMock.expect(tableDAO.findAllTableNames()).andReturn(tableNames).anyTimes();
 
         EasyMock.replay(result);
         EasyMock.replay(metadata);

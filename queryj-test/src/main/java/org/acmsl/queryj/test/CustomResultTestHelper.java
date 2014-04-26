@@ -46,6 +46,7 @@ import cucumber.api.DataTable;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.customsql.PropertyRefElement;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 
@@ -63,6 +64,7 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JetBrains annotations.
  */
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -137,7 +139,7 @@ public class CustomResultTestHelper
 
         if (id != null)
         {
-            result = convertToCustomResult(id, tableEntry.get("type"));
+            result = convertToCustomResult(id, tableEntry.get("class"));
         }
 
         return result;
@@ -176,18 +178,25 @@ public class CustomResultTestHelper
         {
             if (result != null)
             {
-                @Nullable final List<Property<String>> propertyList = properties.get(result.getId());
+                @Nullable List<Property<String>> propertyList = properties.get(result.getId());
 
-                if (propertyList != null)
+                if (propertyList == null)
                 {
-                    for (@NotNull final Map<String, String> propertyEntry: propertyEntries)
-                    {
-                        property = convertToProperty(propertyEntry);
+                    propertyList = new ArrayList<>();
+                    properties.put(result.getId(), propertyList);
+                }
+                int index = 0;
+                for (@NotNull final Map<String, String> propertyEntry: propertyEntries)
+                {
+                    index++;
+                    property = convertToProperty(propertyEntry, index);
 
-                        if (property != null)
-                        {
-                            propertyList.add(property);
-                        }
+                    if (property != null)
+                    {
+                        propertyList.add(property);
+
+                        // so far there's only result in the cucumber feature
+                        result.add(new PropertyRefElement(property.getId()));
                     }
                 }
             }
@@ -200,7 +209,8 @@ public class CustomResultTestHelper
      * @return the {@link Result} instance.
      */
     @Nullable
-    protected Property<String> convertToProperty(@NotNull final Map<String, String> tableEntry)
+    protected Property<String> convertToProperty(
+        @NotNull final Map<String, String> tableEntry, final int index)
     {
         @Nullable Property<String> result = null;
 
@@ -208,13 +218,39 @@ public class CustomResultTestHelper
 
         if (name != null)
         {
+            @Nullable final String columnName = tableEntry.get("columnName");
+            int propertyIndex = toInt(tableEntry.get(Literals.INDEX));
+            if (propertyIndex < 0)
+            {
+                propertyIndex = index;
+            }
             result =
                 convertToProperty(
                     name,
-                    tableEntry.get("columnName"),
-                    tableEntry.get(Literals.INDEX),
+                    columnName != null ? columnName : name,
+                    propertyIndex,
                     tableEntry.get("type"),
                     Boolean.valueOf(tableEntry.get("nullable")));
+        }
+
+        return result;
+    }
+
+    /**
+     * Converts the index to numeric.
+     * @param value the value.
+     * @return the numeric value.
+     */
+    protected int toInt(@NotNull final String value)
+    {
+        int result = -1;
+
+        try
+        {
+            result = Integer.parseInt(value);
+        }
+        catch (@NotNull final NumberFormatException invalidIndex)
+        {
         }
 
         return result;
@@ -233,29 +269,19 @@ public class CustomResultTestHelper
     protected Property<String> convertToProperty(
         @NotNull final String id,
         @NotNull final String columnName,
-        @NotNull final String index,
+        final int index,
         @NotNull final String type,
         final boolean nullable)
     {
         @Nullable final Property<String> result;
 
-        int propertyIndex = -1;
-
-        try
-        {
-            propertyIndex = Integer.parseInt(index);
-        }
-        catch (@NotNull final NumberFormatException invalidIndex)
-        {
-        }
-
-        if (propertyIndex == -1)
+        if (index < 0)
         {
             result = null;
         }
         else
         {
-            result = new PropertyElement<>(id, columnName, propertyIndex, type, nullable);
+            result = new PropertyElement<>(id, columnName, index, type, nullable);
         }
 
         return result;

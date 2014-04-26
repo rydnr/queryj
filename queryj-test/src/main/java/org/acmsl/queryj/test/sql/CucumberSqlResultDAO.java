@@ -27,8 +27,8 @@
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: A SqlResultDAO implementation wrapping a single Result
- *              instance.
+ * Description: A SqlResultDAO implementation wrapping a single or multiple
+ *              Result instances.
  *
  * Date: 6/25/13
  * Time: 6:02 AM
@@ -37,15 +37,10 @@
 package org.acmsl.queryj.test.sql;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.SqlResultDAO;
-
-/*
- * Importing QueryJ Test classes.
- */
-import org.acmsl.queryj.test.antlr4.JavaParser.NonWildcardTypeArgumentsContext;
 
 /*
  * Importing JetBrains annotations.
@@ -56,11 +51,11 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing JDK classes.
  */
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * A {@link SqlResultDAO} implementation wrapping a single {@link Result} instance.
+ * A {@link SqlResultDAO} implementation wrapping a single or multiple {@link Result} instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/06/25
@@ -69,46 +64,56 @@ public class CucumberSqlResultDAO
     implements SqlResultDAO
 {
     /**
-     * The wrapped result.
+     * The wrapped result list.
      */
-    private Result<String> m__CustomResult;
+    private List<Result<String>> m__lCustomResults;
 
     /**
      * Creates a DAO wrapping given result.
      * @param result such result.
      */
+    @SuppressWarnings("unused")
     public CucumberSqlResultDAO(@NotNull final Result<String> result)
     {
-        immutableSetResult(result);
+        immutableSetResultList(Arrays.asList(result));
     }
 
     /**
-     * Specifies the custom result.
-     * @param result such result.
+     * Creates a DAO wrapping given results.
+     * @param results such results.
      */
-    protected final void immutableSetResult(@NotNull final Result<String> result)
+    public CucumberSqlResultDAO(@NotNull final List<Result<String>> results)
     {
-        this.m__CustomResult = result;
+        immutableSetResultList(results);
     }
 
     /**
-     * Specifies the custom result.
-     * @param result such result.
+     * Specifies the custom results.
+     * @param results such results.
+     */
+    protected final void immutableSetResultList(@NotNull final List<Result<String>> results)
+    {
+        this.m__lCustomResults = results;
+    }
+
+    /**
+     * Specifies the custom results.
+     * @param results such results.
      */
     @SuppressWarnings("unused")
-    protected void setResult(@NotNull final Result<String> result)
+    protected void setResultList(@NotNull final List<Result<String>> results)
     {
-        immutableSetResult(result);
+        immutableSetResultList(results);
     }
 
     /**
-     * Retrieves the custom result.
-     * @return such result.
+     * Retrieves the custom results.
+     * @return such results.
      */
     @NotNull
-    protected Result<String> getResult()
+    protected List<Result<String>> getResultList()
     {
-        return m__CustomResult;
+        return m__lCustomResults;
     }
 
     /**
@@ -120,28 +125,37 @@ public class CucumberSqlResultDAO
     @Override
     public Result<String> findByPrimaryKey(@NotNull final String id)
     {
-        return findByPrimaryKey(id, getResult());
+        return findByPrimaryKey(id, getResultList());
     }
 
     /**
      * Retrieves the {@link Result} matching given id.
      * @param id the result id.
-     * @param customResult the custom result.
+     * @param customResults the custom results.
      * @return such result.
      */
     @Nullable
-    protected Result<String> findByPrimaryKey(@NotNull final String id, @NotNull final Result<String> customResult)
+    protected Result<String> findByPrimaryKey(
+        @NotNull final String id, @NotNull final List<Result<String>> customResults)
     {
         @Nullable Result<String> result = null;
 
-        if (id.equals(customResult.getId()))
+        for (@Nullable final Result<String> customResult : customResults)
         {
-            result = customResult;
+            if (   (customResult != null)
+                && (id.equals(customResult.getId())))
+            {
+                result = customResult;
+                break;
+            }
         }
 
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Nullable
     @Override
     public Result<String> findBySqlId(@NotNull final String sqlId)
@@ -158,27 +172,34 @@ public class CucumberSqlResultDAO
     @Override
     public Result<String> findByTable(@NotNull final String table)
     {
-        return findByTable(table, getResult());
+        return findByTable(table, getResultList());
     }
 
     /**
      * Finds nte {@link Result} of given type.
      * @param table the table name.
-     * @param customResult the custom result.
+     * @param customResults the custom results.
      * @return the result.
      */
     @NotNull
-    protected Result<String> findByTable(@NotNull final String table, @NotNull final Result<String> customResult)
+    protected Result<String> findByTable(
+        @NotNull final String table, @NotNull final List<Result<String>> customResults)
     {
-        @Nullable final Result<String> result;
+        @Nullable Result<String> result = null;
 
-        if (table.equals(customResult.getClassValue()))
+        for (@Nullable final Result<String> customResult : customResults)
         {
-            result = customResult;
+            if (   (customResult != null)
+                && (table.equals(customResult.getClassValue())))
+            {
+                result = customResult;
+                break;
+            }
         }
-        else
+
+        if (result == null)
         {
-            result = null;
+            throw new RuntimeException("result for table " + table + " is not found");
         }
 
         return result;
@@ -191,29 +212,20 @@ public class CucumberSqlResultDAO
     @Override
     public List<Result<String>> findAll()
     {
-        return findAll(getResult());
+        return getResultList();
     }
 
     /**
-     * Retrieves all custom {@link Result results}.
-     * @param customResult the wrapped result.
-     * @return a list of just that element.
+     * {@inheritDoc}
      */
-    @NotNull
-    protected List<Result<String>> findAll(@NotNull final Result<String> customResult)
-    {
-        @NotNull final List<Result<String>> result = new ArrayList<>(1);
-
-        result.add(customResult);
-
-        return result;
-    }
-
     @Override
+    @NotNull
     public String toString()
     {
-        return "CucumberSqlResultDAO{" +
-               "customResult=" + m__CustomResult +
-               '}';
+        return
+              "{ \"class\": \"CucumberSqlResultDAO\""
+            + ", \"result\": " + m__lCustomResults
+            + ", \"package\": \"org.acmsl.queryj.test\""
+            + " }";
     }
 }

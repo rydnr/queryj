@@ -40,6 +40,7 @@ package org.acmsl.queryj.metadata;
  * Importing project classes.
  */
 import org.acmsl.commons.patterns.Decorator;
+import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.metadata.vo.Attribute;
 
 /*
@@ -359,6 +360,39 @@ public class TableDecoratorHelper
                 @Nullable final String importType =
                     typeManager.getImport(
                         typeManager.getJavaType(attr.getType().getValue()));
+
+                if (importType != null)
+                {
+                    result.add(new DecoratedString(importType));
+                }
+            }
+        }
+
+        Collections.sort(result);
+
+        return result;
+    }
+
+    /**
+     * Retrieves the ordered list of the fully-qualified types of given properties.
+     * @param properties such properties.
+     * @param typeManager the {@link MetadataTypeManager} instance.
+     * @return such list.
+     */
+    @NotNull
+    protected List<DecoratedString> getPropertyTypes(
+        @NotNull final List<Property<DecoratedString>> properties,
+        @NotNull final MetadataTypeManager typeManager)
+    {
+        @NotNull final List<DecoratedString> result = new ArrayList<>(properties.size());
+
+        for (@Nullable final Property<DecoratedString> property: properties)
+        {
+            if (property != null)
+            {
+                @Nullable final String importType =
+                    typeManager.getImport(
+                        typeManager.getJavaType(property.getType().getValue()));
 
                 if (importType != null)
                 {
