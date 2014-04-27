@@ -1,0 +1,17 @@
+/*
+ * CustomValueObjectFactory template metadata.
+ */
+// The template name (the filename).
+name : CustomValueObjectFactory.stg;
+
+// The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-custom-sql.
+type : per-custom-result;
+
+// The output flavor.
+output: Java;
+
+// The filename builder.
+filename builder : <result.name.camelCase>Factory.java;
+
+// The package.
+package: <packageName>.dao;

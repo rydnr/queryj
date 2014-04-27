@@ -120,7 +120,7 @@ public class <repository.capitalized>DataAccessManager
     /**
      * Public constructor to allow reflective access.
      */
-    public <repository.capitalized>DataAccessManager() {};
+    public <repository.capitalized>DataAccessManager() {}
 
     /**
      * Singleton implementation to avoid double-checked locking.

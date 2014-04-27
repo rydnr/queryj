@@ -1,0 +1,159 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: CustomValueObjectFactory.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate CustomValueObjectFactory
+//              implementations.
+//
+//
+group CustomValueObjectFactory;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+  Defines the rules to generate CustomValueObjectFactory implementations.
+  @param C the context.
+!>
+<sourceFactory(result=C.result, C=C)>
+>>
+
+sourceFactory(result, C) ::= <<
+<!
+  Defines the rules to generate CustomValueObjectFactory implementations.
+  @param result the result.
+  @param C the context.
+!>
+/*
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description(result=result)
+  ],
+  template="org/acmsl/queryj/templates/CustomValueObjectFactory.stg",
+  C=C)><endif>
+*/
+<package_declaration(p=C.package)>
+<checkers_import(C=C)>
+<if(C.implement_markers)>
+
+<endif>
+<if(result.propertyTypes)>
+/*
+ * Importing JDK classes.
+ */
+<result.propertyTypes:{ t | import <t>;}; separator="\n">
+<endif>
+
+<class(result=result, repository=C.repository, C=C)>
+>>
+
+description(result) ::= <<
+<!
+  Generates the first line of the generated file description.
+  @param result the custom result.
+!>
+Are responsible of creating {@link <result.id.voName>} value objects.
+>>
+
+class(result, repository, C) ::= <<
+<!
+ Generates the class body.
+ @param result the result.
+ @param repository the repository.
+ @param C the context.
+!>
+/**
+ * <[
+      description(result=result)
+    ]:{line |<line>}; separator="\n * ">
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/CustomValueObjectFactory.stg", C=C)>
+ */
+public class <result.id.voName>Factory
+{
+    /**
+     * Public constructor ease reflection-based instantiation.
+     */
+    public <result.id.voName>Factory() {}
+
+    /**
+     * Singleton implementation to avoid double-checked locking.
+     */
+    private static final class <result.id.voName>FactorySingletonContainer
+    {
+        private static final <result.id.voName>Factory SINGLETON =
+            new <result.id.voName>Factory();
+    }
+
+    /**
+     * Retrieves a {@code <result.id.voName>Factory} instance.
+     * @return such instance.
+     */
+    public static <result.id.voName>Factory getInstance()
+    {
+        return <result.id.voName>FactorySingletonContainer.SINGLETON;
+    }
+
+    /**
+     * Creates a new {@code <result.id.voName>}.
+     <result.properties:{ p | <property_javadoc(property=p)>}; separator="\n">
+     */
+    public <result.id.voName> create(
+        <result.properties:{ p | <property_method_parameter_declaration(property=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
+    {
+        return
+            new <result.id.voName>Impl(
+                <result.properties:{ p | <p.id.voName.uncapitalized>}; separator=", ">);
+    }
+
+    <tostring_method(result=result, C=C)>
+}
+>>
+
+tostring_method(result, C) ::= <<
+<! Generates the toString() method !>
+/**
+ * {@inheritDoc}
+ */
+<notnull(C=C)>
+@Override
+public String toString()
+{
+    return "{ \class\": \"<result.id.voName>Factory\", \"package\": \"<C.package>\" }");
+}
+>>
