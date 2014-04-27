@@ -1,0 +1,6 @@
+* 2014/04/26
+** DONE CustomValueObjectImpl template #488: 2 -> 1
+** DONE CustomValueObjectFactory template #489: 2 -> 1
+** DONE DAOListener template: 2 -> 1 # NOT NEEDED
+** DONE Nest Queryj versions and enable DataAccessManager #493: 2 -> 1
+   
