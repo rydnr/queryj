@@ -1,8 +1,8 @@
 /*
- * CustomValueObject template metadata.
+ * CustomValueObjectImpl template metadata.
  */
 // The template name (the filename).
-name : CustomValueObject.stg;
+name : CustomValueObjectImpl.stg;
 
 // The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-custom-sql.
 type : per-custom-result;
@@ -11,7 +11,7 @@ type : per-custom-result;
 output: Java;
 
 // The filename builder.
-filename builder : <result.name.camelCase>.java;
+filename builder : <result.name.camelCase>Impl.java;
 
 // The package.
 package: <packageName>.dao;

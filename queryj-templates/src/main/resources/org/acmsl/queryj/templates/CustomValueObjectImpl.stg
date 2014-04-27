@@ -29,21 +29,21 @@
 //
 //***************************************************************************
 //
-// Filename: CustomBaseValueObject.stg
+// Filename: CustomValueObjectImpl.stg
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate CustomBaseValueObject
+// Description: Defines the rules to generate CustomValueObjectImpl
 //              implementations.
 //
 //
-group CustomBaseValueObject;
+group CustomValueObjectImpl;
 
 import "queryj.stg"
 
 source(C) ::= <<
 <!
-  Defines the rules to generate CustomBaseValueObject implementations.
+  Defines the rules to generate CustomValueObjectImpl implementations.
   @param C the context.
 !>
 <sourceImpl(result=C.result, C=C)>
@@ -51,7 +51,7 @@ source(C) ::= <<
 
 sourceImpl(result, C) ::= <<
 <!
-  Defines the rules to generate CustomBaseValueObject implementations.
+  Defines the rules to generate CustomValueObjectImpl implementations.
   @param result the result.
   @param C the context.
 !>
@@ -64,7 +64,7 @@ sourceImpl(result, C) ::= <<
   [
     description(result=result)
   ],
-  template="org/acmsl/queryj/templates/CustomBaseValueObject.stg",
+  template="org/acmsl/queryj/templates/CustomValueObjectImpl.stg",
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
@@ -87,7 +87,7 @@ description(result) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-Base class (mainly a property container) for {@link <result.id.voName>} value objects.
+{@link <result.id.voName>} value object implementations.
 >>
 
 class(result, repository, C) ::= <<
@@ -102,83 +102,22 @@ class(result, repository, C) ::= <<
       description(result=result)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(
-  template="org/acmsl/queryj/templates/CustomBaseValueObject.stg", C=C)>
+  template="org/acmsl/queryj/templates/CustomValueObjectImpl.stg", C=C)>
  */
-public abstract class Abstract<result.id.voName>
-    implements <result.id.voName>
+public class <result.id.voName>Impl
+    extends Abstract<result.id.voName>
 {
-    <result.properties:{ p | <property_isolated_declaration(property=p, C=C)>}; separator="\n\n">
-
     /**
-     * Creates a new {@code Abstract<result.id.voName>}.
+     * Creates a new {@code <result.id.voName>}.
      <result.properties:{ p | <property_javadoc(property=p)>}; separator="\n">
      */
-    public Abstract<result.id.voName>(
+    public <result.id.voName>Impl(
         <result.properties:{ p | <property_method_parameter_declaration(property=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
     {
-        <result.properties:{ p | <immutable_property_setter_call(property=p)>}; separator="\n">
+        super(<result.properties:{ p | <p.id.voName.uncapitalized>}; separator=", ">);
     }
-
-    <result.properties:{ p | <property_accessors(property=p, C=C)>}; separator="\n">
-
-    <equals_method(result=result, C=C)>
-
-    <hashcode_method(result=result, C=C)>
 
     <tostring_method(result=result, C=C)>
-}
->>
-
-equals_method(result, C) ::= <<
-<! Generates the equals(Object) method !>
-/**
- * Checks whether given object is semantically equivalent to this one.
- * @param other the other object to compare to.
- * @return {@code true} if and only if they're equivalent.
- */
-@Override
-public boolean equals(<nullable(C=C)>final Object other)
-{
-    final boolean result;
-
-    if (other instanceof <result.id.voName>)
-    {
-        <notnull(C=C)>final <result.id.voName> candidate = (<result.id.voName>) other;
-
-        <result.properties:{ p | <property_equals(property=p)>}; separator="">
-        result =
-            <result.properties:{ p |<p.id.uncapitalized>Match}; separator="\n&& ">;
-    }
-    else
-    {
-        result = false;
-    }
-
-    return result;
-}
->>
-
-hashcode_method(result, C) ::= <<
-<! Generates the hashcode() method !>
-/**
- * Retrieves the hashcode which identifies this instance
- * from any other one.
- * @return the unique (among instances of this class) value.
- */
-@Override
-public int hashCode()
-{
-    final int result;
-
-    final int classHashCode = Abstract<result.id.voName>.class.hashCode();
-
-    <result.properties:{ p | <property_hashcode(property=p)>}; separator="\n">
-
-    result =
-          classHashCode
-        <result.properties:{ p |+ <p.id.uncapitalized>HashCode}; separator="\n">;
-
-    return result;
 }
 >>
 
@@ -191,12 +130,6 @@ tostring_method(result, C) ::= <<
 @Override
 public String toString()
 {
-    <notnull(C=C)>final StringBuilder result = new StringBuilder("{ \class\": \"Abstract<result.id.voName>");
-
-    <result.properties:{ p | <property_toString(property=p)>}; separator="\n">
-
-    result.append(", \"package\": \"<C.package>\" }");
-
-    return result.toString();
+    return "{ \class\": \"<result.id.voName>Impl\", \"super\": " + super.toString() + ", \"package\": \"<C.package>\" }");
 }
 >>

@@ -1,8 +1,8 @@
 * 2014/04/26
 ** DONE CustomResultSetExtractor template #485: 3 -> 3
-** TODO CustomValueObject template: 2 -> 1
-** TODO CustomBaseValueObject template: 2 ->
-** TODO CustomValueObjectImpl template: 2 ->
+** DONE CustomValueObject template #486: 2 -> 1
+** DONE CustomBaseValueObject template #487: 2 -> 1
+** TODO CustomValueObjectImpl template #488: 2 ->
 ** TODO CustomValueObjectFactory template: 2 ->
 ** TODO DAOListener template: 2 ->
    
