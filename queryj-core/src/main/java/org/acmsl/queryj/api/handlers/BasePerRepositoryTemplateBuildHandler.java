@@ -132,8 +132,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
-        if (isGenerationEnabled(customSqlProvider, parameters))
-        {
+//        if (isGenerationEnabled(customSqlProvider, parameters))
+//        {
             @Nullable final T t_Template =
                 createTemplate(
                     templateFactory,
@@ -146,7 +146,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                 storeTemplate(t_Template, parameters);
             }
         }
-    }
+//    }
 
     /**
      * Checks whether template generation is enabled for this kind of template.

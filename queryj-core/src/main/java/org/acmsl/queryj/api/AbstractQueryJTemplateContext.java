@@ -39,6 +39,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
@@ -54,19 +55,26 @@ import org.acmsl.queryj.tools.exceptions.MetadataManagerNotAvailableException;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
+ * Importing some ACM S.L. Java Commons classes.
+ */
+import org.acmsl.commons.utils.io.FileUtils;
+
+/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
  */
+import java.io.File;
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -158,7 +166,60 @@ public abstract class AbstractQueryJTemplateContext
     @Nullable
     protected String getHeader(@NotNull final QueryJCommand command)
     {
-        return new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.HEADER_FILE);
+        @NotNull final QueryJCommandWrapper<String> wrapper = new QueryJCommandWrapper<>(command);
+
+        @Nullable String result = wrapper.getSetting(Literals.HEADER);
+
+        if (result == null)
+        {
+            result = retrieveHeaderFromFile(command, FileUtils.getInstance());
+
+            if (result == null)
+            {
+                result = "";
+            }
+
+            wrapper.setSetting(Literals.HEADER, result);
+        }
+
+        if ("".equals(result.trim()))
+        {
+            result = null;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the header from the specified the header file.
+     * @param command the {@link QueryJCommand} instance.
+     * @param fileUtils the {@link FileUtils} instance.
+     * @return the header.
+     */
+    @Nullable
+    protected String retrieveHeaderFromFile(
+        @NotNull final QueryJCommand command, @NotNull final FileUtils fileUtils)
+    {
+        @Nullable final String result;
+
+        @Nullable final File file =
+            new QueryJCommandWrapper<File>(command).getSetting(QueryJSettings.HEADER_FILE);
+
+        if (file != null)
+        {
+            @Nullable final String charset =
+                new QueryJCommandWrapper<String>(command).getSetting(QueryJSettings.ENCODING);
+
+            result =
+                fileUtils.readFileIfPossible(
+                    file, charset != null ? Charset.forName(charset) : Charset.defaultCharset());
+        }
+        else
+        {
+            result = null;
+        }
+
+        return result;
     }
 
     /**
