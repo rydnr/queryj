@@ -1,4 +1,4 @@
-* 2014/04/26
+* 2014/04/27
 ** DONE CustomValueObjectImpl template #488: 2 -> 1
 ** DONE CustomValueObjectFactory template #489: 2 -> 1
 ** DONE DAOListener template: 2 -> 1 # NOT NEEDED

@@ -1,0 +1,5 @@
+* 2014/04/28
+** TODO Fix DataAccessManager #493: 5 -> 
+** TODO Move shared classes to commons project : 3 ->
+** TODO Fix DAOChooser : 3 ->
+   
