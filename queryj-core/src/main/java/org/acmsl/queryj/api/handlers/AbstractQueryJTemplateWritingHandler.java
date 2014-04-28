@@ -1,5 +1,5 @@
 /*
-                        QueryJ-Core
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,10 +36,8 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.QueryJTemplate;
 import org.acmsl.queryj.api.QueryJTemplateContext;
@@ -49,11 +47,6 @@ import org.acmsl.queryj.api.TemplateGenerator;
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.metadata.engines.Engine;
-import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
-import org.acmsl.queryj.metadata.engines.oracle.OracleEngine;
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,12 +60,13 @@ import org.checkthread.annotations.ThreadSafe;
  */
 import java.io.File;
 import java.nio.charset.Charset;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.concurrent.CyclicBarrier;
 
 /**
  * QueryJ-specific base writing handler.
+ * @param <T> the template.
+ * @param <C> the context type.
+ * @param <TG> the template generator.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/08/20 06:48
@@ -112,162 +106,4 @@ public abstract class AbstractQueryJTemplateWritingHandler
             new TemplateGeneratorThread<>(
                 generator, template, outputDir, rootDir, charset, threadIndex + 1, barrier);
     }
-
-    /**
-     * Retrieves the database product name.
-     * @param parameters the parameters.
-     * @return the product name.
-     */
-    @NotNull
-    protected String retrieveProductName(@NotNull final QueryJCommand parameters)
-    {
-        @NotNull final String result;
-
-        @Nullable String aux = null;
-
-        try
-        {
-            aux = retrieveProductName(parameters, retrieveDatabaseMetaData(parameters));
-        }
-        catch (@NotNull final QueryJBuildException metadataUnavailable)
-        {
-            @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractQueryJTemplateWritingHandler.class);
-
-            if (t_Log != null)
-            {
-                t_Log.error("Database metadata unavailable", metadataUnavailable);
-            }
-        }
-
-        if (aux == null)
-        {
-            result = "";
-        }
-        else
-        {
-            result = aux;
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the database product name.
-     * @param parameters the parameter map.
-     * @param metadata the database metadata.
-     * @return the product name.
-     */
-    @NotNull
-    public String retrieveProductName(
-        @NotNull final QueryJCommand parameters, @Nullable final DatabaseMetaData metadata)
-    {
-        @NotNull final String result;
-        @Nullable String aux = parameters.getSetting(PRODUCT_NAME);
-
-        if (   (aux == null)
-            && (metadata != null))
-        {
-            try
-            {
-                aux = metadata.getDatabaseProductName();
-            }
-            catch  (@NotNull final SQLException sqlException)
-            {
-                @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class);
-
-                if (t_Log != null)
-                {
-                    t_Log.warn(
-                        "Cannot retrieve database product name, "
-                        + "version or quote string",
-                        sqlException);
-                }
-            }
-        }
-
-        if (aux == null)
-        {
-            result = Literals.UNKNOWN;
-        }
-        else
-        {
-            result = aux;
-        }
-
-        parameters.setSetting(PRODUCT_NAME, result);
-
-        return result;
-    }
-
-
-    /**
-     * Retrieves the database product version.
-     * @param metadata the database metadata.
-     * @return the product version.
-     */
-    @NotNull
-    public String retrieveProductVersion(@Nullable final DatabaseMetaData metadata)
-    {
-        @NotNull final String result;
-
-        @Nullable String aux = null;
-
-        if (metadata != null)
-        {
-            try
-            {
-                aux = metadata.getDatabaseProductVersion();
-            }
-            catch  (@NotNull final SQLException sqlException)
-            {
-                @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class);
-
-                if (t_Log != null)
-                {
-                    t_Log.warn(
-                        "Cannot retrieve database product version",
-                        sqlException);
-                }
-            }
-        }
-
-        if (aux == null)
-        {
-            result = Literals.UNKNOWN;
-        }
-        else
-        {
-            result = aux;
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the database engine.
-     * @param parameters the parameter map.
-     * @param metadata the database metadata.
-     * @return the product.
-     */
-    @NotNull
-    public Engine<String> retrieveEngine(
-        @NotNull final QueryJCommand parameters, @Nullable final DatabaseMetaData metadata)
-    {
-        @NotNull final Engine<String> result;
-
-        @NotNull final String name = retrieveProductName(parameters, metadata);
-        @NotNull final String version = retrieveProductVersion(metadata);
-
-        if (name.equals(Literals.ORACLE))
-        {
-            result = new OracleEngine(version);
-        }
-        else
-        {
-            result = new UndefinedJdbcEngine(name, version);
-        }
-
-        return result;
-    }
-
 }

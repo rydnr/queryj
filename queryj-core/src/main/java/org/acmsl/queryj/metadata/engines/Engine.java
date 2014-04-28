@@ -45,10 +45,14 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
 import java.io.Serializable;
 
 /**
  * Represents engine vendors.
+ * @param <T> the type.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/01/24 07:08

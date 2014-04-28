@@ -241,7 +241,7 @@ public <table.name.voName>DAO get<table.name.voName>DAO()
 }
 >>
 
-repository_dao_methods(repository, C=C) ::= <<
+repository_dao_methods(repository, C) ::= <<
 <!
  Generates the methods for the repository DAO.
  @param repository the repository.

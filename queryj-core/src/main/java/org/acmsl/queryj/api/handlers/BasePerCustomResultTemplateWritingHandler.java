@@ -62,6 +62,7 @@ import java.io.File;
  * @param <TG> the template generator type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public abstract class BasePerCustomResultTemplateWritingHandler
     <T extends PerCustomResultTemplate<C>,
         C extends PerCustomResultTemplateContext,
@@ -124,7 +125,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
                 customSqlProvider,
                 metadataManager,
                 retrieveProjectOutputDir(parameters),
-                retrieveEngine(parameters, retrieveDatabaseMetaData(parameters)),
+                retrieveMetadataManager(parameters).getEngine(),
                 parameters);
     }
 

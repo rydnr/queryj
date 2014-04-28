@@ -60,6 +60,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -67,10 +68,12 @@ import java.util.List;
  * Apache Commons Configuration-based implementation of {@link QueryJCommand}.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
+ * Created: 2013/08/09
  */
 @ThreadSafe
 public class ConfigurationQueryJCommandImpl
-    implements QueryJCommand
+    implements QueryJCommand,
+               Serializable
 {
     /**
      * The attribute collection.
@@ -408,7 +411,7 @@ public class ConfigurationQueryJCommandImpl
             + ", \"configuration\": "
             + "{ \"class\": \"" + m__Configuration.getClass().getSimpleName()
             +    ", \"package\": \"" + m__Configuration.getClass().getPackage().getName() + '"'
-            +    confToString(m__Configuration)
+//            +    confToString(m__Configuration)
             + "} }";
     }
 }

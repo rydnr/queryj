@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -41,7 +41,6 @@ import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.api.PerForeignKeyTemplateGenerator;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.engines.Engine;
-import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing some JetBrains annotations.
@@ -55,6 +54,9 @@ import java.io.File;
 
 /**
  * Writes <i>per-fk</i> templates.
+ * @param <T> the template type.
+ * @param <C> the template context type.
+ * @param <TG> the template generator type.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @SuppressWarnings("unused")
@@ -87,7 +89,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
     {
         return
             retrieveOutputDir(
-                retrieveEngine(parameters, retrieveDatabaseMetaData(parameters)),
+                retrieveMetadataManager(parameters).getEngine(),
                 retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
                 context.getForeignKey().getSourceTableName(),

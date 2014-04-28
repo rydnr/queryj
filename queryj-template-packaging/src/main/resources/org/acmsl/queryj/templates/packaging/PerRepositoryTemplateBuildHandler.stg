@@ -65,19 +65,21 @@ sourceImpl(def, C) ::= <<
 /*
  * Importing QueryJ-Core classes.
  */
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateBuildHandler;
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratedString;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.engines.EngineDecorator;
-import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing custom templates.
  */
-import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.templates.<def.name.noExtension>Template;
 import org.acmsl.queryj.templates.<def.name.noExtension>TemplateFactory;
 
@@ -90,6 +92,7 @@ import org.stringtemplate.v4.ST;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -138,6 +141,34 @@ public class <C.class_name>
     protected <def.name.noExtension>TemplateFactory retrieveTemplateFactory()
     {
         return <def.name.noExtension>TemplateFactory.getInstance();
+    }
+
+    /**
+     * Uses the factory to create the template.
+     * @param templateFactory the template factory.
+     * @param repository the repository.
+     * @param tableNames the table names.
+     * @param parameters the command.
+     * @return the template.
+     */
+    @Nullable
+    protected <def.name.noExtension>Template createTemplate(
+        @NotNull final <def.name.noExtension>TemplateFactory templateFactory,
+        @NotNull final String repository,
+        @NotNull final List\<String> tableNames,
+        @NotNull final QueryJCommand parameters)
+      throws  QueryJBuildException
+    {
+        new QueryJCommandWrapper\<DecoratorFactory>(parameters).setSetting(
+            DecoratorFactory.class.getName(), CachingDecoratorFactory.getInstance());
+
+        new QueryJCommandWrapper\<String>(parameters).setSetting(
+            Literals.PACKAGE_NAME,
+            retrievePackage(
+                repository, retrieveMetadataManager(parameters).getEngine(), retrieveProjectPackage(parameters)));
+
+        // TODO: check whether generation is allowed or not
+        return super.createTemplate(templateFactory, repository, tableNames, parameters);
     }
 
     /**

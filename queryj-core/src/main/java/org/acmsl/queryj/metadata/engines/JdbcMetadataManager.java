@@ -104,7 +104,7 @@ public class JdbcMetadataManager
     public static final String KEY_SEQ = "KEY_SEQ";
 
     /**
-     * Creates a {@link JdbcMetadataManager} with given name.
+     * Creates a {@code JdbcMetadataManager} with given name.
      * @param name the name.
      */
     @SuppressWarnings("unused")

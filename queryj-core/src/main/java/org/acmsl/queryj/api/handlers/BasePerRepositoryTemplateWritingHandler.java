@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,7 +33,7 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.PerRepositoryTemplateGenerator;
@@ -57,6 +57,9 @@ import java.util.List;
 
 /**
  * Writes <i>per-repository</i> templates.
+ * @param <T> the template type.
+ * @param <C> the context type.
+ * @param <G> the generator type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerRepositoryTemplateWritingHandler
@@ -120,7 +123,7 @@ public abstract class BasePerRepositoryTemplateWritingHandler
                 retrieveTableRepositoryName(parameters),
                 context,
                 rootDir,
-                retrieveEngine(parameters, retrieveDatabaseMetaData(parameters)),
+                retrieveMetadataManager(parameters).getEngine(),
                 parameters);
     }
 

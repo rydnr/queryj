@@ -33,7 +33,7 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.PerTableTemplate;
@@ -55,8 +55,12 @@ import java.io.File;
 
 /**
  * Writes <i>per-table</i> templates.
+ * @param <T> the template type.
+ * @param <C> the template context type.
+ * @param <TG> the template generator type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public abstract class BasePerTableTemplateWritingHandler
     <T extends PerTableTemplate<C>,
      C extends PerTableTemplateContext,
@@ -88,7 +92,7 @@ public abstract class BasePerTableTemplateWritingHandler
             retrieveOutputDir(
                 context.getTableName(),
                 rootDir,
-                retrieveEngine(parameters, retrieveDatabaseMetaData(parameters)),
+                retrieveMetadataManager(parameters).getEngine(),
                 parameters);
     }
 
