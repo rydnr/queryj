@@ -29,19 +29,20 @@
 //
 //***************************************************************************
 //
-// Filename: TemplateBuildHandler.stg
+// Filename: PerCustomSqlTemplateBuildHandler.stg
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate QueryJ's TemplateBuildHandlers.
+// Description: Defines the rules to generate per-SQL QueryJ's
+//              TemplateBuildHandlers.
 //
-group TemplateBuildHandler;
+group PerCustomSqlTemplateBuildHandler;
 
 import "common.stg"
 
 source(C) ::= <<
 <!
-  Generates a TemplateBuildHandler source file.
+  Generates a per-SQL TemplateBuildHandler source file.
   @param C the context.
 !>
 <sourceImpl(def=C.templateDef, C=C)>
@@ -49,7 +50,7 @@ source(C) ::= <<
 
 sourceImpl(def, C) ::= <<
 <!
-  Generates a TemplateBuildHandler source file.
+  Generates a per-SQL TemplateBuildHandler source file.
   @param def the template def.
   @param C the context.
 !>
@@ -57,7 +58,7 @@ sourceImpl(def, C) ::= <<
   description=[ "Build handler for ", def.name.capitalized, "Templates." ],
   description_oneline=true,
   filename=C.class_name,
-  template="org/acmsl/queryj/templates/packaging/TemplateBuildHandler.stg",
+  template="org/acmsl/queryj/templates/packaging/PerCustomSqlTemplateBuildHandler.stg",
   C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
 
@@ -107,7 +108,7 @@ class(def, C) ::= <<
 /**
  * Build handler for {@link org.acmsl.queryj.templates.<def.name.noExtension>Template}s.
 <class_common_javadoc(
-  template="org/acmsl/queryj/templates/packaging/TemplateBuildHandler.stg",
+  template="org/acmsl/queryj/templates/packaging/PerCustomSqlTemplateBuildHandler.stg",
   timestamp=C.timestamp,
   version=C.version)>
  */

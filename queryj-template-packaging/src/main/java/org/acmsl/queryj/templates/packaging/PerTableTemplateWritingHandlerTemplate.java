@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerForeignKeyTemplateWritingHandlerTemplate.java
+ * Filename: PerTableTemplateWritingHandlerTemplate.java
  *
- * Author: Jose San Leandro
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Represents foreign key-specific template writing handler
- *              templates.
+ * Description: Represents table-specific template writing handler templates.
  *
- * Created: 2014/04/14 15:42
+ * Date: 2014/04/29
+ * Time: 06:01
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -46,38 +46,38 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Represents foreign key-specific template writing handler templates.
+ * Represents table-specific template writing handler templates.
  * @param <C> the context type.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created 2014/04/14
+ * Created: 2014/04/29 06:01
  */
 @ThreadSafe
-public class PerForeignKeyTemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
-    extends TemplateWritingHandlerTemplate<C>
+public class PerTableTemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
+    extends TemplateBuildHandlerTemplate<C>
 {
     /**
      * The serial version id.
      */
-    private static final long serialVersionUID = 3487564525136393115L;
+    private static final long serialVersionUID = -910691293894728629L;
 
     /**
      * Creates a new instance using given context.
      * @param context the context.
      */
-    public PerForeignKeyTemplateWritingHandlerTemplate(@NotNull final C context)
+    public PerTableTemplateWritingHandlerTemplate(@NotNull final C context)
     {
         super(context);
     }
 
     /**
      * Retrieves the template name.
-     * @return "PerForeignKeyTemplateWritingHandler".
+     * @return "PerTableTemplateWritingHandler".
      */
     @NotNull
     @Override
     public String getTemplateName()
     {
-        return Literals.PER_FOREIGN_KEY_TEMPLATE_WRITING_HANDLER;
+        return Literals.PER_TABLE_TEMPLATE_WRITING_HANDLER;
     }
 }

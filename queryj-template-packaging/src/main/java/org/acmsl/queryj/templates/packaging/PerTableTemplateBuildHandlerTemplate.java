@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerForeignKeyTemplateWritingHandlerTemplate.java
+ * Filename: PerTableTemplateBuildHandlerTemplate.java
  *
- * Author: Jose San Leandro
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Represents foreign key-specific template writing handler
- *              templates.
+ * Description: Template for per-table template build handlers.
  *
- * Created: 2014/04/14 15:42
+ * Date: 2014/04/29
+ * Time: 05:56
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -46,38 +46,38 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Represents foreign key-specific template writing handler templates.
- * @param <C> the context type.
+ * Template for per-table template build handlers.
+ * @param <C> the template packaging context type.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created 2014/04/14
+ * Created: 2014/04/29 05:56
  */
 @ThreadSafe
-public class PerForeignKeyTemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
-    extends TemplateWritingHandlerTemplate<C>
+public class PerTableTemplateBuildHandlerTemplate<C extends TemplatePackagingContext>
+    extends TemplateBuildHandlerTemplate<C>
 {
     /**
      * The serial version id.
      */
-    private static final long serialVersionUID = 3487564525136393115L;
+    private static final long serialVersionUID = 9122581776783678705L;
 
     /**
      * Creates a new instance using given context.
      * @param context the context.
      */
-    public PerForeignKeyTemplateWritingHandlerTemplate(@NotNull final C context)
+    public PerTableTemplateBuildHandlerTemplate(@NotNull final C context)
     {
         super(context);
     }
 
     /**
      * Retrieves the template name.
-     * @return "PerForeignKeyTemplateWritingHandler".
+     * @return "PerTableTemplateBuildHandler".
      */
     @NotNull
     @Override
     public String getTemplateName()
     {
-        return Literals.PER_FOREIGN_KEY_TEMPLATE_WRITING_HANDLER;
+        return Literals.PER_TABLE_TEMPLATE_BUILD_HANDLER;
     }
 }

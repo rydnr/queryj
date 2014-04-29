@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: PerForeignKeyTemplateWritingHandlerTemplate.java
+ * Filename: PerTableTemplateBuildHandlerTemplateTest.java
  *
- * Author: Jose San Leandro
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Represents foreign key-specific template writing handler
- *              templates.
+ * Description: Tests for PerTableTemplateBuildHandlerTemplate.
  *
- * Created: 2014/04/14 15:42
+ * Date: 2014/04/29
+ * Time: 05:53
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -41,43 +41,35 @@ package org.acmsl.queryj.templates.packaging;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JUnit/EasyMock classes.
  */
-import org.checkthread.annotations.ThreadSafe;
+import org.easymock.EasyMock;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
- * Represents foreign key-specific template writing handler templates.
- * @param <C> the context type.
+ * Tests for {@link PerTableTemplateBuildHandlerTemplate}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created 2014/04/14
+ * Created: 2014/04/29 05:53
  */
-@ThreadSafe
-public class PerForeignKeyTemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
-    extends TemplateWritingHandlerTemplate<C>
+@RunWith(JUnit4.class)
+public class PerTableTemplateBuildHandlerTemplateTest
 {
     /**
-     * The serial version id.
+     * Checks whether getTemplateName() returns the correct template name.
      */
-    private static final long serialVersionUID = 3487564525136393115L;
-
-    /**
-     * Creates a new instance using given context.
-     * @param context the context.
-     */
-    public PerForeignKeyTemplateWritingHandlerTemplate(@NotNull final C context)
+    @Test
+    public void getTemplateName_returns_the_correct_template_name()
     {
-        super(context);
-    }
+        @NotNull final DefaultTemplatePackagingContext context =
+            EasyMock.createNiceMock(DefaultTemplatePackagingContext.class);
 
-    /**
-     * Retrieves the template name.
-     * @return "PerForeignKeyTemplateWritingHandler".
-     */
-    @NotNull
-    @Override
-    public String getTemplateName()
-    {
-        return Literals.PER_FOREIGN_KEY_TEMPLATE_WRITING_HANDLER;
+        @NotNull final PerTableTemplateBuildHandlerTemplate instance =
+            new PerTableTemplateBuildHandlerTemplate<>(context);
+
+        Assert.assertEquals(Literals.PER_TABLE_TEMPLATE_BUILD_HANDLER, instance.getTemplateName());
     }
 }

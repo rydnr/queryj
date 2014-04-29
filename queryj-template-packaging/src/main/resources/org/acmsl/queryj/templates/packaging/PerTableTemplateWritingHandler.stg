@@ -29,20 +29,20 @@
 //
 //***************************************************************************
 //
-// Filename: TemplateWritingHandler.stg
+// Filename: PerTableTemplateWritingHandler.stg
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate QueryJ's
+// Description: Defines the rules to generate per-table QueryJ's
 //              TemplateWritingHandlers.
 //
-group TemplateWritingHandler;
+group PerTableTemplateWritingHandler;
 
 import "common.stg"
 
 source(C) ::= <<
 <!
-  Generates a TemplateWritingHandler source file.
+  Generates a per-table TemplateWritingHandler source file.
   @param C the context.
 !>
 <sourceImpl(def=C.templateDef, C=C)>
@@ -50,7 +50,7 @@ source(C) ::= <<
 
 sourceImpl(def, C) ::= <<
 <!
-  Generates a TemplateWritingHandler source file.
+  Generates a per-table TemplateWritingHandler source file.
   @param def the template def.
   @param C the context.
 !>
@@ -58,7 +58,7 @@ sourceImpl(def, C) ::= <<
   description=[ "Writing handler for ", def.name.capitalized, "Templates." ],
   description_oneline=true,
   filename=C.class_name,
-  template="org/acmsl/queryj/templates/packaging/TemplateWritingHandler.stg",
+  template="org/acmsl/queryj/templates/packaging/PerTableTemplateWritingHandler.stg",
    C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
 
@@ -103,7 +103,7 @@ class(def, C) ::= <<
 /**
  * Writing handler for {@link <def.name.noExtension>Template}s.
 <class_common_javadoc(
-  template="org/acmsl/templates/packaging/TemplateWritingHandler.stg",
+  template="org/acmsl/templates/packaging/PerTableTemplateWritingHandler.stg",
   timestamp=C.timestamp,
   version=C.version)>
  */

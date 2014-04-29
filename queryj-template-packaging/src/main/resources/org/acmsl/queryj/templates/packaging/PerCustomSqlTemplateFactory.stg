@@ -29,19 +29,20 @@
 //
 //***************************************************************************
 //
-// Filename: TemplateFactory.stg
+// Filename: PerCustomSqlTemplateFactory.stg
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate QueryJ's TemplateFactories.
+// Description: Defines the rules to generate per-SQL QueryJ's
+//              TemplateFactories.
 //
-group TemplateFactory;
+group PerCustomSqlTemplateFactory;
 
 import "common.stg"
 
 source(C) ::= <<
 <!
- Generates a TemplateFactory source file.
+ Generates a per-SQL TemplateFactory source file.
  @param C the context.
  !>
 <sourceImpl(def=C.templateDef, C=C)>
@@ -57,7 +58,7 @@ sourceImpl(def, C) ::= <<
   description=[ "Factory for ", def.name.capitalized, "Templates." ],
   description_oneline=true,
   filename=C.class_name,
-  template="org/acmsl/queryj/templates/packaging/TemplateFactory.stg",
+  template="org/acmsl/queryj/templates/packaging/PerCustomSqlTemplateFactory.stg",
   C=C)>
 <package_declaration(packageName="org.acmsl.queryj.templates")>
 
@@ -108,7 +109,7 @@ class(def, C) ::= <<
 /**
  * Factory for {@link <def.name.noExtension>Template}s.
 <class_common_javadoc(
-  template="org/acmsl/queryj/templates/packaging/TemplateFactory.stg",
+  template="org/acmsl/queryj/templates/packaging/PerCustomSqlTemplateFactory.stg",
   timestamp=C.timestamp,
   version=C.version)>
  */

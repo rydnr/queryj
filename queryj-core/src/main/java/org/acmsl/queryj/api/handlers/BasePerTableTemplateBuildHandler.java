@@ -82,6 +82,7 @@ import org.jetbrains.annotations.Nullable;
  * @param <C> the template context.
  * @param <TF> the template factory.
  */
+@SuppressWarnings("unused")
 public abstract class BasePerTableTemplateBuildHandler
        <T extends PerTableTemplate<C>,
         C extends PerTableTemplateContext,
