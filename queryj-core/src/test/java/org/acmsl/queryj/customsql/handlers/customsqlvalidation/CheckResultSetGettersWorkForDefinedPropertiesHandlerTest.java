@@ -41,6 +41,7 @@ package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.ParameterRefElement;
@@ -61,11 +62,6 @@ import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-
-/*
- * Importing Apache Commons Configuration classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations.
@@ -110,7 +106,8 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandlerTest
         @NotNull final CheckResultSetGettersWorkForDefinedPropertiesHandler instance =
             new CheckResultSetGettersWorkForDefinedPropertiesHandler();
 
-        @NotNull final QueryJCommand t_Parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final QueryJCommand t_Parameters =
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final SqlElement<String> t_Sql =
             new SqlElement<>(

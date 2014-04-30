@@ -41,20 +41,16 @@ package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
 import org.acmsl.queryj.customsql.PropertyRefElement;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
-
-/*
- * Importing Apache Commons Configuration classes.
- */
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.Sql.Cardinality;
 import org.acmsl.queryj.customsql.SqlElement;
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations.
@@ -89,6 +85,11 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class RetrieveResultSetColumnsHandlerTest
 {
+    /**
+     * Checks the properties are built from the result set metadata.
+     * @throws QueryJBuildException
+     * @throws SQLException
+     */
     @Test
     public void builds_a_list_of_properties_from_the_ResultSetMetadata()
         throws QueryJBuildException,
@@ -96,7 +97,8 @@ public class RetrieveResultSetColumnsHandlerTest
     {
         @NotNull final RetrieveResultSetColumnsHandler instance = new RetrieveResultSetColumnsHandler();
 
-        @NotNull final QueryJCommand t_Parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final QueryJCommand t_Parameters =
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final SqlElement<String> sql =
             new SqlElement<>(
@@ -142,6 +144,11 @@ public class RetrieveResultSetColumnsHandlerTest
         EasyMock.verify(t_ResultSetMetaData);
     }
 
+    /**
+     * Checks it does not process non-select queries.
+     * @throws QueryJBuildException
+     * @throws SQLException
+     */
     @Test
     public void does_not_process_non_select_queries()
         throws QueryJBuildException,
@@ -149,7 +156,8 @@ public class RetrieveResultSetColumnsHandlerTest
     {
         @NotNull final RetrieveResultSetColumnsHandler instance = new RetrieveResultSetColumnsHandler();
 
-        @NotNull final QueryJCommand t_Parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final QueryJCommand t_Parameters =
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final ResultSet t_ResultSet = PowerMock.createMock(ResultSet.class);
 

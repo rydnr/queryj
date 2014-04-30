@@ -38,6 +38,7 @@ import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJChain;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
@@ -114,7 +115,8 @@ public class QueryJTask
      */
     public QueryJTask(@NotNull final Log log)
     {
-        immutableSetQueryJCommand(new ConfigurationQueryJCommandImpl(new PropertiesConfiguration(), log));
+        immutableSetQueryJCommand(
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration(), log));
     }
 
     /**

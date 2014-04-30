@@ -40,16 +40,11 @@ package org.acmsl.queryj.api;
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
-
-/*
- * Importing Apache Commons Configuration classes.
- */
-import org.acmsl.queryj.metadata.CachingDecoratorFactory;
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations.
@@ -92,7 +87,7 @@ public class PerCustomResultTemplateContextTest
         @NotNull final Result<String> result = new ResultElement<>("id", "class");
 
         @NotNull final QueryJCommand command =
-            new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final PerCustomResultTemplateContext instance =
             new PerCustomResultTemplateContext(result, properties, command);

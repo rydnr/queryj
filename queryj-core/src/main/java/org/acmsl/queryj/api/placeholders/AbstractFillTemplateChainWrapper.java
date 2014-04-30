@@ -40,6 +40,7 @@ package org.acmsl.queryj.api.placeholders;
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.AbstractFillTemplateChain;
 import org.acmsl.queryj.api.FillTemplateChain;
 import org.acmsl.queryj.api.NonRelevantFillHandler;
@@ -56,7 +57,6 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing Apache Commons Configuration classes.
  */
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations.
@@ -176,7 +176,7 @@ public abstract class AbstractFillTemplateChainWrapper<C extends TemplateContext
     {
         @NotNull final QueryJCommand result;
 
-        @NotNull final Configuration t_Configuration = new PropertiesConfiguration();
+        @NotNull final Configuration t_Configuration = new SerializablePropertiesConfiguration();
 
         for (@NotNull final FillHandler<?> handler : handlers)
         {

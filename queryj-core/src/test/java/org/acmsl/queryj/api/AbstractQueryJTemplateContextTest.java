@@ -39,6 +39,7 @@ package org.acmsl.queryj.api;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.metadata.DecoratorFactory;
@@ -49,15 +50,9 @@ import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
- * Importing Apache Commons Configuration classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
-
-/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -72,8 +67,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import java.io.File;
 
 /**
  * Tests for {@link AbstractQueryJTemplateContext}.
@@ -236,7 +229,7 @@ public class AbstractQueryJTemplateContextTest
     protected AbstractQueryJTemplateContext createContext()
     {
         @NotNull final QueryJCommand t_Command =
-            new ConfigurationQueryJCommandImpl(new PropertiesConfiguration(), null);
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration(), null);
 
         @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
         new QueryJCommandWrapper<MetadataManager>(t_Command).setSetting(

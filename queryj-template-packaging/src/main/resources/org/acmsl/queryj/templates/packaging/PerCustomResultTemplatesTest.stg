@@ -84,6 +84,7 @@ import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
@@ -96,11 +97,6 @@ import org.acmsl.queryj.test.CustomResultTestHelper;
  * Importing project classes.
  */
 <C.templateDefs:{ d | <def_import(d=d)>}; separator="\n">
-
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing StringTemplate classes.
@@ -312,7 +308,7 @@ public class PerCustomResultTemplatesTest
             firstTime = false;
 
             @NotNull final QueryJCommand t_Command =
-                new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+                new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
             new QueryJCommandWrapper\<DecoratorFactory>(t_Command).setSetting(
                 DecoratorFactory.class.getName(), decoratorFactory);

@@ -41,6 +41,7 @@ package org.acmsl.queryj.customsql.handlers;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Parameter;
@@ -56,18 +57,11 @@ import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.TypeManager;
-import org.acmsl.queryj.metadata.vo.AbstractAttribute;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.AttributeIncompleteValueObject;
-import org.acmsl.queryj.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
-
-/*
- * Importing Apache Commons Configuration classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations.
@@ -104,7 +98,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -180,7 +173,8 @@ public class CustomSqlValidationHandlerTest
         EasyMock.replay(t_ResultSet);
         EasyMock.replay(t_Metadata);
 
-        @NotNull final QueryJCommand t_Parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final QueryJCommand t_Parameters =
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         new QueryJCommandWrapper<Connection>(t_Parameters)
             .setSetting(JdbcConnectionOpeningHandler.JDBC_CONNECTION, t_Connection);

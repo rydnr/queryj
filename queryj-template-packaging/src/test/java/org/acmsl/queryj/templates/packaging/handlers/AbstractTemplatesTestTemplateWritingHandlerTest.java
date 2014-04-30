@@ -41,6 +41,7 @@ package org.acmsl.queryj.templates.packaging.handlers;
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
 /*
@@ -50,11 +51,6 @@ import org.acmsl.queryj.templates.packaging.GlobalTemplateContext;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplate;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateFactory;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateGenerator;
-
-/*
- * Importing Apache Commons Configuration classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations.
@@ -134,7 +130,7 @@ public abstract class AbstractTemplatesTestTemplateWritingHandlerTest<
         @NotNull final BH buildHandler = createBuildHandlerInstance();
 
         @NotNull final QueryJCommand command =
-            new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final T template = createTemplateMock();
 

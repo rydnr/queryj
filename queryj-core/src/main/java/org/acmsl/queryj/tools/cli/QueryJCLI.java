@@ -37,8 +37,7 @@ package org.acmsl.queryj.tools.cli;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
-import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.tools.logging.QueryJCLILog;
 import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -59,7 +58,6 @@ import org.apache.commons.cli.PosixParser;
  */
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations,
@@ -216,7 +214,7 @@ public final class QueryJCLI
                 try
                 {
                     @NotNull final Configuration t_ConfigurationSettings =
-                        new PropertiesConfiguration(t_strConfigurationFileName);
+                        new SerializablePropertiesConfiguration(t_strConfigurationFileName);
 
                     // Custom sql file is validated as part of QueryJ chain.
                     try
@@ -255,7 +253,7 @@ public final class QueryJCLI
         @NotNull final String customSqlFile)
       throws  QueryJBuildException
     {
-        new QueryJChain<QueryJCommandHandler<QueryJCommand>>()
+        new QueryJChain<>()
             .process(
                 new ConfigurationQueryJCommandImpl(configurationSettings, new QueryJCLILog(logThreshold, System.err)));
     }

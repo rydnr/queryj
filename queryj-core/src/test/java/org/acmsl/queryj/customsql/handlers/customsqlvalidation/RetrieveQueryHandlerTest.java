@@ -46,16 +46,12 @@ import org.acmsl.commons.patterns.Chain;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.Sql.Cardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
-
-/*
- * Importing Apache Commons Configuration classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations.
@@ -85,6 +81,10 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class RetrieveQueryHandlerTest
 {
+    /**
+     * Checks the first query is retrieved correctly.
+     * @throws QueryJBuildException
+     */
     @Test
     public void retrieves_the_first_query()
         throws QueryJBuildException
@@ -105,7 +105,8 @@ public class RetrieveQueryHandlerTest
 
         @NotNull final RetrieveQueryHandler instance = new RetrieveQueryHandler();
 
-        @NotNull final QueryJCommand parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final QueryJCommand parameters =
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final List<SqlElement<String>> list = new ArrayList<>(1);
         list.add(
@@ -117,13 +118,18 @@ public class RetrieveQueryHandlerTest
         Assert.assertFalse(instance.handle(parameters, chain));
     }
 
+    /**
+     * Checks the list of queries is retrieved correctly.
+     * @throws QueryJBuildException
+     */
     @Test
     public void retrieves_the_list_of_queries()
         throws QueryJBuildException
     {
         @NotNull final RetrieveQueryHandler instance = new RetrieveQueryHandler();
 
-        @NotNull final QueryJCommand parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final QueryJCommand parameters =
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final List<Sql<String>> list = new ArrayList<>(1);
         list.add(

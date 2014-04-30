@@ -41,15 +41,11 @@ package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.Sql.Cardinality;
 import org.acmsl.queryj.customsql.SqlElement;
-
-/*
- * Importing Apache Commons Configuration classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations.
@@ -73,13 +69,18 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class QueryValidationEnabledHandlerTest
 {
+    /**
+     * Checks a query is not validated if its flag is disabled.
+     * @throws QueryJBuildException
+     */
     @Test
     public void stops_the_validation_process_for_the_current_query_if_validation_flag_is_disabled()
         throws QueryJBuildException
     {
         @NotNull final QueryValidationEnabledHandler instance = new QueryValidationEnabledHandler();
 
-        @NotNull final QueryJCommand parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final QueryJCommand parameters =
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final Sql<String> sql =
             new SqlElement<>(
@@ -90,13 +91,18 @@ public class QueryValidationEnabledHandlerTest
         Assert.assertTrue(instance.handle(parameters));
     }
 
+    /**
+     * Checks a query is validated if its flag is enabled.
+     * @throws QueryJBuildException
+     */
     @Test
     public void allows_the_validation_process_for_the_current_query_if_validation_flag_is_enabled()
         throws QueryJBuildException
     {
         @NotNull final QueryValidationEnabledHandler instance = new QueryValidationEnabledHandler();
 
-        @NotNull final QueryJCommand parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final QueryJCommand parameters =
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final Sql<String> sql =
             new SqlElement<>(

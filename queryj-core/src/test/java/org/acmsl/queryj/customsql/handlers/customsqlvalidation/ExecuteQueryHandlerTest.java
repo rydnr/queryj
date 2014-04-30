@@ -36,11 +36,12 @@
 package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Parameter;
@@ -52,20 +53,25 @@ import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.easymock.EasyMock;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JUnit/EasyMock classes.
  */
-import org.checkthread.annotations.ThreadSafe;
+import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.powermock.api.easymock.PowerMock;
 
+/*
+ * Importing JDK classes.
+ */
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -87,7 +93,8 @@ public class ExecuteQueryHandlerTest
     {
         @NotNull final ExecuteQueryHandler instance = new ExecuteQueryHandler();
 
-        @NotNull final QueryJCommand parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final QueryJCommand parameters =
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final SqlElement<String> sql =
             new SqlElement<>(
@@ -95,7 +102,7 @@ public class ExecuteQueryHandlerTest
 
         sql.setValue("select sysdate from dual where ? = 'A'");
 
-        @NotNull final Parameter parameter = new ParameterElement<String, String>("id", 1, "id", "String", "1");
+        @NotNull final Parameter parameter = new ParameterElement<>("id", 1, "id", "String", "1");
         sql.add(new ParameterRefElement("id"));
 
         new QueryJCommandWrapper<Sql<String>>(parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, sql);

@@ -41,17 +41,13 @@ package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.Sql.Cardinality;
 import org.acmsl.queryj.customsql.SqlElement;
-
-/*
- * Importing Apache Commons Configuration classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing Apache Commons Logging classes.
@@ -88,6 +84,10 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class ReportMissingPropertiesHandlerTest
 {
+    /**
+     * Checks whether it detects missing properties.
+     * @throws QueryJBuildException
+     */
     @Test
     public void detects_missing_properties()
         throws QueryJBuildException
@@ -108,7 +108,8 @@ public class ReportMissingPropertiesHandlerTest
                 }
             };
 
-        @NotNull final QueryJCommand t_Parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final QueryJCommand t_Parameters =
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final List<Property<String>> t_lProperties = new ArrayList<>(2);
         t_lProperties.add(new PropertyElement<>("name", "name", 1, String.class.getSimpleName(), false));

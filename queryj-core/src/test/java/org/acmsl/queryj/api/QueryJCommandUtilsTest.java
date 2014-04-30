@@ -41,13 +41,9 @@ package org.acmsl.queryj.api;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-
-/*
- * Importing Apache Commons Configuration classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing JetBrains annotations.
@@ -85,7 +81,7 @@ public class QueryJCommandUtilsTest
             EasyMock.createMock(MetadataManager.class);
 
         @NotNull final QueryJCommand t_Command =
-            new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         new QueryJCommandWrapper<MetadataManager>(t_Command)
             .setSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, t_MetadataManager);
@@ -103,7 +99,7 @@ public class QueryJCommandUtilsTest
         @NotNull final QueryJCommandUtils instance = QueryJCommandUtils.getInstance();
 
         @NotNull final QueryJCommand t_Command =
-            new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         try
         {

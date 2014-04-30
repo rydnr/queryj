@@ -38,20 +38,15 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.AbstractTemplateContext;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 
 /*
- * Importing Apache Commons Configuration classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
-
-/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -188,7 +183,7 @@ public class AbstractTemplatePackagingContextTest
     protected AbstractTemplatePackagingContext createContext()
     {
         @NotNull final QueryJCommand t_Command =
-            new ConfigurationQueryJCommandImpl(new PropertiesConfiguration(), null);
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration(), null);
 
         @NotNull final String templateName = "template";
         @NotNull final String fileName = "file.name";
@@ -200,7 +195,7 @@ public class AbstractTemplatePackagingContextTest
         @NotNull final String jdbcUsername = "jdbc.username";
         @NotNull final String jdbcPassword = "jdbc.password";
 
-        @NotNull final AbstractTemplatePackagingContext result =
+        return
             new AbstractTemplatePackagingContext(templateName, t_Command)
             {{
                 immutableSetValue(buildTemplateNameKey(), templateName, t_Command);
@@ -213,7 +208,5 @@ public class AbstractTemplatePackagingContextTest
                 immutableSetValue(buildJdbcUserNameKey(), jdbcUsername, t_Command);
                 immutableSetValue(buildJdbcPasswordKey(), jdbcPassword, t_Command);
             }};
-
-        return result;
     }
 }

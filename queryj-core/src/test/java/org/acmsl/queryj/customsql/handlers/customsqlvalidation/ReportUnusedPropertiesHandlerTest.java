@@ -41,6 +41,7 @@ package org.acmsl.queryj.customsql.handlers.customsqlvalidation;
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
@@ -88,6 +89,10 @@ import java.util.List;
 @RunWith(JUnit4.class)
 public class ReportUnusedPropertiesHandlerTest
 {
+    /**
+     * Checks whether it detects unused properties.
+     * @throws QueryJBuildException
+     */
     @Test
     public void detects_unused_properties()
         throws QueryJBuildException
@@ -108,7 +113,8 @@ public class ReportUnusedPropertiesHandlerTest
                 }
             };
 
-        @NotNull final QueryJCommand t_Parameters = new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+        @NotNull final QueryJCommand t_Parameters =
+            new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final List<Property<String>> t_lProperties = new ArrayList<>(3);
         t_lProperties.add(new PropertyElement<>("name", "name", 1, String.class.getSimpleName(), false));

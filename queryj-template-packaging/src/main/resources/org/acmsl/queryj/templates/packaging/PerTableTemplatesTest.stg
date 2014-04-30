@@ -90,6 +90,7 @@ import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
+import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
@@ -104,11 +105,6 @@ import org.acmsl.queryj.test.TableTestHelper;
  * Importing project classes.
  */
 <C.templateDefs:{ d | <def_import(d=d)>}; separator="\n">
-
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
 
 /*
  * Importing StringTemplate classes.
@@ -468,7 +464,7 @@ public class PerTableTemplatesTest
             firstTime = false;
 
             @NotNull final QueryJCommand t_Command =
-                new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+                new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
             new QueryJCommandWrapper\<DecoratorFactory>(t_Command).setSetting(
                 DecoratorFactory.class.getName(), decoratorFactory);
@@ -734,7 +730,7 @@ public class PerTableTemplatesTest
                     jdbcDriver, jdbcUrl, jdbcUserName, jdbcPassword);
 
             @NotNull final QueryJCommand t_Parameters =
-                new ConfigurationQueryJCommandImpl(new PropertiesConfiguration());
+                new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
             new QueryJCommandWrapper\<Connection>(t_Parameters)
                 .setSetting(JdbcConnectionOpeningHandler.JDBC_CONNECTION, connection);
