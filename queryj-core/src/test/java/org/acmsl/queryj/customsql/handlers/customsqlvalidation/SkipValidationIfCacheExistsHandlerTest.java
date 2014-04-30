@@ -95,7 +95,7 @@ public class SkipValidationIfCacheExistsHandlerTest
 
     /**
      * Checks whether it skips further tests if validation cache is found.
-     * @throws QueryJBuildException
+     * Throws QueryJBuildException
      */
     @Test
     public void skips_further_handlers_if_validation_cache_is_found()

@@ -1,7 +1,7 @@
 * 2014/04/30
 ** DONE Fix AttributesStatementSetter #494: 3 -> 1
-** TODO Fix filename overwrite bug #495: 3 ->
+** DONE Fix filename overwrite bug #495: 3 -> 3
 ** TODO Move shared classes to commons project : 3 ->
-** TODO Overcome not-serializable exception for apache commons ConfigurationProperties class: 2 ->
-** TODO Find out why Maven runs plugins three times: 3 ->
+** DONE Overcome not-serializable exception for apache commons ConfigurationProperties class: 2 -> 2
+** DONE Find out why Maven runs plugins three times: 3 -> 1 Because each thread failed with a non-checked exception, and maven went on for each thread. The lifecycle was run once for each one of the cores available.
    

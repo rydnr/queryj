@@ -38,6 +38,7 @@ package org.acmsl.queryj.api;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -69,17 +70,29 @@ public interface TemplateContext
 
     /**
      * Retrieves the file name.
-     * @return such instance.
+     * @return such information.
      */
     @NotNull
     String getFileName();
 
     /**
+     * Specifies the file name.
+     * @param fileName the filename.
+     */
+    void setFileName(@NotNull final String fileName);
+
+    /**
      * Retrieves the package name.
-     * @return such instance.
+     * @return such information.
      */
     @NotNull
     String getPackageName();
+
+    /**
+     * Specifies the package name.
+     * @param packageName the package name.
+     */
+    void setPackageName(@NotNull final String packageName);
 
     /**
      * Retrieves the version.
@@ -94,4 +107,10 @@ public interface TemplateContext
      */
     @NotNull
     DecoratorFactory getDecoratorFactory();
+
+    /**
+     * Specifies the decorator factory.
+     * @param factory the {@link DecoratorFactory factory}.
+     */
+    void setDecoratorFactory(@NotNull final DecoratorFactory factory);
 }

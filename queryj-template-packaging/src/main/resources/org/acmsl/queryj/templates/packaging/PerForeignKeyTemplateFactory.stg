@@ -152,8 +152,7 @@ public class <C.class_name>
                 foreignKey.getSourceTableName(),
                 t_Context.getMetadataManager());
 
-        new QueryJCommandWrapper\<String>(command).setSetting(
-            Literals.FILE_NAME, t_strFileName);
+        t_Context.setFileName(t_strFileName);
 
         return new <def.name.noExtension>Template(t_Context);
     }

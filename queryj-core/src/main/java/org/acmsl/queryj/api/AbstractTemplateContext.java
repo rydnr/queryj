@@ -174,6 +174,26 @@ public abstract class AbstractTemplateContext
     }
 
     /**
+     * Builds a command key.
+     * @param key the key.
+     * @return the command key.
+     */
+    protected String buildKey(final String key)
+    {
+        return buildKey(getPk(), key);
+    }
+
+    /**
+     * Builds a command key.
+     * @param key the key.
+     * @return the command key.
+     */
+    protected String buildKey(@NotNull final String pk, @NotNull final String key)
+    {
+        return pk + '|' + key;
+    }
+
+    /**
      * Annotates a value in the command.
      * @param key the key.
      * @param value the value.
@@ -200,7 +220,7 @@ public abstract class AbstractTemplateContext
         @NotNull final T value,
         @NotNull final QueryJCommand command)
     {
-        new QueryJCommandWrapper<T>(command).setSetting(key + '|' + pk, value);
+        new QueryJCommandWrapper<T>(command).setSetting(buildKey(pk, key), value);
     }
 
     /**
@@ -239,7 +259,7 @@ public abstract class AbstractTemplateContext
         @Nullable final T result;
 
         @Nullable final T aux =
-            new QueryJCommandWrapper<T>(command).getSetting(key + '|' + pk);
+            new QueryJCommandWrapper<T>(command).getSetting(buildKey(pk, key));
 
         if (aux == null)
         {
@@ -294,7 +314,7 @@ public abstract class AbstractTemplateContext
         @Nullable final List<T> result;
 
         @Nullable final List<T> aux =
-            new QueryJCommandWrapper<T>(command).getListSetting(key + '|' + pk);
+            new QueryJCommandWrapper<T>(command).getListSetting(buildKey(pk, key));
 
         if (aux == null)
         {
@@ -335,6 +355,16 @@ public abstract class AbstractTemplateContext
     }
 
     /**
+     * Specifies the file name.
+     * @param fileName such file name.
+     */
+    @Override
+    public void setFileName(@NotNull final String fileName)
+    {
+        new QueryJCommandWrapper<String>(getCommand()).setSetting(buildFileNameKey(), fileName);
+    }
+
+    /**
      * Retrieves the file name.
      * @return such information.
      */
@@ -352,7 +382,16 @@ public abstract class AbstractTemplateContext
     @NotNull
     protected String buildFileNameKey()
     {
-        return Literals.FILE_NAME;
+        return buildKey(Literals.FILE_NAME);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPackageName(@NotNull final String packageName)
+    {
+        new QueryJCommandWrapper<String>(getCommand()).setSetting(buildPackageNameKey(), packageName);
     }
 
     /**
@@ -373,7 +412,7 @@ public abstract class AbstractTemplateContext
     @NotNull
     protected String buildPackageNameKey()
     {
-        return PACKAGE_NAME;
+        return buildKey(PACKAGE_NAME);
     }
 
     /**
@@ -413,7 +452,7 @@ public abstract class AbstractTemplateContext
     @NotNull
     protected String buildOutputDirKey()
     {
-        return "outputDir";
+        return buildKey("outputDir");
     }
 
     /**
@@ -442,10 +481,20 @@ public abstract class AbstractTemplateContext
      * Retrieves the {@link DecoratorFactory} instance.
      * @return such instance.
      */
+    @Override
     @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return getValue(buildDecoratorFactoryKey(), getCommand(), new DecoratorFactoryNotAvailableException());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDecoratorFactory(@NotNull final DecoratorFactory factory)
+    {
+        new QueryJCommandWrapper<DecoratorFactory>(getCommand()).setSetting(buildDecoratorFactoryKey(), factory);
     }
 
     /**

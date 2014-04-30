@@ -98,8 +98,8 @@ public class RetrieveResultPropertiesHandlerTest
 {
     /**
      * Checks the explicit properties are published.
-     * @throws QueryJBuildException
-     * @throws SQLException
+     * Throws QueryJBuildException
+     * Throws SQLException
      */
     @Test
     public void publishes_explicit_properties()

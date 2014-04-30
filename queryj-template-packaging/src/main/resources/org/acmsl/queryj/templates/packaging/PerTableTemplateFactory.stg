@@ -66,13 +66,10 @@ sourceImpl(def, C) ::= <<
  * Importing QueryJ-Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateFactory;
-import org.acmsl.queryj.api.QueryJCommandUtils;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.DecoratedString;
-import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Row;
@@ -148,17 +145,14 @@ public class <C.class_name>
     public <def.name.noExtension>Template createTemplate(
         @NotNull final String tableName,
         @NotNull final List\<Row\<String\>> staticContents,
+        @NotNull final <def.type.capitalized>TemplateContext context,
         @NotNull final QueryJCommand command)
     {
-        @NotNull final <def.type.capitalized>TemplateContext t_Context =
-            new <def.type.capitalized>TemplateContext(tableName, staticContents, command);
+        @NotNull final String t_strFileName = retrieveTemplateFileName(tableName, context.getMetadataManager());
 
-        @NotNull final String t_strFileName = retrieveTemplateFileName(tableName, t_Context.getMetadataManager());
+        context.setFileName(t_strFileName);
 
-        new QueryJCommandWrapper\<String>(command).setSetting(
-            Literals.FILE_NAME, t_strFileName);
-
-        return new <def.name.noExtension>Template(t_Context);
+        return new <def.name.noExtension>Template(context);
     }
 
     /**

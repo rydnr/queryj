@@ -47,7 +47,6 @@ import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.api.MetaLanguageUtils;
@@ -243,15 +242,12 @@ public abstract class BasePerTableTemplateBuildHandler
      * @return the template.
      */
     @Nullable
-    protected T createTemplate(
+    protected abstract T createTemplate(
         @NotNull final TF templateFactory,
         @NotNull final String tableName,
         @NotNull final List<Row<String>> staticContents,
         @NotNull final QueryJCommand parameters)
-      throws  QueryJBuildException
-    {
-        return templateFactory.createTemplate(tableName, staticContents, parameters);
-    }
+      throws  QueryJBuildException;
 
     /**
      * Checks whether given table contains static values or not.

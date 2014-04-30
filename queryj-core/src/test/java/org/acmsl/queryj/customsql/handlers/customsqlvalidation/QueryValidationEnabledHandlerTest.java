@@ -71,7 +71,7 @@ public class QueryValidationEnabledHandlerTest
 {
     /**
      * Checks a query is not validated if its flag is disabled.
-     * @throws QueryJBuildException
+     * Throws QueryJBuildException
      */
     @Test
     public void stops_the_validation_process_for_the_current_query_if_validation_flag_is_disabled()
@@ -93,7 +93,7 @@ public class QueryValidationEnabledHandlerTest
 
     /**
      * Checks a query is validated if its flag is enabled.
-     * @throws QueryJBuildException
+     * Throws QueryJBuildException
      */
     @Test
     public void allows_the_validation_process_for_the_current_query_if_validation_flag_is_enabled()

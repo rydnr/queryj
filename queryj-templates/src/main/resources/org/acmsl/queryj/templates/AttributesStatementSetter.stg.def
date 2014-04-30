@@ -11,7 +11,7 @@ type : per-table;
 output: Java;
 
 // The filename builder.
-filename  builder : <tableName.capitalized>AttributesStatementSetter.java;
+filename  builder : <tableName.voName>AttributesStatementSetter.java;
 
 // The package.
-package: <packageName>.dao.rdb.<tableName.normalized.lowercased>;
+package: <packageName>.dao.rdb.<engine.name.lowercased>.<tableName.normalized.lowercased>;

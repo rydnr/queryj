@@ -82,8 +82,8 @@ public class SetupPreparedStatementHandlerTest
 {
     /**
      * Checks it injects a prepared statement into the command.
-     * @throws QueryJBuildException
-     * @throws SQLException
+     * Throws QueryJBuildException
+     * Throws SQLException
      */
     @Test
     public void injects_a_prepared_statement_into_the_command()

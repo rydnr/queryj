@@ -86,7 +86,7 @@ public class ReportMissingPropertiesHandlerTest
 {
     /**
      * Checks whether it detects missing properties.
-     * @throws QueryJBuildException
+     * Throws QueryJBuildException
      */
     @Test
     public void detects_missing_properties()

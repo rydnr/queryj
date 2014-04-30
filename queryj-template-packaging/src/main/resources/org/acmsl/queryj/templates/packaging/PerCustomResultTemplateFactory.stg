@@ -161,8 +161,7 @@ public class <C.class_name>
                 t_Context.getMetadataManager(),
                 t_Context.getDecoratorFactory());
 
-        new QueryJCommandWrapper\<String>(command).setSetting(
-            Literals.FILE_NAME, t_strFileName);
+        t_Context.setFileName(t_strFileName);
 
         return new <def.name.noExtension>Template(t_Context);
     }

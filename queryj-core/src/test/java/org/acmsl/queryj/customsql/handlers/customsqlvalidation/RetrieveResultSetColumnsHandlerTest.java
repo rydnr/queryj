@@ -87,8 +87,8 @@ public class RetrieveResultSetColumnsHandlerTest
 {
     /**
      * Checks the properties are built from the result set metadata.
-     * @throws QueryJBuildException
-     * @throws SQLException
+     * Throws QueryJBuildException
+     * Throws SQLException
      */
     @Test
     public void builds_a_list_of_properties_from_the_ResultSetMetadata()
@@ -146,8 +146,8 @@ public class RetrieveResultSetColumnsHandlerTest
 
     /**
      * Checks it does not process non-select queries.
-     * @throws QueryJBuildException
-     * @throws SQLException
+     * Throws QueryJBuildException
+     * Throws SQLException
      */
     @Test
     public void does_not_process_non_select_queries()

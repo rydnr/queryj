@@ -63,6 +63,7 @@ public interface PerTableTemplateFactory<T extends PerTableTemplate<C>, C extend
      * Generates a <i>per-table</i> template.
      * @param tableName the table name.
      * @param staticContents the table's static contents (optional).
+     * @param context the context.
      * @param command the command.
      * @return a template.
      */
@@ -70,5 +71,6 @@ public interface PerTableTemplateFactory<T extends PerTableTemplate<C>, C extend
     public T createTemplate(
         @NotNull final String tableName,
         @NotNull final List<Row<String>> staticContents,
+        @NotNull final C context,
         @NotNull final QueryJCommand command);
 }

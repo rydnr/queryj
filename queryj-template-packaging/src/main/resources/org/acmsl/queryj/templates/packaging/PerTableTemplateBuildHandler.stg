@@ -72,7 +72,6 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.engines.EngineDecorator;
@@ -160,15 +159,16 @@ public class <C.class_name>
         @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
-        new QueryJCommandWrapper\<DecoratorFactory>(parameters).setSetting(
-            DecoratorFactory.class.getName(), CachingDecoratorFactory.getInstance());
+        @NotNull final <def.type.capitalized>TemplateContext t_Context =
+            new <def.type.capitalized>TemplateContext(tableName, staticContents, parameters);
 
-        new QueryJCommandWrapper\<String>(parameters).setSetting(
-            Literals.PACKAGE_NAME,
+        t_Context.setDecoratorFactory(CachingDecoratorFactory.getInstance());
+
+        t_Context.setPackageName(
             retrievePackage(
                 tableName, retrieveMetadataManager(parameters).getEngine(), parameters));
 
-        return super.createTemplate(templateFactory, tableName, staticContents, parameters);
+        return templateFactory.createTemplate(tableName, staticContents, t_Context, parameters);
     }
 
     /**

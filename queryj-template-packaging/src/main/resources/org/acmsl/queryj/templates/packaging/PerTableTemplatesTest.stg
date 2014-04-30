@@ -517,8 +517,13 @@ public class PerTableTemplatesTest
                 @NotNull final String packageName =
                     resolvePackage(PACKAGE_MAPPINGS.get(templateName), table.getName(), resolveEngine(engine));
 
+                @NotNull final PerTableTemplateContext t_Context =
+                    new PerTableTemplateContext(table.getName(), tableRows, t_Command);
+
+                t_Context.setPackageName(packageName);
+
                 @Nullable final PerTableTemplate\<PerTableTemplateContext> template =
-                    templateFactory.createTemplate(table.getName(), tableRows, t_Command);
+                    templateFactory.createTemplate(table.getName(), tableRows, t_Context, t_Command);
 
                 Assert.assertNotNull("No template found for " + templateName, template);
 

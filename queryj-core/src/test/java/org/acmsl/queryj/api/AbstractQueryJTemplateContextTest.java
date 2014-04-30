@@ -228,8 +228,27 @@ public class AbstractQueryJTemplateContextTest
     @NotNull
     protected AbstractQueryJTemplateContext createContext()
     {
+        return createContext("file.name");
+    }
+
+    /**
+     * Retrieves an {@link AbstractQueryJTemplateContext}.
+     * @param pk the pk.
+     * @param <T> the pk type.
+     * @return such context.
+     */
+    @NotNull
+    protected <T> AbstractQueryJTemplateContext createContext(@NotNull final T pk)
+    {
         @NotNull final QueryJCommand t_Command =
             new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration(), null);
+
+        @NotNull final AbstractQueryJTemplateContext result =
+            new AbstractQueryJTemplateContext("" + pk, t_Command)
+            {{
+                immutableSetValue(buildTemplateNameKey(), "", getCommand());
+                immutableSetValue(buildFileNameKey(), "" + pk, getCommand());
+            }};
 
         @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
         new QueryJCommandWrapper<MetadataManager>(t_Command).setSetting(
@@ -244,7 +263,7 @@ public class AbstractQueryJTemplateContextTest
             .setSetting(DecoratorFactory.class.getName(), decoratorFactory);
 
         @NotNull final String packageName = "package.name";
-        new QueryJCommandWrapper<String>(t_Command).setSetting("packageName", packageName);
+        new QueryJCommandWrapper<String>(t_Command).setSetting(result.buildPackageNameKey(), packageName);
 
         @NotNull final String basePackageName = "base.package.name";
         new QueryJCommandWrapper<String>(t_Command).setSetting(QueryJSettings.PACKAGE, basePackageName);
@@ -274,13 +293,6 @@ public class AbstractQueryJTemplateContextTest
         new QueryJCommandWrapper<Boolean>(t_Command).setSetting(
             QueryJSettings.DISABLE_CHECKTHREAD_ANNOTATIONS, disableCheckthreadAnnotations);
 
-        @NotNull final String fileName = "file.name";
-
-        return
-            new AbstractQueryJTemplateContext(fileName, t_Command)
-                {{
-                    immutableSetValue(buildTemplateNameKey(), "", getCommand());
-                    immutableSetValue(buildFileNameKey(), fileName, getCommand());
-                }};
+        return result;
     }
 }

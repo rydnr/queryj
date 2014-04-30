@@ -91,7 +91,7 @@ public class ReportUnusedPropertiesHandlerTest
 {
     /**
      * Checks whether it detects unused properties.
-     * @throws QueryJBuildException
+     * Throws QueryJBuildException
      */
     @Test
     public void detects_unused_properties()

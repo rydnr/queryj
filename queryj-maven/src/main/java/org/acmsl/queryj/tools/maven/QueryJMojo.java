@@ -34,6 +34,7 @@ package org.acmsl.queryj.tools.maven;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
@@ -118,7 +119,7 @@ public class QueryJMojo
     /**
      * String literal: "version"
      */
-    public static final String VERSION_LITERAL = "version";
+    public static final String VERSION_LITERAL = QueryJSettings.VERSION;
 
     /**
      * String literal: "Strange... Cannot read my own "
@@ -1627,10 +1628,12 @@ public class QueryJMojo
             result = getRequestThreadCountFromMaven();
         }
 
+        /*
         if (result < 1)
         {
             result = getRequestThreadCountFromRuntime();
         }
+        */
 
         if (result < 1)
         {
