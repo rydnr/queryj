@@ -54,7 +54,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class PerTableTemplateWritingHandlerTemplate<C extends TemplatePackagingContext>
-    extends TemplateBuildHandlerTemplate<C>
+    extends TemplateWritingHandlerTemplate<C>
 {
     /**
      * The serial version id.

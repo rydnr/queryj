@@ -97,6 +97,12 @@ public class TemplateBuildHandlerTemplateFactory
             case PER_CUSTOM_RESULT:
                 result = new PerCustomResultTemplateBuildHandlerTemplate<>(context);
                 break;
+            case PER_TABLE:
+                result = new PerTableTemplateBuildHandlerTemplate<>(context);
+                break;
+            case PER_CUSTOM_SQL:
+                result = new PerCustomSqlTemplateBuildHandlerTemplate<>(context);
+                break;
             default:
                 result = new TemplateBuildHandlerTemplate<>(context);
         }

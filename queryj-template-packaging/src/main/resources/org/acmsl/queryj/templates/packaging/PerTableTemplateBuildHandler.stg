@@ -65,18 +65,22 @@ sourceImpl(def, C) ::= <<
 /*
  * Importing QueryJ-Core classes.
  */
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateBuildHandler;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.engines.EngineDecorator;
+import org.acmsl.queryj.metadata.vo.Row;
 
 /*
  * Importing custom templates.
  */
-import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.templates.<def.name.noExtension>Template;
 import org.acmsl.queryj.templates.<def.name.noExtension>TemplateFactory;
 
@@ -89,6 +93,7 @@ import org.stringtemplate.v4.ST;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -161,9 +166,9 @@ public class <C.class_name>
         new QueryJCommandWrapper\<String>(parameters).setSetting(
             Literals.PACKAGE_NAME,
             retrievePackage(
-                tableName, retrieveMetadataManager(parameters).getEngine(), retrieveProjectPackage(parameters)));
+                tableName, retrieveMetadataManager(parameters).getEngine(), parameters));
 
-        return super.createTemplate(tableName, staticContents, parameters);
+        return super.createTemplate(templateFactory, tableName, staticContents, parameters);
     }
 
     /**
@@ -174,9 +179,9 @@ public class <C.class_name>
     protected String retrievePackage(
         @NotNull final String tableName,
         @NotNull final Engine\<String> engine,
-        @NotNull final String projectPackage)
+        @NotNull final QueryJCommand parameters)
     {
-        return buildPackageName(tableName, engine, projectPackage);
+        return buildPackageName(tableName, engine, retrieveProjectPackage(parameters));
     }
 
     /**

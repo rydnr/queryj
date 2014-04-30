@@ -103,6 +103,9 @@ public class TemplateWritingHandlerTemplateFactory
             case PER_CUSTOM_RESULT:
                 result = new PerCustomResultTemplateWritingHandlerTemplate<>(context);
                 break;
+            case PER_TABLE:
+                result = new PerTableTemplateWritingHandlerTemplate<>(context);
+                break;
             case PER_CUSTOM_SQL:
                 result = new PerCustomSqlTemplateWritingHandlerTemplate<>(context);
                 break;

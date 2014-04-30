@@ -219,34 +219,12 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      */
-    protected String retrievePackage(
-        @NotNull final String tableName,
-        @NotNull final Engine<String> engine,
-        @NotNull final QueryJCommand parameters)
-      throws  QueryJBuildException
-    {
-        return
-            retrievePackage(
-                tableName,
-                engine,
-                retrieveProjectPackage(parameters),
-                PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the package name.
-     * @param tableName the table name.
-     * @param engine the engine.
-     * @param projectPackage the project package.
-     * @param packageUtils the {@link PackageUtils} instance.
-     * @return the package name.
-     */
     protected abstract String retrievePackage(
         @NotNull final String tableName,
         @NotNull final Engine<String> engine,
-        @NotNull final String projectPackage,
-        @NotNull final PackageUtils packageUtils)
-      throws QueryJBuildException;
+        @NotNull final QueryJCommand parameters)
+      throws  QueryJBuildException;
+
 
     /**
      * Stores the template collection in given attribute map.
