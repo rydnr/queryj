@@ -1,0 +1,15 @@
+* 2014/05/01
+** DONE Move shared classes to commons project : 3 -> 2
+** TODO Fix PkStatementSetter #496: 3 -> 
+** TODO Fix BaseDAOFactory template: #497: 3 ->
+** TODO Fix BaseDAO template: #498: 3 ->
+** TODO Fix DAOFactory template: #499: 3 ->
+** Fix DAO template #500
+** Fix ValueObject #501
+** Fix ValueObjectFactory #502
+** Fix BaseValueObject #503
+** Fix ValueObjectImpl #504
+** Fix BaseResultSetExtractor #505
+** Fix ConfigurationProperties #506
+** Fix DAOChooser #507
+** Fix ResultSetExtractor #508

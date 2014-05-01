@@ -185,7 +185,7 @@ public class <table.name.voName>PkStatementSetter
         immutableSetUpdateOperation(updateOperation);
     }
 
-    <table.primaryKey:{ a | <attribute_accessors(attribute=a)>}; separator="\n">
+    <table.primaryKey:{ a | <attribute_accessors(attribute=a, C=C)>}; separator="\n">
 
     /**
      * Specifies whether the operation is an update or not.
@@ -239,7 +239,7 @@ public class <table.name.voName>PkStatementSetter
      */
     protected void setValues(
         <notnull(C=C)>final PreparedStatement preparedStatement,
-        <table.primaryKey:{ a | <attribute_method_parameter_declaration(attribute=a, prefix="")>}; separator=",\n">,
+        <table.primaryKey:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
         final boolean update)
         throws  SQLException
     {
@@ -256,9 +256,9 @@ public class <table.name.voName>PkStatementSetter
 
     <equals_method(table=table, C=C)>
 
-    <hashcode_method(table=table, C=C)>
+    <hashCode_method(table=table, C=C)>
 
-    <tostring_method(table=table, C=C)>
+    <toString_method(table=table, C=C)>
 }
 >>
 
@@ -276,7 +276,7 @@ public boolean equals(<nullable(C=C)>final Object other)
 
     if (other instanceof <table.name.voName>PkStatementSetter)
     {
-        <notnull(C=C)>final <table.name.voName>PkStatementSetter> candidate =
+        <notnull(C=C)>final <table.name.voName>PkStatementSetter candidate =
             (<table.name.voName>AttributesStatementSetter) other;
 
         <table.primaryKey:{ a | <attribute_equals(attribute=a)>}; separator="">
@@ -293,23 +293,23 @@ public boolean equals(<nullable(C=C)>final Object other)
 }
 >>
 
-hashcode_method(table, C) ::= <<
-<! Generates the hashcode() method !>
+hashCode_method(table, C) ::= <<
+<! Generates the hashCode() method !>
 /**
- * Retrieves the hashcode which identifies this instance
+ * Retrieves the hashCode which identifies this instance
  * from any other one.
  * @return the unique (among instances of this class) value.
  */
 @Override
-public int hashcode()
+public int hashCode()
 {
     final int result;
 
-    final int classHashCode = Abstract<table.name.voName>.class.hashcode();
+    final int classHashCode = Abstract<table.name.voName>.class.hashCode();
 
-    <table.primaryKey:{ a | <attribute_hashcode(attribute=a)>}; separator="\n">
+    <table.primaryKey:{ a | <attribute_hashCode(attribute=a)>}; separator="\n">
 
-    final int updateHashCode = Boolean.valueOf(isUpdateOperation()).hashcode();
+    final int updateHashCode = Boolean.valueOf(isUpdateOperation()).hashCode();
 
     result =
           classHashCode
@@ -320,17 +320,18 @@ public int hashcode()
 }
 >>
 
-tostring_method(table, C) ::= <<
+toString_method(table, C) ::= <<
 <! Generates the toString() method !>
 /**
  * Generates a JSON-compatible representation of this instance.
  * @return such text.
  */
+<notnull(C=C)>
 @Override
 public String toString()
 {
     <notnull(C=C)>final StringBuilder result =
-        new StringBuilder("{ \class\": \"<table.name.voName>PkStatementSetter");
+        new StringBuilder("{ \"class\": \"<table.name.voName>PkStatementSetter");
 
     <table.primaryKey:{ a | <attribute_toString(attribute=a)>}; separator="\n">
 
