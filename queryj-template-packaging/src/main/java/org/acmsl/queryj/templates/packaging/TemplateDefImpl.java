@@ -36,9 +36,13 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.DecoratedString;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -61,6 +65,9 @@ import java.io.File;
 public class TemplateDefImpl
     implements TemplateDef<String>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 3072766515558433392L;
 
     /**
@@ -346,6 +353,9 @@ public class TemplateDefImpl
         return new DecoratedString(getName()).getNormalized().getLowercased().getValue();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

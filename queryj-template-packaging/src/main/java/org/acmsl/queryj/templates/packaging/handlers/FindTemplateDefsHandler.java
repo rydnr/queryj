@@ -97,7 +97,7 @@ public class FindTemplateDefsHandler
         new DirectoryFilter();
 
     /**
-     * Creates a {@link org.acmsl.queryj.templates.packaging.handlers.FindTemplateDefsHandler} instance.
+     * Creates a {@code FindTemplateDefsHandler} instance.
      */
     public FindTemplateDefsHandler() {}
 

@@ -96,6 +96,11 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.TemplateDef;
+
+/*
  * Importing QueryJ Test classes.
  */
 import org.acmsl.queryj.test.AbstractTemplatesTest;
@@ -419,6 +424,7 @@ public class PerTableTemplatesTest
         generateFile(
             template,
             engine,
+            retrieveTemplateDef(template),
             getTables(),
             getRows(),
             getOutputFiles(),
@@ -429,6 +435,7 @@ public class PerTableTemplatesTest
      * Generates a file with the information from the feature.
      * @param templateName the template.
      * @param engine the engine name.
+     * @param templateDef the {@link TemplateDef}.
      * @param tableMap the table map.
      * @param rows the rows.
      * @param outputFiles the output files.
@@ -438,11 +445,16 @@ public class PerTableTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
+        @Nullable final TemplateDef\<String> templateDef,
         @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tableMap,
         @NotNull final Map\<String, List\<Row\<String>\>> rows,
         @NotNull final Map\<String, File> outputFiles,
         @NotNull final CustomSqlProvider sqlProvider)
     {
+        if (templateDef == null)
+        {
+            Assert.fail("No TemplateDef (" + templateName + ".stg.def found.");
+        }
         @Nullable final PerTableTemplateGenerator\<PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext> generator =
             (PerTableTemplateGenerator\<PerTableTemplate\<PerTableTemplateContext>, PerTableTemplateContext>) retrieveTemplateGenerator(
                 templateName);
@@ -473,11 +485,7 @@ public class PerTableTemplatesTest
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.PACKAGE, BASE_PACKAGE_NAME);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                Literals.PACKAGE_NAME, BASE_PACKAGE_NAME + ".dao"); // hard-coded in parent. could be retrieved from the feature file
-            new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.REPOSITORY, "acme");
-            new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                QueryJSettings.HEADER_FILE, "");
             new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
                 QueryJSettings.DISABLE_TIMESTAMPS, false);
             new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
@@ -515,7 +523,7 @@ public class PerTableTemplatesTest
                 Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
                 @NotNull final String packageName =
-                    resolvePackage(PACKAGE_MAPPINGS.get(templateName), table.getName(), resolveEngine(engine));
+                    resolvePackage(templateDef.getPackageName(), table.getName(), resolveEngine(engine));
 
                 @NotNull final PerTableTemplateContext t_Context =
                     new PerTableTemplateContext(table.getName(), tableRows, t_Command);

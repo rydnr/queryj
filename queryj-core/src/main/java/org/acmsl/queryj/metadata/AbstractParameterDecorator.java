@@ -52,6 +52,7 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Decorates &lt;parameter&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <V> the type.
  */
 @ThreadSafe
 public abstract class AbstractParameterDecorator<V>
@@ -343,6 +344,27 @@ public abstract class AbstractParameterDecorator<V>
     protected boolean isPrimitive(@NotNull final DecoratedString type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.isPrimitive(type.getValue());
+    }
+
+    /**
+     * Checks whether this parameter is a primitive or not.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean isPrimitiveWrapper()
+    {
+        return isPrimitiveWrapper(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Checks whether this parameter is primitive or not.
+     * @param type the type.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return such information.
+     */
+    protected boolean isPrimitiveWrapper(@NotNull final DecoratedString type, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isPrimitiveWrapper(type.getValue());
     }
 
     /**

@@ -113,3 +113,11 @@ property_javadoc(property) ::= <<
 !>
 * @param <property.id.voName.uncapitalized> the \<i><property.id>\</i> value.
 >>
+
+parameter_javadoc(parameter) ::= <<
+<!
+  Writes the Javadoc for a parameter.
+  @param parameter the parameter.
+!>
+* @param <parameter.id.voName.uncapitalized> the \<i><parameter.id>\</i> value.
+>>

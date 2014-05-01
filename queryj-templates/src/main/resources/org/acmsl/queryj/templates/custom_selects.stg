@@ -50,7 +50,7 @@ custom_select(cs, table, C) ::= <<
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(attr=p)>}; separator="\n">
+ <cs.parameters:{ p | <parameter_javadoc(parameter=p)>}; separator="\n">
 <if(cs.resultRef)>
  * @return the {@link <cs.resultClass>} information retrieved.
 <else>
@@ -58,9 +58,9 @@ custom_select(cs, table, C) ::= <<
 <endif>
  */
 <custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
-public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(<if(!cs.parametersShouldBeWrapped)><cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=", ">)
+public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(<if(!cs.parametersShouldBeWrapped)><cs.parameters:{ p | <attribute_declaration(attribute=p, C=C)>}; separator=", ">)
 <else>
-    <cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=",\n">)    <endif>
+    <cs.parameters:{ p | <attribute_declaration(attribute=p, C=C)>}; separator=",\n">)    <endif>
 <if(cs.parametersShouldBeWrapped)>
   throws DataAccessException
 <else>
@@ -93,7 +93,7 @@ public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.nam
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(attr=p)>}; separator="\n">
+ <cs.parameters:{ p | <parameter_javadoc(parameter=p)>}; separator="\n">
  * @param sql the SQL.
  * @param preparedStatementCreatorFactory the
  * {@link PreparedStatementCreatorFactory} instance
@@ -160,7 +160,7 @@ custom_update_or_insert(cs) ::= <<
 /**
  * Custom sql \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(name=p.name.lowercased)>}; separator="\n">
+ <cs.parameters:{ p | <parameter_javadoc(parameter=p)>}; separator="\n">
  * @return the number of entities updated.
  */
 public int <cs.name.uncapitalized>(
@@ -234,7 +234,7 @@ custom_select_for_update(cs, table) ::= <<
 /**
  * Custom select for update \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ p | <attribute_javadoc(name=p.name)>}; separator=",\n">
+ <cs.parameters:{ p | <parameter_javadoc(parameter=p)>}; separator=",\n">
 <if(cs.resultRef)>
  * @return the {@link <cs.resultClass>} information retrieved.
 <else>
@@ -451,11 +451,11 @@ custom_select_return_nondecorated_implicit_single(cs, result, C) ::= <<
 <cs.dao.voName>
 >>
 
-custom_select_return_import(cs, table, result, package, C) ::= <<
+custom_select_return_import(result, package, C) ::= <<
 <if(result.wrappingASingleProperty)>
 <custom_select_return_import_property_single(result=result, package=package)>
 <else><if(result.classValue)>
-import <package>.<typeInitMap.voSubpackageName>.<result.voName>;
+import <package>.<typeInitMap.voSubpackageName>.<result.id.voName>;
 <endif><endif>
 >>
 

@@ -36,19 +36,30 @@
 package org.acmsl.queryj.test;
 
 /*
- * Importing QueryJ Test classes.
+ * Importing ACM SL Java Commons classes.
  */
 import org.acmsl.commons.utils.StringUtils;
-import org.acmsl.queryj.customsql.Property;
-import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.metadata.SqlPropertyDAO;
-import org.acmsl.queryj.metadata.SqlResultDAO;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.templates.packaging.TemplateDef;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefLexer;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser;
+import org.acmsl.queryj.templates.packaging.handlers.ParseTemplateDefsHandler;
+
+/*
+ * Importing QueryJ Test classes.
+ */
 import org.acmsl.queryj.test.antlr4.JavaLexer;
 import org.acmsl.queryj.test.antlr4.JavaPackageVisitor;
 import org.acmsl.queryj.test.antlr4.JavaParser;
 import org.acmsl.queryj.test.antlr4.JavaRootClassNameVisitor;
 import org.acmsl.queryj.test.sql.CucumberSqlDAO;
 import org.acmsl.queryj.test.sql.CucumberSqlParameterDAO;
+import org.acmsl.queryj.test.sql.CucumberSqlPropertyDAO;
+import org.acmsl.queryj.test.sql.CucumberSqlResultDAO;
 
 /*
  * Importing QueryJ Core classes.
@@ -57,16 +68,20 @@ import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.dao.DAOTemplateUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.customsql.Property;
+import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
 import org.acmsl.queryj.metadata.ColumnDAO;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
+import org.acmsl.queryj.metadata.SqlPropertyDAO;
+import org.acmsl.queryj.metadata.SqlResultDAO;
+import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
@@ -80,9 +95,8 @@ import org.acmsl.commons.utils.io.FileUtils;
 /*
  * Importing ANTLR classes.
  */
-import org.acmsl.queryj.test.sql.CucumberSqlPropertyDAO;
-import org.acmsl.queryj.test.sql.CucumberSqlResultDAO;
 import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -94,7 +108,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing JUnit classes.
+ * Importing JUnit/EasyMock classes.
  */
 import org.easymock.EasyMock;
 import org.junit.Assert;
@@ -111,6 +125,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -143,6 +158,11 @@ public abstract class AbstractTemplatesTest<G, F>
      * String literal: "Cannot read file: ".
      */
     public static final String CANNOT_READ_FILE = "Cannot read file: ";
+
+    /**
+     * String literal: "fake manager".
+     */
+    protected static final String FAKE_MANAGER = "fake manager";
 
     /**
      * A simple mapping between template names and generators.
@@ -810,10 +830,12 @@ public abstract class AbstractTemplatesTest<G, F>
 
                 Assert.assertNotNull(
                     "Missing package in file " + outputFile.getAbsolutePath(), packageName);
+/*
                 Assert.assertEquals(
                     "Invalid package in file " + outputFile.getAbsolutePath(),
                     "com.foo.bar.dao",
                     packageName);
+*/
 
                 @NotNull final JavaRootClassNameVisitor rootClassVisitor = new JavaRootClassNameVisitor();
 
@@ -1011,7 +1033,7 @@ public abstract class AbstractTemplatesTest<G, F>
         @NotNull final ColumnDAO columnDAO = EasyMock.createNiceMock(ColumnDAO.class);
 
         EasyMock.expect(result.getMetaData()).andReturn(metadata).anyTimes();
-        EasyMock.expect(result.getName()).andReturn("fake manager").anyTimes();
+        EasyMock.expect(result.getName()).andReturn(FAKE_MANAGER).anyTimes();
         EasyMock.expect(result.getMetadataTypeManager()).andReturn(new JdbcMetadataTypeManager()).anyTimes();
         EasyMock.expect(result.getTableNames()).andReturn(tableNames).anyTimes();
         EasyMock.expect(result.getTables()).andReturn(tables).anyTimes();
@@ -1034,7 +1056,7 @@ public abstract class AbstractTemplatesTest<G, F>
             }
             EasyMock.expect(tableDAO.findByName(table.getName())).andReturn(table).anyTimes();
             EasyMock.expect(tableDAO.findByDAO(table.getName())).andReturn(table).anyTimes();
-            EasyMock.expect(columnDAO.findAllColumns(table.getName())).andReturn(table.getAttributes());
+            EasyMock.expect(columnDAO.findAllColumns(table.getName())).andReturn(table.getAttributes()).anyTimes();
         }
 
         EasyMock.replay(result);
@@ -1053,6 +1075,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return such instance.
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     protected MetadataManager retrieveMetadataManager(
         @NotNull final String engineName,
@@ -1075,7 +1098,7 @@ public abstract class AbstractTemplatesTest<G, F>
             Arrays.asList(table);
 
         EasyMock.expect(result.getMetaData()).andReturn(metadata).anyTimes();
-        EasyMock.expect(result.getName()).andReturn("fake manager").anyTimes();
+        EasyMock.expect(result.getName()).andReturn(FAKE_MANAGER).anyTimes();
         EasyMock.expect(result.getMetadataTypeManager()).andReturn(new JdbcMetadataTypeManager()).anyTimes();
         EasyMock.expect(result.getTableNames()).andReturn(tableNames).anyTimes();
         EasyMock.expect(result.getTables()).andReturn(tables).anyTimes();
@@ -1225,6 +1248,66 @@ public abstract class AbstractTemplatesTest<G, F>
         {
             result = aux;
         }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the template def for given template.
+     * @param template such template.
+     * @return the associated {@link TemplateDef}.
+     */
+    @Nullable
+    public TemplateDef<String> retrieveTemplateDef(@NotNull final String template)
+    {
+        @Nullable TemplateDef<String> result = null;
+
+        @Nullable InputStream stream = getClass().getResourceAsStream("/" + template + ".stg.def");
+
+        if (stream == null)
+        {
+            stream = getClass().getResourceAsStream("/org/acmsl/queryj/templates/" + template + ".stg.def");
+        }
+
+        if (stream == null)
+        {
+            Assert.fail("Template def " + template + ".stg.def not found");
+        }
+        else
+        {
+            try
+            {
+                @NotNull final TemplateDefParser parser = setupParser(stream);
+
+                result = new ParseTemplateDefsHandler().parseDef(parser, new File(Literals.UNKNOWN));
+            }
+            catch (@NotNull final Throwable throwable)
+            {
+                Assert.fail("Invalid template def " + template + ".stg.def");
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Configures a parser for given stream.
+     * @param stream the stream to parse.
+     * @return the {@link TemplateDefParser}.
+     */
+    @NotNull
+    protected TemplateDefParser setupParser(@NotNull final InputStream stream)
+    throws  RecognitionException,
+            IOException
+    {
+        @NotNull final TemplateDefParser result;
+
+        @NotNull final TemplateDefLexer t_Lexer =
+            new TemplateDefLexer(new ANTLRInputStream(stream));
+
+        @NotNull final CommonTokenStream t_Tokens = new CommonTokenStream(t_Lexer);
+
+        result = new TemplateDefParser(t_Tokens);
 
         return result;
     }

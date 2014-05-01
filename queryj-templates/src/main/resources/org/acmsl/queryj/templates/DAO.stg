@@ -39,7 +39,6 @@
 group DAO;
 
 import "queryj.stg"
-import "type_checkers.stg"
 
 source(C) ::= <<
 <!
@@ -65,7 +64,7 @@ sourceImpl(table, engine, C) ::= <<
     second_line_description(tableName=table.name, engine=engine),
     third_line_description(tableName=table.name, engine=engine)
   ],
-  template="org/acmsl/queryj/dao/DAO.stg",
+  template="org/acmsl/queryj/templates/dao/DAO.stg",
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
@@ -213,10 +212,6 @@ import <basePackageName>.<voSubpackageName>.<table.name.voName>Decorator;
 <endif>
 import <basePackageName>.<voFactorySubpackageName>.<table.name.voName>ValueObjectFactory;
 import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName>DAO;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>JdbcTemplate;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>PreparedStatementCreator;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ResultSetExtractor;
 import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
 <table.foreignKeys:{ fk| <foreignkey_statementsetter_import(
   basePackageName=basePackageName,
@@ -225,12 +220,20 @@ import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
 <table.foreignKeys:{ fk | <foreignkey_dao_import(
   basePackageName=basePackageName,
   baseDAOSubpackageName=baseDAOSubpackageName,
-  referredVOName=fk.sourceTable.name.VoName)>}; separator="\n">
-<table.differentCustomResults:{ cr  | <custom_select_import(result=cr, table=table, package=project_package)>}; separator="\n">
+  referredVOName=fk.sourceTable.name.voName)>}; separator="\n">
+<table.differentCustomResults:{ cr  | <custom_select_import(result=cr, package=basePackageName, C=C)>}; separator="\n">
+
+/*
+ * Importing V24-Commons classes.
+ */
+import com.ventura24.commons.dao.DAOListener;
+import com.ventura24.commons.dao.V24JdbcTemplate;
+import com.ventura24.commons.dao.V24ResultSetExtractor;
+
 >>
 
-custom_select_import(result, table, package) ::= <<
-<custom_select_return_import(result=result, table=table, package=package)>
+custom_select_import(result, package, C) ::= <<
+<custom_select_return_import(result=result, package=package, C=C)>
 >>
 
 foreignkey_statementsetter_import(
@@ -288,7 +291,7 @@ classImpl(foreign_keys, table, parent, repository, engine, C) ::= <<
       first_line_description(tableName=table.name, engine=engine),
       second_line_description(tableName=table.name, engine=engine)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(template="org/acmsl/queryj/dao/DAO.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/dao/DAO.stg", C=C)>
  */
 <class_annotations(C=C)>
 public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.voName>DAO
@@ -590,7 +593,7 @@ public <table.name.voName>Decorator findByPrimaryKey(
 <else>
 public <table.name.voName> findByPrimaryKey(
 <endif>
-    <table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
+    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
 {
     return
         findByPrimaryKey(
@@ -637,7 +640,7 @@ protected <table.name.voName>Decorator findByPrimaryKey(
 <else>
 protected <table.name.voName> findByPrimaryKey(
 <endif>
-    <table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
     <notnull(C=C)>final DataSource dataSource)
 {
@@ -681,7 +684,7 @@ protected <table.name.voName>Decorator findByPrimaryKey(
 <else>
 protected <table.name.voName> findByPrimaryKey(
 <endif>
-    <table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
     <notnull(C=C)>final PlatformTransactionManager transactionManager)
 {
@@ -727,7 +730,7 @@ find_by_primary_key4(table, parent, repository, C) ::= <<
 <else>
 <nullable(C=C)>protected <table.name.voName> findByPrimaryKey(
 <endif>
-    <table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
     <notnull(C=C)>final TransactionTemplate transactionTemplate,
     <nullable(C=C)>final <repository.capitalized>DAOListener daoListener)
@@ -766,9 +769,9 @@ insert(table, parent, repository, C) ::= <<
  */
 public void insert(
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
 <endif>
 {
     create(
@@ -809,9 +812,9 @@ public <table.name.voName>Decorator create(
 public <table.name.voName> create(
 <endif>
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
 <endif>
 {
     return
@@ -862,9 +865,9 @@ protected <table.name.voName>Decorator create(
 protected <table.name.voName> create(
 <endif>
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
 <endif>
     final boolean retrieveAfterwards)
 {
@@ -915,9 +918,9 @@ protected <table.name.voName>Decorator create(
 protected <table.name.voName> create(
 <endif>
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
 <endif>
     final boolean retrieveAfterwards,
     <notnull(C=C)>final String query,
@@ -978,9 +981,9 @@ protected <table.name.voName>Decorator create(
 protected <table.name.voName> create(
 <endif>
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
 <endif>
     final boolean retrieveAfterwards,
     <notnull(C=C)>final String query,
@@ -1049,9 +1052,9 @@ protected <table.name.voName>Decorator create(
 protected <table.name.voName> create(
 <endif>
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
 <endif>
     final boolean retrieveAfterwards,
     <notnull(C=C)>final String query,
@@ -1337,7 +1340,7 @@ delete(table, parent, repository, C) ::= <<
  <table.primaryKey:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
  */
 public void delete(
-    <table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
+    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
 {
 <if(table.foreignKeys)>
     <table.foreignKeys:{ fk | <fk_dao_delete_call(foreignKey=fk, table=table)> };
@@ -1367,7 +1370,7 @@ delete2(table, parent, repository, C) ::= <<
  <table.primaryKey:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
  */
 protected void deleteNoFk(
-    <table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
+    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
 {
     deleteNoFk(
         <table.primaryKey:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
@@ -1400,7 +1403,7 @@ delete3(table, parent, repository, C) ::= <<
 <endif>
  */
 protected void deleteNoFk(
-    <table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
 <if(parent)>
     <notnull(C=C)>final DataSource dataSource,
@@ -1443,7 +1446,7 @@ delete4(table, parent, repository, C) ::= <<
  * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  */
 protected void deleteNoFk(
-    <table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">,
+    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
     <notnull(C=C)>final TransactionTemplate transactionTemplate,
 <if(parent)>
@@ -1591,7 +1594,7 @@ find_constant_by_pk(primaryKey, table, C) ::= <<
  */
 <nullable(C=C)>
 public <table.name.voName> findConstantByPrimaryKey(
-    <primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
+    <primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
 {
     <nullable(C=C)><table.name.voName> result;
 
@@ -1765,7 +1768,7 @@ fk_delete_method(foreignKey, table) ::= <<
  <foreignKey.attributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
  */
 public void deleteBy<foreignKey.attributes:{attr |<attr.name.capitalized>}>(
-    <foreignKey.attributes:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">)
+    <foreignKey.attributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
 {
     // TODO: not refactored yet. Removed till then.
     throw new IllegalArgumentException("Not implemented yet");
@@ -1903,7 +1906,7 @@ public static class <attr.name.capitalized>ResultSetExtractor
               name=attr.name.uncapitalized,
               getterMethod=attr.getterMethod,
               objectType=attr.objectType,
-              isPrimitive=attr.isPrimitive)>
+              isPrimitive=attr.primitive)>
         }
 
         if (daoListener != null)

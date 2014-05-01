@@ -189,8 +189,6 @@ public class ParseTemplateDefsHandler
     protected TemplateDef<String> parseDefFile(@NotNull final File file)
         throws TemplatePackagingCheckedException
     {
-        @NotNull final TemplateDef<String> result;
-
         @Nullable final TemplateDefParser t_Parser;
 
         try
@@ -202,11 +200,26 @@ public class ParseTemplateDefsHandler
             throw new CannotSetUpTemplateDefParserException(file, missingFile);
         }
 
+        return parseDef(t_Parser, file);
+    }
+
+    /**
+     * Parses a template def file.
+     * @param parser the parser.
+     * @param file the file.
+     */
+    @NotNull
+    public TemplateDef<String> parseDef(
+        @NotNull final TemplateDefParser parser, @NotNull final File file)
+        throws TemplatePackagingCheckedException
+    {
+        @NotNull final TemplateDef<String> result;
+
         @Nullable final ParseTree tree;
 
         try
         {
-            tree = t_Parser.templateDef();
+            tree = parser.templateDef();
         }
         catch (@NotNull final Throwable invalidClass)
         {
@@ -326,7 +339,7 @@ public class ParseTemplateDefsHandler
     @NotNull
     protected TemplateDefParser setUpParser(@NotNull final File file)
     throws RecognitionException,
-            IOException
+           IOException
     {
         @NotNull final TemplateDefParser result;
 

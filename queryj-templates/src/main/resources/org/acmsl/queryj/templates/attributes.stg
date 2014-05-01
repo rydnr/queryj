@@ -44,7 +44,7 @@ attribute_method_parameter_declaration(attribute, usePrefix, prefix, C) ::= <<
  @param usePrefix whether to use a prefix or not.
  @param prefix the prefix.
 !>
-<if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>final <attribute.javaType> <if(usePrefix)><prefix><attribute.name.capitalized><else><attribute.name.uncapitalized><endif>
+<if(!attribute.primitive)><if(attribute.nullable)><nullable(C=C)><else><if(attribute.nullable)><notnull(C=C)><endif><endif><endif>final <attribute.javaType> <if(usePrefix)><prefix><attribute.name.capitalized><else><attribute.name.uncapitalized><endif>
 >>
 
 attribute_declaration(attribute, C) ::= <<
@@ -56,7 +56,7 @@ attribute_declaration(attribute, C) ::= <<
 /**
  * The \<i><attribute.name>\</i> value.
  */
-<if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>
+<if(!attribute.primitive)><if(attribute.nullable)><nullable(C=C)><else><if(attribute.nullable)><notnull(C=C)><endif><endif><endif>
 private <attribute.javaType> m__<attribute.name.capitalized>;
 >>
 
@@ -73,7 +73,7 @@ attribute_isolated_declaration(attr, C) ::= <<
   Writes the parameter declaration for a concrete attribute, isolated.
   @param attr the attribute.
 !>
-<attribute_declaration(attr=attr, C=C)>,
+<attribute_declaration(attribute=attr, C=C)>,
 >>
 
 attribute_isolated_declaration_impl(attr, C) ::= <<
@@ -89,12 +89,11 @@ attribute_immutable_setter_call(attribute) ::= <<
  Writes the method call for the immutable setter of given attribute.
  @param attribute the attribute.
 !>
-<if(!attribute.strictlyPrimitive)><if(attribute.nullable)>
+<if(attribute.nullable)>
 if (<attribute.name.uncapitalized> != null)
 {
     immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);
 }<else>immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);<endif>
-<else>immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);<endif>
 >>
 
 attribute_accessors(attribute, C) ::= <<
@@ -117,7 +116,7 @@ attribute_setter(attribute, C) ::= <<
  * Specifies the \<i><attribute.name>\</i> value.
  * @param value such information.
  */
-protected final void immutableSet<attribute.name.capitalized>(<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>final <attribute.javaType> value)
+protected final void immutableSet<attribute.name.capitalized>(<if(attribute.nullable)><notnull(C=C)><endif>final <attribute.javaType> value)
 {
     this.m__<attribute.name.capitalized> = value;
 }
@@ -127,7 +126,7 @@ protected final void immutableSet<attribute.name.capitalized>(<if(!attribute.str
  * @param value such information.
  */
 @SuppressWarnings("unused")
-protected void set<attribute.name.capitalized>(<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>final <attribute.javaType> value)
+protected void set<attribute.name.capitalized>(<if(attribute.nullable)><notnull(C=C)><endif>final <attribute.javaType> value)
 {
     immutableSet<attribute.name.capitalized>(value);
 }
@@ -144,10 +143,10 @@ attribute_getter(attribute, C) ::= <<
  * @return such information.
  */
 <if(attribute.allowsNull)>
-<if(!attribute.strictlyPrimitive)><nullable(C=C)><endif>
+<if(!attribute.primitive)><nullable(C=C)><endif>
 protected final <attribute.objectType> immutableGet<attribute.name.capitalized>()
 <else>
-<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>
+<if(!attribute.primitive)><notnull(C=C)><endif>
 protected final <attribute.javaType> immutableGet<attribute.name.capitalized>()
 <endif>
 {
@@ -160,10 +159,10 @@ protected final <attribute.javaType> immutableGet<attribute.name.capitalized>()
  */
 @Override
 <if(attribute.allowsNull)>
-<if(!attribute.strictlyPrimitive)><nullable(C=C)><endif>
+<if(!attribute.primitive)><nullable(C=C)><endif>
 public <attribute.objectType> get<attribute.name.capitalized>()
 <else>
-<if(!attribute.strictlyPrimitive)><notnull(C=C)><endif>
+<if(!attribute.primitive)><notnull(C=C)><endif>
 public <attribute.javaType> get<attribute.name.capitalized>()
 <endif>
 {
@@ -241,7 +240,7 @@ clob_attribute_resultset_retrieval(attribute, C) ::= <<
 
 attribute_equals(attribute) ::= <<
 <! Generates the contribution of each attribute to the equals method. !>
-<if(attribute.strictlyPrimitive)>
+<if(attribute.primitive)>
 final boolean <attribute.name.uncapitalized>Match = (this.m__<attribute.name.capitalized> == candidate.get<attribute.name.capitalized>());
 <else><if(attribute.allowsNull)>
 final boolean <attribute.name.uncapitalized>Match =
@@ -253,7 +252,7 @@ final boolean <attribute.name.uncapitalized>Match = this.m__<attribute.name.capi
 
 attribute_hashCode(attribute) ::= <<
 <! Generates the hashCode contribution for each attribute. !>
-<if(attribute.strictlyPrimitive)>
+<if(attribute.primitive)>
 final int <attribute.name.uncapitalized>HashCode = ("" + this.m__<attribute.name.capitalized>).hashCode();<else>
 <if(attribute.allowsNull)>final int <attribute.name.uncapitalized>HashCode;
 if (this.m__<attribute.name.capitalized> == null)

@@ -1,8 +1,8 @@
 /*
- * PkStatementSetter template metadata.
+ * Template metadata.
  */
 // The template name (the filename).
-name : PkStatementSetter.stg;
+name : MyTemplate.stg;
 
 // The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-custom-sql.
 type : per-table;
@@ -11,9 +11,7 @@ type : per-table;
 output: Java;
 
 // The filename builder.
-filename  builder : <tableName.voName>PkStatementSetter.java;
+filename builder : <engine.name><tableName.singular.camelCase>Template.java;
 
 // The package.
-package: <packageName>.dao.rdb.<engine.name.lowercased>.<tableName.normalized.lowercased>;
-
-disabled;
+package: <packageName>.dao.rdb.<engine.name.lowercased>;
