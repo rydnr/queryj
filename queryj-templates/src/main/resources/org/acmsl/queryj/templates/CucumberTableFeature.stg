@@ -54,7 +54,7 @@ Feature: <table.name> code compiles
 
     Given the following tables:
     |    table     | parent table | decorated | relationship |   static    |
-    | <table.name> | <table.parentTableName> | <table.voDecorated> | <table.relationship> | <table.static> |
+    | <table.name> | <table.parentTableName> | <table.voDecorated> | <table.relationship> | <if(table.static)><table.staticAttribute.name><endif> |
 
     And the following columns:
     |     table    |         column        | type      | pk    | allows null | readonly |   sequence    | keyword | boolean | length | precision |
@@ -81,13 +81,13 @@ Feature: <table.name> code compiles
 <if(table.staticContent)>
     And the following contents:
       |    table     |         row          |
-      <table.staticContent:{ r | | <table.name> | <r.attributes:{ a | <if(a.primitive)><a.value><else>"<a.value>"<endif>}; separator=",">}; separator="\n">
+      <table.staticContent:{ r | | <table.name> | <r.attributes:{ a | <if(a.primitive)><a.value><else>"<a.value>"<endif>}; separator=",">}; separator="\n"> |
 <endif>
 <endif>
 
-    When I generate with per-table \<template> for <engine.name>
+    When I generate with per-table \<template>.stg for <engine.name>
 
-    Then the generated \<output> file compiles successfully
+    Then the generated per-table \<output> file compiles successfully
 
     Examples:
       | template | output |
