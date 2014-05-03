@@ -139,9 +139,9 @@ class_annotations(C) ::= <<
 
 find_constant_check_attribute(attribute) ::= <<
 <if(attribute.primitive)>
-&& (item.get<attribute.name.capitalized>() == <attribute.name.lowercased>)<else>
+&& (item.get<attribute.name.capitalized>() == <attribute.name.uncapitalized>)<else>
 && (item.get<attribute.name.capitalized>() != null)
-&& (item.get<attribute.name.capitalized>().equals(<attribute.name.lowercased>))<endif>
+&& (item.get<attribute.name.capitalized>().equals(<attribute.name.uncapitalized>))<endif>
 >>
 
 import_template(type) ::= <<

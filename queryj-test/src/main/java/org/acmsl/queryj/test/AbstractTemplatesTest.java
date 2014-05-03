@@ -43,7 +43,6 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing QueryJ Template Packaging classes.
  */
-import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefLexer;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser;
@@ -56,6 +55,7 @@ import org.acmsl.queryj.test.antlr4.JavaLexer;
 import org.acmsl.queryj.test.antlr4.JavaPackageVisitor;
 import org.acmsl.queryj.test.antlr4.JavaParser;
 import org.acmsl.queryj.test.antlr4.JavaRootClassNameVisitor;
+import org.acmsl.queryj.test.antlr4.PropagatingErrorListener;
 import org.acmsl.queryj.test.sql.CucumberSqlDAO;
 import org.acmsl.queryj.test.sql.CucumberSqlParameterDAO;
 import org.acmsl.queryj.test.sql.CucumberSqlPropertyDAO;
@@ -72,6 +72,7 @@ import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.ColumnDAO;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
@@ -108,7 +109,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing JUnit/EasyMock classes.
+ * Importing JUnit/EasyMock/PowerMock classes.
  */
 import org.easymock.EasyMock;
 import org.junit.Assert;
@@ -767,6 +768,8 @@ public abstract class AbstractTemplatesTest<G, F>
 
         @NotNull final JavaLexer t_Lexer =
             new JavaLexer(new ANTLRFileStream(javaFile.getAbsolutePath()));
+
+        t_Lexer.addErrorListener(new PropagatingErrorListener(javaFile));
 
         @NotNull final CommonTokenStream t_Tokens = new CommonTokenStream(t_Lexer);
 

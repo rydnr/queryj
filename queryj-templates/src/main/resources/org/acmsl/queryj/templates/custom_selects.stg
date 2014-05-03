@@ -58,9 +58,9 @@ custom_select(cs, table, C) ::= <<
 <endif>
  */
 <custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
-public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(<if(!cs.parametersShouldBeWrapped)><cs.parameters:{ p | <attribute_declaration(attribute=p, C=C)>}; separator=", ">)
+public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(<if(!cs.parametersShouldBeWrapped)><cs.parameters:{ p | <attribute_method_parameter_declaration(attribute=p, usePrefix=false, prefix="", C=C)>}; separator=", ">)
 <else>
-    <cs.parameters:{ p | <attribute_declaration(attribute=p, C=C)>}; separator=",\n">)    <endif>
+    <cs.parameters:{ p | <attribute_method_parameter_declaration(attribute=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)    <endif>
 <if(cs.parametersShouldBeWrapped)>
   throws DataAccessException
 <else>
@@ -99,8 +99,8 @@ public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.nam
  * {@link PreparedStatementCreatorFactory} instance
  * specific for this operation.
  * @param params the query parameters.
- * @param transactionTemplate the {@link TransactionTemplate{@link
- * instance.
+ * @param transactionTemplate the {@link TransactionTemplate} instance.
+ * @param daoListener the {@link DAOListener} instance.
 <if(cs.resultRef)>
  * @return the {@link <cs.resultClass>} information retrieved.
 <else>
@@ -114,7 +114,7 @@ protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.
     <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable(C=C)>final Object[] params,
     <notnull(C=C)>final TransactionTemplate transactionTemplate,
-    <nullable(C=C)>final DAOListener)
+    <nullable(C=C)>final DAOListener daoListener)
   throws DataAccessException
 {
     <custom_select_result_declaration(sql=cs, result=cs.result, table=table, C=C)>
@@ -154,7 +154,7 @@ custom_select_parameter_value(p) ::= <<
 custom_update_or_insert(cs) ::= <<
 <!
  Writes the subtemplate for custom updates or inserts.
-  @param cs the custom sql.
+ @param cs the custom sql.
 !>
 <if(!cs.dynamic)>
 /**
@@ -164,7 +164,7 @@ custom_update_or_insert(cs) ::= <<
  * @return the number of entities updated.
  */
 public int <cs.name.uncapitalized>(
-    <cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=",\n">)
+    <cs.parameters:{ p | <attribute_method_parameter_declaration(attr=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
   throws DataAccessException
 {
     int result = -10;
@@ -261,7 +261,7 @@ public <cs.resultClass> <cs.name.uncapitalized>(
 public void <cs.name.uncapitalized>(
 <endif>
 
-    <cs.parameters:{ p | <attribute_declaration(attr=p, C=C)>}; separator=",\n">)
+    <cs.parameters:{ p | <attribute_method_parameter_declaration(attr=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
   throws DataAccessException
 {
 <if(cs.resultClass)>
@@ -282,7 +282,7 @@ public void <cs.name.uncapitalized>(
             getDataSource(), <cs.normalized.uppercased>_SQL);
 
 <if(cs.resultClass)>
-    @Nullable final List\<<cs.resultClass>\> t_lResult = (List\<<cs.resultClass>\>) t_Query.execute();
+    <nullable(C=C)>final List\<<cs.resultClass>\> t_lResult = (List\<<cs.resultClass>\>) t_Query.execute();
 
     if  (   (t_lResult != null)
          && (t_lResult.size() > 0))
@@ -316,7 +316,7 @@ implicit_custom_select_attribute_declaration(sql, attr) ::= <<
  @param attr the implicit property.
 !>
 <if(attr.nullable)>
-@Nullable <sql.resultClass> result = null;
+<nullable(C=C)><sql.resultClass> result = null;
 <else>
 <attr.javaType> result = null;
 <endif>
@@ -357,25 +357,30 @@ transactionTemplate.execute(
 >>
 
 custom_select_return(cs, table, result, C) ::= <<
-<if(table.voDecorated)>
-<custom_select_return_decorated(cs=cs, result=result, C=C)>
-<else><custom_select_return_nondecorated(cs=cs, result=result, C=C)><endif>
+<
+if(table.voDecorated)><
+  custom_select_return_decorated(cs=cs, result=result, C=C)><
+else><
+  custom_select_return_nondecorated(cs=cs, result=result, C=C)><
+endif>
 >>
 
 custom_select_return_decorated(cs, result, C) ::= <<
-<if(cs.resultRef)>
-<custom_select_return_decorated_explicit(cs=cs, result=result, C=C)>
-<else>
-<custom_select_return_decorated_implicit(cs=cs, result=result, C=C)>
-<endif>
+<
+if(cs.resultRef)><
+  custom_select_return_decorated_explicit(cs=cs, result=result, C=C)><
+else><
+  custom_select_return_decorated_implicit(cs=cs, result=result, C=C)><
+endif>
 >>
 
 custom_select_decorated_explicit(cs, result, C) ::= <<
-<if(cs.multiple)>
-<custom_select_return_decorated_explicit_multiple(cs=cs, result=result, C=C)>
-<else>
-<custom_select_return_decorated_explicit_single(cs=cs, result=result, C=C)>
-<endif>
+<
+if(cs.multiple)><
+  custom_select_return_decorated_explicit_multiple(cs=cs, result=result, C=C)><
+else><
+  custom_select_return_decorated_explicit_single(cs=cs, result=result, C=C)><
+endif>
 >>
 
 custom_select_return_decorated_explicit_multiple(cs, result, C) ::= <<
@@ -387,33 +392,39 @@ custom_select_return_decorated_explicit_single(cs, result, C) ::= <<
 >>
 
 custom_select_return_nondecorated(cs, result, C) ::= <<
-<if(cs.resultRef)>
-<custom_select_return_nondecorated_explicit(cs=cs, result=result, C=C)>
-<else><custom_select_return_nondecorated_implicit(cs=cs, result=result, C=C)><endif>
+<
+if(cs.resultRef)><
+  custom_select_return_nondecorated_explicit(cs=cs, result=result, C=C)><
+else><
+  custom_select_return_nondecorated_implicit(cs=cs, result=result, C=C)><
+endif>
 >>
 
 custom_select_return_nondecorated_explicit(cs, result, C) ::= <<
-<if(cs.multiple)>
-<custom_select_return_nondecorated_explicit_multiple(cs=cs, result=result, C=C)>
-<else>
-<custom_select_return_nondecorated_explicit_single(cs=cs, result=result, C=C)>
-<endif>
+<
+if(cs.multiple)><
+  custom_select_return_nondecorated_explicit_multiple(cs=cs, result=result, C=C)><
+else><
+  custom_select_return_nondecorated_explicit_single(cs=cs, result=result, C=C)><
+endif>
 >>
 
 custom_select_return_nondecorated_explicit_multiple(cs, result, C) ::= <<
-<if(result.wrappingASingleProperty)>
-<custom_select_return_property_explicit_multiple(cs=cs, result=result, C=C)>
-<else>
-List\<<result.classValue>\>
-<endif>
+<
+if(result.wrappingASingleProperty)><
+  custom_select_return_property_explicit_multiple(cs=cs, result=result, C=C)><
+else
+ >List\<<result.classValue>\><
+endif>
 >>
 
 custom_select_return_nondecorated_explicit_single(cs, result, C) ::= <<
-<if(result.wrappingASingleProperty)>
-<custom_select_return_explicit_property_single(cs=cs, result=result, C=C)>
-<else>
-<result.classValue>
-<endif>
+<
+if(result.wrappingASingleProperty)><
+  custom_select_return_explicit_property_single(cs=cs, result=result, C=C)><
+else><
+  result.classValue><
+endif>
 >>
 
 custom_select_return_explicit_property_multiple(cs, result, C) ::= <<
@@ -425,14 +436,16 @@ custom_select_return_explicit_property_single(select, result, C) ::= <<
 >>
 
 custom_select_return_decorated_implicit(cs, result, C) ::= <<
-<if(cs.multiple)>
-<custom_select_return_decorated_implicit_multiple(cs=cs, result=result, C=C)>
-<else>
-<custom_select_return_decorated_implicit_single(cs=cs, result=result, C=C)><endif>
+<
+if(cs.multiple)><
+  custom_select_return_decorated_implicit_multiple(cs=cs, result=result, C=C)><
+else><
+  custom_select_return_decorated_implicit_single(cs=cs, result=result, C=C)><
+endif>
 >>
 
 custom_select_return_decorated_implicit_multiple(cs, result, C) ::= <<
-List\<<cs.dao.voName>Decorator\>
+List\<<cs.dao.voName>Decorator>
 >>
 
 custom_select_return_decorated_implicit_single(cs, result, C) ::= <<
@@ -440,7 +453,12 @@ custom_select_return_decorated_implicit_single(cs, result, C) ::= <<
 >>
 
 custom_select_return_nondecorated_implicit(cs, result, C) ::= <<
-<if(cs.multiple)><custom_select_return_nondecorated_implicit_multiple(cs=cs, result=result, C=C)><else><custom_select_return_nondecorated_implicit_single(cs=cs, result=result, C=C)><endif>
+<
+if(cs.multiple)><
+  custom_select_return_nondecorated_implicit_multiple(cs=cs, result=result, C=C)><
+else><
+  custom_select_return_nondecorated_implicit_single(cs=cs, result=result, C=C)><
+endif>
 >>
 
 custom_select_return_nondecorated_implicit_multiple(cs, result, C) ::= <<

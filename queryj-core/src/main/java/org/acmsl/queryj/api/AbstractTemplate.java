@@ -809,17 +809,21 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     {
                         result = t_Template.render();
 
-                        if (isInDevMode(t_Group))
+                        if (   (isInDevMode(t_Group))
+                            && (!relevantOnly))
                         {
-                            try
+                            synchronized (AbstractTemplate.class)
                             {
-                                t_Template.inspect().waitForClose();
+                                try
+                                {
+                                    t_Template.inspect().waitForClose();
+                                }
+                                catch (@NotNull final InterruptedException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                                throw new DevelopmentModeException(t_Group);
                             }
-                            catch (InterruptedException e)
-                            {
-                                e.printStackTrace();
-                            }
-                            throw new DevelopmentModeException(t_Group);
                         }
                     }
                     catch (@NotNull final DevelopmentModeException debugging)

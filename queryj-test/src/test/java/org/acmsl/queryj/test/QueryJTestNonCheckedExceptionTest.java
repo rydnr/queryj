@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging Maven Plugin
+                        QueryJ Test
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,17 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: TemplatePackagingNonCheckedExceptionTest.java
+ * Filename: QueryJTestNonCheckedExceptionTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for TemplatePackagingNonCheckedException.
+ * Description: Tests for QueryJTestNonCheckedException.
  *
- * Date: 2014/03/30
- * Time: 20:01
+ * Date: 2014/05/03
+ * Time: 07:27
  *
  */
-package org.acmsl.queryj.templates.packaging.exceptions;
+package org.acmsl.queryj.test;
 
 /*
  * Importing JetBrains annotations.
@@ -49,13 +49,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link TemplatePackagingNonCheckedException}.
+ * Tests for {@link QueryJTestNonCheckedException}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/03/30 20:01
+ * Created: 2014/05/03 07:27
  */
 @RunWith(JUnit4.class)
-public class TemplatePackagingNonCheckedExceptionTest
+public class QueryJTestNonCheckedExceptionTest
 {
     /**
      * Checks the bundle name is customized.
@@ -63,10 +63,10 @@ public class TemplatePackagingNonCheckedExceptionTest
     @Test
     public void customizes_the_bundle()
     {
-        @NotNull final TemplatePackagingNonCheckedException instance =
-            new TemplatePackagingNonCheckedException("bla") {};
+        @NotNull final QueryJTestNonCheckedException instance =
+            new QueryJTestNonCheckedException("bla") {};
 
-        Assert.assertEquals("template-packaging-exceptions", instance.retrieveExceptionsBundleName());
+        Assert.assertEquals("test-exceptions", instance.retrieveExceptionsBundleName());
     }
 
     /**
@@ -75,11 +75,12 @@ public class TemplatePackagingNonCheckedExceptionTest
     @Test
     public void customizes_the_system_property()
     {
-        @NotNull final TemplatePackagingNonCheckedException instance =
-            new TemplatePackagingNonCheckedException("bla") {};
+        @NotNull final QueryJTestNonCheckedException instance =
+            new QueryJTestNonCheckedException("bla") {};
 
         Assert.assertEquals(
-            "org.acmsl.queryj.templates.packaging.exceptions",
+            "org.acmsl.queryj.test.exceptions",
             instance.retrieveExceptionsBundleProperty());
     }
+
 }

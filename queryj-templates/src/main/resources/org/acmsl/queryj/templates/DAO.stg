@@ -220,7 +220,7 @@ import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
 <table.foreignKeys:{ fk | <foreignkey_dao_import(
   basePackageName=basePackageName,
   baseDAOSubpackageName=baseDAOSubpackageName,
-  referredVOName=fk.sourceTable.name.voName)>}; separator="\n">
+  referredVOName=fk.source.name.voName)>}; separator="\n">
 <table.differentCustomResults:{ cr  | <custom_select_import(result=cr, package=basePackageName, C=C)>}; separator="\n">
 
 /*
@@ -228,6 +228,7 @@ import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
  */
 import com.ventura24.commons.dao.DAOListener;
 import com.ventura24.commons.dao.V24JdbcTemplate;
+import com.ventura24.commons.dao.V24PreparedStatementCreator;
 import com.ventura24.commons.dao.V24ResultSetExtractor;
 
 >>
@@ -247,7 +248,7 @@ foreignkey_statementsetter_import(
   statement setter.
   @param foreignKey the foreign key.
 !>
-<!//import <basePackageName>.<fkssSubpackageName>.<foreignKey.targetVoName>By<foreignKey.sourceVoName>StatementSetter;!>
+<!//import <basePackageName>.<fkssSubpackageName>.<foreignKey.target.name.name>By<foreignKey.source.name.voName>StatementSetter;!>
 >>
 
 foreignkey_dao_import(
@@ -553,11 +554,11 @@ constructor(table, repository, engine, C) ::= <<
  * Builds a {@link <engine.name><table.name.voName>DAO} instance
  * with given data source.
  * @param dataSource the required {@link javax.sql.DataSource data source}.
- * @param daoListener the {@link <repository.capitalized>DAOListener}
+ * @param daoListener the {@link DAOListener}
  * instance.
  */
 public <engine.name><table.name.voName>DAO(
-    final DataSource dataSource, final <repository.capitalized>DAOListener daoListener)
+    <notnull(C=C)>final DataSource dataSource, <nullable(C=C)>final DAOListener daoListener)
 {
     super(dataSource, daoListener);
 }
@@ -588,12 +589,12 @@ find_by_primary_key(table, parent, repository, C) ::= <<
  * primary key.
  */
 <nullable(C=C)>
-<if(table.voDecorated)>
-public <table.name.voName>Decorator findByPrimaryKey(
-<else>
-public <table.name.voName> findByPrimaryKey(
-<endif>
-    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
+<if(table.voDecorated)
+ >public <table.name.voName>Decorator findByPrimaryKey(<
+else
+ >public <table.name.voName> findByPrimaryKey(<
+endif>
+    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 {
     return
         findByPrimaryKey(
@@ -618,11 +619,12 @@ find_by_primary_key2(table, parent, repository, C) ::= <<
  @param C the context.
 !>
 /**
-<if(table.voDecorated)>
- * Retrieves {@link <table.name.voName>Decorator} (table <table.name>) information
-<else>
- * Retrieves {@link <table.name.voName>} information
-<endif>
+ <
+if(table.voDecorated)
+ >* Retrieves {@link <table.name.voName>Decorator} (table <table.name>) information<
+else
+ >* Retrieves {@link <table.name.voName>} information<
+endif>
  * filtering by its primary key.
  <table.primaryKey:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
  * @param query the query to find by primary key.
@@ -640,7 +642,7 @@ protected <table.name.voName>Decorator findByPrimaryKey(
 <else>
 protected <table.name.voName> findByPrimaryKey(
 <endif>
-    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
     <notnull(C=C)>final DataSource dataSource)
 {
@@ -684,7 +686,7 @@ protected <table.name.voName>Decorator findByPrimaryKey(
 <else>
 protected <table.name.voName> findByPrimaryKey(
 <endif>
-    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
     <notnull(C=C)>final PlatformTransactionManager transactionManager)
 {
@@ -716,7 +718,7 @@ find_by_primary_key4(table, parent, repository, C) ::= <<
  * @param query the query to find by primary key.
  * @param transactionTemplate the {@link TransactionTemplate}
  * instance.
- * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
+ * @param daoListener the {@link DAOListener} instance.
 <if(table.voDecorated)>
  * @return the {@link <table.name.voName>Decorator} (table <table.name>) matching given
 <else>
@@ -730,10 +732,10 @@ find_by_primary_key4(table, parent, repository, C) ::= <<
 <else>
 <nullable(C=C)>protected <table.name.voName> findByPrimaryKey(
 <endif>
-    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
     <notnull(C=C)>final TransactionTemplate transactionTemplate,
-    <nullable(C=C)>final <repository.capitalized>DAOListener daoListener)
+    <nullable(C=C)>final DAOListener daoListener)
 {
     return
 <if(table.voDecorated)>
@@ -743,7 +745,7 @@ find_by_primary_key4(table, parent, repository, C) ::= <<
 <endif>
             transactionTemplate.execute(
                 new QueryTransactionCallback(
-                    new <repository.capitalized>PreparedStatementCreator(query, daoListener),
+                    new V24PreparedStatementCreator(query, daoListener),
                     new <table.name.voName>PkStatementSetter(
                         <table.primaryKey:{ attr | <attr.name.uncapitalized>}; separator=",\n">),
                     new <table.name.voName>ResultSetExtractor(query, daoListener),
@@ -769,9 +771,9 @@ insert(table, parent, repository, C) ::= <<
  */
 public void insert(
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 <endif>
 {
     create(
@@ -812,9 +814,9 @@ public <table.name.voName>Decorator create(
 public <table.name.voName> create(
 <endif>
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 <endif>
 {
     return
@@ -865,9 +867,9 @@ protected <table.name.voName>Decorator create(
 protected <table.name.voName> create(
 <endif>
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
 <endif>
     final boolean retrieveAfterwards)
 {
@@ -918,9 +920,9 @@ protected <table.name.voName>Decorator create(
 protected <table.name.voName> create(
 <endif>
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
 <endif>
     final boolean retrieveAfterwards,
     <notnull(C=C)>final String query,
@@ -981,9 +983,9 @@ protected <table.name.voName>Decorator create(
 protected <table.name.voName> create(
 <endif>
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
 <endif>
     final boolean retrieveAfterwards,
     <notnull(C=C)>final String query,
@@ -1042,7 +1044,7 @@ create5(table, parent, repository, C) ::= <<
 <if(parent)>
  * @param <parent.name.lowercased>DAO the {@link <parent.name.voName>DAO} instance.
 <endif>
- * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
+ * @param daoListener the {@link DAOListener} instance.
  */
 @SuppressWarnings("unchecked")
 <nullable(C=C)>
@@ -1052,9 +1054,9 @@ protected <table.name.voName>Decorator create(
 protected <table.name.voName> create(
 <endif>
 <if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
 <else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
 <endif>
     final boolean retrieveAfterwards,
     <notnull(C=C)>final String query,
@@ -1063,7 +1065,7 @@ protected <table.name.voName> create(
 <if(parent)>
     <notnull(C=C)>final <parent.name.voName>DAO <parent.name.lowercased>DAO,
 <endif>
-    <notnull(C=C)>final <repository.capitalized>DAOListener daoListener)
+    <nullable(C=C)>final DAOListener daoListener)
 {
 <if(table.voDecorated)>
     <notnull(C=C)>final <table.name.voName>Decorator result;
@@ -1092,7 +1094,7 @@ protected <table.name.voName> create(
 
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new <repository.capitalized>PreparedStatementCreator(query, daoListener),
+            new V24PreparedStatementCreator(query, daoListener),
             new <table.name.voName>AttributesStatementSetter(
 <if(parent)>
                 <table.all.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
@@ -1277,7 +1279,7 @@ update4(table, parent, repository, C) ::= <<
 <if(parent)>
  * @param parentDAO the {@link <parent.name.voName>DAO} instance.
 <endif>
- * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
+ * @param daoListener the {@link DAOListener} instance.
  * @return the number of entities updated.
  */
 protected int update(
@@ -1291,7 +1293,7 @@ protected int update(
 <if(parent)>
     <notnull(C=C)>final <parent.name.voName>DAO parentDAO,
 <endif>
-    <notnull(C=C)>final <repository.capitalized>DAOListener daoListener)
+    <nullable(C=C)>final DAOListener daoListener)
 {
     int result = -10;
 
@@ -1302,7 +1304,7 @@ protected int update(
     Object t_Result =
         transactionTemplate.execute(
             new UpdateTransactionCallback(
-                new <repository.capitalized>PreparedStatementCreator(query, daoListener),
+                new V24PreparedStatementCreator(query, daoListener),
                 new <table.name.voName>AttributesStatementSetter(
 <if(parent)>
                     <table.all.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
@@ -1340,7 +1342,7 @@ delete(table, parent, repository, C) ::= <<
  <table.primaryKey:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
  */
 public void delete(
-    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
+    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 {
 <if(table.foreignKeys)>
     <table.foreignKeys:{ fk | <fk_dao_delete_call(foreignKey=fk, table=table)> };
@@ -1370,7 +1372,7 @@ delete2(table, parent, repository, C) ::= <<
  <table.primaryKey:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
  */
 protected void deleteNoFk(
-    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
+    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 {
     deleteNoFk(
         <table.primaryKey:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
@@ -1403,7 +1405,7 @@ delete3(table, parent, repository, C) ::= <<
 <endif>
  */
 protected void deleteNoFk(
-    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
 <if(parent)>
     <notnull(C=C)>final DataSource dataSource,
@@ -1443,20 +1445,20 @@ delete4(table, parent, repository, C) ::= <<
 <if(parent)>
  * @param parentDAO the {@link <parent.name.voName>DAO} instance.
 <endif>
- * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
+ * @param daoListener the {@link DAOListener} instance.
  */
 protected void deleteNoFk(
-    <table.primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">,
+    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
     <notnull(C=C)>final TransactionTemplate transactionTemplate,
 <if(parent)>
     <notnull(C=C)>final <parent.name.voName>DAO parentDAO,
 <endif>
-    <nullable(C=C)>final <repository.capitalized>DAOListener daoListener)
+    <nullable(C=C)>final DAOListener daoListener)
 {
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new <repository.capitalized>PreparedStatementCreator(query, daoListener),
+            new V24PreparedStatementCreator(query, daoListener),
             new <table.name.voName>PkStatementSetter(
                 <table.primaryKey:{ attr | <attr.name.uncapitalized>}; separator=",\n">),
             this));
@@ -1477,10 +1479,10 @@ extractors(table, parent, repository, C) ::= <<
  !>
 /**
  * Extracts \<i><table.name.voName>\</i> value objects from result sets.
- <class_common_javadoc(template="org/acmsl/queryj/dao/DAO.stg", C=C)>
+ <class_common_javadoc(template="org/acmsl/queryj/templates/dao/DAO.stg", C=C)>
  */
 public static class <table.name.voName>PkResultSetExtractor
-    extends  <repository.capitalized>ResultSetExtractor
+    extends V24ResultSetExtractor\<Map\<String, ?\>>
 {
     /**
     * Constructs a new {@link <table.name.voName>PkResultSetExtractor}.
@@ -1488,8 +1490,7 @@ public static class <table.name.voName>PkResultSetExtractor
     * @param daoListener the dao listener.
     */
     public <table.name.voName>PkResultSetExtractor(
-        <notnull(C=C)>final String sql,
-        <notnull(C=C)>final <repository.capitalized>DAOListener daoListener)
+        <notnull(C=C)>final String sql, <nullable(C=C)>final DAOListener daoListener)
     {
         super(sql, daoListener);
     }
@@ -1498,18 +1499,18 @@ public static class <table.name.voName>PkResultSetExtractor
      * Extracts \<i><table.name.voName>\</i> information from given result set.
      * @param resultSet the result set.
      * @param sql the original SQL.
-     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
-     * @return the {@link <table.name.voName>} or \<code>null\<code>
+     * @param daoListener the {@link DAOListener} instance.
+     * @return the {@link <table.name.voName>} or {@code null}
      * if the operation returned no data.
      * custom exception.
      */
     @Override
     @SuppressWarnings("unchecked")
     <notnull(C=C)>
-    protected Object extractData(
+    protected Map\<String, ?\> extractData(
         <notnull(C=C)>final ResultSet resultSet,
         <notnull(C=C)>final String sql,
-        <notnull(C=C)>final <repository.capitalized>DAOListener daoListener)
+        <nullable(C=C)>final DAOListener daoListener)
     throws  SQLException,
             DataAccessException
     {
@@ -1594,7 +1595,7 @@ find_constant_by_pk(primaryKey, table, C) ::= <<
  */
 <nullable(C=C)>
 public <table.name.voName> findConstantByPrimaryKey(
-    <primaryKey:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
+    <primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 {
     <nullable(C=C)><table.name.voName> result;
 
@@ -1629,12 +1630,20 @@ find_constant_methods(attribute, table, C) ::= <<
 /**
  * Loads \<i><table.name>\</i> information from the pre-existing constants,
  * filtering by \<i><attribute.name>\</i>.
- * @param <attribute.name.lowercased> the \<i><attribute.name>\</i>
- * to filter.
+ <attribute_javadoc(attr=attribute)>
  * @return the {@link <table.name.voName>} instance.
  */
 <notnull(C=C)>
-public List\<<table.name.voName>\> findConstantsBy<attribute.name.capitalized>(<if(!attribute.primitive)><if(!attribute.primitiveWrapper)><notnull(C=C)><else><if(attribute.nullable)><notnull(C=C)><endif><endif><endif>final <attribute.primitiveType> <attribute.name.lowercased.uncapitalized>);
+public List\<<table.name.voName>\> findConstantsBy<attribute.name.capitalized>(<
+    if(!attribute.primitive)><
+      if(!attribute.primitiveWrapper)
+       ><notnull(C=C)><
+      else><
+        if(attribute.nullable)
+         ><notnull(C=C)><
+        endif><
+      endif><
+    endif>final <attribute.primitiveType> <attribute.name.lowercased.uncapitalized>)
 {
     <notnull(C=C)>final List\<<table.name.voName>\> result = new ArrayList\<<table.name.voName>\>(FIXED_CONSTANTS.size());
 
@@ -1731,9 +1740,9 @@ fk_dao_delete_call(foreignKey, table) ::= <<
   @param foreignKey the foreign key.
 !>
 <if(foreignKey.nullable)>
-//<foreignKey.targetTableName.voName>DAO.discardRelationTo<foreignKey.sourceTableName.voName>(
+//<foreignKey.targetTableName.voName>DAO.discardRelationTo<foreignKey.source.name.voName>(
 <else>
-//<foreignKey.targetTableName.voName>DAO.deleteBy<foreignKey.sourceTableName.voName>(
+//<foreignKey.targetTableName.voName>DAO.deleteBy<foreignKey.source.name.voName>(
 <endif>
     <foreignKey.attributes:{ attr | //<attr.name.uncapitalized>}; separator=",\n">);
 >>
@@ -1768,7 +1777,7 @@ fk_delete_method(foreignKey, table) ::= <<
  <foreignKey.attributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
  */
 public void deleteBy<foreignKey.attributes:{attr |<attr.name.capitalized>}>(
-    <foreignKey.attributes:{ attr | <attribute_declaration(attribute=attr, C=C)>}; separator=",\n">)
+    <foreignKey.attributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 {
     // TODO: not refactored yet. Removed till then.
     throw new IllegalArgumentException("Not implemented yet");
@@ -1834,7 +1843,7 @@ attribute_resultset_extractor_class(table, repository, attr, C) ::= <<
 <class_common_javadoc(template="org/acmsl/queryj/templates/DAO.stg", C=C)>
  */
 public static class <attr.name.capitalized>ResultSetExtractor
-    extends  <repository.capitalized>ResultSetExtractor
+    extends  V24ResultSetExtractor\<Map\<String, ?\>>
 {
     /**
      * Constructs a new {@code <attr.name.capitalized>ResultSetExtractor}.
@@ -1843,7 +1852,7 @@ public static class <attr.name.capitalized>ResultSetExtractor
      */
     public <attr.name.capitalized>SingleColumnResultSetExtractor(
         <notnull(C=C)>final String sql,
-        <notnull(C=C)>final <repository.capitalized>DAOListener daoListener)
+        <nullable(C=C)>final DAOListener daoListener)
     {
         super(sql, daoListener);
     }
@@ -1852,17 +1861,17 @@ public static class <attr.name.capitalized>ResultSetExtractor
      * Extracts \<i><table.name>.<attr.name>\</i> information from given result set.
      * @param resultSet the result set.
      * @param sql the SQL used.
-     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
-     * @return the {@link <table.name.voName>} or \<code>null\</code>
+     * @param daoListener the {@link DAOListener} instance.
+     * @return the {@link <table.name.voName>} or {@code null}
      * if the operation returned no data.
      * custom exception.
      */
     @Override
     <notnull(C=C)>
-    protected Object extractData(
+    protected Map\<String, ?> extractData(
         <notnull(C=C)>final ResultSet resultSet,
         <notnull(C=C)>final String sql,
-        <notnull(C=C)>final <repository>DAOListener daoListener)
+        <notnull(C=C)>final DAOListener daoListener)
     throws  SQLException,
             DataAccessException
     {
@@ -1873,17 +1882,17 @@ public static class <attr.name.capitalized>ResultSetExtractor
      * Extracts \<i><table.name><attr.name>\</i> information from given result set.
      * @param resultSet the result set.
      * @param sql the SQL used.
-     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
-     * @return the {@link <table.name.voName>} or \<code>null\</code>
+     * @param daoListener the {@link DAOListener} instance.
+     * @return the {@link <table.name.voName>} or {@code null}
      * if the operation returned no data.
      * custom exception.
      */
     @SuppressWarnings("unchecked")
     <notnull(C=C)>
-    protected Object extractData(
+    protected Map\<String, ?> extractData(
         <notnull(C=C)>final ResultSet resultSet,
         <notnull(C=C)>final String sql,
-        <notnull(C=C)>final <repository.capitalized>DAOListener daoListener)
+        <nullable(C=C)>final DAOListener daoListener)
     throws  SQLException,
             DataAccessException
     {

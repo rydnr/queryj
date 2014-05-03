@@ -41,11 +41,15 @@ package org.acmsl.queryj.templates.packaging.exceptions;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JUnit classes.
  */
-import org.checkthread.annotations.ThreadSafe;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -55,7 +59,7 @@ import java.util.Locale;
  * @since 3.0
  * Created: 2014/03/30 22:13
  */
-@ThreadSafe
+@RunWith(JUnit4.class)
 public class JdbcSettingNotAvailableExceptionTest
 {
     /**

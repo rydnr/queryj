@@ -1858,7 +1858,7 @@ public abstract class AbstractJdbcMetadataManager
             + ", \"catalog\": \"" + m__strCatalog + "\""
             + ", \"schema\": \"" + m__strSchema + "\""
             + ", \"tableNames\": \"" + m__lTableNames + "\""
-            + ", \"tables\": \"" + m__lTables + "\""
+//            + ", \"tables\": \"" + m__lTables + "\""
             + ", \"columns\": \"" + m__mColumns + "\""
             + ", \"disableTableExtraction\": \"" + m__bDisableTableExtraction + "\""
             + ", \"lazyTableExtraction\": \"" + m__bLazyTableExtraction + "\""

@@ -44,7 +44,20 @@ attribute_method_parameter_declaration(attribute, usePrefix, prefix, C) ::= <<
  @param usePrefix whether to use a prefix or not.
  @param prefix the prefix.
 !>
-<if(!attribute.primitive)><if(attribute.nullable)><nullable(C=C)><else><if(attribute.nullable)><notnull(C=C)><endif><endif><endif>final <attribute.javaType> <if(usePrefix)><prefix><attribute.name.capitalized><else><attribute.name.uncapitalized><endif>
+<if(!attribute.primitive)><
+  if(attribute.nullable)
+   ><nullable(C=C)><
+  else><
+    if(attribute.nullable)
+     ><notnull(C=C)><
+    endif><
+  endif><
+endif>final <attribute.javaType> <
+if(usePrefix)
+ ><prefix><attribute.name.capitalized><
+else
+ ><attribute.name.uncapitalized><
+endif>
 >>
 
 attribute_declaration(attribute, C) ::= <<

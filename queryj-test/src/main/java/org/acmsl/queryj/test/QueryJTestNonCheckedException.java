@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        QueryJ Test
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,23 +23,26 @@
 
  ******************************************************************************
  *
- * Filename: TemplatePackagingNonCheckedException.java
+ * Filename: QueryJTestNonCheckedException.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Base class for all template-packaging-related non-checked
- *              exceptions.
+ * Description: Base class for QueryJ Test's non-checked exceptions.
  *
- * Date: 2014/03/30
- * Time: 20:03
+ * Date: 2014/05/03
+ * Time: 07:29
  *
  */
-package org.acmsl.queryj.templates.packaging.exceptions;
+package org.acmsl.queryj.test;
+
+/*
+ * Importing QueryJ Core classes.
+ */
+import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -48,20 +51,20 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Base class for all template-packaging-related non-checked exceptions.
+ * Base class for QueryJ Test's non-checked exceptions.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/03/30 20:03
+ * Created: 2014/05/03 07:29
  */
 @ThreadSafe
-public abstract class TemplatePackagingNonCheckedException
+public class QueryJTestNonCheckedException
     extends QueryJNonCheckedException
 {
     /**
      * Creates a {@code TemplatePackagingNonCheckedException} with given message.
      * @param messageKey the key to build the exception message.
      */
-    protected TemplatePackagingNonCheckedException(@NotNull final String messageKey)
+    protected QueryJTestNonCheckedException(@NotNull final String messageKey)
     {
         super(messageKey);
     }
@@ -71,7 +74,7 @@ public abstract class TemplatePackagingNonCheckedException
      * @param messageKey the key to build the exception message.
      * @param params     the parameters to build the exception message.
      */
-    protected TemplatePackagingNonCheckedException(
+    protected QueryJTestNonCheckedException(
         @NotNull final String messageKey, @NotNull final Object[] params)
     {
         super(messageKey, params);
@@ -83,7 +86,7 @@ public abstract class TemplatePackagingNonCheckedException
      * @param params     the parameters to build the exception message.
      * @param cause      the error cause.
      */
-    protected TemplatePackagingNonCheckedException(
+    protected QueryJTestNonCheckedException(
         @NotNull final String messageKey, @NotNull final Object[] params, @NotNull final Throwable cause)
     {
         super(messageKey, params, cause);
@@ -97,7 +100,7 @@ public abstract class TemplatePackagingNonCheckedException
     @Override
     protected String retrieveExceptionsBundleName()
     {
-        return "template-packaging-exceptions";
+        return "test-exceptions";
     }
 
     /**
@@ -108,6 +111,6 @@ public abstract class TemplatePackagingNonCheckedException
     @Override
     protected String retrieveExceptionsBundleProperty()
     {
-        return "org.acmsl.queryj.templates.packaging.exceptions";
+        return "org.acmsl.queryj.test.exceptions";
     }
 }

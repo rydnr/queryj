@@ -41,14 +41,11 @@ package org.acmsl.queryj.templates.packaging.exceptions;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
- */
-import org.checkthread.annotations.ThreadSafe;
-
-/*
  * Importing JUnit classes.
  */
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /*
  * Importing JDK classes.
@@ -62,7 +59,7 @@ import java.util.Locale;
  * @since 3.0
  * Created: 2014/03/30 22:37
  */
-@ThreadSafe
+@RunWith(JUnit4.class)
 public class TemplateDefNotAvailableExceptionTest
 {
     /**
