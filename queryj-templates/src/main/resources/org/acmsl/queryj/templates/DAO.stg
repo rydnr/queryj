@@ -1507,7 +1507,7 @@ public static class <table.name.voName>PkResultSetExtractor
     @Override
     @SuppressWarnings("unchecked")
     <notnull(C=C)>
-    protected Map\<String, ?\> extractData(
+    protected Map\<String, ?> extractData(
         <notnull(C=C)>final ResultSet resultSet,
         <notnull(C=C)>final String sql,
         <nullable(C=C)>final DAOListener daoListener)

@@ -1,5 +1,5 @@
 * 2014/05/03
-** TODO Fix Java parsing issue #596: 2 ->
+** DONE Fix Java parsing issue #596: 2 -> 2
 ** TODO Fix memory leak issue #597: 6 ->
 ** TODO Fix DAO template #500: 3 ->
 ** TODO Fix BaseDAOFactory template: #497: 3 ->
