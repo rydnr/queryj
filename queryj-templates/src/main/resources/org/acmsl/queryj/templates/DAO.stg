@@ -229,6 +229,7 @@ import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
 import com.ventura24.commons.dao.DAOListener;
 import com.ventura24.commons.dao.V24JdbcTemplate;
 import com.ventura24.commons.dao.V24PreparedStatementCreator;
+import com.ventura24.commons.dao.V24TransactionManager;
 import com.ventura24.commons.dao.V24ResultSetExtractor;
 
 >>
@@ -296,7 +297,7 @@ classImpl(foreign_keys, table, parent, repository, engine, C) ::= <<
  */
 <class_annotations(C=C)>
 public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.voName>DAO
-  extends     <repository.capitalized>JdbcTemplate
+  extends     V24JdbcTemplate
   implements  <table.name.voName>DAO
 <!//              <repository.capitalized>TableRepository!>
 {
@@ -1942,13 +1943,13 @@ protected TransactionTemplate createTransactionTemplate(<notnull(C=C)>final Data
 }
 
 /**
- * Creates a new {@link TransactionTemplate} using given {@link TransactionManager}.
+ * Creates a new {@link TransactionTemplate} using given {@link PlatformTransactionManager}.
  * @param transactionManager the transaction manager.
  * @return the new transaction template.
  */
 <notnull(C=C)>
-protected TransactionTemplate createTransactionTemplate(<notnull(C=C)>final TransactionManager transactionManager)
+protected TransactionTemplate createTransactionTemplate(<notnull(C=C)>final PlatformTransactionManager transactionManager)
 {
-    return new TransactionTemplate(transactionManager);
+    return new V24TransactionTemplate(transactionManager);
 }
 >>

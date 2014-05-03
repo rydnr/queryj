@@ -413,7 +413,7 @@ endif>
 custom_select_return_nondecorated_explicit_multiple(cs, result, C) ::= <<
 <
 if(result.wrappingASingleProperty)><
-  custom_select_return_property_explicit_multiple(cs=cs, result=result, C=C)><
+  custom_select_return_explicit_property_multiple(cs=cs, result=result, C=C)><
 else
  >List\<<result.classValue>\><
 endif>
@@ -471,14 +471,15 @@ custom_select_return_nondecorated_implicit_single(cs, result, C) ::= <<
 >>
 
 custom_select_return_import(result, package, C) ::= <<
-<if(result.wrappingASingleProperty)>
-<custom_select_return_import_property_single(result=result, package=package)>
-<else><if(result.classValue)>
-import <package>.<typeInitMap.voSubpackageName>.<result.id.voName>;
+<if(result.wrappingASingleProperty)><
+  custom_select_return_import_property_single(result=result, package=package)><
+else><
+  if(result.classValue)
+>import <result.classValue>;
 <endif><endif>
 >>
 
-custom_select_return_import_property_single(select, result, package, C) ::= <<
+custom_select_return_import_property_single(result, package) ::= <<
 <!<result.properties:{property|<if(!property.primitive)>import <property.type>;<endif>}>!>
 >>
 
