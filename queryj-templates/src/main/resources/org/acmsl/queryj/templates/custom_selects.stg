@@ -108,9 +108,11 @@ public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.nam
 <endif>
  */
 <custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
-protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(
-    <cs.parameters:{ p | <attribute_isolated_declaration(attr=p, C=C)>}; separator="\n">
-    <notnull(C=C)>final String sql,
+protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(<
+    if(cs.parameters)>
+    <cs.parameters:{ p | <attribute_method_parameter_declaration(attribute=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">,<
+    endif><
+     notnull(C=C)>final String sql,
     <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable(C=C)>final Object[] params,
     <notnull(C=C)>final TransactionTemplate transactionTemplate,
@@ -139,8 +141,7 @@ custom_select_parameter_type_specification(type) ::= <<
   Specifies the type of the parameter of a custom select.
   @param type the SQL type.
 !>
-preparedStatementCreatorFactory.addParameter(
-    new SqlParameter(Types.<type>));
+preparedStatementCreatorFactory.addParameter(new SqlParameter(Types.<type>));
 >>
 
 custom_select_parameter_value(p) ::= <<
