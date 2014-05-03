@@ -346,7 +346,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
 
     <find_by_primary_key(table=table, parent=parent, repository=repository, C=C)>
 <endif>
-    <!
+
     <insert(table=table, parent=parent, repository=repository, C=C)>
 
     <create(table=table, parent=parent, repository=repository, C=C)>
@@ -356,7 +356,6 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
     <delete(table=table, parent=parent, repository=repository, C=C)>
 
     <table.foreignKeys:{ fk | <fk_delete_method(foreignKey=fk, table=table)>}; separator="\n">
-    !>
 <if(table.customSelects)>
 
     <table.customSelects:{ cs | <custom_select(cs=cs, table=table, C=C)>}; separator="\n">
@@ -1950,6 +1949,6 @@ protected TransactionTemplate createTransactionTemplate(<notnull(C=C)>final Data
 <notnull(C=C)>
 protected TransactionTemplate createTransactionTemplate(<notnull(C=C)>final PlatformTransactionManager transactionManager)
 {
-    return new V24TransactionTemplate(transactionManager);
+    return new TransactionTemplate(transactionManager);
 }
 >>

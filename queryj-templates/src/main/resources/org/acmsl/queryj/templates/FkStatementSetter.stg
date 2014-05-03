@@ -178,7 +178,7 @@ public class <fk.source.name.voName>By<fk.target.name.voName>StatementSetter
           separator="\n">
     }
 
-    <fk.attributes:{ a | <attribute_accessors(attribute=a)>}; separator="\n">
+    <fk.attributes:{ a | <attribute_accessors(attribute=a, C=C, override=true)>}; separator="\n">
 
     /**
      * Specifies the values on given {@link PreparedStatement}.

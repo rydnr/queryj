@@ -109,14 +109,14 @@ if (<attribute.name.uncapitalized> != null)
 }<else>immutableSet<attribute.name.capitalized>(<attribute.name.uncapitalized>);<endif>
 >>
 
-attribute_accessors(attribute, C) ::= <<
+attribute_accessors(attribute, C, override=true) ::= <<
 <!
  Writes the accessors for given attribute.
  @param attribute the attribute.
 !>
 <attribute_setter(attribute=attribute, C=C)>
 
-<attribute_getter(attribute=attribute, C=C)>
+<attribute_getter(attribute=attribute, C=C, override=override)>
 >>
 
 attribute_setter(attribute, C) ::= <<
@@ -145,11 +145,12 @@ protected void set<attribute.name.capitalized>(<if(attribute.nullable)><notnull(
 }
 >>
 
-attribute_getter(attribute, C) ::= <<
+attribute_getter(attribute, C, override=false) ::= <<
 <!
  Writes the getter for given attribute.
  @param attribute the attribute.
  @param C the context.
+ @param override whether to add @Override annotations or not.
 !>
 /**
  * Retrieves the \<i><attribute.name>\</i> value.
@@ -169,10 +170,14 @@ protected final <attribute.javaType> immutableGet<attribute.name.capitalized>()
 /**
  * Retrieves the \<i><attribute.name>\</i> value.
  * @return such information.
- */
+ */<
+if(override)>
 @Override
-<if(attribute.allowsNull)>
-<if(!attribute.primitive)><nullable(C=C)><endif>
+<endif><
+if(attribute.allowsNull)><
+  if(!attribute.primitive)>
+<   nullable(C=C)><
+endif>
 public <attribute.objectType> get<attribute.name.capitalized>()
 <else>
 <if(!attribute.primitive)><notnull(C=C)><endif>

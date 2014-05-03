@@ -185,7 +185,7 @@ public class <table.name.voName>PkStatementSetter
         immutableSetUpdateOperation(updateOperation);
     }
 
-    <table.primaryKey:{ a | <attribute_accessors(attribute=a, C=C)>}; separator="\n">
+    <table.primaryKey:{ a | <attribute_accessors(attribute=a, C=C, override=false)>}; separator="\n">
 
     /**
      * Specifies whether the operation is an update or not.
@@ -277,7 +277,7 @@ public boolean equals(<nullable(C=C)>final Object other)
     if (other instanceof <table.name.voName>PkStatementSetter)
     {
         <notnull(C=C)>final <table.name.voName>PkStatementSetter candidate =
-            (<table.name.voName>AttributesStatementSetter) other;
+            (<table.name.voName>PkStatementSetter) other;
 
         <table.primaryKey:{ a | <attribute_equals(attribute=a)>}; separator="">
         result =
@@ -305,7 +305,7 @@ public int hashCode()
 {
     final int result;
 
-    final int classHashCode = Abstract<table.name.voName>.class.hashCode();
+    final int classHashCode = <table.name.voName>PkStatementSetter.class.hashCode();
 
     <table.primaryKey:{ a | <attribute_hashCode(attribute=a)>}; separator="\n">
 
@@ -336,7 +336,7 @@ public String toString()
     <table.primaryKey:{ a | <attribute_toString(attribute=a)>}; separator="\n">
 
     result.append(", \"update\": ");
-    result.append(this.m__UpdateOperation);
+    result.append(this.m__bUpdateOperation);
     result.append(", \"package\": \"<C.package>\" }");
 
     return result.toString();
