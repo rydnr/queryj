@@ -1072,6 +1072,7 @@ protected <table.name.voName> create(
 <else>
     <notnull(C=C)>final <table.name.voName> result;
 <endif>
+
 <if(parent)>
 
     <parent.name.voName> <parent.name.lowercased> =
@@ -1121,7 +1122,7 @@ protected <table.name.voName> create(
             throw
                 new RuntimeException(
                       "Just inserted a new <table.name.voName> ("
-                    + "<table.primaryKey:{ attr |<attr.name> -> " + <attr.name.uncapitalized>}; separator="\"\n+ \", ">
+                    + "<table.primaryKey:{ attr |<attr.name> -> " + <attr.name.uncapitalized>}; separator="\n+ \", ">
                     + "), but it's not retrievable afterwards");
         }
     }

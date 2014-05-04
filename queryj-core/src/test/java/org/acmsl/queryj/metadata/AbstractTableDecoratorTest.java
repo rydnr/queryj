@@ -78,17 +78,40 @@ import java.util.List;
 public class AbstractTableDecoratorTest
 {
     /**
-     * Checks whethe getContainsClobs() is correct for tables with no Clob attributes.
+     * Creates a decorator with the required mock dependencies.
+     * @return the table decorator.
      */
-    @Test
-    public void getContainsClobs_is_correct_if_table_does_not_contain_clobs()
+    protected AbstractTableDecorator setupTableDecorator()
     {
+        return setupTableDecorator(new ArrayList<>(0), null);
+    }
+
+    /**
+     * Creates a decorator with the required mock dependencies.
+     * @param attributes the attributes.
+     * @return the table decorator.
+     */
+    protected AbstractTableDecorator setupTableDecorator(@NotNull final List<Attribute<String>> attributes)
+    {
+        return setupTableDecorator(attributes, null);
+    }
+
+    /**
+     * Creates a decorator with the required mock dependencies.
+     * @param attributes the attributes.
+     * @param parentTable the parent table.
+     * @return the table decorator.
+     */
+    protected AbstractTableDecorator setupTableDecorator(
+        @NotNull final List<Attribute<String>> attributes,
+        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable)
+    {
+        @NotNull final AbstractTableDecorator result;
+
         @NotNull final String name = "name";
         @NotNull final String comment = "comment";
         @NotNull final List<Attribute<String>> primaryKey = new ArrayList<>(0);
-        @NotNull final List<Attribute<String>> attributes = new ArrayList<>();
         @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>(0);
-        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable = null;
         @Nullable final Attribute<String> staticAttribute = null;
         final boolean voDecorated = false;
         final boolean isRelationship = false;
@@ -112,7 +135,7 @@ public class AbstractTableDecoratorTest
         @NotNull final DecoratorFactory decoratorFactory = CachingDecoratorFactory.getInstance();
         @NotNull final CustomSqlProvider customSqlProvider = EasyMock.createNiceMock(CustomSqlProvider.class);
 
-        @NotNull final AbstractTableDecorator instance =
+        result =
             new AbstractTableDecorator(table, metadataManager, decoratorFactory, customSqlProvider)
             {
                 /**
@@ -134,18 +157,27 @@ public class AbstractTableDecoratorTest
                 }
             };
 
+        return result;
+    }
+
+    /**
+     * Checks whether getContainsClobs() is correct for tables with no Clob attributes.
+     */
+    @Test
+    public void getContainsClobs_is_correct_if_table_does_not_contain_clobs()
+    {
+        @NotNull final AbstractTableDecorator instance = setupTableDecorator();
+
         Assert.assertFalse(instance.getContainsClobs());
     }
 
     /**
-     * Checks whethe getContainsClobs() is correct for tables with Clob attributes.
+     * Checks whether getContainsClobs() is correct for tables with Clob attributes.
      */
     @Test
     public void getContainsClobs_is_correct_if_table_contains_clobs()
     {
         @NotNull final String name = "name";
-        @NotNull final String comment = "comment";
-        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<>(0);
         @NotNull final List<Attribute<String>> attributes = new ArrayList<>();
         attributes.add(
             new AttributeIncompleteValueObject(
@@ -160,53 +192,82 @@ public class AbstractTableDecoratorTest
                 false, // allowsNull
                 null)); // value
 
+        @NotNull final AbstractTableDecorator instance = setupTableDecorator(attributes);
+
+        Assert.assertTrue(instance.getContainsClobs());
+    }
+
+    /**
+     * Checks if "getAll()" returns also the parent's attributes.
+     */
+    @Test
+    public void getAll_includes_parent_attributes()
+    {
+        @NotNull final String name = "parentTable";
+        @NotNull final String comment = "comment";
+        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<>(0);
+        @NotNull final List<Attribute<String>> attributes = new ArrayList<>(0);
+        @NotNull final List<Attribute<String>> parentAttributes = new ArrayList<>(0);
         @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>(0);
-        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable = null;
         @Nullable final Attribute<String> staticAttribute = null;
         final boolean voDecorated = false;
         final boolean isRelationship = false;
 
-        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table =
+        @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> parentTable =
             new TableValueObject(
                 name,
                 comment,
                 primaryKey,
-                attributes,
+                parentAttributes,
                 foreignKeys,
-                parentTable,
+                null,
                 staticAttribute,
                 voDecorated,
                 isRelationship);
 
-        @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
-        @NotNull final MetadataTypeManager metadataTypeManager = new JdbcMetadataTypeManager();
-        EasyMock.expect(metadataManager.getMetadataTypeManager()).andReturn(metadataTypeManager).anyTimes();
-        EasyMock.replay(metadataManager);
-        @NotNull final DecoratorFactory decoratorFactory = CachingDecoratorFactory.getInstance();
-        @NotNull final CustomSqlProvider customSqlProvider = EasyMock.createNiceMock(CustomSqlProvider.class);
+        @NotNull final Attribute<String> parentAttribute =
+            new AttributeIncompleteValueObject(
+                "myParentId",
+                Types.BIGINT,
+                "long",
+                name,
+                "parent comment",
+                1, // ordinalPosition
+                6222, // length
+                1, // precision
+                false, // allowsNull
+                null); // value
 
-        @NotNull final AbstractTableDecorator instance =
-            new AbstractTableDecorator(table, metadataManager, decoratorFactory, customSqlProvider)
-            {
-                /**
-                 * {@inheritDoc}
-                 */
-                @Nullable
-                @Override
-                protected Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> createTableDecorator(
-                    @Nullable final String parentTable,
-                    @NotNull final ListDecorator<Attribute<String>> primaryKey,
-                    @NotNull final ListDecorator<Attribute<String>> attributes,
-                    final boolean isStatic,
-                    final boolean voDecorated,
-                    @NotNull final MetadataManager metadataManager,
-                    @NotNull final DecoratorFactory decoratorFactory,
-                    @NotNull final CustomSqlProvider customSqlProvider)
-                {
-                    return null;
-                }
-            };
+        parentAttributes.add(parentAttribute);
 
-        Assert.assertTrue(instance.getContainsClobs());
+        @NotNull final Attribute<String> childAttribute =
+            new AttributeIncompleteValueObject(
+                "myChildId",
+                Types.BIGINT,
+                "long",
+                "name",
+                "child comment",
+                1, // ordinalPosition
+                6222, // length
+                1, // precision
+                false, // allowsNull
+                null); // value
+
+        attributes.add(childAttribute);
+
+        @NotNull final AbstractTableDecorator instance = setupTableDecorator(attributes, parentTable);
+
+        @NotNull final ListDecorator<Attribute<DecoratedString>> listDecorator = instance.getAllAttributes();
+
+        @NotNull final List<Attribute<DecoratedString>> allAttributes = listDecorator.getItems();
+
+        Assert.assertEquals(2, allAttributes.size());
+
+        for (@NotNull final Attribute<DecoratedString> attribute : allAttributes)
+        {
+            Assert.assertTrue(
+                   attribute.getName().getValue().equals("myChildId")
+                || attribute.getName().getValue().equals("myParentId"));
+        }
     }
 }

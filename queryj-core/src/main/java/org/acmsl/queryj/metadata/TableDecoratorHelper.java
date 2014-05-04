@@ -258,7 +258,7 @@ public class TableDecoratorHelper
         @NotNull final List<Attribute<DecoratedString>> attributes,
         @Nullable final List<Attribute<DecoratedString>> childAttributes)
     {
-        final List<Attribute<DecoratedString>> result = new ArrayList<Attribute<DecoratedString>>();
+        final List<Attribute<DecoratedString>> result = new ArrayList<>();
 
         result.addAll(attributes);
 

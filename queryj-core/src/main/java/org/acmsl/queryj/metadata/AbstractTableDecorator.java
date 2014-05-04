@@ -78,7 +78,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Decorates <code>Table</code> instances to provide required alternate
+ * Decorates {@link Table} instances to provide required alternate
  * representations of the information stored therein.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
@@ -144,8 +144,8 @@ public abstract class AbstractTableDecorator
     private ListDecorator<Attribute<DecoratedString>> m__lExternallyManagedAttributes;
 
     /**
-     * Creates an <code>AbstractTableDecorator</code> with the
-     * <code>Table</code> to decorate.
+     * Creates an {@code AbstractTableDecorator} with the
+     * {@link Table} to decorate.
      * @param table the {@link Table table}.
      * @param metadataManager the {@link MetadataManager metadata manager}.
      * @param decoratorFactory the {@link DecoratorFactory decorator factory}.
@@ -306,7 +306,7 @@ public abstract class AbstractTableDecorator
 
     /**
      * Specifies the decorator factory.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     protected final void immutableSetDecoratorFactory(
         @NotNull final DecoratorFactory decoratorFactory)
@@ -316,7 +316,7 @@ public abstract class AbstractTableDecorator
 
     /**
      * Specifies the decorator factory.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     protected void setDecoratorFactory(@NotNull final DecoratorFactory decoratorFactory)
     {
@@ -632,7 +632,7 @@ public abstract class AbstractTableDecorator
     /**
      * Retrieves the foreign keys.
      * @param name the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return such foreign keys.
      */
     @NotNull
@@ -660,8 +660,8 @@ public abstract class AbstractTableDecorator
      * Builds an attribute decorator with given information.
      * @param table the table name.
      * @param name the attribute name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @return such decorator.
      */
     @SuppressWarnings("unused")
@@ -688,7 +688,7 @@ public abstract class AbstractTableDecorator
      * @param attributes the attributes.
      * @param targetTable the target table name.
      * @param allowNull whether the foreign-key allows null.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} implementation.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
     * @return such decorator.
@@ -808,7 +808,7 @@ public abstract class AbstractTableDecorator
      * Checks whether given attribute lists match.
      * @param first the first attribute list.
      * @param second the second attribute list.
-     * @return <code>true</code> in such case.
+     * @return {@code true} in such case.
      */
     protected boolean attributeListMatch(
         final List<Attribute<DecoratedString>> first, final List<Attribute<DecoratedString>> second)
@@ -846,7 +846,7 @@ public abstract class AbstractTableDecorator
      * Checks whether given attributes match.
      * @param first the first attribute.
      * @param second the second attribute.
-     * @return <code>true</code> in such case.
+     * @return {@code true} in such case.
      */
     protected boolean attributesMatch(
         @Nullable final Attribute<DecoratedString> first,
@@ -884,8 +884,8 @@ public abstract class AbstractTableDecorator
     /**
      * Decorates the attributes.
      * @param attributes the attributes.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return the decorated attributes.
      */
     @NotNull
@@ -900,8 +900,8 @@ public abstract class AbstractTableDecorator
     /**
      * Decorates the attributes.
      * @param name the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return the decorated attributes.
      */
     @NotNull
@@ -950,7 +950,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the attributes.
      * @param table the table name.
      * @param childAttributes the child's attributes.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param attributesShouldBeCleanedUp whether the child attributes should be removed
      * from the attribute list.
      * @return such information.
@@ -1022,7 +1022,7 @@ public abstract class AbstractTableDecorator
     /**
      * Retrieves the parent table.
      * @param parent the parent table.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return such information.
      */
     @Nullable
@@ -1095,11 +1095,11 @@ public abstract class AbstractTableDecorator
 
     }
     /**
-     * Removes the duplicated attributes from <code>secondAttributes</code>.
+     * Removes the duplicated attributes from {@code secondAttributes}.
      * @param firstAttributes the child attributes.
      * @param secondAttributes the parent attributes.
      * @param parentTableName the parent table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param tableDecoratorHelper the {@link org.acmsl.queryj.metadata.TableDecoratorHelper} instance.
      * @return the cleaned-up attributes.
      */
@@ -1124,79 +1124,14 @@ public abstract class AbstractTableDecorator
     }
 
     /**
-     * Sums up parent and child's attributes.
-     * @return such collection.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    protected ListDecorator<Attribute<DecoratedString>> sumUpParentAndChildAttributes()
-    {
-        return
-            sumUpParentAndChildAttributes(
-                getAttributes(),
-                retrieveChildAttributes(),
-                TableDecoratorHelper.getInstance());
-    }
-
-    /**
-     * Sums up parent and child's attributes.
-     * @param parentTable the parent table.
-     * @param attributes the attributes.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
-     * @return such collection.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    protected ListDecorator<Attribute<DecoratedString>> sumUpParentAndChildAttributes(
-        @NotNull final String parentTable,
-        @NotNull final ListDecorator<Attribute<String>> attributes,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final TableDecoratorHelper tableDecoratorHelper)
-    {
-        @NotNull
-        final List<Attribute<DecoratedString>> result =
-            tableDecoratorHelper.sumUpParentAndChildAttributes(
-                parentTable,
-                attributes,
-                metadataManager,
-                decoratorFactory);
-
-        return new TableAttributesListDecorator(result, this);
-    }
-
-    /**
-     * Sums up parent and child's attributes.
-     * @param attributes the attributes.
-     * @param childAttributes the child attributes.
-     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
-     * @return such collection.
-     */
-    @NotNull
-    protected ListDecorator<Attribute<DecoratedString>> sumUpParentAndChildAttributes(
-        @NotNull final ListDecorator<Attribute<DecoratedString>> attributes,
-        @NotNull final ListDecorator<Attribute<DecoratedString>> childAttributes,
-        @NotNull final TableDecoratorHelper tableDecoratorHelper)
-    {
-        @NotNull
-        final List<Attribute<DecoratedString>> result =
-            tableDecoratorHelper.sumUpParentAndChildAttributes(
-                attributes, childAttributes);
-
-        return new TableAttributesListDecorator(result, this);
-    }
-
-    /**
      * Creates a table decorator.
      * @param parentTable the parent table name.
      * @param primaryKey the primary key.
      * @param attributes the attributes.
      * @param isStatic whether the table contains static values or not.
      * @param voDecorated whether the value-object is decorated.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return such decorator.
      */
@@ -1240,7 +1175,7 @@ public abstract class AbstractTableDecorator
     /**
      * Removes the read-only attributes from given list.
      * @param attributes the attributes.
-     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return the list without the read-only attributes.
      */
     @SuppressWarnings("unused")
@@ -1983,7 +1918,7 @@ public abstract class AbstractTableDecorator
      * Checks whether given ValueObject classes match.
      * @param classValue the class value.
      * @param voName the ValueObject name.
-     * @return <code>true</code> in such case.
+     * @return {@code true} in such case.
      */
     protected boolean matches(@Nullable final String classValue, @NotNull final String voName)
     {
@@ -2078,6 +2013,51 @@ public abstract class AbstractTableDecorator
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
         return tableDecoratorHelper.containClobs(attributes, metadataTypeManager);
+    }
+
+    /**
+     * Retrieves all attributes, including parent's.
+     * @return such attributes.
+     */
+    @NotNull
+    public ListDecorator<Attribute<DecoratedString>> getAllAttributes()
+    {
+        return getAllAttributes(getAttributes(), getParentTable());
+    }
+
+    /**
+     * Retrieves all attributes, including parent's.
+     * @return such attributes.
+     */
+    @NotNull
+    public ListDecorator<Attribute<DecoratedString>> getAll()
+    {
+        return getAllAttributes();
+    }
+
+    /**
+     * Retrieves all attributes, including parent's.
+     * @return such attributes.
+     */
+    @NotNull
+    protected ListDecorator<Attribute<DecoratedString>> getAllAttributes(
+        @Nullable final ListDecorator<Attribute<DecoratedString>> attributes,
+        @Nullable final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> parent)
+    {
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<>();
+
+        if (parent != null)
+        {
+            result.addAll(getAllAttributes(null, parent.getParentTable()));
+            result.addAll(parent.getAttributes());
+        }
+
+        if (attributes != null)
+        {
+            result.addAll(attributes);
+        }
+
+        return new TableAttributesListDecorator(result, this);
     }
 
     /**

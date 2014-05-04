@@ -58,30 +58,30 @@ Feature: <table.name> code compiles
 
     And the following columns:
     |     table    |         column        | type      | pk    | allows null | readonly |   sequence    | keyword | boolean | length | precision |
-    <table.primaryKey:{ attr | | <table.name> | <attr.name> | <attr.type> | true | <attr.nullable> | <attr.readOnly> | <attr.sequence> | <attr.keyword> | <attr.boolean> | <attr.length> | <attr.precision> |}; separator="\n">
-    <table.own.minus.primaryKey:{ attr | | <table.name> | <attr.name> | <attr.type> | false | <attr.nullable> | <attr.readOnly> | <attr.sequence> | <attr.keyword> | <attr.boolean> | <attr.length> | <attr.precision> |}; separator="\n">
+    <table.primaryKey:{ attr | <attribute(attr=attr, table=table)>}; separator="\n">
+    <table.own.minus.primaryKey:{ attr | <attribute(attr=attr, table=table)>}; separator="\n">
 
 <if(table.foreignKeys)>
     And the following foreign keys:
     | source table | source columns | target table | allows null |
-    <table.foreignKeys:{ fk | | <fk.source.name> | <fk.attributes:{ attr | <attr.name>}; separator=","> | <fk.targetTableName> | <fk.nullable> |}; separator="\n">
+    <table.foreignKeys:{ fk | <foreign_key(fk=fk)>}; separator="\n">
 <endif>
 
 <if(table.customSelects)>
     And the following queries:
       |       id      |     name      |     dao      |  type  | matches  |                        value                           | validate |
-      <table.customSelects:{ s | | <s.id> | <s.name> | <s.dao> | <s.type> | <s.cardinality.name> | <if(s.value)><s.value.singleLine><endif> | <s.validate> |}; separator="\n">
+      <table.customSelects:{ s | <query(select=s)>}; separator="\n">
 
     And the following query parameters:
       |            id            |     sql       | index |  type  |     name    | validation-value |
-      <table.customSelects:{ s | | <s.parameters:{ p | <p.id> | <s.id> | <p.index> | <p.type> | <p.name> | <p.validationValue> |}; separator="\n">}; separator="\n">
+      <table.customSelects:{ s |<query_parameters(select=s)>}; separator="\n">
 <endif>
 
 <if(table.static)>
 <if(table.staticContent)>
     And the following contents:
       |    table     |         row          |
-      <table.staticContent:{ r | | <table.name> | <r.attributes:{ a | <if(a.primitive)><a.value><else>"<a.value>"<endif>}; separator=",">}; separator="\n"> |
+      <table.staticContent:{ r | <static_row(row=r, table=table)>} separator="\n">
 <endif>
 <endif>
 
@@ -92,4 +92,51 @@ Feature: <table.name> code compiles
     Examples:
       | template | output |
       | DAO | <engine.name.capitalized><table.name.singular.camelCase>DAO.java |
+>>
+
+attribute(attr, table) ::= <<
+<!
+ Writes the row describing an attribute.
+!>
+| <table.name> | <attr.name> | <attr.type> | true | <attr.nullable> | <attr.readOnly> | <attr.sequence> | <attr.keyword> | <attr.boolean> | <attr.length> | <attr.precision> |
+>>
+
+foreign_key(fk) ::= <<
+<!
+ Writes a row defining a foreign key.
+ !>
+| <fk.source.name> | <fk.attributes:{ attr | <attr.name>}; separator=","> | <fk.targetTableName> | <fk.nullable> |
+>>
+
+query(select) ::= <<
+<!
+ Writes the row describing given query.
+!>
+| <select.id> | <select.name> | <select.dao> | <select.type> | <select.cardinality.name> | <if(select.value)><select.value.singleLine><endif> | <select.validate> |
+>>
+
+query_parameters(select) ::= <<
+<!
+ Writes the rows describing all parameter for given query.
+ @param select the select.
+ !>
+<select.parameters:{ p |<query_parameter(parameter=p, select=select>}; separator="\n">
+>>
+
+query_parameter(parameter, select) ::= <<
+<!
+ Writes a row describing a query parameter.
+ @param parameter the query parameter.
+ @param select the select.
+ !>
+| <parameter.id> | <select.id> | <parameter.index> | <parameter.type> | <parameter.name> | <parameter.validationValue> |
+>>
+
+static_row(row, table) ::= <<
+<!
+ Writes the row declaring static data.
+ @param row the row.
+ @param table the table.
+ !>
+| <table.name> | <row.attributes:{ a | <if(a.primitive)><a.value><else>"<a.value>"<endif>}; separator=","> |
 >>
