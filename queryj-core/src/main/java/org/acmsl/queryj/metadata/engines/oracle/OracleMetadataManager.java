@@ -270,7 +270,8 @@ public class OracleMetadataManager
                 +                 "and rcol.constraint_name = rcon.constraint_name "
                 +                 "and rcol.position = col.position) fks "
                 +           "on c.table_name = fks.source_table and c.column_name = fks.column_name "
-                +  "where tc.table_name = c.table_name "
+                +  "where instr(tc.table_name, '$') = 0 "
+                +    "and tc.table_name = c.table_name "
                 +    "and tc.table_name = uc.table_name "
                 +    "and c.column_name = uc.column_name ";
             

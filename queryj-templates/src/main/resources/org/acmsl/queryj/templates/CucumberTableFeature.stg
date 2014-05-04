@@ -44,6 +44,7 @@ source(C) ::= <<
 !>
 <source_impl(table=C.table, engine=C.engine, C=C)>
 >>
+
 source_impl(table, engine, C) ::= <<
 <!
   Generates CucumberTable.feature files.
@@ -58,8 +59,8 @@ Feature: <table.name> code compiles
 
     And the following columns:
     |     table    |         column        | type      | pk    | allows null | readonly |   sequence    | keyword | boolean | length | precision |
-    <table.primaryKey:{ attr | <attribute(attr=attr, table=table)>}; separator="\n">
-    <table.own.minus.primaryKey:{ attr | <attribute(attr=attr, table=table)>}; separator="\n">
+    <table.primaryKey:{ attr | <attribute(attr=attr, table=table, pk=true)>}; separator="\n">
+    <table.own.minus.primaryKey:{ attr | <attribute(attr=attr, table=table, pk=false)>}; separator="\n">
 
 <if(table.foreignKeys)>
     And the following foreign keys:
@@ -81,7 +82,7 @@ Feature: <table.name> code compiles
 <if(table.staticContent)>
     And the following contents:
       |    table     |         row          |
-      <table.staticContent:{ r | <static_row(row=r, table=table)>} separator="\n">
+      <table.staticContent:{ r | <static_row(row=r, table=table)>}; separator="\n">
 <endif>
 <endif>
 
@@ -94,23 +95,28 @@ Feature: <table.name> code compiles
       | DAO | <engine.name.capitalized><table.name.singular.camelCase>DAO.java |
 >>
 
-attribute(attr, table) ::= <<
+attribute(attr, table, pk) ::= <<
 <!
  Writes the row describing an attribute.
+ @param attr the attribute.
+ @param table the table.
+ @param pk whether if it's part of the primary key.
 !>
-| <table.name> | <attr.name> | <attr.type> | true | <attr.nullable> | <attr.readOnly> | <attr.sequence> | <attr.keyword> | <attr.boolean> | <attr.length> | <attr.precision> |
+| <table.name> | <attr.name> | <attr.type> | <pk> | <attr.nullable> | <attr.readOnly> | <attr.sequence> | <attr.keyword> | <attr.boolean> | <attr.length> | <attr.precision> |
 >>
 
 foreign_key(fk) ::= <<
 <!
  Writes a row defining a foreign key.
- !>
+ @param fk the foreign key.
+!>
 | <fk.source.name> | <fk.attributes:{ attr | <attr.name>}; separator=","> | <fk.targetTableName> | <fk.nullable> |
 >>
 
 query(select) ::= <<
 <!
  Writes the row describing given query.
+ @param select the custom query.
 !>
 | <select.id> | <select.name> | <select.dao> | <select.type> | <select.cardinality.name> | <if(select.value)><select.value.singleLine><endif> | <select.validate> |
 >>
@@ -120,7 +126,7 @@ query_parameters(select) ::= <<
  Writes the rows describing all parameter for given query.
  @param select the select.
  !>
-<select.parameters:{ p |<query_parameter(parameter=p, select=select>}; separator="\n">
+<select.parameters:{ p |<query_parameter(parameter=p, select=select)>}; separator="\n">
 >>
 
 query_parameter(parameter, select) ::= <<

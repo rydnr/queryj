@@ -344,7 +344,7 @@ public abstract class AbstractListDecorator<T>
     {
         return
               "{ \"class\": \"" + AbstractListDecorator.class.getName()
-            + ", \"list\": " + ToStringUtils.getInstance().toJson(this.m__lList)
+            + ", \"list\": " + this.m__lList
             + " }";
     }
 }

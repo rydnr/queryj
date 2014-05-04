@@ -2073,11 +2073,11 @@ public abstract class AbstractTableDecorator
             + ", \"metadataManager\": " + m__MetadataManager
             + ", \"decoratorFactory\": " + m__DecoratorFactory
             + ", \"customSqlProvider\": " + m__CustomSqlProvider
-            + ", \"readOnlyAttributes\": " + ToStringUtils.getInstance().toJson(m__lReadOnlyAttributes)
-            + ", \"externallyManagedAttributes\": " + ToStringUtils.getInstance().toJson(m__lExternallyManagedAttributes)
-            + ", \"foreignKeys\": " + ToStringUtils.getInstance().toJson(m__lForeignKeys)
+            + ", \"readOnlyAttributes\": " + m__lReadOnlyAttributes
+            + ", \"externallyManagedAttributes\": " + m__lExternallyManagedAttributes
+            + ", \"foreignKeys\": " + m__lForeignKeys
             + ", \"parentForeignKey\": " + m__ParentForeignKey
-            + ", \"childAttributes\": " + ToStringUtils.getInstance().toJson(m__lChildAttributes)
+            + ", \"childAttributes\": " + m__lChildAttributes
             + ", \"attributesShouldBeCleanedUp\": " + m__bAttributesShouldBeCleanedUp
             + ", \"package\": \"" + AbstractTableDecorator.class.getPackage().getName() + "\" }";
     }

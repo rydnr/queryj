@@ -344,8 +344,8 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
 
     <table.own.minus.primaryKey.minus.readOnlyAttributes:{ attr | <find_constant_methods(attribute=attr, table=table, C=C)>}; separator="\n">
 
-    <find_by_primary_key(table=table, parent=parent, repository=repository, C=C)>
 <endif>
+    <find_by_primary_key(table=table, parent=parent, repository=repository, C=C)>
 
     <insert(table=table, parent=parent, repository=repository, C=C)>
 
@@ -588,125 +588,23 @@ find_by_primary_key(table, parent, repository, C) ::= <<
 <endif>
  * primary key.
  */
+@Override
 <nullable(C=C)>
 <if(table.voDecorated)
  >public <table.name.voName>Decorator findByPrimaryKey(<
 else
  >public <table.name.voName> findByPrimaryKey(<
 endif>
-    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
+    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=", ">)
 {
     return
         findByPrimaryKey(
             <table.primaryKey:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
             auditSql(_FIND_BY_PK_SQL),
-            getDataSource());
-}
-
-<find_by_primary_key2(table=table, parent=parent, repository=repository, C=C)>
-
-<find_by_primary_key3(table=table, parent=parent, repository=repository, C=C)>
-
-<find_by_primary_key4(table=table, parent=parent, repository=repository, C=C)>
->>
-
-find_by_primary_key2(table, parent, repository, C) ::= <<
-<!
- Generates a find-by-primary-key method.
- @param table the table.
- @param parent the parent.
- @param repository the repository.
- @param C the context.
-!>
-/**
- <
-if(table.voDecorated)
- >* Retrieves {@link <table.name.voName>Decorator} (table <table.name>) information<
-else
- >* Retrieves {@link <table.name.voName>} information<
-endif>
- * filtering by its primary key.
- <table.primaryKey:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
- * @param query the query to find by primary key.
- * @param dataSource the {@link DataSource} instance.
-<if(table.voDecorated)>
- * @return the {@link <table.name.voName>Decorator} (table <table.name>) matching given
-<else>
- * @return the {@link <table.name.voName>} matching given
-<endif>
- * primary key.
- */
-<nullable(C=C)>
-<if(table.voDecorated)>
-protected <table.name.voName>Decorator findByPrimaryKey(
-<else>
-protected <table.name.voName> findByPrimaryKey(
-<endif>
-    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
-    <notnull(C=C)>final String query,
-    <notnull(C=C)>final DataSource dataSource)
-{
-    return
-        findByPrimaryKey(
-            <table.primaryKey:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
-            query,
-            new DataSourceTransactionManager(dataSource));
-}
->>
-
-find_by_primary_key3(table, parent, repository, C) ::= <<
-<!
- Generates a find-by-primary-key method.
- @param table the table.
- @param parent the parent.
- @param repository the repository.
- @param C the context.
-!>
-/**
-<if(table.voDecorated)>
- * Retrieves {@link <table.name.voName>Decorator} (table <table.name>) information
-<else>
- * Retrieves {@link <table.name.voName>} information
-<endif>
- * filtering by its primary key.
- <table.primaryKey:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
- * @param query the query to find by primary key.
- * @param transactionManager the {@link PlatformTransactionManager}
- * instance.
-<if(table.voDecorated)>
- * @return the {@link <table.name.voName>Decorator} (table <table.name>) matching given
-<else>
- * @return the {@link <table.name.voName>} matching given
-<endif>
- * primary key.
- */
-<nullable(C=C)>
-<if(table.voDecorated)>
-protected <table.name.voName>Decorator findByPrimaryKey(
-<else>
-protected <table.name.voName> findByPrimaryKey(
-<endif>
-    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
-    <notnull(C=C)>final String query,
-    <notnull(C=C)>final PlatformTransactionManager transactionManager)
-{
-    return
-        findByPrimaryKey(
-            <table.primaryKey:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
-            query,
-            new TransactionTemplate(transactionManager),
+            createTransactionTemplate(getDataSource()),
             getDAOListener());
 }
->>
 
-find_by_primary_key4(table, parent, repository, C) ::= <<
-<!
- Generates a find-by-primary-key method.
- @param table the table.
- @param parent the parent.
- @param repository the repository.
- @param C the context.
-!>
 /**
 <if(table.voDecorated)>
  * Retrieves {@link <table.name.voName>Decorator} (table <table.name>) information
@@ -727,10 +625,11 @@ find_by_primary_key4(table, parent, repository, C) ::= <<
  * primary key.
  */
 @SuppressWarnings("unchecked")
+<nullable(C=C)>
 <if(table.voDecorated)>
-<nullable(C=C)>protected <table.name.voName>Decorator findByPrimaryKey(
+protected <table.name.voName>Decorator findByPrimaryKey(
 <else>
-<nullable(C=C)>protected <table.name.voName> findByPrimaryKey(
+protected <table.name.voName> findByPrimaryKey(
 <endif>
     <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
     <notnull(C=C)>final String query,
@@ -769,6 +668,7 @@ insert(table, parent, repository, C) ::= <<
  <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
 <endif>
  */
+@Override
 public void insert(
 <if(parent)>
     <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
@@ -807,6 +707,7 @@ create(table, parent, repository, C) ::= <<
  <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
 <endif>
  */
+@Override
 <notnull(C=C)>
 <if(table.voDecorated)>
 public <table.name.voName>Decorator create(
@@ -832,9 +733,6 @@ public <table.name.voName> create(
 
 <create3(table=table, parent=parent, repository=repository, C=C)>
 
-<create4(table=table, parent=parent, repository=repository, C=C)>
-
-<create5(table=table, parent=parent, repository=repository, C=C)>
 >>
 
 create2(table, parent, repository, C) ::= <<
@@ -860,7 +758,7 @@ create2(table, parent, repository, C) ::= <<
 <endif>
  * @param retrieveAfterwards whether to retrieve the new instance afterwards or not.
  */
-<nullable(C=C)>
+<notnull(C=C)>
 <if(table.voDecorated)>
 protected <table.name.voName>Decorator create(
 <else>
@@ -882,140 +780,16 @@ protected <table.name.voName> create(
 <endif>
             retrieveAfterwards,
             _INSERT_SQL,
-            getDataSource(),
-            <table.name.voName>ValueObjectFactory.getInstance());
-}
->>
-
-create3(table, parent, repository, C) ::= <<
-<!
- Generates the JDBC create logic, overloaded 2.
- @param table the table.
- @param parent the parent.
- @param repository the repository.
- @param C the context.
- !>
-/**
- * Inserts and (optionally) retrieves the newly-inserted
-<if(table.voDecorated)>
- * {@link <table.name.voName>Decorator} (table <table.name>) instance.
-<else>
- * {@link <table.name.voName>} instance.
-<endif>
+            createTransactionTemplate(getDataSource()),
+            <table.name.voName>ValueObjectFactory.getInstance(),
 <if(parent)>
- <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
-<else>
- <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
-<endif>
- * @param retrieveAfterwards whether to retrieve the new instance afterwards or not.
- * @param query the query required to insert given information.
- * @param dataSource the data source.
- * @param factory the {@link <table.name.voName>ValueObjectFactory}
- * instance.
- */
-<nullable(C=C)>
-<if(table.voDecorated)>
-protected <table.name.voName>Decorator create(
-<else>
-protected <table.name.voName> create(
-<endif>
-<if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
-<else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
-<endif>
-    final boolean retrieveAfterwards,
-    <notnull(C=C)>final String query,
-    <notnull(C=C)>final DataSource dataSource,
-    <notnull(C=C)>final <table.name.voName>ValueObjectFactory factory)
-{
-    return
-        create(
-<if(parent)>
-            <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
-<else>
-            <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
-<endif>
-            retrieveAfterwards,
-            query,
-            new DataSourceTransactionManager(dataSource),
-<if(parent)>
-            <repository.capitalized>DataAccessManager.getInstance(),
-<endif>
-            factory);
-}
->>
-
-create4(table, parent, repository, C) ::= <<
-<!
- Generates the JDBC create logic, overloaded 3.
- @param table the table.
- @param parent the parent.
- @param repository the repository.
- @param C the context.
- !>
-/**
- * Inserts and (optionally) retrieves the newly-inserted
-<if(table.voDecorated)>
- * {@link <table.name.voName>Decorator} (table <table.name>) instance.
-<else>
- * {@link <table.name.voName>} instance.
-<endif>
-<if(parent)>
- <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
-<else>
- <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
-<endif>
- * @param retrieveAfterwards whether to retrieve the new instance afterwards or not.
- * @param query the query required to insert given information.
- * @param transactionManager the {@link PlatformTransactionManager}
- * instance.
-<if(parent)>
- * @param dataAccessManager the {@link <repository.capitalized>DataAccessManager} instance.
-<endif>
- * @param factory the {@link <table.name.voName>ValueObjectFactory}
- * instance.
- */
-<nullable(C=C)>
-<if(table.voDecorated)>
-protected <table.name.voName>Decorator create(
-<else>
-protected <table.name.voName> create(
-<endif>
-<if(parent)>
-    <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
-<else>
-    <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
-<endif>
-    final boolean retrieveAfterwards,
-    <notnull(C=C)>final String query,
-    <notnull(C=C)>final PlatformTransactionManager transactionManager,
-<if(parent)>
-    <notnull(C=C)>final <repository.capitalized>DataAccessManager dataAccessManager,
-    <notnull(C=C)>final <table.name.voName>ValueObjectFactory factory)
-<else>
-    <notnull(C=C)>final <table.name.voName>ValueObjectFactory factory)
-<endif>
-{
-    return
-        create(
-<if(parent)>
-            <table.all.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
-<else>
-            <table.own.minus.readOnly.minus.externallyManagedAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
-<endif>
-            retrieveAfterwards,
-            query,
-            new TransactionTemplate(transactionManager),
-            factory,
-<if(parent)>
-            dataAccessManager.get<parent.name.voName>DAO(),
+            <repository.capitalized>DataAccessManager.getInstance().get<parent.name.voName>DAO(),,
 <endif>
             getDAOListener());
 }
 >>
 
-create5(table, parent, repository, C) ::= <<
+create3(table, parent, repository, C) ::= <<
 <!
  Generates the JDBC create logic, overloaded 4.
  @param table the table.
@@ -1047,7 +821,7 @@ create5(table, parent, repository, C) ::= <<
  * @param daoListener the {@link DAOListener} instance.
  */
 @SuppressWarnings("unchecked")
-<nullable(C=C)>
+<notnull(C=C)>
 <if(table.voDecorated)>
 protected <table.name.voName>Decorator create(
 <else>
@@ -1152,6 +926,7 @@ update(table, parent, repository, C) ::= <<
 <endif>
  * @return the number of entities updated.
  */
+@Override
 public int update(
 <if(parent)>
     <table.all.minus.readOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr, C=C)>}; separator=",\n">)
@@ -1342,6 +1117,7 @@ delete(table, parent, repository, C) ::= <<
  * Deletes {@link <table.name.voName>} information.
  <table.primaryKey:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
  */
+@Override
 public void delete(
     <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 {
@@ -1358,6 +1134,8 @@ public void delete(
 <delete3(table=table, parent=parent, repository=repository, C=C)>
 
 <delete4(table=table, parent=parent, repository=repository, C=C)>
+
+<delete5(table=table, parent=parent, repository=repository, C=C)>
 >>
 
 delete2(table, parent, repository, C) ::= <<
@@ -1420,15 +1198,55 @@ protected void deleteNoFk(
         query,
 <if(parent)>
         new DataSourceTransactionManager(dataSource),
+        dataAccessManager.get<parent.name.voName>DAO());
+<else>
+        new DataSourceTransactionManager(dataSource));
+<endif>
+}
+>>
+
+delete4(table, parent, repository, C) ::= <<
+<!
+  Creates a delete method, overridden 3.
+  @param table the table.
+  @param parent the parent.
+  @param repository the repository.
+  @param C the context.
+ !>
+/**
+ * Deletes {@link <table.name.voName>} information without considering foreign keys
+ * pointing to the row to delete.
+ <table.primaryKey:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
+ * @param query the query used to perform the delete operation.
+ * @param transactionManager the {@link PlatformTransactionManager} instance.
+<if(parent)>
+ * @param dataAccessManager the {@link <repository.capitalized>DataAccessManager} instance.
+<endif>
+ */
+protected void deleteNoFk(
+    <table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
+    <notnull(C=C)>final String query,
+<if(parent)>
+    <notnull(C=C)>final PlatformTransactionManager transactionManager,
+    <notnull(C=C)>final <repository.capitalized>DataAccessManager dataAccessManager)
+<else>
+    <notnull(C=C)>final PlatformTransactionManager transactionManager)
+<endif>
+{
+    deleteNoFk(
+        <table.primaryKey:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
+        query,
+<if(parent)>
+        new TransactionTemplate(transactionManager),
         dataAccessManager.get<parent.name.voName>DAO(),
 <else>
-        new DataSourceTransactionManager(dataSource),
+        new TransactionTemplate(transactionManager),
 <endif>
         getDAOListener());
 }
 >>
 
-delete4(table, parent, repository, C) ::= <<
+delete5(table, parent, repository, C) ::= <<
 <!
   Creates a delete method, overridden 4.
   @param table the table.
@@ -1551,6 +1369,7 @@ public static class <table.name.voName>PkResultSetExtractor
  * @param creator the {@link PreparedStatementCreator} instance.
  * @param setter the {@link PreparedStatementSetter} instance.
  */
+@Override
 public int update(
     final PreparedStatementCreator creator,
     final PreparedStatementSetter setter)
@@ -1564,6 +1383,7 @@ public int update(
  * @param setter the {@link PreparedStatementSetter} instance.
  * @param extractor the {@link ResultSetExtractor} instance.
  */
+@Override
 public Object query(
     final PreparedStatementCreator creator,
     final PreparedStatementSetter setter,
@@ -1594,6 +1414,7 @@ find_constant_by_pk(primaryKey, table, C) ::= <<
  <primaryKey:{ attribute | <attribute_javadoc(attr=attribute)>}; separator="\n">
  * @return the {@link <table.name.voName>} instance.
  */
+@Override
 <nullable(C=C)>
 public <table.name.voName> findConstantByPrimaryKey(
     <primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
@@ -1634,6 +1455,7 @@ find_constant_methods(attribute, table, C) ::= <<
  <attribute_javadoc(attr=attribute)>
  * @return the {@link <table.name.voName>} instance.
  */
+@Override
 <notnull(C=C)>
 public List\<<table.name.voName>\> findConstantsBy<attribute.name.capitalized>(<
     if(!attribute.primitive)><
@@ -1777,6 +1599,7 @@ fk_delete_method(foreignKey, table) ::= <<
  * \<br/>\<b>This method is not implemented yet\</b>.
  <foreignKey.attributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
  */
+@Override
 public void deleteBy<foreignKey.attributes:{attr |<attr.name.capitalized>}>(
     <foreignKey.attributes:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 {

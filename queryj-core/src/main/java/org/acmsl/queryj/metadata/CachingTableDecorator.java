@@ -40,7 +40,6 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.commons.utils.ToStringUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
@@ -1030,21 +1029,21 @@ public class CachingTableDecorator
               "{ \"class\": \"" + CachingTableDecorator.class.getSimpleName() + "\""
             + "{ \"package\": \"org.acmsl.queryj.metadata\""
             + ", \"parentForeignKeyAlreadyRetrieved\": " + m__bParentForeignKeyAlreadyRetrieved
-            + ", \"cachedPrimaryKey\": " + ToStringUtils.getInstance().toJson(m__lCachedPrimaryKey)
-            + ", \"cachedReadOnlyAttributes\": " + ToStringUtils.getInstance().toJson(m__lCachedReadOnlyAttributes)
+            + ", \"cachedPrimaryKey\": " + m__lCachedPrimaryKey
+            + ", \"cachedReadOnlyAttributes\": " + m__lCachedReadOnlyAttributes
             + ", \"cachedParentTable\": " + m__CachedParentTable
-            + ", \"cachedAttributes\": " + ToStringUtils.getInstance().toJson(m__lCachedAttributes)
-            + ", \"cachedAllParentTables\": " + ToStringUtils.getInstance().toJson(m__lCachedAllParentTables)
-            + ", \"cachedStaticContents\": " + ToStringUtils.getInstance().toJson(m__lCachedStaticContents)
-            + ", \"cachedDynamicQueries\": " + ToStringUtils.getInstance().toJson(m__lCachedDynamicQueries)
-            + ", \"cachedCustomSelects\": " + ToStringUtils.getInstance().toJson(m__lCachedCustomSelects)
-            + ", \"cachedCustomUpdatesOrInserts\": " + ToStringUtils.getInstance().toJson(m__lCachedCustomUpdatesOrInserts)
+            + ", \"cachedAttributes\": " + m__lCachedAttributes
+            + ", \"cachedAllParentTables\": " + m__lCachedAllParentTables
+            + ", \"cachedStaticContents\": " + m__lCachedStaticContents
+            + ", \"cachedDynamicQueries\": " + m__lCachedDynamicQueries
+            + ", \"cachedCustomSelects\": " + m__lCachedCustomSelects
+            + ", \"cachedCustomUpdatesOrInserts\": " + m__lCachedCustomUpdatesOrInserts
             + ", \"cachedCustomResult\": " + m__CachedCustomResult
-            + ", \"cachedChildAttributes\": " + ToStringUtils.getInstance().toJson(m__lCachedChildAttributes)
-            + ", \"cachedForeignKeys\": " + ToStringUtils.getInstance().toJson(m__lCachedForeignKeys)
+            + ", \"cachedChildAttributes\": " + m__lCachedChildAttributes
+            + ", \"cachedForeignKeys\": " + m__lCachedForeignKeys
             + ", \"cachedParentForeignKey\": " + m__CachedParentForeignKey
-            + ", \"cachedExternallyManagedAttributes\": " + ToStringUtils.getInstance().toJson(m__lCachedExternallyManagedAttributes)
-            + ", \"cachedDifferentCustomResults\": " + ToStringUtils.getInstance().toJson(m__lCachedDifferentCustomResults)
+            + ", \"cachedExternallyManagedAttributes\": " + m__lCachedExternallyManagedAttributes
+            + ", \"cachedDifferentCustomResults\": " + m__lCachedDifferentCustomResults
             + " }";
     }
 }

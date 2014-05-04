@@ -1,6 +1,6 @@
 * 2014/05/04
-** TODO Fix DAO template #500: 3 -> 1
-** TODO Fix memory leak issue #597: 6 ->
+** TODO Fix DAO template #500: 3 -> 4
+** DONE Fix memory leak issue #510: 6 -> 1
 ** TODO Fix BaseDAOFactory template: #497: 3 ->
 ** TODO Fix BaseDAO template: #498: 3 ->
 ** TODO Fix DAOFactory template: #499: 3 ->

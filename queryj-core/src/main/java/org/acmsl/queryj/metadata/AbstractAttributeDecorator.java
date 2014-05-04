@@ -173,7 +173,7 @@ public abstract class AbstractAttributeDecorator
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
-        super(
+         super(
             new DecoratedString(name),
             typeId,
             new DecoratedString(type),
@@ -774,7 +774,7 @@ public abstract class AbstractAttributeDecorator
     /**
      * Retrieves the Java type of the property.
      * @param type the type.
-     * @param metadataManager the <code>MetadataManager</code>
+     * @param metadataManager the {@link MetadataManager}
      * instance.
      * @return such information.
      */

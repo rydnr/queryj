@@ -822,8 +822,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                                 {
                                     e.printStackTrace();
                                 }
-                                throw new DevelopmentModeException(t_Group);
                             }
+                            throw new DevelopmentModeException(t_Group);
                         }
                     }
                     catch (@NotNull final DevelopmentModeException debugging)
