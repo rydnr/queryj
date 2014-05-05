@@ -1,0 +1,13 @@
+* 2014/05/05
+** TODO Fix ResultSetExtractor #508: 2 ->
+** TODO Fix DAO template #500: 3 -> 3
+** Fix BaseDAOFactory template: #497: 3 ->
+** Fix BaseDAO template: #498: 3 ->
+** Fix DAOFactory template: #499: 3 ->
+** Fix ValueObject #501
+** Fix ValueObjectFactory #502
+** Fix BaseValueObject #503
+** Fix ValueObjectImpl #504
+** Fix BaseResultSetExtractor #505
+** Fix ConfigurationProperties #506
+** Fix DAOChooser #507

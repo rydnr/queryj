@@ -68,10 +68,19 @@ sourceImpl(table, C) ::= <<
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
-<checkers_import(C=C)>
-<if(C.implement_markers)>
 
-<endif>
+<project_imports(
+  basePackageName=C.project_package,
+  voSubpackageName=typeInitMap.voSubpackageName,
+  table=table,
+  repository=C.repository)>
+
+/*
+ * Importing V24-Commons classes.
+ */
+import com.ventura24.commons.dao.DAOListener;
+import com.ventura24.commons.dao.V24ResultSetExtractor;
+<checkers_import(C=C)>
 /*
  * Importing JDK classes.
  */
@@ -80,8 +89,21 @@ import java.io.Serializable;
 <table.attributeTypes:{ t | import <t>;}; separator="\n">
 <endif>
 
-
 <class(table=table, repository=C.repository, C=C)>
+>>
+
+project_imports(basePackageName, voSubpackageName, table, repository) ::= <<
+<!
+  Generates the project imports.
+  @param basePackageName the base package name.
+  @param voSubpackageName the subpackage for the value object.
+  @param table the table.
+  @param repository the repository name.
+!>
+/*
+ * Importing <repository.capitalized> classes.
+ */
+import <basePackageName>.<voSubpackageName>.<table.name.voName>;
 >>
 
 description(table) ::= <<
@@ -107,13 +129,13 @@ class(table, repository, C) ::= <<
   template="org/acmsl/queryj/templates/ResultSetExtractor.stg", C=C)>
  */
 public class <table.name.voName>ResultSetExtractor
-    extends <repository.voName>ResultSetExtractor\<<table.name.voName>\>
+    extends V24ResultSetExtractor\<<table.name.voName>\>
 {
     /**
      * Creates a new instance.
      * @param listener the {@link <repository.voName>DAOListener} instance.
      */
-    public <table.name.voName>ResultSetExtractor(<nullable(C=C)>final <repository.voName>DAOListener listener)
+    public <table.name.voName>ResultSetExtractor(<nullable(C=C)>final DAOListener listener)
     {
         super(listener);
     }

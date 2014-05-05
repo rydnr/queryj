@@ -242,8 +242,16 @@ attribute_resultset_retrieval(attr, C) ::= <<
  Generates the code to retrieve the attribute value from the ResultSet.
  @param attr the attribute.
  @param C the context.
-!>
-<if(!attr.clob)>resultSet.get<attr.objectType>("<attr.name>")<else><clob_attribute_resultset_retrieval(attribute=attr, C=C)><endif>
+!><
+if(attr.clob)><
+  clob_attribute_resultset_retrieval(attribute=attr, C=C)><
+else><
+  if(attr.date)><
+    date_attribute_resultset_retrieval(attribute=attr, C=C)><
+  else
+    >resultSet.get<attr.objectType>("<attr.name>")<
+  endif><
+endif>
 >>
 
 clob_attribute_resultset_retrieval(attribute, C) ::= <<
@@ -252,7 +260,15 @@ clob_attribute_resultset_retrieval(attribute, C) ::= <<
  @param attr the attribute.
  @param C the context.
  !>resultSet.getClob("<attribute.name>")
- >>
+>>
+
+date_attribute_resultset_retrieval(attribute, C) ::= <<
+<!
+ Deals with Date attributes
+ @param attr the attribute.
+ @param C the context.
+ !>resultSet.getTimestamp("<attribute.name>")
+>>
 
 attribute_equals(attribute) ::= <<
 <! Generates the contribution of each attribute to the equals method. !>
