@@ -15,5 +15,3 @@ filename  builder : <tableName.voName>AttributesStatementSetter.java;
 
 // The package.
 package: <packageName>.dao.rdb.<engine.name.lowercased>.<tableName.normalized.lowercased>;
-
-disabled;
