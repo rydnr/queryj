@@ -1,17 +1,17 @@
 /*
- * CucumberTableFeature template metadata.
+ * BaseDAO template metadata.
  */
 // The template name (the filename).
-name : CucumberTableFeature.stg;
+name : DBSD.stg;
 
 // The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-custom-sql.
-type : per-table;
+type : per-repository;
 
 // The output flavor.
-output: Cucumber;
+output: Java;
 
 // The filename builder.
-filename  builder : <tableName.singular.camelCase>.feature;
+filename  builder : <repository.capitalized>.dbsd;
 
 // The package.
 package: <packageName>;

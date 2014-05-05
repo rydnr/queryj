@@ -199,9 +199,9 @@ project_imports(
 /*
  * Importing <trName> classes.
  */
-import <package>.<table.name.shrink.lowercased>.<table.name.voName>AttributesStatementSetter;
-import <package>.<table.name.shrink.lowercased>.<table.name.voName>PkStatementSetter;
-import <package>.<table.name.shrink.lowercased>.<table.name.voName>ResultSetExtractor;
+import <package>.<table.name.voName>AttributesStatementSetter;
+import <package>.<table.name.voName>PkStatementSetter;
+import <package>.<table.name.voName>ResultSetExtractor;
 import <basePackageName>.<voSubpackageName>.<table.name.voName>;
 <if(parent)>
 import <basePackageName>.<baseDAOSubpackageName>.<parent.name.voName>DAO;
@@ -1416,7 +1416,7 @@ find_constant_by_pk(primaryKey, table, C) ::= <<
  */
 @Override
 <nullable(C=C)>
-public <table.name.voName> findConstantByPrimaryKey(
+public <table.name.voName> findConstantByPk(
     <primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
 {
     <nullable(C=C)><table.name.voName> result;
@@ -1477,6 +1477,41 @@ public List\<<table.name.voName>\> findConstantsBy<attribute.name.capitalized>(<
         {
             result.add(item);
         }
+    }
+
+    return result;
+}
+
+/**
+ * Loads \<i><table.name>\</i> information from the pre-existing constants,
+ * filtering by \<i><attribute.name>\</i>.
+ <attribute_javadoc(attr=attribute)>
+ * @return the {@link <table.name.voName>} instance.
+ */
+@Override
+<notnull(C=C)>
+public <table.name.voName> findConstantBy<attribute.name.capitalized>(<
+    if(!attribute.primitive)><
+      if(!attribute.primitiveWrapper)
+       ><notnull(C=C)><
+      else><
+        if(attribute.nullable)
+         ><notnull(C=C)><
+        endif><
+      endif><
+    endif>final <attribute.primitiveType> <attribute.name.lowercased.uncapitalized>)
+{
+    <nullable(C=C)>final <table.name.voName> result; = new ArrayList\<<table.name.voName>\>(FIXED_CONSTANTS.size());
+
+    <notnull(C=C)>final List\<<table.name.voName>\> constants = findConstantsBy<attribute.name.capitalized>(<attribute.name.lowercased.uncapitalized>);
+
+    if (constants.size() > 0)
+    {
+        result = constants.get(0);
+    }
+    else
+    {
+        result = null;
     }
 
     return result;

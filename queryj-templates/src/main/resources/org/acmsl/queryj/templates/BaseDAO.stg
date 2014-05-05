@@ -286,7 +286,7 @@ find_constant_by_pk(primaryKey, table, C) ::= <<
  * @return the {@link <table.name.voName>} instance.
  */
 <nullable(C=C)>
-<table.name.voName> findConstantByPrimaryKey(
+<table.name.voName> findConstantByPk(
     <primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">);
 >>
 
@@ -305,6 +305,16 @@ find_constant_methods(attribute, table, C) ::= <<
  */
 <notnull(C=C)>
 List\<<table.name.voName>\> findConstantsBy<attribute.name.capitalized>(<if(!attribute.primitive)><if(!attribute.primitiveWrapper)><notnull(C=C)><else><if(attribute.nullable)><notnull(C=C)><endif><endif><endif>final <attribute.primitiveType> <attribute.name.lowercased.uncapitalized>);
+
+/**
+ * Loads \<i><table.name>\</i> information from the constant pool,
+ * filtering by <attribute.name>.
+ * @param <attribute.name.lowercased.uncapitalized> the <attribute.name>
+ * value to filter.
+ * @return the list of {@link <table.name.voName>} instances with given <attribute.name>.
+ */
+<nullable(C=C)>
+<table.name.voName> findConstantBy<attribute.name.capitalized>(<if(!attribute.primitive)><if(!attribute.primitiveWrapper)><notnull(C=C)><else><if(attribute.nullable)><notnull(C=C)><endif><endif><endif>final <attribute.primitiveType> <attribute.name.lowercased.uncapitalized>);
 >>
 
 fk_delete_method(foreignKey, table) ::= <<

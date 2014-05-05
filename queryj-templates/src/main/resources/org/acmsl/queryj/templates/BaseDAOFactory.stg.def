@@ -14,7 +14,7 @@ output: Java;
 filename  builder : Abstract<tableName.capitalized>DAOFactory.java;
 
 // The package.
-package: <packageName>.dao.rdb;
+package: <packageName>.dao.impl.<table.name.normalized.lowercased>;
 
 // Uncomment to disable.
 disabled;

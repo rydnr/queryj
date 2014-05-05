@@ -14,7 +14,7 @@ output: Java;
 filename  builder : <tableName.capitalized>DAOFactory.java;
 
 // The package.
-package: <packageName>.dao;
+package: <packageName>.dao.impl;
 
 // Uncomment to disable.
 disabled;

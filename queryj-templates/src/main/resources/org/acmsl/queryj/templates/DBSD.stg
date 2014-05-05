@@ -1,0 +1,77 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: DBSD.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate DBSD files.
+//
+//
+group DBSD;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+ Defines the rules to generate DBSD files for a given schema.
+ @param C the context.
+!>
+<dbsd(tables=C.tables, repository=C.repository, C=C)>
+>>
+
+dbsd(tables, repository, C) ::= <<
+<!
+ Defines the rules to generate DBSD files for a given schema.
+ @param tables the tables.
+ @param repository the repository.
+ @param C the context.
+!>
+OWNER(<C.jdbc_user>)
+USER(<C.jdbc_user>)
+USER_ROLE(ROLE_APP_REF)
+
+DEFAULT_TABLE_TABLESPACE(DATA)
+DEFAULT_INDEX_TABLESPACE(INDX)
+TARGET_DBMS(ORACLE)
+
+<tables:{ t | <table_def(table=t, repository=repository, C=C)>}; separator="\n\n">
+>>
+
+table_def(table, repostory, C) ::= <<
+<!
+ Writes the DDL for a table, in DBSD format.
+ @param table the table.
+ @param repository the repository.
+ @param C the context.
+!>
+//\<\<------ <table.name.uppercased> ------\>>
+>>

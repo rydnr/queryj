@@ -68,6 +68,17 @@ sourceImpl(repository, tables, C) ::= <<
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
+
+<project_imports(
+  basePackageName=C.project_package,
+  daoSubpackageName=typeInitMap.daoSubpackageName,
+  table=table,
+  repository=C.repository)>
+
+/*
+ * Importing project classes.
+ */
+import
 <checkers_import(C=C)>
 <if(C.implement_markers)>
 
@@ -80,6 +91,21 @@ import org.acmsl.commons.patterns.dao.DataAccessManager;
 
 
 <class(repository=repository, tables=tables, C=C)>
+>>
+
+project_imports(basePackageName, daoSubpackageName, table, repository) ::= <<
+<!
+  Generates the project imports.
+  @param basePackageName the base package name.
+  @param voSubpackageName the subpackage for the value object.
+  @param table the table.
+  @param repository the repository name.
+!>
+/*
+ * Importing <repository.capitalized> classes.
+ */
+import <basePackageName>.<daoSubpackageName>.<table.name.voName>DAO;
+import <basePackageName>.<daoSubpackageName>.impl.<table.name.voName>DAOFactory;
 >>
 
 description(repository) ::= <<
