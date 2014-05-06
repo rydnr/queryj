@@ -41,7 +41,6 @@ import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.DecoratorFactoryNotAvailableException;
 import org.acmsl.queryj.api.exceptions.FileNameNotAvailableException;
-import org.acmsl.queryj.api.exceptions.PackageNameNotAvailableException;
 import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.acmsl.queryj.api.exceptions.RootDirNotAvailableException;
 import org.acmsl.queryj.api.exceptions.TemplateNameNotAvailableException;
@@ -105,7 +104,7 @@ public abstract class AbstractTemplateContext
     private String m__Pk;
 
     /**
-     * Creates an {@link AbstractTemplateContext} with given information.
+     * Creates an {@code AbstractTemplateContext} with given information.
      * @param pk something unique to the template.
      * @param command the {@link org.acmsl.queryj.QueryJCommand} instance.
      */
@@ -243,6 +242,23 @@ public abstract class AbstractTemplateContext
     /**
      * Retrieves the value.
      * @param key the key.
+     * @param command the command.
+     * @param defaultValue the default value.
+     * @param <T> the value type.
+     * @return such information.
+     */
+    @NotNull
+    protected <T> T getValue(
+        @NotNull final String key,
+        @NotNull final QueryJCommand command,
+        @NotNull final T defaultValue)
+    {
+        return getValue(key, getPk(), command, defaultValue);
+    }
+
+    /**
+     * Retrieves the value.
+     * @param key the key.
      * @param pk the primary key.
      * @param command the command.
      * @param exceptionToThrow the exception to throw.
@@ -273,6 +289,44 @@ public abstract class AbstractTemplateContext
         if (result == null)
         {
             throw exceptionToThrow;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the value.
+     * @param key the key.
+     * @param pk the primary key.
+     * @param command the command.
+     * @param defaultValue the default value.
+     * @param <T> the value type.
+     * @return such information.
+     */
+    @NotNull
+    protected <T> T getValue(
+        @NotNull final String key,
+        @NotNull final String pk,
+        @NotNull final QueryJCommand command,
+        @NotNull final T defaultValue)
+    {
+        @Nullable final T result;
+
+        @Nullable T aux =
+            new QueryJCommandWrapper<T>(command).getSetting(buildKey(pk, key));
+
+        if (aux == null)
+        {
+            aux = new QueryJCommandWrapper<T>(command).getSetting(key);
+        }
+
+        if (aux == null)
+        {
+            result = defaultValue;
+        }
+        else
+        {
+            result = aux;
         }
 
         return result;
@@ -402,7 +456,7 @@ public abstract class AbstractTemplateContext
     @NotNull
     public String getPackageName()
     {
-        return getValue(buildPackageNameKey(), getCommand(), new PackageNameNotAvailableException());
+        return getValue(buildPackageNameKey(), getCommand(), "");
     }
 
     /**

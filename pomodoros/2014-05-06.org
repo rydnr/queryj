@@ -1,7 +1,6 @@
-* 2014/05/05
-** DONE Fix ResultSetExtractor #508: 2 -> 2
+* 2014/05/06
 ** TODO Fix DAO template #500: 3 -> 3
-** TODO Implement DBSD template: 1 -> 1
+** DONE Implement DBSD template #511: 3 -> 3
 ** Fix BaseDAOFactory template: #497: 3 ->
 ** Fix BaseDAO template: #498: 3 ->
 ** Fix DAOFactory template: #499: 3 ->

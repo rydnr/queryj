@@ -66,12 +66,82 @@ TARGET_DBMS(ORACLE)
 <tables:{ t | <table_def(table=t, repository=repository, C=C)>}; separator="\n\n">
 >>
 
-table_def(table, repostory, C) ::= <<
+table_def(table, repository, C) ::= <<
 <!
  Writes the DDL for a table, in DBSD format.
  @param table the table.
  @param repository the repository.
  @param C the context.
 !>
-//\<\<------ <table.name.uppercased> ------\>>
+//\<\<------ <table.name.uppercased>(DESCRIPTION) '<table.comment>' ------\>>
+  <table.attributes:{a | <dbsd_column(column=a)>}; separator="\n">
+##                                     ##
+  <dbsd_pk(table=table)>
+  <table.foreignKeys:{ fk | <dbsd_fk(fk=fk)>}; separator="\n">
+<if(table.static)>
+<if(table.staticContent)>
+++                                     ++
+<table.staticContent:{ r | <dbsd_row(row=r, table=table)>}; separator="\n">
+<endif>
+<endif>
+//\<\<--------------------------------------------------------------------\>>
+
+>>
+
+dbsd_column(column) ::= <<
+<!
+ Writes the column information in DBSD format.
+ @param column the column.
+!>
+<column.name> | <dbsd_column_type(column=column)> | <if(column.nullable)>NULL<else>NOT_NULL<endif> | '<column.comment>' ;
+>>
+
+dbsd_column_type(column) ::= <<
+<!
+ Writes the column type, in DBSD format.
+ @param column the column.
+!>
+<
+if(column.string)
+  >TXT<
+else><
+  if(column.numeric)
+    >NUM<
+  else
+    ><column.type><
+  endif><
+endif
+><
+if(column.length)
+  >(<column.length><
+  if(column.precision)
+    >,<column.precision><
+  endif
+  >)<
+endif>
+>>
+
+dbsd_pk(table) ::= <<
+<!
+ Writes the primary key information, in DBSD format.
+ @param table the table.
+!>
+PK_<table.name.uppercased> | PK(<table.primaryKey:{ c | <c.name.uppercased>}; separator=","> |;
+>>
+
+dbsd_fk(fk) ::= <<
+<!
+ Writes the foreign key information, in DBSD format.
+ @param fk the foreign key.
+!>
+FK_<fk.sourceTableName> | FK(<fk.attributes:{a | <a.name.uppercased>}; separator=", ">) -> <fk.targetTableName>(<fk.target.primaryKey:{ a | <a.name.uppercased>}; separator=", ">) |;
+>>
+
+dbsd_row(row, table) ::= <<
+<!
+ Writes the row declaring static data, in DBSD format.
+ @param row the row.
+ @param table the table.
+ !>
+( <row.attributes:{ a | <if(a.primitive)><a.value><else>'<a.value>'<endif>}; separator=", "> );
 >>

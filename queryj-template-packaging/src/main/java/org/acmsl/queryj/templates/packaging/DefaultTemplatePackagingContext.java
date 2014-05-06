@@ -143,6 +143,39 @@ public  class DefaultTemplatePackagingContext
     }
 
     /**
+     * {@inheritDoc}.
+     */
+    @NotNull
+    @Override
+    public String getPackageName()
+    {
+        return getPackageName(getTemplateDef());
+    }
+
+    /**
+     * Retrieves the package name.
+     * @param templateDef the template def.
+     * @return such information.
+     */
+    @NotNull
+    protected String getPackageName(@NotNull final TemplateDef<String> templateDef)
+    {
+        @NotNull final String result;
+
+        switch (templateDef.getOutput())
+        {
+            case JAVA:
+                result = super.getPackageName();
+                break;
+            default:
+                result = "";
+                break;
+        }
+
+        return result;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
