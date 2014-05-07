@@ -40,6 +40,11 @@ import org.acmsl.queryj.api.PerForeignKeyTemplate;
 import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.api.PerForeignKeyTemplateGenerator;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.metadata.CachingForeignKeyDecorator;
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.ForeignKeyDecorator;
+import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.engines.Engine;
 
 /*
@@ -87,12 +92,19 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
         @NotNull final QueryJCommand parameters)
       throws QueryJBuildException
     {
+        @NotNull final MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+
+        @NotNull final DecoratorFactory t_DecoratorFactory = retrieveDecoratorFactory(parameters);
+
+        @NotNull final CustomSqlProvider t_CustomSqlProvider = retrieveCustomSqlProvider(parameters);
+
         return
             retrieveOutputDir(
-                retrieveMetadataManager(parameters).getEngine(),
+                t_MetadataManager.getEngine(),
                 retrieveProjectOutputDir(parameters),
                 retrieveProjectPackage(parameters),
-                context.getForeignKey().getSourceTableName(),
+                new CachingForeignKeyDecorator(
+                    context.getForeignKey(), t_MetadataManager, t_DecoratorFactory, t_CustomSqlProvider),
                 retrieveUseSubfoldersFlag(parameters));
     }
 
@@ -101,7 +113,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      * @param engine the engine.
      * @param projectOutputDir the project output dir.
      * @param projectPackage the project package.
-     * @param tableName the table name.
+     * @param foreignKey the foreign key.
      * @param subFolders whether to use sub folders or not.
      * @return such folder.
      */
@@ -110,6 +122,6 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
         @NotNull final Engine<String> engine,
         @NotNull final File projectOutputDir,
         final String projectPackage,
-        @NotNull final String tableName,
+        @NotNull final ForeignKeyDecorator foreignKey,
         final boolean subFolders);
 }

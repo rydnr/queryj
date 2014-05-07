@@ -68,9 +68,9 @@ sourceImpl(def, C) ::= <<
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateWritingHandler;
 import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
-import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing custom templates.
@@ -159,7 +159,7 @@ public class <C.class_name>
      * @param engine the engine.
      * @param projectOutputDir the project output dir.
      * @param projectPackage the project package.
-     * @param tableName the source table name.
+     * @param foreignKey the foreign key.
      * @param subFolders whether to use sub folders or not.
      * @return such folder.
      */
@@ -169,14 +169,14 @@ public class <C.class_name>
         @NotNull final Engine\<String> engine,
         @NotNull final File projectOutputDir,
         final String projectPackage,
-        @NotNull final String tableName,
+        @NotNull final ForeignKeyDecorator foreignKey,
         final boolean subFolders)
     {
         @NotNull final File result;
 
         @NotNull final String packageName =
             <def.name.noExtension>TemplateBuildHandler.buildPackageName(
-                tableName, engine, projectPackage);
+                foreignKey, engine, projectPackage);
 
         @NotNull final String[] pieces = packageName.split("\\\.");
 

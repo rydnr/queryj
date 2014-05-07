@@ -55,11 +55,13 @@ import org.checkthread.annotations.ThreadSafe;
 public class ForeignKeyValueObject
     extends AbstractForeignKey<String>
 {
-
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 3292464819930780148L;
 
     /**
-     * Creates a <code>ForeignKeyValueObject</code> with given information.
+     * Creates a {@code ForeignKeyValueObject} with given information.
      * @param sourceTableName the source table name.
      * @param attributes the attributes.
      * @param targetTableName the target table name.

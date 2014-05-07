@@ -69,14 +69,16 @@ public interface PerCustomResultTemplateFactory
 {
     /**
      * Creates a per-<i>custom result</i> template.
-     * @param command the {@link QueryJCommand}.
      * @param customResult the custom result.
      * @param properties the properties.
+     * @param context the context.
+     * @param command the {@link QueryJCommand}.
      * @return the template.
      */
     @Nullable
     public T createTemplate(
         @NotNull final Result<String> customResult,
         @NotNull final List<Property<String>> properties,
+        @NotNull final C context,
         @NotNull final QueryJCommand command);
 }

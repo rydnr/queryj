@@ -36,21 +36,21 @@ package org.acmsl.queryj.api.handlers;
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.PerForeignKeyTemplate;
 import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.api.PerForeignKeyTemplateFactory;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 
 /*
  * Importing some JetBrains annotations.
@@ -171,14 +171,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                 && (metadataManager.isGenerationAllowedForForeignKey(t_ForeignKey)))
             {
                 t_lTemplates.add(
-                    templateFactory.createTemplate(
+                    createTemplate(
+                        templateFactory,
                         t_ForeignKey,
-                        /*
-                        retrievePackage(
-                            t_ForeignKey.getSourceTableName(),
-                            metadataManager.getEngine(),
-                            parameters),
-                        */
                         parameters));
             }
         }
@@ -187,40 +182,51 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     }
 
     /**
+     * Creates a template with required information.
+     * @param templateFactory the {@link org.acmsl.queryj.api.PerTableTemplateFactory} instance.
+     * @param foreignKey the foreign key.
+     * @param parameters the parameter map.
+     * @return the template.
+     */
+    @Nullable
+    protected abstract T createTemplate(
+        @NotNull final TF templateFactory,
+        @NotNull final ForeignKey<String> foreignKey,
+        @NotNull final QueryJCommand parameters)
+        throws  QueryJBuildException;
+
+    /**
      * Retrieves the package name from the attribute map.
-     * @param tableName the table name.
+     * @param foreignKey the foreign key.
      * @param engine the engine.
      * @param parameters the parameter map.
      * @return the package name.
      */
     @NotNull
     protected String retrievePackage(
-        @NotNull final String tableName,
+        @NotNull final ForeignKeyDecorator foreignKey,
         @NotNull final Engine<String> engine,
         @NotNull final QueryJCommand parameters)
     {
         return
             retrievePackage(
-                tableName,
+                foreignKey,
                 engine,
-                retrieveProjectPackage(parameters),
-                PackageUtils.getInstance());
+                retrieveProjectPackage(parameters));
     }
 
     /**
      * Retrieves the package name.
-     * @param tableName the table name.
+     * @param foreignKey the foreign key.
      * @param engineName the engine name.
      * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      */
     @NotNull
     protected abstract String retrievePackage(
-        @NotNull final String tableName,
+        @NotNull final ForeignKeyDecorator foreignKey,
         @NotNull final Engine<String> engineName,
-        @NotNull final String projectPackage,
-        @NotNull final PackageUtils packageUtils);
+        @NotNull final String projectPackage);
 
     /**
      * Stores the template collection in given attribute map.

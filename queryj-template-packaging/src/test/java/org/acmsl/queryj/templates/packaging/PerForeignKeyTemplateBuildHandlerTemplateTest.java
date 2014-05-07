@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: TemplateBuildHandlerTemplate.java
+ * Filename: PerForeignKeyTemplateBuildHandlerTemplateTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Template to build QueryJ's build handler sources.
+ * Description: Tests for PerForeignKeyTemplateBuildHandlerTemplate.
  *
- * Date: 2013/08/16
- * Time: 09:35
+ * Date: 2014/05/06
+ * Time: 11:37
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -41,31 +41,35 @@ package org.acmsl.queryj.templates.packaging;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JUnit/EasyMock classes.
  */
-import org.checkthread.annotations.ThreadSafe;
+import org.easymock.EasyMock;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
- * Template to build QueryJ's build handler sources.
+ * Tests for {@link PerForeignKeyTemplateBuildHandlerTemplate}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/16 09/35
+ * Created: 2014/05/06 11:37
  */
-@ThreadSafe
-public abstract class TemplateBuildHandlerTemplate<C extends TemplatePackagingContext>
-    extends AbstractTemplatePackagingTemplate<C>
+@RunWith(JUnit4.class)
+public class PerForeignKeyTemplateBuildHandlerTemplateTest
 {
     /**
-     * The serial version id.
+     * Checks whether getTemplateName() returns the correct template name.
      */
-    private static final long serialVersionUID = -312645255731109773L;
-
-    /**
-     * Creates a TemplateBuildHandlerTemplate instance.
-     * @param context the {@link TemplatePackagingContext context}.
-     */
-    public TemplateBuildHandlerTemplate(@NotNull final C context)
+    @Test
+    public void getTemplateName_returns_the_correct_template_name()
     {
-        super(context);
+        @NotNull final DefaultTemplatePackagingContext context =
+            EasyMock.createNiceMock(DefaultTemplatePackagingContext.class);
+
+        @NotNull final PerForeignKeyTemplateBuildHandlerTemplate instance =
+            new PerForeignKeyTemplateBuildHandlerTemplate<>(context);
+
+        Assert.assertEquals(Literals.PER_FOREIGN_KEY_TEMPLATE_BUILD_HANDLER, instance.getTemplateName());
     }
 }

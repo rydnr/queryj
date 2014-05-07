@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: TemplateBuildHandlerTemplate.java
+ * Filename: PerForeignKeyTemplateBuildHandlerTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Template to build QueryJ's build handler sources.
+ * Description: Template for per-foreign key template build handlers.
  *
- * Date: 2013/08/16
- * Time: 09:35
+ * Date: 2014/05/06
+ * Time: 11:40
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -46,26 +46,38 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Template to build QueryJ's build handler sources.
+ * Template for per-foreign key template build handlers.
+ * @param <C> the template packaging context type.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/08/16 09/35
+ * Created: 2014/05/06 11:40
  */
 @ThreadSafe
-public abstract class TemplateBuildHandlerTemplate<C extends TemplatePackagingContext>
-    extends AbstractTemplatePackagingTemplate<C>
+public class PerForeignKeyTemplateBuildHandlerTemplate<C extends TemplatePackagingContext>
+    extends TemplateBuildHandlerTemplate<C>
 {
     /**
      * The serial version id.
      */
-    private static final long serialVersionUID = -312645255731109773L;
+    private static final long serialVersionUID = -1713270572350678204L;
 
     /**
-     * Creates a TemplateBuildHandlerTemplate instance.
-     * @param context the {@link TemplatePackagingContext context}.
+     * Creates a new instance using given context.
+     * @param context the context.
      */
-    public TemplateBuildHandlerTemplate(@NotNull final C context)
+    public PerForeignKeyTemplateBuildHandlerTemplate(@NotNull final C context)
     {
         super(context);
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return "PerForeignKeyTemplateBuildHandler".
+     */
+    @NotNull
+    @Override
+    public String getTemplateName()
+    {
+        return Literals.PER_FOREIGN_KEY_TEMPLATE_BUILD_HANDLER;
     }
 }

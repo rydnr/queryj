@@ -15,5 +15,3 @@ filename builder : queryj-<repository>.properties;
 
 // The package.
 package: <packageName>;
-
-disabled;

@@ -1,0 +1,236 @@
+//;-*- mode: stringtemplate -*-
+//
+//                   QueryJ's Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: PerForeignKeyTemplateBuildHandler.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate per-foreign key QueryJ's
+//              TemplateBuildHandlers.
+//
+group PerForeignKeyTemplateBuildHandler;
+
+import "common.stg"
+
+source(C) ::= <<
+<!
+  Generates a per-foreign key TemplateBuildHandler source file.
+  @param C the context.
+!>
+<sourceImpl(def=C.templateDef, C=C)>
+>>
+
+sourceImpl(def, C) ::= <<
+<!
+  Generates a per-foreign key TemplateBuildHandler source file.
+  @param def the template def.
+  @param C the context.
+!>
+<java_header(
+  description=[ "Build handler for ", def.name.capitalized, "Templates." ],
+  description_oneline=true,
+  filename=C.class_name,
+  template="org/acmsl/queryj/templates/packaging/PerForeignKeyTemplateBuildHandler.stg",
+  C=C)>
+<package_declaration(packageName="org.acmsl.queryj.templates.handlers")>
+
+/*
+ * Importing QueryJ-Core classes.
+ */
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
+import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateBuildHandler;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJCommandWrapper;
+import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.CachingForeignKeyDecorator;
+import org.acmsl.queryj.metadata.DecoratedString;
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.ForeignKeyDecorator;
+import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.engines.EngineDecorator;
+import org.acmsl.queryj.metadata.vo.ForeignKey;
+
+/*
+ * Importing custom templates.
+ */
+import org.acmsl.queryj.templates.<def.name.noExtension>Template;
+import org.acmsl.queryj.templates.<def.name.noExtension>TemplateFactory;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.List;
+
+<class(def=def, C=C)>
+>>
+
+class(def, C) ::= <<
+/**
+ * Build handler for {@link org.acmsl.queryj.templates.<def.name.noExtension>Template}s.
+<class_common_javadoc(
+  template="org/acmsl/queryj/templates/packaging/PerForeignKeyTemplateBuildHandler.stg",
+  timestamp=C.timestamp,
+  version=C.version)>
+ */
+@ThreadSafe
+public class <C.class_name>
+    extends Base<def.type.capitalized>TemplateBuildHandler\<
+                <def.name.noExtension>Template,
+                <def.type.capitalized>TemplateContext,
+                <def.name.noExtension>TemplateFactory>
+{
+    /**
+     * The key to access the templates in the command.
+     */
+    @NotNull static final String TEMPLATES_KEY = "<def.name>_templates";
+
+    /**
+     * Creates a {@code <def.name.capitalized>TemplateBuildHandler}.
+     */
+    public <C.class_name>() {}
+
+    /**
+     * Retrieves the template factory.
+     * @return the {@link <def.name.noExtension>TemplateFactory} instance.
+     */
+    @Override
+    @NotNull
+    protected <def.name.noExtension>TemplateFactory retrieveTemplateFactory()
+    {
+        return <def.name.noExtension>TemplateFactory.getInstance();
+    }
+
+    /**
+     * Creates a template with required information.
+     * @param templateFactory the {@link <def.name.noExtension>TemplateFactory} instance.
+     * @param foreignKey the {@link ForeignKey}.
+     * @param parameters the parameter map.
+     * @return the template.
+     */
+    @Nullable
+    protected <def.name.noExtension>Template createTemplate(
+        @NotNull final <def.name.noExtension>TemplateFactory templateFactory,
+        @NotNull final ForeignKey\<String> foreignKey,
+        @NotNull final QueryJCommand parameters)
+      throws  QueryJBuildException
+    {
+        @NotNull final <def.type.capitalized>TemplateContext t_Context =
+            new <def.type.capitalized>TemplateContext(foreignKey, parameters);
+
+        @NotNull final DecoratorFactory t_DecoratorFactory = retrieveDecoratorFactory();
+
+        t_Context.setDecoratorFactory(t_DecoratorFactory);
+
+        @NotNull final MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+
+        @NotNull final CustomSqlProvider t_CustomSqlProvider = retrieveCustomSqlProvider(parameters);
+
+        @NotNull final ForeignKeyDecorator t_DecoratedForeignKey =
+            new CachingForeignKeyDecorator(foreignKey, t_MetadataManager, t_DecoratorFactory, t_CustomSqlProvider);
+
+        t_Context.setPackageName(
+            retrievePackage(
+                t_DecoratedForeignKey, t_MetadataManager.getEngine(), parameters));
+
+        return templateFactory.createTemplate(foreignKey, t_Context, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    protected String retrievePackage(
+        @NotNull final ForeignKeyDecorator foreignKey,
+        @NotNull final Engine\<String> engine,
+        @NotNull final String packageName)
+    {
+        return buildPackageName(foreignKey, engine, packageName);
+    }
+
+    /**
+     * Builds the actual package name.
+     * @param foreignKey the foreign key.
+     * @param engine the engine.
+     * @param projectPackage the project package.
+     * @return the package name.
+     */
+    @NotNull
+    static String buildPackageName(
+        @SuppressWarnings("unused") @NotNull final ForeignKey\<DecoratedString> foreignKey,
+        @SuppressWarnings("unused") @NotNull final Engine\<String> engine,
+        @SuppressWarnings("unused") @NotNull final String projectPackage)
+    {
+        @NotNull final String result;
+
+        @NotNull final ST packageTemplate = new ST("<def.packageName>");
+
+        packageTemplate.add(Literals.FOREIGN_KEY, foreignKey);
+        packageTemplate.add(Literals.PACKAGE_NAME, new DecoratedString(projectPackage));
+        packageTemplate.add(Literals.ENGINE, new EngineDecorator(engine));
+
+        result = packageTemplate.render();
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void storeTemplates(
+        @NotNull final List\<<def.name.noExtension>Template> templates,
+        @NotNull final QueryJCommand parameters)
+    {
+        new QueryJCommandWrapper\<List\<<def.name.noExtension>Template\>>(parameters)
+            .setSetting(TEMPLATES_KEY, templates);
+    }
+}
+>>
