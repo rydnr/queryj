@@ -411,8 +411,13 @@ public class PerForeignKeyTemplatesTest
                         PACKAGE_MAPPINGS.get(templateName),
                         foreignKey.getSourceTableName(), resolveEngine(engine));
 
+                @NotNull final PerForeignKeyTemplateContext t_Context =
+                    new PerForeignKeyTemplateContext(foreignKey, t_Command);
+
+                t_Context.setPackageName(packageName);
+
                 @Nullable final PerForeignKeyTemplate\<PerForeignKeyTemplateContext> template =
-                    templateFactory.createTemplate(foreignKey, t_Command);
+                    templateFactory.createTemplate(foreignKey, t_Context, t_Command);
 
                 Assert.assertNotNull("No template found for " + templateName, template);
 
