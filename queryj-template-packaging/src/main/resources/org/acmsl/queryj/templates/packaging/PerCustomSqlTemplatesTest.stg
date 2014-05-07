@@ -134,7 +134,7 @@ import cucumber.api.java.en.When;
 import org.apache.commons.logging.LogFactory;
 
 /*
- * Importing Jetbrains Annotations.
+ * Importing JetBrains Annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -381,8 +381,13 @@ public class PerCustomSqlTemplatesTest
                 @NotNull final String packageName =
                     resolvePackage(PACKAGE_MAPPINGS.get(templateName), sql.getId(), resolveEngine(engine));
 
+                @NotNull final PerCustomSqlTemplateContext t_Context =
+                    new PerCustomSqlTemplateContext(sql, t_Command);
+
+                t_Context.setPackageName(packageName);
+
                 @Nullable final PerCustomSqlTemplate\<PerCustomSqlTemplateContext> template =
-                    templateFactory.createTemplate(sql, t_Command);
+                    templateFactory.createTemplate(sql, t_Context, t_Command);
 
                 Assert.assertNotNull("No template found for " + templateName, template);
 

@@ -123,7 +123,7 @@ import cucumber.api.java.en.When;
 import org.apache.commons.logging.LogFactory;
 
 /*
- * Importing Jetbrains Annotations.
+ * Importing JetBrains Annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -131,7 +131,6 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing JUnit/EasyMock classes.
  */
-import org.easymock.EasyMock;
 import org.junit.Assert;
 
 /*
@@ -366,8 +365,13 @@ public class PerCustomResultTemplatesTest
                     @NotNull final String packageName =
                         resolvePackage(PACKAGE_MAPPINGS.get(templateName), result.getId(), resolveEngine(engine));
 
+                    @NotNull final PerCustomResultTemplateContext t_Context =
+                        new PerCustomResultTemplateContext(result, properties, t_Command);
+
+                    t_Context.setPackageName(packageName);
+
                     @Nullable final PerCustomResultTemplate\<PerCustomResultTemplateContext> template =
-                        templateFactory.createTemplate(result, properties, t_Command);
+                        templateFactory.createTemplate(result, properties, t_Context, t_Command);
 
                     Assert.assertNotNull("No template found for " + templateName, template);
 
