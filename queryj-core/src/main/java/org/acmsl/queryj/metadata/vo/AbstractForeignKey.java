@@ -142,6 +142,7 @@ public abstract class AbstractForeignKey<V>
      */
     @SuppressWarnings("unused")
     @Nullable
+    @Override
     public V getFkName()
     {
         return m__strFkName;
@@ -170,6 +171,7 @@ public abstract class AbstractForeignKey<V>
      * Retrieves the source table name.
      * @return such table name.
      */
+    @Override
     @NotNull
     public V getSourceTableName()
     {
@@ -262,6 +264,15 @@ public abstract class AbstractForeignKey<V>
     public boolean isNullable()
     {
         return m__bNullable;
+    }
+
+    /**
+     * Retrieves whether the foreign key can take null values.
+     * @return such information.
+     */
+    public boolean getAllowsNull()
+    {
+        return isNullable();
     }
 
     /**

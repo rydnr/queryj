@@ -368,6 +368,16 @@ public abstract class AbstractParameterDecorator<V>
     }
 
     /**
+     * Retrieves the comment.
+     * @return such information.
+     */
+    @NotNull
+    public String getComment()
+    {
+        return "";
+    }
+
+    /**
      * Provides a text representation of the information
      * contained in given instance.
      * @return such information.

@@ -147,7 +147,7 @@ custom_select_parameter_value(p) ::= <<
 <if(p.object)><p.name.uncapitalized><else><if(p.primitive)><p.objectType>.valueOf(<p.name.uncapitalized>)<else><if(p.string)><p.name.uncapitalized><else>new <p.objectType>(<p.name.uncapitalized>)<endif><endif><endif>
 >>
 
-custom_update_or_insert(cs) ::= <<
+custom_update_or_insert(cs, C) ::= <<
 <!
  Writes the subtemplate for custom updates or inserts.
  @param cs the custom sql.
@@ -220,7 +220,7 @@ public int <cs.name.uncapitalized>(
 <endif>
 >>
 
-custom_select_for_update(cs, table) ::= <<
+custom_select_for_update(cs, table, C) ::= <<
 <!
  Writes the code for a custom select for update.
  @param cs the custom select.

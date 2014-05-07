@@ -150,7 +150,7 @@ public interface <table.name.voName>DAO
 
 {
 <if(table.static)>
-    <table.staticContent:{r | <cached_constants(row=r, voName=table.name.voName)>}; separator="\n\n">
+    <table.staticContent:{r | <cached_constants(row=r, voName=table.name.voName, C=C)>}; separator="\n\n">
 
     /**
      * The pre-existing {@link <table.name.voName>} values.
@@ -183,7 +183,7 @@ public interface <table.name.voName>DAO
      <table.own.minus.externallyManagedAttributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
     void insert(
-        <table.own.minus.externallyManagedAttributes:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
+        <table.own.minus.externallyManagedAttributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
       throws DataAccessException;
 
     /**
@@ -194,7 +194,7 @@ public interface <table.name.voName>DAO
      */
     <notnull(C=C)>
     <table.name.voName> create(
-        <table.own.minus.externallyManagedAttributes:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
+        <table.own.minus.externallyManagedAttributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
       throws DataAccessException;
 
     /**
@@ -203,31 +203,32 @@ public interface <table.name.voName>DAO
      * @return the number of {@code <table.name>} rows updated.
      */
     int update(
-        <table.attributes:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
+        <table.attributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
       throws DataAccessException;
 
     /**
      * Deletes {@link <table.name.voName>} information.
      <table.primaryKey:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
-    void delete(<table.primaryKey:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
+    void delete(<table.primaryKey:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=", ">)
         throws DataAccessException;
 
-    <table.foreignKeys:{ fk | <fk_delete_method(foreignKey=fk, table=table)>}; separator="\n">
+    <table.foreignKeys:{ fk | <fk_delete_method(foreignKey=fk, table=table, C=C)>}; separator="\n">
 
-    <table.customSelects:{ cs | <custom_select(cs=cs)>}; separator="\n">
+    <table.customSelects:{ cs | <custom_select(cs=cs, C=C)>}; separator="\n\n">
 
-    <table.customUpdatesOrInserts:{ cs | <custom_update_or_insert(cs=cs)>}; separator="\n">
+    <table.customUpdatesOrInserts:{ cs | <custom_update_or_insert(cs=cs, C=C)>}; separator="\n\n">
 
-    <table.customSelectsForUpdate:{ cs | <custom_select_for_update(cs=cs)>}; separator="\n">
+    <table.customSelectsForUpdate:{ cs | <custom_select_for_update(cs=cs, C=C)>}; separator="\n\n">
 }
 >>
 
-cached_constants(row, voName) ::= <<
+cached_constants(row, voName, C) ::= <<
 <!
  Generates the constant for the cached row.
  @param row the row
  @param voName the value-object name.
+ @param C the context.
 !>
 /**
  * The <row.name> {@link <voName>}.
@@ -279,6 +280,12 @@ attribute_specification(attr) ::= <<
 >>
 
 find_constant_by_pk(primaryKey, table, C) ::= <<
+<!
+ Generates the "findContantByPk()" method.
+ @param primaryKey the primary key.
+ @param table the table.
+ @param C the context.
+!>
 /**
  * Loads \<i><table.name.voName>\</i> information from the constant pool,
  * filtering by the primary key.
@@ -295,12 +302,12 @@ find_constant_methods(attribute, table, C) ::= <<
   Declares the methods to operate directly on defined constants.
   @param attribute the attribute.
   @param table the table.
+  @param C the context.
 !>
 /**
  * Loads \<i><table.name>\</i> information from the constant pool,
  * filtering by <attribute.name>.
- * @param <attribute.name.lowercased.uncapitalized> the <attribute.name>
- * value to filter.
+ <attribute_javadoc(attr=attribute)>
  * @return the list of {@link <table.name.voName>} instances with given <attribute.name>.
  */
 <notnull(C=C)>
@@ -309,19 +316,19 @@ List\<<table.name.voName>\> findConstantsBy<attribute.name.capitalized>(<if(!att
 /**
  * Loads \<i><table.name>\</i> information from the constant pool,
  * filtering by <attribute.name>.
- * @param <attribute.name.lowercased.uncapitalized> the <attribute.name>
- * value to filter.
+ <attribute_javadoc(attr=attribute)>
  * @return the list of {@link <table.name.voName>} instances with given <attribute.name>.
  */
 <nullable(C=C)>
 <table.name.voName> findConstantBy<attribute.name.capitalized>(<if(!attribute.primitive)><if(!attribute.primitiveWrapper)><notnull(C=C)><else><if(attribute.nullable)><notnull(C=C)><endif><endif><endif>final <attribute.primitiveType> <attribute.name.lowercased.uncapitalized>);
 >>
 
-fk_delete_method(foreignKey, table) ::= <<
+fk_delete_method(foreignKey, table, C) ::= <<
 <!
   Writes the deleteByXX method for a concrete foreign key.
   @param foreignKey the foreign key.
   @param table the table.
+  @param C the context.
 !>
 /**
 <if(foreignKey.allowsNull)>
@@ -331,25 +338,22 @@ fk_delete_method(foreignKey, table) ::= <<
  * Deletes <table.name> information from the persistence layer filtering
  * by given foreign keys.
 <endif>
-
- <foreignKey.attributes:{ a | <attribute_javadoc(name=a)>}; separator="\n">
+ <foreignKey.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
  */
-<if(foreignKey.allowsNull)>
-void discardRelationTo<foreignKey.target.voName>By<foreignKey.attributes:{attr |<attr.name.capitalized>};
-                                                          separator="And">(
-<else>
-void deleteBy<foreignKey.attributes:{attr |<attr.name.capitalized>};
-                      separator="And">(
-<endif>
-
-
-    <foreignKey.attributes:{ a | <primitive_attribute_declaration(attr=a)>}; separator=",\n">);
+<
+if(foreignKey.allowsNull)
+>void discardRelationTo<foreignKey.target.voName>By<foreignKey.attributes:{attr |<attr.name.capitalized>}; separator="And">(<
+else
+>void deleteBy<foreignKey.attributes:{attr |<attr.name.capitalized>}; separator="And">(<
+endif
+><foreignKey.attributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=", ">);
 >>
 
-custom_select(cs) ::= <<
+custom_select(cs, C) ::= <<
 <!
   Writes the code for a custom select query.
   @param cs the custom select.
+  @param C the context.
 !>
 /**
  * Custom select \<i><cs.id>\</i>:
@@ -357,39 +361,42 @@ custom_select(cs) ::= <<
  <cs.parameters:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  */
-<if(cs.resultNullable)><nullable(C=C)><else><if(cs.result.multiple)><notnull(C=C)><endif><endif>
+<if(cs.resultNullable)><nullable(C=C)><else><if(cs.result)><if(cs.result.multiple)><notnull(C=C)><endif><endif><endif>
 <cs.resultClass> <cs.name.uncapitalized>(
-    <cs.parameters:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
+    <cs.parameters:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
   throws DataAccessException;
 >>
 
-custom_update_or_insert(cs) ::= <<
+custom_update_or_insert(cs, C) ::= <<
 <!
  Writes the subtemplate for custom updates or inserts.
   @param cs the custom sql.
+  @param C the context.
 !>
 /**
  * Custom sql \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ a | <attribute_javadoc(name=a)>}; separator="\n">
+ <cs.parameters:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
  */
 public void <cs.nameUncapitalized>(
-    <cs.parameters:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
+    <cs.parameters:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
   throws DataAccessException;
 >>
 
-custom_select_for_update(cs) ::= <<
+custom_select_for_update(cs, C) ::= <<
 <!
   Writes the code for a custom select for update.
   @param cs the custom sql.
+  @param C the context.
 !>
 /**
  * Custom select for update \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ a | <attribute_javadoc(name=a)>}; separator="\n">
+ <cs.parameters:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  */
+<if(cs.resultNullable)><nullable(C=C)><else><if(cs.result)><if(cs.result.multiple)><notnull(C=C)><endif><endif><endif>
 <cs.resultClass> <cs.name.uncapitalized>(
-    <cs.parameters:{ a | <attribute_declaration(attr=a, C=C)>}; separator=",\n">)
+    <cs.parameters:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
   throws DataAccessException;
 >>

@@ -58,7 +58,11 @@ import org.checkthread.annotations.ThreadSafe;
 public class CachingParameterDecorator<V>
     extends  AbstractParameterDecorator<V>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -598058048217257284L;
+
     /**
      * The cached SQL type.
      */

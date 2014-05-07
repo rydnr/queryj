@@ -15,3 +15,5 @@ filename builder : <repository.capitalized>ResultSetExtractor.java;
 
 // The package.
 package: <packageName>.dao;
+
+disabled;
