@@ -94,7 +94,6 @@ import java.util.Arrays;
 import java.util.Collections;
 <endif>
 import java.util.List;
-
 <if(table.attributeTypes)>
 <table.attributeTypes:{ t | import <t>;}; separator="\n">
 <endif>
@@ -180,30 +179,30 @@ public interface <table.name.voName>DAO
 
     /**
      * Persists {@link <table.name.voName>} information.
-     <table.own.minus.externallyManagedAttributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
+     <table.own.minus.readOnly.minus.externallyManagedAttributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
     void insert(
-        <table.own.minus.externallyManagedAttributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
+        <table.own.minus.readOnly.minus.externallyManagedAttributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
       throws DataAccessException;
 
     /**
      * Inserts and retrieves the newly-inserted
      * {@link <table.name.voName>} instance.
-     <table.own.minus.externallyManagedAttributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
+     <table.own.minus.readOnly.minus.externallyManagedAttributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      * @return such instance.
      */
     <notnull(C=C)>
     <table.name.voName> create(
-        <table.own.minus.externallyManagedAttributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
+        <table.own.minus.readOnly.minus.externallyManagedAttributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
       throws DataAccessException;
 
     /**
      * Updates {@link <table.name.voName>} information.
-     <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
+     <table.own.minus.readOnly.minus.externallyManagedAttributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      * @return the number of {@code <table.name>} rows updated.
      */
     int update(
-        <table.attributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
+        <table.own.minus.readOnly.minus.externallyManagedAttributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
       throws DataAccessException;
 
     /**
@@ -211,16 +210,24 @@ public interface <table.name.voName>DAO
      <table.primaryKey:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
     void delete(<table.primaryKey:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=", ">)
-        throws DataAccessException;
+        throws DataAccessException;<
+if(table.foreignKeys)>
 
-    <table.foreignKeys:{ fk | <fk_delete_method(foreignKey=fk, table=table, C=C)>}; separator="\n">
+    <table.foreignKeys:{ fk | <fk_delete_method(foreignKey=fk, table=table, C=C)>}; separator="\n\n">
+<endif><
+if(table.customSelects)>
 
     <table.customSelects:{ cs | <custom_select(cs=cs, C=C)>}; separator="\n\n">
+<endif><
+if(table.customUpdatesOrInserts)>
 
     <table.customUpdatesOrInserts:{ cs | <custom_update_or_insert(cs=cs, C=C)>}; separator="\n\n">
+<endif><
+if(table.customSelectsForUpdate)>
 
     <table.customSelectsForUpdate:{ cs | <custom_select_for_update(cs=cs, C=C)>}; separator="\n\n">
-}
+<endif
+>}
 >>
 
 cached_constants(row, voName, C) ::= <<
@@ -347,6 +354,7 @@ else
 >void deleteBy<foreignKey.attributes:{attr |<attr.name.capitalized>}; separator="And">(<
 endif
 ><foreignKey.attributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=", ">);
+      throws DataAccessException;
 >>
 
 custom_select(cs, C) ::= <<
@@ -361,7 +369,7 @@ custom_select(cs, C) ::= <<
  <cs.parameters:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  */
-<if(cs.resultNullable)><nullable(C=C)><else><if(cs.result)><if(cs.result.multiple)><notnull(C=C)><endif><endif><endif>
+<if(cs.resultNullable)><nullable(C=C)><else><if(cs.multiple)><notnull(C=C)><endif><endif>
 <cs.resultClass> <cs.name.uncapitalized>(
     <cs.parameters:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
   throws DataAccessException;

@@ -270,4 +270,80 @@ public class AbstractTableDecoratorTest
                 || attribute.getName().getValue().equals("myParentId"));
         }
     }
+
+    @Test
+    public void getAttributeTypes_does_not_contain_duplicates()
+    {
+        @NotNull final List<Attribute<String>> attributes = new ArrayList<>(0);
+
+        @NotNull final Attribute<String> childAttribute1 =
+            new AttributeIncompleteValueObject(
+                "myChildId1",
+                Types.BIGINT,
+                "long",
+                "id1",
+                "child comment 1",
+                1, // ordinalPosition
+                6222, // length
+                1, // precision
+                false, // allowsNull
+                null); // value
+
+        @NotNull final Attribute<String> childAttribute2 =
+            new AttributeIncompleteValueObject(
+                "time2",
+                Types.TIMESTAMP,
+                "Timestamp",
+                "id2",
+                "child comment 2",
+                2, // ordinalPosition
+                6222, // length
+                1, // precision
+                false, // allowsNull
+                null); // value
+
+        @NotNull final Attribute<String> childAttribute3 =
+            new AttributeIncompleteValueObject(
+                "date3",
+                Types.DATE,
+                "Date",
+                "name",
+                "child comment 3",
+                3, // ordinalPosition
+                6222, // length
+                1, // precision
+                false, // allowsNull
+                null); // value
+
+        @NotNull final Attribute<String> childAttribute4 =
+            new AttributeIncompleteValueObject(
+                "date4",
+                Types.DATE,
+                "Date",
+                "name",
+                "child comment 4",
+                3, // ordinalPosition
+                6222, // length
+                1, // precision
+                false, // allowsNull
+                null); // value
+
+        attributes.add(childAttribute1);
+        attributes.add(childAttribute2);
+        attributes.add(childAttribute3);
+        attributes.add(childAttribute4);
+
+        @NotNull final AbstractTableDecorator instance = setupTableDecorator(attributes, null);
+
+        @NotNull final List<DecoratedString> attributeTypes = instance.getAttributeTypes();
+
+        Assert.assertEquals(2, attributeTypes.size());
+
+        for (@NotNull final DecoratedString type: attributeTypes)
+        {
+            Assert.assertTrue(
+                   type.getValue().equals("java.util.Date")
+                || type.getValue().equals("java.sql.Timestamp"));
+        }
+    }
 }

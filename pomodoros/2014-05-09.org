@@ -1,0 +1,13 @@
+* 2014/05/09
+** DONE Fix BaseDAO template: #498: 3 -> 1
+** TODO Fix DAO template #500: 3 ->
+** Fix remaining compile errors #512: 1 ->
+** Fix BaseDAOFactory template: #497: 3 ->
+** Fix DAOFactory template: #499: 3 ->
+** Fix ValueObject #501
+** Fix ValueObjectFactory #502
+** Fix BaseValueObject #503
+** Fix ValueObjectImpl #504
+** Fix BaseResultSetExtractor #505
+** Fix ConfigurationProperties #506
+** Fix DAOChooser #507

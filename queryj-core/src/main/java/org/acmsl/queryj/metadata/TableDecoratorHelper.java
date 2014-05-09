@@ -363,7 +363,12 @@ public class TableDecoratorHelper
 
                 if (importType != null)
                 {
-                    result.add(new DecoratedString(importType));
+                    @NotNull final DecoratedString value = new DecoratedString(importType);
+
+                    if (!result.contains(value))
+                    {
+                        result.add(value);
+                    }
                 }
             }
         }
