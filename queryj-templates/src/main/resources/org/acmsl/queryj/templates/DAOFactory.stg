@@ -33,7 +33,7 @@
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate DAOFactory interfaces.
+// Description: Defines the rules to generate DAOFactory implementations.
 //
 group DAOFactory;
 
@@ -66,13 +66,36 @@ sourceImpl(table, C) ::= <<
 */
 <package_declaration(p=C.package)>
 
-<checkers_import(C=C)>
-/*
- * Importing JetBrains annotations.
- */
-import org.jetbrains.annotations.Nullable;
+<project_imports(
+  basePackageName=C.project_package,
+  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
+  table=table,
+  repository=C.repository)>
 
-<interface(table=table, C=C)>
+/*
+ * Importing V24-Commons classes.
+ */
+import com.ventura24.commons.dao.DAOFactory;
+
+/*
+ * Importing Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
+<checkers_import(C=C)>
+<class(table=table, C=C)>
+>>
+
+project_imports(basePackageName, baseDAOSubpackageName, table, repository) ::= <<
+<!
+  Generates the project imports
+  @param basePackageName the base package name.
+  @param baseDAOSubpackageName the subpackage of the base DAO interface.
+  @param table the table.
+!>
+/*
+ * Importing <repository.capitalized> classes.
+ */
+import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName>DAO;
 >>
 
 description(tableName) ::= <<
@@ -83,36 +106,55 @@ description(tableName) ::= <<
 <tableName>-specific DAOFactory implementation.
 >>
 
-interface(table, C) ::= <<
+class(table, C) ::= <<
 <!
  Generates the interface body.
  @param table the table.
  @param C the context.
 !>
-<interfaceImpl(table=table, repository=C.repository, C=C)>
+<classImpl(table=table, repository=C.repository, engine=C.engine, C=C)>
 >>
 
-interfaceImpl(table, repository, C) ::= <<
+classImpl(table, repository, engine, C) ::= <<
 <!
  Generates the interface body.
  @param table the table.
  @param repository the table repository name.
+ @param engine the database engine.
  @param C the context.
 !>
 /**
  * <description(tableName=table.name)>
-<class_common_javadoc(
-  template="org/acmsl/queryj/dao/DAOFactory.stg",
-  generation_timestamps_enabled=C.generation_timestamps_enabled,
-  timestamp=C.timestamp)>
+<class_common_javadoc(template="org/acmsl/queryj/dao/DAOFactory.stg", C=C)>
  */
-public interface <table.name.capitalized>DAOFactory
+public class <engine.name.voName><table.name.capitalized>DAOFactory
+    implements <table.name.voName>DAOFactory
+    extends DAOFactory\<<table.name.voName>DAO>
 {
     /**
-     * Creates a <table.name>-specific DAO implementation.
-     * @return such implementation.
+     * Creates a {@link <engine.name.voName><table.name.capitalized>DAO}.
+     * @param dataSource the required {@link DataSource}.
+     * @param daoListener the {@link DAOListener} (optional).
+     * @return such {@link <table.name.voName>DAO} implementation.
      */
-    @Nullable
-    <table.name.capitalized>DAO createDAO();
+    <nullable(C=C)>
+    @Override
+    protected <table.name.capitalized>DAO createDAO(
+        <nullable(C=C)>final DataSource dataSource,
+        <nullable(C=C)>final DAOListener daoListener)
+    {
+        <nullable(C=C)>final <table.name.capitalized>DAO result;
+
+        if (dataSource != null)
+        {
+            result = new <engine.name.voName><table.name.capitalized>DAO(dataSource, daoListener);
+        }
+        else
+        {
+            result = null;
+        }
+
+        return result;
+    }
 }
 >>

@@ -1,0 +1,43 @@
+* 2014/05/10
+** DONE Fix BaseDAOFactory template #497: 2 -> 2
+** TODO Fix DAOFactory template #499: 2 ->
+** TODO Fix ValueObject #501: 2 ->
+** TODO Fix ValueObjectFactory #502: 2 ->
+** TODO Fix BaseValueObject #503: 2 ->
+** TODO Fix ValueObjectImpl #504: 2 ->
+** Fix DAO template #500: 3 ->
+** Fix remaining compile errors #512: 1 ->
+** Fix BaseResultSetExtractor #505
+** Fix ConfigurationProperties #506
+** Fix DAOChooser #507
+
+
+* Package layout:
+** dao
+- DataAccessManager
+- BaseDAO
+*** dao/core
+- DAOChooser
+- BaseDAOFactory
+*** dao/impl
+- DAOFactory
+*** dao/rdb -> X
+*** dao/[table]
+- CustomResultSetExtractor
+- FkStatementSetter
+- PkStatementSetter
+- ResultSetExtractor
+- AttributesStatementSetter
+**** dao/[table]/oracle
+- DAO
+** vo
+- ValueObject
+- CustomValueObject
+** vo/core
+- ValueObjectFactory
+** vo/impl
+- ValueObjectImpl
+- ValueObjectFactoryImpl
+- BaseValueObject
+- CustomValueObjectImpl
+- CustomBaseValueObject
