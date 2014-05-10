@@ -67,7 +67,7 @@ sourceImpl(table, C) ::= <<
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
-<checkers_import(C=C)>
+<notnull_import(C=C)>
 <if(table.attributeTypes)>
 /*
  * Importing JDK classes.
@@ -108,7 +108,7 @@ class(table, C) ::= <<
   template="org/acmsl/queryj/templates/ValueObjectFactory.stg", C=C)>
  */
 <class_annotations(C=C)>
-public class <table.name.voName>ValueObjectFactory
+public class <table.name.voName>Factory
 {
     /**
      * Singleton implemented to avoid the double-check locking.
@@ -118,36 +118,36 @@ public class <table.name.voName>ValueObjectFactory
         /**
          * The actual singleton.
          */
-        public static final <table.name.ame>ValueObjectFactory SINGLETON =
-            new <table.name.voName>ValueObjectFactory();
+        public static final <table.name.voName>Factory SINGLETON =
+            new <table.name.voName>Factory();
     }
 
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public <table.name.voName>ValueObjectFactory() {}
+    public <table.name.voName>Factory() {}
 
     /**
-     * Retrieves a \<code><table.name.voName>ValueObjectFactory\</code>
-     * instance.
+     * Retrieves a {@code <table.name.voName>Factory} instance.
      * @return such instance.
      */
-    public static <table.name.voName>ValueObjectFactory getInstance()
+    public static <table.name.voName>Factory getInstance()
     {
-        return <table.name.voName>ValueObjectFactorySingletonContainer.SINGLETON;
+        return <table.name.voName>FactorySingletonContainer.SINGLETON;
     }
 
     /**
-     * Creates a new {@link <table.name.voName>ValueObject} instance.
+     * Creates a new {@link <table.name.voName>} instance.
      <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      * @return the new value object.
      */
+    <notnull(C=C)>
     public <table.name.voName> create<table.name.voName>(
         <table.attributes:{ a | <attribute_method_declaration(attribute=a)>};
           separator=",\n">)
     {
         return
-            new <table.name.voName>ValueObject(
+            new <table.name.voName>ValueObjectImpl(
                 <table.attributes:{ a | <a.name.uncapitalized>}; separator=",\n">);
     }
 }
