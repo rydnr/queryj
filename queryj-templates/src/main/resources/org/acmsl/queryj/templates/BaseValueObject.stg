@@ -67,6 +67,11 @@ sourceImpl(table, C) ::= <<
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
+
+/*
+ * Importing <C.repository.capitalized> classes.
+ */
+import <C.package_name>.<typeInitMap.voSubpackageName>.<table.name.voName>;
 <checkers_import(C=C)>
 /*
  * Importing JDK classes.
@@ -76,7 +81,6 @@ import java.io.Serializable;
 <table.attributeTypes:{ t | import <t>;}; separator="\n">
 <endif>
 
-
 <class(table=table, C=C)>
 >>
 
@@ -85,7 +89,7 @@ description(table) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-<if(table.comment.empty)>Base class for <table.name> value objects.<else><table.comment><endif>
+<if(table.comment.empty)>Base class for {@link <table.name.voName>} value objects.<else><table.comment><endif>
 >>
 
 imports(table) ::= <<
@@ -106,12 +110,12 @@ class(table, C) ::= <<
  * <[
       description(table=table)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/BaseValueObject.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/BaseValueObject.stg", C=C)>
  */
 <class_annotations(C=C)>
 public abstract class Abstract<table.name.voName>
     extends Serializable
+    implements <table.name.voName>
 {
     /**
      * The serial version id.
@@ -121,14 +125,14 @@ public abstract class Abstract<table.name.voName>
     <table.attributes:{ a | <attribute_declaration(attribute=a, C=C)>}; separator="\n\n">
 
     /**
-     * Creates an \<code>Abstract<table.name.voName>ValueObject\</code> instance.
+     * Creates an {@code Abstract<table.name.voName>} instance.
      <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
      */
-    public Abstract<table.name.voName>ValueObject(
-        <table.attributes:{ a | <attribute_method_declaration(attribute=a, C=C)>};
+    public Abstract<table.name.voName>(
+        <table.attributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>};
           separator=",\n">)
     {
-        <table.attributes:{ a | <immutable_setter_call(attribute=a)>};
+        <table.attributes:{ a | <attribute_immutable_setter_call(attribute=a)>};
           separator="\n">
     }
 
@@ -137,9 +141,9 @@ public abstract class Abstract<table.name.voName>
 
     <equals_method(table=table, C=C)>
 
-    <hashcode_method(table=table, C=C)>
+    <hashCode_method(table=table, C=C)>
 
-    <tostring_method(table=table, C=C)>
+    <toString_method(table=table, C=C)>
 }
 >>
 
@@ -172,21 +176,21 @@ public boolean equals(<nullable(C=C)>final Object other)
 }
 >>
 
-hashcode_method(table, C) ::= <<
-<! Generates the hashcode() method !>
+hashCode_method(table, C) ::= <<
+<! Generates the hashCode() method !>
 /**
- * Retrieves the hashcode which identifies this instance
+ * Retrieves the hashCode which identifies this instance
  * from any other one.
  * @return the unique (among instances of this class) value.
  */
 @Override
-public int hashcode()
+public int hashCode()
 {
     final int result;
 
-    final int classHashCode = Abstract<table.name.voName>.class.hashcode();
+    final int classHashCode = <table.name.voName>.class.hashCode();
 
-    <table.attributes:{ a | <attribute_hashcode(attribute=a)>}; separator="\n">
+    <table.attributes:{ a | <attribute_hashCode(attribute=a)>}; separator="\n">
 
     result =
           classHashCode
@@ -196,15 +200,16 @@ public int hashcode()
 }
 >>
 
-tostring_method(table, C) ::= <<
+toString_method(table, C) ::= <<
 <! Generates the toString() method !>
 /**
- * {@inheritdoc}
+ * {@inheritDoc}
  */
+<notnull(C=C)>
 @Override
 public String toString()
 {
-    StringBuilder result = new StringBuilder("{ \class\": \"Abstract<table.name.voName>");
+    <notnull(C=C)>final StringBuilder result = new StringBuilder("{ \class\": \"Abstract<table.name.voName>");
 
     <table.attributes:{ a | <attribute_toString(attribute=a)>}; separator="\n">
 

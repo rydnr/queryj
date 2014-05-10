@@ -15,3 +15,5 @@ filename  builder : <tableName.voName>Factory.java;
 
 // The package.
 package: <packageName>.vo;
+
+disabled;
