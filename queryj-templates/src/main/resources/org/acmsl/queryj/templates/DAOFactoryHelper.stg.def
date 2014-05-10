@@ -1,8 +1,8 @@
 /*
- * BaseDAO template metadata.
+ * DAOFactoryHelper template metadata.
  */
 // The template name (the filename).
-name : BaseDAO.stg;
+name : DAOFactoryHelper.stg;
 
 // The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-custom-sql.
 type : per-table;
@@ -11,9 +11,7 @@ type : per-table;
 output: Java;
 
 // The filename builder.
-filename  builder : <tableName.capitalized>DAO.java;
+filename  builder : <tableName.capitalized>DAOFactoryHelper.java;
 
 // The package.
-package: <packageName>.dao;
-
-disabled;
+package: <packageName>.dao.core;

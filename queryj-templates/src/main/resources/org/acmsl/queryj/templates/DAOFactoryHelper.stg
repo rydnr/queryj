@@ -1,0 +1,370 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: DAOFactoryHelper.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate DAOFactory database-based
+//              implementations.
+//
+group DAOFactoryHelper;
+
+import "queryj.stg"
+
+source(C) ::= <<
+<!
+  Generates a DAOFactoryHelper source file.
+!>
+<sourceImpl(table=C.table, C=C)>
+>>
+
+sourceImpl(table, C) ::= <<
+<!
+  Generates a DAOFactoryHelper source file.
+  @param table the table.
+  @param C the context.
+!>
+/*
+<if(C.header)>
+<C.header>
+<else>
+<java_header(
+  description=
+  [
+    description(tableName=table.name)
+  ],
+  template="org/acmsl/queryj/templates/DAOFactoryHelper.stg",
+  C=C)><endif>
+*/
+<package_declaration(p=C.package)>
+
+<checkers_import(C=C)>
+/*
+ * Importing some JDK classes.
+ */
+import java.io.PrintStream;
+import java.util.Map;
+
+/*
+ * Importing some JDK extension classes
+ */
+import javax.sql.DataSource;
+
+/*
+ * Importing Jakarta Commons Logging classes
+ */
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+<class(table=table, C=C)>
+>>
+
+description(tableName) ::= <<
+<!
+  Generates a description for the generated file.
+  @param tableName the table name.
+!>
+<tableName>-specific DAOFactory implementation.
+>>
+
+class(table, C) ::= <<
+<!
+ Generates the class body.
+ @param table the table.
+ @param C the context.
+!>
+<classImpl(table=table, repository=C.repository, C=C)>
+>>
+
+classImpl(table, repository, C) ::= <<
+<!
+ Generates the class body.
+ @param table the table.
+ @param repository the table repository name.
+ @param C the context.
+!>
+/**
+ * <description(tableName=table.name)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/BaseDAOFactory.stg", C=C)>
+ */
+// TODO: Make it @ThreadSafe
+public class <table.name.capitalized>DAOFactoryHelper
+{
+    /**
+     * The cached instance of the most recent implementation.
+     */
+    <nullable(C=C)>
+    private <table.name.capitalized>DAOFactory m__LastUsed;
+
+    /**
+     * Public constructor to allow reflective access.
+     */
+    public <table.name.capitalized>DAOFactoryHelper() {}
+
+    /**
+     * Singleton implementation to avoid double-checked locking.
+     */
+    private static final class <table.name.capitalized>DAOFactoryHelperSingletonContainer
+    {
+        private static final <table.name.capitalized>DAOFactoryHelper SINGLETON =
+            new <table.name.capitalized>DAOFactoryHelper();
+    }
+
+    /**
+     * Retrieves a {@code <table.name.capitalized>DAOFactoryHelper} instance.
+     * @return such instance.
+     */
+    public static <table.name.capitalized>DAOFactoryHelper getInstance()
+    {
+        return <table.name.capitalized>DAOFactoryHelperSingletonContainer.SINGLETON;
+    }
+
+    /**
+     * Specifies the last used instance.
+     * @param factory the last used {@code <table.name.capitalized>DAOFactory}.
+     */
+    protected final void immutableSetLastUsed(<notnull(C=C)>final <table.name.capitalized>DAOFactory factory)
+    {
+        this.m__LastUsed = factory;
+    }
+
+    /**
+     * Specifies the last used instance.
+     * @param factory the last used {@code <table.name.capitalized>DAOFactory}.
+     */
+    protected void setLastUsed(<notnull(C=C)>final <table.name.capitalized>DAOFactory factory)
+    {
+        immutableSetLastUsed(factory);
+    }
+
+    /**
+     * Specifies the last used instance.
+     * @param factory the last used {@code <table.name.capitalized>DAOFactory}.
+     */
+    <nullable(C=C)>
+    protected <table.name.capitalized>DAOFactory getLastUsed()
+    {
+        return this.m__LastUsed;
+    }
+
+    /**
+     * Retrieves a {@code <table.name.capitalized>DAOFactory} instance.
+     * @return such instance.
+     */
+    <nullable(C=C)>
+    public static <table.name.capitalized>DAOFactory getDAOFactory()
+    {
+        return getDAOFactory(getLastUsed());
+    }
+
+    /**
+     * Retrieves a {@code <table.name.capitalized>DAOFactory} instance.
+     * @return such instance.
+     */
+    <nullable(C=C)>
+    protected static <table.name.capitalized>DAOFactory getDAOFactory(
+        <nullable(C=C)>final <table.name.capitalized>DAOFactory lastUsed)
+    {
+        <nullable(C=C)>final <table.name.capitalized>DAOFactory result;
+
+        if (lastUsed == null)
+        {
+            result = getDAOFactory(<repository.capitalized>DAOChooser.getInstance());
+            setLastUsed(result);
+        }
+        else
+        {
+            result = lastUsed;
+        }
+    }
+
+    /**
+     * Retrieves a {@code <table.name.capitalized>DAOFactory} instance.
+     * @param daoChooser the {@link <repository.capitalized>DAOChooser} instance.
+     * @return such instance.
+     */
+    <nullable(C=C)>
+    protected static <table.name.capitalized>DAOFactory getDAOFactory(
+        <notnull(C=C)>final <repository.capitalized>DAOChooser daoChooser)
+    {
+        <nullable(C=C)><table.name.capitalized>DAOFactory result = null;
+
+        <nullable(C=C)>final String factoryClassName =
+            daoChooser.get<table.name.capitalized>DAOFactoryClassName();
+
+        if (factoryClassName != null)
+        {
+            try
+            {
+                <notnull(C=C)>final Class\<<table.name.capitalized>\>DAOFactory factoryClass =
+                    Class.forName(factoryClassName);
+
+                result = factoryClass.newInstance();
+            }
+            catch (@NotNull final ClassNotFoundException factoryImplementationMissing)
+            {
+                logError(
+                    "Cannot find " + factoryClassName + " implementation",
+                    factoryImplementationMissing);
+            }
+            catch (@NotNull final InstantiationException invalidClassName)
+            {
+                logError(
+                    "Cannot instantiate " + factoryClassName + " implementation",
+                    invalidClassName);
+            }
+        }
+        else
+        {
+            logError("<C.package>.<table.name.capitalized>DAOFactory not specified");
+        }
+
+        return result;
+    }
+
+    /**
+     * Prints an error message.
+     * @param message the error message.
+     * @param error the underlying error (optional).
+     */
+    protected static void logError(<notnull(C=C)>final String message, <nullable(C=C)>final Throwable error)
+    {
+        try
+        {
+            <nullable(C=C)>final Log log = LogFactory.getLog(<table.name.capitalized>DAOFactory.class);
+
+            if (log != null)
+            {
+                if (error != null)
+                {
+                    log.fatal(message, error);
+                }
+                else
+                {
+                    log.fatal(message);
+                }
+            }
+            else
+            {
+                <nullable(C=C)>final PrintStream printer = retrieveFallbackLog();
+
+                if (printer != null)
+                {
+                    logError(printer, message, error);
+                }
+            }
+        }
+        catch (<notnull(C=C)>final Throwable throwable)
+        {
+            <nullable(C=C)>final PrintStream printer = retrieveFallbackLog();
+
+            if (printer != null)
+            {
+                logError(printer, "Cannot log using Apache Commons Logging.");
+                logError(printer, "The original error was: ");
+                logError(printer, message, error);
+                logError(printer, "The logging error is: ", throwable);
+            }
+        }
+    }
+
+    /**
+     * Retrieves the fallback {@link PrintStream}.
+     * @return either {@code System.err} or {@code System.out}, or {@code null} if none of them
+     * are available.
+     */
+    <nullable(C=C)>
+    protected static PrintStream retrieveFallbackLog()
+    {
+        <nullable(C=C)>final PrintStream result;
+
+        if (System.err != null)
+        {
+            result = System.err;
+        }
+        else if (System.out != null)
+        {
+            result = System.out;
+        }
+        else
+        {
+            result = null;
+        }
+
+        return result;
+    }
+
+    /**
+     * Logs an error if Commons-Logging is not available, using given {@code PrintStream}.
+     * @param printStream the {@link PrintStream}.
+     * @param message the message.
+     */
+    protected static void logError(
+        <notnull(C=C)>final PrintStream printStream, <notnull(C=C)>final String message)
+    {
+        logError(printStream, message, null);
+    }
+
+    /**
+     * Logs an error if Commons-Logging is not available, using given {@code PrintStream}.
+     * @param printStream the {@link PrintStream}.
+     * @param message the message.
+     * @param error the cause (optional).
+     */
+    protected static void logError(
+        <notnull(C=C)>final PrintStream printStream,
+        <notnull(C=C)>final String message,
+        <nullable(C=C)>final Throwable error)
+    {
+        if (error != null)
+        {
+            printStream.println(message + " (" + error.getMessage() + ")");
+            error.printStacktrace(printStream);
+        }
+        else
+        {
+            printStream.println(message);
+        }
+    }
+}
+>>

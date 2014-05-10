@@ -85,6 +85,34 @@ import org.jetbrains.annotations.Nullable;
 <endif>
 >>
 
+nullable_import(C) ::= <<
+<!
+ Generates the import group for NotNull/Nullable annotations.
+ @param C the context.
+ !>
+<if(C.notnull_annotations_enabled)>
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.Nullable;
+<endif>
+>>
+
+notnull_import(C) ::= <<
+<!
+ Generates the import group for NotNull/Nullable annotations.
+ @param C the context.
+ !>
+<if(C.notnull_annotations_enabled)>
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+<endif>
+>>
+
 checkers_import_jsr() ::= <<
 <!
  Generates the JSR-based checkers import group.

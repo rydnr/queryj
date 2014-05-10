@@ -11,9 +11,7 @@ type : per-table;
 output: Java;
 
 // The filename builder.
-filename  builder : Abstract<tableName.capitalized>DAOFactory.java;
+filename  builder : <tableName.voName>DAOFactory.java;
 
 // The package.
-package: <packageName>.dao.impl.<table.name.normalized.lowercased>;
-
-disabled;
+package: <packageName>.dao.core;
