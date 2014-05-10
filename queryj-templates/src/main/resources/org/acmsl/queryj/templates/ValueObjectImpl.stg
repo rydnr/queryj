@@ -29,20 +29,20 @@
 //
 //***************************************************************************
 //
-// Filename: ValueObject.stg
+// Filename: ValueObjectImpl.stg
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate value object interfaces.
+// Description: Defines the rules to generate value object implementations.
 //
 //
-group ValueObject;
+group ValueObjectImpl;
 
 import "queryj.stg"
 
 source(C) ::= <<
 <!
-  Defines the rules to generate value object interfaces.
+  Defines the rules to generate value object implementations.
   @param C the context.
 !>
 <sourceImpl(table=C.table, C=C)>
@@ -50,7 +50,7 @@ source(C) ::= <<
 
 sourceImpl(table, C) ::= <<
 <!
-  Defines the rules to generate value object interfaces.
+  Defines the rules to generate value object implementations.
   @param table the table.
   @param C the context.
 !>
@@ -63,7 +63,7 @@ sourceImpl(table, C) ::= <<
   [
     description(table=table)
   ],
-  template="org/acmsl/queryj/templates/ValueObject.stg",
+  template="org/acmsl/queryj/templates/ValueObjectImpl.stg",
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
@@ -76,7 +76,7 @@ import java.io.Serializable;
 <table.attributeTypes:{ t | import <t>;}; separator="\n">
 <endif>
 
-<interface(table=table, C=C)>
+<class(table=table, C=C)>
 >>
 
 description(table) ::= <<
@@ -84,10 +84,10 @@ description(table) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-<if(table.comment.empty)>ValueObject for <table.name>.<else><table.comment><endif>
+<if(table.comment.empty)>ValueObject implementation for <table.name>.<else><table.comment><endif>
 >>
 
-interface(table, C) ::= <<
+class(table, C) ::= <<
 <!
  Generates the class body.
  @param table the table.
@@ -97,12 +97,27 @@ interface(table, C) ::= <<
  * <[
       description(table=table)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(template="org/acmsl/queryj/templates/ValueObject.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/ValueObjectImpl.stg", C=C)>
  */
-public interface <table.name.voName>
-    extends Serializable
+public class <table.name.voName>Impl
+    extends Abstract<table.name.voName>
+    implements Serializable
 {
-    <table.attributes:getter(); separator="\n\n">
+    /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = <C.serialVersionUID>L;
+
+    /**
+     * Creates an {@code <table.name.voName>Impl} instance.
+     <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
+     */
+    public <table.name.voName>Impl(
+        <table.attributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>};
+          separator=",\n">)
+    {
+        super(<table.attributes:{ a | <a.name.voName.uncapitalized>}; separator=", ">);
+    }
 }
 >>
 

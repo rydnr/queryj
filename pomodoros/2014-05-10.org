@@ -3,10 +3,10 @@
 ** DONE Fix DAOFactory template #499: 2 -> 2
 ** DONE Fix ValueObject #501: 2 -> 1
 ** DONE Fix ValueObjectFactory #502: 2 -> 1
-** TODO Fix BaseValueObject #503: 2 ->
-** TODO Fix ValueObjectImpl #504: 2 ->
+** DONE Fix BaseValueObject #503: 2 -> 1
+** DONE Fix ValueObjectImpl #504: 2 -> 1
 ** Fix DAO template #500: 3 ->
-** Fix remaining compile errors #512: 1 ->
+** DONE Fix remaining compile errors #512: 1
 ** Fix BaseResultSetExtractor #505
 ** Fix ConfigurationProperties #506
 ** Fix DAOChooser #507
