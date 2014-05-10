@@ -9,7 +9,7 @@ Feature: G_TAX_PRODUCTS code compiles
     And the following columns:
     |     table    |         column        | type      | pk    | allows null | readonly |   sequence    | keyword | boolean | length | precision |
     | G_TAX_PRODUCTS | G_PRODUCT_ID | NUMBER | true | false | false |  |  | false | 22 | 0 |
-    | G_TAX_PRODUCTS | G_TAX_ID | NUMBER | true | false | false |  |  | false | 22 | 10 |
+    | G_TAX_PRODUCTS | G_TAX_ID | NUMBER | true | false | false |  |  | false | 22 | 0 |
     | G_TAX_PRODUCTS | AMOUNT | NUMBER | false | false | false |  |  | false | 22 | 10 |
     | G_TAX_PRODUCTS | TAX_AMOUNT | NUMBER | false | false | false |  |  | false | 22 | 10 |
     | G_TAX_PRODUCTS | LAST_MODIFIED | DATE | false | false | true |  |  | false | 7 | 0 |
@@ -47,7 +47,8 @@ Feature: G_TAX_PRODUCTS code compiles
 
     Examples:
       | template | output |
-      | DAOFactory | OracleGTaxProductDAOFactory.java |
+      | ValueObject| GTaxProduct.java |
+#      | DAOFactory | OracleGTaxProductDAOFactory.java |
 #      | BaseDAOFactory | GTaxProductDAOFactory.java |
 #      | BaseDAO | GTaxProductDAO.java |
 #      | ResultSetExtractor| GTaxProductResultSetExtractor.java |

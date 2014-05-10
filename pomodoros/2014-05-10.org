@@ -1,7 +1,7 @@
 * 2014/05/10
 ** DONE Fix BaseDAOFactory template #497: 2 -> 2
-** TODO Fix DAOFactory template #499: 2 ->
-** TODO Fix ValueObject #501: 2 ->
+** DONE Fix DAOFactory template #499: 2 -> 2
+** DONE Fix ValueObject #501: 2 -> 1
 ** TODO Fix ValueObjectFactory #502: 2 ->
 ** TODO Fix BaseValueObject #503: 2 ->
 ** TODO Fix ValueObjectImpl #504: 2 ->

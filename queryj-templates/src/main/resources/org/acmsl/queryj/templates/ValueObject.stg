@@ -67,15 +67,7 @@ sourceImpl(table, C) ::= <<
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
-<checkers_import(C=C)>
-<if(C.implement_markers)>
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.dao.ValueObject;
-
-<endif>
+<notnull_import(C=C)>
 /*
  * Importing JDK classes.
  */
@@ -83,7 +75,6 @@ import java.io.Serializable;
 <if(table.attributeTypes)>
 <table.attributeTypes:{ t | import <t>;}; separator="\n">
 <endif>
-
 
 <class(table=table, C=C)>
 >>
@@ -106,16 +97,10 @@ class(table, C) ::= <<
  * <[
       description(table=table)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/ValueObject.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/ValueObject.stg", C=C)>
  */
 public interface <table.name.voName>
-<if(C.implement_markers)>
-    extends  ValueObject,
-             Serializable
-<else>
     extends Serializable
-<endif>
 {
     <table.attributes:getter(); separator="\n\n">
 }

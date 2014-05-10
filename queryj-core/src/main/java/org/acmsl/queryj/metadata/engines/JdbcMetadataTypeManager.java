@@ -157,8 +157,7 @@ public class JdbcMetadataTypeManager
      */
     @Override
     @Nullable
-    public String getNativeType(
-        final int dataType, final boolean allowsNull)
+    public String getNativeType(final int dataType, final boolean allowsNull)
     {
         @Nullable final String result;
 
@@ -1814,7 +1813,6 @@ public class JdbcMetadataTypeManager
                 result = Types.NULL;
                 break;
             case Literals.NUMBER_U:
-                /*
                 if (precision > 0)
                 {
                     result = Types.DECIMAL;
@@ -1823,8 +1821,6 @@ public class JdbcMetadataTypeManager
                 {
                     result = Types.BIGINT;
                 }
-                */
-                result = Types.BIGINT;
                 break;
             case Literals.NUMERIC_U:
                 result = Types.NUMERIC;
