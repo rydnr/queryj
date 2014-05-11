@@ -860,7 +860,7 @@ public abstract class AbstractTemplatesTest<G, F>
                     Assert.fail(PARSER_ERROR + invalidClass.getMessage());
                 }
 
-                Assert.assertNotNull("Missing class in file " + outputFile.getAbsolutePath(), rootClass);
+                Assert.assertNotNull("Missing class or interface in file " + outputFile.getAbsolutePath(), rootClass);
             }
         }
     }

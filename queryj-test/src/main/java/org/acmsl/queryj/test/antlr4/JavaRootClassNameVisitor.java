@@ -39,11 +39,13 @@ package org.acmsl.queryj.test.antlr4;
 /*
  * Importing QueryJ Test classes.
  */
+import gherkin.lexer.Ja;
 import org.acmsl.queryj.test.antlr4.JavaParser.ClassDeclarationContext;
 
 /*
  * Importing checkthread.org annotations.
  */
+import org.acmsl.queryj.test.antlr4.JavaParser.NormalInterfaceDeclarationContext;
 import org.checkthread.annotations.ThreadSafe;
 
 /*
@@ -108,7 +110,7 @@ public class JavaRootClassNameVisitor
     }
 
     /**
-     * Visits the parser tree within the <pre>packageDeclaration</pre> rule.
+     * Visits the parser tree within the <pre>classDeclaration</pre> rule.
      * @param context the parse context.
      * @return the package name.
      */
@@ -121,11 +123,31 @@ public class JavaRootClassNameVisitor
         return super.visitClassDeclaration(context);
     }
 
+    /**
+     * Visits the parser tree within the <pre>packageDeclaration</pre> rule.
+     * @param context the parse context.
+     * @return the package name.
+     */
+    @NotNull
+    @Override
+    public String visitNormalInterfaceDeclaration(@NotNull final NormalInterfaceDeclarationContext context)
+    {
+        setRootClass(context.getChild(1).getText());
+
+        return super.visitNormalInterfaceDeclaration(context);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
     @Override
     public String toString()
     {
-        return "JavaRootClassNameVisitor{" +
-               "rootClass='" + m__strRootClass + '\'' +
-               '}';
+        return
+              "{ \"class\": \"JavaRootClassNameVisitor\""
+            + ", \"rootClass\": \"" + m__strRootClass + '\''
+            + ", \"package\": \"" + JavaRootClassNameVisitor.class.getPackage().getName()
+            + "\" }";
     }
 }

@@ -435,4 +435,52 @@ public class TableDecoratorHelper
 
         return result;
     }
+
+    /**
+     * Checks whether any attribute is nullable.
+     * @param attributes the {@link Attribute}s.
+     * @return {@code true} in such case.
+     */
+    public boolean containNullableAttributes(@NotNull final ListDecorator<Attribute<DecoratedString>> attributes)
+    {
+        boolean result = false;
+
+        for (@Nullable final Attribute<DecoratedString> attribute : attributes)
+        {
+            if (   (attribute != null)
+                && (attribute.isNullable()))
+            {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether any attribute cannot be null.
+     * @param attributes the {@link Attribute}s.
+     * @param typeManager the {@link MetadataTypeManager} instance.
+     * @return {@code true} in such case.
+     */
+    public boolean containNotNullAttributes(
+        @NotNull final ListDecorator<Attribute<DecoratedString>> attributes,
+        @NotNull final MetadataTypeManager typeManager)
+    {
+        boolean result = false;
+
+        for (@Nullable final Attribute<DecoratedString> attribute : attributes)
+        {
+            if (   (attribute != null)
+                && (!typeManager.isPrimitive(attribute.getTypeId()))
+                && (!attribute.isNullable()))
+            {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
 }

@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Is able to resolve "timestamps?" placeholders in
+ * Description: Is able to resolve "generation_timestamps_enabled" placeholders in
  *              templates.
  *
  */
@@ -49,23 +49,25 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Is able to resolve "timestamps?" placeholders in templates.
+ * Is able to resolve "generation_timestamps_enabled" placeholders in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2013/03/18
+ * @since 3.0
+ * Created: 2013/03/18
  */
-@SuppressWarnings("unused")
 @ThreadSafe
 public class AreTimestampsAllowedHandler
     extends AbstractTemplateContextFillHandler<QueryJTemplateContext, Boolean>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -3522961683638627590L;
 
     /**
-     * Creates a {@link AreTimestampsAllowedHandler} to resolve placeholders
+     * Creates a {@code AreTimestampsAllowedHandler} to resolve placeholders
      * using given {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
-    @SuppressWarnings("unused")
     public AreTimestampsAllowedHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);

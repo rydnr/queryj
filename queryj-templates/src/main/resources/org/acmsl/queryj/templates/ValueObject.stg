@@ -67,13 +67,26 @@ sourceImpl(table, C) ::= <<
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
-<notnull_import(C=C)>
+<
+if(table.containsNotNullAttributes)><
+  if(table.containsNullableAttributes)><
+    checkers_import(C=C)>
+< else><
+    notnull_import(C=C)>
+< endif><
+else><
+  if(table.containsNullableAttributes)><
+    nullable_import(C=C)>
+< endif><
+endif>
 /*
  * Importing JDK classes.
  */
 import java.io.Serializable;
 <if(table.attributeTypes)>
-<table.attributeTypes:{ t | import <t>;}; separator="\n">
+<  table.attributeTypes:{ t | import <t>;}; separator="\n">
+
+<else>
 <endif>
 
 <interface(table=table, C=C)>
@@ -112,7 +125,7 @@ getter(attribute) ::= <<
  @param attribute the attribute.
 !>
 /**
- * <if(attribute.comment)><attribute.comment><else>Retrieves the \<i\><attribute.name>\</i\> value<endif>.
+ * <if(attribute.comment)><attribute.comment><else>Retrieves the \<i><attribute.name>\</i> value<endif>.
  * @return such information.
  */
 <if(!attribute.strictlyPrimitive)><if(attribute.nullable)><nullable(C=C)><else><notnull(C=C)><endif><endif>

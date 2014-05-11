@@ -102,7 +102,7 @@ public class AbstractTableDecoratorTest
      * @param parentTable the parent table.
      * @return the table decorator.
      */
-    protected AbstractTableDecorator setupTableDecorator(
+    protected static AbstractTableDecorator setupTableDecorator(
         @NotNull final List<Attribute<String>> attributes,
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable)
     {
@@ -271,6 +271,9 @@ public class AbstractTableDecoratorTest
         }
     }
 
+    /**
+     * Checks getAttributeTypes() does not return duplicates.
+     */
     @Test
     public void getAttributeTypes_does_not_contain_duplicates()
     {

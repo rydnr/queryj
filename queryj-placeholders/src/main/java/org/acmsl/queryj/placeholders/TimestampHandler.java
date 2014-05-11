@@ -56,10 +56,10 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Handler to provide 'timestamp' placeholder in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/18
+ * @since 3.0
+ * Created: 2012/06/18
  */
 @ThreadSafe
-@SuppressWarnings("unused")
 public class TimestampHandler
     extends AbstractFillHandler<String>
     implements NonRelevantFillHandler
@@ -70,20 +70,18 @@ public class TimestampHandler
     private static final long serialVersionUID = 2312284463910738810L;
 
     /**
-     * Retrieves the placeholder.
-     *
+     * Retrieves "timestamp".
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return Literals.TIMESTAMP;
+        return "timestamp";
     }
 
     /**
      * Retrieves the timestamp.
-     *
      * @return the dynamic value.
      */
     @Override
