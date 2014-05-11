@@ -67,13 +67,14 @@ sourceImpl(table, C) ::= <<
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
-<notnull_import(C=C)>
-<if(table.attributeTypes)>
+
 /*
- * Importing JDK classes.
+ * Importing <C.repository.capitalized> classes.
  */
-<table.attributeTypes:{ t | import <t>;}; separator="\n">
-<endif>
+import <C.project_package>.<typeInitMap.voSubpackageName>.<table.name.voName>;
+import <C.project_package>.<typeInitMap.voSubpackageName>.impl.<table.name.voName>Impl;
+<notnull_import_maybe_nullable(table=table, C=C)>
+<import_attribute_types(table=table, useHeader=true)>
 
 <class(table=table, C=C)>
 >>
@@ -113,7 +114,7 @@ public class <table.name.voName>Factory
     /**
      * Singleton implemented to avoid the double-check locking.
      */
-    private static class <table.name.voName>ValueObjectFactorySingletonContainer
+    private static class <table.name.voName>FactorySingletonContainer
     {
         /**
          * The actual singleton.
@@ -147,7 +148,7 @@ public class <table.name.voName>Factory
           separator=",\n">)
     {
         return
-            new <table.name.voName>ValueObjectImpl(
+            new <table.name.voName>Impl(
                 <table.attributes:{ a | <a.name.uncapitalized>}; separator=",\n">);
     }
 }

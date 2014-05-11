@@ -302,3 +302,20 @@ attribute_toString(attribute) ::= <<
 result.append("\", \"<attribute.name.capitalized>\": \"");
 result.append(this.m__<attribute.name.capitalized>);
 >>
+
+import_attribute_types(table, useHeader=true) ::= <<
+<!
+ Imports the attribute types.
+ @param table the table.
+ @param useHeader whether to use the import header or not.
+!>
+<if(table.attributeTypes)>
+<if(useHeader)
+>/*
+ * Importing JDK classes.
+ */
+<endif><
+  table.attributeTypes:{ t | import <t>;}; separator="\n"><
+else>
+<endif>
+>>

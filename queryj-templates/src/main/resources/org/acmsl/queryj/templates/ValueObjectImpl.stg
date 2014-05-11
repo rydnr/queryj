@@ -67,14 +67,12 @@ sourceImpl(table, C) ::= <<
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
-<notnull_import(C=C)>
+<checkers_import_maybe(table=table, C=C)>
 /*
  * Importing JDK classes.
  */
 import java.io.Serializable;
-<if(table.attributeTypes)>
-<table.attributeTypes:{ t | import <t>;}; separator="\n">
-<endif>
+<import_attribute_types(table=table, useHeader=false)>
 
 <class(table=table, C=C)>
 >>
@@ -99,6 +97,7 @@ class(table, C) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/templates/ValueObjectImpl.stg", C=C)>
  */
+<class_annotations(C=C)>
 public class <table.name.voName>Impl
     extends Abstract<table.name.voName>
     implements Serializable
@@ -116,7 +115,7 @@ public class <table.name.voName>Impl
         <table.attributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>};
           separator=",\n">)
     {
-        super(<table.attributes:{ a | <a.name.voName.uncapitalized>}; separator=", ">);
+        super(<table.attributes:{ a | <a.name.uncapitalized>}; separator=", ">);
     }
 }
 >>

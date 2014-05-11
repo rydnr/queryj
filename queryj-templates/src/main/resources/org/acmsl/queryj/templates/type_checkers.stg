@@ -85,30 +85,33 @@ import org.jetbrains.annotations.Nullable;
 <endif>
 >>
 
-nullable_import(C) ::= <<
+nullable_import(C, useHeader=true) ::= <<
 <!
  Generates the import group for NotNull/Nullable annotations.
  @param C the context.
- !>
+!>
 <if(C.notnull_annotations_enabled)>
 
-/*
+<if(useHeader)>/*
  * Importing JetBrains annotations.
  */
+<endif>
 import org.jetbrains.annotations.Nullable;
 <endif>
 >>
 
-notnull_import(C) ::= <<
+notnull_import(C, useHeader=true) ::= <<
 <!
  Generates the import group for NotNull/Nullable annotations.
  @param C the context.
+ @param useHeader whether to use a header.
  !>
 <if(C.notnull_annotations_enabled)>
 
-/*
+<if(useHeader)>/*
  * Importing JetBrains annotations.
  */
+<endif>
 import org.jetbrains.annotations.NotNull;
 <endif>
 >>
@@ -134,4 +137,54 @@ checkthread_import(C) ::= <<
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+>>
+
+checkers_import_maybe(table, C, useHeader=true) ::= <<
+<!
+ Imports the checkers depending on the table attributes.
+ @param table the table.
+ @param context the context.
+!>
+<
+if(table.containsNotNullAttributes)><
+  if(table.containsNullableAttributes)><
+    checkers_import(C=C)><
+  else><
+    notnull_import(C=C, useHeader=useHeader)>
+< endif><
+else><
+  if(table.containsNullableAttributes)><
+    nullable_import(C=C, useHeader=useHeader)>
+< endif><
+endif>
+>>
+
+notnull_import_maybe_nullable(table, C) ::= <<
+<!
+ Imports the checkers depending on the table attributes.
+ @param table the table.
+ @param context the context.
+!>
+<notnull_import(C=C)><
+if(table.containsNullableAttributes)><
+ nullable_import(useHeader=false, C=C)>
+<
+endif>
+>>
+
+nullable_import_maybe_notnull(table, C) ::= <<
+<!
+ Imports the checkers depending on the table attributes.
+ @param table the table.
+ @param context the context.
+!>
+/*
+ * Importing JetBrains annotations.
+ */
+<
+if(table.containsNotNullAttributes)><
+ notnull_import(useHeader=false, C=C)>
+<
+endif>
+<nullable_import(C=C, useHeader=false)>
 >>

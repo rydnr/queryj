@@ -71,15 +71,13 @@ sourceImpl(table, C) ::= <<
 /*
  * Importing <C.repository.capitalized> classes.
  */
-import <C.package_name>.<typeInitMap.voSubpackageName>.<table.name.voName>;
+import <C.project_package>.<typeInitMap.voSubpackageName>.<table.name.voName>;
 <checkers_import(C=C)>
 /*
  * Importing JDK classes.
  */
 import java.io.Serializable;
-<if(table.attributeTypes)>
-<table.attributeTypes:{ t | import <t>;}; separator="\n">
-<endif>
+<import_attribute_types(table=table, useHeader=false)>
 
 <class(table=table, C=C)>
 >>
@@ -114,8 +112,8 @@ class(table, C) ::= <<
  */
 <class_annotations(C=C)>
 public abstract class Abstract<table.name.voName>
-    extends Serializable
-    implements <table.name.voName>
+    implements <table.name.voName>,
+               Serializable
 {
     /**
      * The serial version id.
@@ -209,7 +207,7 @@ toString_method(table, C) ::= <<
 @Override
 public String toString()
 {
-    <notnull(C=C)>final StringBuilder result = new StringBuilder("{ \class\": \"Abstract<table.name.voName>");
+    <notnull(C=C)>final StringBuilder result = new StringBuilder("{ \"class\": \"Abstract<table.name.voName>");
 
     <table.attributes:{ a | <attribute_toString(attribute=a)>}; separator="\n">
 

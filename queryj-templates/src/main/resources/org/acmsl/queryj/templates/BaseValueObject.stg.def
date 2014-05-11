@@ -15,5 +15,3 @@ filename  builder : Abstract<tableName.voName>.java;
 
 // The package.
 package: <packageName>.vo.impl;
-
-disabled;

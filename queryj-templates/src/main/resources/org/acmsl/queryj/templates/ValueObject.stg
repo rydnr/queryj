@@ -67,27 +67,12 @@ sourceImpl(table, C) ::= <<
   C=C)><endif>
 */
 <package_declaration(p=C.package)>
-<
-if(table.containsNotNullAttributes)><
-  if(table.containsNullableAttributes)><
-    checkers_import(C=C)>
-< else><
-    notnull_import(C=C)>
-< endif><
-else><
-  if(table.containsNullableAttributes)><
-    nullable_import(C=C)>
-< endif><
-endif>
+<checkers_import_maybe(table=table, C=C)>
 /*
  * Importing JDK classes.
  */
 import java.io.Serializable;
-<if(table.attributeTypes)>
-<  table.attributeTypes:{ t | import <t>;}; separator="\n">
-
-<else>
-<endif>
+<import_attribute_types(table=table, useHeader=false)>
 
 <interface(table=table, C=C)>
 >>
