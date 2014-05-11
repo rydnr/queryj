@@ -73,9 +73,8 @@ sourceImpl(table, C) ::= <<
  */
 import <C.project_package>.<typeInitMap.voSubpackageName>.<table.name.voName>;
 import <C.project_package>.<typeInitMap.voSubpackageName>.impl.<table.name.voName>Impl;
-<notnull_import_maybe_nullable(table=table, C=C)>
-<import_attribute_types(table=table, useHeader=true)>
-
+<notnull_import_maybe_nullable(table=table, C=C)><
+import_attribute_types(table=table, useHeader=true)>
 <class(table=table, C=C)>
 >>
 
@@ -105,14 +104,15 @@ class(table, C) ::= <<
  * <[
       description(table=table)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/ValueObjectFactory.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/ValueObjectFactory.stg", C=C)>
  */
 <class_annotations(C=C)>
 public class <table.name.voName>Factory
 {
     /**
-     * Singleton implemented to avoid the double-check locking.
+     * Singleton implemented to avoid the
+     * \<a href="https://en.wikipedia.org/wiki/Double-checked_locking">double-checked locking\</a>.
+     * This relies on the fact that inner classes are not loaded until they are referenced.
      */
     private static class <table.name.voName>FactorySingletonContainer
     {
