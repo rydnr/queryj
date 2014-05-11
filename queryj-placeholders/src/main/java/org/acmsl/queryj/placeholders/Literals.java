@@ -38,7 +38,6 @@ package org.acmsl.queryj.placeholders;
 /*
  * Importing checkthread.org annotations.
  */
-import org.acmsl.queryj.metadata.engines.JdbcTypeManager;
 import org.checkthread.annotations.ThreadSafe;
 
 /**

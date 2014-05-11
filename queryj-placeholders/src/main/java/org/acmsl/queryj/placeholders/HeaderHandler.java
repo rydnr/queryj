@@ -64,6 +64,9 @@ public class HeaderHandler
     extends AbstractTemplateContextFillHandler<QueryJTemplateContext, DecoratedString>
     implements NonRelevantFillHandler
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -6297477975848530513L;
 
     /**
