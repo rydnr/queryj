@@ -86,16 +86,13 @@ import com.ventura24.commons.dao.V24ResultSetExtractor;
  */
 import org.springframework.dao.DataAccessException;
 <checkers_import(C=C)>
-
 /*
  * Importing JDK classes.
  */
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-<if(table.attributeTypes)>
-<table.attributeTypes:{ t | import <t>;}; separator="\n">
-<endif>
+<import_attribute_types(table=table, useHeader=false)>
 
 <class(table=table, repository=C.repository, C=C)>
 >>
@@ -112,7 +109,7 @@ project_imports(basePackageName, voSubpackageName, table, repository) ::= <<
  * Importing <repository.capitalized> classes.
  */
 import <basePackageName>.<voSubpackageName>.<table.name.voName>;
-import <basePackageName>.<voSubpackageName>.<table.name.voName>ValueObjectFactory;
+import <basePackageName>.<voSubpackageName>.core.<table.name.voName>Factory;
 >>
 
 description(table) ::= <<
@@ -142,15 +139,16 @@ public class <table.name.voName>ResultSetExtractor
 {
     /**
      * Creates a new instance.
+     * @param sql the SQL query.
      * @param listener the {@link DAOListener} instance.
      */
-    public <table.name.voName>ResultSetExtractor(<nullable(C=C)>final DAOListener listener)
+    public <table.name.voName>ResultSetExtractor(
+        <notnull(C=C)>final String sql, <nullable(C=C)>final DAOListener listener)
     {
-        super(listener);
+        super(sql, listener);
     }
 
     <defaultExtractor(table=table, repository=repository, C=C)>
-
 }
 >>
 
@@ -164,10 +162,11 @@ defaultExtractor(table, repository, C) ::= <<
 /**
  * Extracts {@link <table.name.voName>} information from given result set.
  * @param resultSet the result set.
- * @param listener the {@link <repository.voName>DAOListener} instance.
- * @return the {@code <table.name.voName>} or
+ * @param sql the original SQL query.
+ * @param listener the {@link DAOListener} instance.
+ * @return the {@link <table.name.voName>} or
  * {@code null} if the operation returned no data.
- * @throws SQLException intercepted by \<i>Spring\</i\>.
+ * @throws SQLException intercepted by \<i>Spring\</i>.
  * @throws DataAccessException with information about any
  * custom exception.
  */
@@ -175,18 +174,20 @@ defaultExtractor(table, repository, C) ::= <<
 <notnull(C=C)>
 protected <table.name.voName> extractData(
     <notnull(C=C)>final ResultSet resultSet,
+    <notnull(C=C)>final String sql,
     <nullable(C=C)>final DAOListener listener)
     throws  SQLException,
             DataAccessException
 {
-    return extractData(resultSet, listener, <table.name.voName>ValueObjectFactory.getInstance());
+    return extractData(resultSet, sql, listener, <table.name.voName>Factory.getInstance());
 }
 
 /**
  * Extracts {@link <table.name.voName>} information from given result set.
  * @param resultSet the result set.
+ * @param sql the original SQL query.
  * @param listener the {@link DAOListener} instance.
- * @param factory the {@link <table.name.voName>ValueObjectFactory}
+ * @param factory the {@link <table.name.voName>Factory}
  * instance.
  * @return the {@code <table.name.voName>} or
  * {@code null} if the operation returned no data.
@@ -197,8 +198,9 @@ protected <table.name.voName> extractData(
 <notnull(C=C)>
 protected <table.name.voName> extractData(
     <notnull(C=C)>final ResultSet resultSet,
+    <notnull(C=C)>final String sql,
     <nullable(C=C)>final DAOListener listener,
-    <notnull(C=C)>final <table.name.voName>ValueObjectFactory factory)
+    <notnull(C=C)>final <table.name.voName>Factory factory)
   throws  SQLException,
           DataAccessException
 {
@@ -208,21 +210,21 @@ protected <table.name.voName> extractData(
     {
         if (listener != null)
         {
-            daoListener.resultSetMovedForward(this);
+            listener.resultSetMovedForward(sql, 1);
         }
 
         result =
             factory.create<table.name.voName>(
                 <table.attributes:{a | <attribute_resultset_retrieval(attr=a, C=C)>}; separator=",\n">);
 
-        if  (daoListener != null)
+        if  (listener != null)
         {
-            daoListener.resultSetClosed(this);
+            listener.resultSetClosed(this);
         }
     }
     else
     {
-        // TODO: check it this is exceptional or not.
+        // TODO: check if this is exceptional or not.
         throw new RuntimeException("No more data to extract!");
         //result = null;
     }

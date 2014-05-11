@@ -92,6 +92,17 @@ Feature: <table.name> code compiles
 
     Examples:
       | template | output |
+      | ResultSetExtractor | <table.name.singular.camelCase>ResultSetExtractor.java |
+      | ValueObject | <table.name.singular.camelCase>.java                   |
+      | BaseValueObject | Abstract<table.name.singular.camelCase>.java           |
+      | ValueObjectImpl | <table.name.singular.camelCase>Impl.java               |
+      | ValueObjectFactory | <table.name.singular.camelCase>Factory.java            |
+      | DAOFactoryHelper | <table.name.singular.camelCase>DAOFactoryHelper.java |
+      | ValueObjectFactory | <table.name.singular.camelCase>Factory.java |
+      | DAOFactory | <engine.name.capitalized><table.name.singular.camelCase>DAOFactory.java |
+      | BaseDAOFactory | <table.name.singular.camelCase>DAOFactory.java |
+      | BaseDAO | <table.name.singular.camelCase>DAO.java |
+      | BaseResultSetExtractor | <table.name.singular.camelCase>ResultSetExtractor.java |
       | DAO | <engine.name.capitalized><table.name.singular.camelCase>DAO.java |
 >>
 

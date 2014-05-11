@@ -1,5 +1,6 @@
 * 2014/05/11
 ** DONE Fix ValueObject #501: 3 -> 3
+** DONE Fix ResultSetExtractor #508: 2 -> 2
 ** TODO Fix BaseResultSetExtractor #505: 1
 ** TODO Fix ConfigurationProperties #506: 1
 ** TODO Fix DAOChooser #507: 1
