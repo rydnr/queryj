@@ -270,15 +270,15 @@ public class PerRepositoryTemplatesTest
         @NotNull final Map\<String, File> outputFiles,
         @NotNull final CustomSqlProvider sqlProvider)
     {
-        @Nullable final PerRepositoryTemplateGenerator\<PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext> generator =
+        @Nullable final PerRepositoryTemplateGenerator\<PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext> t_Generator =
             (PerRepositoryTemplateGenerator\<PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext>) retrieveTemplateGenerator(
                 templateName);
 
         Assert.assertNotNull(
             "No template generator found for " + templateName + ". Does " + templateName + ".stg exist?",
-            generator);
+            t_Generator);
 
-        @NotNull final DecoratorFactory decoratorFactory = retrieveDecoratorFactory(generator);
+        @NotNull final DecoratorFactory t_DecoratorFactory = retrieveDecoratorFactory(t_Generator);
 
         boolean firstTime = true;
         boolean restart = false;
@@ -294,17 +294,13 @@ public class PerRepositoryTemplatesTest
                 new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
             new QueryJCommandWrapper\<DecoratorFactory>(t_Command).setSetting(
-                DecoratorFactory.class.getName(), decoratorFactory);
+                DecoratorFactory.class.getName(), t_DecoratorFactory);
             new QueryJCommandWrapper\<CustomSqlProvider>(t_Command).setSetting(
                 CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, sqlProvider);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.PACKAGE, BASE_PACKAGE_NAME);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                Literals.PACKAGE_NAME, BASE_PACKAGE_NAME + ".dao"); // hard-coded in parent. could be retrieved from the feature file
-            new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.REPOSITORY, repository);
-            new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                QueryJSettings.HEADER_FILE, "");
             new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
                 QueryJSettings.DISABLE_TIMESTAMPS, false);
             new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(
@@ -318,67 +314,74 @@ public class PerRepositoryTemplatesTest
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.VERSION, "<C.version>");
 
-            @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables =
+            @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> t_lTables =
                 new ArrayList\<>(tableMap.values());
 
-            @NotNull final MetadataManager metadataManager =
-                retrieveMetadataManager(engine, tables, new ArrayList\<>(0), decoratorFactory);
+            @NotNull final MetadataManager t_MetadataManager =
+                retrieveMetadataManager(engine, t_lTables, new ArrayList\<>(0), t_DecoratorFactory);
 
             new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
-                DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, metadataManager);
+                DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, t_MetadataManager);
 
-            @Nullable final PerRepositoryTemplateFactory\<? extends PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext> templateFactory =
+            @Nullable final PerRepositoryTemplateFactory\<? extends PerRepositoryTemplate\<PerRepositoryTemplateContext>, PerRepositoryTemplateContext> t_TemplateFactory =
                 retrieveTemplateFactory(templateName);
 
-            Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
+            Assert.assertNotNull("No template factory found for " + templateName, t_TemplateFactory);
 
-            @NotNull final String packageName =
+            @NotNull final List\<String> t_lTableNames = t_MetadataManager.getTableDAO().findAllTableNames();
+
+            @NotNull final PerRepositoryTemplateContext t_Context =
+                new PerRepositoryTemplateContext(repository, t_lTableNames, t_Command);
+
+            @NotNull final String t_strPackageName =
                 resolvePackage(PACKAGE_MAPPINGS.get(templateName), repository, resolveEngine(engine));
 
-            @Nullable final PerRepositoryTemplate\<PerRepositoryTemplateContext> template =
-                templateFactory.createTemplate(
-                    repository, metadataManager.getTableDAO().findAllTableNames(), t_Command);
+            t_Context.setPackageName(t_strPackageName);
 
-            Assert.assertNotNull("No template found for " + templateName, template);
+            @Nullable final PerRepositoryTemplate\<PerRepositoryTemplateContext> t_Template =
+                t_TemplateFactory.createTemplate(
+                    repository, t_lTableNames, t_Context, t_Command);
 
-            File outputDir = null;
+            Assert.assertNotNull("No template found for " + templateName, t_Template);
+
+            File t_OutputDir = null;
 
             try
             {
                 rootFolder.create();
 
-                @NotNull final String[] packages = packageName.split("\\\.");
-                @NotNull final StringBuilder folder = new StringBuilder();
+                @NotNull final String[] t_astrPackages = t_strPackageName.split("\\\.");
+                @NotNull final StringBuilder t_sbFolder = new StringBuilder();
 
-                for (@NotNull final String pkg : packages)
+                for (@NotNull final String t_strPkg : t_astrPackages)
                 {
-                    folder.append(File.separator);
-                    folder.append(pkg);
+                    t_sbFolder.append(File.separator);
+                    t_sbFolder.append(t_strPkg);
                 }
 
-                outputDir = new File(rootFolder.getRoot().getAbsolutePath().concat(folder.toString()));
+                t_OutputDir = new File(rootFolder.getRoot().getAbsolutePath().concat(t_sbFolder.toString()));
 
-                outputDir.mkdirs();
+                t_OutputDir.mkdirs();
             }
             catch (@NotNull final IOException ioException)
             {
                 Assert.fail(ioException.getMessage());
             }
 
-            if (!outputDir.exists())
+            if (!t_OutputDir.exists())
             {
-                Assert.fail("Cannot create folder: " + outputDir.getAbsolutePath());
+                Assert.fail("Cannot create folder: " + t_OutputDir.getAbsolutePath());
             }
 
             UniqueLogFactory.initializeInstance(LogFactory.getLog(PerRepositoryTemplatesTest.class));
 
-            ((AbstractTemplate) template).setDebugMode(true);
+            ((AbstractTemplate) t_Template).setDebugMode(true);
 
             try
             {
-                generator.write(
-                    template,
-                    outputDir,
+                t_Generator.write(
+                    t_Template,
+                    t_OutputDir,
                     rootFolder.getRoot(),
                     Charset.defaultCharset());
             }
@@ -401,7 +404,7 @@ public class PerRepositoryTemplatesTest
 
             outputFiles.put(
                 repository,
-                new File(outputDir, template.getTemplateContext().getFileName()));
+                new File(t_OutputDir, t_Template.getTemplateContext().getFileName()));
         }
 
         if (failCause != null)
@@ -459,21 +462,21 @@ public class PerRepositoryTemplatesTest
     /**
      * Resolves the package.
      * @param packageTemplate the package template.
-     * @param tableName the table name.
+     * @param repository the repository.
      * @param engine the engine.
      * @return the actual package.
      */
     @NotNull
     protected String resolvePackage(
         @NotNull final String packageTemplate,
-        @NotNull final String tableName,
+        @NotNull final String repository,
         @NotNull final Engine\<String> engine)
     {
         @NotNull final String result;
 
         @NotNull final ST template = new ST(packageTemplate);
         template.add(Literals.PACKAGE_NAME, new DecoratedString(BASE_PACKAGE_NAME));
-        template.add(Literals.TABLE_NAME, new DecoratedString(tableName));
+        template.add(Literals.REPOSITORY, new DecoratedString(repository));
         template.add(Literals.ENGINE, new EngineDecorator(engine));
 
         result = template.render();

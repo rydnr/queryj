@@ -172,32 +172,25 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @return the template.
      */
     @Nullable
-    protected T createTemplate(
+    protected abstract T createTemplate(
         @NotNull final TF templateFactory,
         @NotNull final String repository,
         @NotNull final List<String> tableNames,
         @NotNull final QueryJCommand parameters)
-      throws  QueryJBuildException
-    {
-        return
-            templateFactory.createTemplate(
-                repository,
-                tableNames,
-                parameters);
-    }
+      throws  QueryJBuildException;
 
     /**
      * Retrieves the package name.
-     * @param repository the repositony.
+     * @param repository the repository.
      * @param engine the engine.
-     * @param projectPackage the project package.
+     * @param parameters the parameters.
      * @return the package name.
      */
     @NotNull
     protected abstract String retrievePackage(
         @NotNull final String repository,
         @NotNull final Engine<String> engine,
-        @NotNull final String projectPackage);
+        @NotNull final QueryJCommand parameters);
 
     /**
      * Stores the template in given attribute map.

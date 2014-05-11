@@ -159,16 +159,17 @@ public class <C.class_name>
         @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
-        new QueryJCommandWrapper\<DecoratorFactory>(parameters).setSetting(
-            DecoratorFactory.class.getName(), CachingDecoratorFactory.getInstance());
+        @NotNull final <def.type.capitalized>TemplateContext t_Context =
+            new <def.type.capitalized>TemplateContext(repository, tableNames, parameters);
 
-        new QueryJCommandWrapper\<String>(parameters).setSetting(
-            Literals.PACKAGE_NAME,
+        t_Context.setDecoratorFactory(CachingDecoratorFactory.getInstance());
+
+        t_Context.setPackageName(
             retrievePackage(
-                repository, retrieveMetadataManager(parameters).getEngine(), retrieveProjectPackage(parameters)));
+                repository, retrieveMetadataManager(parameters).getEngine(), parameters));
 
         // TODO: check whether generation is allowed or not
-        return super.createTemplate(templateFactory, repository, tableNames, parameters);
+        return templateFactory.createTemplate(repository, tableNames, t_Context, parameters);
     }
 
     /**
@@ -179,9 +180,9 @@ public class <C.class_name>
     protected String retrievePackage(
         @NotNull final String repository,
         @NotNull final Engine\<String> engine,
-        @NotNull final String projectPackage)
+        @NotNull final QueryJCommand parameters)
     {
-        return buildPackageName(repository, engine, projectPackage);
+        return buildPackageName(repository, engine, retrieveProjectPackage(parameters));
     }
 
     /**

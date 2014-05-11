@@ -65,14 +65,13 @@ sourceImpl(def, C) ::= <<
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateFactory;
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.QueryJCommand;
 
 /*
  * Importing some ACM-SL Java Commons classes.
@@ -147,16 +146,14 @@ public class <C.class_name>
     public <def.name.noExtension>Template createTemplate(
         @NotNull final String repository,
         @NotNull final List\<String> tableNames,
+        @NotNull final <def.type.capitalized>TemplateContext context,
         @NotNull final QueryJCommand command)
     {
-        @NotNull final <def.type.capitalized>TemplateContext t_Context =
-            new <def.type.capitalized>TemplateContext(repository, tableNames, command);
+        @NotNull final String t_strFileName = retrieveTemplateFileName(repository, context.getMetadataManager());
 
-        @NotNull final String t_strFileName = retrieveTemplateFileName(repository, t_Context.getMetadataManager());
+        context.setFileName(t_strFileName);
 
-        t_Context.setFileName(t_strFileName);
-
-        return new <def.name.noExtension>Template(t_Context);
+        return new <def.name.noExtension>Template(context);
     }
 
     /**

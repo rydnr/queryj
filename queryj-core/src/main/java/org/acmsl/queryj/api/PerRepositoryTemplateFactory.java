@@ -67,6 +67,7 @@ public interface PerRepositoryTemplateFactory
      * Creates a {@link T} instance with given information.
      * @param repository the repository name.
      * @param tableNames the table names.
+     * @param context the {@link PerRepositoryTemplateContext}.
      * @param command the {@link QueryJCommand command}.
      * @return the new template.
      */
@@ -74,5 +75,6 @@ public interface PerRepositoryTemplateFactory
     public T createTemplate(
         @NotNull final String repository,
         @NotNull final List<String> tableNames,
+        @NotNull final C context,
         @NotNull final QueryJCommand command);
 }
