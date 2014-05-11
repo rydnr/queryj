@@ -65,35 +65,34 @@ sourceImpl(repository, tables, C) ::= <<
   ],
   template="org/acmsl/queryj/templates/ConfigurationProperties.stg",
   C=C,
-  prefix="#")><endif>
+  prefix="#")>
+<endif>
 
 <if(C.repository_dao)>
 <  repository_dao_factory_property(
                   repository=repository,
                   engine=C.engine,
-                  package=C.package,
+                  package=C.project_package,
                   daoSubpackage=typeInitMap.baseDAOSubpackageName,
-                  subpackage="impl",
                   C=C)>
 <else>
 <  tables:{t | <table_dao_factory_property(
                   table=t,
                   repository=repository,
                   engine=C.engine,
-                  package=C.package,
+                  package=C.project_package,
                   daoSubpackage=typeInitMap.baseDAOSubpackageName,
-                  subpackage="impl",
                   C=C)>}; separator="\n\n">
 <endif>
 >>
 
-repository_dao_factory_property(repository, engine, package, daoSubpackage, subpackage, C) ::= <<
+repository_dao_factory_property(repository, engine, package, daoSubpackage, C) ::= <<
 <! Generates the property for creating repository DAO factories !>
-<repository.lowercased>.dao=<package>.<daoSubpackage>.<subpackage>.<engine.name.capitalized><repository.capitalized>DAOFactory
+<repository.lowercased>.dao=<package>.<daoSubpackage>.<repository.normalized.lowercased>.<engine.name.capitalized><repository.capitalized>DAOFactory
 >>
 
-table_dao_factory_property(table, repository, engine, package, daoSubpackage, subpackage, C) ::= <<
+table_dao_factory_property(table, repository, engine, package, daoSubpackage, C) ::= <<
 <! Generates the property for creating repository DAO factories !>
 # <table.name> DAO implementation.
-<repository.lowercased>.<table.name.voName.lowercased>.dao=<package>.<daoSubpackage>.<subpackage>.<engine.name.capitalized><table.name.voName>DAOFactory
+<repository.lowercased>.<table.name.voName.lowercased>.dao=<package>.<daoSubpackage>.<table.name.normalized.lowercased>.<engine.name.capitalized><table.name.voName>DAOFactory
 >>

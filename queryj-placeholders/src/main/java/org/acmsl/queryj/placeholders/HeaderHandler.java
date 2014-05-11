@@ -36,33 +36,31 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.api.NonRelevantFillHandler;
 import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.metadata.DecoratedString;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.DecoratedString;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Fills "header" placeholder in templates.
- * @author <a href="mailto:jose.sanleandro@ventura24.es">Jose San Leandro</a>
- * @since 2012/05/23
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 3.0
+ * Created: 2012/05/23
  */
-@SuppressWarnings("unused")
 @ThreadSafe
 public class HeaderHandler
     extends AbstractTemplateContextFillHandler<QueryJTemplateContext, DecoratedString>
-    implements NonRelevantFillHandler
 {
     /**
      * The serial version id.
@@ -73,7 +71,6 @@ public class HeaderHandler
      * Creates a handler able to resolve "header" placeholders.
      * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.
      */
-    @SuppressWarnings("unused")
     public HeaderHandler(@NotNull final QueryJTemplateContext context)
     {
         super(context);

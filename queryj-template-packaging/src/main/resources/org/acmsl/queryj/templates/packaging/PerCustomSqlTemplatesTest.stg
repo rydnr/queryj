@@ -528,6 +528,7 @@ public class PerCustomSqlTemplatesTest
         template.add(Literals.PACKAGE_NAME, new DecoratedString(BASE_PACKAGE_NAME));
         template.add(Literals.RESULT_NAME, new DecoratedString(resultName));
         template.add(Literals.ENGINE, new EngineDecorator(engine));
+        template.add(Literals.NOTHING, new DecoratedString(""));
 
         result = template.render();
 

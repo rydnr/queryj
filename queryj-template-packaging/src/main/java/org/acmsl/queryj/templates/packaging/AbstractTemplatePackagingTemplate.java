@@ -88,18 +88,6 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
     }
 
     /**
-     * Retrieves the header.
-     * @param context the template context.
-     * @return "".
-     */
-    @Nullable
-    @Override
-    protected String getHeader(@NotNull final C context)
-    {
-        return "";
-    }
-
-    /**
      * Retrieves the string template group.
      * @return such instance.
      */

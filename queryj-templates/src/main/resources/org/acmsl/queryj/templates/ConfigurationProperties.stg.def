@@ -11,7 +11,7 @@ type : per-repository;
 output: properties;
 
 // The filename builder.
-filename builder : queryj-<repository>.properties;
+filename builder : queryj-<repository.normalized.lowercased>.properties;
 
 // The package.
-package: <packageName>;
+package: <nothing>;

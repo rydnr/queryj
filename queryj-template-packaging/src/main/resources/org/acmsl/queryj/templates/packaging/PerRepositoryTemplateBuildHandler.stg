@@ -205,6 +205,7 @@ public class <C.class_name>
         packageTemplate.add(Literals.REPOSITORY, new DecoratedString(repository));
         packageTemplate.add(Literals.PACKAGE_NAME, new DecoratedString(projectPackage));
         packageTemplate.add(Literals.ENGINE, new EngineDecorator(engine));
+        packageTemplate.add(Literals.NOTHING, new DecoratedString(""));
 
         result = packageTemplate.render();
 

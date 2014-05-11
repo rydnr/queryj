@@ -192,6 +192,7 @@ public class <C.class_name>
                 metadataManager,
                 decoratorFactory));
 
+        template.add(Literals.NOTHING, new DecoratedString(""));
         template.add(Literals.ENGINE, new EngineDecorator(metadataManager.getEngine()));
 
         result = template.render();

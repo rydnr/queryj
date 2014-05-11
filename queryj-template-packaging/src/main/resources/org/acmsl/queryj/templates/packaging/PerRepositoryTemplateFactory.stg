@@ -171,6 +171,7 @@ public class <C.class_name>
         @NotNull final ST template =
             new ST("<def.filenameBuilder>");
 
+        template.add(Literals.NOTHING, new DecoratedString(""));
         template.add(Literals.REPOSITORY, new DecoratedString(repository));
         template.add(Literals.ENGINE, new EngineDecorator(metadataManager.getEngine()));
 

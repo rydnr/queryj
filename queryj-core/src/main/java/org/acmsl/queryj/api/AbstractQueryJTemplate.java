@@ -51,9 +51,9 @@ import java.util.Map;
 
 /**
  * Represents generic templates.
+ * @param <C> the template context.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 2.0
- * @param <C> the template context.
  */
 public abstract class AbstractQueryJTemplate<C extends QueryJTemplateContext>
     extends AbstractTemplate<C>
@@ -107,18 +107,6 @@ public abstract class AbstractQueryJTemplate<C extends QueryJTemplateContext>
     protected String getCachedProcessedHeader()
     {
         return m__strCachedProcessedHeader;
-    }
-
-    /**
-     * Retrieves the header.
-     * @param context the template context.
-     * @return such information.
-     */
-    @Override
-    @Nullable
-    protected String getHeader(@NotNull final QueryJTemplateContext context)
-    {
-        return context.getHeader();
     }
 
     /**

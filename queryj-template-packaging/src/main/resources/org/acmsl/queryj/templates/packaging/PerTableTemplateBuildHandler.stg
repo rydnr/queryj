@@ -204,6 +204,7 @@ public class <C.class_name>
         packageTemplate.add(Literals.TABLE_NAME, new DecoratedString(tableName));
         packageTemplate.add(Literals.PACKAGE_NAME, new DecoratedString(projectPackage));
         packageTemplate.add(Literals.ENGINE, new EngineDecorator(engine));
+        packageTemplate.add(Literals.NOTHING, new DecoratedString(""));
 
         result = packageTemplate.render();
 

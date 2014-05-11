@@ -480,6 +480,7 @@ public class PerRepositoryTemplatesTest
         template.add(Literals.PACKAGE_NAME, new DecoratedString(BASE_PACKAGE_NAME));
         template.add(Literals.REPOSITORY, new DecoratedString(repository));
         template.add(Literals.ENGINE, new EngineDecorator(engine));
+        template.add(Literals.NOTHING, new DecoratedString(""));
 
         result = template.render();
 

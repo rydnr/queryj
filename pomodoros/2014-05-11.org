@@ -2,7 +2,7 @@
 ** DONE Fix ValueObject #501: 3 -> 3
 ** DONE Fix ResultSetExtractor #508: 2 -> 2
 ** DONE Fix BaseResultSetExtractor #505: 1 -> 3
-** TODO Fix ConfigurationProperties #506: 1
+** DONE Fix ConfigurationProperties #506: 1 -> 2
 ** TODO Fix DAOChooser #507: 1
 ** TODO Fix DAO template #500: 3 ->
 
@@ -14,7 +14,6 @@
 - DAOChooser
 - BaseDAOFactory
 *** dao/impl
-- DAOFactory
 *** dao/rdb -> X
 *** dao/[table]
 - CustomResultSetExtractor
@@ -24,6 +23,7 @@
 - AttributesStatementSetter
 **** dao/[table]/oracle
 - DAO
+- DAOFactory
 ** vo
 - ValueObject
 - CustomValueObject

@@ -125,4 +125,5 @@ public interface Literals
     String FILE_NAME = "fileName";
     String RESULT = "result";
     String FOREIGN_KEY = "foreignKey";
+    String NOTHING = "nothing";
 }
