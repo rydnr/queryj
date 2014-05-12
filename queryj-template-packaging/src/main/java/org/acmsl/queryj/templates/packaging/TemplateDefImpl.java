@@ -106,6 +106,11 @@ public class TemplateDefImpl
     private boolean m__bDisabled;
 
     /**
+     * Whether the template def is being debugged or not.
+     */
+    private boolean m__bDebug;
+
+    /**
      * Creates an instance using given information.
      * @param name the name.
      * @param type the type.
@@ -114,6 +119,7 @@ public class TemplateDefImpl
      * @param packageName the package name.
      * @param file the file.
      * @param disabled whether the template def is marked as disabled.
+     * @param debug whether the template def is being debugged or not.
      */
     public TemplateDefImpl(
         @NotNull final String name,
@@ -122,7 +128,8 @@ public class TemplateDefImpl
         @NotNull final String filenameBuilder,
         @NotNull final String packageName,
         @NotNull final File file,
-        final boolean disabled)
+        final boolean disabled,
+        final boolean debug)
     {
         immutableSetName(name);
         immutableSetType(type);
@@ -131,6 +138,7 @@ public class TemplateDefImpl
         immutableSetPackageName(packageName);
         immutableSetFile(file);
         immutableSetDisabled(disabled);
+        immutableSetDebug(debug);
     }
 
     /**
@@ -343,6 +351,35 @@ public class TemplateDefImpl
     }
 
     /**
+     * Specifies whether the template def is being debugged or not.
+     * @param debug such behavior.
+     */
+    protected final void immutableSetDebug(final boolean debug)
+    {
+        this.m__bDebug = debug;
+    }
+
+    /**
+     * Specifies whether the template def is being debugged or not.
+     * @param debug such behavior.
+     */
+    @SuppressWarnings("unused")
+    protected void setDebug(final boolean debug)
+    {
+        immutableSetDebug(debug);
+    }
+
+    /**
+     * Checks whether the template def is being debugged or not.
+     * @return such behavior.
+     */
+    @Override
+    public boolean isDebug()
+    {
+        return this.m__bDebug;
+    }
+
+    /**
      * Retrieves the filename rule.
      * @return such rule.
      */
@@ -368,6 +405,7 @@ public class TemplateDefImpl
             + ", \"filenameBuilder\": \"" + m__strFilenameBuilder + '"'
             + ", \"packageName\": \"" + m__strPackageName + '"'
             + ", \"file\": \"" + m__File.getAbsolutePath() + '"'
-            + ", \"disabled\": " + m__bDisabled + " }";
+            + ", \"disabled\": " + m__bDisabled
+            + ", \"debug\": " + m__bDebug + " }";
     }
 }

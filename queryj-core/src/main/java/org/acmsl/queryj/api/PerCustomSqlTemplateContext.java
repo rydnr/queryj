@@ -81,11 +81,13 @@ public class PerCustomSqlTemplateContext
     /**
      * Creates a {@code PerCustomSqlTemplateContext} with given information.
      * @param sql the {@link Sql} instance.
+     * @param debug whether debugging is enabled.
      * @param command the {@link QueryJCommand} instance.
      */
-    public PerCustomSqlTemplateContext(@NotNull final Sql<String> sql, @NotNull final QueryJCommand command)
+    public PerCustomSqlTemplateContext(
+        @NotNull final Sql<String> sql, final boolean debug, @NotNull final QueryJCommand command)
     {
-        super(sql.getId(), command);
+        super(sql.getId(), debug, command);
 
         immutableSetSql(sql);
     }

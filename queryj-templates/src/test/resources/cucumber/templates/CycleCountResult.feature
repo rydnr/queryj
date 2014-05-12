@@ -19,6 +19,6 @@ Feature: Classes associated to custom results compile
     | template                 | output                             |
 #    | CustomValueObjectFactory | GCycleCountFactory.java            |
 #    | CustomValueObjectImpl    | GCycleCountImpl.java               |
-#    | CustomBaseValueObject    | AbstractGCycleCount.java           |
+    | CustomBaseValueObject    | AbstractGCycleCount.java           |
 #    | CustomValueObject        | GCycleCount.java                   |
 #    | CustomResultSetExtractor | GCycleCountResultSetExtractor.java |

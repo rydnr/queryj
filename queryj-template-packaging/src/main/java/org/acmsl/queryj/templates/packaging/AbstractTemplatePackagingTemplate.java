@@ -36,12 +36,16 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.exceptions.InvalidTemplatePackagingTemplateException;
+
+/*
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.AbstractTemplate;
 import org.acmsl.queryj.api.STTemplate;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
-import org.acmsl.queryj.templates.packaging.exceptions.InvalidTemplatePackagingTemplateException;
 
 /*
  * Importing JetBrains annotations.
@@ -67,6 +71,7 @@ import java.util.Arrays;
 
 /**
  * Abstract template for Template Packaging.
+ * @param <C> the context type.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/08/15 08/34

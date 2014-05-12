@@ -67,10 +67,12 @@ sourceImpl(def, C) ::= <<
  */
 import org.acmsl.queryj.api.handlers.Base<def.type.capitalized>TemplateBuildHandler;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratedString;
@@ -148,6 +150,34 @@ public class <C.class_name>
      * {@inheritDoc}
      */
     @Override
+    protected <def.name.noExtension>Template createTemplate(
+        @NotNull final <def.name.noExtension>TemplateFactory templateFactory,
+        @NotNull final Result\<String> result,
+        @NotNull final List\<Property\<String\>> properties,
+        @NotNull final QueryJCommand parameters)
+    {
+        @NotNull final <def.type.capitalized>TemplateContext t_Context =
+            new <def.type.capitalized>TemplateContext(result, properties, <def.debug>, parameters);
+
+        t_Context.setDecoratorFactory(CachingDecoratorFactory.getInstance());
+
+        @NotNull final MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+
+        t_Context.setPackageName(
+            retrievePackage(
+                result,
+                retrieveCustomSqlProvider(parameters),
+                t_MetadataManager,
+                t_MetadataManager.getEngine(),
+                parameters));
+
+        return templateFactory.createTemplate(result, properties, t_Context, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     @NotNull
     protected String retrievePackage(
         @NotNull final Result\<String> customResult,
@@ -163,8 +193,7 @@ public class <C.class_name>
                 metadataManager,
                 engine,
                 retrieveDecoratorFactory(parameters),
-                retrieveProjectPackage(parameters),
-                parameters);
+                retrieveProjectPackage(parameters));
     }
 
     /**
@@ -175,7 +204,6 @@ public class <C.class_name>
      * @param engine the engine.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param projectPackage the project package.
-     * @param parameters the parameter map.
      * @return the package name.
      */
     @NotNull
@@ -185,8 +213,7 @@ public class <C.class_name>
         @NotNull final MetadataManager metadataManager,
         @NotNull final Engine\<String> engine,
         @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String projectPackage,
-        @NotNull final QueryJCommand parameters)
+        @NotNull final String projectPackage)
     {
         @NotNull final String result;
 

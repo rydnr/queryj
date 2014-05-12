@@ -61,7 +61,6 @@ source(C) ::= <<
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.api.AbstractTemplate;
 import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.PerCustomSqlTemplate;
@@ -205,6 +204,7 @@ public class PerCustomSqlTemplatesTest
         super();
 
         <defs:{ d | <if(!d.disabled)><if(d.type.perSql)><generator_mapping(def=d)><endif><endif>}; separator="\n">
+        <defs:{ d | <if(!d.disabled)><if(d.type.perSql)><debug_mapping(def=d)><endif><endif>}; separator="\n">
     }
 
     /**
@@ -380,7 +380,8 @@ public class PerCustomSqlTemplatesTest
                     resolvePackage(PACKAGE_MAPPINGS.get(templateName), sql.getId(), resolveEngine(engine));
 
                 @NotNull final PerCustomSqlTemplateContext t_Context =
-                    new PerCustomSqlTemplateContext(sql, t_Command);
+                    new PerCustomSqlTemplateContext(
+                        sql, (DEBUG.containsKey(templateName) && DEBUG.get(templateName)), t_Command);
 
                 t_Context.setPackageName(packageName);
 
@@ -419,8 +420,6 @@ public class PerCustomSqlTemplatesTest
                 }
 
                 UniqueLogFactory.initializeInstance(LogFactory.getLog(PerCustomSqlTemplatesTest.class));
-
-                ((AbstractTemplate) template).setDebugMode(true);
 
                 try
                 {
@@ -545,4 +544,12 @@ generator_mapping(def) ::= <<
 GENERATOR_MAPPINGS.put("<def.name>", new <def.name>TemplateGenerator(false, 1));
 FACTORY_MAPPINGS.put("<def.name>", <def.name>TemplateFactory.getInstance());
 PACKAGE_MAPPINGS.put("<def.name>", "<def.packageName>");
+>>
+
+debug_mapping(def) ::= <<
+<!
+ Generates the call to specify which template defs are market for debugging.
+ @param def the template def.
+!>
+DEBUG.put("<def.name>", <def.debug>);
 >>

@@ -87,14 +87,16 @@ public class PerRepositoryTemplateContext
      * Creates the template context with required information.
      * @param repositoryName the repository name.
      * @param tableNames the table names.
+     * @param debug whether debugging is enabled.
      * @param command the command.
      */
     public PerRepositoryTemplateContext(
         @NotNull final String repositoryName,
         @NotNull final List<String> tableNames,
+        final boolean debug,
         @NotNull final QueryJCommand command)
     {
-        super(repositoryName, command);
+        super(repositoryName, debug, command);
 
         immutableSetTableNames(tableNames);
     }

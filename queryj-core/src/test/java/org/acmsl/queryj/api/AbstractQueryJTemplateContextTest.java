@@ -244,7 +244,7 @@ public class AbstractQueryJTemplateContextTest
             new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration(), null);
 
         @NotNull final AbstractQueryJTemplateContext result =
-            new AbstractQueryJTemplateContext("" + pk, t_Command)
+            new AbstractQueryJTemplateContext("" + pk, false, t_Command)
             {{
                 immutableSetValue(buildTemplateNameKey(), "", getCommand());
                 immutableSetValue(buildFileNameKey(), "" + pk, getCommand());

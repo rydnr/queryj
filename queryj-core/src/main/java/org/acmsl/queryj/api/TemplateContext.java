@@ -113,4 +113,10 @@ public interface TemplateContext
      * @param factory the {@link DecoratorFactory factory}.
      */
     void setDecoratorFactory(@NotNull final DecoratorFactory factory);
+
+    /**
+     * Checks whether is being debugged or not.
+     * @return such behavior.
+     */
+    boolean isDebugEnabled();
 }

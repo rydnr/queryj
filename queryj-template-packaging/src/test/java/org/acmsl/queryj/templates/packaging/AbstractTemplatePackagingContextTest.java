@@ -196,7 +196,7 @@ public class AbstractTemplatePackagingContextTest
         @NotNull final String jdbcPassword = "jdbc.password";
 
         return
-            new AbstractTemplatePackagingContext(templateName, t_Command)
+            new AbstractTemplatePackagingContext(templateName, false, t_Command)
             {{
                 immutableSetValue(buildTemplateNameKey(), templateName, t_Command);
                 immutableSetValue(buildFileNameKey(), fileName, t_Command);

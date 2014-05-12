@@ -1,0 +1,36 @@
+* 2014/05/12
+** TODO Cherry-pick the template to debug #515: 2 -> 1
+** TODO Fix CustomBaseValueObject #487: 3 ->
+** TODO Fix CustomValueObject #486: 3 ->
+** TODO Fix CustomValueObjectImpl #488: 3 ->
+** TODO Fix CustomValueObjectFactory #489: 3 ->
+
+* Package layout:
+** dao
+- DataAccessManager
+- BaseDAO
+*** dao/core
+- DAOChooser
+- BaseDAOFactory
+*** dao/impl
+*** dao/rdb -> X
+*** dao/[table]
+- CustomResultSetExtractor
+- FkStatementSetter
+- PkStatementSetter
+- ResultSetExtractor
+- AttributesStatementSetter
+**** dao/[table]/oracle
+- DAO
+- DAOFactory
+** vo
+- ValueObject
+- CustomValueObject
+** vo/core
+- ValueObjectFactory
+** vo/impl
+- ValueObjectImpl
+- ValueObjectFactoryImpl
+- BaseValueObject
+- CustomValueObjectImpl
+- CustomBaseValueObject

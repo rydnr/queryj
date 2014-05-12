@@ -65,8 +65,6 @@ sourceImpl(def, C) ::= <<
 /*
  * Importing QueryJ-Core classes.
  */
-import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateFactory;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
@@ -74,9 +72,11 @@ import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
 import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.engines.EngineDecorator;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.QueryJCommand;
 
 /*
  * Importing some ACM-SL Java Commons classes.
@@ -149,21 +149,19 @@ public class <C.class_name>
     public <def.name.noExtension>Template createTemplate(
         @NotNull final Result\<String> customResult,
         @NotNull final List\<Property\<String\>> properties,
+        @NotNull final <def.type.capitalized>TemplateContext context,
         @NotNull final QueryJCommand command)
     {
-        @NotNull final <def.type.capitalized>TemplateContext t_Context =
-            new <def.type.capitalized>TemplateContext(customResult, properties, command);
-
         @NotNull final String t_strFileName =
             retrieveTemplateFileName(
                 customResult,
-                t_Context.getCustomSqlProvider(),
-                t_Context.getMetadataManager(),
-                t_Context.getDecoratorFactory());
+                context.getCustomSqlProvider(),
+                context.getMetadataManager(),
+                context.getDecoratorFactory());
 
-        t_Context.setFileName(t_strFileName);
+        context.setFileName(t_strFileName);
 
-        return new <def.name.noExtension>Template(t_Context);
+        return new <def.name.noExtension>Template(context);
     }
 
     /**

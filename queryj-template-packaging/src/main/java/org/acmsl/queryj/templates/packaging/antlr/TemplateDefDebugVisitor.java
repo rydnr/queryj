@@ -1,6 +1,5 @@
 /*
-/*
-                        QueryJ Template Packaging
+                        queryj
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -24,23 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefDisabledVisitor.java
+ * Filename: TemplateDefDebugVisitor.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: ANTLR4 visitor to retrieve whether the template def is
- *              disabled or not.
+ * Description: Visitor for "debug" rule.
  *
- * Date: 2013/12/07
- * Time: 11:06
+ * Date: 2014/05/12
+ * Time: 05:14
  *
  */
 package org.acmsl.queryj.templates.packaging.antlr;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Template Packaging classes.
  */
-import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser.DisabledRuleContext;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser.DebugRuleContext;
 
 /*
  * Importing JetBrains annotations.
@@ -54,46 +52,46 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * ANTLR4 visitor to retrieve whether the template def is disabled or not.
+ * Visitor for "debug" rule.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/12/07 11:06
+ * Created: 2014/05/12 05:14
  */
 @ThreadSafe
-public class TemplateDefDisabledVisitor
+public class TemplateDefDebugVisitor
     extends TemplateDefBaseVisitor<Boolean>
 {
     /**
-     * Whether the template def is disabled or not.
+     * Whether the template def allows debugging or not.
      */
-    private boolean m__bDisabled;
+    private boolean m__bDebug;
 
     /**
-     * Specifies whether the template def is disabled.
-     * @param disabled if the template def is disabled.
+     * Specifies whether the template def is marked as debugged.
+     * @param debug if the template def is being debugged.
      */
-    protected final void immutableSetDisabled(final boolean disabled)
+    protected final void immutableSetDebug(final boolean debug)
     {
-        this.m__bDisabled = disabled;
+        this.m__bDebug = debug;
     }
 
     /**
-     * Specifies whether the template def is disabled.
-     * @param disabled if the template def is disabled.
+     * Specifies whether the template def is marked as debugged.
+     * @param debug if the template def is being debugged.
      */
     @SuppressWarnings("unused")
-    protected void setDisabled(final boolean disabled)
+    protected void setDebug(final boolean debug)
     {
-        immutableSetDisabled(disabled);
+        immutableSetDebug(debug);
     }
 
     /**
-     * Retrieves whether the template def is disabled.
-     * @return such information.
+     * Retrieves whether the template def is marked as debugged.
+     * @return such behavior.
      */
-    public boolean isDisabled()
+    public boolean isDebug()
     {
-        return this.m__bDisabled;
+        return this.m__bDebug;
     }
 
     /**
@@ -103,11 +101,11 @@ public class TemplateDefDisabledVisitor
      */
     @Override
     @Nullable
-    public Boolean visitDisabledRule(@NotNull final DisabledRuleContext ctx)
+    public Boolean visitDebugRule(@NotNull final DebugRuleContext ctx)
     {
-        setDisabled(true);
+        setDebug(true);
 
-        return super.visitDisabledRule(ctx);
+        return super.visitDebugRule(ctx);
     }
 
     /**
@@ -118,7 +116,7 @@ public class TemplateDefDisabledVisitor
     public String toString()
     {
         return
-              "{ \"class\": \"" + TemplateDefDisabledVisitor.class.getSimpleName() + '"'
-            + ", \"disabled\": " + m__bDisabled + " }";
+            "{ \"class\": \"" + TemplateDefDebugVisitor.class.getSimpleName() + '"'
+            + ", \"debug\": " + m__bDebug + " }";
     }
 }

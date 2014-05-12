@@ -61,6 +61,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class TemplateAssociatedToTemplateDefDoesNotExist
     extends TemplatePackagingCheckedException
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 864771092787892139L;
 
     /**

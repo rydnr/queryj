@@ -16,4 +16,4 @@ filename builder : <result.name.camelCase>.java;
 // The package.
 package: <packageName>.vo;
 
-disabled;
+debug;

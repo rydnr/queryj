@@ -88,14 +88,16 @@ public class PerTableTemplateContext
      * Creates a {@code PerTableTemplateContext} with given information.
      * @param tableName the table name.
      * @param staticValues the static values.
+     * @param debug whether debugging is enabled.
      * @param command the {@link QueryJCommand}.
      */
     public PerTableTemplateContext(
         @NotNull final String tableName,
         @NotNull final List<Row<String>> staticValues,
+        final boolean debug,
         @NotNull final QueryJCommand command)
     {
-        super(tableName, command);
+        super(tableName, debug, command);
 
         immutableSetValue(buildTableNameKey(), tableName, command);
         immutableSetValue(buildStaticValuesKey(), staticValues, command);

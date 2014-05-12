@@ -90,14 +90,14 @@ public class PerCustomResultTemplateContextTest
             new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
         @NotNull final PerCustomResultTemplateContext instance =
-            new PerCustomResultTemplateContext(result, properties, command);
+            new PerCustomResultTemplateContext(result, properties, false, command);
 
         Assert.assertEquals(properties, instance.getProperties());
 
         @NotNull final Result<String> result2 = new ResultElement<>("id2", "class");
 
         @NotNull final PerCustomResultTemplateContext instance2 =
-            new PerCustomResultTemplateContext(result2, new ArrayList<>(0), command);
+            new PerCustomResultTemplateContext(result2, new ArrayList<>(0), false, command);
 
         Assert.assertEquals(properties, instance.getProperties());
         Assert.assertNotEquals(properties, instance2.getProperties());

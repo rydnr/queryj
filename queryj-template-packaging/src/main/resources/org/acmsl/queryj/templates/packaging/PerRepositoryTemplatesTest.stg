@@ -61,7 +61,6 @@ source(C) ::= <<
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.api.AbstractTemplate;
 import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.PerRepositoryTemplate;
@@ -202,6 +201,7 @@ public class PerRepositoryTemplatesTest
         super();
 
         <defs:{ d | <if(!d.disabled)><if(d.type.perRepository)><generator_mapping(def=d)><endif><endif>}; separator="\n">
+        <defs:{ d | <if(!d.disabled)><if(d.type.perRepository)><debug_mapping(def=d)><endif><endif>}; separator="\n">
     }
 
     /**
@@ -333,7 +333,11 @@ public class PerRepositoryTemplatesTest
             @NotNull final List\<String> t_lTableNames = t_MetadataManager.getTableDAO().findAllTableNames();
 
             @NotNull final PerRepositoryTemplateContext t_Context =
-                new PerRepositoryTemplateContext(repository, t_lTableNames, t_Command);
+                new PerRepositoryTemplateContext(
+                    repository,
+                    t_lTableNames,
+                    (DEBUG.containsKey(templateName) && DEBUG.get(templateName)),
+                    t_Command);
 
             @NotNull final String t_strPackageName =
                 resolvePackage(PACKAGE_MAPPINGS.get(templateName), repository, resolveEngine(engine));
@@ -376,8 +380,6 @@ public class PerRepositoryTemplatesTest
             }
 
             UniqueLogFactory.initializeInstance(LogFactory.getLog(PerRepositoryTemplatesTest.class));
-
-            ((AbstractTemplate) t_Template).setDebugMode(true);
 
             try
             {
@@ -497,4 +499,12 @@ generator_mapping(def) ::= <<
 GENERATOR_MAPPINGS.put("<def.name>", new <def.name>TemplateGenerator(false, 1));
 FACTORY_MAPPINGS.put("<def.name>", <def.name>TemplateFactory.getInstance());
 PACKAGE_MAPPINGS.put("<def.name>", "<def.packageName>");
+>>
+
+debug_mapping(def) ::= <<
+<!
+ Generates the call to specify which template defs are market for debugging.
+ @param def the template def.
+!>
+DEBUG.put("<def.name>", <def.debug>);
 >>

@@ -86,9 +86,12 @@ public class GlobalTemplateContextImpl
 
     /**
      * Creates a new global context.
+     * @param templateName the template name.
+     * @param packageName the package name.
      * @param fileName the file name.
      * @param outputDir the output dir.
      * @param templateDefs the template definitions.
+     * @param command the command.
      */
     public GlobalTemplateContextImpl(
         @NotNull final String templateName,
@@ -98,7 +101,7 @@ public class GlobalTemplateContextImpl
         @NotNull final List<TemplateDef<String>> templateDefs,
         @NotNull final QueryJCommand command)
     {
-        super(fileName, command);
+        super(fileName, false, command);
         immutableSetValue(buildTemplateNameKey(), templateName, command);
         immutableSetValue(buildPackageNameKey(), packageName, command);
         immutableSetValue(buildTemplateDefsKey(), templateDefs, command);

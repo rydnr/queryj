@@ -86,14 +86,16 @@ public class PerCustomResultTemplateContext
      * Creates a {@link PerCustomResultTemplateContext} with given information.
      * @param result the {@link Result} instance.
      * @param properties the properties.
+     * @param debug whether debugging is enabled.
      * @param command the command.
      */
     public PerCustomResultTemplateContext(
         @NotNull final Result<String> result,
         @NotNull final List<Property<String>> properties,
+        final boolean debug,
         @NotNull final QueryJCommand command)
     {
-        super(result.getId(), command);
+        super(result.getId(), debug, command);
 
         immutableSetValue(buildResultKey(), result, command);
         immutableSetValue(buildPropertiesKey(), properties, command);

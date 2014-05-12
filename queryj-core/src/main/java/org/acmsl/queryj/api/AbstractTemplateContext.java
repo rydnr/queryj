@@ -104,13 +104,21 @@ public abstract class AbstractTemplateContext
     private String m__Pk;
 
     /**
+     * Whether we're debugging using this context.
+     */
+    private boolean m__bDebugEnabled;
+
+    /**
      * Creates an {@code AbstractTemplateContext} with given information.
      * @param pk something unique to the template.
+     * @param debug whether debugging is enabled.
      * @param command the {@link org.acmsl.queryj.QueryJCommand} instance.
      */
-    protected AbstractTemplateContext(@NotNull final String pk, @NotNull final QueryJCommand command)
+    protected AbstractTemplateContext(
+        @NotNull final String pk, final boolean debug, @NotNull final QueryJCommand command)
     {
         immutableSetPk(pk);
+        immutableSetDebugEnabled(debug);
         immutableSetCommand(command);
     }
 
@@ -141,6 +149,35 @@ public abstract class AbstractTemplateContext
     protected String getPk()
     {
         return this.m__Pk;
+    }
+
+    /**
+     * Specifies we're debugging or not.
+     * @param flag such behavior.
+     */
+    protected final void immutableSetDebugEnabled(final boolean flag)
+    {
+        this.m__bDebugEnabled = flag;
+    }
+
+    /**
+     * Specifies we're debugging or not.
+     * @param flag such behavior.
+     */
+    @SuppressWarnings("unused")
+    protected void setDebugEnabled(final boolean flag)
+    {
+        immutableSetDebugEnabled(flag);
+    }
+
+    /**
+     * Retrieves whether we're debugging or not.
+     * @return such behavior.
+     */
+    @Override
+    public boolean isDebugEnabled()
+    {
+        return this.m__bDebugEnabled;
     }
 
     /**
@@ -608,6 +645,7 @@ public abstract class AbstractTemplateContext
         return
               "{ \"class\": \"" + AbstractTemplateContext.class.getSimpleName() + '"'
             + ", \"pk\": \"" + m__Pk + '"'
+            + ", \"debug\": \"" + m__bDebugEnabled + '"'
             + ", \"command\": " + m__Command
             + ", \"package\": \"org.acmsl.queryj.api\""
             + " }";

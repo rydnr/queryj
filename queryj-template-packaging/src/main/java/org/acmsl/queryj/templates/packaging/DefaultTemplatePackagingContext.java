@@ -100,7 +100,7 @@ public  class DefaultTemplatePackagingContext
         @NotNull final TemplateDef<String> templateDef,
         @NotNull final QueryJCommand command)
     {
-        super(fileName, command);
+        super(fileName, templateDef.isDebug(), command);
         immutableSetValue(buildTemplateNameKey(), templateName, command);
         immutableSetValue(buildPackageNameKey(), outputPackage, command);
         immutableSetValue(buildFileNameKey(), fileName, command);

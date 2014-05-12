@@ -45,6 +45,7 @@ import org.acmsl.queryj.templates.packaging.TemplateDefImpl;
 import org.acmsl.queryj.templates.packaging.TemplateDefOutput;
 import org.acmsl.queryj.templates.packaging.TemplateDefType;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefDebugVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefDisabledVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefFilenameBuilderVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefLexer;
@@ -317,6 +318,21 @@ public class ParseTemplateDefsHandler
             throw new InvalidTemplateDefException("disabled", file, invalidClass);
         }
 
+        @NotNull final TemplateDefDebugVisitor debugVisitor = new TemplateDefDebugVisitor();
+
+        @Nullable final boolean debug;
+
+        try
+        {
+            debugVisitor.visit(tree);
+
+            debug = debugVisitor.isDebug();
+        }
+        catch (@NotNull final Throwable invalidClass)
+        {
+            throw new InvalidTemplateDefException("debug", file, invalidClass);
+        }
+
         result =
             new TemplateDefImpl(
                 defName,
@@ -325,7 +341,8 @@ public class ParseTemplateDefsHandler
                 defFilenameBuilder,
                 defPackage,
                 file,
-                disabled);
+                disabled,
+                debug);
 
         return result;
     }

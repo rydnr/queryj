@@ -73,6 +73,9 @@ import java.io.File;
 public class DecoratedTemplateDefWrapper
     implements TemplateDef<DecoratedString>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 1996073167613801985L;
 
     /**
@@ -293,6 +296,26 @@ public class DecoratedTemplateDefWrapper
     }
 
     /**
+     * Checks whether given template def is marked as being debugged or not.
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean isDebug()
+    {
+        return isDebug(getTemplateDef());
+    }
+
+    /**
+     * Checks whether given template def is marked as being debugged or not.
+     * @param templateDef the template def.
+     * @return {@code true} in such case.
+     */
+    protected boolean isDebug(@NotNull final TemplateDef<String> templateDef)
+    {
+        return templateDef.isDebug();
+    }
+
+    /**
      * Retrieves the filename rule.
      * @return such rule.
      */
@@ -313,6 +336,9 @@ public class DecoratedTemplateDefWrapper
         return templateDef.getFilenameRule();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

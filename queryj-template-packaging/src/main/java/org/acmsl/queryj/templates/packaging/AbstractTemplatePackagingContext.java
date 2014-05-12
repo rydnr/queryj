@@ -81,11 +81,13 @@ public abstract class AbstractTemplatePackagingContext
     /**
      * Creates a new instance.
      * @param pk the pk.
+     * @param debug whether we're debugging or not.
      * @param command the command.
      */
-    public AbstractTemplatePackagingContext(@NotNull final String pk, @NotNull final QueryJCommand command)
+    public AbstractTemplatePackagingContext(
+        @NotNull final String pk, final boolean debug, @NotNull final QueryJCommand command)
     {
-        super(pk, command);
+        super(pk, debug, command);
     }
 
     /**

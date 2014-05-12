@@ -112,6 +112,12 @@ public interface TemplateDef<S>
     boolean isDisabled();
 
     /**
+     * Checks whether this template def is being debugged or not.
+     * @return such information.
+     */
+    boolean isDebug();
+
+    /**
      * Retrieves the filename rule.
      * @return such rule.
      */

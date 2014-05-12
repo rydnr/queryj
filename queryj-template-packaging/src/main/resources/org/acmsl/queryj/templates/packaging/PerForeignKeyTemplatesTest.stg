@@ -61,7 +61,6 @@ source(C) ::= <<
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.api.AbstractTemplate;
 import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.PerForeignKeyTemplate;
@@ -193,6 +192,7 @@ public class PerForeignKeyTemplatesTest
         super();
 
         <defs:{ d | <if(!d.disabled)><if(d.type.perForeignKey)><generator_mapping(def=d)><endif><endif>}; separator="\n">
+        <defs:{ d | <if(!d.disabled)><if(d.type.perForeignKey)><debug_mapping(def=d)><endif><endif>}; separator="\n">
     }
 
     /**
@@ -408,7 +408,8 @@ public class PerForeignKeyTemplatesTest
                         foreignKey.getSourceTableName(), resolveEngine(engine));
 
                 @NotNull final PerForeignKeyTemplateContext t_Context =
-                    new PerForeignKeyTemplateContext(foreignKey, t_Command);
+                    new PerForeignKeyTemplateContext(
+                        foreignKey, (DEBUG.containsKey(templateName) && DEBUG.get(templateName)), t_Command);
 
                 t_Context.setPackageName(packageName);
 
@@ -447,8 +448,6 @@ public class PerForeignKeyTemplatesTest
                 }
 
                 UniqueLogFactory.initializeInstance(LogFactory.getLog(PerTableTemplatesTest.class));
-
-                ((AbstractTemplate) template).setDebugMode(true);
 
                 try
                 {
@@ -549,4 +548,12 @@ generator_mapping(def) ::= <<
 GENERATOR_MAPPINGS.put("<def.name>", new <def.name>TemplateGenerator(false, 1));
 FACTORY_MAPPINGS.put("<def.name>", <def.name>TemplateFactory.getInstance());
 PACKAGE_MAPPINGS.put("<def.name>", "<def.packageName>");
+>>
+
+debug_mapping(def) ::= <<
+<!
+ Generates the call to specify which template defs are market for debugging.
+ @param def the template def.
+!>
+DEBUG.put("<def.name>", <def.debug>);
 >>
