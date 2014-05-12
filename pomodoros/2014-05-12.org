@@ -1,6 +1,6 @@
 * 2014/05/12
-** TODO Cherry-pick the template to debug #515: 2 -> 1
-** TODO Fix CustomBaseValueObject #487: 3 ->
+** DONE Cherry-pick the template to debug #515: 2 -> 2
+** DONE Fix CustomBaseValueObject #487: 3 -> 1
 ** TODO Fix CustomValueObject #486: 3 ->
 ** TODO Fix CustomValueObjectImpl #488: 3 ->
 ** TODO Fix CustomValueObjectFactory #489: 3 ->

@@ -218,8 +218,8 @@ final boolean <property.id.voName.uncapitalized>Match =
 final boolean <property.id.voName.uncapitalized>Match = this.m__<property.id.voName.capitalized>.equals(candidate.get<property.id.voName.capitalized>());<endif><endif>
 >>
 
-property_hashcode(property) ::= <<
-<! Generates the hashcode contribution for each property. !>
+property_hashCode(property) ::= <<
+<! Generates the hashCode contribution for each property. !>
 <if(property.strictlyPrimitive)>
 final int <property.id.voName.uncapitalized>HashCode = ("" + this.m__<property.id.voName.capitalized>).hashCode();<else>
 <if(property.allowsNull)>final int <property.id.voName.uncapitalized>HashCode;

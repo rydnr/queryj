@@ -69,14 +69,13 @@ sourceImpl(result, C) ::= <<
 */
 <package_declaration(p=C.package)>
 <checkers_import(C=C)>
-<if(C.implement_markers)>
-
-<endif>
-<if(result.propertyTypes)>
 /*
  * Importing JDK classes.
  */
+import java.io.Serializable;
+<if(result.propertyTypes)>
 <result.propertyTypes:{ t | import <t>;}; separator="\n">
+<else>
 <endif>
 
 <class(result=result, repository=C.repository, C=C)>
@@ -104,10 +103,16 @@ class(result, repository, C) ::= <<
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/CustomBaseValueObject.stg", C=C)>
  */
+<class_annotations(C=C)>
 public abstract class Abstract<result.id.voName>
-    implements <result.id.voName>
+    implements <result.id.voName>,
+               Serializable
 {
-    <result.properties:{ p | <property_isolated_declaration(property=p, C=C)>}; separator="\n\n">
+     * The serial version id.
+     */
+    private static final long serialVersionUID = <C.serialVersionUID>L;
+
+    <result.properties:{ p | <property_declaration(property=p, C=C)>}; separator="\n\n">
 
     /**
      * Creates a new {@code Abstract<result.id.voName>}.
@@ -123,9 +128,9 @@ public abstract class Abstract<result.id.voName>
 
     <equals_method(result=result, C=C)>
 
-    <hashcode_method(result=result, C=C)>
+    <hashCode_method(result=result, C=C)>
 
-    <tostring_method(result=result, C=C)>
+    <toString_method(result=result, C=C)>
 }
 >>
 
@@ -158,10 +163,10 @@ public boolean equals(<nullable(C=C)>final Object other)
 }
 >>
 
-hashcode_method(result, C) ::= <<
-<! Generates the hashcode() method !>
+hashCode_method(result, C) ::= <<
+<! Generates the hashCode() method !>
 /**
- * Retrieves the hashcode which identifies this instance
+ * Retrieves the hashCode which identifies this instance
  * from any other one.
  * @return the unique (among instances of this class) value.
  */
@@ -170,9 +175,9 @@ public int hashCode()
 {
     final int result;
 
-    final int classHashCode = Abstract<result.id.voName>.class.hashCode();
+    final int classHashCode = <result.id.voName>.class.hashCode();
 
-    <result.properties:{ p | <property_hashcode(property=p)>}; separator="\n">
+    <result.properties:{ p | <property_hashCode(property=p)>}; separator="\n">
 
     result =
           classHashCode
@@ -182,7 +187,7 @@ public int hashCode()
 }
 >>
 
-tostring_method(result, C) ::= <<
+toString_method(result, C) ::= <<
 <! Generates the toString() method !>
 /**
  * {@inheritDoc}
