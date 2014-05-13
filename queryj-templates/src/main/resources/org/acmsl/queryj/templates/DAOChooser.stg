@@ -66,7 +66,7 @@ sourceImpl(repository, tables, C) ::= <<
   ],
   template="org/acmsl/queryj/templates/DAOChooser.stg",
   C=C)><endif>
-*/
+ */
 <package_declaration(p=C.package)>
 <checkers_import(C=C)>
 <if(C.implement_markers)>

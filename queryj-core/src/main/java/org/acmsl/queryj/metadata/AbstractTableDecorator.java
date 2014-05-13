@@ -41,7 +41,6 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.commons.utils.ToStringUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultRef;
@@ -2073,6 +2072,16 @@ public abstract class AbstractTableDecorator
     }
 
     /**
+     * Checks whether some of the attributes are nullable or not.
+     * @return {@code true} in such case.
+     */
+    @SuppressWarnings("unused")
+    public boolean getContainsNullableItems()
+    {
+        return getContainsNullableAttributes();
+    }
+
+    /**
      * Checks whether some of the given attributes are nullable or not.
      * @param attributes the {@link Attribute}s.
      * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
@@ -2095,6 +2104,16 @@ public abstract class AbstractTableDecorator
         return
             containNotNullAttributes(
                 getAttributes(), getMetadataManager().getMetadataTypeManager(), TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Checks whether some of the attributes cannot be null.
+     * @return {@code true} in such case.
+     */
+    @SuppressWarnings("unused")
+    public boolean getContainsNotNullItems()
+    {
+        return getContainsNotNullAttributes();
     }
 
     /**

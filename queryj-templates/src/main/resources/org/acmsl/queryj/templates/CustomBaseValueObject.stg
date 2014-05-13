@@ -66,7 +66,7 @@ sourceImpl(result, C) ::= <<
   ],
   template="org/acmsl/queryj/templates/CustomBaseValueObject.stg",
   C=C)><endif>
-*/
+ */
 <package_declaration(p=C.package)>
 <checkers_import(C=C)>
 /*
@@ -100,8 +100,7 @@ class(result, repository, C) ::= <<
  * <[
       description(result=result)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/CustomBaseValueObject.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/CustomBaseValueObject.stg", C=C)>
  */
 <class_annotations(C=C)>
 public abstract class Abstract<result.id.voName>

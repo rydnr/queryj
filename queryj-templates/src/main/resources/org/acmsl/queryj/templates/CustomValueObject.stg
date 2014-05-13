@@ -66,21 +66,20 @@ sourceImpl(result, C) ::= <<
   ],
   template="org/acmsl/queryj/templates/CustomValueObject.stg",
   C=C)><endif>
-*/
+ */
 <package_declaration(p=C.package)>
-<checkers_import(C=C)>
-<if(C.implement_markers)>
+<checkers_import_maybe(container=result, C=C)>
 
-<endif>
 /*
  * Importing JDK classes.
  */
 import java.io.Serializable;
 <if(result.propertyTypes)>
 <result.propertyTypes:{ t | import <t>;}; separator="\n">
+<else>
 <endif>
 
-<class(result=result, repository=C.repository, C=C)>
+<interface(result=result, repository=C.repository, C=C)>
 >>
 
 description(result) ::= <<
@@ -91,7 +90,7 @@ description(result) ::= <<
 {@link <result.id.voName>} value objects as required by some custom queries.
 >>
 
-class(result, repository, C) ::= <<
+interface(result, repository, C) ::= <<
 <!
  Generates the class body.
  @param result the result.
@@ -102,8 +101,7 @@ class(result, repository, C) ::= <<
  * <[
       description(result=result)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/CustomValueObject.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/CustomValueObject.stg", C=C)>
  */
 public interface <result.id.voName>
     extends Serializable

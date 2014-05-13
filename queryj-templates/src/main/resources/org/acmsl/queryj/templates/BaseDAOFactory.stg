@@ -63,7 +63,7 @@ sourceImpl(table, C) ::= <<
   ],
   template="org/acmsl/queryj/dao/BaseDAOFactory.stg",
   C=C)><endif>
-*/
+ */
 <package_declaration(p=C.package)>
 
 /*

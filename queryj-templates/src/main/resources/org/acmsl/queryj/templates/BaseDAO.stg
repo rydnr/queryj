@@ -65,7 +65,7 @@ sourceImpl(table, C) ::= <<
   ],
   template="org/acmsl/queryj/templates/BaseDAO.stg",
   C=C)><endif>
-*/
+ */
 <package_declaration(p=C.package)>
 
 <project_imports(

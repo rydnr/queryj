@@ -141,21 +141,21 @@ checkthread_import(C) ::= <<
 import org.checkthread.annotations.ThreadSafe;
 >>
 
-checkers_import_maybe(table, C, useHeader=true) ::= <<
+checkers_import_maybe(container, C, useHeader=true) ::= <<
 <!
- Imports the checkers depending on the table attributes.
- @param table the table.
+ Imports the checkers depending on the container.
+ @param container the container (table or result).
  @param context the context.
 !>
 <
-if(table.containsNotNullAttributes)><
-  if(table.containsNullableAttributes)><
+if(container.containsNotNullItems)><
+  if(container.containsNullableItems)><
     checkers_import(C=C)><
   else><
     notnull_import(C=C, useHeader=useHeader)>
 < endif><
 else><
-  if(table.containsNullableAttributes)><
+  if(container.containsNullableItems)><
     nullable_import(C=C, useHeader=useHeader)>
 < endif><
 endif>

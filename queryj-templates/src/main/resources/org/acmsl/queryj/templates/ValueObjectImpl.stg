@@ -65,9 +65,9 @@ sourceImpl(table, C) ::= <<
   ],
   template="org/acmsl/queryj/templates/ValueObjectImpl.stg",
   C=C)><endif>
-*/
+ */
 <package_declaration(p=C.package)>
-<checkers_import_maybe(table=table, C=C)>
+<checkers_import_maybe(container=table, C=C)>
 /*
  * Importing JDK classes.
  */

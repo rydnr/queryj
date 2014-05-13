@@ -66,7 +66,7 @@ sourceImpl(table, engine, C) ::= <<
   ],
   template="org/acmsl/queryj/templates/dao/DAO.stg",
   C=C)><endif>
-*/
+ */
 <package_declaration(p=C.package)>
 
 <project_imports(

@@ -623,6 +623,76 @@ public abstract class AbstractResultDecorator
     }
 
     /**
+     * Checks whether some of the properties are nullable or not.
+     * @return {@code true} in such case.
+     */
+    @SuppressWarnings("unused")
+    public boolean getContainsNullableProperties()
+    {
+        return containNullableProperties(getProperties(), ResultDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Checks whether some of the properties are nullable or not.
+     * @return {@code true} in such case.
+     */
+    @SuppressWarnings("unused")
+    public boolean getContainsNullableItems()
+    {
+        return getContainsNullableProperties();
+    }
+
+    /**
+     * Checks whether some of the given properties are nullable or not.
+     * @param properties the {@link Property properties}.
+     * @param resultDecoratorHelper the {@link ResultDecoratorHelper} instance.
+     * @return {@code true} in such case.
+     */
+    protected boolean containNullableProperties(
+        @NotNull final List<Property<DecoratedString>> properties,
+        @NotNull final ResultDecoratorHelper resultDecoratorHelper)
+    {
+        return resultDecoratorHelper.containNullableProperties(properties);
+    }
+
+    /**
+     * Checks whether some of the properties cannot be null.
+     * @return {@code true} in such case.
+     */
+    @SuppressWarnings("unused")
+    public boolean getContainsNotNullProperties()
+    {
+        return
+            containNotNullProperties(
+                getProperties(), getMetadataManager().getMetadataTypeManager(), ResultDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Checks whether some of the properties cannot be null.
+     * @return {@code true} in such case.
+     */
+    @SuppressWarnings("unused")
+    public boolean getContainsNotNullItems()
+    {
+        return getContainsNotNullProperties();
+    }
+
+    /**
+     * Checks whether some of the given properties cannot be null.
+     * @param properties the {@link Property properties}.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @param resultDecoratorHelper the {@link ResultDecoratorHelper} instance.
+     * @return {@code true} in such case.
+     */
+    protected boolean containNotNullProperties(
+        @NotNull final List<Property<DecoratedString>> properties,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final ResultDecoratorHelper resultDecoratorHelper)
+    {
+        return resultDecoratorHelper.containNotNullProperties(properties, metadataTypeManager);
+    }
+
+    /**
      * Provides a text representation of the information
      * contained in given instance.
      * @return such information.
