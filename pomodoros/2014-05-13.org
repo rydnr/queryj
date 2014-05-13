@@ -1,7 +1,7 @@
 * 2014/05/13
 ** DONE Fix CustomValueObject #486: 3 -> 3
-** TODO Fix CustomValueObjectImpl #488: 1 ->
-** TODO Fix CustomValueObjectFactory #489: 3 ->
+** DONE Fix CustomValueObjectImpl #488: 1 ->
+** DONE Fix CustomValueObjectFactory #489: 1 -> 1
 
 * Package layout:
 ** dao

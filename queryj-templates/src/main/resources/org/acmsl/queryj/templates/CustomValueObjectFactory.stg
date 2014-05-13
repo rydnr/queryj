@@ -68,10 +68,8 @@ sourceFactory(result, C) ::= <<
   C=C)><endif>
  */
 <package_declaration(p=C.package)>
-<checkers_import(C=C)>
-<if(C.implement_markers)>
+<notnull_import_maybe_nullable(container=result, C=C)>
 
-<endif>
 <if(result.propertyTypes)>
 /*
  * Importing JDK classes.
@@ -101,9 +99,9 @@ class(result, repository, C) ::= <<
  * <[
       description(result=result)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/CustomValueObjectFactory.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/CustomValueObjectFactory.stg", C=C)>
  */
+<class_annotations(C=C)>
 public class <result.id.voName>Factory
 {
     /**
@@ -112,7 +110,9 @@ public class <result.id.voName>Factory
     public <result.id.voName>Factory() {}
 
     /**
-     * Singleton implementation to avoid double-checked locking.
+     * Singleton implemented to avoid the
+     * \<a href="https://en.wikipedia.org/wiki/Double-checked_locking">double-checked locking\</a>.
+     * This relies on the fact that inner classes are not loaded until they are referenced.
      */
     private static final class <result.id.voName>FactorySingletonContainer
     {
@@ -124,6 +124,7 @@ public class <result.id.voName>Factory
      * Retrieves a {@code <result.id.voName>Factory} instance.
      * @return such instance.
      */
+    <notnull(C=C)>
     public static <result.id.voName>Factory getInstance()
     {
         return <result.id.voName>FactorySingletonContainer.SINGLETON;
@@ -132,7 +133,9 @@ public class <result.id.voName>Factory
     /**
      * Creates a new {@code <result.id.voName>}.
      <result.properties:{ p | <property_javadoc(property=p)>}; separator="\n">
+     * @return the new {@link <result.id.voName>} instance.
      */
+    <notnull(C=C)>
     public <result.id.voName> create(
         <result.properties:{ p | <property_method_parameter_declaration(property=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
     {
@@ -141,12 +144,16 @@ public class <result.id.voName>Factory
                 <result.properties:{ p | <p.id.voName.uncapitalized>}; separator=", ">);
     }
 
-    <tostring_method(result=result, C=C)>
+    <toString_method(result=result, C=C)>
 }
 >>
 
-tostring_method(result, C) ::= <<
-<! Generates the toString() method !>
+toString_method(result, C) ::= <<
+<!
+ Generates the toString() method.
+ @param result the result.
+ @param C the context.
+ !>
 /**
  * {@inheritDoc}
  */
@@ -154,6 +161,6 @@ tostring_method(result, C) ::= <<
 @Override
 public String toString()
 {
-    return "{ \class\": \"<result.id.voName>Factory\", \"package\": \"<C.package>\" }");
+    return "{ \"class\": \"<result.id.voName>Factory\", \"package\": \"<C.package>\" }";
 }
 >>

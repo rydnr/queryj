@@ -124,7 +124,7 @@ public class <table.name.voName>Factory
     }
 
     /**
-     * Public constructor to allow reflective instantiation.
+     * Public constructor to allow reflection-based instantiation.
      */
     public <table.name.voName>Factory() {}
 
