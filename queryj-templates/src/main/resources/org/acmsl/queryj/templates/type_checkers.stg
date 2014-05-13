@@ -161,14 +161,14 @@ else><
 endif>
 >>
 
-notnull_import_maybe_nullable(table, C) ::= <<
+notnull_import_maybe_nullable(container, C) ::= <<
 <!
- Imports the checkers depending on the table attributes.
- @param table the table.
+ Imports the checkers depending on the container items.
+ @param container the container.
  @param context the context.
 !>
 <notnull_import(C=C, blankLineAfter=false)><
-if(table.containsNullableAttributes)><
+if(container.containsNullableItems)><
  nullable_import(useHeader=false, C=C, blankLineAfter=true)><
 endif>
 >>

@@ -68,10 +68,8 @@ sourceImpl(result, C) ::= <<
   C=C)><endif>
  */
 <package_declaration(p=C.package)>
-<checkers_import(C=C)>
-<if(C.implement_markers)>
+<notnull_import_maybe_nullable(container=result, C=C)>
 
-<endif>
 <if(result.propertyTypes)>
 /*
  * Importing JDK classes.
@@ -104,6 +102,7 @@ class(result, repository, C) ::= <<
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/CustomValueObjectImpl.stg", C=C)>
  */
+<class_annotations(C=C)>
 public class <result.id.voName>Impl
     extends Abstract<result.id.voName>
 {
@@ -117,12 +116,16 @@ public class <result.id.voName>Impl
         super(<result.properties:{ p | <p.id.voName.uncapitalized>}; separator=", ">);
     }
 
-    <tostring_method(result=result, C=C)>
+    <toString_method(result=result, C=C)>
 }
 >>
 
-tostring_method(result, C) ::= <<
-<! Generates the toString() method !>
+toString_method(result, C) ::= <<
+<!
+ Generates the toString() method
+ @param result the result.
+ @param C the context.
+ !>
 /**
  * {@inheritDoc}
  */
@@ -130,6 +133,11 @@ tostring_method(result, C) ::= <<
 @Override
 public String toString()
 {
-    return "{ \class\": \"<result.id.voName>Impl\", \"super\": " + super.toString() + ", \"package\": \"<C.package>\" }");
+    <notnull(C=C)>final StringBuilder result =
+        new StringBuilder("{ \"class\": \"<result.id.voName>Impl\", \"super\": ");
+    result.append(super.toString());
+    result.append(", \"package\": \"<C.package>\" }");
+
+    return result;
 }
 >>

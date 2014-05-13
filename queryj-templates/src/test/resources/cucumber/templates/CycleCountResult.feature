@@ -4,7 +4,7 @@ Feature: Classes associated to custom results compile
 
     Given the following custom result:
       | id | class |
-      | cycle.count | GCycle |
+      | g.cycle.count | GCycle |
 
     And the following custom result properties:
       | name       | type | nullable |
@@ -19,6 +19,7 @@ Feature: Classes associated to custom results compile
     | template                 | output                             |
     | CustomValueObject        | GCycleCount.java                   |
     | CustomBaseValueObject    | AbstractGCycleCount.java           |
+    | CustomValueObjectImpl    | GCycleCountImpl.java               |
 #    | CustomValueObjectFactory | GCycleCountFactory.java            |
 #    | CustomValueObjectImpl    | GCycleCountImpl.java               |
 #    | CustomResultSetExtractor | GCycleCountResultSetExtractor.java |

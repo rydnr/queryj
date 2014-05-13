@@ -11,9 +11,9 @@ type : per-custom-result;
 output: Java;
 
 // The filename builder.
-filename builder : <result.name.camelCase>Impl.java;
+filename builder : <result.id.voName>Impl.java;
 
 // The package.
-package: <packageName>.dao;
+package: <packageName>.vo.impl;
 
-disabled;
+debug;

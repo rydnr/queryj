@@ -107,6 +107,7 @@ public abstract class Abstract<result.id.voName>
     implements <result.id.voName>,
                Serializable
 {
+    /**
      * The serial version id.
      */
     private static final long serialVersionUID = <C.serialVersionUID>L;
@@ -195,7 +196,7 @@ toString_method(result, C) ::= <<
 @Override
 public String toString()
 {
-    <notnull(C=C)>final StringBuilder result = new StringBuilder("{ \class\": \"Abstract<result.id.voName>");
+    <notnull(C=C)>final StringBuilder result = new StringBuilder("{ \"class\": \"Abstract<result.id.voName>");
 
     <result.properties:{ p | <property_toString(property=p)>}; separator="\n">
 

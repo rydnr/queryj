@@ -1,6 +1,6 @@
 * 2014/05/13
-** TODO Fix CustomValueObject #486: 3 ->
-** TODO Fix CustomValueObjectImpl #488: 3 ->
+** DONE Fix CustomValueObject #486: 3 -> 3
+** TODO Fix CustomValueObjectImpl #488: 1 ->
 ** TODO Fix CustomValueObjectFactory #489: 3 ->
 
 * Package layout:
@@ -26,9 +26,11 @@
 - CustomValueObject
 ** vo/core
 - ValueObjectFactory
+- CustomValueObjectFactory
 ** vo/impl
 - ValueObjectImpl
 - ValueObjectFactoryImpl
 - BaseValueObject
 - CustomValueObjectImpl
+- CustomValueObjectFactoryImpl
 - CustomBaseValueObject

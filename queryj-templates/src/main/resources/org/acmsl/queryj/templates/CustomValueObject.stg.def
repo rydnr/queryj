@@ -15,5 +15,3 @@ filename builder : <result.id.voName>.java;
 
 // The package.
 package: <packageName>.vo;
-
-debug;
