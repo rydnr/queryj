@@ -267,7 +267,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         if (result)
         {
             result =
-                !customResultUtils.isImplicit(customResult, customSqlProvider, metadataManager);
+                !customResultUtils.isImplicit(customResult, metadataManager);
 
         }
 

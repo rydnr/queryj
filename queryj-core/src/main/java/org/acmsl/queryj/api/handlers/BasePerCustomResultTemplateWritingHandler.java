@@ -48,6 +48,7 @@ import org.acmsl.queryj.metadata.engines.Engine;
 /*
  * Importing Jetbrains annotations.
  */
+import org.acmsl.queryj.tools.DebugUtils;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -89,7 +90,11 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     {
         final File result;
 
-        @NotNull final MetadataManager t_MetadataManager =
+        if (DebugUtils.getInstance().debugEnabledForResultId(context.getResult().getId()))
+        {
+            int a = 0;
+        }
+         @NotNull final MetadataManager t_MetadataManager =
             retrieveMetadataManager(parameters);
 
         result =

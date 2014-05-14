@@ -102,13 +102,11 @@ public class CustomResultUtils
     /**
      * Checks whether given {@link Result} is implicit or not.
      * @param customResult the {@link Result} to process.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param metadataManager the {@link MetadataManager} instance.
      * @return {@code true} in such case.
      */
     public boolean isImplicit(
         @NotNull final Result<String> customResult,
-        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
         boolean result = false;

@@ -141,7 +141,7 @@ public class <result.id.voName>Factory
     {
         return
             new <result.id.voName>Impl(
-                <result.properties:{ p | <p.id.voName.uncapitalized>}; separator=", ">);
+                <result.properties:{ p | <p.id.uncapitalized>}; separator=", ">);
     }
 
     <toString_method(result=result, C=C)>

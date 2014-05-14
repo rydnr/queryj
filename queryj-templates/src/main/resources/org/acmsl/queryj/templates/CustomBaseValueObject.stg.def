@@ -14,4 +14,4 @@ output: Java;
 filename builder : Abstract<result.id.voName>.java;
 
 // The package.
-package: <packageName>.vo;
+package: <packageName>.vo.impl;

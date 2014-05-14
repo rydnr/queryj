@@ -113,7 +113,7 @@ public class <result.id.voName>Impl
     public <result.id.voName>Impl(
         <result.properties:{ p | <property_method_parameter_declaration(property=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
     {
-        super(<result.properties:{ p | <p.id.voName.uncapitalized>}; separator=", ">);
+        super(<result.properties:{ p | <p.id.uncapitalized>}; separator=", ">);
     }
 
     <toString_method(result=result, C=C)>
@@ -138,6 +138,6 @@ public String toString()
     result.append(super.toString());
     result.append(", \"package\": \"<C.package>\" }");
 
-    return result;
+    return result.toString();
 }
 >>
