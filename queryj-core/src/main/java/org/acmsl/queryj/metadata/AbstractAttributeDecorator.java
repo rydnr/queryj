@@ -935,8 +935,8 @@ public abstract class AbstractAttributeDecorator
         return
               "{ \"class\": \"" + AbstractAttributeDecorator.class.getName() + "\""
             + ", \"attribute\": " + this.m__Attribute
-            + ", \"metadataManager\": " + this.m__MetadataManager
-            + ", \"metadataTypeManager\": " + this.m__MetadataTypeManager
+            + ", \"metadataManager\": " + this.m__MetadataManager.hashCode()
+            + ", \"metadataTypeManager\": " + this.m__MetadataTypeManager.hashCode()
             + " }";
     }
 

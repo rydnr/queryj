@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -77,7 +77,7 @@ import java.util.List;
  * @param <T> the template type.
  * @param <C> the context type.
  * @param <TF> the template factory type.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
 @SuppressWarnings("unused")

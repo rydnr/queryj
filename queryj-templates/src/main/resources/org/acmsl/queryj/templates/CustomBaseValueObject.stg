@@ -86,7 +86,7 @@ description(result) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-Base class (mainly a property container) for {@link <result.id.voName>} value objects.
+Base class (mainly a property container) for {@link <result.id>} value objects.
 >>
 
 class(result, repository, C) ::= <<

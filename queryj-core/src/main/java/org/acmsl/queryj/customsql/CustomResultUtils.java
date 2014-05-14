@@ -33,7 +33,7 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing some project-specific classes.
+ * Importing some QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
@@ -113,12 +113,11 @@ public class CustomResultUtils
     {
         boolean result = false;
 
-        @Nullable final String t_strTable = retrieveTable(customResult, customSqlProvider, metadataManager);
+        @Nullable final String t_strTable = retrieveTable(customResult, metadataManager);
 
         if (t_strTable != null)
         {
-            result =
-                matches(customResult, t_strTable, customSqlProvider, MetadataUtils.getInstance());
+            result = matches(customResult, t_strTable);
         }
 
         return result;
@@ -289,7 +288,6 @@ public class CustomResultUtils
     /**
      * Retrieves the table associated to the result.
      * @param resultElement the result element.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
      * @return the table name.
      * @param <T> the result type.
@@ -297,48 +295,31 @@ public class CustomResultUtils
     @Nullable
     public <T> String retrieveTable(
         @NotNull final Result<T> resultElement,
-        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable final String result;
-
-        result = retrieveTable(resultElement.getId(), customSqlProvider, metadataManager);
-
-        return result;
-    }
-
-    /**
-     * Retrieves the table associated to the result.
-     * @param resultId the result id.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the database metadata manager.
-     * @return the table name.
-     * @param <T> the resultId type.
-     */
-    @Nullable
-    public <T> String retrieveTable(
-        @NotNull final T resultId,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager)
-    {
-        @Nullable String result = retrieveCachedEntry("" + resultId);
+        @Nullable String result = retrieveCachedEntry("" + resultElement.getId());
 
         if (result == null)
         {
-            if (DebugUtils.getInstance().debugEnabledForResultId(resultId))
+            if (DebugUtils.getInstance().debugEnabledForResultId(resultElement.getId()))
             {
                 @SuppressWarnings("unused") final int a = 1;
             }
 
-            for (@Nullable final Sql<String> t_Sql : retrieveSqlElementsByResultId(customSqlProvider, "" + resultId))
+            List<String> tableNames = metadataManager.getTableDAO().findAllTableNames();
+
+            for (@Nullable final String tableName : tableNames)
             {
-                if (t_Sql != null)
+                if (tableName != null)
                 {
-                    result = retrieveTable(t_Sql, metadataManager);
+                    if (matches(resultElement, tableName))
+                    {
+                        result = tableName;
+                    }
 
                     if (result != null)
                     {
-                        cacheEntry("" + resultId, result);
+                        cacheEntry("" + resultElement.getId(), result);
                         break;
                     }
                 }
@@ -411,63 +392,23 @@ public class CustomResultUtils
      * included in the DAO layer associated to a concrete table.
      * @param resultElement the result.
      * @param tableName the table name.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @return <code>true</code> if it should be included.
-     */
-    public boolean matches(
-        @NotNull final Result<String> resultElement,
-        @NotNull final String tableName,
-        @NotNull final CustomSqlProvider customSqlProvider)
-    {
-        return matches(resultElement, tableName, customSqlProvider, MetadataUtils.getInstance());
-    }
-
-    /**
-     * Checks whether given result element is suitable of being
-     * included in the DAO layer associated to a concrete table.
-     * @param resultElement the result.
-     * @param tableName the table name.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param metadataUtils the {@link MetadataUtils} instance.
      * @return {@code true} if it should be included.
      * @param <T> the Result type.
      */
-    protected <T> boolean matches(
-        @NotNull final Result<T> resultElement,
-        @NotNull final String tableName,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataUtils metadataUtils)
+    protected <T> boolean matches(@NotNull final Result<T> resultElement, @NotNull final String tableName)
     {
-        boolean result = false;
+        final boolean result;
 
-        @Nullable String t_strDao = null;
+        @Nullable final String t_strResultVoClass = extractVoName(resultElement);
 
-        for (@Nullable final Sql<String> t_Sql : findSqlElementsByResultId("" + resultElement.getId(), customSqlProvider))
+        if (t_strResultVoClass != null)
         {
-            if (t_Sql != null)
-            {
-                t_strDao = t_Sql.getDao();
-            }
-
-            if (   (t_strDao != null)
-                && (metadataUtils.matches(tableName, t_strDao)))
-            {
-                result = true;
-                break;
-            }
+            @Nullable final String t_strDaoVoClass = extractVoName(tableName);
+            result = t_strResultVoClass.equalsIgnoreCase(t_strDaoVoClass);
         }
-
-        if (result)
+        else
         {
             result = false;
-
-            @Nullable final String t_strResultVoClass = extractVoName(resultElement);
-            @Nullable final String t_strDaoVoClass = extractVoName(t_strDao);
-
-            if (t_strResultVoClass != null)
-            {
-                result = t_strResultVoClass.equalsIgnoreCase(t_strDaoVoClass);
-            }
         }
 
         return result;
@@ -713,6 +654,7 @@ public class CustomResultUtils
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
+    @Override
     public boolean equals(@Nullable final Object object)
     {
         boolean result = false;

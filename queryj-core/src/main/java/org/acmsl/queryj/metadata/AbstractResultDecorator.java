@@ -369,10 +369,7 @@ public abstract class AbstractResultDecorator
             else
             {
                 @Nullable final String t_strTable =
-                    customResultUtils.retrieveTable(
-                        resultElement,
-                        customSqlProvider,
-                        metadataManager);
+                    customResultUtils.retrieveTable(resultElement, metadataManager);
 
                 if  (t_strTable != null)
                 {
@@ -494,7 +491,7 @@ public abstract class AbstractResultDecorator
         @Nullable List<Property<DecoratedString>> result = null;
 
         @Nullable final String t_strTable =
-            customResultUtils.retrieveTable(sqlResult, customSqlProvider, metadataManager);
+            customResultUtils.retrieveTable(sqlResult, metadataManager);
 
         if (t_strTable != null)
         {
