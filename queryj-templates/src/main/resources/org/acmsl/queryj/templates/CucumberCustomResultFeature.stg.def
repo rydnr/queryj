@@ -1,0 +1,17 @@
+/*
+ * CucumberCustomResultFeature template metadata.
+ */
+// The template name (the filename).
+name : CucumberCustomResultFeature.stg;
+
+// The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-custom-sql.
+type : per-custom-result;
+
+// The output flavor.
+output: Cucumber;
+
+// The filename builder.
+filename  builder : <result.id.camelCase>.feature;
+
+// The package.
+package: <packageName>;

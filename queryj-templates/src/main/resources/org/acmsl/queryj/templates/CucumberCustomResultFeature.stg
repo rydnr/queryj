@@ -1,0 +1,83 @@
+//;-*- mode: antlr -*-
+//
+//                      QueryJ Template Packaging
+//
+//  Copyright (C) 2002-today  ACM-SL
+//                           chous@acm-sl.org
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU General Public
+//  License as published by the Free Software Foundation; either
+//  version 2 of the License, or any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+//  Thanks to ACM S.L. for distributing this library under the GPL license.
+//  Contact info: jose.sanleandro@acm-sl.com
+//  Postal Address: c/Playa de Lagoa, 1
+//                  Urb. Valdecabanas
+//                  Boadilla del monte
+//                  28660 Madrid
+//                  Spain
+//
+//***************************************************************************
+//
+// Filename: CucumberCustomResultFeature.stg
+//
+// Author: Jose San Leandro Armendariz
+//
+// Description: Defines the rules to generate [result].feature
+//              Cucumber tests
+//
+group CucumberCustomResultFeature;
+
+source(C) ::= <<
+<!
+  Generates CucumberResult.feature files.
+!>
+<source_impl(result=C.result, engine=C.engine, C=C)>
+>>
+
+source_impl(result, engine, C) ::= <<
+<!
+  Generates CucumberResult.feature files.
+!>
+Feature: Classes associated to custom result <result.id> compile
+
+  Scenario Outline: Custom result <result.id>'s sources work
+
+    Given the following custom result:
+      | id | class |
+      | <result.id> | <result.classValue> |
+
+    And the following custom result properties:
+      | name | type | nullable |
+      <result.properties:{ p | <cucumber_property_definition(property=p)>}; separator="\n">
+
+    When I use the custom result template \<template> for Oracle
+
+    Then the generated custom result-specific \<output> file compiles successfully
+
+  Examples:
+    | template                 | output |
+    | CustomValueObjectFactory | <result.id.voName>Factory.java            |
+    | CustomValueObject        | <result.id.voName>.java                   |
+    | CustomBaseValueObject    | Abstract<result.id.voName>.java           |
+    | CustomValueObjectImpl    | <result.id.voName>Impl.java               |
+    | CustomResultSetExtractor | <result.id.voName>ResultSetExtractor.java |
+>>
+
+cucumber_property_definition(property) ::= <<
+<!
+ Writes the row describing a property.
+ @param property the property.
+!>
+| <property.id> | <property.type> | <property.nullable> |
+>>
