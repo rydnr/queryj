@@ -116,7 +116,7 @@ project_imports(
  @param voName the value-object name.
 !>
 /*
- * Importing project classes.
+ * Importing <C.repository.capitalized> classes.
  */
 import <basePackageName>.<voSubpackageName>.<voName>;
 >>
@@ -157,8 +157,7 @@ class(table, C) ::= <<
       second_line_description(table=table),
       third_line_description(table=table)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/PkStatementSetter.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/PkStatementSetter.stg", C=C)>
  */
 <class_annotations(C=C)>
 public class <table.name.voName>PkStatementSetter
@@ -185,7 +184,7 @@ public class <table.name.voName>PkStatementSetter
         immutableSetUpdateOperation(updateOperation);
     }
 
-     /**
+    /**
      * Creates a {@code <table.name.voName>PkStatementSetter}
      * instance.
      <table.primaryKey:{ a |<attribute_javadoc(attr=a)>}; separator="\n">
@@ -193,7 +192,7 @@ public class <table.name.voName>PkStatementSetter
     public <table.name.voName>PkStatementSetter(
         <table.primaryKey:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
     {
-        this(<table.primaryKey:{ a | <a.name.uncapitalized>}; separator=", ">);
+        this(<table.primaryKey:{ a | <a.name.uncapitalized>}; separator=", ">, false);
     }
 
     <table.primaryKey:{ a | <attribute_accessors(attribute=a, C=C, override=false)>}; separator="\n">
@@ -227,7 +226,7 @@ public class <table.name.voName>PkStatementSetter
     }
 
     /**
-     * Specifies the values on given {@link PreparedStatement}
+     * Specifies the values on given {@link PreparedStatement}.
      * @param preparedStatement the prepared statement.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      */
@@ -305,7 +304,11 @@ public boolean equals(<nullable(C=C)>final Object other)
 >>
 
 hashCode_method(table, C) ::= <<
-<! Generates the hashCode() method !>
+<!
+ Generates the hashCode() method.
+ @param table the table.
+ @param C the context.
+!>
 /**
  * Retrieves the hashCode which identifies this instance
  * from any other one.
@@ -332,7 +335,11 @@ public int hashCode()
 >>
 
 toString_method(table, C) ::= <<
-<! Generates the toString() method !>
+<!
+ Generates the toString() method.
+ @param table the table.
+ @param C the context.
+!>
 /**
  * Generates a JSON-compatible representation of this instance.
  * @return such text.
