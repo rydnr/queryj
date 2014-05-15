@@ -11,9 +11,7 @@ type : per-table;
 output: Java;
 
 // The filename builder.
-filename  builder : <tableName.capitalized>DAO.java;
+filename  builder : <tableName.voName>DAO.java;
 
 // The package.
 package: <packageName>.dao;
-
-disabled;

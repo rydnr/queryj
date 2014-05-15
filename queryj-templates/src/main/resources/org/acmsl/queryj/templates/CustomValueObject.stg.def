@@ -11,7 +11,7 @@ type : per-custom-result;
 output: Java;
 
 // The filename builder.
-filename builder : <result.id.voName>.java;
+filename builder : <result.simpleClassValue>.java;
 
 // The package.
-package: <packageName>.vo;
+package: <result.package>;

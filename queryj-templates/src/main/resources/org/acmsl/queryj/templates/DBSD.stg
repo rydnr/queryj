@@ -126,7 +126,7 @@ dbsd_pk(table) ::= <<
  Writes the primary key information, in DBSD format.
  @param table the table.
 !>
-PK_<table.name.uppercased> | PK(<table.primaryKey:{ c | <c.name.uppercased>}; separator=","> |;
+PK_<table.name.uppercased> | PK(<table.primaryKey:{ c | <c.name.uppercased>}; separator=",">) |;
 >>
 
 dbsd_fk(fk) ::= <<

@@ -70,9 +70,9 @@ sourceImpl(result, C) ::= <<
 <package_declaration(p=C.package)>
 
 /*
- * Importing <C.repository> classes.
+ * Importing <C.repository.capitalized> classes.
  */
-import <C.project_package>.<typeInitMap.voSubpackageName>.<result.id.voName>;
+import <result.classValue>;
 <checkers_import(C=C)>
 /*
  * Importing JDK classes.
@@ -108,8 +108,8 @@ class(result, repository, C) ::= <<
 <class_common_javadoc(template="org/acmsl/queryj/templates/CustomBaseValueObject.stg", C=C)>
  */
 <class_annotations(C=C)>
-public abstract class Abstract<result.id.voName>
-    implements <result.id.voName>,
+public abstract class Abstract<result.simpleClassValue>
+    implements <result.simpleClassValue>,
                Serializable
 {
     /**
@@ -123,7 +123,7 @@ public abstract class Abstract<result.id.voName>
      * Creates a new {@code Abstract<result.id.voName>}.
      <result.properties:{ p | <property_javadoc(property=p)>}; separator="\n">
      */
-    public Abstract<result.id.voName>(
+    public Abstract<result.simpleClassValue>(
         <result.properties:{ p | <property_method_parameter_declaration(property=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
     {
         <result.properties:{ p | <immutable_property_setter_call(property=p)>}; separator="\n">
@@ -151,9 +151,9 @@ public boolean equals(<nullable(C=C)>final Object other)
 {
     final boolean result;
 
-    if (other instanceof <result.id.voName>)
+    if (other instanceof <result.simpleClassValue>)
     {
-        <notnull(C=C)>final <result.id.voName> candidate = (<result.id.voName>) other;
+        <notnull(C=C)>final <result.simpleClassValue> candidate = (<result.simpleClassValue>) other;
 
         <result.properties:{ p | <property_equals(property=p)>}; separator="">
         result =
@@ -180,7 +180,7 @@ public int hashCode()
 {
     final int result;
 
-    final int classHashCode = <result.id.voName>.class.hashCode();
+    final int classHashCode = <result.simpleClassValue>.class.hashCode();
 
     <result.properties:{ p | <property_hashCode(property=p)>}; separator="\n">
 
@@ -201,7 +201,7 @@ toString_method(result, C) ::= <<
 @Override
 public String toString()
 {
-    <notnull(C=C)>final StringBuilder result = new StringBuilder("{ \"class\": \"Abstract<result.id.voName>");
+    <notnull(C=C)>final StringBuilder result = new StringBuilder("{ \"class\": \"Abstract<result.simpleClassValue>");
 
     <result.properties:{ p | <property_toString(property=p)>}; separator="\n">
 

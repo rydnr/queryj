@@ -68,6 +68,10 @@ sourceImpl(result, C) ::= <<
   C=C)><endif>
  */
 <package_declaration(p=C.package)>
+/*
+ * Importing project classes.
+ */
+import <result.classValue>;
 <notnull_import_maybe_nullable(container=result, C=C)>
 
 <if(result.propertyTypes)>
@@ -85,7 +89,7 @@ description(result) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-{@link <result.id.voName>} value object implementations.
+{@link <result.simpleClassValue>} value object implementations.
 >>
 
 class(result, repository, C) ::= <<
@@ -103,8 +107,8 @@ class(result, repository, C) ::= <<
   template="org/acmsl/queryj/templates/CustomValueObjectImpl.stg", C=C)>
  */
 <class_annotations(C=C)>
-public class <result.id.voName>Impl
-    extends Abstract<result.id.voName>
+public class <result.simpleClassValue>Impl
+    extends Abstract<result.simpleClassValue>
 {
     /**
      * The serial version id.
@@ -112,10 +116,10 @@ public class <result.id.voName>Impl
     private static final long serialVersionUID = <C.serialVersionUID>L;
 
     /**
-     * Creates a new {@code <result.id.voName>}.
+     * Creates a new {@code <result.simpleClassValue>}.
      <result.properties:{ p | <property_javadoc(property=p)>}; separator="\n">
      */
-    public <result.id.voName>Impl(
+    public <result.simpleClassValue>Impl(
         <result.properties:{ p | <property_method_parameter_declaration(property=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
     {
         super(<result.properties:{ p | <p.id.uncapitalized>}; separator=", ">);
@@ -139,7 +143,7 @@ toString_method(result, C) ::= <<
 public String toString()
 {
     <notnull(C=C)>final StringBuilder result =
-        new StringBuilder("{ \"class\": \"<result.id.voName>Impl\", \"super\": ");
+        new StringBuilder("{ \"class\": \"<result.simpleClassValue>Impl\", \"super\": ");
     result.append(super.toString());
     result.append(", \"package\": \"<C.package>\" }");
 

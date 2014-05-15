@@ -136,6 +136,32 @@ public class AbstractResultDecoratorTest
     }
 
     /**
+     * Checks getSimpleClassValue() removes the package name.
+     */
+    @Test
+    public void getSimpleClassValue_removes_the_package_name()
+    {
+        @NotNull final AbstractResultDecorator result =
+            AbstractResultDecoratorTest.setupResultDecorator("my.id", "com.foo.bar.MyResult", new ArrayList<>(0));
+
+        Assert.assertEquals("MyResult", result.getSimpleClassValue().getValue());
+
+    }
+
+    /**
+     * Checks getPackage() retrieves the package name.
+     */
+    @Test
+    public void getPackage_retrieves_the_package_name()
+    {
+        @NotNull final AbstractResultDecorator result =
+            AbstractResultDecoratorTest.setupResultDecorator("my.id", "com.foo.bar.MyResult", new ArrayList<>(0));
+
+        Assert.assertEquals("com.foo.bar", result.getPackage().getValue());
+
+    }
+
+    /**
      * Sets up an {@link AbstractResultDecorator} instance, for testing purposes.
      * @param properties the {@link org.acmsl.queryj.customsql.Property properties}.
      * @return the decorator.
@@ -143,9 +169,25 @@ public class AbstractResultDecoratorTest
     @NotNull
     protected static AbstractResultDecorator setupResultDecorator(@NotNull final List<Property<String>> properties)
     {
+        return setupResultDecorator("my.result", "MyResult", properties);
+    }
+
+    /**
+     * Sets up an {@link AbstractResultDecorator} instance, for testing purposes.
+     * @param id the result id.
+     * @param classValue the class value.
+     * @param properties the {@link org.acmsl.queryj.customsql.Property properties}.
+     * @return the decorator.
+     */
+    @NotNull
+    protected static AbstractResultDecorator setupResultDecorator(
+        @NotNull final String id,
+        @NotNull final String classValue,
+        @NotNull final List<Property<String>> properties)
+    {
         @NotNull final AbstractResultDecorator result;
 
-        @NotNull final Result<String> wrappedResult = new ResultElement<>("my.result", "MyResult");
+        @NotNull final Result<String> wrappedResult = new ResultElement<>(id, classValue);
 
         @NotNull final CustomSqlProvider customSqlProvider = EasyMock.createNiceMock(CustomSqlProvider.class);
         @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);

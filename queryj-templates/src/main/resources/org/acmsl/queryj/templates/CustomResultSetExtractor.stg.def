@@ -11,9 +11,9 @@ type : per-custom-result;
 output: Java;
 
 // The filename builder.
-filename builder : <result.id.normalized.camelCase>ResultSetExtractor.java;
+filename builder : <result.simpleClassValue>ResultSetExtractor.java;
 
 // The package.
-package: <packageName>.dao.<result.id.camelCase.lowercased>;
+package: <packageName>.dao.<result.classValue.lowercased>;
 
 debug;

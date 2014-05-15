@@ -68,23 +68,12 @@ sourceImpl(table, C) ::= <<
  */
 <package_declaration(p=C.package)>
 
-<project_imports(
-  basePackageName=C.package,
-  voName=table.name.voName)>
+<project_imports(basePackageName=C.project_package, voSubpackageName=typeInitMap.voSubpackageName, table=table)>
 <checkers_import(C=C)>
 /*
  * Importing Spring classes.
  */
 import org.springframework.dao.DataAccessException;
-<if(C.implement_markers)>
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.dao.DAO;
-
-<endif>
-
 
 /*
  * Importing JDK classes.
@@ -96,6 +85,7 @@ import java.util.Collections;
 import java.util.List;
 <if(table.attributeTypes)>
 <table.attributeTypes:{ t | import <t>;}; separator="\n">
+<else>
 <endif>
 
 <class(table=table, C=C)>
@@ -117,16 +107,20 @@ second_line_description(tableName) ::= <<
 <tableName> structures from persistence layers.
 >>
 
-project_imports(basePackageName, voName) ::= <<
+project_imports(basePackageName, voSubpackageName, table) ::= <<
 <!
  Generates the project imports.
  @param basePackageName the base package name.
- @param voName the value-object name.
+ @param voSubpackageName the value-object subpackage name.
+ @param table the table.
 !>
 /*
  * Importing project classes.
  */
-import <basePackageName>.dao.<voName>;
+import <basePackageName>.<voSubpackageName>.<table.name.voName>;
+<if(table.staticContent)>
+import <basePackageName>.<voSubpackageName>.impl.<table.name.voName>Impl;
+<endif>
 >>
 
 class(table, C) ::= <<
@@ -242,7 +236,7 @@ cached_constants(row, voName, C) ::= <<
  */
 <notnull(C=C)>
 static final <voName> <row.name.normalized.uppercased> =
-    new <voName>ValueObject(
+    new <voName>Impl(
         <row.attributes:{ a | <attribute_specification(attr=a)>}; separator=",\n">);
 >>
 
@@ -272,9 +266,9 @@ find_by_primary_key(table, parent, repository, C) ::= <<
  */
 <nullable(C=C)>
 <if(table.voDecorated)>
-<table.name.voName>Decorator findByPrimaryKey(<table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">);
+<table.name.voName>Decorator findByPrimaryKey(<table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">);
 <else>
-<table.name.voName> findByPrimaryKey(<table.primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">);
+<table.name.voName> findByPrimaryKey(<table.primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=",\n">);
 <endif>
 >>
 
@@ -283,7 +277,7 @@ attribute_specification(attr) ::= <<
  Prints the value of the attribute, optionally escaping it.
  @param attr the attribute.
 !>
-<if(attr.string)>"<attr.value>"<else><attr.value><endif>
+<if(attr.value)><if(attr.string)>"<attr.value>"<else><attr.value><endif><else>null<endif>
 >>
 
 find_constant_by_pk(primaryKey, table, C) ::= <<
@@ -300,8 +294,7 @@ find_constant_by_pk(primaryKey, table, C) ::= <<
  * @return the {@link <table.name.voName>} instance.
  */
 <nullable(C=C)>
-<table.name.voName> findConstantByPk(
-    <primaryKey:{ attr | <attribute_declaration(attr=attr, C=C)>}; separator=",\n">);
+<table.name.voName> findConstantByPk(<primaryKey:{ attr | <attribute_method_parameter_declaration(attribute=attr, usePrefix=false, prefix="", C=C)>}; separator=", ">);
 >>
 
 find_constant_methods(attribute, table, C) ::= <<
@@ -339,7 +332,7 @@ fk_delete_method(foreignKey, table, C) ::= <<
 !>
 /**
 <if(foreignKey.allowsNull)>
- * Discards the relation to \<code><foreignKey.target.voName>\</code> in
+ * Discards the relation to {@code <foreignKey.target.voName>} in
  * {@link <foreignKey.source.voName>}.
 <else>
  * Deletes <table.name> information from the persistence layer filtering
@@ -353,7 +346,7 @@ if(foreignKey.allowsNull)
 else
 >void deleteBy<foreignKey.attributes:{attr |<attr.name.capitalized>}; separator="And">(<
 endif
-><foreignKey.attributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=", ">);
+><foreignKey.attributes:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=", ">)
       throws DataAccessException;
 >>
 

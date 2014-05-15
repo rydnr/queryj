@@ -87,7 +87,7 @@ description(result) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-{@link <result.id.voName>} value objects as required by some custom queries.
+{@code <result.simpleClassValue>} value objects as required by some custom queries.
 >>
 
 interface(result, repository, C) ::= <<
@@ -103,7 +103,7 @@ interface(result, repository, C) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/templates/CustomValueObject.stg", C=C)>
  */
-public interface <result.id.voName>
+public interface <result.simpleClassValue>
     extends Serializable
 {
     <result.properties:{ p | <property_getter_interface(property=p, C=C)>}; separator="\n\n">

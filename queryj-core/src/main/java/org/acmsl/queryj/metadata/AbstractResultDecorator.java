@@ -48,6 +48,11 @@ import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.tools.DebugUtils;
 
 /*
+ * Importing ACM S.L. Java Commons classes.
+ */
+import org.acmsl.commons.utils.StringUtils;
+
+/*
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
@@ -722,6 +727,77 @@ public abstract class AbstractResultDecorator
         return result;
     }
 
+
+    /**
+     * Retrieves the class name, with no package information.
+     * @return such information.
+     */
+    @NotNull
+    public DecoratedString getSimpleClassValue()
+    {
+        return getSimpleClassValue(getClassValue(), StringUtils.getInstance());
+    }
+
+
+    /**
+     * Retrieves the class name, with no package information.
+     * @param classValue the class value.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected DecoratedString getSimpleClassValue(
+        @Nullable final DecoratedString classValue, @NotNull final StringUtils stringUtils)
+    {
+        @NotNull final DecoratedString result;
+
+        if (classValue == null)
+        {
+            result = new DecoratedString("");
+        }
+        else
+        {
+            result = new DecoratedString(stringUtils.extractPackageName(classValue.getValue()));
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the package information from the class name.
+     * @return such information.
+     */
+    @NotNull
+    public DecoratedString getPackage()
+    {
+        return getPackage(getClassValue(), StringUtils.getInstance());
+    }
+
+
+    /**
+     * Retrieves the package information from the class name.
+     * @param classValue the class value.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected DecoratedString getPackage(
+        @Nullable final DecoratedString classValue, @NotNull final StringUtils stringUtils)
+    {
+        @NotNull final DecoratedString result;
+
+        if (classValue == null)
+        {
+            result = new DecoratedString("");
+        }
+        else
+        {
+            result = new DecoratedString(stringUtils.extractClassName(classValue.getValue()));
+        }
+
+        return result;
+    }
+
     /**
      * Provides a text representation of the information
      * contained in given instance.
@@ -741,7 +817,7 @@ public abstract class AbstractResultDecorator
     }
 
     /**
-     * Retrieves the hashcode.
+     * Retrieves the hashCode.
      * @return such value.
      */
     @Override
@@ -810,7 +886,8 @@ public abstract class AbstractResultDecorator
      * object prevents it from being compared to this Object.
      */
     @SuppressWarnings("unchecked")
-    protected int compareTo(@NotNull final Result<String> resultElement, @Nullable final Result<DecoratedString> object)
+    protected int compareTo(
+        @NotNull final Result<String> resultElement, @Nullable final Result<DecoratedString> object)
         throws  ClassCastException
     {
         final int result;

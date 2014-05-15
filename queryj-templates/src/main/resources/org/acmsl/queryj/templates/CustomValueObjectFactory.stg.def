@@ -11,7 +11,7 @@ type : per-custom-result;
 output: Java;
 
 // The filename builder.
-filename builder : <result.id.camelCase>Factory.java;
+filename builder : <result.simpleClassValue>Factory.java;
 
 // The package.
-package: <packageName>.vo.core;
+package: <result.package>.core;

@@ -72,8 +72,8 @@ sourceFactory(result, C) ::= <<
 /*
  * Importing <C.repository.capitalized> classes.
  */
-import <C.project_package>.<typeInitMap.voSubpackageName>.<result.id.voName>;
-import <C.project_package>.<typeInitMap.voSubpackageName>.impl.<result.id.voName>Impl;
+import <result.classValue>;
+import <C.project_package>.<typeInitMap.voSubpackageName>.impl.<result.simpleClassValue>Impl;
 <notnull_import_maybe_nullable(container=result, C=C)>
 
 <if(result.propertyTypes)>
@@ -91,7 +91,7 @@ description(result) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-Are responsible of creating {@link <result.id.voName> <result.id>} value objects.
+Are responsible of creating {@link <result.simpleClassValue> <result.id>} value objects.
 >>
 
 class(result, repository, C) ::= <<
@@ -108,45 +108,45 @@ class(result, repository, C) ::= <<
 <class_common_javadoc(template="org/acmsl/queryj/templates/CustomValueObjectFactory.stg", C=C)>
  */
 <class_annotations(C=C)>
-public class <result.id.voName>Factory
+public class <result.simpleClassValue>Factory
 {
     /**
      * Public constructor ease reflection-based instantiation.
      */
-    public <result.id.voName>Factory() {}
+    public <result.simpleClassValue>Factory() {}
 
     /**
      * Singleton implemented to avoid the
      * \<a href="https://en.wikipedia.org/wiki/Double-checked_locking">double-checked locking\</a>.
      * This relies on the fact that inner classes are not loaded until they are referenced.
      */
-    private static final class <result.id.voName>FactorySingletonContainer
+    private static final class <result.simpleClassValue>FactorySingletonContainer
     {
-        private static final <result.id.voName>Factory SINGLETON =
-            new <result.id.voName>Factory();
+        private static final <result.simpleClassValue>Factory SINGLETON =
+            new <result.simpleClassValue>Factory();
     }
 
     /**
-     * Retrieves a {@code <result.id.voName>Factory} instance.
+     * Retrieves a {@code <result.simpleClassValue>Factory} instance.
      * @return such instance.
      */
     <notnull(C=C)>
-    public static <result.id.voName>Factory getInstance()
+    public static <result.simpleClassValue>Factory getInstance()
     {
-        return <result.id.voName>FactorySingletonContainer.SINGLETON;
+        return <result.simpleClassValue>FactorySingletonContainer.SINGLETON;
     }
 
     /**
-     * Creates a new {@code <result.id.voName>}.
+     * Creates a new {@code <result.simpleClassValue>}.
      <result.properties:{ p | <property_javadoc(property=p)>}; separator="\n">
-     * @return the new {@link <result.id.voName>} instance.
+     * @return the new {@link <result.simpleClassValue>} instance.
      */
     <notnull(C=C)>
-    public <result.id.voName> create(
+    public <result.simpleClassValue> create(
         <result.properties:{ p | <property_method_parameter_declaration(property=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
     {
         return
-            new <result.id.voName>Impl(
+            new <result.simpleClassValue>Impl(
                 <result.properties:{ p | <p.id.uncapitalized>}; separator=", ">);
     }
 
@@ -167,6 +167,6 @@ toString_method(result, C) ::= <<
 @Override
 public String toString()
 {
-    return "{ \"class\": \"<result.id.voName>Factory\", \"package\": \"<C.package>\" }";
+    return "{ \"class\": \"<result.simpleClassValue>Factory\", \"package\": \"<C.package>\" }";
 }
 >>
