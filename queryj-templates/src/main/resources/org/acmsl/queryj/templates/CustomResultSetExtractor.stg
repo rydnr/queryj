@@ -80,13 +80,21 @@ import <C.project_package>.<typeInitMap.voSubpackageName>.core.<result.id.voName
  */
 import com.ventura24.commons.dao.DAOListener;
 import com.ventura24.commons.dao.V24ResultSetExtractor;
+
+/*
+ * Importing Spring classes.
+ */
+import org.springframework.dao.DataAccessException;
 <checkers_import(C=C)>
 /*
  * Importing JDK classes.
  */
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 <if(result.propertyTypes)>
 <result.propertyTypes:{ t | import <t>;}; separator="\n">
+<else>
 <endif>
 
 <class(result=result, repository=C.repository, C=C)>
@@ -111,10 +119,9 @@ class(result, repository, C) ::= <<
  * <[
       description(result=result)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/CustomResultSetExtractor.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/CustomResultSetExtractor.stg", C=C)>
  */
-public class <result.id.voName>ResultSetExtractor
+public class <result.id.normalized.camelCase>ResultSetExtractor
     extends V24ResultSetExtractor\<<result.id.voName>\>
 {
     /**
@@ -122,7 +129,7 @@ public class <result.id.voName>ResultSetExtractor
      * @param sql the SQL query.
      * @param listener the {@link <repository.voName>DAOListener} instance.
      */
-    public <result.id.voName>ResultSetExtractor(
+    public <result.id.normalized.camelCase>ResultSetExtractor(
         <notnull(C=C)>final String sql, <nullable(C=C)>final DAOListener listener)
     {
         super(sql, listener);
@@ -146,7 +153,7 @@ defaultExtractor(result, repository, C) ::= <<
  * @param listener the {@link DAOListener} instance.
  * @return the {@code <result.id.voName>} or
  * {@code null} if the operation returned no data.
- * @throws SQLException intercepted by \<i>Spring\</i\>.
+ * @throws SQLException intercepted by \<i>Spring\</i>.
  * @throws DataAccessException with information about any
  * custom exception.
  */
@@ -189,16 +196,20 @@ protected <result.id.voName> extractData(
     {
         if (listener != null)
         {
-            daoListener.resultSetMovedForward(1, sql);
+            listener.resultSetMovedForward(sql, 1);
         }
 
-        result =
-            factory.create<result.id.voName>(
-                <result.properties:{p | <property_resultset_retrieval(property=p, C=C)>}; separator=",\n">);
+<if(result.nullableProperties)>
+        <result.nullableProperties:{p | <nullable_property_resultset_retrieval_declaration(property=p, C=C)>}; separator="\n">
 
-        if  (daoListener != null)
+<endif>
+        result =
+            factory.create(
+                <result.properties:{p | <nullable_property_resultset_retrieval(property=p, C=C)>}; separator=",\n">);
+
+        if  (listener != null)
         {
-            daoListener.resultSetClosed(this);
+            listener.resultSetClosed(this);
         }
     }
     else
@@ -211,3 +222,54 @@ protected <result.id.voName> extractData(
     return result;
 }
 >>
+
+nullable_property_resultset_retrieval_declaration(property, C) ::= <<
+<!
+ Writes the piece of code to retrieve the value of a nullable property from a ResultSet.
+ @param property the property.
+ @param C the context.
+!>
+<nullable(C=C)>final <p.objectType> <p.id.uncapitalized> = <property_resultset_retrieval(property=p, C=C)>;
+>>
+
+nullable_property_resultset_retrieval(property, C) ::= <<
+<!
+ Writes the piece of code to retrieve the value of a nullable property from a ResultSet.
+ @param property the property.
+ @param C the context.
+!>
+<
+if(property.nullable)
+  >(<property.id.uncapitalized> == null) ? null : <generic_nullable_property_resultset_retrieval(property=property, C=C)><
+else
+  ><property_resultset_retrieval(property=property, C=C)><
+endif>
+>>
+
+generic_nullable_property_resultset_retrieval(property, C) ::= <<
+<!
+ Writes the piece of code to retrieve the value of a nullable property from a ResultSet.
+ @param property the property.
+ @param C the context.
+!>
+<
+if(property.date)
+  ><nullable_date_property_resultset_retrieval(property=property, C=C)><
+else><
+  if(property.primitive)
+   ><property.objectType>.valueOf(<property.id.uncapitalized>)<
+  else
+   ><property.id.uncapitalized><
+  endif><
+endif>
+>>
+
+nullable_date_property_resultset_retrieval(property, C) ::= <<
+<!
+ Writes the piece of code to retrieve the value of a nullable Date property from a ResultSet.
+ @param property the property.
+ @param C the context.
+!>
+<if(property.nullable)>new Date(<property.id.uncapitalized>.getTime())<endif>
+>>
+

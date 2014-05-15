@@ -89,4 +89,15 @@ public class DecoratedStringTest
 
         Assert.assertFalse(instance.isEmpty());
     }
+
+    /**
+     * Checks whether capitalize() preserves camel case.
+     */
+    @Test
+    public void capitalize_preserves_camelCase()
+    {
+        @NotNull final DecoratedString instance = new DecoratedString("test.with.CamelCase.example");
+
+        Assert.assertEquals("TestWithCamelCaseExample", instance.getCapitalized().getValue());
+    }
 }

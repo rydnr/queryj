@@ -14,4 +14,4 @@ output: Java;
 filename builder : <result.id.camelCase>Factory.java;
 
 // The package.
-package: <packageName>.vo.impl;
+package: <packageName>.vo.core;

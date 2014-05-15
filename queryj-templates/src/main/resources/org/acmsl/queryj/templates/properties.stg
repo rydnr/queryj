@@ -147,7 +147,16 @@ property_resultset_retrieval(property, C) ::= <<
  @param property the property.
  @param C the context.
 !>
-<if(!property.clob)>resultSet.get<property.objectType>("<property.id>")<else><clob_property_resultset_retrieval(property=attr, C=C)><endif>
+<
+if(property.clob)><
+  clob_property_resultset_retrieval(property=attr, C=C)><
+else><
+  if(property.boolean)
+   >resultSet.getBoolean("<property.columnName>")<
+  else
+   >resultSet.get<property.objectType>("<property.columnName>")<
+  endif><
+endif>
 >>
 
 clob_property_resultset_retrieval(property, C) ::= <<

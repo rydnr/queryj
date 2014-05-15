@@ -690,6 +690,39 @@ public abstract class AbstractResultDecorator
     }
 
     /**
+     * Retrieves the nullable properties.
+     * @return such properties.
+     */
+    @NotNull
+    public List<Property<DecoratedString>> getNullableProperties()
+    {
+        return filterNullableProperties(getProperties());
+    }
+
+    /**
+     * Filters the nullable properties.
+     * @param properties the {@link Property properties}.
+     * @return such properties.
+     */
+    @NotNull
+    protected List<Property<DecoratedString>> filterNullableProperties(
+        @NotNull final List<Property<DecoratedString>> properties)
+    {
+        @NotNull final List<Property<DecoratedString>> result = new ArrayList<>(properties.size());
+
+        for (@Nullable final Property<DecoratedString> property : properties)
+        {
+            if (   (property != null)
+                && (property.isNullable()))
+            {
+                result.add(property);
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Provides a text representation of the information
      * contained in given instance.
      * @return such information.
@@ -718,8 +751,8 @@ public abstract class AbstractResultDecorator
     }
 
     /**
-     * Retrieves the hashcode of given instance.
-     * @param result the decoreated result.
+     * Retrieves the hashCode of given instance.
+     * @param result the decorated result.
      * @return such value.
      */
     protected final int hashCode(@NotNull final Result<String> result)

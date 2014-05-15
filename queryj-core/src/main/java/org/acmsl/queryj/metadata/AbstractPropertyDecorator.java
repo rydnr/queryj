@@ -35,6 +35,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.IdentifiableElement;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
@@ -204,7 +205,7 @@ public abstract class AbstractPropertyDecorator
     {
         final int t_iJavaType = metadataTypeManager.getJavaType(type);
 
-        return metadataTypeManager.getFieldType(t_iJavaType, isNullable(), "boolean".equals(type));
+        return metadataTypeManager.getFieldType(t_iJavaType, isNullable(), isBoolean(type));
     }
 
     /**
@@ -388,18 +389,17 @@ public abstract class AbstractPropertyDecorator
     @SuppressWarnings("unused")
     public boolean isBoolean()
     {
-        return isBoolean(getType().getValue(), getMetadataTypeManager());
+        return isBoolean(getType().getValue());
     }
 
     /**
      * Retrieves whether the attribute is boolean or not.
      * @param type the attribute type.
-     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @return such information.
      */
-    protected boolean isBoolean(@NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+    protected boolean isBoolean(@NotNull final String type)
     {
-        return metadataTypeManager.isBoolean(metadataTypeManager.getJavaType(type));
+        return Literals.BOOLEAN.equalsIgnoreCase(type);
     }
 
     /**
