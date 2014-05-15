@@ -47,6 +47,8 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -134,6 +136,43 @@ public class ResultDecoratorHelper
                 }
             }
         }
+
+        return result;
+    }
+    /**
+     * Retrieves the ordered list of the fully-qualified types of given properties.
+     * @param properties such properties.
+     * @param typeManager the {@link MetadataTypeManager} instance.
+     * @return such list.
+     */
+    @NotNull
+    protected List<DecoratedString> getPropertyTypes(
+        @NotNull final List<Property<DecoratedString>> properties,
+        @NotNull final MetadataTypeManager typeManager)
+    {
+        @NotNull final List<DecoratedString> result = new ArrayList<>(properties.size());
+
+        for (@Nullable final Property<DecoratedString> property: properties)
+        {
+            if (property != null)
+            {
+                @Nullable final String importType =
+                    typeManager.getImport(
+                        typeManager.getJavaType(property.getType().getValue()));
+
+                if (importType != null)
+                {
+                    @NotNull final DecoratedString type = new DecoratedString(importType);
+
+                    if (!result.contains(type))
+                    {
+                        result.add(type);
+                    }
+                }
+            }
+        }
+
+        Collections.sort(result);
 
         return result;
     }

@@ -600,23 +600,23 @@ public abstract class AbstractResultDecorator
             getPropertyTypes(
                 getProperties(),
                 getMetadataManager().getMetadataTypeManager(),
-                TableDecoratorHelper.getInstance());
+                ResultDecoratorHelper.getInstance());
     }
 
     /**
      * Retrieves the ordered list of the fully-qualified types of given attributes.
      * @param properties such attributes.
      * @param typeManager the {@link MetadataTypeManager} instance.
-     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
+     * @param resultDecoratorHelper the {@link org.acmsl.queryj.metadata.ResultDecoratorHelper} instance.
      * @return such list.
      */
     @NotNull
     protected List<DecoratedString> getPropertyTypes(
         @NotNull final List<Property<DecoratedString>> properties,
         @NotNull final MetadataTypeManager typeManager,
-        @NotNull final TableDecoratorHelper tableDecoratorHelper)
+        @NotNull final ResultDecoratorHelper resultDecoratorHelper)
     {
-        return tableDecoratorHelper.getPropertyTypes(properties, typeManager);
+        return resultDecoratorHelper.getPropertyTypes(properties, typeManager);
     }
 
     /**

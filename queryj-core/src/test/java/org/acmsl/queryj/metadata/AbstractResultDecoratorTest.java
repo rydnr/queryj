@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: ResultDecoratorHelperTest.java
+ * Filename: AbstractResultDecoratorTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for ResultDecoratorHelper.
+ * Description: Tests for AbstractResultDecorator.
  *
- * Date: 2014/05/13
- * Time: 07:30
+ * Date: 2014/05/15
+ * Time: 10:59
  *
  */
 package org.acmsl.queryj.metadata;
@@ -38,8 +38,13 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.customsql.PropertyRefElement;
+import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.ResultElement;
+import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 
 /*
  * Importing JetBrains annotations.
@@ -47,8 +52,9 @@ import org.acmsl.queryj.customsql.PropertyElement;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing JUnit classes.
+ * Importing checkthread.org annotations.
  */
+import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,23 +67,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Tests for {@link ResultDecoratorHelper}.
+ * Tests for {@link AbstractResultDecorator}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/05/13 07:30
+ * Created: 2014/05/15 10:59
  */
 @RunWith(JUnit4.class)
-public class ResultDecoratorHelperTest
+public class AbstractResultDecoratorTest
 {
+
     /**
-     * Checks whether {@link ResultDecoratorHelper} detects nullable properties
-     * for a given {@link org.acmsl.queryj.customsql.Result}.
+     * Checks getPropertyTypes() don't include duplicates.
      */
     @Test
-    public void containsNullableProperties_detects_nullable_properties()
+    public void getPropertyTypes_do_not_include_duplicates()
     {
-        @NotNull final ResultDecoratorHelper instance = ResultDecoratorHelper.getInstance();
-
         @NotNull final Property<String> property1 =
             new PropertyElement<>("prop1", "propertyId", 1, "long", false);
 
@@ -99,39 +103,42 @@ public class ResultDecoratorHelperTest
 
         @NotNull final AbstractResultDecorator result = AbstractResultDecoratorTest.setupResultDecorator(properties);
 
-        Assert.assertTrue(instance.containNullableProperties(result.getProperties()));
+        Assert.assertEquals(1, result.getPropertyTypes().size());
     }
 
     /**
-     * Checks whether {@link ResultDecoratorHelper} detects not null properties
-     * for a given {@link org.acmsl.queryj.customsql.Result}.
+     * Sets up an {@link AbstractResultDecorator} instance, for testing purposes.
+     * @param properties the {@link org.acmsl.queryj.customsql.Property properties}.
+     * @return the decorator.
      */
-    @Test
-    public void containsNotNullProperties_detects_notNull_properties()
+    @NotNull
+    protected static AbstractResultDecorator setupResultDecorator(@NotNull final List<Property<String>> properties)
     {
-        @NotNull final ResultDecoratorHelper instance = ResultDecoratorHelper.getInstance();
+        @NotNull final AbstractResultDecorator result;
 
-        @NotNull final Property<String> property1 =
-            new PropertyElement<>("prop1", "propertyId", 1, "long", false);
+        @NotNull final Result<String> wrappedResult = new ResultElement<>("my.result", "MyResult");
 
-        @NotNull final Property<String> property2 =
-            new PropertyElement<>("prop2", "name", 2, "String", false);
+        @NotNull final CustomSqlProvider customSqlProvider = EasyMock.createNiceMock(CustomSqlProvider.class);
+        @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);
+        @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
+        @NotNull final MetadataTypeManager metadataTypeManager = JdbcMetadataTypeManager.getInstance();
+        @NotNull final DecoratorFactory decoratorFactory = CachingDecoratorFactory.getInstance();
+        EasyMock.expect(customSqlProvider.getSqlPropertyDAO()).andReturn(propertyDAO).anyTimes();
+        EasyMock.expect(metadataManager.getMetadataTypeManager()).andReturn(metadataTypeManager).anyTimes();
 
-        @NotNull final Property<String> property3 =
-            new PropertyElement<>("prop3", "date", 3, "Date", true);
+        for (@NotNull final Property<String> property : properties)
+        {
+            EasyMock.expect(propertyDAO.findByPrimaryKey(property.getId())).andReturn(property);
+            wrappedResult.add(new PropertyRefElement(property.getId()));
+        }
 
-        @NotNull final Property<String> property4 =
-            new PropertyElement<>("prop4", "registration", 4, "Date", false);
+        EasyMock.replay(customSqlProvider);
+        EasyMock.replay(propertyDAO);
+        EasyMock.replay(metadataManager);
 
-        @NotNull final List<Property<String>> properties = new ArrayList<>(4);
+        result =
+            new AbstractResultDecorator(wrappedResult, customSqlProvider, metadataManager, decoratorFactory) {};
 
-        properties.add(property1);
-        properties.add(property2);
-        properties.add(property3);
-        properties.add(property4);
-
-        @NotNull final AbstractResultDecorator result = AbstractResultDecoratorTest.setupResultDecorator(properties);
-
-        Assert.assertTrue(instance.containNotNullProperties(result.getProperties(), result.getMetadataTypeManager()));
+        return result;
     }
 }

@@ -68,10 +68,19 @@ sourceImpl(result, C) ::= <<
   C=C)><endif>
  */
 <package_declaration(p=C.package)>
-<checkers_import(C=C)>
-<if(C.implement_markers)>
 
-<endif>
+/*
+ * Importing <C.repository.capitalized> classes.
+ */
+import <C.project_package>.<typeInitMap.voSubpackageName>.<result.id.voName>;
+import <C.project_package>.<typeInitMap.voSubpackageName>.core.<result.id.voName>Factory;
+
+/*
+ * Importing V24-Commons classes.
+ */
+import com.ventura24.commons.dao.DAOListener;
+import com.ventura24.commons.dao.V24ResultSetExtractor;
+<checkers_import(C=C)>
 /*
  * Importing JDK classes.
  */
@@ -79,7 +88,6 @@ import java.io.Serializable;
 <if(result.propertyTypes)>
 <result.propertyTypes:{ t | import <t>;}; separator="\n">
 <endif>
-
 
 <class(result=result, repository=C.repository, C=C)>
 >>
@@ -89,7 +97,7 @@ description(result) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-{@link ResultSetExtractor} implementation for <result.id> result.
+{@link V24ResultSetExtractor} implementation for {@link <result.id.voName> <result.id>} result.
 >>
 
 class(result, repository, C) ::= <<
@@ -107,15 +115,17 @@ class(result, repository, C) ::= <<
   template="org/acmsl/queryj/templates/CustomResultSetExtractor.stg", C=C)>
  */
 public class <result.id.voName>ResultSetExtractor
-    extends <repository.voName>ResultSetExtractor\<<result.id.voName>\>
+    extends V24ResultSetExtractor\<<result.id.voName>\>
 {
     /**
-     * Creates a new instance.
+     * Creates a new {@code <result.id.voName>ResultSetExtractor} instance.
+     * @param sql the SQL query.
      * @param listener the {@link <repository.voName>DAOListener} instance.
      */
-    public <result.id.voName>ResultSetExtractor(<nullable(C=C)>final <repository.voName>DAOListener listener)
+    public <result.id.voName>ResultSetExtractor(
+        <notnull(C=C)>final String sql, <nullable(C=C)>final DAOListener listener)
     {
-        super(listener);
+        super(sql, listener);
     }
 
     <defaultExtractor(result=result, repository=repository, C=C)>
@@ -132,7 +142,8 @@ defaultExtractor(result, repository, C) ::= <<
 /**
  * Extracts {@link <result.id.voName>} information from given result set.
  * @param resultSet the result set.
- * @param listener the {@link <repository.voName>DAOListener} instance.
+ * @param sql the SQL query.
+ * @param listener the {@link DAOListener} instance.
  * @return the {@code <result.id.voName>} or
  * {@code null} if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
@@ -142,16 +153,18 @@ defaultExtractor(result, repository, C) ::= <<
 <notnull(C=C)>
 protected <result.id.voName> extractData(
     <notnull(C=C)>final ResultSet resultSet,
-    <nullable(C=C)>final <repository.voName>DAOListener listener)
+    <notnull(C=C)>final String sql,
+    <nullable(C=C)>final DAOListener listener)
     throws  SQLException,
             DataAccessException
 {
-    return extractData(resultSet, listener, <result.id.voName>ValueObjectFactory.getInstance());
+    return extractData(resultSet, sql, listener, <result.id.voName>Factory.getInstance());
 }
 
 /**
  * Extracts {@link <result.id.voName>} information from given result set.
  * @param resultSet the result set.
+ * @param sql the SQL query.
  * @param listener the {@link <repository.voName>DAOListener} instance.
  * @param factory the {@link <result.id.voName>ValueObjectFactory}
  * instance.
@@ -164,8 +177,9 @@ protected <result.id.voName> extractData(
 <notnull(C=C)>
 protected <result.id.voName> extractData(
     <notnull(C=C)>final ResultSet resultSet,
-    <nullable(C=C)>final <repository.voName>DAOListener listener,
-    <notnull(C=C)>final <result.id.voName>ValueObjectFactory factory)
+    <notnull(C=C)>final String sql,
+    <nullable(C=C)>final DAOListener listener,
+    <notnull(C=C)>final <result.id.voName>Factory factory)
   throws  SQLException,
           DataAccessException
 {
@@ -175,7 +189,7 @@ protected <result.id.voName> extractData(
     {
         if (listener != null)
         {
-            daoListener.resultSetMovedForward(this);
+            daoListener.resultSetMovedForward(1, sql);
         }
 
         result =

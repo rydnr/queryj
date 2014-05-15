@@ -73,6 +73,7 @@ import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.Literals;
+import org.acmsl.queryj.metadata.CachingResultDecorator;
 import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.engines.Engine;
@@ -359,7 +360,13 @@ public class PerCustomResultTemplatesTest
                     Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
                     @NotNull final String packageName =
-                        resolvePackage(PACKAGE_MAPPINGS.get(templateName), result.getId(), resolveEngine(engine));
+                        resolvePackage(
+                            PACKAGE_MAPPINGS.get(templateName),
+                            result,
+                            resolveEngine(engine),
+                            sqlProvider,
+                            metadataManager,
+                            decoratorFactory);
 
                     @NotNull final PerCustomResultTemplateContext t_Context =
                         new PerCustomResultTemplateContext(
@@ -497,21 +504,34 @@ public class PerCustomResultTemplatesTest
     /**
      * Resolves the package.
      * @param packageTemplate the package template.
-     * @param resultName the result name.
+     * @param customResult the custom result.
      * @param engine the engine.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return the actual package.
      */
     @NotNull
     protected String resolvePackage(
         @NotNull final String packageTemplate,
-        @NotNull final String resultName,
-        @NotNull final Engine\<String> engine)
+        @NotNull final Result\<String> customResult,
+        @NotNull final Engine\<String> engine,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         @NotNull final String result;
 
         @NotNull final ST template = new ST(packageTemplate);
+
         template.add(Literals.PACKAGE_NAME, new DecoratedString(BASE_PACKAGE_NAME));
-        template.add(Literals.RESULT_NAME, new DecoratedString(resultName));
+        template.add(
+            Literals.RESULT,
+            new CachingResultDecorator(
+                customResult,
+                customSqlProvider,
+                metadataManager,
+                decoratorFactory));
         template.add(Literals.ENGINE, new EngineDecorator(engine));
         template.add(Literals.NOTHING, new DecoratedString(""));
 
