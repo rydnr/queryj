@@ -1,7 +1,8 @@
 * 2014/05/15
 ** DONE Fix CustomValueObjectImpl #487: 3 -> 1
 ** DONE Implement per-custom result Cucumber features #516: 2 -> 1
-** TODO Fix CustomBaseResultSetExtractor #485: 3 -> 1
+** DONE Fix CustomBaseResultSetExtractor #485: 3 -> 1
+** DONE Fix AttributesStatementSetter #494 : 2 -> 1
 * Package layout:
 ** dao
 - DataAccessManager
