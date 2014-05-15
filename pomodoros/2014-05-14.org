@@ -1,0 +1,33 @@
+* 2014/05/14
+** DONE Fix CustomValueObjectImpl #487: 3 -> 3
+* Package layout:
+** dao
+- DataAccessManager
+- BaseDAO
+*** dao/core
+- DAOChooser
+- BaseDAOFactory
+*** dao/impl
+*** dao/rdb -> X
+*** dao/[table]
+- CustomResultSetExtractor
+- FkStatementSetter
+- PkStatementSetter
+- ResultSetExtractor
+- AttributesStatementSetter
+**** dao/[table]/oracle
+- DAO
+- DAOFactory
+** vo
+- ValueObject
+- CustomValueObject
+** vo/core
+- ValueObjectFactory
+- CustomValueObjectFactory
+** vo/impl
+- ValueObjectImpl
+- ValueObjectFactoryImpl
+- BaseValueObject
+- CustomValueObjectImpl
+- CustomValueObjectFactoryImpl
+- CustomBaseValueObject

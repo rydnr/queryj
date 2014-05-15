@@ -68,6 +68,11 @@ sourceFactory(result, C) ::= <<
   C=C)><endif>
  */
 <package_declaration(p=C.package)>
+
+/*
+ * Importing <C.repository.capitalized> classes.
+ */
+import <C.project_package>.<typeInitMap.voSubpackageName>.<result.id.voName>;
 <notnull_import_maybe_nullable(container=result, C=C)>
 
 <if(result.propertyTypes)>
@@ -85,7 +90,7 @@ description(result) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-Are responsible of creating {@link <result.id.voName>} value objects.
+Are responsible of creating {@link <result.id.voName> <result.id>} value objects.
 >>
 
 class(result, repository, C) ::= <<
