@@ -83,11 +83,10 @@ import java.util.Arrays;
 import java.util.Collections;
 <endif>
 import java.util.List;
-<if(table.attributeTypes)>
-<table.attributeTypes:{ t | import <t>;}; separator="\n">
-<else>
+<import_attribute_types(table=table, useHeader=false)>
+if(table.customSelects)>
+<table.customSelects:{ cs | <import_custom_select_types(cs=cs, C=C)>}; separator="\n">
 <endif>
-
 <class(table=table, C=C)>
 >>
 
@@ -118,9 +117,10 @@ project_imports(basePackageName, voSubpackageName, table) ::= <<
  * Importing project classes.
  */
 import <basePackageName>.<voSubpackageName>.<table.name.voName>;
-<if(table.staticContent)>
-import <basePackageName>.<voSubpackageName>.impl.<table.name.voName>Impl;
-<endif>
+<
+if(table.staticContent)>
+import <basePackageName>.<voSubpackageName>.impl.<table.name.voName>Impl;<
+endif>
 >>
 
 class(table, C) ::= <<
@@ -161,15 +161,15 @@ public interface <table.name.voName>DAO
     <notnull(C=C)>
     List\<<table.name.voName\>> getStaticValues();
 
-<if(table.primaryKey)>
-
+<
+if(table.primaryKey)>
     <find_constant_by_pk(primaryKey=table.primaryKey, table=table, C=C)>
 <endif>
 
     <table.own.minus.primaryKey.minus.readOnlyAttributes:{ attr | <find_constant_methods(attribute=attr, table=table, C=C)>}; separator="\n\n">
 
-    <find_by_primary_key(table=table, parent=table.parentTable, repository=C.repository, C=C)>
-<endif>
+    <find_by_primary_key(table=table, parent=table.parentTable, repository=C.repository, C=C)><
+endif>
 
     /**
      * Persists {@link <table.name.voName>} information.
@@ -277,7 +277,56 @@ attribute_specification(attr) ::= <<
  Prints the value of the attribute, optionally escaping it.
  @param attr the attribute.
 !>
-<if(attr.value)><if(attr.string)>"<attr.value>"<else><attr.value><endif><else>null<endif>
+<
+if(attr.value)><
+  if(attr.string)
+   >"<attr.value>"<
+  else><
+    if(attr.date)
+     >new SimpleDateFormat("dd/mm/yyyy").parse("<attr.value>")<
+    else><
+      if(attr.double)><
+        if(attr.nullable)
+         >Double.valueOf(<attr.value>d)<
+        else
+         ><attr.value>d<
+        endif><
+      else><
+        if(attr.float)><
+          if(attr.nullable)
+           >Double.valueOf(<attr.value>d)<
+          else
+            ><attr.value>d<
+          endif><
+        else><
+          if(attr.decimal)
+            >new BigDecimal("<attr.value>")<
+          else><
+            if(attr.long)><
+              if(attr.nullable)
+               >Long.valueOf(<attr.value>L)<
+              else
+               ><attr.value>L<
+              endif><
+            else><
+              if(attr.int)><
+                if(attr.nullable)
+                 >Integer.valueOf(<attr.value>)<
+                else
+                 ><attr.value><
+                endif><
+              else
+               ><attr.value><
+              endif><
+            endif><
+          endif><
+        endif><
+      endif><
+    endif><
+  endif><
+else
+ >null<
+endif>
 >>
 
 find_constant_by_pk(primaryKey, table, C) ::= <<

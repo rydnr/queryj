@@ -485,3 +485,12 @@ custom_select_return_cast(cs, table, result, C) ::= <<
 custom_select_return_nullable_maybe(cs, result, C) ::= <<
 <if(cs.multiple)><notnull(C=C)><else><if(cs.resultRef)><if(result.wrappingASingleProperty)><result.properties:{property|<if(property.object)><nullable(C=C)><endif>}><else><nullable(C=C)><endif><else><nullable(C=C)><endif><endif>
 >>
+
+import_custom_select_types(cs, C) ::= <<
+<!
+ Imports the types for the custom select.
+ @param cs the custom select.
+ @param C the context.
+!>
+<cs.parameterTypes:{ t | import <t>;}; separator="\n">
+>>

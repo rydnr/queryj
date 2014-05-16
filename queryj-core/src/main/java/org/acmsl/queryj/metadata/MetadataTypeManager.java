@@ -462,4 +462,39 @@ public interface MetadataTypeManager
      * @return the associated {@link java.sql.Types} constant.
      */
     public int toJdbcType(@NotNull final String type, final int length, final int precision);
+
+    /**
+     * Checks whether given id matches a float type.
+     * @param typeId the type id.
+     * @return {@code true} if it's a float.
+     */
+    boolean isFloat(final int typeId);
+
+    /**
+     * Checks whether given id matches a double type.
+     * @param typeId the type id.
+     * @return {@code true} if it's a double.
+     */
+    boolean isDouble(final int typeId);
+
+    /**
+     * Checks whether given id matches a decimal type.
+     * @param typeId the type id.
+     * @return {@code true} if it's a double.
+     */
+    boolean isDecimal(final int typeId);
+
+    /**
+     * Checks whether given id matches an integer type.
+     * @param typeId the type id.
+     * @return {@code true} if it's an integer.
+     */
+    boolean isInt(final int typeId);
+
+    /**
+     * Checks whether given id matches a long type.
+     * @param typeId the type id.
+     * @return {@code true} if it's a long.
+     */
+    boolean isLong(final int typeId);
 }

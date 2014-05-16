@@ -102,7 +102,6 @@ Feature: <table.name> code compiles
       | DAOFactory | <engine.name.capitalized><table.name.singular.camelCase>DAOFactory.java |
       | BaseDAOFactory | <table.name.singular.camelCase>DAOFactory.java |
       | BaseDAO | <table.name.singular.camelCase>DAO.java |
-      | BaseResultSetExtractor | <table.name.singular.camelCase>ResultSetExtractor.java |
       | DAO | <engine.name.capitalized><table.name.singular.camelCase>DAO.java |
 >>
 

@@ -1715,6 +1715,122 @@ public class JdbcMetadataTypeManager
     }
 
     /**
+     * Checks whether given data type is float or not.
+     * @param dataType the data type.
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean isFloat(final int dataType)
+    {
+        final boolean result;
+
+        switch (dataType)
+        {
+            case Types.FLOAT:
+            case Types.REAL:
+                result = true;
+                break;
+            default:
+                result = false;
+                break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given data type is double or not.
+     * @param dataType the data type.
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean isDouble(final int dataType)
+    {
+        final boolean result;
+
+        switch (dataType)
+        {
+            case Types.DOUBLE:
+                result = true;
+                break;
+            default:
+                result = false;
+                break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given data type is decimal or not.
+     * @param dataType the data type.
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean isDecimal(final int dataType)
+    {
+        final boolean result;
+
+        switch (dataType)
+        {
+            case Types.DECIMAL:
+                result = true;
+                break;
+            default:
+                result = false;
+                break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given data type is integer or not.
+     * @param dataType the data type.
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean isInt(final int dataType)
+    {
+        final boolean result;
+
+        switch (dataType)
+        {
+            case Types.INTEGER:
+                result = true;
+                break;
+            default:
+                result = false;
+                break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given data type is long or not.
+     * @param dataType the data type.
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean isLong(final int dataType)
+    {
+        final boolean result;
+
+        switch (dataType)
+        {
+            case Types.BIGINT:
+                result = true;
+                break;
+            default:
+                result = false;
+                break;
+        }
+
+        return result;
+    }
+
+    /**
      * Checks whether given type belongs to <code>java.lang</code> package or not.
      * @param type the type.
      * @return <code>true</code> in such case.

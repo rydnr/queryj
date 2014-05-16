@@ -926,6 +926,106 @@ public abstract class AbstractAttributeDecorator
     }
 
     /**
+     * Checks whether this attribute is a float.
+     * @return {@code true} in such case.
+     */
+    public boolean isFloat()
+    {
+        return isFloat(getTypeId(), getMetadataTypeManager());
+    }
+
+    /**
+     * Checks whether this attribute is a float.
+     * @param typeId the type id.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return {@code true} in such case.
+     */
+    protected boolean isFloat(final int typeId, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isFloat(typeId);
+    }
+
+    /**
+     * Checks whether this attribute is a double.
+     * @return {@code true} in such case.
+     */
+    public boolean isDouble()
+    {
+        return isDouble(getTypeId(), getMetadataTypeManager());
+    }
+
+    /**
+     * Checks whether this attribute is a double.
+     * @param typeId the type id.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return {@code true} in such case.
+     */
+    protected boolean isDouble(final int typeId, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isDouble(typeId);
+    }
+
+    /**
+     * Checks whether this attribute is decimal or not.
+     * @return {@code true} in such case.
+     */
+    public boolean isDecimal()
+    {
+        return isDecimal(getTypeId(), getMetadataTypeManager());
+    }
+
+    /**
+     * Checks whether this attribute is decimal or not.
+     * @param typeId the type id.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return {@code true} in such case.
+     */
+    protected boolean isDecimal(final int typeId, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isDecimal(typeId);
+    }
+
+    /**
+     * Checks whether this attribute is int or not.
+     * @return {@code true} in such case.
+     */
+    public boolean isInt()
+    {
+        return isInt(getTypeId(), getMetadataTypeManager());
+    }
+
+    /**
+     * Checks whether this attribute is int or not.
+     * @param typeId the type id.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return {@code true} in such case.
+     */
+    protected boolean isInt(final int typeId, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isInt(typeId);
+    }
+
+    /**
+     * Checks whether this attribute is long or not.
+     * @return {@code true} in such case.
+     */
+    public boolean isLong()
+    {
+        return isLong(getTypeId(), getMetadataTypeManager());
+    }
+
+    /**
+     * Checks whether this attribute is long or not.
+     * @param typeId the type id.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return {@code true} in such case.
+     */
+    protected boolean isLong(final int typeId, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isLong(typeId);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @NotNull
@@ -953,7 +1053,7 @@ public abstract class AbstractAttributeDecorator
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final Object obj)
+    public boolean equals(@Nullable final Object obj)
     {
         if (obj == null)
         {

@@ -208,11 +208,9 @@ public class AbstractAttributeDecoratorTest
     @Test
     public void isStrictlyPrimitive_works_for_doubles()
     {
-        @NotNull final MetadataManager metadataManager =
-            EasyMock.createNiceMock(MetadataManager.class);
+        @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
 
-        @NotNull final MetadataTypeManager metadataTypeManager =
-            new JdbcMetadataTypeManager();
+        @NotNull final MetadataTypeManager metadataTypeManager = new JdbcMetadataTypeManager();
 
         EasyMock.expect(metadataManager.getMetadataTypeManager()).andReturn(metadataTypeManager);
 
@@ -240,9 +238,296 @@ public class AbstractAttributeDecoratorTest
                 null); // boolean-null
 
         @NotNull final AbstractAttributeDecorator instance =
-            new AbstractAttributeDecorator(
-                attribute, metadataManager) {};
+            new AbstractAttributeDecorator(attribute, metadataManager) {};
 
         Assert.assertTrue(instance.isStrictlyPrimitive());
     }
+
+    /**
+     * Checks whether isFloat() returns true for floats.
+     */
+    @Test
+    public void isFloat_returns_true_for_floats()
+    {
+        @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
+
+        @NotNull final MetadataTypeManager metadataTypeManager = new JdbcMetadataTypeManager();
+
+        EasyMock.expect(metadataManager.getMetadataTypeManager()).andReturn(metadataTypeManager).anyTimes();
+
+        EasyMock.replay(metadataManager);
+
+        @NotNull final Attribute<String> attribute =
+            new AttributeValueObject(
+                "name",
+                Types.FLOAT,
+                "float",
+                "tableName",
+                "comment",
+                1,
+                10, // length
+                1, // precision
+                null, // keyword
+                null, // retrieval query
+                null, // sequence
+                false, // nullable
+                null, // value
+                false, // read-only
+                false, // is-bool
+                null, // boolean-true
+                null, // boolean-false
+                null); // boolean-null
+
+        @NotNull final AbstractAttributeDecorator instance =
+            new AbstractAttributeDecorator(attribute, metadataManager) {};
+
+        Assert.assertTrue(instance.isFloat());
+    }
+
+    /**
+     * Checks whether isFloat() returns false for doubles.
+     */
+    @Test
+    public void isFloat_returns_false_for_doubles()
+    {
+        @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
+
+        @NotNull final MetadataTypeManager metadataTypeManager = new JdbcMetadataTypeManager();
+
+        EasyMock.expect(metadataManager.getMetadataTypeManager()).andReturn(metadataTypeManager).anyTimes();
+
+        EasyMock.replay(metadataManager);
+
+        @NotNull final Attribute<String> attribute =
+            new AttributeValueObject(
+                "name",
+                Types.DOUBLE,
+                "double",
+                "tableName",
+                "comment",
+                1,
+                10, // length
+                1, // precision
+                null, // keyword
+                null, // retrieval query
+                null, // sequence
+                false, // nullable
+                null, // value
+                false, // read-only
+                false, // is-bool
+                null, // boolean-true
+                null, // boolean-false
+                null); // boolean-null
+
+        @NotNull final AbstractAttributeDecorator instance =
+            new AbstractAttributeDecorator(attribute, metadataManager) {};
+
+        Assert.assertFalse(instance.isFloat());
+    }
+
+    /**
+     * Checks whether isDouble() returns true for doubles.
+     */
+    @Test
+    public void isDouble_returns_true_for_doubles()
+    {
+        @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
+
+        @NotNull final MetadataTypeManager metadataTypeManager = new JdbcMetadataTypeManager();
+
+        EasyMock.expect(metadataManager.getMetadataTypeManager()).andReturn(metadataTypeManager).anyTimes();
+
+        EasyMock.replay(metadataManager);
+
+        @NotNull final Attribute<String> attribute =
+            new AttributeValueObject(
+                "name",
+                Types.DOUBLE,
+                "double",
+                "tableName",
+                "comment",
+                1,
+                10, // length
+                1, // precision
+                null, // keyword
+                null, // retrieval query
+                null, // sequence
+                false, // nullable
+                null, // value
+                false, // read-only
+                false, // is-bool
+                null, // boolean-true
+                null, // boolean-false
+                null); // boolean-null
+
+        @NotNull final AbstractAttributeDecorator instance =
+            new AbstractAttributeDecorator(attribute, metadataManager) {};
+
+        Assert.assertTrue(instance.isDouble());
+    }
+
+    /**
+     * Checks whether isDouble() returns false for floats.
+     */
+    @Test
+    public void isDouble_returns_false_for_floats()
+    {
+        @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
+
+        @NotNull final MetadataTypeManager metadataTypeManager = new JdbcMetadataTypeManager();
+
+        EasyMock.expect(metadataManager.getMetadataTypeManager()).andReturn(metadataTypeManager).anyTimes();
+
+        EasyMock.replay(metadataManager);
+
+        @NotNull final Attribute<String> attribute =
+            new AttributeValueObject(
+                "name",
+                Types.FLOAT,
+                "float",
+                "tableName",
+                "comment",
+                1,
+                10, // length
+                1, // precision
+                null, // keyword
+                null, // retrieval query
+                null, // sequence
+                false, // nullable
+                null, // value
+                false, // read-only
+                false, // is-bool
+                null, // boolean-true
+                null, // boolean-false
+                null); // boolean-null
+
+        @NotNull final AbstractAttributeDecorator instance =
+            new AbstractAttributeDecorator(attribute, metadataManager) {};
+
+        Assert.assertFalse(instance.isDouble());
+    }
+
+    /**
+     * Checks whether isDecimal() returns true for BigDecimals.
+     */
+    @Test
+    public void isDecimal_returns_true_for_BigDecimals()
+    {
+        @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
+
+        @NotNull final MetadataTypeManager metadataTypeManager = new JdbcMetadataTypeManager();
+
+        EasyMock.expect(metadataManager.getMetadataTypeManager()).andReturn(metadataTypeManager).anyTimes();
+
+        EasyMock.replay(metadataManager);
+
+        @NotNull final Attribute<String> attribute =
+            new AttributeValueObject(
+                "name",
+                Types.DECIMAL,
+                "BigDecimal",
+                "tableName",
+                "comment",
+                1,
+                10, // length
+                1, // precision
+                null, // keyword
+                null, // retrieval query
+                null, // sequence
+                false, // nullable
+                null, // value
+                false, // read-only
+                false, // is-bool
+                null, // boolean-true
+                null, // boolean-false
+                null); // boolean-null
+
+        @NotNull final AbstractAttributeDecorator instance =
+            new AbstractAttributeDecorator(attribute, metadataManager) {};
+
+        Assert.assertTrue(instance.isDecimal());
+    }
+
+    /**
+     * Checks whether isInt() returns true for integers.
+     */
+    @Test
+    public void isInt_returns_true_for_integers()
+    {
+        @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
+
+        @NotNull final MetadataTypeManager metadataTypeManager = new JdbcMetadataTypeManager();
+
+        EasyMock.expect(metadataManager.getMetadataTypeManager()).andReturn(metadataTypeManager).anyTimes();
+
+        EasyMock.replay(metadataManager);
+
+        @NotNull final Attribute<String> attribute =
+            new AttributeValueObject(
+                "name",
+                Types.INTEGER,
+                "int",
+                "tableName",
+                "comment",
+                1,
+                10, // length
+                1, // precision
+                null, // keyword
+                null, // retrieval query
+                null, // sequence
+                false, // nullable
+                null, // value
+                false, // read-only
+                false, // is-bool
+                null, // boolean-true
+                null, // boolean-false
+                null); // boolean-null
+
+        @NotNull final AbstractAttributeDecorator instance =
+            new AbstractAttributeDecorator(attribute, metadataManager) {};
+
+        Assert.assertTrue(instance.isInt());
+    }
+
+    /**
+     * Checks whether isLong() returns true for longs.
+     */
+    @Test
+    public void isLong_returns_true_for_longs()
+    {
+        @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
+
+        @NotNull final MetadataTypeManager metadataTypeManager = new JdbcMetadataTypeManager();
+
+        EasyMock.expect(metadataManager.getMetadataTypeManager()).andReturn(metadataTypeManager).anyTimes();
+
+        EasyMock.replay(metadataManager);
+
+        @NotNull final Attribute<String> attribute =
+            new AttributeValueObject(
+                "name",
+                Types.BIGINT,
+                "long",
+                "tableName",
+                "comment",
+                1,
+                10, // length
+                1, // precision
+                null, // keyword
+                null, // retrieval query
+                null, // sequence
+                false, // nullable
+                null, // value
+                false, // read-only
+                false, // is-bool
+                null, // boolean-true
+                null, // boolean-false
+                null); // boolean-null
+
+        @NotNull final AbstractAttributeDecorator instance =
+            new AbstractAttributeDecorator(attribute, metadataManager) {};
+
+        Assert.assertTrue(instance.isLong());
+    }
+
 }
