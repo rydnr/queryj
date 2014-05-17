@@ -68,15 +68,19 @@ sourceImpl(repository, tables, C) ::= <<
   C=C)><endif>
  */
 <package_declaration(p=C.package)>
-<checkers_import(C=C)>
-<if(C.implement_markers)>
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing Apache Commons Logging classes.
  */
-import org.acmsl.commons.patterns.dao.DAOChooser;
-
-<endif>
+import org.apache.commons.logging.LogFactory;
+<checkers_import(C=C)>
+/*
+ * Importing JDK classes.
+ */
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Properties;
 
 <class(repository=repository, tables=tables, C=C)>
 >>
@@ -100,17 +104,27 @@ class(repository, tables, C) ::= <<
  * <[
       description(repository=repository)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/DAOChooser.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/DAOChooser.stg", C=C)>
  */
+<class_annotations(C=C)>
 public class <repository.capitalized>DAOChooser
-<if(C.implement_markers)>
-    extends  DAOChooser,
-             Serializable
-<else>
-    extends Serializable
-<endif>
+    implements Serializable
 {
+    /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = <C.serialVersionUID>L;
+
+    /**
+     * The configuration settings.
+     */
+    <notnull(C=C)>
+    private static final String PROPERTIES_FILE = "queryj-<repository.lowercased>.properties";
+
+    /**
+     * The configuration settings.
+     */
+    private Properties m__Properties;
 
     /**
      * Public constructor to allow reflective access.
@@ -118,7 +132,9 @@ public class <repository.capitalized>DAOChooser
     public <repository.capitalized>DAOChooser() {};
 
     /**
-     * Singleton implementation to avoid double-checked locking.
+     * Singleton implemented to avoid the
+     * \<a href="https://en.wikipedia.org/wiki/Double-checked_locking">double-checked locking\</a>.
+     * This relies on the fact that inner classes are not loaded until they are referenced.
      */
     private static final class <repository.capitalized>DAOChooserSingletonContainer
     {
@@ -140,32 +156,6 @@ public class <repository.capitalized>DAOChooser
 <if(C.repository_dao)>
     <repository_dao_constant(repository=repository, C=C)>
 <endif>
-
-    /**
-     * The configuration settings.
-     */
-    <notnull(C=C)>
-    private static final String PROPERTIES_FILE = "queryj-<repository.lowercased>.properties";
-
-    /**
-     * The configuration settings.
-     */
-    private Properties m__Properties;
-
-    /**
-     * Public constructor to allow reflective access.
-     */
-    public <repository.capitalized>DAOChooser() {};
-
-    /**
-     * Retrieves a {@code <repository.capitalized>DAOChooser} instance.
-     * @return such instance.
-     */
-    <notnull(C=C)>
-    public static <repository.capitalized>DAOChooser getInstance()
-    {
-        return <repository.capitalized>DAOChooserSingletonContainer.SINGLETON;
-    }
 
     /**
      * Specifies the properties.
@@ -192,7 +182,7 @@ public class <repository.capitalized>DAOChooser
     <notnull(C=C)>
     protected final Properties immutableGetProperties()
     {
-        <nullable(C=C)>final Properties result = getProperties();
+        <nullable(C=C)>Properties result = getProperties();
 
         if  (result == null)
         {
@@ -231,7 +221,7 @@ public class <repository.capitalized>DAOChooser
      * Loads the configuration from a property file.
      * @param properties where to store the settings.
      */
-    protected synchronized void loadProperties(<notnull(C=C)>final Properties properties)
+    protected synchronized void loadProperties(<nullable(C=C)>final Properties properties)
     {
         if  (properties != null)
         {
@@ -265,13 +255,13 @@ public class <repository.capitalized>DAOChooser
                                "Couldn't find the property file: "
                              + PROPERTIES_FILE);
                      }
-                     catch  (final Throwable throwable)
+                     catch  (<notnull(C=C)>final Throwable throwable)
                      {
                          // class-loading problem.
                      }
                 }
             }
-            catch  (final IOException ioException)
+            catch  (<notnull(C=C)>final IOException ioException)
             {
                 try
                 {
@@ -280,7 +270,7 @@ public class <repository.capitalized>DAOChooser
                         + PROPERTIES_FILE,
                         ioException);
                 }
-                catch  (final Throwable throwable)
+                catch  (<notnull(C=C)>final Throwable throwable)
                 {
                     // class-loading problem.
                 }
@@ -293,7 +283,7 @@ public class <repository.capitalized>DAOChooser
                 LogFactory.getLog(<repository.capitalized>DAOChooser.class).warn(
                     "Properties object not valid!");
             }
-            catch  (final Throwable throwable)
+            catch  (<notnull(C=C)>final Throwable throwable)
             {
                 // class-loading problem.
             }
@@ -316,7 +306,7 @@ dao_constant(table, repository, C) ::= <<
  @param C the context.
 !>
 /**
- * Used to retrieve the value of \<i\><repository.lowercased>.<table.name.normalized.lowercased>.dao\</i\>
+ * Used to retrieve the value of \<i><repository.lowercased>.<table.name.normalized.lowercased>.dao\</i>
  * from the configuration layer.
  */
 <notnull(C=C)>
@@ -331,7 +321,7 @@ repository_dao_constant(repository, C) ::= <<
  @param C the context.
 !>
 /**
- * Used to retrieve the value of \<i\><repository.lowercased>.dao\</i\>
+ * Used to retrieve the value of \<i><repository.lowercased>.dao\</i>
  * from the configuration layer.
  */
 <notnull(C=C)>

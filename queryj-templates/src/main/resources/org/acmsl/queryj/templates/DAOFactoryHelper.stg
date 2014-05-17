@@ -127,7 +127,7 @@ classImpl(table, repository, C) ::= <<
  * <description(tableName=table.name)>
 <class_common_javadoc(template="org/acmsl/queryj/templates/BaseDAOFactory.stg", C=C)>
  */
-// TODO: Make it @ThreadSafe
+<class_annotations(C=C)>
 public class <table.name.capitalized>DAOFactoryHelper
 {
     /**
@@ -137,7 +137,7 @@ public class <table.name.capitalized>DAOFactoryHelper
     private <table.name.capitalized>DAOFactory m__LastUsed;
 
     /**
-     * Public constructor to allow reflective access.
+     * Public constructor to allow reflection/deserialization.
      */
     public <table.name.capitalized>DAOFactoryHelper() {}
 

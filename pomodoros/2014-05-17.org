@@ -3,6 +3,7 @@
 ** DONE Per custom result templates generated only once, regardless of multiplicity
 ** DONE Find out why certain per-table features get generated over and over again
 ** DONE Review BaseDAOFactory #497: 1 -> 1
+** DONE Review DAOChooser #507: 1 -> 1
 ** REVIEW TODOs!!!
 
 * Package layout:
