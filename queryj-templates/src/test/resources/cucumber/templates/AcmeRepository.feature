@@ -16,4 +16,4 @@ Feature: Acme-wide classes compile
     | DAOChooser | AcmeDAOChooser.java |
 #    | BaseResultSetExtractor | AcmeResultSetExtractor.java |
     | ConfigurationProperties | queryj-acme.properties |
-#    | DataAccessManager| AcmeDataAccessManager.java |
+    | DataAccessManager| AcmeDataAccessManager.java |

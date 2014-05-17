@@ -55,7 +55,7 @@ Feature: G_TAX_PRODUCTS code compiles
       | AttributesStatementSetter | GTaxProductStatementSetter.java    |
       | PkStatementSetter         | GTaxProductPkStatementSetter.java  |
       | BaseDAO                   | GTaxProductDAO.java                |
-#      | DAOFactoryHelper | GTaxProductDAOFactoryHelper.java |
+      | DAOFactoryHelper          | GTaxProductDAOFactoryHelper.java   |
 #      | DAOFactory | OracleGTaxProductDAOFactory.java |
 #      | BaseDAOFactory | GTaxProductDAOFactory.java |
 #      | DAO | OracleGTaxProductDAO.java |

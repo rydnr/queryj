@@ -4,6 +4,7 @@
 ** DONE Find out why certain per-table features get generated over and over again
 ** DONE Review BaseDAOFactory #497: 1 -> 1
 ** DONE Review DAOChooser #507: 1 -> 1
+** Review DataAccessManager #493 : 2 -> 2
 ** REVIEW TODOs!!!
 
 * Package layout:

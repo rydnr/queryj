@@ -69,26 +69,16 @@ sourceImpl(repository, tables, C) ::= <<
  */
 <package_declaration(p=C.package)>
 
-<project_imports(
-  basePackageName=C.project_package,
-  daoSubpackageName=typeInitMap.daoSubpackageName,
-  table=table,
-  repository=C.repository)>
-
 /*
- * Importing project classes.
+ * Importing <repository.capitalized> classes.
  */
-import
+<tables:{ t | <project_imports(basePackageName=C.project_package, daoSubpackageName=typeInitMap.baseDAOSubpackageName, table=t, repository=C.repository)>}; separator="\n">
 <checkers_import(C=C)>
-<if(C.implement_markers)>
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing JDK classes.
  */
-import org.acmsl.commons.patterns.dao.DataAccessManager;
-
-<endif>
-
+import java.io.Serializable;
 
 <class(repository=repository, tables=tables, C=C)>
 >>
@@ -101,11 +91,9 @@ project_imports(basePackageName, daoSubpackageName, table, repository) ::= <<
   @param table the table.
   @param repository the repository name.
 !>
-/*
- * Importing <repository.capitalized> classes.
- */
 import <basePackageName>.<daoSubpackageName>.<table.name.voName>DAO;
-import <basePackageName>.<daoSubpackageName>.impl.<table.name.voName>DAOFactory;
+import <basePackageName>.<daoSubpackageName>.core.<table.name.voName>DAOFactory;
+import <basePackageName>.<daoSubpackageName>.core.<table.name.voName>DAOFactoryHelper;
 >>
 
 description(repository) ::= <<
@@ -127,17 +115,17 @@ class(repository, tables, C) ::= <<
  * <[
       description(repository=repository)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/DataAccessManager.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/DataAccessManager.stg", C=C)>
  */
+<class_annotations(C=C)>
 public class <repository.capitalized>DataAccessManager
-<if(C.implement_markers)>
-    extends  DataAccessManager,
-             Serializable
-<else>
-    extends Serializable
-<endif>
+    implements Serializable
 {
+    /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = <C.serialVersionUID>L;
+
     <tables:{ t | <dao_attribute_declaration(table=t, C=C)>}; separator="\n\n">
 
 <if(C.repository_dao)>
@@ -150,7 +138,9 @@ public class <repository.capitalized>DataAccessManager
     public <repository.capitalized>DataAccessManager() {}
 
     /**
-     * Singleton implementation to avoid double-checked locking.
+     * Singleton implemented to avoid the
+     * \<a href="https://en.wikipedia.org/wiki/Double-checked_locking">double-checked locking\</a>.
+     * This relies on the fact that inner classes are not loaded until they are referenced.
      */
     private static final class <repository.capitalized>DataAccessManagerSingletonContainer
     {
@@ -234,18 +224,29 @@ protected <table.name.voName>DAO get<table.name.voName>DAOReference()
 <notnull(C=C)>
 public <table.name.voName>DAO get<table.name.voName>DAO()
 {
+    return get<table.name.voName>DAO(<table.name.voName>DAOFactoryHelper.getInstance());
+}
+
+/**
+ * Retrieves a {@link <table.name.voName>DAO}.
+ * @param daoFactoryHelper the {@link <table.name.voName>DAOFactoryHelper} instance.
+ * @return a DAO instance for accessing <table.name> information.
+ */
+<notnull(C=C)>
+protected <table.name.voName>DAO get<table.name.voName>DAO(<notnull(C=C)>final <table.name.voName>DAOFactoryHelper daoFactoryHelper)
+{
     <notnull(C=C)>final <table.name.voName>DAO result;
 
     <nullable(C=C)><table.name.voName>DAO aux = get<table.name.voName>DAOReference();
 
-    if  (result == null)
+    if  (aux == null)
     {
-        <notnull(C=C)>final <table.name.voName>DAOFactory t_<table.name.voName>DAOFactory =
-            <table.name.voName>DAOFactory.getInstance();
+        <notnull(C=C)>final <table.name.voName>DAOFactory <table.name.voName.uncapitalized>DAOFactory =
+            daoFactoryHelper.getDAOFactory();
 
-        if  (t_<table.name.voName>DAOFactory != null)
+        if  (<table.name.voName.uncapitalized>DAOFactory != null)
         {
-            aux = t_<table.name.voName>DAOFactory.create<table.name.voName>DAO();
+            aux = <table.name.voName.uncapitalized>DAOFactory.createDAO();
 
             if (aux != null)
             {
@@ -274,7 +275,7 @@ repository_dao_methods(repository, C) ::= <<
  @param C the context.
 !>
 /**
- * Specifies the new {@code <repository.capitalized>DAO} reference to keep.
+ * Specifies the new {@link <repository.capitalized>DAO} reference to keep.
  * @param dao the new DAO.
  */
 protected void set<repository.capitalized>DAOReference(<notnull(C=C)>final <repository.capitalized>DAO dao)
@@ -283,7 +284,7 @@ protected void set<repository.capitalized>DAOReference(<notnull(C=C)>final <repo
 }
 
 /**
- * Retrieves the existing {@code <repository.capitalized>DAO} reference.
+ * Retrieves the existing {@link <repository.capitalized>DAO} reference.
  * @return a DAO instance for accessing the <repository>-wide DAO.
  */
 <nullable(C=C)>
@@ -293,7 +294,7 @@ protected <repository.capitalized>DAO get<repository.capitalized>DAOReference()
 }
 
 /**
- * Retrieves a {@code <repository.capitalized>DAO}.
+ * Retrieves a {@link <repository.capitalized>DAO}.
  * @return a DAO instance for accessing the <repository>-wide DAO.
  */
 <notnull(C=C)>
