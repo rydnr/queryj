@@ -34,9 +34,8 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing JetBrains annotations.
  */
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +53,9 @@ import org.checkthread.annotations.ThreadSafe;
  *    id ID #REQUIRED
  *    index CDATA #IMPLIED
  *    type CDATA #REQUIRED&gt;
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <T> the type.
+ * @param <V> the type of the value.
  */
 @ThreadSafe
 public class ParameterElement<T, V>
@@ -152,8 +153,11 @@ public class ParameterElement<T, V>
         immutableSetValidationValue(validationValue);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public int compareTo(final Parameter<T, V> parameter)
+    public int compareTo(@Nullable final Parameter<T, V> parameter)
     {
         return super.<IdentifiableElement<T>>compareTo(parameter);
     }

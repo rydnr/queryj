@@ -65,11 +65,6 @@ import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
 
 /*
- * Importing Apache Commons Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
-
-/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -681,18 +676,25 @@ public class TableTestHelper
     {
         @Nullable Date result = null;
 
-        try
+        if (validationValue.trim().equals("[now]"))
         {
-            result = new SimpleDateFormat(DATE_FORMAT_ES).parse(validationValue);
+            result = new Date();
         }
-        catch (@NotNull final ParseException invalidDate)
+        else
         {
             try
             {
-                result = new SimpleDateFormat(DATE_FORMAT_EN).parse(validationValue);
+                result = new SimpleDateFormat(DATE_FORMAT_ES).parse(validationValue);
             }
-            catch (@NotNull final ParseException invalidEnglishDate)
+            catch (@NotNull final ParseException invalidDate)
             {
+                try
+                {
+                    result = new SimpleDateFormat(DATE_FORMAT_EN).parse(validationValue);
+                }
+                catch (@NotNull final ParseException invalidEnglishDate)
+                {
+                }
             }
         }
 
@@ -755,7 +757,7 @@ public class TableTestHelper
             else
             {
 
-                List<Attribute<String>> rowValues = fillValues(contents, table.getAttributes());
+                final List<Attribute<String>> rowValues = fillValues(contents, table.getAttributes());
 
                 @Nullable final String rowName = retrieveRowName(rowValues, table);
 

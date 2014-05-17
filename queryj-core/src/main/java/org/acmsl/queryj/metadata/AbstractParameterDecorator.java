@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,7 +33,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.ParameterElement;
@@ -51,7 +51,7 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Decorates &lt;parameter&gt; elements in <i>custom-sql</i> models.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro Armendariz</a>
  * @param <V> the type.
  */
 @ThreadSafe
@@ -362,7 +362,8 @@ public abstract class AbstractParameterDecorator<V>
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @return such information.
      */
-    protected boolean isPrimitiveWrapper(@NotNull final DecoratedString type, @NotNull final MetadataTypeManager metadataTypeManager)
+    protected boolean isPrimitiveWrapper(
+        @NotNull final DecoratedString type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.isPrimitiveWrapper(type.getValue());
     }
@@ -375,6 +376,27 @@ public abstract class AbstractParameterDecorator<V>
     public String getComment()
     {
         return "";
+    }
+
+    /**
+     * Checks whether this parameter is a Date.
+     * @return {@code true} in such case.
+     */
+    public boolean isDate()
+    {
+        return isDate(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Checks whether this parameter is a Date.
+     * @param type the type.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return {@code true} in such case.
+     */
+    protected boolean isDate(
+        @NotNull final DecoratedString type, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isDate(type.getValue());
     }
 
     /**

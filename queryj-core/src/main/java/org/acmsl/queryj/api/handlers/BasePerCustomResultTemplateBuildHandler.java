@@ -69,8 +69,10 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Builds all templates to generate sources for each custom result.
@@ -246,7 +248,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param customResultUtils the {@link CustomResultUtils} instance.
-     * @return <code>true</code> in such case.
+     * @return {@code true} in such case.
      */
     @ThreadSafe
     protected boolean isGenerationAllowedForResult(
@@ -349,15 +351,18 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     @NotNull
     protected List<Result<String>> fixDuplicated(@NotNull final List<Result<String>> results)
     {
-        @NotNull final List<Result<String>> result = new ArrayList<>(results.size());
+        @NotNull final Map<String, Result<String>> result = new HashMap<>(results.size());
 
-        @NotNull final HashSet<Result<String>> t_Aux = new HashSet<>(results.size());
+        for (@Nullable final Result<String> customResult : results)
+        {
+            if (   (customResult != null)
+                && (!result.containsKey(customResult.getClassValue())))
+            {
+                result.put(customResult.getClassValue(), customResult);
+            }
+        }
 
-        t_Aux.addAll(results);
-
-        result.addAll(t_Aux);
-
-        return result;
+        return new ArrayList<>(result.values());
     }
 
     /**

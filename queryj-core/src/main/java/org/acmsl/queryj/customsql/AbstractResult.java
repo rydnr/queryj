@@ -49,6 +49,7 @@ import java.util.Locale;
 /**
  * Commons logic for all &lt;result&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <T> the type.
  */
 public abstract class AbstractResult<T>
     extends  AbstractIdElement<T>
@@ -140,6 +141,7 @@ public abstract class AbstractResult<T>
      * Retrieves the hashcode.
      * @return such value.
      */
+    @Override
     public int hashCode()
     {
         return hashCode(getId(), getPropertyRefs());
@@ -205,7 +207,7 @@ public abstract class AbstractResult<T>
     @Override
     public String toString()
     {
-        return toString( getId(), getPropertyRefs());
+        return toString(getId(), getPropertyRefs());
     }
 
     /**
@@ -216,7 +218,7 @@ public abstract class AbstractResult<T>
      */
     @NotNull
     protected String toString(
-        final T id, final Collection<PropertyRef> propertyRefs)
+        @NotNull final T id, @NotNull final Collection<PropertyRef> propertyRefs)
     {
         return
               getClass().getName()

@@ -47,7 +47,6 @@ import org.acmsl.commons.patterns.Decorator;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.

@@ -1,7 +1,7 @@
 * 2014/05/17
 ** DONE Review BaseDAO #514: 3 -> 3
-** TODO Per custom result templates generated only once, regardless of multiplicity
-** Find out why certain per-table features get generated over and over again
+** DONE Per custom result templates generated only once, regardless of multiplicity
+** DONE Find out why certain per-table features get generated over and over again
 ** REVIEW TODOs!!!
 
 * Package layout:

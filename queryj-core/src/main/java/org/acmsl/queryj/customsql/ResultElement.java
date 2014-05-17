@@ -58,7 +58,8 @@ import org.jetbrains.annotations.Nullable;
  *    id ID #REQUIRED
  *    class CDATA #IMPLIED
  *    matches (single | multiple) #REQUIRED&gt;
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <T> the type.
  */
 @ThreadSafe
 public class ResultElement<T>
@@ -125,6 +126,7 @@ public class ResultElement<T>
      * Retrieves the hashcode.
      * @return such value.
      */
+    @Override
     public int hashCode()
     {
         return hashCode(getId(), getPropertyRefs());
