@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -266,8 +266,7 @@ public abstract class AbstractSqlDecorator
      * @return such manager.
      */
     @NotNull
-    protected MetadataTypeManager getMetadataTypeManager(
-        @NotNull final MetadataManager metadataManager)
+    protected MetadataTypeManager getMetadataTypeManager(@NotNull final MetadataManager metadataManager)
     {
         return metadataManager.getMetadataTypeManager();
     }
@@ -627,6 +626,32 @@ public abstract class AbstractSqlDecorator
         result = !typeManager.isPrimitiveWrapper(clazz);
 
         return result;
+    }
+
+    /**
+     * Retrieves the parameter types.
+     * @return such list.
+     */
+    @NotNull
+    public List<DecoratedString> getParameterTypes()
+    {
+        return getParameterTypes(getParameters(), getMetadataTypeManager(), SqlDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the parameter types.
+     * @param parameters the parameters.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @param sqlDecoratorHelper the {@link SqlDecoratorHelper} instance.
+     * @return such list.
+     */
+    @NotNull
+    protected List<DecoratedString> getParameterTypes(
+        @NotNull final List<Parameter<DecoratedString, ?>> parameters,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final SqlDecoratorHelper sqlDecoratorHelper)
+    {
+        return sqlDecoratorHelper.getParameterTypes(parameters, metadataTypeManager);
     }
 
     /**

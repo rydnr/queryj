@@ -84,9 +84,11 @@ import java.util.Collections;
 <endif>
 import java.util.List;
 <import_attribute_types(table=table, useHeader=false)>
-if(table.customSelects)>
-<table.customSelects:{ cs | <import_custom_select_types(cs=cs, C=C)>}; separator="\n">
-<endif>
+<
+if(table.customSelects)
+ ><table.customSelects:{ cs | <import_custom_select_types(cs=cs, C=C)>}; separator="\n">
+<
+endif>
 <class(table=table, C=C)>
 >>
 
