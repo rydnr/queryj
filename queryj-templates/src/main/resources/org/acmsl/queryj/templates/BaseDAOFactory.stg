@@ -29,7 +29,7 @@
 //
 //***************************************************************************
 //
-// Filename: DAOFactory.stg
+// Filename: BaseDAOFactory.stg
 //
 // Author: Jose San Leandro Armendariz
 //
@@ -68,8 +68,9 @@ sourceImpl(table, C) ::= <<
 
 /*
  * Importing <C.repository.capitalized> classes.
- *
+ */
 import <C.project_package>.dao.<table.name.voName>DAO;
+
 <nullable_import(C=C)>
 <interface(table=table, C=C)>
 >>
@@ -102,7 +103,7 @@ interfaceImpl(table, repository, C) ::= <<
  * <description(tableName=table.name)>
 <class_common_javadoc(template="org/acmsl/queryj/dao/BaseDAOFactory.stg", C=C)>
  */
-public interface <table.name.capitalized>DAOFactory
+public interface <table.name.voName>DAOFactory
 {
     /**
      * Creates a <table.name>-specific DAO implementation.
