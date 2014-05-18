@@ -355,10 +355,15 @@ public abstract class BasePerCustomResultTemplateBuildHandler
 
         for (@Nullable final Result<String> customResult : results)
         {
-            if (   (customResult != null)
-                && (!result.containsKey(customResult.getClassValue())))
+            if (customResult != null)
             {
-                result.put(customResult.getClassValue(), customResult);
+                @Nullable final Result<String> previous = result.get(customResult.getClassValue());
+
+                if (   (previous == null)
+                    || (customResult.compareTo(previous) > 0))
+                {
+                    result.put(customResult.getClassValue(), customResult);
+                }
             }
         }
 

@@ -76,6 +76,12 @@ sourceImpl(table, C) ::= <<
  * Importing V24-Commons classes.
  */
 import com.ventura24.commons.dao.DAOFactory;
+import com.ventura24.commons.dao.DAOListener;
+
+/*
+ * Importing Java extension classes.
+ */
+import javax.sql.DataSource;
 
 /*
  * Importing Apache Commons Logging classes.
@@ -96,6 +102,7 @@ project_imports(basePackageName, baseDAOSubpackageName, table, repository) ::= <
  * Importing <repository.capitalized> classes.
  */
 import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName>DAO;
+import <basePackageName>.<baseDAOSubpackageName>.core.<table.name.voName>DAOFactory;
 >>
 
 description(tableName) ::= <<
@@ -103,7 +110,7 @@ description(tableName) ::= <<
   Generates a description for the generated file.
   @param tableName the table name.
 !>
-<tableName>-specific DAOFactory implementation.
+<tableName>-specific {@link DAOFactory} implementation.
 >>
 
 class(table, C) ::= <<
@@ -127,27 +134,28 @@ classImpl(table, repository, engine, C) ::= <<
  * <description(tableName=table.name)>
 <class_common_javadoc(template="org/acmsl/queryj/dao/DAOFactory.stg", C=C)>
  */
-public class <engine.name.voName><table.name.capitalized>DAOFactory
-    implements <table.name.voName>DAOFactory
+<class_annotations(C=C)>
+public class <engine.name.voName><table.name.voName>DAOFactory
     extends DAOFactory\<<table.name.voName>DAO>
+    implements <table.name.voName>DAOFactory
 {
     /**
-     * Creates a {@link <engine.name.voName><table.name.capitalized>DAO}.
+     * Creates a {@link <engine.name.voName><table.name.voName>DAO}.
      * @param dataSource the required {@link DataSource}.
      * @param daoListener the {@link DAOListener} (optional).
      * @return such {@link <table.name.voName>DAO} implementation.
      */
     <nullable(C=C)>
     @Override
-    protected <table.name.capitalized>DAO createDAO(
+    protected <table.name.voName>DAO createDAO(
         <nullable(C=C)>final DataSource dataSource,
         <nullable(C=C)>final DAOListener daoListener)
     {
-        <nullable(C=C)>final <table.name.capitalized>DAO result;
+        <nullable(C=C)>final <table.name.voName>DAO result;
 
         if (dataSource != null)
         {
-            result = new <engine.name.voName><table.name.capitalized>DAO(dataSource, daoListener);
+            result = new <engine.name.voName><table.name.voName>DAO(dataSource, daoListener);
         }
         else
         {
