@@ -34,7 +34,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Row;
@@ -54,12 +54,15 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Adds a simple caching mechanism while decorating <code>Row</code>
  * instances.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
 public class CachingRowDecorator
     extends  AbstractRowDecorator
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 7506582704616898824L;
 
     /**
@@ -92,6 +95,7 @@ public class CachingRowDecorator
      * @param metadataManager the metadata manager.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
+    @SuppressWarnings("unused")
     public CachingRowDecorator(
         @NotNull final String name,
         @NotNull final String tableName,
@@ -149,12 +153,18 @@ public class CachingRowDecorator
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
         return
-              "{ \"class\": \"" + CachingRowDecorator.class.getName() + '"'
-            + ", \"cachedAttributes\": \"" + m__lCachedAttributes + "\" }";
+              "{ \"cachedAttributes\": \"" + m__lCachedAttributes
+            + " \"class\": \"CachingRowDecorator\""
+            + " \"package\": \"org.acmsl.queryj.metadata\""
+            + " \"super\": " + super.toString()
+            + " }";
     }
 }

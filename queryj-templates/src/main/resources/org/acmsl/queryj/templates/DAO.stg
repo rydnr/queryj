@@ -115,6 +115,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Types;
+import java.util.ArrayList;
 <if(table.static)>
 import java.util.Arrays;
 <endif>
@@ -201,9 +202,9 @@ project_imports(
  */
 import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
 import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName>DAO;
-import <basePackageName>.<baseDAOSubpackageName>.<table.name.normalized.lowercased>.<table.name.voName>StatementSetter;
-import <basePackageName>.<baseDAOSubpackageName>.<table.name.normalized.lowercased>.<table.name.voName>PkStatementSetter;
-import <basePackageName>.<baseDAOSubpackageName>.<table.name.normalized.lowercased>.<table.name.voName>ResultSetExtractor;
+import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName.lowercased>.<table.name.voName>StatementSetter;
+import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName.lowercased>.<table.name.voName>PkStatementSetter;
+import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName.lowercased>.<table.name.voName>ResultSetExtractor;
 <if(parent)>
 import <basePackageName>.<baseDAOSubpackageName>.<parent.name.voName>DAO;
 <endif>
@@ -223,7 +224,8 @@ import <basePackageName>.<voFactorySubpackageName>.core.<table.name.voName>Facto
   basePackageName=basePackageName,
   baseDAOSubpackageName=baseDAOSubpackageName,
   referredVOName=fk.source.name.voName)>}; separator="\n">
-<table.differentCustomResults:{ cr  | <custom_select_import(result=cr, package=basePackageName, C=C)>}; separator="\n">
+<table.differentCustomResults:{ cr  | <custom_select_import(result=cr, package=basePackageName, baseDAOSubpackageName=baseDAOSubpackageName, C=C)>}; separator="\n">
+
 /*
  * Importing V24-Commons classes.
  */
@@ -235,8 +237,15 @@ import com.ventura24.commons.dao.V24ResultSetExtractor;
 
 >>
 
-custom_select_import(result, package, C) ::= <<
-<custom_select_return_import(result=result, package=package, C=C)>
+custom_select_import(result, package, baseDAOSubpackageName, C) ::= <<
+<!
+ Generates the imports for given result.
+ @param result the custom result.
+ @param package the base package.
+ @param baseDAOSubpackageName the base DAO subpackage name.
+ @param C the context.
+!>
+<custom_select_return_import(result=result, package=package, baseDAOSubpackageName=baseDAOSubpackageName, C=C)>
 >>
 
 foreignkey_statementsetter_import(
@@ -871,13 +880,13 @@ protected <table.name.voName> create(
     transactionTemplate.execute(
         new UpdateTransactionCallback(
             new V24PreparedStatementCreator(query, daoListener),
-            new <table.name.voName>AttributesStatementSetter(
+            new <table.name.voName>StatementSetter(
 <if(parent)>
                 <table.all.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
 <else>
                 <table.own.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
 <endif>
-                <table.name.voName>AttributesStatementSetter.INSERT),
+                <table.name.voName>StatementSetter.INSERT),
             this));
 
     if (retrieveAfterwards)
@@ -897,7 +906,7 @@ protected <table.name.voName> create(
             throw
                 new RuntimeException(
                       "Just inserted a new <table.name.voName> ("
-                    + "<table.primaryKey:{ attr |<attr.name> -> " + <attr.name.uncapitalized>}; separator="\n+ \", ">
+                    + "<table.primaryKey:{ attr |<attr.name> -> " + <attr.name.uncapitalized>}; separator="\n                    + \", ">
                     + "), but it's not retrievable afterwards");
         }
     }
@@ -1082,7 +1091,7 @@ protected int update(
         transactionTemplate.execute(
             new UpdateTransactionCallback(
                 new V24PreparedStatementCreator(query, daoListener),
-                new <table.name.voName>AttributesStatementSetter(
+                new <table.name.voName>StatementSetter(
 <if(parent)>
                     <table.all.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
 <else>
@@ -1093,7 +1102,7 @@ protected int update(
                     false,
                     false),
 <else>
-                    <table.name.voName>AttributesStatementSetter.UPDATE),
+                    <table.name.voName>StatementSetter.UPDATE),
 <endif>
                 this));
 

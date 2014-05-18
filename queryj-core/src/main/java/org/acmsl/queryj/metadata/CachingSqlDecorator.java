@@ -92,9 +92,9 @@ public class CachingSqlDecorator
     private Boolean m__bIsResultNullable = null;
 
     /**
-     * Creates a <code>CachingSqlDecorator</code> with given information.
-     * @param sql the <code>Sql</code> to decorate.
-     * @param customSqlProvider the <code>CustomSqlProvider</code>, required
+     * Creates a {@code CachingSqlDecorator} with given information.
+     * @param sql the {@link Sql} to decorate.
+     * @param customSqlProvider the {@link CustomSqlProvider}, required
      * to decorate referred parameters.
      * @param metadataManager the metadata manager.
      */
@@ -299,12 +299,13 @@ public class CachingSqlDecorator
     public String toString()
     {
         return
-              "{ \"class\": \"" + CachingSqlDecorator.class.getSimpleName() + '"'
-            + ", \"wrappedParametersCheck\": " + m__bWrappedParametersCheck
+              "{ \"wrappedParametersCheck\": " + m__bWrappedParametersCheck
             + ", \"cachedParameters\": [ " + m__cCachedParameters + ']'
             + ", \"resultClass\": \"" + m__strCachedResultClass + '"'
             + ", \"isResultNullable\": " + m__bIsResultNullable
+            + ", \"class\": \"" + CachingSqlDecorator.class.getSimpleName() + '"'
             + ", \"package\": \"" + CachingSqlDecorator.class.getPackage().getName() + '"'
+            + ", \"super\": " + super.toString()
             + " }";
     }
 }

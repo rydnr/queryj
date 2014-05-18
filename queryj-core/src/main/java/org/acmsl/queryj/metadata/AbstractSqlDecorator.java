@@ -73,7 +73,7 @@ import java.util.List;
 
 /**
  * Decorates &lt;sql&gt; elements in <i>custom-sql</i> models.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractSqlDecorator
     extends SqlElement<DecoratedString>
@@ -667,8 +667,8 @@ public abstract class AbstractSqlDecorator
             new org.apache.commons.lang.builder.ToStringBuilder(this)
                 .appendSuper(super.toString())
                 .append("sql", getSql())
-                .append("customSqlProvider", getCustomSqlProvider())
-                .append("metadataManager", getMetadataManager())
+                .append("customSqlProvider", getCustomSqlProvider().hashCode())
+                .append("metadataManager", getMetadataManager().hashCode())
                 .toString();
     }
 

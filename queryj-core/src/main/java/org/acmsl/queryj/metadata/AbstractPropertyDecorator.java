@@ -513,8 +513,8 @@ public abstract class AbstractPropertyDecorator
         return
               "{ \"class\": \"AbstractPropertyDecorator\""
             + ", \"property\": " + this.m__Property
-            + ", \"metadataManager\": " + this.m__MetadataManager
-            + ", \"metadataTypeManager\": " + this.m__MetadataTypeManager
+            + ", \"metadataManager\": " + this.m__MetadataManager.hashCode()
+            + ", \"metadataTypeManager\": " + this.m__MetadataTypeManager.hashCode()
             + ", \"package\": \"org.acmsl.queryj.metadata\""
             + " }";
     }

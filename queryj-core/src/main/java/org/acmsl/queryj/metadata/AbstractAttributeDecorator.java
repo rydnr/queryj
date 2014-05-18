@@ -144,11 +144,11 @@ public abstract class AbstractAttributeDecorator
      * @param readOnly whether the attribute is marked as read-only.
      * @param isBool whether the attribute is marked as boolean.
      * @param attribute the attribute.
-     * @param booleanTrue the symbol for <code>true</code> values in boolean attributes.
-     * @param booleanFalse the symbol for <code>false</code> values in boolean attributes.
-     * @param booleanNull the symbol for <code>null</code> values in boolean attributes.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
+     * @param booleanTrue the symbol for {@code true} values in boolean attributes.
+     * @param booleanFalse the symbol for {@code false} values in boolean attributes.
+     * @param booleanNull the symbol for {@code null} values in boolean attributes.
+     * @param metadataManager the {@link MetadataManager metadata manager}.
+     * @param metadataTypeManager the {@link MetadataTypeManager metadata type manager}.
      */
     public AbstractAttributeDecorator(
         @NotNull final String name,
@@ -178,20 +178,20 @@ public abstract class AbstractAttributeDecorator
             typeId,
             new DecoratedString(type),
             new DecoratedString(tableName),
-            isNullOrEmpty(comment) ? null : new DecoratedString(comment),
+            isNullOrEmpty(comment) ? null : new DecoratedString("" + comment),
             ordinalPosition,
             length,
             precision,
-            isNullOrEmpty(keyword) ? null : new DecoratedString(keyword),
-            isNullOrEmpty(retrievalQuery) ? null : new DecoratedString(retrievalQuery),
-            isNullOrEmpty(sequence) ? null : new DecoratedString(sequence),
+            isNullOrEmpty(keyword) ? null : new DecoratedString("" + keyword),
+            isNullOrEmpty(retrievalQuery) ? null : new DecoratedString("" + retrievalQuery),
+            isNullOrEmpty(sequence) ? null : new DecoratedString("" + sequence),
             allowsNull,
-            isNullOrEmpty(value) ? null : new DecoratedString(value),
+            isNullOrEmpty(value) ? null : new DecoratedString("" + value),
             readOnly,
             isBool,
-            isNullOrEmpty(booleanTrue) ? null : new DecoratedString(booleanTrue),
-            isNullOrEmpty(booleanFalse) ? null : new DecoratedString(booleanFalse),
-            isNullOrEmpty(booleanNull) ? null : new DecoratedString(booleanNull));
+            isNullOrEmpty(booleanTrue) ? null : new DecoratedString("" + booleanTrue),
+            isNullOrEmpty(booleanFalse) ? null : new DecoratedString("" + booleanFalse),
+            isNullOrEmpty(booleanNull) ? null : new DecoratedString("" + booleanNull));
 
         immutableSetAttribute(attribute);
         immutableSetMetadataManager(metadataManager);

@@ -64,8 +64,9 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * {@link SqlXmlParser}-backed {@link SqlDAO} implementation.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/06
+ * @author <a href="mailto:queryj@acm-sl.org">chous</a>
+ * @since 3.0
+ * Created: 2012/06/06
  */
 @ThreadSafe
 public class SqlXmlParserSqlDAO
@@ -217,6 +218,9 @@ public class SqlXmlParserSqlDAO
         return filterSelects(findByDAO(table));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Sql<String>> findDynamic(@NotNull final String tableName)
     {

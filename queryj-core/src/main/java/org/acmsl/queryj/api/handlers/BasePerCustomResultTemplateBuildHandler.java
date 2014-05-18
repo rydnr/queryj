@@ -149,7 +149,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     /**
      * Retrieves whether for this template type in particular, duplicated results
      * are allowed or not (i.e., results differing only in the multiplicity factor).
-     * @return <code>true</code> in such case.
+     * @return {@code true} in such case.
      */
     protected boolean isDuplicatedResultsAllowed()
     {
@@ -236,6 +236,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param parameters the parameters.
      * @return the template.
      */
+    @Nullable
     protected abstract T createTemplate(
         @NotNull final TF templateFactory,
         @NotNull final Result<String> result,

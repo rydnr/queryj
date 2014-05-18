@@ -33,7 +33,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.Property;
 
@@ -56,6 +56,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class CachingPropertyDecorator
     extends  AbstractPropertyDecorator
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -3484708648329474308L;
 
     /**
@@ -271,6 +274,7 @@ public class CachingPropertyDecorator
      * Retrieves whether the property is a Date or not.
      * @return such information.
      */
+    @Override
     public boolean isDate()
     {
         Boolean result = getCachedDate();
@@ -285,6 +289,9 @@ public class CachingPropertyDecorator
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @NotNull
     public String toString()

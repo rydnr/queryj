@@ -810,9 +810,9 @@ public abstract class AbstractResultDecorator
         return
               "{ \"class\": \"AbstractResultDecorator\""
             + ", \"result\": " + m__Result
-            + ", \"customSqlProvider\": " + m__CustomSqlProvider
-            + ", \"metadataManager\": " + m__MetadataManager
-            + ", \"decoratorFactory\": " + m__DecoratorFactory
+            + ", \"customSqlProvider\": " + m__CustomSqlProvider.hashCode()
+            + ", \"metadataManager\": " + m__MetadataManager.hashCode()
+            + ", \"decoratorFactory\": " + m__DecoratorFactory.hashCode()
             + " }";
     }
 

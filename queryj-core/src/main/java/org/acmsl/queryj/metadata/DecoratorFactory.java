@@ -65,17 +65,16 @@ import java.util.List;
 
 /**
  * Abstract factory for template-specific decorators.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  */
 public interface DecoratorFactory
     extends  Factory
 {
     /**
-     * Creates an <code>AttributeDecorator</code> for given
+     * Creates an {@link AttributeDecorator} for given
      * attribute instance.
-     * @param attribute the attribute.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param attribute the {@link Attribute attribute}.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated attribute for the concrete template.
      */
     @NotNull
@@ -83,10 +82,10 @@ public interface DecoratorFactory
         @NotNull final Attribute<V> attribute, @NotNull final MetadataManager metadataManager);
 
     /**
-     * Creates an <code>ParameterDecorator</code> for given
+     * Creates an {@link ParameterDecorator} for given
      * parameter instance.
-     * @param parameter the parameter.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param parameter the {@link Parameter parameter}.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated attribute for the concrete template.
      */
     @SuppressWarnings("unused")
@@ -95,12 +94,12 @@ public interface DecoratorFactory
         @NotNull final Parameter<String, ?> parameter, @NotNull final MetadataManager metadataManager);
 
     /**
-     * Creates a <code>PropertyDecorator</code> for given
+     * Creates a {@link PropertyDecorator} for given
      * property instance.
-     * @param property the property.
-     * @param result the result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param property the {@link Property property}.
+     * @param result the {@link Result result}.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated property for the concrete template.
      */
     @NotNull
@@ -111,11 +110,11 @@ public interface DecoratorFactory
         @NotNull final MetadataManager metadataManager);
 
     /**
-     * Creates a <code>ResultDecorator</code> for given
+     * Creates a {@link ResultDecorator} for given
      * result instance.
-     * @param result the custom result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param result the {@link Result custom result}.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated result for the concrete template.
      */
     @SuppressWarnings("unused")
@@ -126,10 +125,10 @@ public interface DecoratorFactory
         @NotNull final MetadataManager metadataManager);
 
     /**
-     * Creates a <code>SqlDecorator</code>.
-     * @param sql the custom sql.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * Creates a {@link SqlDecorator}.
+     * @param sql the {@link Sql custom sql}.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated sql for the concrete template.
      */
     @NotNull
@@ -139,10 +138,9 @@ public interface DecoratorFactory
         @NotNull final MetadataManager metadataManager);
 
     /**
-     * Creates a <code>TableDecorator</code>.
-     *
+     * Creates a {@link TableDecorator}.
      * @param table the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return the decorated table for the concrete template.
      */
@@ -153,9 +151,9 @@ public interface DecoratorFactory
         @NotNull final CustomSqlProvider customSqlProvider);
 
     /**
-     * Retrieves the decorated list of attributes of given table.
-     * @param table the table.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * Retrieves the decorated list of {@link Attribute attributes} of given table.
+     * @param table the table name.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the attribute list
      */
     @NotNull
@@ -163,9 +161,9 @@ public interface DecoratorFactory
         @NotNull final String table, @NotNull final MetadataManager metadataManager);
 
     /**
-     * Retrieves the decorated list of attributes.
-     * @param attributes the attributes.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * Retrieves the decorated list of {@link Attribute attributes}.
+     * @param attributes the {@link Attribute attributes}.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated version of the attribute list.
      */
     @NotNull
@@ -173,10 +171,10 @@ public interface DecoratorFactory
         @NotNull final List<Attribute<V>> attributes, @NotNull final MetadataManager metadataManager);
 
     /**
-     * Retrieves the decorated list of attributes of given table.
+     * Retrieves the decorated list of {@link Attribute attributes} of given table.
      * @param table the table.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return the attribute list
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return the attribute list.
      */
     @SuppressWarnings("unused")
     @NotNull
@@ -184,7 +182,7 @@ public interface DecoratorFactory
         @NotNull final String table, @NotNull final MetadataManager metadataManager);
 
     /**
-     * Creates a <code>ForeignKeyDecorator</code>.
+     * Creates a {@link ForeignKeyDecorator}.
      * @param sourceTableName the name of the source table.
      * @param attributes the foreign key attributes.
      * @param targetTableName the name of the target table.

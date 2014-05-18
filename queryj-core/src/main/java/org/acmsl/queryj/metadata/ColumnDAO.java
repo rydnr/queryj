@@ -36,7 +36,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.vo.Attribute;
 
@@ -58,8 +58,9 @@ import java.util.List;
 
 /**
  * Provides methods to access {@link Attribute column} information.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/06
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 3.0
+ * @Created 2012/06/06
  */
 public interface ColumnDAO
     extends DAO

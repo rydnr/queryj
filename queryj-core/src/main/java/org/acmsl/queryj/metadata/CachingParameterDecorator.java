@@ -34,7 +34,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.Parameter;
 
@@ -53,6 +53,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Adds a simple caching mechanism while decorating <code>Parameter</code>
  * instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <V> the type.
  */
 @ThreadSafe
 public class CachingParameterDecorator<V>
@@ -329,6 +330,9 @@ public class CachingParameterDecorator<V>
         return result.booleanValue();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

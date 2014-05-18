@@ -571,10 +571,10 @@ public abstract class AbstractForeignKeyDecorator
     {
         return
               "{ \"class\": \"" + AbstractForeignKeyDecorator .class.getName() + '"'
-            + ", \"customSqlProvider\": " + m__CustomSqlProvider
+            + ", \"customSqlProvider\": " + m__CustomSqlProvider.hashCode()
             + ", \"foreignKey\": " + m__ForeignKey
-            + ", \"metadataManager\": " + m__MetadataManager
-            + ", \"decoratorFactory\": " + m__DecoratorFactory
+            + ", \"metadataManager\": " + m__MetadataManager.hashCode()
+            + ", \"decoratorFactory\": " + m__DecoratorFactory.hashCode()
             + "\" }";
     }
 

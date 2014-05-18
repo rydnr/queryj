@@ -87,12 +87,27 @@ sourceImpl(repository, tables, C) ::= <<
 >>
 
 repository_dao_factory_property(repository, engine, package, daoSubpackage, C) ::= <<
-<! Generates the property for creating repository DAO factories !>
+<!
+ Generates the property for creating repository DAO factories.
+ @param repository the repository.
+ @param engine the engine.
+ @param package the package.
+ @param daoSubpackage the DAO subpackage.
+ @param C the context.
+!>
 <repository.lowercased>.dao=<package>.<daoSubpackage>.<repository.normalized.lowercased>.<engine.name.capitalized><repository.capitalized>DAOFactory
 >>
 
 table_dao_factory_property(table, repository, engine, package, daoSubpackage, C) ::= <<
-<! Generates the property for creating repository DAO factories !>
+<!
+ Generates the property for creating repository DAO factories.
+ @param table the table.
+ @param repository the repository.
+ @param engine the engine.
+ @param package the package.
+ @param daoSubpackage the DAO subpackage.
+ @param C the context.
+!>
 # <table.name> DAO implementation.
-<repository.lowercased>.<table.name.voName.lowercased>.dao=<package>.<daoSubpackage>.<table.name.normalized.lowercased>.<engine.name.capitalized><table.name.voName>DAOFactory
+<repository.lowercased>.<table.name.voName.lowercased>.dao=<package>.<daoSubpackage>.<table.name.voName.lowercased>.<engine.name.capitalized><table.name.voName>DAOFactory
 >>

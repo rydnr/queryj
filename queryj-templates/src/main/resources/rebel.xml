@@ -4,8 +4,6 @@
     <classpath>
         <dir name="${queryjroot}/queryj-templates/src/main/resources">
         </dir>
-        <dir name="${queryjroot}/queryj-templates/src/main/resources/org/acmsl/queryj/templates/">
-        </dir>
         <!-- It overrides the stg files from src/main/resources -->
         <dir name="${queryjroot}/queryj-templates/target/classes">
             <exclude name="**/*"/>

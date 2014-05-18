@@ -421,7 +421,7 @@ public abstract class AbstractParameterDecorator<V>
     protected String toString(
         @NotNull final Parameter<String, V> parameter, @NotNull final MetadataTypeManager typeManager)
     {
-        return "" + parameter + typeManager;
+        return "" + parameter + typeManager.hashCode();
     }
 
     /**

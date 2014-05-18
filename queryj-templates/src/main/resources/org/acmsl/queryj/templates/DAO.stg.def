@@ -14,4 +14,6 @@ output: Java;
 filename builder : <engine.name.voName><tableName.singular.camelCase>DAO.java;
 
 // The package.
-package: <packageName>.dao.<tableName.normalized.lowercased>.<engine.name.normalized.lowercased>;
+package: <packageName>.dao.<tableName.voName.lowercased>.<engine.name.normalized.lowercased>;
+
+debug;

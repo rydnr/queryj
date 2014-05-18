@@ -154,7 +154,7 @@ custom_update_or_insert(cs, C) ::= <<
 !>
 <if(!cs.dynamic)>
 /**
- * Custom sql \<i><cs.id>\</i>:\<br/>
+ * Custom sql \<i><cs.id>\</i>:
  * \<b><cs.description>\</b>.
  <cs.parameters:{ p | <parameter_javadoc(parameter=p)>}; separator="\n">
  * @return the number of entities updated.
@@ -344,11 +344,18 @@ transactionTemplate.execute(
         // calls setXXX twice
         // preparedStatementCreatorFactory
         //     .newPreparedStatementSetter(params),
-<if(sql.resultRef)>
-        new <sql.result.id.voName>Extractor(sql, daoListener),
-<else>
-        new <sql.dao.voName>Extractor(sql, daoListener),
-<endif>
+<
+if(sql.resultRef)
+ ><if(sql.result.wrappingASingleProperty)
+   >/* single property */<sql.result.properties:{ p |
+        new <p.type.capitalized>ResultSetExtractor(sql, daoListener),}; separator=""
+ ><else>
+        new <sql.result.simpleClassValue>ResultSetExtractor(sql, daoListener),
+<  endif><
+else>
+        new <sql.dao.voName>ResultSetExtractor(sql, daoListener),
+<
+endif>
         this))
 >>
 
@@ -465,19 +472,30 @@ custom_select_return_nondecorated_implicit_single(cs, result, C) ::= <<
 <cs.dao.voName>
 >>
 
-custom_select_return_import(result, package, C) ::= <<
+custom_select_return_import(result, package, baseDAOSubpackageName, C) ::= <<
+<!
+ Generates the import for the ResultSet associated to the custom result.
+ @param result the custom result.
+ @param package the package.
+ @param baseDAOSubpackageName the base DAO subpackage name.
+ @param C the context.
+!>
 <
 if(result.wrappingASingleProperty)><
   custom_select_return_import_property_single(result=result, package=package)><
 else><
   if(result.classValue)
-   >import <result.classValue>;<
+   >import <result.classValue>;
+import <C.project_package>.<baseDAOSubpackageName>.<result.simpleClassValue.lowercased>.<result.simpleClassValue>ResultSetExtractor;<
   endif><
 endif>
 >>
 
 custom_select_return_import_property_single(result, package) ::= <<
-<!<result.properties:{property|<if(!property.primitive)>import <property.type>;<endif>}>!>
+<!<result.properties:{property|<
+  if(!property.primitive)
+   >import <property.type>;<
+  endif>}>!>
 >>
 
 custom_select_return_cast(cs, table, result, C) ::= <<

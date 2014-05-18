@@ -39,7 +39,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
@@ -79,7 +79,7 @@ import java.util.List;
 /**
  * Decorates {@link Table} instances to provide required alternate
  * representations of the information stored therein.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  */
 public abstract class AbstractTableDecorator
     extends     AbstractTable<
@@ -2141,9 +2141,9 @@ public abstract class AbstractTableDecorator
         return
               "{ \"class\": \"" + AbstractTableDecorator.class.getSimpleName() + '"'
             + ", \"table\": " + m__Table
-            + ", \"metadataManager\": " + m__MetadataManager
-            + ", \"decoratorFactory\": " + m__DecoratorFactory
-            + ", \"customSqlProvider\": " + m__CustomSqlProvider
+            + ", \"metadataManager\": " + m__MetadataManager.hashCode()
+            + ", \"decoratorFactory\": " + m__DecoratorFactory.hashCode()
+            + ", \"customSqlProvider\": " + m__CustomSqlProvider.hashCode()
             + ", \"readOnlyAttributes\": " + m__lReadOnlyAttributes
             + ", \"externallyManagedAttributes\": " + m__lExternallyManagedAttributes
             + ", \"foreignKeys\": " + m__lForeignKeys

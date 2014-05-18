@@ -14,4 +14,4 @@ output: Java;
 filename  builder : <tableName.voName>PkStatementSetter.java;
 
 // The package.
-package: <packageName>.dao.<tableName.normalized.lowercased>;
+package: <packageName>.dao.<tableName.voName.lowercased>;

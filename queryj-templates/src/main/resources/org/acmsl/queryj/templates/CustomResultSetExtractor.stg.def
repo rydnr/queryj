@@ -14,6 +14,4 @@ output: Java;
 filename builder : <result.simpleClassValue>ResultSetExtractor.java;
 
 // The package.
-package: <packageName>.dao.<result.classValue.lowercased>;
-
-debug;
+package: <packageName>.dao.<result.simpleClassValue.lowercased>;

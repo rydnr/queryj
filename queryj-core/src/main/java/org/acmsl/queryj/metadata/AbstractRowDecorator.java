@@ -34,7 +34,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.vo.AbstractRow;
 import org.acmsl.queryj.metadata.vo.Attribute;
@@ -56,7 +56,7 @@ import java.util.List;
 /**
  * Decorates <code>Row</code> instances to provide required alternate
  * representations of the information stored therein.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractRowDecorator
     extends AbstractRow<DecoratedString>
@@ -281,15 +281,18 @@ public abstract class AbstractRowDecorator
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
         return
               "{ \"class\": \"" + AbstractRowDecorator.class.getName() + '"'
-            + ", \"decoratorFactory\": " + m__DecoratorFactory
+            + ", \"decoratorFactory\": " + m__DecoratorFactory.hashCode()
             + ", \"row\": " + m__Row
-            + ", \"metadataManager\": " + m__MetadataManager
-            + ", \"metadataTypeManager\": " + m__MetadataTypeManager + " }";
+            + ", \"metadataManager\": " + m__MetadataManager.hashCode()
+            + ", \"metadataTypeManager\": " + m__MetadataTypeManager.hashCode() + " }";
     }
 }

@@ -1185,8 +1185,8 @@ public class LazyAttribute
             + ", \"cachedBooleanTrue\": \"" + m__strCachedBooleanTrue + '"'
             + ", \"cachedBooleanFalse\": \"" + m__strCachedBooleanFalse + '"'
             + ", \"cachedBooleanNull\": \"" + m__strCachedBooleanNull + '"'
-            + ", \"metadataManager\": " + m__MetadataManager
-            + ", \"metadataTypeManager\": " + m__MetadataTypeManager
+            + ", \"metadataManager\": " + m__MetadataManager.hashCode()
+            + ", \"metadataTypeManager\": " + m__MetadataTypeManager.hashCode()
             + " }";
     }
 }
