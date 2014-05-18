@@ -1,6 +1,9 @@
 * 2014/05/18
 ** DONE Review DAOFactory #499: 1 -> 1
-** TODO Review DAO #500: 3 -> 3
+** TODO Review DAO #500: 3 -> 1
+** Generate per-fk Cucumber feature: 2 ->
+** Generate per-sql Cucumber feature: 2 ->
+** Generate per-repository Cucumber feature: 2 ->
 ** REVIEW TODOs!!!
 
 * Package layout:

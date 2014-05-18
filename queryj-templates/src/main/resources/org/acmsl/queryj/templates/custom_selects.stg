@@ -466,12 +466,14 @@ custom_select_return_nondecorated_implicit_single(cs, result, C) ::= <<
 >>
 
 custom_select_return_import(result, package, C) ::= <<
-<if(result.wrappingASingleProperty)><
+<
+if(result.wrappingASingleProperty)><
   custom_select_return_import_property_single(result=result, package=package)><
 else><
   if(result.classValue)
->import <result.classValue>;
-<endif><endif>
+   >import <result.classValue>;<
+  endif><
+endif>
 >>
 
 custom_select_return_import_property_single(result, package) ::= <<
@@ -492,5 +494,5 @@ import_custom_select_types(cs, C) ::= <<
  @param cs the custom select.
  @param C the context.
 !>
-<cs.parameterTypes:{ t | import <t>;}; separator="\n">
+<if(cs.parameterTypes)><cs.parameterTypes:{ t | import <t>;}; separator="\n"><endif>
 >>

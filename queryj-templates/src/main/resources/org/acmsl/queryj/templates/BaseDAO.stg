@@ -408,15 +408,23 @@ custom_select(cs, C) ::= <<
   @param C the context.
 !>
 /**
- * Custom select \<i><cs.id>\</i>:
+ * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
- <cs.parameters:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
- * @return the \<i><cs.resultClass>\</i> information retrieved.
+ <cs.parameters:{ p | <parameter_javadoc(parameter=p)>}; separator="\n">
+<if(cs.resultRef)>
+ * @return the {@link <cs.resultClass>} information retrieved.
+<else>
+ * @return the {@link <cs.dao.voName>} information retrieved.
+<endif>
  */
-<if(cs.resultNullable)><nullable(C=C)><else><if(cs.multiple)><notnull(C=C)><endif><endif>
-<cs.resultClass> <cs.name.uncapitalized>(
-    <cs.parameters:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
-  throws DataAccessException;
+<custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
+public <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(
+    <if(!cs.parametersShouldBeWrapped)><cs.parameters:{ p | <attribute_method_parameter_declaration(attribute=p, usePrefix=false, prefix="", C=C)>}; separator=", ">)
+<else>
+    <cs.parameters:{ p | <attribute_method_parameter_declaration(attribute=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)<
+endif>
+
+    throws DataAccessException;
 >>
 
 custom_update_or_insert(cs, C) ::= <<

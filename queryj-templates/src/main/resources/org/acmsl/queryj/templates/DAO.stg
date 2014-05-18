@@ -199,20 +199,22 @@ project_imports(
 /*
  * Importing <trName> classes.
  */
-import <package>.<table.name.voName>AttributesStatementSetter;
-import <package>.<table.name.voName>PkStatementSetter;
-import <package>.<table.name.voName>ResultSetExtractor;
-import <basePackageName>.<voSubpackageName>.<table.name.voName>;
+import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
+import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName>DAO;
+import <basePackageName>.<baseDAOSubpackageName>.<table.name.normalized.lowercased>.<table.name.voName>StatementSetter;
+import <basePackageName>.<baseDAOSubpackageName>.<table.name.normalized.lowercased>.<table.name.voName>PkStatementSetter;
+import <basePackageName>.<baseDAOSubpackageName>.<table.name.normalized.lowercased>.<table.name.voName>ResultSetExtractor;
 <if(parent)>
 import <basePackageName>.<baseDAOSubpackageName>.<parent.name.voName>DAO;
+<endif>
+import <basePackageName>.<voSubpackageName>.<table.name.voName>;
+<if(parent)>
 import <basePackageName>.<voSubpackageName>.<parent.name.voName>;
 <endif>
 <if(table.voDecorated)>
 import <basePackageName>.<voSubpackageName>.<table.name.voName>Decorator;
 <endif>
-import <basePackageName>.<voFactorySubpackageName>.<table.name.voName>ValueObjectFactory;
-import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName>DAO;
-import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
+import <basePackageName>.<voFactorySubpackageName>.core.<table.name.voName>Factory;
 <table.foreignKeys:{ fk| <foreignkey_statementsetter_import(
   basePackageName=basePackageName,
   fkssSubpackageName=fkssSubpackageName,
@@ -222,7 +224,6 @@ import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
   baseDAOSubpackageName=baseDAOSubpackageName,
   referredVOName=fk.source.name.voName)>}; separator="\n">
 <table.differentCustomResults:{ cr  | <custom_select_import(result=cr, package=basePackageName, C=C)>}; separator="\n">
-
 /*
  * Importing V24-Commons classes.
  */
@@ -781,7 +782,7 @@ protected <table.name.voName> create(
             retrieveAfterwards,
             _INSERT_SQL,
             createTransactionTemplate(getDataSource()),
-            <table.name.voName>ValueObjectFactory.getInstance(),
+            <table.name.voName>Factory.getInstance(),
 <if(parent)>
             <repository.capitalized>DataAccessManager.getInstance().get<parent.name.voName>DAO(),,
 <endif>
@@ -813,7 +814,7 @@ create3(table, parent, repository, C) ::= <<
  * @param query the query required to insert given information.
  * @param transactionTemplate the {@link TransactionTemplate}
  * instance.
- * @param factory the {@link <table.name.voName>ValueObjectFactory}
+ * @param factory the {@link <table.name.voName>Factory}
  * instance.
 <if(parent)>
  * @param <parent.name.lowercased>DAO the {@link <parent.name.voName>DAO} instance.
@@ -835,7 +836,7 @@ protected <table.name.voName> create(
     final boolean retrieveAfterwards,
     <notnull(C=C)>final String query,
     <notnull(C=C)>final TransactionTemplate transactionTemplate,
-    <notnull(C=C)>final <table.name.voName>ValueObjectFactory factory,
+    <notnull(C=C)>final <table.name.voName>Factory factory,
 <if(parent)>
     <notnull(C=C)>final <parent.name.voName>DAO <parent.name.lowercased>DAO,
 <endif>
@@ -1371,8 +1372,8 @@ public static class <table.name.voName>PkResultSetExtractor
  */
 @Override
 public int update(
-    final PreparedStatementCreator creator,
-    final PreparedStatementSetter setter)
+    <notnull(C=C)>final PreparedStatementCreator creator,
+    <notnull(C=C)>final PreparedStatementSetter setter)
 {
     return super.update(creator, setter);
 }
@@ -1384,10 +1385,11 @@ public int update(
  * @param extractor the {@link ResultSetExtractor} instance.
  */
 @Override
+<notnull(C=C)>
 public Object query(
-    final PreparedStatementCreator creator,
-    final PreparedStatementSetter setter,
-    final ResultSetExtractor extractor)
+    <notnull(C=C)>final PreparedStatementCreator creator,
+    <notnull(C=C)>final PreparedStatementSetter setter,
+    <notnull(C=C)>final ResultSetExtractor extractor)
 {
     return super.query(creator, setter, extractor);
 }
@@ -1501,7 +1503,7 @@ public <table.name.voName> findConstantBy<attribute.name.capitalized>(<
       endif><
     endif>final <attribute.primitiveType> <attribute.name.lowercased.uncapitalized>)
 {
-    <nullable(C=C)>final <table.name.voName> result; = new ArrayList\<<table.name.voName>\>(FIXED_CONSTANTS.size());
+    <nullable(C=C)>final <table.name.voName> result;
 
     <notnull(C=C)>final List\<<table.name.voName>\> constants = findConstantsBy<attribute.name.capitalized>(<attribute.name.lowercased.uncapitalized>);
 
