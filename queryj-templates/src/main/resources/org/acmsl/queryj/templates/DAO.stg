@@ -209,6 +209,7 @@ import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName.lowercased>.
 import <basePackageName>.<baseDAOSubpackageName>.<parent.name.voName>DAO;
 <endif>
 import <basePackageName>.<voSubpackageName>.<table.name.voName>;
+import <basePackageName>.<voSubpackageName>.impl.<table.name.voName>Impl;
 <if(parent)>
 import <basePackageName>.<voSubpackageName>.<parent.name.voName>;
 <endif>
@@ -232,6 +233,7 @@ import <basePackageName>.<voFactorySubpackageName>.core.<table.name.voName>Facto
 import com.ventura24.commons.dao.DAOListener;
 import com.ventura24.commons.dao.V24JdbcTemplate;
 import com.ventura24.commons.dao.V24PreparedStatementCreator;
+import com.ventura24.commons.dao.V24PreparedStatementSetter;
 import com.ventura24.commons.dao.V24TransactionManager;
 import com.ventura24.commons.dao.V24ResultSetExtractor;
 
@@ -881,12 +883,13 @@ protected <table.name.voName> create(
         new UpdateTransactionCallback(
             new V24PreparedStatementCreator(query, daoListener),
             new <table.name.voName>StatementSetter(
+                new <table.name.voName>Impl(
 <if(parent)>
-                <table.all.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
+                    <table.all.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">),
 <else>
-                <table.own.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
+                    <table.own.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">),
 <endif>
-                <table.name.voName>StatementSetter.INSERT),
+                V24PreparedStatementSetter.Operation.INSERT),
             this));
 
     if (retrieveAfterwards)
@@ -1092,17 +1095,18 @@ protected int update(
             new UpdateTransactionCallback(
                 new V24PreparedStatementCreator(query, daoListener),
                 new <table.name.voName>StatementSetter(
+                    new <table.name.voName>Impl(
 <if(parent)>
-                    <table.all.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
+                        <table.all.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">),
 <else>
-                    <table.own.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">,
+                        <table.own.minus.readOnlyAttributes:{ attr | <attr.name.uncapitalized>}; separator=",\n">),
 <endif>
 <if(C.lob_handling_required)>
                     true,
                     false,
                     false),
 <else>
-                    <table.name.voName>StatementSetter.UPDATE),
+                    V24PreparedStatementSetter.Operation.UPDATE),
 <endif>
                 this));
 

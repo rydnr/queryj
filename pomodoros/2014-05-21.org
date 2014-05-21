@@ -1,0 +1,42 @@
+* 2014/05/21
+** Review DAO #500:
+*** DONE Fix UPDATE/INSERT constants: 1 -> 1
+*** Fix invalid override of update() methods: 1
+
+* Delayed list
+** Generate per-fk Cucumber feature: 2 ->
+** Generate per-sql Cucumber feature: 2 ->
+** Generate per-repository Cucumber feature: 2 ->
+** REVIEW TODOs!!!
+
+* Package layout:
+** dao
+- DataAccessManager
+- BaseDAO
+*** dao/core
+- DAOChooser
+- BaseDAOFactory
+*** dao/impl
+*** dao/rdb -> X
+*** dao/[table]
+- CustomResultSetExtractor
+- FkStatementSetter
+- PkStatementSetter
+- ResultSetExtractor
+- AttributesStatementSetter
+**** dao/[table]/oracle
+- DAO
+- DAOFactory
+** vo
+- ValueObject
+- CustomValueObject
+** vo/core
+- ValueObjectFactory
+- CustomValueObjectFactory
+** vo/impl
+- ValueObjectImpl
+- ValueObjectFactoryImpl
+- BaseValueObject
+- CustomValueObjectImpl
+- CustomValueObjectFactoryImpl
+- CustomBaseValueObject
