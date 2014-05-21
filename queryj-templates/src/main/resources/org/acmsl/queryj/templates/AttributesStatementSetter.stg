@@ -75,6 +75,11 @@ sourceImpl(table, C) ::= <<
   voName=table.name.voName)>
 
 /*
+ * Importing V24-Commons classes.
+ */
+import com.ventura24.commons.dao.V24PreparedStatementSetter;
+
+/*
  * Importing Spring classes.
  */
 import org.springframework.dao.DataAccessException;
@@ -157,125 +162,44 @@ class(table, C) ::= <<
       second_line_description(table=table),
       third_line_description(table=table)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/AttributesStatementSetter.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/AttributesStatementSetter.stg", C=C)>
  */
 <class_annotations(C=C)>
 public class <table.name.voName>StatementSetter
-    implements  PreparedStatementSetter
+    extends  V24PreparedStatementSetter\<<table.name.voName>\>
 {
-    /**
-     * An attribute container.
-     */
-    <notnull(C=C)>
-    private <table.name.voName> m__Values;
-
-    /**
-     * The \<i>update\</i> operation.
-     */
-    private boolean m__bUpdateOperation;
-
     /**
      * Creates a {@code <table.name.voName>StatementSetter}
      * instance.
      * @param values the {@link <table.name.voName>} instance.
-     * @param updateOperation whether the operation is an update.
+     * @param operation the kind of {@link V24PreparedStatementSetter.Operation operation}.
      */
     public <table.name.voName>StatementSetter(
         <notnull(C=C)>final <table.name.voName> values,
-        final boolean updateOperation)
+        final V24PreparedStatementSetter.Operation operation)
     {
-        immutableSetValues(values);
-        immutableSetUpdateOperation(updateOperation);
-    }
-
-    /**
-     * Specifies the values.
-     * @param values the {@link <table.name.voName>} instance.
-     */
-    protected final void immutableSetValues(<notnull(C=C)>final <table.name.voName> values)
-    {
-        this.m__Values = values;
-    }
-
-    /**
-     * Specifies the values.
-     * @param values the {@link <table.name.voName>} instance.
-     */
-    @SuppressWarnings("unused")
-    protected void setValues(<notnull(C=C)>final <table.name.voName> values)
-    {
-        immutableSetValues(values);
-    }
-
-    /**
-     * Retrieves the values.
-     * @return such {@link <table.name.voName>} instance.
-     */
-    <notnull(C=C)>
-    public <table.name.voName> getValues()
-    {
-        return this.m__Values;
-    }
-
-    /**
-     * Specifies whether the operation is an update or not.
-     * @param updateOperation such information.
-     */
-    protected final void immutableSetUpdateOperation(
-        final boolean updateOperation)
-    {
-        m__bUpdateOperation = updateOperation;
-    }
-
-    /**
-     * Specifies whether the operation is an update or not.
-     * @param updateOperation such information.
-     */
-    protected void setUpdateOperation(final boolean updateOperation)
-    {
-        immutableSetUpdateOperation(updateOperation);
-    }
-
-    /**
-     * Retrieves whether the operation is an update or not.
-     * @return such information.
-     */
-    public boolean isUpdateOperation()
-    {
-        return m__bUpdateOperation;
-    }
-
-    /**
-     * Specifies the values on given {@link PreparedStatement}.
-     * @param preparedStatement the prepared statement.
-     * @throws SQLException intercepted by \<i>Spring\</i>.
-     */
-    @Override
-    public void setValues(<notnull(C=C)>final PreparedStatement preparedStatement)
-        throws  SQLException
-    {
-        setValues(preparedStatement, getValues(), isUpdateOperation());
+        super(values, operation);
     }
 
     /**
      * Specifies the values on given {@link PreparedStatement}
      * @param preparedStatement the prepared statement.
      * @param values the {@link <table.name.voName>} instance.
-     * @param update whether it's an update operation.
+     * @param operation the {@link V24PreparedStatementSetter.Operation operation}.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      */
+    @Override
     protected void setValues(
         <notnull(C=C)>final PreparedStatement preparedStatement,
         <notnull(C=C)>final <table.name.voName> values,
-        final boolean update)
+        final V24PreparedStatementSetter.Operation operation)
         throws  SQLException
-    {
+     {
         setValues(
             preparedStatement,
             <table.attributes:{ attr | values.get<attr.name.capitalized>()}; separator=",\n">,
-            isUpdateOperation());
-    }
+            Operation.UPDATE.equals(getOperation()));
+     }
 
     /**
      * Specifies the values on given {@link PreparedStatement}
@@ -327,10 +251,7 @@ public boolean equals(<nullable(C=C)>final Object other)
 
     if (other instanceof <table.name.voName>StatementSetter)
     {
-        <notnull(C=C)>final <table.name.voName>StatementSetter candidate =
-            (<table.name.voName>StatementSetter) other;
-
-        result = equals(getValues(), isUpdateOperation(), candidate.getValues(), candidate.isUpdateOperation());
+        result = super.equals(other);
     }
     else
     {
@@ -343,19 +264,19 @@ public boolean equals(<nullable(C=C)>final Object other)
 /**
  * Checks whether the state information provided match.
  * @param myValue my {@code <table.name.voName>} value.
- * @param myUpdate whether it's an update operation.
+ * @param myOperation my operation.
  * @param hisValue his {@code <table.name.voName>} value.
- * @param hisUpdate whether his it's an update operation.
+ * @param hisOperation his operation.
  * @return {@code true} if and only if both sets are equivalent.
  */
 protected boolean equals(
     <notnull(C=C)>final <table.name.voName> myValue,
-    final boolean myUpdate,
+    final V24PreparedStatementSetter.Operation myOperation,
     <notnull(C=C)>final <table.name.voName> hisValue,
-    final boolean hisUpdate)
+    final V24PreparedStatementSetter.Operation  hisOperation)
 {
     return
-           (myUpdate == hisUpdate)
+           (myOperation.equals(hisOperation))
         && (myValue.equals(hisValue));
 }
 >>
@@ -378,11 +299,9 @@ public int hashCode()
 
     final int classHashCode = <table.name.voName>StatementSetter.class.hashCode();
 
-    final int valuesHashCode = this.m__Values.hashCode();
+    final int superHashCode = super.hashCode();
 
-    final int updateHashCode = Boolean.valueOf(this.m__bUpdateOperation).hashCode();
-
-    result = classHashCode + valuesHashCode + updateHashCode;
+    result = classHashCode + superHashCode;
 
     return result;
 }
@@ -405,14 +324,9 @@ public String toString()
     <notnull(C=C)>final StringBuilder result =
         new StringBuilder("{ \"class\": \"<table.name.voName>StatementSetter");
 
-    result.append("\", \"values\": ");
-    result.append(this.m__Values);
-    result.append(", \"update\": ");
-    result.append(this.m__bUpdateOperation);
-
-    result.append(", \"package\": \"");
-    result.append(<table.name.voName>StatementSetter.class.getPackage().getName());
-    result.append("\" }");
+    result.append("\", \"super\": ");
+    result.append(super.toString());
+    result.append(", \"package\": \"<C.package>\" }");
 
     return result.toString();
 }
