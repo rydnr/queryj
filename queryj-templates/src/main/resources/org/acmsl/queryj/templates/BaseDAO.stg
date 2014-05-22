@@ -144,7 +144,8 @@ public interface <table.name.voName>DAO
 <endif>
 
 {
-<if(table.static)>
+<
+if(table.static)>
     <table.staticContent:{r | <cached_constants(row=r, voName=table.name.voName, C=C)>}; separator="\n\n">
 
     /**
@@ -163,15 +164,17 @@ public interface <table.name.voName>DAO
     <notnull(C=C)>
     List\<<table.name.voName\>> getStaticValues();
 
-<
-if(table.primaryKey)>
+< if(table.primaryKey)>
     <find_constant_by_pk(primaryKey=table.primaryKey, table=table, C=C)>
-<endif>
+< endif>
 
     <table.own.minus.primaryKey.minus.readOnlyAttributes:{ attr | <find_constant_methods(attribute=attr, table=table, C=C)>}; separator="\n\n">
 
-    <find_by_primary_key(table=table, parent=table.parentTable, repository=C.repository, C=C)><
+<
 endif>
+< if(table.primaryKey)>
+    <find_by_primary_key(table=table, parent=table.parentTable, repository=C.repository, C=C)>
+< endif>
 
     /**
      * Persists {@link <table.name.voName>} information.

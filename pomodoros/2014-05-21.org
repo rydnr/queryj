@@ -1,7 +1,10 @@
 * 2014/05/21
-** Review DAO #500:
-*** DONE Fix UPDATE/INSERT constants: 1 -> 1
-*** Fix invalid override of update() methods: 1
+** Review DAO #500: 2 -> 1
+*** DONE Fix UPDATE/INSERT constanst
+*** DONE Missing findByPrimaryKey method in BaseDAO.stg
+*** DONE Fix call to ValueObjectFactory
+*** TODO Cannot find symbol query(PreparedStatementCreator, PreparedStatementSetter, ResultSetExtractor)
+*** TODO Fix invalid override of update() methods
 
 * Delayed list
 ** Generate per-fk Cucumber feature: 2 ->

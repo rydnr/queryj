@@ -91,20 +91,13 @@ sourceImpl(table, engine, C) ::= <<
  */
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ParameterDisposer;
-import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.object.SqlQuery;
-import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 
 /*
@@ -113,8 +106,6 @@ import org.springframework.transaction.TransactionStatus;
 <imports(table=table)>
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.Types;
 import java.util.ArrayList;
 <if(table.static)>
 import java.util.Arrays;
@@ -200,7 +191,9 @@ project_imports(
 /*
  * Importing <trName> classes.
  */
+<if(table.foreignKeys)>
 import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
+<endif>
 import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName.lowercased>.<table.name.voName>StatementSetter;
 import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName.lowercased>.<table.name.voName>PkStatementSetter;
@@ -382,7 +375,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
 
     <extractors(table=table, parent=parent, repository=repository, C=C)>
 
-    <inner_transaction_callbacks(table=table, parent=parent, repository=repository, C=C)>
+    <inner_transaction_callbacks(table=table, parent=parent, repository=repository, engine=engine, C=C)>
 
     <helper_methods()>
 }
@@ -897,13 +890,6 @@ protected <table.name.voName> create(
 <if(table.readOnlyAttributes)>
         result = findByPrimaryKey(<table.primaryKey:{ attr |<attr.name.uncapitalized>}; separator=", ">);
 
-<else>
-        result =
-            factory.create(
-                <table.attributes:{ attr |<attr.name.uncapitalized>}; separator=",\n">);
-
-<endif>
-
         if (result == null)
         {
             throw
@@ -912,6 +898,11 @@ protected <table.name.voName> create(
                     + "<table.primaryKey:{ attr |<attr.name> -> " + <attr.name.uncapitalized>}; separator="\n                    + \", ">
                     + "), but it's not retrievable afterwards");
         }
+<else>
+        result =
+            factory.create<table.name.voName>(
+                <table.attributes:{ attr |<attr.name.uncapitalized>}; separator=",\n">);
+<endif>
     }
     else
     {
@@ -1063,8 +1054,7 @@ update4(table, parent, repository, C) ::= <<
  <table.own.minus.readOnlyAttributes:{ attr | <attribute_javadoc(attr=attr)>}; separator="\n">
 <endif>
  * @param query the query used to perform the update operation.
- * @param transactionManager the {@link PlatformTransactionManager}
- * instance.
+ * @param transactionTemplate the {@link TransactionTemplate} instance.
 <if(parent)>
  * @param parentDAO the {@link <parent.name.voName>DAO} instance.
 <endif>
@@ -1419,7 +1409,7 @@ resultset_extractor_parameter_retrieval(name, getterMethod, objectType, isPrimit
 !>
 index = index + 1;
 
-result.put("<name>", resultSet.<getterMethod>(index));
+((Map\<String, <objectType>\>) result).put("<name>", <if(isPrimitive)><objectType>.valueOf(<endif>resultSet.<getterMethod>(index)<if(isPrimitive)>)<endif>);
 >>
 
 find_constant_by_pk(primaryKey, table, C) ::= <<

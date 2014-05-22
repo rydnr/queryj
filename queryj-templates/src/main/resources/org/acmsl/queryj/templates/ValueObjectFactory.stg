@@ -114,7 +114,7 @@ public class <table.name.voName>Factory
      * \<a href="https://en.wikipedia.org/wiki/Double-checked_locking">double-checked locking\</a>.
      * This relies on the fact that inner classes are not loaded until they are referenced.
      */
-    private static class <table.name.voName>FactorySingletonContainer
+    private static final class <table.name.voName>FactorySingletonContainer
     {
         /**
          * The actual singleton.
