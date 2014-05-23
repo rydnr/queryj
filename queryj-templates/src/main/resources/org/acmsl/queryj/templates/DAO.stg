@@ -119,7 +119,6 @@ import java.util.Map;
  */
 import javax.sql.DataSource;
 <checkers_import(C=C)>
-<checkthread_import(C=C)>
 
 <class(foreign_keys=table.foreignKeys, table=table, engine=engine, C=C)>
 >>
@@ -374,8 +373,6 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
       table=table, repository=repository, attr=attr, C=C)>}; separator="\n\n">
 
     <extractors(table=table, parent=parent, repository=repository, C=C)>
-
-    <inner_transaction_callbacks(table=table, parent=parent, repository=repository, engine=engine, C=C)>
 
     <helper_methods()>
 }
