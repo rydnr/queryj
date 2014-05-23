@@ -41,7 +41,6 @@ import "types.stg"
 import "type_checkers.stg"
 import "javadoc.stg"
 import "custom_selects.stg"
-import "callbacks.stg"
 import "attributes.stg"
 import "properties.stg"
 

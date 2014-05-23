@@ -155,7 +155,11 @@ public class <engine.name.voName><table.name.voName>DAOFactory
 
         if (dataSource != null)
         {
+<if(table.dynamicQueries)>
+            result = new <engine.name.voName><table.name.voName>DAOImpl(dataSource, daoListener);
+<else>
             result = new <engine.name.voName><table.name.voName>DAO(dataSource, daoListener);
+<endif>
         }
         else
         {

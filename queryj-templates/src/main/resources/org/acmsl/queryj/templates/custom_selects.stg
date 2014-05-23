@@ -106,6 +106,7 @@ endif>
 <endif>
  */
 <custom_select_return_nullable_maybe(cs=cs, result=cs.result, C=C)>
+@SuppressWarnings("unchecked")
 protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.name.uncapitalized>(
     <notnull(C=C)>final String sql,
     <notnull(C=C)>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
@@ -193,7 +194,7 @@ public int <cs.name.uncapitalized>(
 
     <notnull(C=C)>final Object t_Result =
         transactionTemplate.execute(
-            new UpdateTransactionCallback(
+            new V24UpdateTransactionCallback\<<engine.name><table.name.voName>DAO>(
                 preparedStatementCreatorFactory
                     .newPreparedStatementCreator(params),
                 preparedStatementCreatorFactory
@@ -337,7 +338,7 @@ actual_custom_select_template_call(sql, result, C) ::= <<
  @param result the sql result.
  !>
 transactionTemplate.execute(
-    new QueryTransactionCallback(
+    new V24QueryTransactionCallback\<<engine.name><table.name.voName>DAO>(
         preparedStatementCreatorFactory
             .newPreparedStatementCreator(params),
         null,
@@ -348,7 +349,7 @@ transactionTemplate.execute(
 if(sql.resultRef)
  ><if(sql.result.wrappingASingleProperty)
    >/* single property */<sql.result.properties:{ p |
-        new <p.type.capitalized>ResultSetExtractor(sql, daoListener),}; separator=""
+        new <p.type.capitalized>ResultSetExtractor("<p.columnName>", sql, daoListener),}; separator=""
  ><else>
         new <sql.result.simpleClassValue>ResultSetExtractor(sql, daoListener),
 <  endif><
