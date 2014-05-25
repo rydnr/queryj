@@ -1,0 +1,44 @@
+* 2014/05/25
+** DONE Find out duplicated executions in Maven : 2 -> 2
+There's something wrong with db-schema-definition-translator-maven-plugin
+** DONE Fix compile errors: 1 -> 1
+** TODO Implement single vs multiple result set extractors.
+** 'build.plugins.plugin.version' for org.acmsl.queryj:queryj-maven is missing. @ line 86, column 15
+** Generate report on API changes
+** Generate per-repository Cucumber feature: 2 ->
+* Delayed list
+** Generate per-fk Cucumber feature: 2 ->
+** Generate per-sql Cucumber feature: 2 ->
+** REVIEW TODOs!!!
+
+* Package layout:
+** dao
+- DataAccessManager
+- BaseDAO
+*** dao/core
+- DAOChooser
+- BaseDAOFactory
+*** dao/impl
+*** dao/rdb -> X
+*** dao/[table]
+- CustomResultSetExtractor
+- FkStatementSetter
+- PkStatementSetter
+- ResultSetExtractor
+- AttributesStatementSetter
+**** dao/[table]/oracle
+- DAO
+- DAOFactory
+** vo
+- ValueObject
+- CustomValueObject
+** vo/core
+- ValueObjectFactory
+- CustomValueObjectFactory
+** vo/impl
+- ValueObjectImpl
+- ValueObjectFactoryImpl
+- BaseValueObject
+- CustomValueObjectImpl
+- CustomValueObjectFactoryImpl
+- CustomBaseValueObject

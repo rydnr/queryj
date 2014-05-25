@@ -62,6 +62,9 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Wraps a {@link TemplateDef} to provide decorated versions of its information, to be used in templates.
@@ -287,7 +290,7 @@ public class DecoratedTemplateDefWrapper
 
     /**
      * Checks whether given template def is disabled.
-     * @param templateDef the template def.
+     * @param templateDef the wrapped {@link TemplateDef}.
      * @return {@code true} in such case.
      */
     protected boolean isDisabled(@NotNull final TemplateDef<String> templateDef)
@@ -307,7 +310,7 @@ public class DecoratedTemplateDefWrapper
 
     /**
      * Checks whether given template def is marked as being debugged or not.
-     * @param templateDef the template def.
+     * @param templateDef the wrapped {@link TemplateDef}.
      * @return {@code true} in such case.
      */
     protected boolean isDebug(@NotNull final TemplateDef<String> templateDef)
@@ -328,12 +331,46 @@ public class DecoratedTemplateDefWrapper
 
     /**
      * Retrieves the filename rule.
+     * @param templateDef the wrapped {@link TemplateDef}.
      * @return such rule.
      */
     @NotNull
     protected String getFilenameRule(@NotNull final TemplateDef<String> templateDef)
     {
         return templateDef.getFilenameRule();
+    }
+
+    /**
+     * Retrieves additional metadata.
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public Map<DecoratedString, DecoratedString> getMetadata()
+    {
+        return getMetadata(getTemplateDef());
+    }
+
+    /**
+     * Retrieves additional metadata.
+     * @param templateDef the wrapped {@link TemplateDef}.
+     * @return such information.
+     */
+    @NotNull
+    protected Map<DecoratedString, DecoratedString> getMetadata(@NotNull final TemplateDef<String> templateDef)
+    {
+        @NotNull final Map<DecoratedString, DecoratedString> result;
+
+        @NotNull final Map<String, String> metadata = templateDef.getMetadata();
+
+        result = new HashMap<>(metadata.size());
+
+        for (@NotNull final Entry<String, String> entry : metadata.entrySet())
+        {
+            result.put(new DecoratedString(entry.getKey()), new DecoratedString(entry.getValue()));
+        }
+
+        return result;
     }
 
     /**
@@ -344,7 +381,7 @@ public class DecoratedTemplateDefWrapper
     public String toString()
     {
         return
-              "{ \"class\": \"" + DecoratedTemplateDefWrapper.class.getName() + '"'
-            + ", \"templateDef\": " + this.m__TemplateDef + " }";
+              "{ \"templateDef\": " + this.m__TemplateDef
+            + ", \"class\": \"" + DecoratedTemplateDefWrapper.class.getName() +  "\" }";
     }
 }

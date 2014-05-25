@@ -38,7 +38,6 @@ package org.acmsl.queryj.templates.packaging.exceptions;
 /*
  * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -56,7 +55,7 @@ import java.io.File;
  */
 @ThreadSafe
 public class InvalidTemplateDefException
-    extends QueryJNonCheckedException
+    extends TemplatePackagingNonCheckedException
 {
     /**
      * The serial version id.

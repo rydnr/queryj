@@ -79,7 +79,7 @@ import <C.project_package>.<typeInitMap.voSubpackageName>.core.<result.simpleCla
  * Importing V24-Commons classes.
  */
 import com.ventura24.commons.dao.DAOListener;
-import com.ventura24.commons.dao.V24ResultSetExtractor;
+import com.ventura24.commons.dao.V24ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor;
 
 /*
  * Importing Spring classes.
@@ -121,15 +121,15 @@ class(result, repository, C) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/templates/CustomResultSetExtractor.stg", C=C)>
  */
-public class <result.simpleClassValue>ResultSetExtractor
-    extends V24ResultSetExtractor\<<result.simpleClassValue>\>
+public class <result.simpleClassValue>ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor
+    extends V24ResultSet<if(C.multiple)>Multiple<else>Single<endif>Extractor\<<result.simpleClassValue>\>
 {
     /**
-     * Creates a new {@code <result.simpleClassValue>ResultSetExtractor} instance.
+     * Creates a new {@code <result.simpleClassValue>ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor} instance.
      * @param sql the SQL query.
      * @param listener the {@link <repository.voName>DAOListener} instance.
      */
-    public <result.simpleClassValue>ResultSetExtractor(
+    public <result.simpleClassValue>ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor(
         <notnull(C=C)>final String sql, <nullable(C=C)>final DAOListener listener)
     {
         super(sql, listener);
@@ -158,23 +158,16 @@ defaultExtractor(result, repository, C) ::= <<
  * custom exception.
  */
 <notnull(C=C)>
-protected <result.simpleClassValue> extractData(
-    <notnull(C=C)>final ResultSet resultSet,
-    <notnull(C=C)>final String sql,
-    <nullable(C=C)>final DAOListener listener)
+protected <if(C.multiple)>List\<<result.simpleClassValue>\><else><result.simpleClassValue><endif> extractValue(<notnull(C=C)>final ResultSet resultSet)
     throws  SQLException,
             DataAccessException
 {
-    return extractData(resultSet, sql, listener, <result.simpleClassValue>Factory.getInstance());
+    return extractValue(resultSet, <result.simpleClassValue>Factory.getInstance());
 }
 
 /**
  * Extracts {@link <result.simpleClassValue>} information from given result set.
  * @param resultSet the result set.
- * @param sql the SQL query.
- * @param listener the {@link <repository.voName>DAOListener} instance.
- * @param factory the {@link <result.simpleClassValue>ValueObjectFactory}
- * instance.
  * @return the {@code <result.simpleClassValue>} or
  * {@code null} if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i>.
@@ -182,42 +175,21 @@ protected <result.simpleClassValue> extractData(
  * custom exception.
  */
 <notnull(C=C)>
-protected <result.simpleClassValue> extractData(
+protected <if(C.multiple)>List\<<result.simpleClassValue>\><else><result.simpleClassValue><endif> extractValue(
     <notnull(C=C)>final ResultSet resultSet,
-    <notnull(C=C)>final String sql,
-    <nullable(C=C)>final DAOListener listener,
     <notnull(C=C)>final <result.simpleClassValue>Factory factory)
   throws  SQLException,
           DataAccessException
 {
     <nullable(C=C)>final <result.simpleClassValue> result;
 
-    if  (resultSet.next())
-    {
-        if (listener != null)
-        {
-            listener.resultSetMovedForward(sql, 1);
-        }
-
 <if(result.nullableProperties)>
-        <result.nullableProperties:{p | <nullable_property_resultset_retrieval_declaration(property=p, C=C)>}; separator="\n">
+    <result.nullableProperties:{p | <nullable_property_resultset_retrieval_declaration(property=p, C=C)>}; separator="\n">
 
 <endif>
-        result =
-            factory.create(
-                <result.properties:{p | <nullable_property_resultset_retrieval(property=p, C=C)>}; separator=",\n">);
-
-        if  (listener != null)
-        {
-            listener.resultSetClosed(this);
-        }
-    }
-    else
-    {
-        // TODO: check it this is exceptional or not.
-        throw new RuntimeException("No more data to extract!");
-        //result = null;
-    }
+    result =
+        factory.create(
+            <result.properties:{p | <nullable_property_resultset_retrieval(property=p, C=C)>}; separator=",\n">);
 
     return result;
 }

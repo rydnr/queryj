@@ -51,6 +51,11 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
+import java.io.File;
+
 /**
  * Error when the template described in a TemplateDef does not exist.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
@@ -69,15 +74,17 @@ public class TemplateAssociatedToTemplateDefDoesNotExist
     /**
      * Creates an exception representing a TemplateDef pointing to a missing template.
      * @param templateDef the {@link TemplateDef}.
+     * @param templateFile the template {@link File file}.
      */
-    public TemplateAssociatedToTemplateDefDoesNotExist(@NotNull final TemplateDef<String> templateDef)
+    public TemplateAssociatedToTemplateDefDoesNotExist(
+        @NotNull final TemplateDef<String> templateDef,
+        @NotNull final File templateFile)
     {
         super(
             "template.associated.to.templatedef.does.not.exist",
             new Object[]
             {
-                templateDef.getFile().getAbsolutePath().replaceAll("\\.def$", ""),
-                templateDef.getName(),
+                templateFile.getAbsolutePath(),
                 templateDef.getFile().getAbsolutePath()
             });
     }

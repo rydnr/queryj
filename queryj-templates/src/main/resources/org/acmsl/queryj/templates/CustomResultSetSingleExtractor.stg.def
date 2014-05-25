@@ -11,7 +11,11 @@ type : per-custom-result;
 output: Java;
 
 // The filename builder.
-filename builder : <result.simpleClassValue>ResultSetExtractor.java;
+filename builder : <result.simpleClassValue>ResultSetSingleExtractor.java;
 
 // The package.
 package: <packageName>.dao.<result.simpleClassValue.lowercased>;
+
+metadata: {
+  multiple: false;
+}

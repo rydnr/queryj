@@ -36,7 +36,7 @@
 package org.acmsl.queryj.templates.packaging.antlr;
 
 /*
- * Importing ANTLR-generated classes..
+ * Importing ANTLR-generated classes.
  */
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefParser.NameRuleContext;
 
@@ -106,11 +106,17 @@ public class TemplateDefNameVisitor
         return super.visitNameRule(context);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'TemplateDefNameVisitor', " +
-               "'name': '" + m__strName + "' }";
+        return
+              "{ \"name\": \""
+            + m__strName
+            + "\", \"class\": \"TemplateDefNameVisitor\", "
+            + "\"package\": \"org.acmsl.queryj.template.packaging.antlr\" }";
     }
 }

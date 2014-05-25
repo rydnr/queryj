@@ -1,0 +1,44 @@
+* 2014/05/22
+** Review DAO #500: 1 -> 1
+*** DONE Cannot find symbol query(PreparedStatementCreator, PreparedStatementSetter, ResultSetExtractor)
+*** DONE Fix invalid override of update() methods
+*** TODO missing LongResultSetExtractor
+*** 'build.plugins.plugin.version' for org.acmsl.queryj:queryj-maven is missing. @ line 86, column 15
+*** Maven runs Maven several times!
+* Delayed list
+** Generate per-fk Cucumber feature: 2 ->
+** Generate per-sql Cucumber feature: 2 ->
+** Generate per-repository Cucumber feature: 2 ->
+** REVIEW TODOs!!!
+
+* Package layout:
+** dao
+- DataAccessManager
+- BaseDAO
+*** dao/core
+- DAOChooser
+- BaseDAOFactory
+*** dao/impl
+*** dao/rdb -> X
+*** dao/[table]
+- CustomResultSetExtractor
+- FkStatementSetter
+- PkStatementSetter
+- ResultSetExtractor
+- AttributesStatementSetter
+**** dao/[table]/oracle
+- DAO
+- DAOFactory
+** vo
+- ValueObject
+- CustomValueObject
+** vo/core
+- ValueObjectFactory
+- CustomValueObjectFactory
+** vo/impl
+- ValueObjectImpl
+- ValueObjectFactoryImpl
+- BaseValueObject
+- CustomValueObjectImpl
+- CustomValueObjectFactoryImpl
+- CustomBaseValueObject

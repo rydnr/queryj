@@ -51,6 +51,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 import java.io.File;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Represents template definitions: all additional metadata associated to
@@ -123,4 +124,11 @@ public interface TemplateDef<S>
      */
     @NotNull
     public String getFilenameRule();
+
+    /**
+     * Retrieves additional metadata.
+     * @return such information.
+     */
+    @NotNull
+    public Map<S, S> getMetadata();
 }

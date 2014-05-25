@@ -194,7 +194,8 @@ import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
 import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName.lowercased>.<table.name.voName>StatementSetter;
 import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName.lowercased>.<table.name.voName>PkStatementSetter;
-import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName.lowercased>.<table.name.voName>ResultSetExtractor;
+import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName.lowercased>.<table.name.voName>ResultSetMultipleExtractor;
+import <basePackageName>.<baseDAOSubpackageName>.<table.name.voName.lowercased>.<table.name.voName>ResultSetSingleExtractor;
 <if(parent)>
 import <basePackageName>.<baseDAOSubpackageName>.<parent.name.voName>DAO;
 <endif>
@@ -379,8 +380,6 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine.name><table.name.
       table=table, repository=repository, attr=attr, C=C)>}; separator="\n\n">
 
     <extractors(table=table, parent=parent, repository=repository, C=C)>
-
-    <helper_methods()>
 }
 >>
 
@@ -655,7 +654,7 @@ protected <table.name.voName> findByPrimaryKey(
                     new V24PreparedStatementCreator(query, daoListener),
                     new <table.name.voName>PkStatementSetter(
                         <table.primaryKey:{ attr | <attr.name.uncapitalized>}; separator=",\n">),
-                    new <table.name.voName>ResultSetExtractor(query, daoListener),
+                    new <table.name.voName>ResultSetSingleExtractor(query, daoListener),
                     this));
 }
 >>
@@ -1308,7 +1307,7 @@ extractors(table, parent, repository, C) ::= <<
  <class_common_javadoc(template="org/acmsl/queryj/templates/dao/DAO.stg", C=C)>
  */
 public static class <table.name.voName>PkResultSetExtractor
-    extends V24ResultSetExtractor\<Map\<String, ?\>>
+    extends V24ResultSetSingleExtractor\<Map\<String, ?\>>
 {
     /**
     * Constructs a new {@link <table.name.voName>PkResultSetExtractor}.
@@ -1324,48 +1323,22 @@ public static class <table.name.voName>PkResultSetExtractor
     /**
      * Extracts \<i><table.name.voName>\</i> information from given result set.
      * @param resultSet the result set.
-     * @param sql the original SQL.
-     * @param daoListener the {@link DAOListener} instance.
-     * @return the {@link <table.name.voName>} or {@code null}
-     * if the operation returned no data.
-     * custom exception.
+     * @return the primary key or {@code null} if the operation returned no data.
      */
     @Override
     @SuppressWarnings("unchecked")
     <notnull(C=C)>
-    protected Map\<String, ?> extractData(
-        <notnull(C=C)>final ResultSet resultSet,
-        <notnull(C=C)>final String sql,
-        <nullable(C=C)>final DAOListener daoListener)
+    protected Map\<String, ?> extractValue(<notnull(C=C)>final ResultSet resultSet)
     throws  SQLException,
             DataAccessException
     {
         <notnull(C=C)>final Map\<String, ?> result = new HashMap\<String, Object>();
 
-        int t_iRowCount = 0;
-
-        if  (resultSet.next())
-        {
-            t_iRowCount++;
-
-            if (daoListener != null)
-            {
-                daoListener.resultSetMovedForward(sql, t_iRowCount);
-            }
-
-            int index = 1;
-
-            <table.primaryKey:{ attr | <resultset_extractor_parameter_retrieval(
+        <table.primaryKey:{ attr | <resultset_extractor_parameter_retrieval(
               name=attr.name.lowercased,
               getterMethod=attr.getterMethod,
               objectType=attr.objectType,
               isPrimitive=attr.primitive)> }; separator="\n">
-        }
-
-        if (daoListener != null)
-        {
-            daoListener.resultSetClosed(sql, t_iRowCount);
-        }
 
         return result;
     }
@@ -1591,7 +1564,7 @@ em_attribute_value_retrieval(attr, table, C) ::= <<
    transactionTemplate.execute(
        new V24QueryTransactionCallback\<<engine.name><table.name.voName>DAO, Map\<String, <attr.objectType>\>(
            <attr.name.uncapitalized>Sql,
-           new <attr.name.capitalized>ResultSetExtractor(<attr.name.uncapitalized>Sql, daoListener),
+           new <attr.name.capitalized>ResultSetSingleExtractor(<attr.name.uncapitalized>Sql, daoListener),
            this));
 
 final <attr.javaType> <attr.name.uncapitalized> = <attr.name.uncapitalized>Map.get("<attr.name.lowercased>");
@@ -1708,14 +1681,14 @@ attribute_resultset_extractor_class(table, repository, attr, C) ::= <<
 <class_common_javadoc(template="org/acmsl/queryj/templates/DAO.stg", C=C)>
  */
 public static class <attr.name.capitalized>ResultSetExtractor
-    extends  V24ResultSetExtractor\<Map\<String, ?\>>
+    extends  V24ResultSetSingleExtractor\<Map\<String, ?\>>
 {
     /**
-     * Constructs a new {@code <attr.name.capitalized>ResultSetExtractor}.
+     * Constructs a new {@code <attr.name.capitalized>ResultSetSingleExtractor}.
      * @param sql the original SQL.
      * @param daoListener the dao listener.
      */
-    public <attr.name.capitalized>SingleColumnResultSetExtractor(
+    public <attr.name.capitalized>SingleColumnResultSetSingleExtractor(
         <notnull(C=C)>final String sql,
         <nullable(C=C)>final DAOListener daoListener)
     {
@@ -1729,7 +1702,6 @@ public static class <attr.name.capitalized>ResultSetExtractor
      * @param daoListener the {@link DAOListener} instance.
      * @return the {@link <table.name.voName>} or {@code null}
      * if the operation returned no data.
-     * custom exception.
      */
     @Override
     <notnull(C=C)>
@@ -1746,74 +1718,23 @@ public static class <attr.name.capitalized>ResultSetExtractor
     /**
      * Extracts \<i><table.name><attr.name>\</i> information from given result set.
      * @param resultSet the result set.
-     * @param sql the SQL used.
-     * @param daoListener the {@link DAOListener} instance.
-     * @return the {@link <table.name.voName>} or {@code null}
-     * if the operation returned no data.
-     * custom exception.
+     * @return the information retrieved from the database.
      */
     @SuppressWarnings("unchecked")
     <notnull(C=C)>
-    protected Map\<String, ?> extractData(
-        <notnull(C=C)>final ResultSet resultSet,
-        <notnull(C=C)>final String sql,
-        <nullable(C=C)>final DAOListener daoListener)
+    protected Map\<String, ?> extractValue(<notnull(C=C)>final ResultSet resultSet)
     throws  SQLException,
             DataAccessException
     {
         <notnull(C=C)>final Map\<String, ?> result = new HashMap\<String, Object>();
 
-        int t_iRowCount = 0;
-
-        if  (resultSet.next())
-        {
-            t_iRowCount++;
-
-            if (daoListener != null)
-            {
-                daoListener.resultSetMovedForward(sql, t_iRowCount);
-            }
-
-            int index = 1;
-
-            <resultset_extractor_parameter_retrieval(
+        <resultset_extractor_parameter_retrieval(
               name=attr.name.uncapitalized,
               getterMethod=attr.getterMethod,
               objectType=attr.objectType,
               isPrimitive=attr.primitive)>
-        }
-
-        if (daoListener != null)
-        {
-            daoListener.resultSetClosed(sql, t_iRowCount);
-        }
 
         return result;
     }
-}
->>
-
-helper_methods() ::= <<
-<! Some helper methods !>
-/**
- * Creates a new {@link TransactionTemplate} using given {@link DataSource}.
- * @param dataSource the database data source.
- * @return the new transaction template.
- */
-<notnull(C=C)>
-protected TransactionTemplate createTransactionTemplate(<notnull(C=C)>final DataSource dataSource)
-{
-    return createTransactionTemplate(new DataSourceTransactionManager(dataSource));
-}
-
-/**
- * Creates a new {@link TransactionTemplate} using given {@link PlatformTransactionManager}.
- * @param transactionManager the transaction manager.
- * @return the new transaction template.
- */
-<notnull(C=C)>
-protected TransactionTemplate createTransactionTemplate(<notnull(C=C)>final PlatformTransactionManager transactionManager)
-{
-    return new TransactionTemplate(transactionManager);
 }
 >>

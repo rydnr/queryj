@@ -48,7 +48,7 @@ custom_select(cs, table, C) ::= <<
 !>
 <if(!cs.dynamic)>
 /**
- * Custom select \<i><cs.id>\</i>:\<br/>
+ * Custom select \<i><cs.id>\</i>:
  * \<b><cs.description>\</b>.
  <cs.parameters:{ p | <parameter_javadoc(parameter=p)>}; separator="\n">
 <if(cs.resultRef)>
@@ -90,7 +90,7 @@ endif>
 }
 
 /**
- * Custom select \<i><cs.id>\</i>:\<br/>
+ * Custom select \<i><cs.id>\</i>:
  * \<b><cs.description>\</b>.
  * @param sql the SQL.
  * @param preparedStatementCreatorFactory the
@@ -229,7 +229,7 @@ custom_select_for_update(cs, table, C) ::= <<
 !>
 <if(!cs.dynamic)>
 /**
- * Custom select for update \<i><cs.id>\</i>:\<br/>
+ * Custom select for update \<i><cs.id>\</i>:
  * \<b><cs.description>\</b>.
  <cs.parameters:{ p | <parameter_javadoc(parameter=p)>}; separator=",\n">
 <if(cs.resultRef)>
@@ -338,23 +338,30 @@ actual_custom_select_template_call(sql, result, C) ::= <<
  @param result the sql result.
  !>
 transactionTemplate.execute(
-    new V24QueryTransactionCallback\<<engine.name><table.name.voName>DAO>(
-        preparedStatementCreatorFactory
-            .newPreparedStatementCreator(params),
+<
+if(sql.resultRef)
+><if(sql.result.wrappingASingleProperty)
+   >/* single property */<sql.result.properties:{ p |
+    new V24QueryTransactionCallback\<<engine.name><table.name.voName>DAO, <p.type.capitalized>\>(}; separator=""><
+  else>
+    new V24QueryTransactionCallback\<<engine.name><table.name.voName>DAO, <sql.result.simpleClassValue>\>(<
+  endif><
+else>
+    new V24QueryTransactionCallback\<<engine.name><table.name.voName>DAO, <sql.dao.voName>\>(<
+endif>
+
+        preparedStatementCreatorFactory.newPreparedStatementCreator(params),
         null,
-        // calls setXXX twice
-        // preparedStatementCreatorFactory
-        //     .newPreparedStatementSetter(params),
 <
 if(sql.resultRef)
  ><if(sql.result.wrappingASingleProperty)
    >/* single property */<sql.result.properties:{ p |
-        new <p.type.capitalized>ResultSetExtractor("<p.columnName>", sql, daoListener),}; separator=""
+        new <p.type.capitalized>ResultSet<if(sql.multiple)>Multiple<else>Single<endif>Extractor("<p.columnName>", sql, daoListener),}; separator=""
  ><else>
-        new <sql.result.simpleClassValue>ResultSetExtractor(sql, daoListener),
+        new <sql.result.simpleClassValue>ResultSet<if(sql.multiple)>Multiple<else>Single<endif>Extractor(sql, daoListener),
 <  endif><
 else>
-        new <sql.dao.voName>ResultSetExtractor(sql, daoListener),
+        new <sql.dao.voName>ResultSet<if(sql.multiple)>Multiple<else>Single<endif>Extractor(sql, daoListener),
 <
 endif>
         this))
@@ -487,7 +494,8 @@ if(result.wrappingASingleProperty)><
 else><
   if(result.classValue)
    >import <result.classValue>;
-import <C.project_package>.<baseDAOSubpackageName>.<result.simpleClassValue.lowercased>.<result.simpleClassValue>ResultSetExtractor;<
+import <C.project_package>.<baseDAOSubpackageName>.<result.simpleClassValue.lowercased>.<result.simpleClassValue>ResultSetSingleExtractor;
+import <C.project_package>.<baseDAOSubpackageName>.<result.simpleClassValue.lowercased>.<result.simpleClassValue>ResultSetMultipleExtractor;<
   endif><
 endif>
 >>

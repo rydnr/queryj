@@ -54,6 +54,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.util.Map;
 
 /**
  * Trivial TemplateDef implementation as a pojo.
@@ -101,6 +102,11 @@ public class TemplateDefImpl
     private File m__File;
 
     /**
+     * Additional information to the templates.
+     */
+    private Map<String, String> m__mMetadata;
+
+    /**
      * Whether the template def is disabled or not.
      */
     private boolean m__bDisabled;
@@ -118,6 +124,7 @@ public class TemplateDefImpl
      * @param filenameBuilder the builder.
      * @param packageName the package name.
      * @param file the file.
+     * @param metadata any additional metadata to provide to the template.
      * @param disabled whether the template def is marked as disabled.
      * @param debug whether the template def is being debugged or not.
      */
@@ -128,6 +135,7 @@ public class TemplateDefImpl
         @NotNull final String filenameBuilder,
         @NotNull final String packageName,
         @NotNull final File file,
+        @NotNull final Map<String, String> metadata,
         final boolean disabled,
         final boolean debug)
     {
@@ -137,6 +145,7 @@ public class TemplateDefImpl
         immutableSetFilenameBuilder(filenameBuilder);
         immutableSetPackageName(packageName);
         immutableSetFile(file);
+        immutableSetMetadata(metadata);
         immutableSetDisabled(disabled);
         immutableSetDebug(debug);
     }
@@ -322,6 +331,36 @@ public class TemplateDefImpl
     }
 
     /**
+     * Specifies additional metadata.
+     * @param metadata such metadata.
+     */
+    protected final void immutableSetMetadata(@NotNull final Map<String, String> metadata)
+    {
+        this.m__mMetadata = metadata;
+    }
+
+    /**
+     * Specifies additional metadata.
+     * @param metadata such metadata.
+     */
+    @SuppressWarnings("unused")
+    protected void setMetadata(@NotNull final Map<String, String> metadata)
+    {
+        immutableSetMetadata(metadata);
+    }
+
+    /**
+     * Retrieves additional metadata.
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public Map<String, String> getMetadata()
+    {
+        return this.m__mMetadata;
+    }
+
+    /**
      * Specifies whether the template def is disabled.
      * @param disabled whether the template def is disabled.
      */
@@ -398,14 +437,16 @@ public class TemplateDefImpl
     public String toString()
     {
         return
-              "{ \"class\": \"" + TemplateDefImpl.class.getName() + '"'
-            + ", \"output\": \"" + m__Output + '"'
+              "{ \"output\": \"" + m__Output + '"'
             + ", \"name\": \"" + m__strName + '"'
             + ", \"type\": \"" + m__Type  + '"'
             + ", \"filenameBuilder\": \"" + m__strFilenameBuilder + '"'
             + ", \"packageName\": \"" + m__strPackageName + '"'
             + ", \"file\": \"" + m__File.getAbsolutePath() + '"'
+            + ", \"metadata\": \"" + m__mMetadata + '"'
             + ", \"disabled\": " + m__bDisabled
-            + ", \"debug\": " + m__bDebug + " }";
+            + ", \"debug\": " + m__bDebug
+            + ", \"class\": \"" + TemplateDefImpl.class.getSimpleName() + '"'
+            + ", \"package\": \"org.acmsl.queryj.templates.packaging\" }";
     }
 }

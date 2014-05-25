@@ -79,7 +79,7 @@ sourceImpl(table, C) ::= <<
  * Importing V24-Commons classes.
  */
 import com.ventura24.commons.dao.DAOListener;
-import com.ventura24.commons.dao.V24ResultSetExtractor;
+import com.ventura24.commons.dao.V24ResultSet<if(C.multiple)>Multiple<else>Single<endif>Extractor;
 
 /*
  * Importing Spring classes.
@@ -134,15 +134,15 @@ class(table, repository, C) ::= <<
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/ResultSetExtractor.stg", C=C)>
  */
-public class <table.name.voName>ResultSetExtractor
-    extends V24ResultSetExtractor\<<table.name.voName>\>
+public class <table.name.voName>ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor
+    extends V24ResultSet<if(C.multiple)>Multiple<else>Single<endif>Extractor\<<table.name.voName>\>
 {
     /**
      * Creates a new instance.
      * @param sql the SQL query.
      * @param listener the {@link DAOListener} instance.
      */
-    public <table.name.voName>ResultSetExtractor(
+    public <table.name.voName>ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor(
         <notnull(C=C)>final String sql, <nullable(C=C)>final DAOListener listener)
     {
         super(sql, listener);
@@ -172,14 +172,11 @@ defaultExtractor(table, repository, C) ::= <<
  */
 @Override
 <notnull(C=C)>
-protected <table.name.voName> extractData(
-    <notnull(C=C)>final ResultSet resultSet,
-    <notnull(C=C)>final String sql,
-    <nullable(C=C)>final DAOListener listener)
+protected <if(C.templateDef.metadata.multiple)>List\<<table.name.voName>\><else><table.name.voName><endif> extractValue(<notnull(C=C)>final ResultSet resultSet)
     throws  SQLException,
             DataAccessException
 {
-    return extractData(resultSet, sql, listener, <table.name.voName>Factory.getInstance());
+    return extractValue(resultSet, <table.name.voName>Factory.getInstance());
 }
 
 /**
@@ -196,38 +193,18 @@ protected <table.name.voName> extractData(
  * custom exception.
  */
 <notnull(C=C)>
-protected <table.name.voName> extractData(
+protected <if(C.templateDef.metadata.multiple)>List\<<table.name.voName>\><else><table.name.voName><endif> extractValue(
     <notnull(C=C)>final ResultSet resultSet,
-    <notnull(C=C)>final String sql,
-    <nullable(C=C)>final DAOListener listener,
     <notnull(C=C)>final <table.name.voName>Factory factory)
   throws  SQLException,
           DataAccessException
 {
     <nullable(C=C)>final <table.name.voName> result;
 
-    if  (resultSet.next())
-    {
-        if (listener != null)
-        {
-            listener.resultSetMovedForward(sql, 1);
-        }
+    result =
+        factory.create<table.name.voName>(
+            <table.attributes:{a | <attribute_resultset_retrieval(attr=a, C=C)>}; separator=",\n">);
 
-        result =
-            factory.create<table.name.voName>(
-                <table.attributes:{a | <attribute_resultset_retrieval(attr=a, C=C)>}; separator=",\n">);
-
-        if  (listener != null)
-        {
-            listener.resultSetClosed(this);
-        }
-    }
-    else
-    {
-        // TODO: check if this is exceptional or not.
-        throw new RuntimeException("No more data to extract!");
-        //result = null;
-    }
 
     return result;
 }

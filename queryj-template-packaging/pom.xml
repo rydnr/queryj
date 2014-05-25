@@ -113,7 +113,7 @@
           <sourceDirectory>${project.basedir}/src/main/antlr4</sourceDirectory>
           <listener>false</listener>
           <visitor>true</visitor>
-          <outputDirectory>${project.build.directory}/generated-sources/org/acmsl/queryj/templates/packaging/antlr</outputDirectory>
+          <outputDirectory>${project.build.directory}/generated-sources/</outputDirectory>
         </configuration>
       </plugin>
     </plugins>

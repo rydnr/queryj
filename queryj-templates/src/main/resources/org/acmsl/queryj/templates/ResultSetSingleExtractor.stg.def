@@ -11,7 +11,11 @@ type : per-table;
 output: Java;
 
 // The filename builder.
-filename  builder : <tableName.voName>ResultSetExtractor.java;
+filename  builder : <tableName.voName>ResultSetSingleExtractor.java;
 
 // The package.
 package: <packageName>.dao.<tableName.voName.lowercased>;
+
+metadata: {
+  multiple: false;
+}

@@ -37,7 +37,7 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.Literals;
 import org.acmsl.queryj.templates.packaging.TemplateDef;
@@ -49,6 +49,7 @@ import org.acmsl.queryj.templates.packaging.antlr.TemplateDefDebugVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefDisabledVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefFilenameBuilderVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefLexer;
+import org.acmsl.queryj.templates.packaging.antlr.TemplateDefMetadataVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefNameVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefOutputVisitor;
 import org.acmsl.queryj.templates.packaging.antlr.TemplateDefPackageVisitor;
@@ -77,6 +78,11 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /*
+ * Importing ACM-SL Commons classes.
+ */
+import org.acmsl.commons.utils.StringUtils;
+
+/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -94,6 +100,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Parses the template definition files and provides the template
@@ -113,11 +120,27 @@ public class ParseTemplateDefsHandler
      * represents.
      *
      * @param command the command to process (or not).
-     * @return <code>true</code> if the handler actually process the command,
+     * @return {@code true} if the handler actually process the command,
      *         or maybe because it's not desirable to continue the chain.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand command)
+        throws QueryJBuildException
+    {
+        return handle(command, StringUtils.getInstance());
+    }
+
+    /**
+     * Asks the handler to process the command. The idea is that each
+     * command handler decides if such command is suitable of being
+     * processed, and if so perform the concrete actions the command
+     * represents.
+     * @param command the command to process (or not).
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return {@code true} if the handler actually process the command,
+     *         or maybe because it's not desirable to continue the chain.
+     */
+    protected boolean handle(@NotNull final QueryJCommand command, @NotNull final StringUtils stringUtils)
         throws QueryJBuildException
     {
         @Nullable final List<File> templateDefFiles =
@@ -139,7 +162,7 @@ public class ParseTemplateDefsHandler
                 {
                     @NotNull final TemplateDef<String> templateDef = parseDefFile(defFile);
 
-                    if (isValid(templateDef))
+                    if (isValid(templateDef, stringUtils))
                     {
                         if (!templateDef.isDisabled())
                         {
@@ -148,7 +171,9 @@ public class ParseTemplateDefsHandler
                     }
                     else
                     {
-                        throw new TemplateAssociatedToTemplateDefDoesNotExist(templateDef);
+                        throw
+                            new TemplateAssociatedToTemplateDefDoesNotExist(
+                                templateDef, retrieveTemplateFile(templateDef, stringUtils));
                     }
 
 //                    if (templateDefs.size() == 1)
@@ -164,18 +189,37 @@ public class ParseTemplateDefsHandler
     }
 
     /**
+     * Retrieves the template file.
+     * @param templateDef the {@link TemplateDef}.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return the template {@link File file}.
+     */
+    @NotNull
+    protected File retrieveTemplateFile(
+        @NotNull final TemplateDef<String> templateDef, @NotNull final StringUtils stringUtils)
+    {
+        @NotNull final File templateDefFile = templateDef.getFile();
+
+        return
+            new File(
+                stringUtils.extractClassName(
+                    templateDefFile.getAbsolutePath().replaceAll("\\.", "\126").replaceAll("\\.stg\\.def$", "").replaceAll(File.separator, "."))
+                .replaceAll("\\.", File.separator).replaceAll("\126", ".")
+                + File.separator
+                + templateDef.getName());
+    }
+
+    /**
      * Checks whether the template def is valid.
      * @param templateDef the {@link TemplateDef} to check.
+     * @param stringUtils the {@link StringUtils} instance.
      * @return {@code true} in such case.
      */
-    protected boolean isValid(@NotNull final TemplateDef<String> templateDef)
+    protected boolean isValid(@NotNull final TemplateDef<String> templateDef, @NotNull final StringUtils stringUtils)
     {
         final boolean result;
 
-        @NotNull final File templateDefFile = templateDef.getFile();
-
-        @NotNull final File templateFile =
-            new File(templateDefFile.getAbsolutePath().replaceAll("\\.def", ""));
+        @NotNull final File templateFile = retrieveTemplateFile(templateDef, stringUtils);
 
         result = templateFile.exists();
 
@@ -281,7 +325,7 @@ public class ParseTemplateDefsHandler
         {
             filenameBuilderVisitor.visit(tree);
 
-            defFilenameBuilder= filenameBuilderVisitor.getFilenameBuilder();
+            defFilenameBuilder = filenameBuilderVisitor.getFilenameBuilder();
         }
         catch (@NotNull final Throwable invalidClass)
         {
@@ -301,6 +345,20 @@ public class ParseTemplateDefsHandler
         catch (@NotNull final Throwable invalidClass)
         {
             throw new InvalidTemplateDefException(Literals.PACKAGE, file, invalidClass);
+        }
+
+        @NotNull final TemplateDefMetadataVisitor metadataVisitor = new TemplateDefMetadataVisitor();
+        @NotNull final Map<String, String> metadata;
+
+        try
+        {
+            metadataVisitor.visit(tree);
+
+            metadata = metadataVisitor.getMetadata();
+        }
+        catch (@NotNull final Throwable invalidClass)
+        {
+            throw new InvalidTemplateDefException("metadata", file, invalidClass);
         }
 
         @NotNull final TemplateDefDisabledVisitor disabledVisitor = new TemplateDefDisabledVisitor();
@@ -341,6 +399,7 @@ public class ParseTemplateDefsHandler
                 defFilenameBuilder,
                 defPackage,
                 file,
+                metadata,
                 disabled,
                 debug);
 

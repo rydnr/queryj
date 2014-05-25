@@ -254,13 +254,12 @@ public class QueryJMojo
     private Boolean m__bDisableCheckthreadAnnotations = false;
 
     /**
- 	* The current build session instance. This is used for toolchain manager API calls.
- 	*
- 	* @parameter default-value="${session}"
- 	* @required
- 	* @readonly
- 	*/
- 	private MavenSession session;
+     * The current build session instance. This is used for toolchain manager API calls.
+     * @parameter default-value="${session}"
+     * @required
+     * @readonly
+     */
+    private MavenSession session;
 
     /**
      * Specifies the driver.

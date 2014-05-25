@@ -1,0 +1,21 @@
+/*
+ * CustomResultSetExtractor template metadata.
+ */
+// The template name (the filename).
+name : CustomResultSetExtractor.stg;
+
+// The type of template: per-table, per-repository, per-foreign-key, per-custom-result, per-custom-sql.
+type : per-custom-result;
+
+// The output flavor.
+output: Java;
+
+// The filename builder.
+filename builder : <result.simpleClassValue>ResultSetMultipleExtractor.java;
+
+// The package.
+package: <packageName>.dao.<result.simpleClassValue.lowercased>;
+
+metadata: {
+  multiple: true;
+}

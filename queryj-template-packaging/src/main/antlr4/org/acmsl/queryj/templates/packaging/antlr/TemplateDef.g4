@@ -1,7 +1,7 @@
 grammar TemplateDef;
 
 templateDef
-:   nameRule typeRule outputRule filenameBuilderRule packageRule disabledRule? debugRule?
+:   nameRule typeRule outputRule filenameBuilderRule packageRule metadataRule? disabledRule? debugRule?
     EOF;
 
 nameRule:
@@ -24,6 +24,12 @@ disabledRule:
 
 debugRule:
         'debug' ';';
+
+metadataRule:
+        'metadata' ':' '{' keyValueRule+ '}';
+
+keyValueRule:
+        ID ':' ID ';';
 
 ID : [a-zA-Z0-9\.\-_,<>]+ ;
 

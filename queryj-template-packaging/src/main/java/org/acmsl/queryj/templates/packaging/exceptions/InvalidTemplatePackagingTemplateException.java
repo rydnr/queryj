@@ -62,6 +62,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class InvalidTemplatePackagingTemplateException
     extends InvalidTemplateException
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -6950491764603246762L;
 
     /**
