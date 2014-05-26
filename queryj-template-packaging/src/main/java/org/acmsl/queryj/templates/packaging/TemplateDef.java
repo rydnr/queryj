@@ -131,4 +131,11 @@ public interface TemplateDef<S>
      */
     @NotNull
     public Map<S, S> getMetadata();
+
+    /**
+     * Retrieves the name of the template def itself.
+     * @return such information.
+     */
+    @NotNull
+    public String getDefName();
 }

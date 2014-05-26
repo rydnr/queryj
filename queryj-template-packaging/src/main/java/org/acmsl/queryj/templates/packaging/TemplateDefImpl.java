@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.packaging;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.queryj.metadata.DecoratedString;
 
 /*
@@ -427,6 +428,37 @@ public class TemplateDefImpl
     public String getFilenameRule()
     {
         return new DecoratedString(getName()).getNormalized().getLowercased().getValue();
+    }
+
+    /**
+     * Retrieves the name of the template def itself.
+     * @return such information.
+     */
+    @Override
+    @NotNull
+    public String getDefName()
+    {
+        return getDefName(getFile(), FileUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the name of the template def itself.
+     * @param file the def file.
+     * @param fileUtils the {@link FileUtils} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected String getDefName(@NotNull final File file, @NotNull final FileUtils fileUtils)
+    {
+        @NotNull final String result;
+
+        @NotNull final String absolutePath = file.getAbsolutePath();
+
+        @NotNull final String fileName = fileUtils.getFileName(absolutePath);
+
+        result = fileUtils.stripExtensions(fileName);
+
+        return result;
     }
 
     /**

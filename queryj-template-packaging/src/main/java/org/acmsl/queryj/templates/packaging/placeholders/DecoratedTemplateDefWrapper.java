@@ -191,6 +191,27 @@ public class DecoratedTemplateDefWrapper
     }
 
     /**
+     * Retrieves the name of the template def itself.
+     * @return such information.
+     */
+    @Override
+    @NotNull
+    public String getDefName()
+    {
+        return getDefName(getTemplateDef());
+    }
+
+    /**
+     * Retrieves the name of the template def itself.
+     * @return such information.
+     */
+    @NotNull
+    protected String getDefName(@NotNull final TemplateDef<String> templateDef)
+    {
+        return templateDef.getDefName();
+    }
+
+    /**
      * Retrieves the filename builder expression.
      * @return such expression.
      */
