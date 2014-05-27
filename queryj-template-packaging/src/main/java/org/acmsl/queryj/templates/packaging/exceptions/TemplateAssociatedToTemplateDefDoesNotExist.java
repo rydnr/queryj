@@ -85,7 +85,22 @@ public class TemplateAssociatedToTemplateDefDoesNotExist
             new Object[]
             {
                 templateFile.getAbsolutePath(),
-                templateDef.getFile().getAbsolutePath()
+                templateDef.getDefName()
             });
+    }
+
+    /**
+     * Creates an exception representing a TemplateDef pointing to a missing template.
+     * @param templateDef the {@link TemplateDef}.
+     */
+    public TemplateAssociatedToTemplateDefDoesNotExist(
+        @NotNull final TemplateDef<String> templateDef)
+    {
+        super(
+            "template.associated.to.classloaded.templatedef.does.not.exist",
+            new Object[]
+                {
+                    templateDef.getDefName()
+                });
     }
 }

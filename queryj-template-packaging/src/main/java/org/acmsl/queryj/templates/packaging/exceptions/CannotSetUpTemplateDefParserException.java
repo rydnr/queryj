@@ -66,6 +66,9 @@ import java.io.File;
 public class CannotSetUpTemplateDefParserException
     extends QueryJNonCheckedException
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -618063241782514710L;
 
     /**
@@ -77,5 +80,14 @@ public class CannotSetUpTemplateDefParserException
         @NotNull final File file, @NotNull final Throwable cause)
     {
         super("cannot.setup.templatedef.parser", new Object[] { file.getAbsolutePath() }, cause);
+    }
+
+    /**
+     * Creates a new instance.
+     * @param cause the cause.
+     */
+    public CannotSetUpTemplateDefParserException(@NotNull final Throwable cause)
+    {
+        super("cannot.setup.templatedef.parser.for.stream", new Object[0], cause);
     }
 }

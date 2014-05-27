@@ -50,6 +50,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -135,7 +136,7 @@ public class TemplateDefImpl
         @NotNull final TemplateDefOutput output,
         @NotNull final String filenameBuilder,
         @NotNull final String packageName,
-        @NotNull final File file,
+        @Nullable final File file,
         @NotNull final Map<String, String> metadata,
         final boolean disabled,
         final boolean debug)
@@ -145,7 +146,10 @@ public class TemplateDefImpl
         immutableSetOutput(output);
         immutableSetFilenameBuilder(filenameBuilder);
         immutableSetPackageName(packageName);
-        immutableSetFile(file);
+        if (file != null)
+        {
+            immutableSetFile(file);
+        }
         immutableSetMetadata(metadata);
         immutableSetDisabled(disabled);
         immutableSetDebug(debug);
@@ -325,7 +329,7 @@ public class TemplateDefImpl
      * @return such file.
      */
     @Override
-    @NotNull
+    @Nullable
     public File getFile()
     {
         return this.m__File;

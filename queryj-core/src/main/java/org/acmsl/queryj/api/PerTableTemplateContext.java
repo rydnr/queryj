@@ -181,7 +181,6 @@ public class PerTableTemplateContext
         return result.toString();
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -240,6 +239,7 @@ public class PerTableTemplateContext
         return
               "{ \"class\": \"" + PerTableTemplateContext.class.getSimpleName() + '"'
             + ", \"package\": \"org.acmsl.queryj.api\""
-            + ", \"command\": " + getCommand() + " }";
+            + ", \"command\": " + getCommand().hashCode()
+            + " }";
     }
 }

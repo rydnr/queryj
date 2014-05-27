@@ -73,6 +73,7 @@ import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
  * Importing ANTLR classes.
  */
 import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -98,6 +99,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -171,9 +173,18 @@ public class ParseTemplateDefsHandler
                     }
                     else
                     {
-                        throw
-                            new TemplateAssociatedToTemplateDefDoesNotExist(
-                                templateDef, retrieveTemplateFile(templateDef, stringUtils));
+                        @Nullable final File templateFile = retrieveTemplateFile(templateDef, stringUtils);
+
+                        if (templateFile != null)
+                        {
+                            throw
+                                new TemplateAssociatedToTemplateDefDoesNotExist(templateDef, templateFile);
+                        }
+                        else
+                        {
+                            throw
+                                new TemplateAssociatedToTemplateDefDoesNotExist(templateDef);
+                        }
                     }
 
 //                    if (templateDefs.size() == 1)
@@ -194,19 +205,30 @@ public class ParseTemplateDefsHandler
      * @param stringUtils the {@link StringUtils} instance.
      * @return the template {@link File file}.
      */
-    @NotNull
+    @Nullable
     protected File retrieveTemplateFile(
         @NotNull final TemplateDef<String> templateDef, @NotNull final StringUtils stringUtils)
     {
-        @NotNull final File templateDefFile = templateDef.getFile();
+        @Nullable final File result;
 
-        return
-            new File(
-                stringUtils.extractClassName(
-                    templateDefFile.getAbsolutePath().replaceAll("\\.", "\126").replaceAll("\\.stg\\.def$", "").replaceAll(File.separator, "."))
-                .replaceAll("\\.", File.separator).replaceAll("\126", ".")
-                + File.separator
-                + templateDef.getName());
+        @Nullable final File templateDefFile = templateDef.getFile();
+
+        if (templateDefFile != null)
+        {
+            result =
+                new File(
+                    stringUtils.extractClassName(
+                        templateDefFile.getAbsolutePath().replaceAll("\\.", "\126").replaceAll("\\.stg\\.def$", "").replaceAll(File.separator, "."))
+                    .replaceAll("\\.", File.separator).replaceAll("\126", ".")
+                    + File.separator
+                    + templateDef.getName());
+        }
+        else
+        {
+            result = null;
+        }
+
+        return result;
     }
 
     /**
@@ -219,9 +241,16 @@ public class ParseTemplateDefsHandler
     {
         final boolean result;
 
-        @NotNull final File templateFile = retrieveTemplateFile(templateDef, stringUtils);
+        @Nullable final File templateFile = retrieveTemplateFile(templateDef, stringUtils);
 
-        result = templateFile.exists();
+        if (templateFile != null)
+        {
+            result = templateFile.exists();
+        }
+        else
+        {
+            result = true;
+        }
 
         return result;
     }
@@ -231,7 +260,7 @@ public class ParseTemplateDefsHandler
      * @param file the file to parse.
      */
     @NotNull
-    protected TemplateDef<String> parseDefFile(@NotNull final File file)
+    public TemplateDef<String> parseDefFile(@NotNull final File file)
         throws TemplatePackagingCheckedException
     {
         @Nullable final TemplateDefParser t_Parser;
@@ -249,13 +278,48 @@ public class ParseTemplateDefsHandler
     }
 
     /**
+     * Parses a template def stream.
+     * @param inputStream the stream to parse.
+     */
+    @NotNull
+    public TemplateDef<String> parseDefStream(@NotNull final InputStream inputStream)
+        throws TemplatePackagingCheckedException
+    {
+        @Nullable final TemplateDefParser t_Parser;
+
+        try
+        {
+            t_Parser = setUpParser(inputStream);
+        }
+        catch (final IOException invalidStream)
+        {
+            throw new CannotSetUpTemplateDefParserException(invalidStream);
+        }
+
+        return parseDef(t_Parser);
+    }
+
+    /**
+     * Parses a template def file.
+     * @param parser the parser.
+     * @return the {@link TemplateDef}.
+     */
+    @NotNull
+    public TemplateDef<String> parseDef(@NotNull final TemplateDefParser parser)
+        throws TemplatePackagingCheckedException
+    {
+        return parseDef(parser, null);
+    }
+
+    /**
      * Parses a template def file.
      * @param parser the parser.
      * @param file the file.
+     * @return the {@link TemplateDef}.
      */
     @NotNull
     public TemplateDef<String> parseDef(
-        @NotNull final TemplateDefParser parser, @NotNull final File file)
+        @NotNull final TemplateDefParser parser, @Nullable final File file)
         throws TemplatePackagingCheckedException
     {
         @NotNull final TemplateDef<String> result;
@@ -268,7 +332,14 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            throw new CannotProcessTemplateDefException(file, invalidClass);
+            if (file == null)
+            {
+                throw new CannotProcessTemplateDefException(invalidClass);
+            }
+            else
+            {
+                throw new CannotProcessTemplateDefException(file, invalidClass);
+            }
         }
 
         @NotNull final TemplateDefNameVisitor nameVisitor = new TemplateDefNameVisitor();
@@ -283,7 +354,14 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            throw new InvalidTemplateDefException("name", file, invalidClass);
+            if (file == null)
+            {
+                throw new InvalidTemplateDefException("name", invalidClass);
+            }
+            else
+            {
+                throw new InvalidTemplateDefException("name", file, invalidClass);
+            }
         }
 
         @NotNull final TemplateDefTypeVisitor typeVisitor = new TemplateDefTypeVisitor();
@@ -298,7 +376,14 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            throw new InvalidTemplateDefException("type", file, invalidClass);
+            if (file == null)
+            {
+                throw new InvalidTemplateDefException("type", invalidClass);
+            }
+            else
+            {
+                throw new InvalidTemplateDefException("type", file, invalidClass);
+            }
         }
 
         @NotNull final TemplateDefOutputVisitor outputVisitor = new TemplateDefOutputVisitor();
@@ -313,7 +398,14 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            throw new InvalidTemplateDefException("output", file, invalidClass);
+            if (file == null)
+            {
+                throw new InvalidTemplateDefException("output", invalidClass);
+            }
+            else
+            {
+                throw new InvalidTemplateDefException("output", file, invalidClass);
+            }
         }
 
         @NotNull final TemplateDefFilenameBuilderVisitor filenameBuilderVisitor =
@@ -329,7 +421,14 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            throw new InvalidTemplateDefException("filenameBuilder", file, invalidClass);
+            if (file == null)
+            {
+                throw new InvalidTemplateDefException("filenameBuilder", invalidClass);
+            }
+            else
+            {
+                throw new InvalidTemplateDefException("filenameBuilder", file, invalidClass);
+            }
         }
 
         @NotNull final TemplateDefPackageVisitor packageVisitor = new TemplateDefPackageVisitor();
@@ -344,7 +443,14 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            throw new InvalidTemplateDefException(Literals.PACKAGE, file, invalidClass);
+            if (file == null)
+            {
+                throw new InvalidTemplateDefException(Literals.PACKAGE, invalidClass);
+            }
+            else
+            {
+                throw new InvalidTemplateDefException(Literals.PACKAGE, file, invalidClass);
+            }
         }
 
         @NotNull final TemplateDefMetadataVisitor metadataVisitor = new TemplateDefMetadataVisitor();
@@ -358,7 +464,14 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            throw new InvalidTemplateDefException("metadata", file, invalidClass);
+            if (file == null)
+            {
+                throw new InvalidTemplateDefException("metadata", invalidClass);
+            }
+            else
+            {
+                throw new InvalidTemplateDefException("metadata", file, invalidClass);
+            }
         }
 
         @NotNull final TemplateDefDisabledVisitor disabledVisitor = new TemplateDefDisabledVisitor();
@@ -373,7 +486,14 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            throw new InvalidTemplateDefException("disabled", file, invalidClass);
+            if (file == null)
+            {
+                throw new InvalidTemplateDefException("disabled", invalidClass);
+            }
+            else
+            {
+                throw new InvalidTemplateDefException("disabled", file, invalidClass);
+            }
         }
 
         @NotNull final TemplateDefDebugVisitor debugVisitor = new TemplateDefDebugVisitor();
@@ -388,7 +508,14 @@ public class ParseTemplateDefsHandler
         }
         catch (@NotNull final Throwable invalidClass)
         {
-            throw new InvalidTemplateDefException("debug", file, invalidClass);
+            if (file == null)
+            {
+                throw new InvalidTemplateDefException("debug", invalidClass);
+            }
+            else
+            {
+                throw new InvalidTemplateDefException("debug", file, invalidClass);
+            }
         }
 
         result =
@@ -411,16 +538,41 @@ public class ParseTemplateDefsHandler
      * @param file the template def contents to parse.
      * @return the {@link TemplateDefParser} instance.
      */
-    @SuppressWarnings("unchecked")
     @NotNull
     protected TemplateDefParser setUpParser(@NotNull final File file)
     throws RecognitionException,
            IOException
     {
+        return setUpParser(new ANTLRFileStream(file.getAbsolutePath()));
+    }
+
+    /**
+     * Sets up the template definition parser.
+     * @param inputStream the template def contents to parse.
+     * @return the {@link TemplateDefParser} instance.
+     */
+    @NotNull
+    protected TemplateDefParser setUpParser(@NotNull final InputStream inputStream)
+        throws RecognitionException,
+        IOException
+    {
+        return setUpParser(new ANTLRInputStream(inputStream));
+    }
+
+    /**
+     * Sets up the template definition parser.
+     * @param stream the {@link ANTLRInputStream}.
+     * @return the {@link TemplateDefParser} instance.
+     */
+    @SuppressWarnings("unchecked")
+    @NotNull
+    protected TemplateDefParser setUpParser(@NotNull final ANTLRInputStream stream)
+        throws RecognitionException,
+        IOException
+    {
         @NotNull final TemplateDefParser result;
 
-        @NotNull final TemplateDefLexer t_Lexer =
-            new TemplateDefLexer(new ANTLRFileStream(file.getAbsolutePath()));
+        @NotNull final TemplateDefLexer t_Lexer = new TemplateDefLexer(stream);
 
         @NotNull final CommonTokenStream t_Tokens = new CommonTokenStream(t_Lexer);
 

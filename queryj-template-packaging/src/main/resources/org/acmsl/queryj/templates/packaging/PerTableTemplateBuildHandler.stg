@@ -84,6 +84,13 @@ import org.acmsl.queryj.templates.<def.name.noExtension>Template;
 import org.acmsl.queryj.templates.<def.name.noExtension>TemplateFactory;
 
 /*
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.TemplateDef;
+import org.acmsl.queryj.templates.packaging.TemplateDefPerTableTemplateContext;
+import org.acmsl.queryj.templates.packaging.handlers.ParseTemplateDefsHandler;
+
+/*
  * Importing StringTemplate classes.
  */
 import org.stringtemplate.v4.ST;
@@ -159,8 +166,12 @@ public class <C.class_name>
         @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
     {
+        @NotNull final TemplateDef\<String> templateDef =
+            new ParseTemplateDefsHandler().parseDefStream(
+                getClass().getResourceAsStream("<def.defName>"));
+
         @NotNull final <def.type.capitalized>TemplateContext t_Context =
-            new <def.type.capitalized>TemplateContext(tableName, staticContents, <def.debug>, parameters);
+            new TemplateDef<def.type.capitalized>TemplateContext(templateDef, tableName, staticContents, <def.debug>, parameters);
 
         t_Context.setDecoratorFactory(CachingDecoratorFactory.getInstance());
 

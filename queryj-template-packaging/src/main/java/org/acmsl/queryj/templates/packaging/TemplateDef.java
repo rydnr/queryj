@@ -45,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -103,7 +104,7 @@ public interface TemplateDef<S>
      * Retrieves the actual template definition file.
      * @return the file.
      */
-    @NotNull
+    @Nullable
     File getFile();
 
     /**

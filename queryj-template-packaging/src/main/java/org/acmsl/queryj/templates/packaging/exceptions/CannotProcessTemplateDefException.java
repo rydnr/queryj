@@ -80,4 +80,13 @@ public class CannotProcessTemplateDefException
     {
         super("cannot.process.templatedef", new Object[] { file.getAbsolutePath() }, cause);
     }
+
+    /**
+     * Creates a new instance.
+     * @param cause the cause.
+     */
+    public CannotProcessTemplateDefException(@NotNull final Throwable cause)
+    {
+        super("cannot.process.templatedef.from.stream", new Object[0], cause);
+    }
 }
