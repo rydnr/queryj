@@ -89,6 +89,12 @@ import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.TemplateDef;
+import org.acmsl.queryj.templates.packaging.TemplateDefPerForeignKeyTemplateContext;
+
+/*
  * Importing QueryJ Test classes.
  */
 import org.acmsl.queryj.test.AbstractTemplatesTest;
@@ -315,6 +321,7 @@ public class PerForeignKeyTemplatesTest
         generateFile(
             template,
             engine,
+            retrieveTemplateDef(template),
             getForeignKeys(),
             getTables(),
             getOutputFiles());
@@ -324,6 +331,7 @@ public class PerForeignKeyTemplatesTest
      * Generates a file with the information from the feature.
      * @param templateName the template.
      * @param engine the engine name.
+     * @param templateDef the {@link TemplateDef}.
      * @param foreignKeys the foreign keys.
      * @param tables the tables.
      * @param outputFiles the output files.
@@ -332,6 +340,7 @@ public class PerForeignKeyTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
+        @NotNull final TemplateDef\<String> templateDef,
         @NotNull final List\<ForeignKey\<String\>> foreignKeys,
         @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables,
         @NotNull final Map\<String, File> outputFiles)
@@ -408,8 +417,11 @@ public class PerForeignKeyTemplatesTest
                         foreignKey.getSourceTableName(), resolveEngine(engine));
 
                 @NotNull final PerForeignKeyTemplateContext t_Context =
-                    new PerForeignKeyTemplateContext(
-                        foreignKey, (DEBUG.containsKey(templateName) && DEBUG.get(templateName)), t_Command);
+                    new TemplateDefPerForeignKeyTemplateContext(
+                        templateDef,
+                        foreignKey,
+                        (DEBUG.containsKey(templateName) && DEBUG.get(templateName)),
+                        t_Command);
 
                 t_Context.setPackageName(packageName);
 

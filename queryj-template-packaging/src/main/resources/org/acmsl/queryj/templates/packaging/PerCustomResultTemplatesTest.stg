@@ -88,6 +88,12 @@ import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.TemplateDef;
+import org.acmsl.queryj.templates.packaging.TemplateDefPerCustomResultTemplateContext;
+
+/*
  * Importing QueryJ Test classes.
  */
 import org.acmsl.queryj.test.AbstractTemplatesTest;
@@ -262,6 +268,7 @@ public class PerCustomResultTemplatesTest
         generateFile(
             template,
             engine,
+            retrieveTemplateDef(template),
             getResults(),
             getProperties(),
             getOutputFiles(),
@@ -273,6 +280,7 @@ public class PerCustomResultTemplatesTest
      * Generates a file with the information from the feature.
      * @param templateName the template.
      * @param engine the engine name.
+     * @param templateDef the {@link TemplateDef}.
      * @param resultMap the result map.
      * @param propertyMap the property map.
      * @param outputFiles the output files.
@@ -282,6 +290,7 @@ public class PerCustomResultTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
+        @NotNull final TemplateDef\<String> templateDef,
         @NotNull final Map\<String, Result\<String\>> resultMap,
         @NotNull final Map\<String, List\<Property\<String>\>> propertyMap,
         @NotNull final Map\<String, File> outputFiles,
@@ -369,7 +378,8 @@ public class PerCustomResultTemplatesTest
                             decoratorFactory);
 
                     @NotNull final PerCustomResultTemplateContext t_Context =
-                        new PerCustomResultTemplateContext(
+                        new TemplateDefPerCustomResultTemplateContext(
+                            templateDef,
                             result,
                             properties,
                             (DEBUG.containsKey(templateName) && DEBUG.get(templateName)),

@@ -95,6 +95,12 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.TemplateDef;
+import org.acmsl.queryj.templates.packaging.TemplateDefPerRepositoryTemplateContext;
+
+/*
  * Importing QueryJ Test classes.
  */
 import org.acmsl.queryj.test.AbstractTemplatesTest;
@@ -246,6 +252,7 @@ public class PerRepositoryTemplatesTest
         generateFile(
             template,
             engine,
+            retrieveTemplateDef(template),
             getRepository(),
             getTables(),
             getOutputFiles(),
@@ -256,6 +263,7 @@ public class PerRepositoryTemplatesTest
      * Generates a file with the information from the feature.
      * @param templateName the template.
      * @param engine the engine name.
+     * @param templateDef the {@link TemplateDef}.
      * @param repository the repository.
      * @param tableMap the table map.
      * @param outputFiles the output files.
@@ -265,6 +273,7 @@ public class PerRepositoryTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
+        @NotNull final TemplateDef\<String> templateDef,
         @NotNull final String repository,
         @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tableMap,
         @NotNull final Map\<String, File> outputFiles,
@@ -333,7 +342,8 @@ public class PerRepositoryTemplatesTest
             @NotNull final List\<String> t_lTableNames = t_MetadataManager.getTableDAO().findAllTableNames();
 
             @NotNull final PerRepositoryTemplateContext t_Context =
-                new PerRepositoryTemplateContext(
+                new TemplateDefPerRepositoryTemplateContext(
+                    templateDef,
                     repository,
                     t_lTableNames,
                     (DEBUG.containsKey(templateName) && DEBUG.get(templateName)),

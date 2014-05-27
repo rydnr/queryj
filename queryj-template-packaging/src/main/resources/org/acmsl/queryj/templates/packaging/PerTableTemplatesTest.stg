@@ -98,6 +98,7 @@ import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
  * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.TemplateDef;
+import org.acmsl.queryj.templates.packaging.TemplateDefPerTableTemplateContext;
 
 /*
  * Importing QueryJ Test classes.
@@ -526,7 +527,8 @@ public class PerTableTemplatesTest
                     resolvePackage(templateDef.getPackageName(), table.getName(), resolveEngine(engine));
 
                 @NotNull final PerTableTemplateContext t_Context =
-                    new PerTableTemplateContext(
+                    new TemplateDefPerTableTemplateContext(
+                        templateDef,
                         table.getName(),
                         tableRows,
                         (DEBUG.containsKey(templateName) && DEBUG.get(templateName)),

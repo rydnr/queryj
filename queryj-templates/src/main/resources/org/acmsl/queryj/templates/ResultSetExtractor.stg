@@ -79,7 +79,7 @@ sourceImpl(table, C) ::= <<
  * Importing V24-Commons classes.
  */
 import com.ventura24.commons.dao.DAOListener;
-import com.ventura24.commons.dao.V24ResultSet<if(C.multiple)>Multiple<else>Single<endif>Extractor;
+import com.ventura24.commons.dao.V24ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor;
 
 /*
  * Importing Spring classes.
@@ -131,11 +131,10 @@ class(table, repository, C) ::= <<
  * <[
       description(table=table)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(
-  template="org/acmsl/queryj/templates/ResultSetExtractor.stg", C=C)>
+<class_common_javadoc(template="org/acmsl/queryj/templates/ResultSetExtractor.stg", C=C)>
  */
 public class <table.name.voName>ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor
-    extends V24ResultSet<if(C.multiple)>Multiple<else>Single<endif>Extractor\<<table.name.voName>\>
+    extends V24ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor\<<table.name.voName>\>
 {
     /**
      * Creates a new instance.

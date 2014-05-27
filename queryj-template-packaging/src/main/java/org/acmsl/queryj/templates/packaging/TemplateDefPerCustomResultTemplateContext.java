@@ -23,15 +23,15 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefPerTableTemplateContext.java
+ * Filename: TemplateDefPerCustomResultTemplateContext.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Enhances PerTableTemplateContext with the TemplateDef
+ * Description: Enhances PerCustomResultTemplateContext with the TemplateDef
  *              reference.
  *
  * Date: 2014/05/27
- * Time: 06:06
+ * Time: 20:44
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -40,8 +40,9 @@ package org.acmsl.queryj.templates.packaging;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.api.PerTableTemplateContext;
-import org.acmsl.queryj.metadata.vo.Row;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.customsql.Property;
+import org.acmsl.queryj.customsql.Result;
 
 /*
  * Importing JetBrains annotations.
@@ -59,15 +60,15 @@ import org.checkthread.annotations.ThreadSafe;
 import java.util.List;
 
 /**
- * Enhances {@link PerTableTemplateContext} with the {@link TemplateDef} reference.
+ * Enhances {@link PerCustomResultTemplateContext} with the {@link TemplateDef} reference.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/05/27 06:06
+ * Created: 2014/05/27 20:44
  */
 @ThreadSafe
 @SuppressWarnings("unused")
-public class TemplateDefPerTableTemplateContext
-    extends PerTableTemplateContext
+public class TemplateDefPerCustomResultTemplateContext
+    extends PerCustomResultTemplateContext
 {
     /**
      * The template def.
@@ -75,21 +76,21 @@ public class TemplateDefPerTableTemplateContext
     private TemplateDef<String> m__TemplateDef;
 
     /**
-     * Creates a new {@code TemplateDefPerTableTemplateContext}.
+     * Creates a new context.
      * @param templateDef the {@link TemplateDef}.
-     * @param tableName the table name.
-     * @param staticValues the static values, if any.
-     * @param debug whether we're debugging.
-     * @param command the command.
+     * @param result the {@link Result result}.
+     * @param properties the list of {@link Property properties}.
+     * @param debug whether we're debugging or not.
+     * @param command the {@link QueryJCommand command}.
      */
-    public TemplateDefPerTableTemplateContext(
+    public TemplateDefPerCustomResultTemplateContext(
         @NotNull final TemplateDef<String> templateDef,
-        @NotNull final String tableName,
-        @NotNull final List<Row<String>> staticValues,
+        @NotNull final Result<String> result,
+        @NotNull final List<Property<String>> properties,
         final boolean debug,
         @NotNull final QueryJCommand command)
     {
-        super(tableName, staticValues, debug, command);
+        super(result, properties, debug, command);
         immutableSetTemplateDef(templateDef);
     }
 
@@ -132,7 +133,7 @@ public class TemplateDefPerTableTemplateContext
         return
               "{ \"templateDef\": " + this.m__TemplateDef
             + ", \"super\": " + super.toString()
-            + ", \"class\": \"TemplateDefPerTableTemplateContext\""
+            + ", \"class\": \"TemplateDefPerCustomResultTemplateContext\""
             + ", \"package\": \"org.acmsl.queryj.templates.packaging\" }";
     }
 }

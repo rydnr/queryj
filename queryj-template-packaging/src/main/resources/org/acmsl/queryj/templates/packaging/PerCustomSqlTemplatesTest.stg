@@ -96,6 +96,12 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.TemplateDef;
+import org.acmsl.queryj.templates.packaging.TemplateDefPerCustomSqlTemplateContext;
+
+/*
  * Importing QueryJ Test classes.
  */
 import org.acmsl.queryj.test.AbstractTemplatesTest;
@@ -294,6 +300,7 @@ public class PerCustomSqlTemplatesTest
         generateFile(
             template,
             engine,
+            retrieveTemplateDef(template),
             getTables(),
             getSqlList(),
             getOutputFiles(),
@@ -304,6 +311,7 @@ public class PerCustomSqlTemplatesTest
      * Generates a file with the information from the feature.
      * @param templateName the template.
      * @param engine the engine name.
+     * @param templateDef the {@link TemplateDef}.
      * @param tableMap the table map.
      * @param sqlList the custom queries.
      * @param outputFiles the output files.
@@ -313,6 +321,7 @@ public class PerCustomSqlTemplatesTest
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
+        @NotNull final TemplateDef\<String> templateDef,
         @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tableMap,
         @NotNull final List\<Sql\<String\>> sqlList,
         @NotNull final Map\<String, File> outputFiles,
@@ -380,8 +389,11 @@ public class PerCustomSqlTemplatesTest
                     resolvePackage(PACKAGE_MAPPINGS.get(templateName), sql.getId(), resolveEngine(engine));
 
                 @NotNull final PerCustomSqlTemplateContext t_Context =
-                    new PerCustomSqlTemplateContext(
-                        sql, (DEBUG.containsKey(templateName) && DEBUG.get(templateName)), t_Command);
+                    new TemplateDefPerCustomSqlTemplateContext(
+                        templateDef,
+                        sql,
+                        (DEBUG.containsKey(templateName) && DEBUG.get(templateName)),
+                        t_Command);
 
                 t_Context.setPackageName(packageName);
 

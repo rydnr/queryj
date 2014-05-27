@@ -87,7 +87,7 @@ import org.acmsl.queryj.templates.<def.name.noExtension>TemplateFactory;
  * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.TemplateDef;
-import org.acmsl.queryj.templates.packaging.TemplateDefPerTableTemplateContext;
+import org.acmsl.queryj.templates.packaging.TemplateDef<def.type.capitalized>TemplateContext;
 import org.acmsl.queryj.templates.packaging.handlers.ParseTemplateDefsHandler;
 
 /*
@@ -158,7 +158,8 @@ public class <C.class_name>
      * @param parameters the parameter map.
      * @return the template.
      */
-    @Nullable
+    @Override
+    @NotNull
     protected <def.name.noExtension>Template createTemplate(
         @NotNull final <def.name.noExtension>TemplateFactory templateFactory,
         @NotNull final String tableName,
@@ -168,7 +169,7 @@ public class <C.class_name>
     {
         @NotNull final TemplateDef\<String> templateDef =
             new ParseTemplateDefsHandler().parseDefStream(
-                getClass().getResourceAsStream("<def.defName>"));
+                getClass().getResourceAsStream("<def.defName>.stg.def"));
 
         @NotNull final <def.type.capitalized>TemplateContext t_Context =
             new TemplateDef<def.type.capitalized>TemplateContext(templateDef, tableName, staticContents, <def.debug>, parameters);

@@ -241,7 +241,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         @NotNull final TF templateFactory,
         @NotNull final Result<String> result,
         @NotNull final List<Property<String>> properties,
-        @NotNull final QueryJCommand parameters);
+        @NotNull final QueryJCommand parameters)
+      throws  QueryJBuildException;
 
     /**
      * Checks whether the generation is allowed for given result.
