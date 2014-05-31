@@ -64,6 +64,9 @@ public class TemplateContextFillAdapterHandler
     <C extends QueryJTemplateContext, F extends TemplateContextFillHandler<C,P>, P>
     extends FillAdapterHandler<F, P>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 7171024612422933270L;
 
     /**

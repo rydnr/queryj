@@ -65,19 +65,20 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.api.PerTableTemplate per-table templates}.
+ * @param <C> the context.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 3.0
  * Created: 2012/06/03
  */
 @ThreadSafe
-public class BasePerTableFillTemplateChain
-    extends AbstractFillTemplateChain<PerTableTemplateContext>
+public class BasePerTableFillTemplateChain<C extends PerTableTemplateContext>
+    extends AbstractFillTemplateChain<C>
 {
     /**
      * Creates a {@link BasePerTableFillTemplateChain} using given context.
      * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      */
-    public BasePerTableFillTemplateChain(@NotNull final PerTableTemplateContext context)
+    public BasePerTableFillTemplateChain(@NotNull final C context)
     {
         super(context);
     }

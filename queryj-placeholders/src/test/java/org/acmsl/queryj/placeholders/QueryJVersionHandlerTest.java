@@ -69,6 +69,9 @@ import org.junit.Test;
 @ThreadSafe
 public class QueryJVersionHandlerTest
 {
+    /**
+     * Checks whether the handler returns the expected placeholder.
+     */
     @Test
     public void returns_the_expected_placeholder()
     {
@@ -76,11 +79,14 @@ public class QueryJVersionHandlerTest
             EasyMock.createNiceMock(PerTableTemplateContext.class);
 
         @NotNull final QueryJVersionHandler instance =
-            new QueryJVersionHandler(t_Context);
+            new QueryJVersionHandler<>(t_Context);
 
         Assert.assertEquals("version", instance.getPlaceHolder());
     }
 
+    /**
+     * Checks whether the handler returns the expected value.
+     */
     @Test
     public void returns_the_expected_values()
         throws QueryJBuildException
@@ -94,7 +100,7 @@ public class QueryJVersionHandlerTest
         EasyMock.replay(t_Context);
 
         @NotNull final QueryJVersionHandler<PerTableTemplateContext> instance =
-            new QueryJVersionHandler(t_Context);
+            new QueryJVersionHandler<>(t_Context);
 
         @Nullable final DecoratedString t_Value = instance.getValue();
 

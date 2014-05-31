@@ -44,12 +44,13 @@ import org.acmsl.queryj.api.PerTableTemplateContext;
 /**
  * JDK 6 Services'-compatible per-table {@link org.acmsl.queryj.api.placeholders.FillTemplateChainFactory}
  * implementation.
+ * @param <C> the context type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/06/08
  */
 @SuppressWarnings("unused")
-public interface PerTableFillTemplateChainFactory
-    extends FillTemplateChainFactory<PerTableTemplateContext>
+public interface PerTableFillTemplateChainFactory<C extends PerTableTemplateContext>
+    extends FillTemplateChainFactory<C>
 {
 }

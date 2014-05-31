@@ -1,5 +1,5 @@
 /*
-                        QueryJ Placeholders
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,52 +23,48 @@
 
  ******************************************************************************
  *
- * Filename: PerTableFillTemplateChainFactoryImpl.java
+ * Filename: TemplateDefTemplateContext.java
  *
- * Author: Jose San Leandro Armendariz (chous)
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Creates the chain to provide all per-table placeholders.
+ * Description: TemplateContext with access to a TemplateDef.
  *
- * Date: 6/8/13
- * Time: 7:56 AM
+ * Date: 2014/05/31
+ * Time: 08:48
  *
  */
-package org.acmsl.queryj.placeholders;
+package org.acmsl.queryj.templates.packaging;
 
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.api.PerTableTemplateContext;
-import org.acmsl.queryj.api.FillTemplateChain;
-import org.acmsl.queryj.api.placeholders.PerTableFillTemplateChainFactory;
+import org.acmsl.queryj.api.QueryJTemplateContext;
+import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Creates the chain to provide all per-table placeholders.
+ * {@link TemplateContext} with access to a {@link TemplateDef}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/06/08
+ * Created: 2014/05/31 08:48
  */
-@SuppressWarnings("unused")
-public class PerTableFillTemplateChainFactoryImpl<C extends PerTableTemplateContext>
-    implements PerTableFillTemplateChainFactory<C>
+@ThreadSafe
+public interface TemplateDefTemplateContext
+    extends QueryJTemplateContext
 {
     /**
-     * Creates {@link FillTemplateChain} instances for given context.
-     * @param context the {@link PerTableTemplateContext} needed.
-     * @return the FillTemplateChain, or {@code null} if the context is invalid.
+     * Retrieves the {@link TemplateDef}.
+     * @return such information.
      */
-    @Nullable
-    @Override
-    public FillTemplateChain<C> createFillChain(@NotNull final C context)
-    {
-        return
-            new FillTemplateChainWrapper<>(
-                new BasePerTableFillTemplateChain<>(context));
-    }
+    @NotNull
+    TemplateDef<String> getTemplateDef();
 }

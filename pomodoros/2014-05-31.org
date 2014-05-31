@@ -1,0 +1,5 @@
+* 2014/05/31
+** Make templateDef visible to templates (in order to use templatedef metadata section): X
+** 'build.plugins.plugin.version' for org.acmsl.queryj:queryj-maven is missing. @ line 86, column 15
+** Generate report on API changes
+** Generate per-repository Cucumber feature: 2 ->

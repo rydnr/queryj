@@ -68,6 +68,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class TemplateDefPerTableTemplateContext
     extends PerTableTemplateContext
+    implements TemplateDefTemplateContext
 {
     /**
      * The template def.
