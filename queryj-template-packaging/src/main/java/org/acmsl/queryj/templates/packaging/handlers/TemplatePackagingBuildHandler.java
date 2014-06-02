@@ -109,6 +109,12 @@ public abstract class TemplatePackagingBuildHandler
     private static final Pattern STG_EXT = Pattern.compile("\\.stg$");
 
     /**
+     * The regex to match .stg.def extensions.
+     */
+    @NotNull
+    private static final Pattern STG_DEF_EXT = Pattern.compile("\\.stg\\.def$");
+
+    /**
      * Creates a {@link TemplatePackagingBuildHandler} instance.
      */
     protected TemplatePackagingBuildHandler() {}
@@ -183,10 +189,27 @@ public abstract class TemplatePackagingBuildHandler
         @NotNull final TemplateDef<String> templateDef,
         @NotNull final String templateName)
     {
-        return
-              new DecoratedString(STG_EXT.matcher(templateDef.getName()).replaceAll("")) //.getCapitalized()
+        @NotNull final String result;
+
+        @NotNull final String templateDefPart;
+
+        @Nullable final File defFile = templateDef.getFile();
+
+        if (defFile == null)
+        {
+            templateDefPart = STG_EXT.matcher(templateDef.getName()).replaceAll("");
+        }
+        else
+        {
+            templateDefPart = STG_DEF_EXT.matcher(defFile.getName()).replaceAll("");
+        }
+
+        result =
+              new DecoratedString(templateDefPart) //.getCapitalized()
             + templateName
             + ".java";
+
+        return result;
     }
 
     /**
@@ -312,6 +335,7 @@ public abstract class TemplatePackagingBuildHandler
      * @param parameters the parameters.
      * @return the information.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveJdbcUsername(@NotNull final QueryJCommand parameters)
     {

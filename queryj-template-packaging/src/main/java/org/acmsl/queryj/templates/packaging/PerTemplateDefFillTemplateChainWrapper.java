@@ -116,7 +116,7 @@ public class PerTemplateDefFillTemplateChainWrapper
         result.add(new SerialVersionUIDHandler<>(context));
         result.add(new TimestampHandler());
         result.add(new TemplateNameHandler<>(context));
-        result.add(new TemplateDefHandler(context));
+        result.add(new TemplateDefHandler<>(context));
         result.add(new QueryJVersionHandler<>(context));
 
         return result;

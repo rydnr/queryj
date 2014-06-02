@@ -1,0 +1,3 @@
+* 2014/06/02
+** Make filenames TemplateDef-aware: 1 -> X
+** Make class names TemplateDef-aware: 1 ->
