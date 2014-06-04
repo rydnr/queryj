@@ -46,13 +46,14 @@ source(C) ::= <<
   Defines the rules to generate ResultSetExtractor implementations.
   @param C the context.
 !>
-<sourceImpl(table=C.table, C=C)>
+<sourceImpl(table=C.table, def=C.templateDef, C=C)>
 >>
 
-sourceImpl(table, C) ::= <<
+sourceImpl(table, def, C) ::= <<
 <!
   Defines the rules to generate ResultSetExtractor implementations.
   @param table the table.
+  @param def the template def.
   @param C the context.
 !>
 /*
@@ -79,7 +80,7 @@ sourceImpl(table, C) ::= <<
  * Importing V24-Commons classes.
  */
 import com.ventura24.commons.dao.DAOListener;
-import com.ventura24.commons.dao.V24ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor;
+import com.ventura24.commons.dao.V24ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor;
 
 /*
  * Importing Spring classes.
@@ -94,7 +95,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 <import_attribute_types(table=table, useHeader=false)>
 
-<class(table=table, repository=C.repository, C=C)>
+<class(table=table, repository=C.repository, def=def, C=C)>
 >>
 
 project_imports(basePackageName, voSubpackageName, table, repository) ::= <<
@@ -120,11 +121,12 @@ description(table) ::= <<
 {@link ResultSetExtractor} implementation for <table.name>.
 >>
 
-class(table, repository, C) ::= <<
+class(table, repository, def, C) ::= <<
 <!
  Generates the class body.
  @param table the table.
  @param repository the repository.
+ @param def the template def.
  @param C the context.
 !>
 /**
@@ -133,29 +135,30 @@ class(table, repository, C) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/templates/ResultSetExtractor.stg", C=C)>
  */
-public class <table.name.voName>ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor
-    extends V24ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor\<<table.name.voName>\>
+public class <table.name.voName>ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor
+    extends V24ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor\<<table.name.voName>\>
 {
     /**
      * Creates a new instance.
      * @param sql the SQL query.
      * @param listener the {@link DAOListener} instance.
      */
-    public <table.name.voName>ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor(
+    public <table.name.voName>ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor(
         <notnull(C=C)>final String sql, <nullable(C=C)>final DAOListener listener)
     {
         super(sql, listener);
     }
 
-    <defaultExtractor(table=table, repository=repository, C=C)>
+    <defaultExtractor(table=table, repository=repository, def=def, C=C)>
 }
 >>
 
-defaultExtractor(table, repository, C) ::= <<
+defaultExtractor(table, repository, def, C) ::= <<
 <!
  Generates the default logic for the extractor.
  @param table the table.
  @param repository the repository.
+ @param def the template def.
  @param C the context.
 !>
 /**
@@ -171,7 +174,7 @@ defaultExtractor(table, repository, C) ::= <<
  */
 @Override
 <notnull(C=C)>
-protected <if(C.templateDef.metadata.multiple)>List\<<table.name.voName>\><else><table.name.voName><endif> extractValue(<notnull(C=C)>final ResultSet resultSet)
+protected <if(def.metadata.multiple.meansTrue)>List\<<table.name.voName>\><else><table.name.voName><endif> extractValue(<notnull(C=C)>final ResultSet resultSet)
     throws  SQLException,
             DataAccessException
 {
@@ -192,7 +195,7 @@ protected <if(C.templateDef.metadata.multiple)>List\<<table.name.voName>\><else>
  * custom exception.
  */
 <notnull(C=C)>
-protected <if(C.templateDef.metadata.multiple)>List\<<table.name.voName>\><else><table.name.voName><endif> extractValue(
+protected <if(def.metadata.multiple.meansTrue)>List\<<table.name.voName>\><else><table.name.voName><endif> extractValue(
     <notnull(C=C)>final ResultSet resultSet,
     <notnull(C=C)>final <table.name.voName>Factory factory)
   throws  SQLException,

@@ -100,4 +100,30 @@ public class DecoratedStringTest
 
         Assert.assertEquals("TestWithCamelCaseExample", instance.getCapitalized().getValue());
     }
+
+    /**
+     * Checks whether isTrue works for "true".
+     */
+    @Test
+    public void isTrue_works_for_true_literals()
+    {
+        @NotNull final DecoratedString instance = new DecoratedString("true");
+
+        Assert.assertTrue(instance.isTrue());
+    }
+
+    /**
+     * Checks whether isFalse returns true for anything but "true".
+     */
+    @Test
+    public void isFalse_returns_true_for_literals_different_than_true()
+    {
+        @NotNull final DecoratedString instance = new DecoratedString("false");
+
+        Assert.assertTrue(instance.isFalse());
+
+        @NotNull final DecoratedString somethingElse = new DecoratedString("something else");
+
+        Assert.assertTrue(somethingElse.isFalse());
+    }
 }

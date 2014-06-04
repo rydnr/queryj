@@ -610,4 +610,41 @@ public class DecoratedString
     {
         return stringUtils.isEmpty(value);
     }
+
+    /**
+     * Checks whether the value is the literal "true".
+     * @return {@code true} in such case.
+     */
+    public boolean isTrue()
+    {
+        return isTrue(getValue());
+    }
+
+    /**
+     * Checks whether the value is the literal "true".
+     * @param value the value.
+     * @return {@code true} in such case.
+     */
+    protected boolean isTrue(@NotNull final String value)
+    {
+        return "true".equals(value);
+    }
+
+    /**
+     * Checks whether the value is the literal "true".
+     * @return {@code true} in such case.
+     */
+    public boolean isMeansTrue()
+    {
+        return isTrue();
+    }
+
+    /**
+     * Checks whether the value is not the literal "true".
+     * @return {@code true} in such case.
+     */
+    public boolean isFalse()
+    {
+        return !isTrue();
+    }
 }

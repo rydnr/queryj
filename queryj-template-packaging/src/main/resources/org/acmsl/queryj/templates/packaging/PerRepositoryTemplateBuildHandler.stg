@@ -132,7 +132,7 @@ public class <C.class_name>
     /**
      * The key to access the templates in the command.
      */
-    @NotNull static final String TEMPLATE_KEY = "<def.name>_template";
+    @NotNull static final String TEMPLATE_KEY = "<def.defName>_template";
 
     /**
      * Creates a {@code <def.name.capitalized>TemplateBuildHandler}.

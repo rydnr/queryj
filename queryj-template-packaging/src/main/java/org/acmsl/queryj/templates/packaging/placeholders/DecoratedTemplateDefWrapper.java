@@ -368,7 +368,7 @@ public class DecoratedTemplateDefWrapper
      */
     @NotNull
     @Override
-    public Map<DecoratedString, DecoratedString> getMetadata()
+    public Map<String, DecoratedString> getMetadata()
     {
         return getMetadata(getTemplateDef());
     }
@@ -379,9 +379,9 @@ public class DecoratedTemplateDefWrapper
      * @return such information.
      */
     @NotNull
-    protected Map<DecoratedString, DecoratedString> getMetadata(@NotNull final TemplateDef<String> templateDef)
+    protected Map<String, DecoratedString> getMetadata(@NotNull final TemplateDef<String> templateDef)
     {
-        @NotNull final Map<DecoratedString, DecoratedString> result;
+        @NotNull final Map<String, DecoratedString> result;
 
         @NotNull final Map<String, String> metadata = templateDef.getMetadata();
 
@@ -389,7 +389,7 @@ public class DecoratedTemplateDefWrapper
 
         for (@NotNull final Entry<String, String> entry : metadata.entrySet())
         {
-            result.put(new DecoratedString(entry.getKey()), new DecoratedString(entry.getValue()));
+            result.put(entry.getKey(), new DecoratedString(entry.getValue()));
         }
 
         return result;
