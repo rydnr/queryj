@@ -85,7 +85,7 @@ import org.checkthread.annotations.ThreadSafe;
 
 class(def, C) ::= <<
 /**
- * Generator for {@link <def.name.noExtension>Template}s.
+ * Generator for {@link <def.defName>Template}s.
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/packaging/TemplateGenerator.stg",
   timestamp=C.timestamp,
@@ -93,8 +93,8 @@ class(def, C) ::= <<
  */
 @ThreadSafe
 public class <C.class_name>
-    extends AbstractQueryJTemplateGenerator\<<def.name.noExtension>Template, <def.type.capitalized>TemplateContext>
-    implements <def.type.capitalized>TemplateGenerator\<<def.name.noExtension>Template, <def.type.capitalized>TemplateContext>
+    extends AbstractQueryJTemplateGenerator\<<def.defName>Template, <def.type.capitalized>TemplateContext>
+    implements <def.type.capitalized>TemplateGenerator\<<def.defName>Template, <def.type.capitalized>TemplateContext>
 {
     /**
      * Creates a new generator instance with given settings.

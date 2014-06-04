@@ -242,7 +242,7 @@ public abstract class AbstractTemplateWritingHandler
 
         if (templates != null)
         {
-            result = new ArrayList<Future<T>>(templates.size());
+            result = new ArrayList<>(templates.size());
 
             @NotNull final ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 
@@ -279,7 +279,7 @@ public abstract class AbstractTemplateWritingHandler
         }
         else
         {
-            result = new ArrayList<Future<T>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;
@@ -334,7 +334,7 @@ public abstract class AbstractTemplateWritingHandler
 
         if (templates != null)
         {
-            result = new ArrayList<Future<?>>(templates.size());
+            result = new ArrayList<>(templates.size());
 
             @NotNull final ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 
@@ -418,7 +418,7 @@ public abstract class AbstractTemplateWritingHandler
         }
         else
         {
-            result = new ArrayList<Future<?>>(0);
+            result = new ArrayList<>(0);
         }
 
         return result;

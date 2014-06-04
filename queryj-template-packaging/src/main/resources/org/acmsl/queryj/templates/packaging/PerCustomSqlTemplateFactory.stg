@@ -107,7 +107,7 @@ import java.util.List;
 
 class(def, C) ::= <<
 /**
- * Factory for {@link <def.name.noExtension>Template}s.
+ * Factory for {@link <def.defName>Template}s.
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/packaging/PerCustomSqlTemplateFactory.stg",
   timestamp=C.timestamp,
@@ -116,7 +116,7 @@ class(def, C) ::= <<
 @ThreadSafe
 public class <C.class_name>
     implements <def.type.capitalized>TemplateFactory\<
-               <def.name.noExtension>Template, <def.type.capitalized>TemplateContext>,
+               <def.defName>Template, <def.type.capitalized>TemplateContext>,
                Singleton
 {
     /**
@@ -145,7 +145,7 @@ public class <C.class_name>
      */
     @Override
     @NotNull
-    public <def.name.noExtension>Template createTemplate(
+    public <def.defName>Template createTemplate(
         @NotNull final QueryJCommand command,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
@@ -165,7 +165,7 @@ public class <C.class_name>
                 staticContents,
                 command);
 
-        return new <def.name.noExtension>Template(t_Context);
+        return new <def.defName>Template(t_Context);
     }
 
     /**

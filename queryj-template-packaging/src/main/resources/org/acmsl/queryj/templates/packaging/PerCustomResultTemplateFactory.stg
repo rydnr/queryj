@@ -108,7 +108,7 @@ import java.util.List;
 
 class(def, C) ::= <<
 /**
- * Factory for {@link <def.name.noExtension>Template}s.
+ * Factory for {@link <def.defName>Template}s.
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/packaging/PerCustomResultTemplateFactory.stg",
   timestamp=C.timestamp,
@@ -117,7 +117,7 @@ class(def, C) ::= <<
 @ThreadSafe
 public class <C.class_name>
     implements <def.type.capitalized>TemplateFactory\<
-               <def.name.noExtension>Template, <def.type.capitalized>TemplateContext>,
+               <def.defName>Template, <def.type.capitalized>TemplateContext>,
                Singleton
 {
     /**
@@ -146,7 +146,7 @@ public class <C.class_name>
      */
     @Override
     @NotNull
-    public <def.name.noExtension>Template createTemplate(
+    public <def.defName>Template createTemplate(
         @NotNull final Result\<String> customResult,
         @NotNull final List\<Property\<String\>> properties,
         @NotNull final <def.type.capitalized>TemplateContext context,
@@ -161,7 +161,7 @@ public class <C.class_name>
 
         context.setFileName(t_strFileName);
 
-        return new <def.name.noExtension>Template(context);
+        return new <def.defName>Template(context);
     }
 
     /**

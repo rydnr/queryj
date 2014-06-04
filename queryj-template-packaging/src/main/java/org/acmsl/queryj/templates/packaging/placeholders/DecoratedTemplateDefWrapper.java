@@ -57,6 +57,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -172,7 +173,7 @@ public class DecoratedTemplateDefWrapper
      * Retrieves the actual template definition file.
      * @return the file.
      */
-    @NotNull
+    @Nullable
     @Override
     public File getFile()
     {
@@ -184,7 +185,7 @@ public class DecoratedTemplateDefWrapper
      * @param def the {@link TemplateDef}.
      * @return the file.
      */
-    @NotNull
+    @Nullable
     protected File getFile(@NotNull final TemplateDef<String> def)
     {
         return def.getFile();

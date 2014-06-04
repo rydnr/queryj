@@ -139,7 +139,7 @@ public class <C.class_name>
     @Override
     public String getTemplateName()
     {
-        return "<def.name.noExtension>";
+        return "<def.defName>";
     }
 }
 >>

@@ -77,8 +77,8 @@ import org.acmsl.queryj.QueryJCommandWrapper;
 /*
  * Importing custom templates.
  */
-import org.acmsl.queryj.templates.<def.name.noExtension>Template;
-import org.acmsl.queryj.templates.<def.name.noExtension>TemplateGenerator;
+import org.acmsl.queryj.templates.<def.defName>Template;
+import org.acmsl.queryj.templates.<def.defName>TemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -103,7 +103,7 @@ import java.util.List;
 
 class(def, C) ::= <<
 /**
- * Writing handler for {@link <def.name.noExtension>Template}s.
+ * Writing handler for {@link <def.defName>Template}s.
 <class_common_javadoc(
   template="org/acmsl/templates/packaging/PerCustomResultTemplateWritingHandler.stg",
   timestamp=C.timestamp,
@@ -112,12 +112,12 @@ class(def, C) ::= <<
 @ThreadSafe
 public class <C.class_name>
     extends Base<def.type.capitalized>TemplateWritingHandler\<
-                <def.name.noExtension>Template,
+                <def.defName>Template,
                 <def.type.capitalized>TemplateContext,
-                <def.name.noExtension>TemplateGenerator>
+                <def.defName>TemplateGenerator>
 {
     /**
-     * Creates a new writing handler for {@link <def.name.noExtension>Template templates}.
+     * Creates a new writing handler for {@link <def.defName>Template templates}.
      */
     public <C.class_name>() {}
 
@@ -126,9 +126,9 @@ public class <C.class_name>
      */
     @NotNull
     @Override
-    public <def.name.noExtension>TemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
+    public <def.defName>TemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return new <def.name.noExtension>TemplateGenerator(caching, threadCount);
+        return new <def.defName>TemplateGenerator(caching, threadCount);
     }
 
     /**
@@ -136,17 +136,17 @@ public class <C.class_name>
      */
     @NotNull
     @Override
-    public List\<<def.name.noExtension>Template> retrieveTemplates(@NotNull final QueryJCommand parameters)
+    public List\<<def.defName>Template> retrieveTemplates(@NotNull final QueryJCommand parameters)
     {
-        @NotNull final List\<<def.name.noExtension>Template> result;
+        @NotNull final List\<<def.defName>Template> result;
 
-        @Nullable final List\<<def.name.noExtension>Template> aux =
-            new QueryJCommandWrapper\<List\<<def.name.noExtension>Template\>>(parameters)
-                .getSetting(<def.name.noExtension>TemplateBuildHandler.TEMPLATES_KEY);
+        @Nullable final List\<<def.defName>Template> aux =
+            new QueryJCommandWrapper\<List\<<def.defName>Template\>>(parameters)
+                .getSetting(<def.defName>TemplateBuildHandler.TEMPLATES_KEY);
 
         if (aux == null)
         {
-            result = new ArrayList\<<def.name.noExtension>Template>(0);
+            result = new ArrayList\<<def.defName>Template>(0);
         }
         else
         {
@@ -179,7 +179,7 @@ public class <C.class_name>
         @NotNull final File result;
 
         @NotNull final String packageName =
-            <def.name.noExtension>TemplateBuildHandler.buildPackageName(
+            <def.defName>TemplateBuildHandler.buildPackageName(
                 customResult,
                 customSqlProvider,
                 metadataManager,

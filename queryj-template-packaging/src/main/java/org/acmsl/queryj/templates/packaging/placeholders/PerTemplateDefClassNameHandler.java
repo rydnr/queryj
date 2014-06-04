@@ -37,20 +37,30 @@
 package org.acmsl.queryj.templates.packaging.placeholders;
 
 /*
- * Importing QueryJ-Placeholders classes.
+ * Importing QueryJ Placeholders classes.
  */
 import org.acmsl.queryj.placeholders.AbstractDecoratedStringHandler;
+import org.acmsl.queryj.placeholders.Literals;
+
+/*
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.metadata.DecoratedString;
 
 /*
- * Importing QueryJ-Template-Packaging classes.
+ * Importing QueryJ Template Packaging classes.
  */
-import org.acmsl.queryj.placeholders.Literals;
 import org.acmsl.queryj.templates.packaging.DefaultTemplatePackagingContext;
 
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.templates.packaging.TemplateDef;
+import org.acmsl.queryj.templates.packaging.TemplatePackagingContext;
+import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplate;
+import org.acmsl.queryj.templates.packaging.TemplatePackagingTemplateFactory;
+import org.acmsl.queryj.templates.packaging.TemplatePackagingUtils;
+import org.acmsl.queryj.templates.packaging.handlers.TemplatePackagingBuildHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -74,9 +84,15 @@ import java.util.regex.Pattern;
 public class PerTemplateDefClassNameHandler
     extends AbstractDecoratedStringHandler<DefaultTemplatePackagingContext>
 {
+    /**
+     * The regex to remove the trailing .stg extension.
+     */
     @NotNull
     public static final Pattern STG_EXT = Pattern.compile("\\.stg$");
 
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 7668827891857653722L;
 
     /**
@@ -109,9 +125,27 @@ public class PerTemplateDefClassNameHandler
     @Override
     protected String resolveContextValue(@NotNull final DefaultTemplatePackagingContext context)
     {
-        @NotNull final String result =
-              new DecoratedString(STG_EXT.matcher(context.getTemplateDef().getName()).replaceAll("")).getValue(); //getCapitalized().getValue();
+        return
+            resolveContextValue(
+                context.getTemplateDef(), context.getTemplateName(), TemplatePackagingUtils.getInstance());
+    }
 
-        return result + context.getTemplateName();
+    /**
+     * Resolves "class_name" values.
+     * @param templateDef the {@link TemplateDef}.
+     * @param templateName the template name.
+     * @param templatePackagingUtils the {@link TemplatePackagingUtils} instance.
+     * @return such value.
+     */
+    @NotNull
+    protected String resolveContextValue(
+        @NotNull final TemplateDef<String> templateDef,
+        @NotNull final String templateName,
+        @NotNull final TemplatePackagingUtils templatePackagingUtils)
+    {
+        @NotNull final String result =
+            templatePackagingUtils.buildFilename(templateDef, templateName, "");
+
+        return result;
     }
 }

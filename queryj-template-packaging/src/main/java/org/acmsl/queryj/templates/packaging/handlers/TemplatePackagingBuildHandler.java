@@ -41,6 +41,8 @@ package org.acmsl.queryj.templates.packaging.handlers;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.api.handlers.TemplateBuildHandler;
+import org.acmsl.queryj.templates.packaging.TemplateDefOutput;
+import org.acmsl.queryj.templates.packaging.TemplatePackagingUtils;
 import org.acmsl.queryj.tools.exceptions.MissingJdbcDriverAtRuntimeException;
 import org.acmsl.queryj.tools.exceptions.MissingJdbcPasswordAtRuntimeException;
 import org.acmsl.queryj.tools.exceptions.MissingJdbcUrlAtRuntimeException;
@@ -102,18 +104,6 @@ public abstract class TemplatePackagingBuildHandler
                QueryJCommandHandler<QueryJCommand>,
                TemplatePackagingSettings
 {
-    /**
-     * The regex to match .stg extensions.
-     */
-    @NotNull
-    private static final Pattern STG_EXT = Pattern.compile("\\.stg$");
-
-    /**
-     * The regex to match .stg.def extensions.
-     */
-    @NotNull
-    private static final Pattern STG_DEF_EXT = Pattern.compile("\\.stg\\.def$");
-
     /**
      * Creates a {@link TemplatePackagingBuildHandler} instance.
      */
@@ -185,31 +175,27 @@ public abstract class TemplatePackagingBuildHandler
      * @return such file name.
      */
     @NotNull
-    protected String buildFilename(
+    public String buildFilename(
         @NotNull final TemplateDef<String> templateDef,
         @NotNull final String templateName)
     {
-        @NotNull final String result;
+        return buildFilename(templateDef, templateName, TemplatePackagingUtils.getInstance());
+    }
 
-        @NotNull final String templateDefPart;
-
-        @Nullable final File defFile = templateDef.getFile();
-
-        if (defFile == null)
-        {
-            templateDefPart = STG_EXT.matcher(templateDef.getName()).replaceAll("");
-        }
-        else
-        {
-            templateDefPart = STG_DEF_EXT.matcher(defFile.getName()).replaceAll("");
-        }
-
-        result =
-              new DecoratedString(templateDefPart) //.getCapitalized()
-            + templateName
-            + ".java";
-
-        return result;
+    /**
+     * Builds the final file name.
+     * @param templateDef the {@link TemplateDef} instance.
+     * @param templateName the template name.
+     * @param templatePackagingUtils the {@link TemplatePackagingUtils} instance.
+     * @return such file name.
+     */
+    @NotNull
+    protected String buildFilename(
+        @NotNull final TemplateDef<String> templateDef,
+        @NotNull final String templateName,
+        @NotNull final TemplatePackagingUtils templatePackagingUtils)
+    {
+        return templatePackagingUtils.buildFilename(templateDef, templateName);
     }
 
     /**

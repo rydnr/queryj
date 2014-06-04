@@ -1038,10 +1038,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     public String toString()
     {
         return
-              "{ \"class\": \"AbstractTemplate" + '"'
-            + ", \"templateContext\": " + this.m__TemplateContext
-            + ", \"placeholderPackage\": \"" + this.m__strPlaceholderPackage + '"'
+              "{ \"placeholderPackage\": \"" + this.m__strPlaceholderPackage + '"'
             + ", \"debug\": " + this.m__bDebugEnabled
+            + ", \"class\": \"AbstractTemplate" + '"'
+            + ", \"templateContext\": " + this.m__TemplateContext
             + ", \"package\": \"org.acmsl.queryj.api\" }";
     }
 }

@@ -64,6 +64,9 @@ import java.util.HashMap;
 @RunWith(JUnit4.class)
 public class TemplateDefImplTest
 {
+    /**
+     * Checks whether getDefName is based on the filename.
+     */
     @Test
     public void getDefName_is_based_on_the_filename()
     {

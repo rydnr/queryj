@@ -80,8 +80,8 @@ import org.acmsl.queryj.metadata.engines.EngineDecorator;
 /*
  * Importing custom templates.
  */
-import org.acmsl.queryj.templates.<def.name.noExtension>Template;
-import org.acmsl.queryj.templates.<def.name.noExtension>TemplateFactory;
+import org.acmsl.queryj.templates.<def.defName>Template;
+import org.acmsl.queryj.templates.<def.defName>TemplateFactory;
 
 /*
  * Importing QueryJ Template Packaging classes.
@@ -116,7 +116,7 @@ import java.util.List;
 
 class(def, C) ::= <<
 /**
- * Build handler for {@link org.acmsl.queryj.templates.<def.name.noExtension>Template}s.
+ * Build handler for {@link org.acmsl.queryj.templates.<def.defName>Template}s.
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/packaging/PerRepositoryTemplateBuildHandler.stg",
   timestamp=C.timestamp,
@@ -125,9 +125,9 @@ class(def, C) ::= <<
 @ThreadSafe
 public class <C.class_name>
     extends Base<def.type.capitalized>TemplateBuildHandler\<
-                <def.name.noExtension>Template,
+                <def.defName>Template,
                 <def.type.capitalized>TemplateContext,
-                <def.name.noExtension>TemplateFactory>
+                <def.defName>TemplateFactory>
 {
     /**
      * The key to access the templates in the command.
@@ -141,13 +141,13 @@ public class <C.class_name>
 
     /**
      * Retrieves the template factory.
-     * @return the {@link <def.name.noExtension>TemplateFactory} instance.
+     * @return the {@link <def.defName>TemplateFactory} instance.
      */
     @Override
     @NotNull
-    protected <def.name.noExtension>TemplateFactory retrieveTemplateFactory()
+    protected <def.defName>TemplateFactory retrieveTemplateFactory()
     {
-        return <def.name.noExtension>TemplateFactory.getInstance();
+        return <def.defName>TemplateFactory.getInstance();
     }
 
     /**
@@ -160,8 +160,8 @@ public class <C.class_name>
      */
     @Override
     @Nullable
-    protected <def.name.noExtension>Template createTemplate(
-        @NotNull final <def.name.noExtension>TemplateFactory templateFactory,
+    protected <def.defName>Template createTemplate(
+        @NotNull final <def.defName>TemplateFactory templateFactory,
         @NotNull final String repository,
         @NotNull final List\<String> tableNames,
         @NotNull final QueryJCommand parameters)
@@ -229,10 +229,10 @@ public class <C.class_name>
      */
     @Override
     protected void storeTemplate(
-        @NotNull final <def.name.noExtension>Template template,
+        @NotNull final <def.defName>Template template,
         @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper\<<def.name.noExtension>Template>(parameters)
+        new QueryJCommandWrapper\<<def.defName>Template>(parameters)
             .setSetting(TEMPLATE_KEY, template);
     }
 }

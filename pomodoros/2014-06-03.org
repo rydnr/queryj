@@ -1,0 +1,2 @@
+* 2014/06/03
+** TODO Make class names TemplateDef-aware: 1 ->

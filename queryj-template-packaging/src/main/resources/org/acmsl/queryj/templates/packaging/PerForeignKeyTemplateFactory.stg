@@ -99,7 +99,7 @@ import org.checkthread.annotations.ThreadSafe;
 
 class(def, C) ::= <<
 /**
- * Factory for {@link <def.name.noExtension>Template}s.
+ * Factory for {@link <def.defName>Template}s.
 <class_common_javadoc(
   description=[ "Factory for ", def.name.capitalized, "Templates, for each foreign key" ],
   description_oneline=true,
@@ -110,7 +110,7 @@ class(def, C) ::= <<
 @ThreadSafe
 public class <C.class_name>
     implements <def.type.capitalized>TemplateFactory\<
-               <def.name.noExtension>Template, <def.type.capitalized>TemplateContext>,
+               <def.defName>Template, <def.type.capitalized>TemplateContext>,
                Singleton
 {
     /**
@@ -139,7 +139,7 @@ public class <C.class_name>
      */
     @Override
     @NotNull
-    public <def.name.noExtension>Template createTemplate(
+    public <def.defName>Template createTemplate(
         @NotNull final ForeignKey\<String> foreignKey,
         @NotNull final <def.type.capitalized>TemplateContext context,
         @NotNull final QueryJCommand command)
@@ -151,7 +151,7 @@ public class <C.class_name>
 
         context.setFileName(t_strFileName);
 
-        return new <def.name.noExtension>Template(context);
+        return new <def.defName>Template(context);
     }
 
     /**

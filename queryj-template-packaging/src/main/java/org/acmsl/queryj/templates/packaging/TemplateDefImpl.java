@@ -442,27 +442,31 @@ public class TemplateDefImpl
     @NotNull
     public String getDefName()
     {
-        return getDefName(getFile(), FileUtils.getInstance());
+        return getDefName(FileUtils.getInstance());
     }
 
     /**
      * Retrieves the name of the template def itself.
-     * @param file the def file.
      * @param fileUtils the {@link FileUtils} instance.
      * @return such information.
      */
     @NotNull
-    protected String getDefName(@NotNull final File file, @NotNull final FileUtils fileUtils)
+    protected String getDefName(@NotNull final FileUtils fileUtils)
     {
         @NotNull final String result;
 
-        @NotNull final String absolutePath = file.getAbsolutePath();
+        @Nullable final File file = getFile();
 
-        @NotNull final String fileName = fileUtils.getFileName(absolutePath);
+        if (file != null)
+        {
+            result = fileUtils.getFileName(file.getAbsolutePath());
+        }
+        else
+        {
+            result = getName();
+        }
 
-        result = fileUtils.stripExtensions(fileName);
-
-        return result;
+        return fileUtils.stripExtensions(result);
     }
 
     /**

@@ -81,7 +81,7 @@ import org.checkthread.annotations.ThreadSafe;
 
 class(def, C) ::= <<
 /**
- * Handler bundle for {@link org.acmsl.queryj.templates.<def.name.noExtension>Template}s.
+ * Handler bundle for {@link org.acmsl.queryj.templates.<def.defName>Template}s.
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/packaging/TemplateHandlerBundle.stg",
   timestamp=C.timestamp,
@@ -89,18 +89,18 @@ class(def, C) ::= <<
  */
 @ThreadSafe
 public class <C.class_name>
-    extends TemplateHandlerBundle\<<def.name.noExtension>TemplateBuildHandler, <def.name.noExtension>TemplateWritingHandler>
+    extends TemplateHandlerBundle\<<def.defName>TemplateBuildHandler, <def.defName>TemplateWritingHandler>
 {
     /**
      * Builds a bundle consisting of
-     * {@link <def.name.noExtension>TemplateBuildHandler}
-     * and {@link <def.name.noExtension>TemplateWritingHandler}.
+     * {@link <def.defName>TemplateBuildHandler}
+     * and {@link <def.defName>TemplateWritingHandler}.
      */
     public <C.class_name>()
     {
         super(
-            new <def.name.noExtension>TemplateBuildHandler(),
-            new <def.name.noExtension>TemplateWritingHandler());
+            new <def.defName>TemplateBuildHandler(),
+            new <def.defName>TemplateWritingHandler());
     }
 }
 >>

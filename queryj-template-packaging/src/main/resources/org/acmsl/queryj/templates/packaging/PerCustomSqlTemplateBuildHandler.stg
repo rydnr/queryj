@@ -79,8 +79,8 @@ import org.acmsl.queryj.tools.PackageUtils;
  * Importing custom templates.
  */
 import org.acmsl.queryj.api.<def.type.capitalized>TemplateContext;
-import org.acmsl.queryj.templates.<def.name.noExtension>Template;
-import org.acmsl.queryj.templates.<def.name.noExtension>TemplateFactory;
+import org.acmsl.queryj.templates.<def.defName>Template;
+import org.acmsl.queryj.templates.<def.defName>TemplateFactory;
 
 /*
  * Importing QueryJ Template Packaging classes.
@@ -114,7 +114,7 @@ import java.util.List;
 
 class(def, C) ::= <<
 /**
- * Build handler for {@link org.acmsl.queryj.templates.<def.name.noExtension>Template}s.
+ * Build handler for {@link org.acmsl.queryj.templates.<def.defName>Template}s.
 <class_common_javadoc(
   template="org/acmsl/queryj/templates/packaging/PerCustomSqlTemplateBuildHandler.stg",
   timestamp=C.timestamp,
@@ -123,9 +123,9 @@ class(def, C) ::= <<
 @ThreadSafe
 public class <C.class_name>
     extends Base<def.type.capitalized>TemplateBuildHandler\<
-                <def.name.noExtension>Template,
+                <def.defName>Template,
                 <def.type.capitalized>TemplateContext,
-                <def.name.noExtension>TemplateFactory>
+                <def.defName>TemplateFactory>
 {
     /**
      * The key to access the templates in the command.
@@ -139,26 +139,26 @@ public class <C.class_name>
 
     /**
      * Retrieves the template factory.
-     * @return the {@link <def.name.noExtension>TemplateFactory} instance.
+     * @return the {@link <def.defName>TemplateFactory} instance.
      */
     @Override
     @NotNull
-    protected <def.name.noExtension>TemplateFactory retrieveTemplateFactory()
+    protected <def.defName>TemplateFactory retrieveTemplateFactory()
     {
-        return <def.name.noExtension>TemplateFactory.getInstance();
+        return <def.defName>TemplateFactory.getInstance();
     }
 
     /**
      * Creates a template with required information.
-     * @param templateFactory the {@link <def.name.noExtension>TemplateFactory} instance.
+     * @param templateFactory the {@link <def.defName>TemplateFactory} instance.
      * @param sql the {@link Sql}.
      * @param parameters the parameter map.
      * @return the template.
      */
     @Override
     @NotNull
-    protected <def.name.noExtension>Template createTemplate(
-        @NotNull final <def.name.noExtension>TemplateFactory templateFactory,
+    protected <def.defName>Template createTemplate(
+        @NotNull final <def.defName>TemplateFactory templateFactory,
         @NotNull final Sql\<String> sql,
         @NotNull final QueryJCommand parameters)
       throws  QueryJBuildException
@@ -234,10 +234,10 @@ public class <C.class_name>
      */
     @Override
     protected void storeTemplates(
-        @NotNull final List\<<def.name.noExtension>Template> templates,
+        @NotNull final List\<<def.defName>Template> templates,
         @NotNull final QueryJCommand parameters)
     {
-        new QueryJCommandWrapper\<List\<<def.name.noExtension>Template\>>(parameters)
+        new QueryJCommandWrapper\<List\<<def.defName>Template\>>(parameters)
             .setSetting(TEMPLATES_KEY, templates);
     }
 }

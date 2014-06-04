@@ -166,8 +166,8 @@ def_import(d) ::= <<
   @param d the template def.
 !>
 <if(d.type.perCustomResult)>
-import org.acmsl.queryj.templates.<d.name>TemplateFactory;
-import org.acmsl.queryj.templates.<d.name>TemplateGenerator;<endif>
+import org.acmsl.queryj.templates.<d.defName>TemplateFactory;
+import org.acmsl.queryj.templates.<d.defName>TemplateGenerator;<endif>
 >>
 
 class(defs, C) ::= <<
@@ -557,9 +557,9 @@ generator_mapping(def) ::= <<
  Generates the call to add the generator and factory of the def to the general mappings.
  @param def the template def.
 !>
-GENERATOR_MAPPINGS.put("<def.name>", new <def.name>TemplateGenerator(false, 1));
-FACTORY_MAPPINGS.put("<def.name>", <def.name>TemplateFactory.getInstance());
-PACKAGE_MAPPINGS.put("<def.name>", "<def.packageName>");
+GENERATOR_MAPPINGS.put("<def.defName>", new <def.defName>TemplateGenerator(false, 1));
+FACTORY_MAPPINGS.put("<def.defName>", <def.defName>TemplateFactory.getInstance());
+PACKAGE_MAPPINGS.put("<def.defName>", "<def.packageName>");
 >>
 
 debug_mapping(def) ::= <<
@@ -567,5 +567,5 @@ debug_mapping(def) ::= <<
  Generates the call to specify which template defs are market for debugging.
  @param def the template def.
 !>
-DEBUG.put("<def.name>", <def.debug>);
+DEBUG.put("<def.defName>", <def.debug>);
 >>

@@ -176,8 +176,8 @@ def_import(d) ::= <<
   Generates the imports for a given TemplateDef.
   @param d the template def.
 !>
-import org.acmsl.queryj.templates.<d.name>TemplateFactory;
-import org.acmsl.queryj.templates.<d.name>TemplateGenerator;
+import org.acmsl.queryj.templates.<d.defName>TemplateFactory;
+import org.acmsl.queryj.templates.<d.defName>TemplateGenerator;
 >>
 
 class(defs, C) ::= <<
@@ -796,8 +796,8 @@ generator_mapping(def) ::= <<
  Generates the call to add the generator and factory of the def to the general mappings.
  @param def the template def.
 !>
-GENERATOR_MAPPINGS.put("<def.defName>", new <def.name>TemplateGenerator(false, 1));
-FACTORY_MAPPINGS.put("<def.defName>", <def.name>TemplateFactory.getInstance());
+GENERATOR_MAPPINGS.put("<def.defName>", new <def.defName>TemplateGenerator(false, 1));
+FACTORY_MAPPINGS.put("<def.defName>", <def.defName>TemplateFactory.getInstance());
 PACKAGE_MAPPINGS.put("<def.defName>", "<def.packageName>");
 >>
 
