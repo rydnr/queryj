@@ -46,13 +46,14 @@ source(C) ::= <<
   Defines the rules to generate CustomResultSetExtractor implementations.
   @param C the context.
 !>
-<sourceImpl(result=C.result, C=C)>
+<sourceImpl(result=C.result, def=C.templateDef, C=C)>
 >>
 
-sourceImpl(result, C) ::= <<
+sourceImpl(result, def, C) ::= <<
 <!
   Defines the rules to generate CustomResultSetExtractor implementations.
   @param result the result.
+  @param def the template def.
   @param C the context.
 !>
 /*
@@ -79,7 +80,7 @@ import <C.project_package>.<typeInitMap.voSubpackageName>.core.<result.simpleCla
  * Importing V24-Commons classes.
  */
 import com.ventura24.commons.dao.DAOListener;
-import com.ventura24.commons.dao.V24ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor;
+import com.ventura24.commons.dao.V24ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor;
 
 /*
  * Importing Spring classes.
@@ -97,7 +98,7 @@ import java.sql.SQLException;
 <else>
 <endif>
 
-<class(result=result, repository=C.repository, C=C)>
+<class(result=result, repository=C.repository, def=def, C=C)>
 >>
 
 description(result) ::= <<
@@ -108,11 +109,12 @@ description(result) ::= <<
 {@link V24ResultSetExtractor} implementation for {@link <result.simpleClassValue> <result.id>} result.
 >>
 
-class(result, repository, C) ::= <<
+class(result, repository, def, C) ::= <<
 <!
  Generates the class body.
  @param result the result.
  @param repository the repository.
+ @param def the template def.
  @param C the context.
 !>
 /**
@@ -121,15 +123,15 @@ class(result, repository, C) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/templates/CustomResultSetExtractor.stg", C=C)>
  */
-public class <result.simpleClassValue>ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor
+public class <result.simpleClassValue>ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor
     extends V24ResultSet<if(C.multiple)>Multiple<else>Single<endif>Extractor\<<result.simpleClassValue>\>
 {
     /**
-     * Creates a new {@code <result.simpleClassValue>ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor} instance.
+     * Creates a new {@code <result.simpleClassValue>ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor} instance.
      * @param sql the SQL query.
      * @param listener the {@link <repository.voName>DAOListener} instance.
      */
-    public <result.simpleClassValue>ResultSet<if(C.templateDef.metadata.multiple)>Multiple<else>Single<endif>Extractor(
+    public <result.simpleClassValue>ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor(
         <notnull(C=C)>final String sql, <nullable(C=C)>final DAOListener listener)
     {
         super(sql, listener);

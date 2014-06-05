@@ -19,5 +19,3 @@ package: <packageName>.dao.<result.simpleClassValue.lowercased>;
 metadata: {
   multiple: false;
 }
-
-debug;

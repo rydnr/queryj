@@ -40,7 +40,6 @@ package org.acmsl.queryj.templates.packaging;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
@@ -110,7 +109,8 @@ public class TemplateDefPerTableFillTemplateChain
      */
     @NotNull
     @Override
-    protected List<FillHandler<?>> getHandlers(@NotNull final TemplateDefPerTableTemplateContext context)
+    protected List<FillHandler<?>> getHandlers(
+        @NotNull final TemplateDefPerTableTemplateContext context)
     {
         @NotNull final List<FillHandler<?>> result = new ArrayList<>(12);
 
@@ -118,7 +118,7 @@ public class TemplateDefPerTableFillTemplateChain
             new TemplateContextFillAdapterHandler<>(
                 new TemplateDefHandler<>(context)));
 
-        result.addAll(super.getHandlers((PerTableTemplateContext) context));
+        result.addAll(super.getHandlers(context));
 
         return result;
     }
