@@ -37,10 +37,28 @@
 package org.acmsl.queryj.api.handlers.fillhandlers;
 
 /*
- *Importing project classes.
+ *Importing QueryJ Core classes.
 */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.FillTemplateChain;
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
@@ -49,8 +67,39 @@ import org.acmsl.queryj.api.PerCustomResultTemplateContext;
  * @since 3.0
  * Created: 2012/06/17
  */
-@SuppressWarnings("unused")
-public interface BasePerCustomResultFillTemplateChain<BC extends PerCustomResultTemplateContext>
-    extends FillTemplateChain<BC>
+@ThreadSafe
+public class BasePerCustomResultFillTemplateChain<BC extends PerCustomResultTemplateContext>
+    implements FillTemplateChain<BC>
 {
+    /**
+     * Creates a {@code BasePerCustomResultFillTemplateChain} using given context.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
+     */
+    public BasePerCustomResultFillTemplateChain(@NotNull final C context)
+    {
+        super(context);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public QueryJCommand providePlaceholders(final boolean relevantOnly)
+        throws QueryJBuildException
+    {
+        return new FillTemplateChainWrapper<>(this).providePlaceholders(relevantOnly);
+    }
+
+    /**
+     * Retrieves the additional per-table handlers.
+     * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
+     * @return such handlers.
+     */
+    @NotNull
+    @Override
+    protected List<FillHandler<?>> getHandlers(@NotNull final PerCustomResultTemplateContext context)
+    {
+        return new ArrayList<>(0);
+    }
 }

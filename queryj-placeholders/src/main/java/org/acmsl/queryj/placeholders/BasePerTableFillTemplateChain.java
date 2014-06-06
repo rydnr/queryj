@@ -75,7 +75,7 @@ public class BasePerTableFillTemplateChain<C extends PerTableTemplateContext>
     extends AbstractFillTemplateChain<C>
 {
     /**
-     * Creates a {@link BasePerTableFillTemplateChain} using given context.
+     * Creates a {@code BasePerTableFillTemplateChain} using given context.
      * @param context the {@link org.acmsl.queryj.api.PerTableTemplateContext context}.
      */
     public BasePerTableFillTemplateChain(@NotNull final C context)

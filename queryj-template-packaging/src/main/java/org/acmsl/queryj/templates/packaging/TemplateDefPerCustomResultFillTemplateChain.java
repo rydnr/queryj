@@ -1,5 +1,5 @@
 /*
-                        QueryJ Template Packaging
+                        queryj
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,42 +23,33 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefPerTableFillTemplateChain.java
+ * Filename: TemplateDefPerCustomResultFillTemplateChain.java
  *
  * Author: Jose San Leandro Armendariz
  *
  * Description: Builds the list of fill handlers to extend
- *              BasePerTableFillTemplateChain's with TemplateDef-related ones.
+ *              BasePerCustomResultFillTemplateChain's with TemplateDef-related
+ *              ones.
  *
- * Date: 2014/05/31
- * Time: 08:39
+ * Date: 2014/06/06
+ * Time: 07:09
  *
  */
 package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing QueryJ Core classes.
+ * Importing JetBrains annotations.
  */
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.api.PerCustomResultTemplateContext;
 import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
+import org.acmsl.queryj.api.handlers.fillhandlers.BasePerCustomResultFillTemplateChain;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
-
-/*
- * Importing QueryJ Placeholders.
- */
 import org.acmsl.queryj.placeholders.BasePerTableFillTemplateChain;
 import org.acmsl.queryj.placeholders.FillTemplateChainWrapper;
-
-/*
- * Importing QueryJ Template Packaging classes.
- */
 import org.acmsl.queryj.templates.packaging.placeholders.TemplateDefHandler;
-
-/*
- * Importing JetBrains annotations.
- */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -66,28 +57,25 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
-/*
- * Importing JDK classes.
- */
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Builds the list of fill handlers to extend {@link BasePerTableFillTemplateChain}'s
+ * Builds the list of fill handlers to extend {@link BasePerCustomResultFillTemplateChain}'s
  * with {@link TemplateDef}-related ones.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/05/31 08:39
+ * Created: 2014/06/06 07:09
  */
 @ThreadSafe
-public class TemplateDefPerTableFillTemplateChain
-    extends BasePerTableFillTemplateChain<TemplateDefPerTableTemplateContext>
+public class TemplateDefPerCustomResultFillTemplateChain
+    extends BasePerCustomResultFillTemplateChain<TemplateDefPerCustomResultTemplateContext>
 {
     /**
-     * Creates a {@code TemplateDefPerTableFillTemplateChain} using given context.
-     * @param context the {@link TemplateDefPerTableTemplateContext context}.
+     * Creates a {@code TemplateDefPerCustomResultFillTemplateChain} using given context.
+     * @param context the {@link TemplateDefPerCustomResultTemplateContext context}.
      */
-    public TemplateDefPerTableFillTemplateChain(@NotNull final TemplateDefPerTableTemplateContext context)
+    public TemplateDefPerCustomResultFillTemplateChain(@NotNull final TemplateDefPerCustomResultTemplateContext context)
     {
         super(context);
     }
@@ -105,13 +93,13 @@ public class TemplateDefPerTableFillTemplateChain
 
     /**
      * Retrieves the additional per-table handlers.
-     * @param context the {@link TemplateDefPerTableTemplateContext context}.
+     * @param context the {@link TemplateDefPerCustomResultTemplateContext context}.
      * @return such handlers.
      */
     @NotNull
     @Override
     protected List<FillHandler<?>> getHandlers(
-        @NotNull final TemplateDefPerTableTemplateContext context)
+        @NotNull final TemplateDefPerCustomResultTemplateContext context)
     {
         @NotNull final List<FillHandler<?>> result = new ArrayList<>(12);
 
@@ -119,7 +107,7 @@ public class TemplateDefPerTableFillTemplateChain
             new TemplateContextFillAdapterHandler<>(
                 new TemplateDefHandler<>(context)));
 
-        result.addAll(super.getHandlers((PerTableTemplateContext) context));
+        result.addAll(super.getHandlers((PerCustomResultTemplateContext) context));
 
         return result;
     }

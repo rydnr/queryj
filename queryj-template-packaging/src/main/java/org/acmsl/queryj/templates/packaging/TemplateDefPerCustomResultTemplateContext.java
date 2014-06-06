@@ -69,6 +69,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class TemplateDefPerCustomResultTemplateContext
     extends PerCustomResultTemplateContext
+    implements TemplateDefTemplateContext
 {
     /**
      * The template def.

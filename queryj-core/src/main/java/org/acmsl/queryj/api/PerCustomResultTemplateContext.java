@@ -83,7 +83,7 @@ public class PerCustomResultTemplateContext
     private static final long serialVersionUID = 5193168262427622240L;
 
     /**
-     * Creates a {@link PerCustomResultTemplateContext} with given information.
+     * Creates a {@code PerCustomResultTemplateContext} with given information.
      * @param result the {@link Result} instance.
      * @param properties the properties.
      * @param debug whether debugging is enabled.
