@@ -37,19 +37,20 @@
 package org.acmsl.queryj.api.placeholders;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
 
 /**
  * JDK 6 Services'-compatible per-custom-sql {@link org.acmsl.queryj.api.placeholders.FillTemplateChainFactory}
  * implementation.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @param <C> the template context.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/06/08
  */
 @SuppressWarnings("unused")
-public interface PerCustomSqlFillTemplateChainFactory
-    extends FillTemplateChainFactory<PerCustomSqlTemplateContext>
+public interface PerCustomSqlFillTemplateChainFactory<C extends PerCustomSqlTemplateContext>
+    extends FillTemplateChainFactory<C>
 {
 }

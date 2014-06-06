@@ -65,19 +65,20 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.api.PerTableTemplate per-table templates}.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * @param <C> the template context.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2012/06/18
  */
 @ThreadSafe
-public class BasePerRepositoryFillTemplateChain
-    extends AbstractFillTemplateChain<PerRepositoryTemplateContext>
+public class BasePerRepositoryFillTemplateChain<C extends PerRepositoryTemplateContext>
+    extends AbstractFillTemplateChain<C>
 {
     /**
-     * Creates a {@link BasePerRepositoryFillTemplateChain} using given context.
+     * Creates a {@code BasePerRepositoryFillTemplateChain} using given context.
      * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext context}.
      */
-    public BasePerRepositoryFillTemplateChain(@NotNull final PerRepositoryTemplateContext context)
+    public BasePerRepositoryFillTemplateChain(@NotNull final C context)
     {
         super(context);
     }
@@ -100,7 +101,7 @@ public class BasePerRepositoryFillTemplateChain
      */
     @NotNull
     @Override
-    protected List<FillHandler<?>> getHandlers(@NotNull final PerRepositoryTemplateContext context)
+    protected List<FillHandler<?>> getHandlers(@NotNull final C context)
     {
         @NotNull final List<FillHandler<?>> result = new ArrayList<>(1);
 

@@ -66,20 +66,21 @@ import java.util.List;
 /**
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.api.PerCustomResultTemplate per-custom-result templates}.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * @param <C> the template context.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2012/06/17
  */
 @ThreadSafe
 @SuppressWarnings("unused")
-public class BasePerCustomResultFillTemplateChain
-    extends AbstractFillTemplateChain<PerCustomResultTemplateContext>
+public class BasePerCustomResultFillTemplateChain<C extends PerCustomResultTemplateContext>
+    extends AbstractFillTemplateChain<C>
 {
     /**
-     * Creates a {@link BasePerCustomResultFillTemplateChain} using given context.
+     * Creates a {@code BasePerCustomResultFillTemplateChain} using given context.
      * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
      */
-    public BasePerCustomResultFillTemplateChain(@NotNull final PerCustomResultTemplateContext context)
+    public BasePerCustomResultFillTemplateChain(@NotNull final C context)
     {
         super(context);
     }
@@ -97,12 +98,12 @@ public class BasePerCustomResultFillTemplateChain
 
     /**
      * Retrieves the additional per-custom-result handlers.
-     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext context}.
+     * @param context the {@link PerCustomResultTemplateContext context}.
      * @return such handlers.
      */
     @NotNull
     @Override
-    protected List<FillHandler<?>> getHandlers(@NotNull final PerCustomResultTemplateContext context)
+    protected List<FillHandler<?>> getHandlers(@NotNull final C context)
     {
         @NotNull final List<FillHandler<?>> result = new ArrayList<>(3);
 

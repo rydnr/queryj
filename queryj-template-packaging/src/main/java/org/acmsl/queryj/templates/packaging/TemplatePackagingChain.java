@@ -78,9 +78,9 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Defines the steps performed by QueryJ.
+ * @param <CH> the command handler type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 3.0
- * @param <CH> the command handler type.
  */
 @ThreadSafe
 public class TemplatePackagingChain<CH extends QueryJCommandHandler<QueryJCommand>>

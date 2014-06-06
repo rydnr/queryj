@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,7 +37,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing queryj-core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.PerRepositoryTemplateContext;
 import org.acmsl.queryj.api.FillTemplateChain;
@@ -47,29 +47,32 @@ import org.acmsl.queryj.api.placeholders.PerRepositoryFillTemplateChainFactory;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Creates the chain to provide all per-repository placeholders.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2013/06/08
  */
-@SuppressWarnings("unused")
-public class PerRepositoryFillTemplateChainFactoryImpl
-    implements PerRepositoryFillTemplateChainFactory
+@ThreadSafe
+public class PerRepositoryFillTemplateChainFactoryImpl<C extends PerRepositoryTemplateContext>
+    implements PerRepositoryFillTemplateChainFactory<C>
 {
     /**
      * Creates {@link FillTemplateChain} instances for given context.
      * @param context the {@link org.acmsl.queryj.api.PerRepositoryTemplateContext} needed.
-     * @return the FillTemplateChain, or <code>null</code> if the context is invalid.
+     * @return the FillTemplateChain, or {@code null} if the context is invalid.
      */
-    @Nullable
+    @NotNull
     @Override
-    public FillTemplateChain<PerRepositoryTemplateContext> createFillChain(
-        @NotNull final PerRepositoryTemplateContext context)
+    public FillTemplateChain<C> createFillChain(@NotNull final C context)
     {
         return
-            new FillTemplateChainWrapper<PerRepositoryTemplateContext>(
-                new BasePerRepositoryFillTemplateChain(context));
+            new FillTemplateChainWrapper<>(
+                new BasePerRepositoryFillTemplateChain<>(context));
     }
 }

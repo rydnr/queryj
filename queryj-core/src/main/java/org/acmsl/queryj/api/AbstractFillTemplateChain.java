@@ -36,9 +36,8 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
-import org.acmsl.commons.patterns.CommandHandler;
 import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -49,16 +48,21 @@ import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Chain;
+import org.acmsl.commons.patterns.CommandHandler;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.List;
 
 /**
  * Sets up the chain to provide all placeholder replacements in templates.
+ * @param <C> the template context.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2012/06/03

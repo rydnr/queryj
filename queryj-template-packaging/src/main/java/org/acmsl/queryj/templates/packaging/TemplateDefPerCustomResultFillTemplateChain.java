@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -38,18 +38,27 @@
 package org.acmsl.queryj.templates.packaging;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.api.PerCustomResultTemplateContext;
-import org.acmsl.queryj.api.PerTableTemplateContext;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
-import org.acmsl.queryj.api.handlers.fillhandlers.BasePerCustomResultFillTemplateChain;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
-import org.acmsl.queryj.placeholders.BasePerTableFillTemplateChain;
+
+/*
+ * Importing QueryJ Placeholders classes.
+ */
 import org.acmsl.queryj.placeholders.FillTemplateChainWrapper;
+import org.acmsl.queryj.placeholders.BasePerCustomResultFillTemplateChain;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
 import org.acmsl.queryj.templates.packaging.placeholders.TemplateDefHandler;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -57,6 +66,9 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JetBrains annotations.
+ */
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,7 +119,7 @@ public class TemplateDefPerCustomResultFillTemplateChain
             new TemplateContextFillAdapterHandler<>(
                 new TemplateDefHandler<>(context)));
 
-        result.addAll(super.getHandlers((PerCustomResultTemplateContext) context));
+        result.addAll(super.getHandlers(context));
 
         return result;
     }

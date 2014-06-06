@@ -1,8 +1,5 @@
 * 2014/06/06
-** Implement TemplateDefPerRepositoryFillTemplateChain
-** Implement TemplateDefPerRepositoryFillTemplateChainFactoryImpl
-** TODO Implement TemplateDefPerCustomResultFillTemplateChain, TemplateDefPerCustomResultFillTemplateChainFactoryImpl: 1 ->
-** Implement TemplateDefPerCustomSqlFillTemplateChain
-** Implement TemplateDefPerCustomSqlFillTemplateChainFactoryImpl
-** Implement TemplateDefPerForeignKeyFillTemplateChain
-** Implement TemplateDefPerForeignKeyFillTemplateChainFactoryImpl
+** DONE Implement TemplateDefPerRepositoryFillTemplateChain: 1 -> 1
+** DONE Implement TemplateDefPerCustomResultFillTemplateChain: 1 -> 1
+** DONE Implement TemplateDefPerCustomSqlFillTemplateChain, TemplateDefPerForeignKeyFillTemplateChain: 1 -> 1
+** DONE Implement FactoryImpls for PerRepository, CustomResult, CustomSql, ForeignKey: 1 -> 1

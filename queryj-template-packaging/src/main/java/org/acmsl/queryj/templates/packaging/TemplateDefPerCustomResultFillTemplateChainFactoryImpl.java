@@ -1,5 +1,5 @@
 /*
-                        QueryJ Placeholders
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,25 +23,29 @@
 
  ******************************************************************************
  *
- * Filename: PerCustomResultFillTemplateChainFactoryImpl.java
+ * Filename: TemplateDefPerCustomResultFillTemplateChainFactoryImpl.java
  *
- * Author: Jose San Leandro Armendariz (chous)
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Creates the chain to provide all per-foreign-key
- *              placeholders.
+ * Description: Creates the chain to provide all per-custom-result
+ *              placeholders, with access to the TemplateDef information.
  *
- * Date: 6/8/13
- * Time: 8:11 AM
+ * Date: 2014/06/06
+ * Time: 20:42
  *
  */
-package org.acmsl.queryj.placeholders;
+package org.acmsl.queryj.templates.packaging;
 
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.api.FillTemplateChain;
-import org.acmsl.queryj.api.placeholders.PerForeignKeyFillTemplateChainFactory;
+
+/*
+ * Importing QueryJ Placeholders classes.
+ */
+import org.acmsl.queryj.placeholders.FillTemplateChainWrapper;
+import org.acmsl.queryj.placeholders.PerCustomResultFillTemplateChainFactoryImpl;
 
 /*
  * Importing JetBrains annotations.
@@ -54,27 +58,29 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Creates the chain to provide all per-foreign-key placeholders.
- * @param <C> the template context.
+ * Creates the chain to provide all per-custom-result placeholders, with access to the
+ * {@link TemplateDef} information.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/08
+ * @since 3.0
+ * Created: 2014/06/06 20:42
  */
-@SuppressWarnings("unused")
 @ThreadSafe
-public class PerForeignKeyFillTemplateChainFactoryImpl<C extends PerForeignKeyTemplateContext>
-    implements PerForeignKeyFillTemplateChainFactory<C>
+@SuppressWarnings("unused")
+public class TemplateDefPerCustomResultFillTemplateChainFactoryImpl
+    extends PerCustomResultFillTemplateChainFactoryImpl<TemplateDefPerCustomResultTemplateContext>
 {
     /**
-     * Creates {@link FillTemplateChain} instances for given context.
-     * @param context the {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext} needed.
+     * Creates {@link org.acmsl.queryj.api.FillTemplateChain} instances for given context.
+     * @param context the {@link org.acmsl.queryj.api.PerCustomResultTemplateContext} needed.
      * @return the FillTemplateChain, or {@code null} if the context is invalid.
      */
     @NotNull
     @Override
-    public FillTemplateChain<C> createFillChain(@NotNull final C context)
+    public FillTemplateChain<TemplateDefPerCustomResultTemplateContext> createFillChain(
+        @NotNull final TemplateDefPerCustomResultTemplateContext context)
     {
         return
             new FillTemplateChainWrapper<>(
-                new BasePerForeignKeyFillTemplateChain<>(context));
+                new TemplateDefPerCustomResultFillTemplateChain(context));
     }
 }

@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefPerCustomResultFillTemplateChainTest.java
+ * Filename: TemplateDefPerForeignKeyFillTemplateChainTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for TemplateDefPerCustomResultFillTemplateChain.
+ * Description: Tests for TemplateDefPerForeignKeyFillTemplateChain.
  *
  * Date: 2014/06/06
- * Time: 06:58
+ * Time: 18:10
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -49,16 +49,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link TemplateDefPerCustomResultFillTemplateChain}.
+ * Tests for {@link TemplateDefPerForeignKeyFillTemplateChain}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/06/06 06:58
+ * Created: 2014/06/06 18:10
  */
-@SuppressWarnings("unused")
 @RunWith(JUnit4.class)
-public abstract class TemplateDefPerCustomResultFillTemplateChainTest
+public class TemplateDefPerForeignKeyFillTemplateChainTest
     extends AbstractTemplateDefFillTemplateChainTest<
-                TemplateDefPerCustomResultTemplateContext, TemplateDefPerCustomResultFillTemplateChain>
+    TemplateDefPerForeignKeyTemplateContext, TemplateDefPerForeignKeyFillTemplateChain>
 {
     /**
      * Checks getHandlers() include the handler to resolve
@@ -67,11 +66,11 @@ public abstract class TemplateDefPerCustomResultFillTemplateChainTest
     @Test
     public void getHandlers_include_templateDef_placeholder()
     {
-        @NotNull final TemplateDefPerCustomResultTemplateContext context =
-            EasyMock.createNiceMock(TemplateDefPerCustomResultTemplateContext.class);
+        @NotNull final TemplateDefPerForeignKeyTemplateContext context =
+            EasyMock.createNiceMock(TemplateDefPerForeignKeyTemplateContext.class);
 
-        @NotNull final TemplateDefPerCustomResultFillTemplateChain instance =
-            new TemplateDefPerCustomResultFillTemplateChain(context);
+        @NotNull final TemplateDefPerForeignKeyFillTemplateChain instance =
+            new TemplateDefPerForeignKeyFillTemplateChain(context);
 
         testGetHandlers(instance);
     }

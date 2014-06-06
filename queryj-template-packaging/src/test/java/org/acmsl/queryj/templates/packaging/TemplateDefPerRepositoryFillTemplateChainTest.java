@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDefPerCustomResultFillTemplateChainTest.java
+ * Filename: TemplateDefPerRepositoryFillTemplateChainTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Tests for TemplateDefPerCustomResultFillTemplateChain.
+ * Description: Tests for TemplateDefPerRepositoryFillTemplateChain.
  *
  * Date: 2014/06/06
- * Time: 06:58
+ * Time: 17:42
  *
  */
 package org.acmsl.queryj.templates.packaging;
@@ -49,16 +49,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link TemplateDefPerCustomResultFillTemplateChain}.
+ * Tests for {@link TemplateDefPerRepositoryFillTemplateChain}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/06/06 06:58
+ * Created: 2014/06/06 17:42
  */
-@SuppressWarnings("unused")
 @RunWith(JUnit4.class)
-public abstract class TemplateDefPerCustomResultFillTemplateChainTest
+public class TemplateDefPerRepositoryFillTemplateChainTest
     extends AbstractTemplateDefFillTemplateChainTest<
-                TemplateDefPerCustomResultTemplateContext, TemplateDefPerCustomResultFillTemplateChain>
+                TemplateDefPerRepositoryTemplateContext, TemplateDefPerRepositoryFillTemplateChain>
 {
     /**
      * Checks getHandlers() include the handler to resolve
@@ -67,11 +66,11 @@ public abstract class TemplateDefPerCustomResultFillTemplateChainTest
     @Test
     public void getHandlers_include_templateDef_placeholder()
     {
-        @NotNull final TemplateDefPerCustomResultTemplateContext context =
-            EasyMock.createNiceMock(TemplateDefPerCustomResultTemplateContext.class);
+        @NotNull final TemplateDefPerRepositoryTemplateContext context =
+            EasyMock.createNiceMock(TemplateDefPerRepositoryTemplateContext.class);
 
-        @NotNull final TemplateDefPerCustomResultFillTemplateChain instance =
-            new TemplateDefPerCustomResultFillTemplateChain(context);
+        @NotNull final TemplateDefPerRepositoryFillTemplateChain instance =
+            new TemplateDefPerRepositoryFillTemplateChain(context);
 
         testGetHandlers(instance);
     }

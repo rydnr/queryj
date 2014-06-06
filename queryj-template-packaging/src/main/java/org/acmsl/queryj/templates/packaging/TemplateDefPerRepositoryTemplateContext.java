@@ -67,6 +67,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class TemplateDefPerRepositoryTemplateContext
     extends PerRepositoryTemplateContext
+    implements TemplateDefTemplateContext
 {
     /**
      * The template def.

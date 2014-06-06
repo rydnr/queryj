@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,7 +37,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing queryj-core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
 import org.acmsl.queryj.api.FillTemplateChain;
@@ -47,29 +47,35 @@ import org.acmsl.queryj.api.placeholders.PerCustomSqlFillTemplateChainFactory;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Creates the chain to provide all per-custom-sql placeholders.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/08
+ * @param <C> the template context.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 3.0
+ * Created: 2013/06/08
  */
 @SuppressWarnings("unused")
-public class PerCustomSqlFillTemplateChainFactoryImpl
-    implements PerCustomSqlFillTemplateChainFactory
+@ThreadSafe
+public class PerCustomSqlFillTemplateChainFactoryImpl<C extends PerCustomSqlTemplateContext>
+    implements PerCustomSqlFillTemplateChainFactory<C>
 {
     /**
      * Creates {@link FillTemplateChain} instances for given context.
      * @param context the {@link org.acmsl.queryj.api.PerCustomSqlTemplateContext} needed.
-     * @return the FillTemplateChain, or <code>null</code> if the context is invalid.
+     * @return the FillTemplateChain, or {@code null} if the context is invalid.
      */
-    @Nullable
+    @NotNull
     @Override
-    public FillTemplateChain<PerCustomSqlTemplateContext> createFillChain(
-        @NotNull final PerCustomSqlTemplateContext context)
+    public FillTemplateChain<C> createFillChain(@NotNull final C context)
     {
         return
-            new FillTemplateChainWrapper<PerCustomSqlTemplateContext>(
-                new BasePerCustomSqlFillTemplateChain(context));
+            new FillTemplateChainWrapper<>(
+                new BasePerCustomSqlFillTemplateChain<>(context));
     }
 }

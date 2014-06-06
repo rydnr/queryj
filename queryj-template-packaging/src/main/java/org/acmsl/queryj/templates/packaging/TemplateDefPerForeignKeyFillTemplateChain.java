@@ -1,5 +1,5 @@
 /*
-                        QueryJ Placeholders
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -23,30 +23,41 @@
 
  ******************************************************************************
  *
- * Filename: BasePerTableFillTemplateChain.java
+ * Filename: TemplateDefPerForeignKeyFillTemplateChain.java
  *
- * Author: Jose San Leandro Armendariz (chous)
+ * Author: Jose San Leandro Armendariz
  *
- * Description: Sets up the chain required to provide placeholder replacements
- *              for per-custom-sql templates.
+ * Description: Builds the list of fill handlers to extend
+ *              BasePerForeignKeyFillTemplateChain's with TemplateDef-related
+ *              ones.
  *
- * Date: 6/3/12
- * Time: 12:38 PM
+ * Date: 2014/06/06
+ * Time: 18:11
  *
  */
-package org.acmsl.queryj.placeholders;
+package org.acmsl.queryj.templates.packaging;
 
 /*
- *Importing project classes.
-*/
+ * Importing QueryJ Core classes.
+ */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.api.AbstractFillTemplateChain;
-import org.acmsl.queryj.api.PerCustomSqlTemplateContext;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.handlers.TemplateContextFillAdapterHandler;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing QueryJ Placeholders classes.
+ */
+import org.acmsl.queryj.placeholders.BasePerForeignKeyFillTemplateChain;
+import org.acmsl.queryj.placeholders.FillTemplateChainWrapper;
+
+/*
+ * Importing QueryJ Template Packaging classes.
+ */
+import org.acmsl.queryj.templates.packaging.placeholders.TemplateDefHandler;
+
+/*
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
@@ -62,22 +73,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Sets up the chain required to provide placeholder replacements for
- * {@link org.acmsl.queryj.api.PerCustomSqlTemplate per-custom-sql templates}.
- * @param <C> the template context.
+ * Builds the list of fill handlers to extend {@link BasePerForeignKeyFillTemplateChain}'s
+ * with {@link TemplateDef}-related ones.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2012/07/07
+ * Created: 2014/06/06 18:11
  */
 @ThreadSafe
-public class BasePerCustomSqlFillTemplateChain<C extends PerCustomSqlTemplateContext>
-    extends AbstractFillTemplateChain<C>
+public class TemplateDefPerForeignKeyFillTemplateChain
+    extends BasePerForeignKeyFillTemplateChain<TemplateDefPerForeignKeyTemplateContext>
 {
     /**
-     * Creates a {@code BasePerCustomSqlFillTemplateChain} using given context.
-     * @param context the {@link PerCustomSqlTemplateContext context}.
+     * Creates a {@code TemplateDefPerForeignKeyFillTemplateChain} using given context.
+     * @param context the {@link TemplateDefPerForeignKeyTemplateContext context}.
      */
-    public BasePerCustomSqlFillTemplateChain(@NotNull final C context)
+    public TemplateDefPerForeignKeyFillTemplateChain(@NotNull final TemplateDefPerForeignKeyTemplateContext context)
     {
         super(context);
     }
@@ -94,17 +104,22 @@ public class BasePerCustomSqlFillTemplateChain<C extends PerCustomSqlTemplateCon
     }
 
     /**
-     * Retrieves the additional per-custom-sql handlers.
-     * @param context the {@link org.acmsl.queryj.api.PerCustomSqlTemplateContext context}.
+     * Retrieves the additional per-table handlers.
+     * @param context the {@link TemplateDefPerForeignKeyTemplateContext context}.
      * @return such handlers.
      */
     @NotNull
     @Override
-    protected List<FillHandler<?>> getHandlers(@NotNull final C context)
+    protected List<FillHandler<?>> getHandlers(
+        @NotNull final TemplateDefPerForeignKeyTemplateContext context)
     {
-        @NotNull final List<FillHandler<?>> result = new ArrayList<>(0);
+        @NotNull final List<FillHandler<?>> result = new ArrayList<>(12);
 
-        // TODO
+        result.add(
+            new TemplateContextFillAdapterHandler<>(
+                new TemplateDefHandler<>(context)));
+
+        result.addAll(super.getHandlers(context));
 
         return result;
     }

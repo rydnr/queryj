@@ -37,7 +37,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- *Importing project classes.
+ *Importing QueryJ Core classes.
 */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -65,19 +65,20 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.api.PerForeignKeyTemplate per-foreign-key templates}.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * @param <C> the template context.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2012/06/18
  */
 @ThreadSafe
-public class BasePerForeignKeyFillTemplateChain
-    extends AbstractFillTemplateChain<PerForeignKeyTemplateContext>
+public class BasePerForeignKeyFillTemplateChain<C extends PerForeignKeyTemplateContext>
+    extends AbstractFillTemplateChain<C>
 {
     /**
-     * Creates a {@link BasePerForeignKeyFillTemplateChain} using given context.
-     * @param context the {@link org.acmsl.queryj.api.PerForeignKeyTemplateContext context}.
+     * Creates a {@code BasePerForeignKeyFillTemplateChain} using given context.
+     * @param context the {@link PerForeignKeyTemplateContext context}.
      */
-    public BasePerForeignKeyFillTemplateChain(@NotNull final PerForeignKeyTemplateContext context)
+    public BasePerForeignKeyFillTemplateChain(@NotNull final C context)
     {
         super(context);
     }
@@ -100,7 +101,7 @@ public class BasePerForeignKeyFillTemplateChain
      */
     @NotNull
     @Override
-    protected List<FillHandler<?>> getHandlers(@NotNull final PerForeignKeyTemplateContext context)
+    protected List<FillHandler<?>> getHandlers(@NotNull final C context)
     {
         @NotNull final List<FillHandler<?>> result = new ArrayList<>(2);
 

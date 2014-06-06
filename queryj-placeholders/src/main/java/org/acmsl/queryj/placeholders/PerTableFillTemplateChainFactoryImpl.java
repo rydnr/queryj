@@ -46,15 +46,21 @@ import org.acmsl.queryj.api.placeholders.PerTableFillTemplateChainFactory;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Creates the chain to provide all per-table placeholders.
+ * @param <C> the template context.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/06/08
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class PerTableFillTemplateChainFactoryImpl<C extends PerTableTemplateContext>
     implements PerTableFillTemplateChainFactory<C>
 {
@@ -63,7 +69,7 @@ public class PerTableFillTemplateChainFactoryImpl<C extends PerTableTemplateCont
      * @param context the {@link PerTableTemplateContext} needed.
      * @return the FillTemplateChain, or {@code null} if the context is invalid.
      */
-    @Nullable
+    @NotNull
     @Override
     public FillTemplateChain<C> createFillChain(@NotNull final C context)
     {

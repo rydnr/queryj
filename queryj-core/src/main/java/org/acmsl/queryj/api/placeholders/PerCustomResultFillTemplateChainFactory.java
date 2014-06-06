@@ -37,19 +37,26 @@
 package org.acmsl.queryj.api.placeholders;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.PerCustomResultTemplateContext;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /**
  * JDK 6 Services'-compatible per-custom-result {@link FillTemplateChainFactory}
  * implementation.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @param <C> the template context.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/06/08
  */
 @SuppressWarnings("unused")
-public interface PerCustomResultFillTemplateChainFactory
-    extends FillTemplateChainFactory<PerCustomResultTemplateContext>
+@ThreadSafe
+public interface PerCustomResultFillTemplateChainFactory<C extends PerCustomResultTemplateContext>
+    extends FillTemplateChainFactory<C>
 {
 }

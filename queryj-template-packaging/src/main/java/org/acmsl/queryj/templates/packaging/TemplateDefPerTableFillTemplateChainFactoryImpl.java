@@ -52,7 +52,6 @@ import org.acmsl.queryj.placeholders.PerTableFillTemplateChainFactoryImpl;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -75,7 +74,7 @@ public class TemplateDefPerTableFillTemplateChainFactoryImpl
      * @param context the {@link PerTableTemplateContext} needed.
      * @return the FillTemplateChain, or {@code null} if the context is invalid.
      */
-    @Nullable
+    @NotNull
     @Override
     public FillTemplateChain<TemplateDefPerTableTemplateContext> createFillChain(
         @NotNull final TemplateDefPerTableTemplateContext context)
