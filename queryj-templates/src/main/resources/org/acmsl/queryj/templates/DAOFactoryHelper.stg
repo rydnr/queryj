@@ -77,29 +77,12 @@ import <C.project_package>.<typeInitMap.baseDAOSubpackageName>.impl.<C.repositor
  * Importing some JDK classes.
  */
 import java.io.PrintStream;
-import java.util.Map;
-
-/*
- * Importing some JDK extension classes
- */
-import javax.sql.DataSource;
 
 /*
  * Importing Jakarta Commons Logging classes
  */
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-/*
- * Importing JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing checkthread.org annotations.
- */
-import org.checkthread.annotations.ThreadSafe;
 
 <class(table=table, C=C)>
 >>
@@ -186,7 +169,7 @@ public class <table.name.voName>DAOFactoryHelper
 
     /**
      * Specifies the last used instance.
-     * @param factory the last used {@link <table.name.voName>DAOFactory}.
+     * @return the last used {@link <table.name.voName>DAOFactory}.
      */
     <nullable(C=C)>
     protected <table.name.voName>DAOFactory getLastUsed()
@@ -217,7 +200,11 @@ public class <table.name.voName>DAOFactoryHelper
         if (lastUsed == null)
         {
             result = getDAOFactory(<repository.capitalized>DAOChooser.getInstance());
-            setLastUsed(result);
+
+            if (result != null)
+            {
+                setLastUsed(result);
+            }
         }
         else
         {
@@ -233,46 +220,38 @@ public class <table.name.voName>DAOFactoryHelper
      * @return such instance.
      */
     <nullable(C=C)>
-    @SuppressWarnings("unchecked")
     protected <table.name.voName>DAOFactory getDAOFactory(
         <notnull(C=C)>final <repository.capitalized>DAOChooser daoChooser)
     {
         <nullable(C=C)><table.name.voName>DAOFactory result = null;
 
-        <nullable(C=C)>final String factoryClassName =
+        <notnull(C=C)>final String factoryClassName =
             daoChooser.get<table.name.voName>DAOFactoryClassName();
 
-        if (factoryClassName != null)
+        try
         {
-            try
-            {
-                <notnull(C=C)>final Class\<?> factoryClass =
-                    Class.forName(factoryClassName);
+            <notnull(C=C)>final Class\<?> factoryClass =
+                Class.forName(factoryClassName);
 
-                result = (<table.name.voName>DAOFactory) factoryClass.newInstance();
-            }
-            catch (<notnull(C=C)>final ClassNotFoundException factoryImplementationMissing)
-            {
-                logError(
-                    "Cannot find " + factoryClassName + " implementation",
-                    factoryImplementationMissing);
-            }
-            catch (<notnull(C=C)>final InstantiationException invalidClassName)
-            {
-                logError(
-                    "Cannot instantiate " + factoryClassName + " implementation",
-                    invalidClassName);
-            }
-            catch (<notnull(C=C)>final IllegalAccessException illegalAccess)
-            {
-                logError(
-                    "Insufficient rights to instantiate " + factoryClassName,
-                    illegalAccess);
-            }
+            result = (<table.name.voName>DAOFactory) factoryClass.newInstance();
         }
-        else
+        catch (<notnull(C=C)>final ClassNotFoundException factoryImplementationMissing)
         {
-            logError("<C.package>.<table.name.voName>DAOFactory not specified");
+            logError(
+                "Cannot find " + factoryClassName + " implementation",
+                factoryImplementationMissing);
+        }
+        catch (<notnull(C=C)>final InstantiationException invalidClassName)
+        {
+            logError(
+                "Cannot instantiate " + factoryClassName + " implementation",
+                invalidClassName);
+        }
+        catch (<notnull(C=C)>final IllegalAccessException illegalAccess)
+        {
+            logError(
+                "Insufficient rights to instantiate " + factoryClassName,
+                illegalAccess);
         }
 
         return result;
