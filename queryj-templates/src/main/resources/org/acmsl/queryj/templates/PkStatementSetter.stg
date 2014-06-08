@@ -69,21 +69,11 @@ sourceImpl(table, C) ::= <<
  */
 <package_declaration(p=C.package)>
 
-<project_imports(
-  basePackageName=C.project_package,
-  voSubpackageName=typeInitMap.voSubpackageName,
-  voName=table.name.voName)>
-
 /*
  * Importing Spring classes.
  */
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 <checkers_import(C=C)>
-/*
- * Importing JDK extension classes
- */
-import javax.sql.DataSource;
 
 /*
  * Importing JDK classes.
@@ -97,28 +87,8 @@ import java.sql.Clob;
 <endif>
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Types;
-
-/*
- * Importing Apache Commons Logging classes
- */
-import org.apache.commons.logging.LogFactory;
 
 <class(table=table, C=C)>
->>
-
-project_imports(
-  basePackageName, voSubpackageName, voName) ::= <<
-<!
- Generates the project imports.
- @param basePackageName the base package name.
- @param voSubpackageName the value-object subpackage name.
- @param voName the value-object name.
-!>
-/*
- * Importing <C.repository.capitalized> classes.
- */
-import <basePackageName>.<voSubpackageName>.<voName>;
 >>
 
 first_line_description(table) ::= <<
@@ -166,25 +136,6 @@ public class <table.name.voName>PkStatementSetter
     <table.primaryKey:{ a | <attribute_declaration(attribute=a, C=C)>}; separator="\n">
 
     /**
-     * The \<i>update\</i> operation.
-     */
-    private boolean m__bUpdateOperation;
-
-    /**
-     * Creates a {@code <table.name.voName>PkStatementSetter}
-     * instance.
-     <table.primaryKey:{ a |<attribute_javadoc(attr=a)>}; separator="\n">
-     * @param updateOperation whether the operation is an update.
-     */
-    public <table.name.voName>PkStatementSetter(
-        <table.primaryKey:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
-        final boolean updateOperation)
-    {
-        <table.primaryKey:{ a | immutableSet<a.name.capitalized>(<a.name.uncapitalized>);}; separator="\n">
-        immutableSetUpdateOperation(updateOperation);
-    }
-
-    /**
      * Creates a {@code <table.name.voName>PkStatementSetter}
      * instance.
      <table.primaryKey:{ a |<attribute_javadoc(attr=a)>}; separator="\n">
@@ -192,38 +143,10 @@ public class <table.name.voName>PkStatementSetter
     public <table.name.voName>PkStatementSetter(
         <table.primaryKey:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
     {
-        this(<table.primaryKey:{ a | <a.name.uncapitalized>}; separator=", ">, false);
+        <table.primaryKey:{ a | immutableSet<a.name.capitalized>(<a.name.uncapitalized>);}; separator="\n">
     }
 
     <table.primaryKey:{ a | <attribute_accessors(attribute=a, C=C, override=false)>}; separator="\n">
-
-    /**
-     * Specifies whether the operation is an update or not.
-     * @param updateOperation such information.
-     */
-    protected final void immutableSetUpdateOperation(
-        final boolean updateOperation)
-    {
-        m__bUpdateOperation = updateOperation;
-    }
-
-    /**
-     * Specifies whether the operation is an update or not.
-     * @param updateOperation such information.
-     */
-    protected void setUpdateOperation(final boolean updateOperation)
-    {
-        immutableSetUpdateOperation(updateOperation);
-    }
-
-    /**
-     * Retrieves whether the operation is an update or not.
-     * @return such information.
-     */
-    public boolean isUpdateOperation()
-    {
-        return m__bUpdateOperation;
-    }
 
     /**
      * Specifies the values on given {@link PreparedStatement}.
@@ -236,31 +159,22 @@ public class <table.name.voName>PkStatementSetter
     {
         setValues(
             preparedStatement,
-            <table.primaryKey:{ a | get<a.name.capitalized>(),}; separator="\n">
-            isUpdateOperation());
+            <table.primaryKey:{ a | get<a.name.capitalized>()}; separator=",\n">);
     }
 
     /**
      * Specifies the values on given {@link PreparedStatement}
      * @param preparedStatement the prepared statement.
      <table.primaryKey:{ a |<attribute_javadoc(attr=a)>}; separator="\n">
-     * @param update whether it's an update operation.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      */
     protected void setValues(
         <notnull(C=C)>final PreparedStatement preparedStatement,
-        <table.primaryKey:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
-        final boolean update)
+        <table.primaryKey:{ a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
         throws  SQLException
     {
         int index = 1;
 
-<  if(table.externallyManaged.only.primaryKey)>
-        if (update)
-        {
-            <table.externallyManaged.only.primaryKey:{ a | <attribute_preparedstatement_specification(attr=a, C=C)>}; separator="\n">
-        }<
-   endif>
         <table.primaryKey.minus.externallyManaged:{ a | <attribute_preparedstatement_specification(attr=a, C=C)>}; separator="\n">
     }
 
@@ -291,8 +205,7 @@ public boolean equals(<nullable(C=C)>final Object other)
 
         <table.primaryKey:{ a | <attribute_equals(attribute=a)>}; separator="">
         result =
-                (isUpdateOperation() == candidate.isUpdateOperation())
-            <table.primaryKey:{ a |&& <a.name.uncapitalized>Match}; separator="\n">;
+            <table.primaryKey:{ a |<a.name.uncapitalized>Match}; separator="&& \n">;
     }
     else
     {
@@ -323,12 +236,9 @@ public int hashCode()
 
     <table.primaryKey:{ a | <attribute_hashCode(attribute=a)>}; separator="\n">
 
-    final int updateHashCode = Boolean.valueOf(isUpdateOperation()).hashCode();
-
     result =
           classHashCode
-        <table.primaryKey:{ a |+ <a.name.uncapitalized>HashCode}; separator="\n">
-        + updateHashCode;
+        <table.primaryKey:{ a |+ <a.name.uncapitalized>HashCode}; separator="\n">;
 
     return result;
 }
@@ -353,8 +263,6 @@ public String toString()
 
     <table.primaryKey:{ a | <attribute_toString(attribute=a)>}; separator="\n">
 
-    result.append(", \"update\": ");
-    result.append(this.m__bUpdateOperation);
     result.append(", \"package\": \"<C.package>\" }");
 
     return result.toString();
