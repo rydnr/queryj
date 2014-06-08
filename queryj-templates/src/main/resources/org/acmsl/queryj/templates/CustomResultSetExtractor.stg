@@ -209,11 +209,11 @@ if(property.nullable)>
 <nullable(C=C)>final <p.objectType> <p.id.uncapitalized>;
 if (resultSet.wasNull())
 {
-    <p.id.uncapitalized> = <p.id.uncapitalized>Aux;
+    <p.id.uncapitalized> = null;
 }
 else
 {
-    <p.id.uncapitalized> = null;
+    <p.id.uncapitalized> = <p.id.uncapitalized>Aux;
 }<
 else>
 <notnull(C=C)>final <p.objectType> <p.id.uncapitalized> = <property_resultset_retrieval(property=p, C=C)>;
