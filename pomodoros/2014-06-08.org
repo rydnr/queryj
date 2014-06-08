@@ -1,0 +1,5 @@
+* 2014/06/08
+** DONE Remaining compile errors: 3 -> 3
+*** DONE Fix DAO template
+** Implement a way to specify the package of the TemplateDefs: 2 ->
+** In DAO.stg, avoid importing unused ResultSetExtractors for default types.
