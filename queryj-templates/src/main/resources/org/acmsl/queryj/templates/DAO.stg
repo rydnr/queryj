@@ -222,19 +222,26 @@ import <basePackageName>.<voFactorySubpackageName>.core.<table.name.voName>Facto
  * Importing V24-Commons classes.
  */
 import com.ventura24.commons.dao.DAOListener;
-import com.ventura24.commons.dao.IntegerResultSetExtractor;
-import com.ventura24.commons.dao.LongResultSetExtractor;
-import com.ventura24.commons.dao.DateResultSetExtractor;
-import com.ventura24.commons.dao.BigDecimalResultSetExtractor;
-import com.ventura24.commons.dao.StringResultSetExtractor;
-import com.ventura24.commons.dao.DoubleResultSetExtractor;
+import com.ventura24.commons.dao.IntegerResultSetMultipleExtractor;
+import com.ventura24.commons.dao.IntegerResultSetSingleExtractor;
+import com.ventura24.commons.dao.LongResultSetMultipleExtractor;
+import com.ventura24.commons.dao.LongResultSetSingleExtractor;
+import com.ventura24.commons.dao.DateResultSetMultipleExtractor;
+import com.ventura24.commons.dao.DateResultSetSingleExtractor;
+import com.ventura24.commons.dao.BigDecimalResultSetMultipleExtractor;
+import com.ventura24.commons.dao.BigDecimalResultSetSingleExtractor;
+import com.ventura24.commons.dao.StringResultSetMultipleExtractor;
+import com.ventura24.commons.dao.StringResultSetSingleExtractor;
+import com.ventura24.commons.dao.DoubleResultSetMultipleExtractor;
+import com.ventura24.commons.dao.DoubleResultSetSingleExtractor;
 import com.ventura24.commons.dao.V24JdbcTemplate;
 import com.ventura24.commons.dao.V24PreparedStatementCreator;
 import com.ventura24.commons.dao.V24PreparedStatementSetter;
 import com.ventura24.commons.dao.V24QueryTransactionCallback;
 //import com.ventura24.commons.dao.V24SelectForUpdateTransactionCallback;
 import com.ventura24.commons.dao.V24UpdateTransactionCallback;
-import com.ventura24.commons.dao.V24ResultSetExtractor;
+import com.ventura24.commons.dao.V24ResultSetMultipleExtractor;
+import com.ventura24.commons.dao.V24ResultSetSingleExtractor;
 
 >>
 
@@ -1334,6 +1341,8 @@ public static class <table.name.voName>PkResultSetExtractor
     {
         <notnull(C=C)>final Map\<String, ?> result = new HashMap\<String, Object>();
 
+        int index = 0;
+
         <table.primaryKey:{ attr | <resultset_extractor_parameter_retrieval(
               name=attr.name.lowercased,
               getterMethod=attr.getterMethod,
@@ -1383,7 +1392,7 @@ resultset_extractor_parameter_retrieval(name, getterMethod, objectType, isPrimit
   @param isPrimitive whether the attribute is modelled as an instance or as
   a primitive type.
 !>
-index = index + 1;
+index = index + 1;//
 
 ((Map\<String, <objectType>\>) result).put("<name>", <if(isPrimitive)><objectType>.valueOf(<endif>resultSet.<getterMethod>(index)<if(isPrimitive)>)<endif>);
 >>
@@ -1700,8 +1709,7 @@ public static class <attr.name.capitalized>ResultSetExtractor
      * @param resultSet the result set.
      * @param sql the SQL used.
      * @param daoListener the {@link DAOListener} instance.
-     * @return the {@link <table.name.voName>} or {@code null}
-     * if the operation returned no data.
+     * @return the data extracted.
      */
     @Override
     <notnull(C=C)>
@@ -1716,7 +1724,7 @@ public static class <attr.name.capitalized>ResultSetExtractor
     }
 
     /**
-     * Extracts \<i><table.name><attr.name>\</i> information from given result set.
+     * Extracts \<i><table.name>.<attr.name>\</i> information from given result set.
      * @param resultSet the result set.
      * @return the information retrieved from the database.
      */
@@ -1727,6 +1735,8 @@ public static class <attr.name.capitalized>ResultSetExtractor
             DataAccessException
     {
         <notnull(C=C)>final Map\<String, ?> result = new HashMap\<String, Object>();
+
+        int index = 0;
 
         <resultset_extractor_parameter_retrieval(
               name=attr.name.uncapitalized,

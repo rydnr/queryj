@@ -63,7 +63,7 @@ sourceImpl(result, def, C) ::= <<
 <java_header(
   description=
   [
-    description(result=result)
+    description(result=result, def=def)
   ],
   template="org/acmsl/queryj/templates/CustomResultSetExtractor.stg",
   C=C)><endif>
@@ -97,16 +97,20 @@ import java.sql.SQLException;
 <result.propertyTypes:{ t | import <t>;}; separator="\n">
 <else>
 <endif>
+<if(def.metadata.multiple.meansTrue)
+  >import java.util.List;
+<endif>
 
 <class(result=result, repository=C.repository, def=def, C=C)>
 >>
 
-description(result) ::= <<
+description(result, def) ::= <<
 <!
   Generates the first line of the generated file description.
   @param result the custom result.
+  @param def the template def.
 !>
-{@link V24ResultSetExtractor} implementation for {@link <result.simpleClassValue> <result.id>} result.
+{@link V24ResultSetExtractor} implementation for extracting <if(def.metadata.multiple.meansTrue)>multiple<endif> {@link <result.simpleClassValue> <result.id>} results.
 >>
 
 class(result, repository, def, C) ::= <<
@@ -119,12 +123,12 @@ class(result, repository, def, C) ::= <<
 !>
 /**
  * <[
-      description(result=result)
+      description(result=result, def=def)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/templates/CustomResultSetExtractor.stg", C=C)>
  */
 public class <result.simpleClassValue>ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor
-    extends V24ResultSet<if(C.multiple)>Multiple<else>Single<endif>Extractor\<<result.simpleClassValue>\>
+    extends V24ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor\<<result.simpleClassValue>\>
 {
     /**
      * Creates a new {@code <result.simpleClassValue>ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor} instance.
@@ -151,8 +155,6 @@ defaultExtractor(result, repository, C) ::= <<
 /**
  * Extracts {@link <result.simpleClassValue>} information from given result set.
  * @param resultSet the result set.
- * @param sql the SQL query.
- * @param listener the {@link DAOListener} instance.
  * @return the {@code <result.simpleClassValue>} or
  * {@code null} if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i>.
@@ -160,7 +162,8 @@ defaultExtractor(result, repository, C) ::= <<
  * custom exception.
  */
 <notnull(C=C)>
-protected <if(C.multiple)>List\<<result.simpleClassValue>\><else><result.simpleClassValue><endif> extractValue(<notnull(C=C)>final ResultSet resultSet)
+@Override
+protected <result.simpleClassValue> extractValue(<notnull(C=C)>final ResultSet resultSet)
     throws  SQLException,
             DataAccessException
 {
@@ -170,6 +173,7 @@ protected <if(C.multiple)>List\<<result.simpleClassValue>\><else><result.simpleC
 /**
  * Extracts {@link <result.simpleClassValue>} information from given result set.
  * @param resultSet the result set.
+ * @param factory the {@link <result.simpleClassValue>Factory} instance.
  * @return the {@code <result.simpleClassValue>} or
  * {@code null} if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i>.
@@ -177,7 +181,7 @@ protected <if(C.multiple)>List\<<result.simpleClassValue>\><else><result.simpleC
  * custom exception.
  */
 <notnull(C=C)>
-protected <if(C.multiple)>List\<<result.simpleClassValue>\><else><result.simpleClassValue><endif> extractValue(
+protected <result.simpleClassValue> extractValue(
     <notnull(C=C)>final ResultSet resultSet,
     <notnull(C=C)>final <result.simpleClassValue>Factory factory)
   throws  SQLException,

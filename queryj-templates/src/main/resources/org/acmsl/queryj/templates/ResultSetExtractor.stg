@@ -63,7 +63,7 @@ sourceImpl(table, def, C) ::= <<
 <java_header(
   description=
   [
-    description(table=table)
+    description(table=table, def=def)
   ],
   template="org/acmsl/queryj/templates/ResultSetExtractor.stg",
   C=C)><endif>
@@ -94,6 +94,9 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 <import_attribute_types(table=table, useHeader=false)>
+<if(def.metadata.multiple.meansTrue)
+  >import java.util.List;
+<endif>
 
 <class(table=table, repository=C.repository, def=def, C=C)>
 >>
@@ -113,12 +116,13 @@ import <basePackageName>.<voSubpackageName>.<table.name.voName>;
 import <basePackageName>.<voSubpackageName>.core.<table.name.voName>Factory;
 >>
 
-description(table) ::= <<
+description(table, def) ::= <<
 <!
   Generates the first line of the generated file description.
   @param result the custom result.
+  @param def the template def.
 !>
-{@link ResultSetExtractor} implementation for <table.name>.
+{@link ResultSetExtractor} implementation for extracting <if(def.metadata.multiple.meansTrue)>multiple<endif> {@link <table.name.voName>} entries from the database.
 >>
 
 class(table, repository, def, C) ::= <<
@@ -131,7 +135,7 @@ class(table, repository, def, C) ::= <<
 !>
 /**
  * <[
-      description(table=table)
+      description(table=table, def=def)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/templates/ResultSetExtractor.stg", C=C)>
  */
@@ -164,8 +168,7 @@ defaultExtractor(table, repository, def, C) ::= <<
 /**
  * Extracts {@link <table.name.voName>} information from given result set.
  * @param resultSet the result set.
- * @param sql the original SQL query.
- * @param listener the {@link DAOListener} instance.
+ * @param factory the {@link <table.name.voName>Factory} instance.
  * @return the {@link <table.name.voName>} or
  * {@code null} if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i>.
@@ -174,7 +177,7 @@ defaultExtractor(table, repository, def, C) ::= <<
  */
 @Override
 <notnull(C=C)>
-protected <if(def.metadata.multiple.meansTrue)>List\<<table.name.voName>\><else><table.name.voName><endif> extractValue(<notnull(C=C)>final ResultSet resultSet)
+protected <table.name.voName> extractValue(<notnull(C=C)>final ResultSet resultSet)
     throws  SQLException,
             DataAccessException
 {
@@ -184,8 +187,6 @@ protected <if(def.metadata.multiple.meansTrue)>List\<<table.name.voName>\><else>
 /**
  * Extracts {@link <table.name.voName>} information from given result set.
  * @param resultSet the result set.
- * @param sql the original SQL query.
- * @param listener the {@link DAOListener} instance.
  * @param factory the {@link <table.name.voName>Factory}
  * instance.
  * @return the {@code <table.name.voName>} or
@@ -195,13 +196,13 @@ protected <if(def.metadata.multiple.meansTrue)>List\<<table.name.voName>\><else>
  * custom exception.
  */
 <notnull(C=C)>
-protected <if(def.metadata.multiple.meansTrue)>List\<<table.name.voName>\><else><table.name.voName><endif> extractValue(
+protected <table.name.voName> extractValue(
     <notnull(C=C)>final ResultSet resultSet,
     <notnull(C=C)>final <table.name.voName>Factory factory)
   throws  SQLException,
           DataAccessException
 {
-    <nullable(C=C)>final <table.name.voName> result;
+    <notnull(C=C)>final <table.name.voName> result;
 
     result =
         factory.create<table.name.voName>(
