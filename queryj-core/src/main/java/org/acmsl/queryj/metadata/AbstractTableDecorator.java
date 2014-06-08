@@ -528,7 +528,7 @@ public abstract class AbstractTableDecorator
      * Alias to make templates more readable.
      * @return the child attributes.
      */
-    @SuppressWarnings("unused")
+    @Override
     @Nullable
     public ListDecorator<Attribute<DecoratedString>> getChild()
     {
@@ -539,7 +539,7 @@ public abstract class AbstractTableDecorator
      * Alias to make templates more readable.
      * @return the table's own attributes.
      */
-    @SuppressWarnings("unused")
+    @Override
     @Nullable
     public ListDecorator<Attribute<DecoratedString>> getOwn()
     {
@@ -748,7 +748,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the parent foreign-key.
      * @return such foreign key.
      */
-    @SuppressWarnings("unused")
+    @Override
     @Nullable
     public ForeignKey<DecoratedString> getParentForeignKey()
     {
@@ -810,7 +810,8 @@ public abstract class AbstractTableDecorator
      * @return {@code true} in such case.
      */
     protected boolean attributeListMatch(
-        final List<Attribute<DecoratedString>> first, final List<Attribute<DecoratedString>> second)
+        @Nullable final List<Attribute<DecoratedString>> first,
+        @Nullable final List<Attribute<DecoratedString>> second)
     {
         boolean result =
             (   (first != null)
@@ -1072,7 +1073,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the name of the parent table, or {@code null} if no parent exists.
      * @return such information.
      */
-    @SuppressWarnings("unused")
+    @Override
     @Nullable
     public DecoratedString getParentTableName()
     {
@@ -1413,6 +1414,32 @@ public abstract class AbstractTableDecorator
     }
 
     /**
+     * Retrieves the nullable attributes from given list.
+     * @param attributes the attribute list.
+     * @return the nullable subset.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    protected List<Attribute<DecoratedString>> filterNullableAttributes(
+        @NotNull final List<Attribute<DecoratedString>> attributes)
+    {
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<>(0);
+
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
+        {
+            if (   (t_Attribute != null)
+                && (t_Attribute.isNullable()))
+            {
+                result.add(t_Attribute);
+            }
+        }
+
+        Collections.sort(result);
+
+        return result;
+    }
+
+    /**
      * Retrieves the read-only attributes from given list.
      * @param attributes the attribute list.
      * @return the read-only subset.
@@ -1464,7 +1491,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the custom selects.
      * @return such list of {@link Sql} elements.
      */
-    @SuppressWarnings("unused")
+    @Override
     @NotNull
     public List<Sql<DecoratedString>> getCustomSelects()
     {
@@ -1507,7 +1534,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the custom select-for-update queries.
      * @return such list of {@link Sql} elements.
      */
-    @SuppressWarnings("unused")
+    @Override
     @NotNull
     public List<Sql<DecoratedString>> getCustomSelectsForUpdate()
     {
@@ -1653,6 +1680,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the custom updates or inserts.
      * @return such information.
      */
+    @Override
     @NotNull
     public List<Sql<DecoratedString>> getCustomUpdatesOrInserts()
     {
@@ -1694,7 +1722,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the custom result.
      * @return such {@link ResultDecorator} element.
      */
-    @SuppressWarnings("unused")
+    @Override
     @Nullable
     public Result<DecoratedString> getCustomResult()
     {
@@ -1943,7 +1971,8 @@ public abstract class AbstractTableDecorator
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return the list of decorated rows.
      */
-    @NotNull protected List<Row<DecoratedString>> decorate(
+    @NotNull
+    protected List<Row<DecoratedString>> decorate(
         @NotNull final List<Row<String>> rows,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -1995,6 +2024,7 @@ public abstract class AbstractTableDecorator
      * Checks whether any attribute is a clob.
      * @return {@code true} in such case.
      */
+    @Override
     public boolean getContainsClobs()
     {
         return
@@ -2020,6 +2050,7 @@ public abstract class AbstractTableDecorator
      * Retrieves all attributes, including parent's.
      * @return such attributes.
      */
+    @Override
     @NotNull
     public ListDecorator<Attribute<DecoratedString>> getAllAttributes()
     {
@@ -2030,6 +2061,7 @@ public abstract class AbstractTableDecorator
      * Retrieves all attributes, including parent's.
      * @return such attributes.
      */
+    @Override
     @NotNull
     public ListDecorator<Attribute<DecoratedString>> getAll()
     {
@@ -2065,7 +2097,7 @@ public abstract class AbstractTableDecorator
      * Checks whether some of the attributes are nullable or not.
      * @return {@code true} in such case.
      */
-    @SuppressWarnings("unused")
+    @Override
     public boolean getContainsNullableAttributes()
     {
         return containNullableAttributes(getAttributes(), TableDecoratorHelper.getInstance());
@@ -2098,7 +2130,7 @@ public abstract class AbstractTableDecorator
      * Checks whether some of the attributes cannot be null.
      * @return {@code true} in such case.
      */
-    @SuppressWarnings("unused")
+    @Override
     public boolean getContainsNotNullAttributes()
     {
         return
@@ -2129,6 +2161,29 @@ public abstract class AbstractTableDecorator
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
         return tableDecoratorHelper.containNotNullAttributes(attributes, metadataTypeManager);
+    }
+
+    /**
+     * Retrieves the nullable attributes.
+     * @return such list.
+     */
+    @Override
+    @NotNull
+    public List<Attribute<DecoratedString>> getNullableAttributes()
+    {
+        return getNullableAttributes(getAttributes());
+    }
+
+    /**
+     * Retrieves the nullable attributes.
+     * @param attributes the {@link Attribute}s.
+     * @return such list.
+     */
+    @NotNull
+    protected List<Attribute<DecoratedString>> getNullableAttributes(
+        @NotNull final ListDecorator<Attribute<DecoratedString>> attributes)
+    {
+        return filterNullableAttributes(attributes);
     }
 
     /**

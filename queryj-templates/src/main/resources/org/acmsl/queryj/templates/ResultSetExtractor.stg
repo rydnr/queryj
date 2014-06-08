@@ -164,9 +164,7 @@ defaultExtractor(table, repository, def, C) ::= <<
 /**
  * Extracts {@link <table.name.voName>} information from given result set.
  * @param resultSet the result set.
- * @param factory the {@link <table.name.voName>Factory} instance.
- * @return the {@link <table.name.voName>} or
- * {@code null} if the operation returned no data.
+ * @return the {@link <table.name.voName>}.
  * @throws SQLException intercepted by \<i>Spring\</i>.
  * @throws DataAccessException with information about any
  * custom exception.
@@ -185,8 +183,7 @@ protected <table.name.voName> extractValue(<notnull(C=C)>final ResultSet resultS
  * @param resultSet the result set.
  * @param factory the {@link <table.name.voName>Factory}
  * instance.
- * @return the {@code <table.name.voName>} or
- * {@code null} if the operation returned no data.
+ * @return the {@code <table.name.voName>}.
  * @throws SQLException intercepted by \<i>Spring\</i>.
  * @throws DataAccessException with information about any
  * custom exception.
@@ -200,9 +197,14 @@ protected <table.name.voName> extractValue(
 {
     <notnull(C=C)>final <table.name.voName> result;
 
+<if(table.containsNullableAttributes)>
+    <table.nullableAttributes:{a | <nullable_attribute_resultset_retrieval_declaration(attr=a, C=C)>}; separator="\n">
+
+<endif>
+
     result =
         factory.create<table.name.voName>(
-            <table.attributes:{a | <attribute_resultset_retrieval(attr=a, C=C)>}; separator=",\n">);
+            <table.attributes:{a | <nullable_attribute_resultset_retrieval(attr=a, C=C)>}; separator=",\n">);
 
     return result;
 }
@@ -214,4 +216,68 @@ nullable_attribute_extraction(attr, table, repository, C) ::= <<
 
 attribute_extraction(attr, table, repository, C) ::= <<
 <attr.name>
+>>
+
+nullable_attribute_resultset_retrieval_declaration(attr, C) ::= <<
+<!
+ Writes the piece of code to retrieve the value of a nullable attribute from a ResultSet.
+ @param attr the attribute.
+ @param C the context.
+!>
+<
+if(attr.nullable)>
+<nullable(C=C)>final <attr.objectType> <attr.name.uncapitalized>Aux = <attribute_resultset_retrieval(attr=attr, C=C)>;
+<nullable(C=C)>final <attr.objectType> <attr.name.uncapitalized>;
+if (resultSet.wasNull())
+{
+    <attr.id.uncapitalized> = null;
+}
+else
+{
+    <attr.id.uncapitalized> = <attr.id.uncapitalized>Aux;
+}<
+else>
+<notnull(C=C)>final <attr.objectType> <attr.name.uncapitalized> = <attribute_resultset_retrieval(attr=attr, C=C)>;
+<endif>
+>>
+
+nullable_attribute_resultset_retrieval(attr, C) ::= <<
+<!
+ Writes the piece of code to retrieve the value of a nullable attribute from a ResultSet.
+ @param attr the attribute.
+ @param C the context.
+!>
+<
+if(attr.nullable)
+  >(<attr.name.uncapitalized> == null) ? null : <generic_nullable_attribute_resultset_retrieval(attr=attr, C=C)><
+else
+  ><attribute_resultset_retrieval(attr=attr, C=C)><
+endif>
+>>
+
+generic_nullable_attribute_resultset_retrieval(attr, C) ::= <<
+<!
+ Writes the piece of code to retrieve the value of a nullable attribute from a ResultSet.
+ @param attr the attribute.
+ @param C the context.
+!>
+<
+if(attr.date)
+  ><nullable_date_attribute_resultset_retrieval(attr=attr, C=C)><
+else><
+  if(attr.primitive)
+   ><attr.objectType>.valueOf(<attr.name.uncapitalized>)<
+  else
+   ><attr.name.uncapitalized><
+  endif><
+endif>
+>>
+
+nullable_date_attribute_resultset_retrieval(attr, C) ::= <<
+<!
+ Writes the piece of code to retrieve the value of a nullable Date attribute from a ResultSet.
+ @param attr the attribute.
+ @param C the context.
+!>
+<if(attr.nullable)>new Date(<attr.name.uncapitalized>.getTime())<endif>
 >>

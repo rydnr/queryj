@@ -44,6 +44,7 @@ package org.acmsl.queryj.metadata;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
 
@@ -51,6 +52,7 @@ import org.acmsl.queryj.metadata.vo.Table;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -121,4 +123,109 @@ public interface TableDecorator
      */
     @NotNull
     MetadataManager getMetadataManager();
+
+    /**
+     * Checks whether any attribute is a clob.
+     * @return {@code true} in such case.
+     */
+    boolean getContainsClobs();
+
+    /**
+     * Retrieves all attributes, including parent's.
+     * @return such attributes.
+     */
+    @NotNull
+    ListDecorator<Attribute<DecoratedString>> getAllAttributes();
+
+    /**
+     * Retrieves all attributes, including parent's.
+     * @return such attributes.
+     */
+    @NotNull
+    ListDecorator<Attribute<DecoratedString>> getAll();
+
+    /**
+     * Checks whether some of the attributes are nullable or not.
+     * @return {@code true} in such case.
+     */
+    @SuppressWarnings("unused")
+    boolean getContainsNullableAttributes();
+
+    /**
+     * Checks whether some of the attributes cannot be null.
+     * @return {@code true} in such case.
+     */
+    @SuppressWarnings("unused")
+    boolean getContainsNotNullAttributes();
+
+    /**
+     * Retrieves the custom result.
+     * @return such {@link ResultDecorator} element.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    Result<DecoratedString> getCustomResult();
+
+    /**
+     * Retrieves the custom selects.
+     * @return such list of {@link Sql} elements.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    List<Sql<DecoratedString>> getCustomSelects();
+
+    /**
+     * Retrieves the custom updates or inserts.
+     * @return such information.
+     */
+    @NotNull
+    List<Sql<DecoratedString>> getCustomUpdatesOrInserts();
+
+    /**
+     * Retrieves the custom select-for-update queries.
+     * @return such list of {@link Sql} elements.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    List<Sql<DecoratedString>> getCustomSelectsForUpdate();
+
+    /**
+     * Retrieves the name of the parent table, or {@code null} if no parent exists.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    DecoratedString getParentTableName();
+
+    /**
+     * Retrieves the parent foreign-key.
+     * @return such foreign key.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    ForeignKey<DecoratedString> getParentForeignKey();
+
+    /**
+     * Alias to make templates more readable.
+     * @return the table's own attributes.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    ListDecorator<Attribute<DecoratedString>> getOwn();
+
+    /**
+     * Alias to make templates more readable.
+     * @return the child attributes.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    ListDecorator<Attribute<DecoratedString>> getChild();
+
+    /**
+     * Retrieves the nullable attributes.
+     * @return such list.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    List<Attribute<DecoratedString>> getNullableAttributes();
 }
