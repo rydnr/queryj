@@ -90,13 +90,9 @@ import org.springframework.dao.DataAccessException;
 /*
  * Importing JDK classes.
  */
-import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 <import_attribute_types(table=table, useHeader=false)>
-<if(def.metadata.multiple.meansTrue)
-  >import java.util.List;
-<endif>
 
 <class(table=table, repository=C.repository, def=def, C=C)>
 >>
@@ -122,7 +118,7 @@ description(table, def) ::= <<
   @param result the custom result.
   @param def the template def.
 !>
-{@link ResultSetExtractor} implementation for extracting <if(def.metadata.multiple.meansTrue)>multiple<endif> {@link <table.name.voName>} entries from the database.
+{@link V24ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor} implementation for extracting <if(def.metadata.multiple.meansTrue)>multiple<endif> {@link <table.name.voName>} entries from the database.
 >>
 
 class(table, repository, def, C) ::= <<
@@ -207,7 +203,6 @@ protected <table.name.voName> extractValue(
     result =
         factory.create<table.name.voName>(
             <table.attributes:{a | <attribute_resultset_retrieval(attr=a, C=C)>}; separator=",\n">);
-
 
     return result;
 }

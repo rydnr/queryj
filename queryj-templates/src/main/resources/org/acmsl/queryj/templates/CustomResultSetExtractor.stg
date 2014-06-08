@@ -90,15 +90,11 @@ import org.springframework.dao.DataAccessException;
 /*
  * Importing JDK classes.
  */
-import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 <if(result.propertyTypes)>
 <result.propertyTypes:{ t | import <t>;}; separator="\n">
 <else>
-<endif>
-<if(def.metadata.multiple.meansTrue)
-  >import java.util.List;
 <endif>
 
 <class(result=result, repository=C.repository, def=def, C=C)>
@@ -110,7 +106,7 @@ description(result, def) ::= <<
   @param result the custom result.
   @param def the template def.
 !>
-{@link V24ResultSetExtractor} implementation for extracting <if(def.metadata.multiple.meansTrue)>multiple<endif> {@link <result.simpleClassValue> <result.id>} results.
+{@link V24ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor} implementation for extracting <if(def.metadata.multiple.meansTrue)>multiple<endif> {@link <result.simpleClassValue> <result.id>} results.
 >>
 
 class(result, repository, def, C) ::= <<
@@ -133,7 +129,7 @@ public class <result.simpleClassValue>ResultSet<if(def.metadata.multiple.meansTr
     /**
      * Creates a new {@code <result.simpleClassValue>ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor} instance.
      * @param sql the SQL query.
-     * @param listener the {@link <repository.voName>DAOListener} instance.
+     * @param listener the {@link DAOListener} instance.
      */
     public <result.simpleClassValue>ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor(
         <notnull(C=C)>final String sql, <nullable(C=C)>final DAOListener listener)
@@ -207,7 +203,21 @@ nullable_property_resultset_retrieval_declaration(property, C) ::= <<
  @param property the property.
  @param C the context.
 !>
-<nullable(C=C)>final <p.objectType> <p.id.uncapitalized> = <property_resultset_retrieval(property=p, C=C)>;
+<
+if(property.nullable)>
+<nullable(C=C)>final <p.objectType> <p.id.uncapitalized>Aux = <property_resultset_retrieval(property=p, C=C)>;
+<nullable(C=C)>final <p.objectType> <p.id.uncapitalized>;
+if (resultSet.wasNull())
+{
+    <p.id.uncapitalized> = <p.id.uncapitalized>Aux;
+}
+else
+{
+    <p.id.uncapitalized> = null;
+}<
+else>
+<notnull(C=C)>final <p.objectType> <p.id.uncapitalized> = <property_resultset_retrieval(property=p, C=C)>;
+<endif>
 >>
 
 nullable_property_resultset_retrieval(property, C) ::= <<
