@@ -152,6 +152,148 @@ public class TableAttributesListDecorator
     }
 
     /**
+     * Retrieves all attributes, including parent's.
+     *
+     * @return such attributes.
+     */
+    @NotNull
+    @Override
+    public ListDecorator<Attribute<DecoratedString>> getAll()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
+     * Retrieves all attributes, including parent's.
+     *
+     * @return such attributes.
+     */
+    @NotNull
+    @Override
+    public ListDecorator<Attribute<DecoratedString>> getAllAttributes()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
+     * Checks whether some of the attributes are nullable or not.
+     *
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean getContainsNullableAttributes()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
+     * Checks whether some of the attributes cannot be null.
+     *
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean getContainsNotNullAttributes()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
+     * Retrieves the custom result.
+     *
+     * @return such {@link org.acmsl.queryj.metadata.ResultDecorator} element.
+     */
+    @Nullable
+    @Override
+    public Result<DecoratedString> getCustomResult()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
+     * Retrieves the custom selects.
+     *
+     * @return such list of {@link org.acmsl.queryj.customsql.Sql} elements.
+     */
+    @NotNull
+    @Override
+    public List<Sql<DecoratedString>> getCustomSelects()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
+     * Retrieves the custom updates or inserts.
+     *
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public List<Sql<DecoratedString>> getCustomUpdatesOrInserts()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
+     * Retrieves the custom select-for-update queries.
+     *
+     * @return such list of {@link org.acmsl.queryj.customsql.Sql} elements.
+     */
+    @NotNull
+    @Override
+    public List<Sql<DecoratedString>> getCustomSelectsForUpdate()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
+     * Retrieves the name of the parent table, or {@code null} if no parent exists.
+     *
+     * @return such information.
+     */
+    @Nullable
+    @Override
+    public DecoratedString getParentTableName()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
+     * Retrieves the parent foreign-key.
+     *
+     * @return such foreign key.
+     */
+    @Nullable
+    @Override
+    public ForeignKey<DecoratedString> getParentForeignKey()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
+     * Alias to make templates more readable.
+     *
+     * @return the child attributes.
+     */
+    @Nullable
+    @Override
+    public ListDecorator<Attribute<DecoratedString>> getChild()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
+     * Retrieves the nullable attributes.
+     *
+     * @return such list.
+     */
+    @NotNull
+    @Override
+    public List<Attribute<DecoratedString>> getNullableAttributes()
+    {
+        throw new RuntimeException(INVALID_OPERATION);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @NotNull

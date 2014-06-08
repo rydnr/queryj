@@ -448,4 +448,30 @@ public class TableDecoratorHelper
 
         return result;
     }
+
+    /**
+     * Retrieves the nullable attributes from given list.
+     * @param attributes the attribute list.
+     * @return the nullable subset.
+     */
+    @NotNull
+    public List<Attribute<DecoratedString>> filterNullableAttributes(
+        @NotNull final List<Attribute<DecoratedString>> attributes)
+    {
+        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<>(0);
+
+        for (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
+        {
+            if (   (t_Attribute != null)
+                   && (t_Attribute.isNullable()))
+            {
+                result.add(t_Attribute);
+            }
+        }
+
+        Collections.sort(result);
+
+        return result;
+    }
+
 }

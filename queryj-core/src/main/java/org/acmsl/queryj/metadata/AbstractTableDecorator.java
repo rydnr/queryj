@@ -82,8 +82,8 @@ import java.util.List;
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  */
 public abstract class AbstractTableDecorator
-    extends     AbstractTable<
-                    DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>
+    extends AbstractTable<
+                DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>
     implements  TableDecorator
 {
     /**
@@ -1414,32 +1414,6 @@ public abstract class AbstractTableDecorator
     }
 
     /**
-     * Retrieves the nullable attributes from given list.
-     * @param attributes the attribute list.
-     * @return the nullable subset.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    protected List<Attribute<DecoratedString>> filterNullableAttributes(
-        @NotNull final List<Attribute<DecoratedString>> attributes)
-    {
-        @NotNull final List<Attribute<DecoratedString>> result = new ArrayList<>(0);
-
-        for (@Nullable final Attribute<DecoratedString> t_Attribute : attributes)
-        {
-            if (   (t_Attribute != null)
-                && (t_Attribute.isNullable()))
-            {
-                result.add(t_Attribute);
-            }
-        }
-
-        Collections.sort(result);
-
-        return result;
-    }
-
-    /**
      * Retrieves the read-only attributes from given list.
      * @param attributes the attribute list.
      * @return the read-only subset.
@@ -2021,6 +1995,35 @@ public abstract class AbstractTableDecorator
     }
 
     /**
+     * Retrieves the ordered list of the fully-qualified attribute types,
+     * only for the nullable attributes.
+     * @return such list.
+     */
+    @Override
+    @NotNull
+    public List<DecoratedString> getNullableAttributeTypes()
+    {
+        return getNullableAttributeTypes(TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the ordered list of the fully-qualified attribute types,
+     * only for the nullable attributes.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
+     * @return such list.
+     */
+    @NotNull
+    protected List<DecoratedString> getNullableAttributeTypes(
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
+    {
+        return
+            getAttributeTypes(
+                tableDecoratorHelper.filterNullableAttributes(getAttributes()),
+                getMetadataManager().getMetadataTypeManager(),
+                TableDecoratorHelper.getInstance());
+    }
+
+    /**
      * Checks whether any attribute is a clob.
      * @return {@code true} in such case.
      */
@@ -2171,19 +2174,21 @@ public abstract class AbstractTableDecorator
     @NotNull
     public List<Attribute<DecoratedString>> getNullableAttributes()
     {
-        return getNullableAttributes(getAttributes());
+        return getNullableAttributes(getAttributes(), TableDecoratorHelper.getInstance());
     }
 
     /**
      * Retrieves the nullable attributes.
      * @param attributes the {@link Attribute}s.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return such list.
      */
     @NotNull
     protected List<Attribute<DecoratedString>> getNullableAttributes(
-        @NotNull final ListDecorator<Attribute<DecoratedString>> attributes)
+        @NotNull final ListDecorator<Attribute<DecoratedString>> attributes,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        return filterNullableAttributes(attributes);
+        return tableDecoratorHelper.filterNullableAttributes(attributes);
     }
 
     /**

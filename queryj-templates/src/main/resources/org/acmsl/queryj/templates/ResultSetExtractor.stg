@@ -92,7 +92,7 @@ import org.springframework.dao.DataAccessException;
  */
 import java.sql.ResultSet;
 import java.sql.SQLException;
-<import_attribute_types(table=table, useHeader=false)>
+<import_attribute_types(table=table, useHeader=false, nullableOnly=true)>
 
 <class(table=table, repository=C.repository, def=def, C=C)>
 >>
@@ -135,6 +135,7 @@ class(table, repository, def, C) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/templates/ResultSetExtractor.stg", C=C)>
  */
+<class_annotations(C=C)>
 public class <table.name.voName>ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor
     extends V24ResultSet<if(def.metadata.multiple.meansTrue)>Multiple<else>Single<endif>Extractor\<<table.name.voName>\>
 {
@@ -230,11 +231,11 @@ if(attr.nullable)>
 <nullable(C=C)>final <attr.objectType> <attr.name.uncapitalized>;
 if (resultSet.wasNull())
 {
-    <attr.id.uncapitalized> = null;
+    <attr.name.uncapitalized> = null;
 }
 else
 {
-    <attr.id.uncapitalized> = <attr.id.uncapitalized>Aux;
+    <attr.name.uncapitalized> = <attr.name.uncapitalized>Aux;
 }<
 else>
 <notnull(C=C)>final <attr.objectType> <attr.name.uncapitalized> = <attribute_resultset_retrieval(attr=attr, C=C)>;

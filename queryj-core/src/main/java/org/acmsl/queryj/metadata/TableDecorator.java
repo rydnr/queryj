@@ -118,6 +118,14 @@ public interface TableDecorator
     List<DecoratedString> getAttributeTypes();
 
     /**
+     * Retrieves the ordered list of the fully-qualified attribute types.
+     * @return such list.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    List<DecoratedString> getNullableAttributeTypes();
+
+    /**
      * Retrieves the metadata manager.
      * @return such instance.
      */

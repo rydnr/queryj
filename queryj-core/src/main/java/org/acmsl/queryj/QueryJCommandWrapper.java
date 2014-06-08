@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -47,6 +47,9 @@ import org.jetbrains.annotations.Nullable;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +57,7 @@ import java.util.List;
 /**
  * Wraps a {@link QueryJCommand} to provide type-safe access
  * to its settings.
+ * @param <T> the type.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  */
@@ -194,10 +198,15 @@ public class QueryJCommandWrapper<T>
         command.setSetting(key, value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @NotNull
     public String toString()
     {
-        return "{ 'class': 'QueryJCommandWrapper', 'command': '" + m__Command + "' }";
+        return
+              "{ \"command\": " + m__Command
+            + ", \"class\": \"QueryJCommandWrapper\", \"package\": \"org.acmsl.queryj\" }";
     }
 }

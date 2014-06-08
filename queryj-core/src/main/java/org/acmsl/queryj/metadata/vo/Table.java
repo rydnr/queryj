@@ -112,6 +112,7 @@ public interface Table<V, A extends Attribute<V>, L extends List<A>>
      * Retrieves the attribute used to label the static rows in the table.
      * @return such attribute.
      */
+    @Nullable
     A getStaticAttribute();
 
     /**

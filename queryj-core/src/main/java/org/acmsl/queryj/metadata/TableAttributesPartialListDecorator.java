@@ -457,6 +457,16 @@ public class TableAttributesPartialListDecorator
         return getTable().getAttributeTypes();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public List<DecoratedString> getNullableAttributeTypes()
+    {
+        return getTable().getNullableAttributeTypes();
+    }
+
     // Table implementation
     /**
      * {@inheritDoc}
@@ -634,6 +644,171 @@ public class TableAttributesPartialListDecorator
     public MetadataManager getMetadataManager()
     {
         return getTable().getMetadataManager();
+    }
+
+    /**
+     * Retrieves all attributes, including parent's.
+     *
+     * @return such attributes.
+     */
+    @NotNull
+    @Override
+    public ListDecorator<Attribute<DecoratedString>> getAll()
+    {
+        return getTable().getAll();
+    }
+
+    /**
+     * Checks whether any attribute is a clob.
+     *
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean getContainsClobs()
+    {
+        return getTable().getContainsClobs();
+    }
+
+    /**
+     * Retrieves all attributes, including parent's.
+     *
+     * @return such attributes.
+     */
+    @NotNull
+    @Override
+    public ListDecorator<Attribute<DecoratedString>> getAllAttributes()
+    {
+        return getTable().getAll();
+    }
+
+    /**
+     * Checks whether some of the attributes are nullable or not.
+     *
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean getContainsNullableAttributes()
+    {
+        return getTable().getContainsNullableAttributes();
+    }
+
+    /**
+     * Checks whether some of the attributes cannot be null.
+     *
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean getContainsNotNullAttributes()
+    {
+        return getTable().getContainsNotNullAttributes();
+    }
+
+    /**
+     * Retrieves the custom result.
+     *
+     * @return such {@link org.acmsl.queryj.metadata.ResultDecorator} element.
+     */
+    @Nullable
+    @Override
+    public Result<DecoratedString> getCustomResult()
+    {
+        return getTable().getCustomResult();
+    }
+
+    /**
+     * Retrieves the custom selects.
+     *
+     * @return such list of {@link org.acmsl.queryj.customsql.Sql} elements.
+     */
+    @NotNull
+    @Override
+    public List<Sql<DecoratedString>> getCustomSelects()
+    {
+        return getTable().getCustomSelects();
+    }
+
+    /**
+     * Retrieves the custom updates or inserts.
+     *
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public List<Sql<DecoratedString>> getCustomUpdatesOrInserts()
+    {
+        return getTable().getCustomUpdatesOrInserts();
+    }
+
+    /**
+     * Retrieves the custom select-for-update queries.
+     *
+     * @return such list of {@link org.acmsl.queryj.customsql.Sql} elements.
+     */
+    @NotNull
+    @Override
+    public List<Sql<DecoratedString>> getCustomSelectsForUpdate()
+    {
+        return getTable().getCustomSelectsForUpdate();
+    }
+
+    /**
+     * Retrieves the name of the parent table, or {@code null} if no parent exists.
+     *
+     * @return such information.
+     */
+    @Nullable
+    @Override
+    public DecoratedString getParentTableName()
+    {
+        return getTable().getParentTableName();
+    }
+
+    /**
+     * Retrieves the parent foreign-key.
+     *
+     * @return such foreign key.
+     */
+    @Nullable
+    @Override
+    public ForeignKey<DecoratedString> getParentForeignKey()
+    {
+        return getTable().getParentForeignKey();
+    }
+
+    /**
+     * Alias to make templates more readable.
+     *
+     * @return the table's own attributes.
+     */
+    @Nullable
+    @Override
+    public ListDecorator<Attribute<DecoratedString>> getOwn()
+    {
+        return getTable().getOwn();
+    }
+
+    /**
+     * Alias to make templates more readable.
+     *
+     * @return the child attributes.
+     */
+    @Nullable
+    @Override
+    public ListDecorator<Attribute<DecoratedString>> getChild()
+    {
+        return getTable().getChild();
+    }
+
+    /**
+     * Retrieves the nullable attributes.
+     *
+     * @return such list.
+     */
+    @NotNull
+    @Override
+    public List<Attribute<DecoratedString>> getNullableAttributes()
+    {
+        return getTable().getNullableAttributes();
     }
 
     /**

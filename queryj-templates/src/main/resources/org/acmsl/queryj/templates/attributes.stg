@@ -343,21 +343,35 @@ result.append("\", \"<attribute.name.capitalized>\": \"");
 result.append(this.m__<attribute.name.capitalized>);
 >>
 
-import_attribute_types(table, useHeader=true) ::= <<
+import_attribute_types(table, useHeader=true, nullableOnly=false) ::= <<
 <!
  Imports the attribute types.
  @param table the table.
  @param useHeader whether to use the import header or not.
 !>
 <
-if(table.attributeTypes)><
-  if(useHeader)>
+if(nullableOnly)><
+  if(table.nullableAttributeTypes)><
+    if(useHeader)>
 /*
  * Importing JDK classes.
  */
-<  endif><
-  table.attributeTypes:{ t | import <t>;}; separator="\n">
+<   endif><
+    table.nullableAttributeTypes:{ t | import <t>;}; separator="\n">
 <
-else>
-<endif>
+  else>
+< endif><
+else><
+  if(table.attributeTypes)><
+    if(useHeader)>
+/*
+ * Importing JDK classes.
+ */
+<   endif><
+    table.attributeTypes:{ t | import <t>;}; separator="\n">
+<
+  else>
+< endif>
+<
+endif>
 >>
