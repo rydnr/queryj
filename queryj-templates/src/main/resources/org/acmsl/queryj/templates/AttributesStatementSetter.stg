@@ -78,17 +78,7 @@ sourceImpl(table, C) ::= <<
  * Importing V24-Commons classes.
  */
 import com.ventura24.commons.dao.V24PreparedStatementSetter;
-
-/*
- * Importing Spring classes.
- */
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.PreparedStatementSetter;
 <checkers_import(C=C)>
-/*
- * Importing JDK extension classes
- */
-import javax.sql.DataSource;
 
 /*
  * Importing JDK classes.
@@ -102,12 +92,9 @@ import java.sql.Clob;
 <endif>
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+<if(table.nullableAttributes)>
 import java.sql.Types;
-
-/*
- * Importing Apache Commons Logging classes
- */
-import org.apache.commons.logging.LogFactory;
+<endif>
 
 <class(table=table, C=C)>
 >>
@@ -197,21 +184,18 @@ public class <table.name.voName>StatementSetter
      {
         setValues(
             preparedStatement,
-            <table.attributes:{ attr | values.get<attr.name.capitalized>()}; separator=",\n">,
-            Operation.UPDATE.equals(getOperation()));
+            <table.attributes:{ attr | values.get<attr.name.capitalized>()}; separator=",\n">);
      }
 
     /**
      * Specifies the values on given {@link PreparedStatement}
      * @param preparedStatement the prepared statement.
      <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
-     * @param update whether it's an update operation.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      */
     protected void setValues(
         <notnull(C=C)>final PreparedStatement preparedStatement,
-        <table.attributes:{a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
-        final boolean update)
+        <table.attributes:{a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
         throws  SQLException
     {
         int index = 1;
