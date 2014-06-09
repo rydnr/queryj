@@ -68,11 +68,7 @@ sourceImpl(table, C) ::= <<
  */
 <package_declaration(p=C.package)>
 <checkers_import_maybe(container=table, C=C)>
-/*
- * Importing JDK classes.
- */
-import java.io.Serializable;
-<import_attribute_types(table=table, useHeader=false)>
+<import_attribute_types(table=table, useHeader=true)>
 
 <class(table=table, C=C)>
 >>
@@ -100,7 +96,6 @@ class(table, C) ::= <<
 <class_annotations(C=C)>
 public class <table.name.voName>Impl
     extends Abstract<table.name.voName>
-    implements Serializable
 {
     /**
      * The serial version id.

@@ -98,7 +98,12 @@ interface(table, C) ::= <<
 <class_common_javadoc(template="org/acmsl/queryj/templates/ValueObject.stg", C=C)>
  */
 public interface <table.name.voName>
+<if(table.primaryKey)>
+    extends Serializable,
+            Comparable\<<table.name.voName>\>
+<else>
     extends Serializable
+<endif>
 {
     <table.attributes:getter(); separator="\n\n">
 }

@@ -147,7 +147,7 @@ public class <result.simpleClassValue>Factory
     {
         return
             new <result.simpleClassValue>Impl(
-                <result.properties:{ p | <p.id.uncapitalized>}; separator=", ">);
+                <result.properties:{ p | <p.columnName.uncapitalized>}; separator=",\n">);
     }
 
     <toString_method(result=result, C=C)>

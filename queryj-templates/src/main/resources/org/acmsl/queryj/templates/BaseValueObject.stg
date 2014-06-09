@@ -137,11 +137,66 @@ public abstract class Abstract<table.name.voName>
     <table.attributes:{ a | <attribute_accessors(attribute=a, C=C)>};
      separator="\n\n">
 
+<if(table.primaryKey)>
+    <compareTo_method(table=table, C=C)>
+<endif>
     <equals_method(table=table, C=C)>
 
     <hashCode_method(table=table, C=C)>
 
     <toString_method(table=table, C=C)>
+}
+>>
+
+compareTo_method(table, C) ::= <<
+<! Generates the compareTo(T) method !>
+/**
+ * Compares given object to this instance.
+ * @param other the other object to compare to.
+ * @return {@code -1}, {@code 0}, or {@code 1} if this instance
+ * is lower, equal or greater than given object.
+ */
+@Override
+public int compareTo(<nullable(C=C)>final <table.name.voName> other)
+{
+    final int result;
+
+    if (other == null)
+    {
+        result = 1;
+    }
+    else
+    {
+        <table.primaryKey:{ a | <attribute_compareTo(attr=a, table=table, C=C)>}; separator="">
+
+        final boolean greater =
+            <table.primaryKey:{ a |<a.name.uncapitalized>Greater}; separator="\n&& ">;
+
+        final boolean lower =
+            <table.primaryKey:{ a |<a.name.uncapitalized>Lower}; separator="\n&& ">;
+
+        final boolean equal =
+            <table.primaryKey:{ a |<a.name.uncapitalized>Equal}; separator="\n&& ">;
+
+        if (greater)
+        {
+            result = 1;
+        }
+        else if (lower)
+        {
+            result = -1;
+        }
+        else if (equal)
+        {
+            result = 0;
+        }
+        else
+        {
+            result = -1;
+        }
+    }
+
+    return result;
 }
 >>
 

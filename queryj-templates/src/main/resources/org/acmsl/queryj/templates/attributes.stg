@@ -383,3 +383,77 @@ else><
 <
 endif>
 >>
+
+attribute_compareTo(attr, table, C) ::= <<
+<!
+ Generates the code for the compareTo method.
+ @param attr the attribute.
+ @param table the table.
+ @param C the context.
+!>
+<if(attr.nullable)>
+final boolean <attr.name.uncapitalized>Greater;
+final boolean <attr.name.uncapitalized>Lower;
+final boolean <attr.name.uncapitalized>Equal;
+
+<nullable(C=C)>final <attr.objectType> <attr.name.uncapitalized>Mine = this.get<attr.name.capitalized>();
+<nullable(C=C)>final <attr.objectType> <attr.name.uncapitalized>His = other.get<attr.name.capitalized>();
+
+<if(attr.nullable)>
+if (<attr.name.uncapitalized>Mine != null)
+{
+    if (<attr.name.uncapitalized>His != null)
+    {
+< if(attr.primitive)>
+        <attr.name.uncapitalized>Greater = <attr.name.uncapitalized>Mine > <attr.name.uncapitalized>His;
+        <attr.name.uncapitalized>Lower = <attr.name.uncapitalized>Mine \< <attr.name.uncapitalized>His;
+        <attr.name.uncapitalized>Equal = <attr.name.uncapitalized>Mine == <attr.name.uncapitalized>His;
+< else>
+        final int <attr.name.uncapitalized>Check = <attr.name.uncapitalized>Mine.compareTo(<attr.name.uncapitalized>His);
+
+        <attr.name.uncapitalized>Greater = (<attr.name.uncapitalized>Check > 0);
+        <attr.name.uncapitalized>Lower = (<attr.name.uncapitalized>Check \< 0);
+        <attr.name.uncapitalized>Equal = (<attr.name.uncapitalized>Check == 0);
+< endif>
+    }
+    else
+    {
+        <attr.name.uncapitalized>Greater = true;
+        <attr.name.uncapitalized>Lower = false;
+        <attr.name.uncapitalized>Equal = false;
+    }
+}
+else
+{
+    if (<attr.name.uncapitalized>His != null)
+    {
+        <attr.name.uncapitalized>Greater = false;
+        <attr.name.uncapitalized>Lower = true;
+        <attr.name.uncapitalized>Equal = false;
+    }
+    else
+    {
+        <attr.name.uncapitalized>Greater = false;
+        <attr.name.uncapitalized>Lower = false;
+        <attr.name.uncapitalized>Equal = true;
+    }
+}
+< endif><
+else><
+  if(attr.primitive)>
+final <attr.javaType> <attr.name.uncapitalized>Mine = this.get<attr.name.capitalized>();
+final <attr.javaType> <attr.name.uncapitalized>His = other.get<attr.name.capitalized>();
+final boolean <attr.name.uncapitalized>Greater = <attr.name.uncapitalized>Mine > <attr.name.uncapitalized>His;
+final boolean <attr.name.uncapitalized>Lower = <attr.name.uncapitalized>Mine \< <attr.name.uncapitalized>His;
+final boolean <attr.name.uncapitalized>Equal = <attr.name.uncapitalized>Mine == <attr.name.uncapitalized>His;
+< else>
+<notnull(C=C)>final <attr.objectType> <attr.name.uncapitalized>Mine = this.get<attr.name.capitalized>();
+<notnull(C=C)>final <attr.objectType> <attr.name.uncapitalized>His = other.get<attr.name.capitalized>();
+final int <attr.name.uncapitalized>Check = <attr.name.uncapitalized>Mine.compareTo(<attr.name.uncapitalized>His);
+
+final boolean <attr.name.uncapitalized>Greater = (<attr.name.uncapitalized>Check > 0);
+final boolean <attr.name.uncapitalized>Lower = (<attr.name.uncapitalized>Check \< 0);
+final boolean <attr.name.uncapitalized>Equal = (<attr.name.uncapitalized>Check == 0);
+< endif><
+endif>
+>>

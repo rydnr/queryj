@@ -120,7 +120,7 @@ public abstract class Abstract<result.simpleClassValue>
     <result.properties:{ p | <property_declaration(property=p, C=C)>}; separator="\n\n">
 
     /**
-     * Creates a new {@code Abstract<result.id.voName>}.
+     * Creates a new {@code Abstract<result.simpleClassValue>}.
      <result.properties:{ p | <property_javadoc(property=p)>}; separator="\n">
      */
     public Abstract<result.simpleClassValue>(
@@ -157,7 +157,7 @@ public boolean equals(<nullable(C=C)>final Object other)
 
         <result.properties:{ p | <property_equals(property=p)>}; separator="">
         result =
-            <result.properties:{ p |<p.id.uncapitalized>Match}; separator="\n&& ">;
+            <result.properties:{ p |<p.columnName.uncapitalized>Match}; separator="\n&& ">;
     }
     else
     {
@@ -186,7 +186,7 @@ public int hashCode()
 
     result =
           classHashCode
-        <result.properties:{ p |+ <p.id.uncapitalized>HashCode}; separator="\n">;
+        <result.properties:{ p |+ <p.columnName.uncapitalized>HashCode}; separator="\n">;
 
     return result;
 }
