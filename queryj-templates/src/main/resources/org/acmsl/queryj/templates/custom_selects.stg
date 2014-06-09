@@ -503,17 +503,17 @@ custom_select_return_javadoc(cs, table, rs) ::= <<
 if(cs.resultClass)><
   if(table.voDecorated)><
     if(rs.implicitProperties)>
-* @return the {@link <cs.resultClass>} information retrieved.
-<   else><
+* @return the {@link <cs.resultClass>} information retrieved.<
+    else><
       if(cs.multiple)>
-* @return the {@link <cs.resultClass>} information retrieved.
-<     else>
- * @return the {@link <cs.resultClass>Decorator} information retrieved.
-<     endif>
-<   endif>
-< else>
- * @return the {@link <cs.resultClass>} information retrieved.
-< endif><
+* @return the {@link <cs.resultClass>} information retrieved.<
+      else>
+* @return the {@link <cs.resultClass>Decorator} information retrieved.<
+      endif><
+    endif><
+  else>
+* @return the {@code <cs.resultClass>} information retrieved.<
+  endif><
 endif>
 >>
 

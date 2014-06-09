@@ -136,11 +136,25 @@ class_annotations(C) ::= <<
 <if(C.checkthread_annotations_enabled)>@org.checkthread.annotations.ThreadSafe<endif>
 >>
 
-find_constant_check_attribute(attribute) ::= <<
-<if(attribute.primitive)>
-&& (item.get<attribute.name.capitalized>() == <attribute.name.uncapitalized>)<else>
-&& (item.get<attribute.name.capitalized>() != null)
-&& (item.get<attribute.name.capitalized>().equals(<attribute.name.uncapitalized>))<endif>
+find_constant_check_attribute(attribute, C) ::= <<
+<!
+ Generates a check for given attribute.
+ @param attribute the attribute.
+ @param C the context.
+!>
+<
+if(attribute.primitive)>
+if (item.get<attribute.name.capitalized>() == <attribute.name.uncapitalized>)<
+else><
+  if(attribute.nullable)
+   ><nullable(C=C)>final <attribute.objectType> <attribute.name.uncapitalized>Aux = item.get<attribute.name.capitalized>();
+
+if (   (<attribute.name.uncapitalized>Aux != null)
+    && (<attribute.name.uncapitalized>Aux.equals(<attribute.name.uncapitalized>)))<
+  else
+   >if (item.get<attribute.name.capitalized>().equals(<attribute.name.uncapitalized>))<
+  endif><
+endif>
 >>
 
 import_template(type) ::= <<

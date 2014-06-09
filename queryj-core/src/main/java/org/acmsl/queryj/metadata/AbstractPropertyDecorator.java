@@ -237,7 +237,7 @@ public abstract class AbstractPropertyDecorator
     /**
      * Retrieves the Object type of the property.
      * @param type the declared type.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param allowsNull whether it allows nulls.
      * @return such information.
      */
@@ -257,9 +257,9 @@ public abstract class AbstractPropertyDecorator
     /**
      * Retrieves the Object type of the property.
      * @param type the declared type.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @param allowsNull whether it allows nulls.
-     * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
+     * @param metadataTypeUtils the {@link MetadataTypeUtils} instance.
      * @return such information.
      */
     @SuppressWarnings("unused")
@@ -501,6 +501,16 @@ public abstract class AbstractPropertyDecorator
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return !nullable && metadataTypeManager.isPrimitive(type);
+    }
+
+    /**
+     * Checks whether its type is supported out-of-the-box.
+     * @return {@code true} in such case.
+     */
+    @Override
+    public boolean isTypeSupportedOutOfTheBox()
+    {
+        return isPrimitive() || isDate() || isNumeric();
     }
 
     /**
