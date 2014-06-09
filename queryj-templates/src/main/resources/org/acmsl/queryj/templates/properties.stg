@@ -176,11 +176,13 @@ property_getter(property, C) ::= <<
  * Retrieves the \<i><property.id>\</i> value.
  * @return such information.
  */
+@Override
 <if(property.allowsNull)
   ><if(!property.strictlyPrimitive)
     ><nullable(C=C)><
     endif
-  >public <property.objectType> get<property.id.capitalized>()<
+  >
+public <property.objectType> get<property.id.capitalized>()<
 else
   ><if(!property.strictlyPrimitive)
     ><notnull(C=C)><
@@ -189,7 +191,17 @@ else
 endif>
 
 {
+<
+if(property.date)><
+  if(property.allowsNull)>
+    return this.m__<property.id.capitalized> == null ? null : new Date(this.m__<property.id.capitalized>.getTime());
+< else>
+    return new Date(this.m__<property.id.capitalized>.getTime());
+< endif><
+else>
     return this.m__<property.id.capitalized>;
+<
+endif>
 }
 >>
 
