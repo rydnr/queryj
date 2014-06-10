@@ -252,7 +252,7 @@ public class DecoratedString
     @NotNull
     protected String normalize(@NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
-        return decorationUtils.normalize(value);
+        return decorationUtils.softNormalize(value);
     }
 
     /**

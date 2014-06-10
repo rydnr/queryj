@@ -126,4 +126,24 @@ public class DecoratedStringTest
 
         Assert.assertTrue(somethingElse.isFalse());
     }
+
+    /**
+     * Checks whether normalize() replaces non-alphanumeric characters
+     * with underscores.
+     */
+    @Test
+    public void normalize_replaces_nonalphanumeric_with_underscores()
+    {
+        @NotNull final DecoratedString instance = new DecoratedString("A-Constant");
+
+        Assert.assertEquals("A_Constant", instance.getNormalized().getValue());
+
+        @NotNull final DecoratedString instance2 = new DecoratedString("A Constant");
+
+        Assert.assertEquals("A_Constant", instance2.getNormalized().getValue());
+
+        @NotNull final DecoratedString instance3 = new DecoratedString("A_Constant");
+
+        Assert.assertEquals("A_Constant", instance3.getNormalized().getValue());
+    }
 }

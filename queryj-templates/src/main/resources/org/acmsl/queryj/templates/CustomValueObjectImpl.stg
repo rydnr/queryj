@@ -122,7 +122,7 @@ public class <result.simpleClassValue>Impl
     public <result.simpleClassValue>Impl(
         <result.properties:{ p | <property_method_parameter_declaration(property=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
     {
-        super(<result.properties:{ p | <p.id.uncapitalized>}; separator=", ">);
+        super(<result.properties:{ p | <p.columnName.uncapitalized>}; separator=", ">);
     }
 
     <toString_method(result=result, C=C)>
