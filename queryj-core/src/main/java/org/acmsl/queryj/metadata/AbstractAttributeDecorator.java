@@ -732,7 +732,6 @@ public abstract class AbstractAttributeDecorator
             getPrimitiveType(
                 getTypeId(),
                 retrieveType(),
-                isNullable(),
                 isBoolean(),
                 getPrecision(),
                 getMetadataTypeManager());
@@ -742,7 +741,6 @@ public abstract class AbstractAttributeDecorator
      * Retrieves the primitive type of the attribute, converting to a primitive if possible, even if it's nullable.
      * @param typeId the id of the type.
      * @param type the type.
-     * @param isNullable whether the attribute allows nulls.
      * @param isBool whether is a boolean attribute.
      * @param precision the precision.
      * @param metadataTypeManager the {@link MetadataTypeManager}.
@@ -752,14 +750,13 @@ public abstract class AbstractAttributeDecorator
     protected String getPrimitiveType(
         final int typeId,
         @NotNull final String type,
-        final boolean isNullable,
         final boolean isBool,
         final int precision,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
         @Nullable final String result;
 
-        if (isPrimitive(typeId, type, isNullable, metadataTypeManager))
+        if (isPrimitive(typeId, type, false, metadataTypeManager))
         {
             result = metadataTypeManager.getNativeType(typeId, false, isBool, precision);
         }

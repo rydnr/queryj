@@ -530,4 +530,45 @@ public class AbstractAttributeDecoratorTest
         Assert.assertTrue(instance.isLong());
     }
 
+    /**
+     * Checks whether getPrimitiveType() returns long for Longs.
+     */
+    @Test
+    public void getPrimitiveType_returns_long_for_longs()
+    {
+        @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
+
+        @NotNull final MetadataTypeManager metadataTypeManager = new JdbcMetadataTypeManager();
+
+        EasyMock.expect(metadataManager.getMetadataTypeManager()).andReturn(metadataTypeManager).anyTimes();
+
+        EasyMock.replay(metadataManager);
+
+        @NotNull final Attribute<String> attribute =
+            new AttributeValueObject(
+                "name",
+                Types.BIGINT,
+                "Long",
+                "tableName",
+                "comment",
+                1,
+                10, // length
+                1, // precision
+                null, // keyword
+                null, // retrieval query
+                null, // sequence
+                true, // nullable
+                null, // value
+                false, // read-only
+                false, // is-bool
+                null, // boolean-true
+                null, // boolean-false
+                null); // boolean-null
+
+        @NotNull final AbstractAttributeDecorator instance =
+            new AbstractAttributeDecorator(attribute, metadataManager) {};
+
+        Assert.assertEquals("long", instance.getPrimitiveType());
+    }
+
 }
