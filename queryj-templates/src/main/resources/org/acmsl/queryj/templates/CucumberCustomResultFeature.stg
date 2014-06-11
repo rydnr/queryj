@@ -66,12 +66,13 @@ Feature: Classes associated to custom result <result.id> compile
     Then the generated custom result-specific \<output> file compiles successfully
 
   Examples:
-    | template                 | output |
-    | CustomValueObjectFactory | <result.id.voName>Factory.java            |
-    | CustomValueObject        | <result.id.voName>.java                   |
-    | CustomBaseValueObject    | Abstract<result.id.voName>.java           |
-    | CustomValueObjectImpl    | <result.id.voName>Impl.java               |
-    | CustomResultSetExtractor | <result.id.voName>ResultSetExtractor.java |
+    | template                         | output |
+    | CustomValueObjectFactory         | <result.id.voName>Factory.java                    |
+    | CustomValueObject                | <result.id.voName>.java                           |
+    | CustomBaseValueObject            | Abstract<result.id.voName>.java                   |
+    | CustomValueObjectImpl            | <result.id.voName>Impl.java                       |
+    | CustomResultSetSingleExtractor   | <result.id.voName>ResultSetSingleExtractor.java   |
+    | CustomResultSetMultipleExtractor | <result.id.voName>ResultSetMultipleExtractor.java |
 >>
 
 cucumber_property_definition(property) ::= <<

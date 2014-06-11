@@ -163,7 +163,7 @@ public class <table.name.voName>StatementSetter
      */
     public <table.name.voName>StatementSetter(
         <notnull(C=C)>final <table.name.voName> values,
-        final V24PreparedStatementSetter.Operation operation)
+        <notnull(C=C)>final V24PreparedStatementSetter.Operation operation)
     {
         super(values, operation);
     }
@@ -179,34 +179,44 @@ public class <table.name.voName>StatementSetter
     protected void setValues(
         <notnull(C=C)>final PreparedStatement preparedStatement,
         <notnull(C=C)>final <table.name.voName> values,
-        final V24PreparedStatementSetter.Operation operation)
-        throws  SQLException
+        <notnull(C=C)>final V24PreparedStatementSetter.Operation operation)
+      throws  SQLException
      {
         setValues(
             preparedStatement,
-            <table.attributes:{ attr | values.get<attr.name.capitalized>()}; separator=",\n">);
+            <table.attributes:{ attr | values.get<attr.name.capitalized>()}; separator=",\n">,
+            operation);
      }
 
     /**
      * Specifies the values on given {@link PreparedStatement}
      * @param preparedStatement the prepared statement.
      <table.attributes:{ a | <attribute_javadoc(attr=a)>}; separator="\n">
+     * @param operation the operation.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      */
     protected void setValues(
         <notnull(C=C)>final PreparedStatement preparedStatement,
-        <table.attributes:{a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
-        throws  SQLException
+        <table.attributes:{a | <attribute_method_parameter_declaration(attribute=a, usePrefix=false, prefix="", C=C)>}; separator=",\n">,
+        <notnull(C=C)>final V24PreparedStatementSetter.Operation operation)
+      throws  SQLException
     {
         int index = 1;
 
-<  if(table.externallyManagedAttributes)>
-        if (update)
+<  if(table.primaryKey)>
+        if (operation.equals(V24PreparedStatementSetter.Operation.INSERT))
         {
-            <table.externallyManagedAttributes:{ a | <attribute_preparedstatement_specification(attr=a, C=C)>}; separator="\n">
-        }<
-   endif>
-        <table.own.minus.externallyManagedAttributes:{ a | <attribute_preparedstatement_specification(attr=a, C=C)>}; separator="\n">
+            <table.primaryKey:{ a | <attribute_preparedstatement_specification(attr=a, C=C)>}; separator="\n">
+        }
+<   endif>
+        <table.own.minus.primaryKey:{ a | <attribute_preparedstatement_specification(attr=a, C=C)>}; separator="\n">
+
+<  if(table.primaryKey)>
+        if (operation.equals(V24PreparedStatementSetter.Operation.UPDATE))
+        {
+            <table.primaryKey:{ a | <attribute_preparedstatement_specification(attr=a, C=C)>}; separator="\n">
+        }
+<   endif>
     }
 
     <equals_method(table=table, C=C)>
@@ -244,26 +254,6 @@ public boolean equals(<nullable(C=C)>final Object other)
 
     return result;
 }
-
-/**
- * Checks whether the state information provided match.
- * @param myValue my {@code <table.name.voName>} value.
- * @param myOperation my operation.
- * @param hisValue his {@code <table.name.voName>} value.
- * @param hisOperation his operation.
- * @return {@code true} if and only if both sets are equivalent.
- */
-protected boolean equals(
-    <notnull(C=C)>final <table.name.voName> myValue,
-    final V24PreparedStatementSetter.Operation myOperation,
-    <notnull(C=C)>final <table.name.voName> hisValue,
-    final V24PreparedStatementSetter.Operation  hisOperation)
-{
-    return
-           (myOperation.equals(hisOperation))
-        && (myValue.equals(hisValue));
-}
->>
 
 hashCode_method(table, C) ::= <<
 <!
@@ -305,11 +295,10 @@ toString_method(table, C) ::= <<
 @Override
 public String toString()
 {
-    <notnull(C=C)>final StringBuilder result =
-        new StringBuilder("{ \"class\": \"<table.name.voName>StatementSetter");
+    <notnull(C=C)>final StringBuilder result = new StringBuilder("{ \"super\": ");
 
-    result.append("\", \"super\": ");
     result.append(super.toString());
+    result.append(", \"class\": \"<table.name.voName>StatementSetter\"");
     result.append(", \"package\": \"<C.package>\" }");
 
     return result.toString();
