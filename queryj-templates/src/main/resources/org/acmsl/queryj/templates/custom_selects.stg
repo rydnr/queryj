@@ -151,8 +151,9 @@ custom_update_or_insert(cs, C) ::= <<
  <cs.parameters:{ p | <parameter_javadoc(parameter=p)>}; separator="\n">
  * @return the number of entities updated.
  */
+@Override
 public int <cs.name.uncapitalized>(
-    <cs.parameters:{ p | <attribute_method_parameter_declaration(attr=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
+    <cs.parameters:{ p | <attribute_method_parameter_declaration(attribute=p, usePrefix=false, prefix="", C=C)>}; separator=",\n">)
   throws DataAccessException
 {
     int result = -10;
@@ -160,15 +161,15 @@ public int <cs.name.uncapitalized>(
     final PreparedStatementCreatorFactory
         preparedStatementCreatorFactory =
             new PreparedStatementCreatorFactory(
-                auditSql(<cs.idAsConstant>_SQL));
-
+                auditSql(<cs.id.normalized.uppercased>_SQL));
+<!
     /*
     t_PreparedStatementCreatorFactory.setResultSetType(..);
     t_PreparedStatementCreatorFactory.setUpdatableResults(..);
     t_PreparedStatementCreatorFactory.setReturnGeneratedKeys(..);
     t_PreparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
      */
-
+!>
     <cs.parameters:{ p | <custom_select_parameter_type_specification(
       type=p.sqlType)>}; separator="\n">
 
@@ -183,7 +184,7 @@ public int <cs.name.uncapitalized>(
     <notnull(C=C)>final TransactionTemplate transactionTemplate =
         new TransactionTemplate(transactionManager);
 
-    <notnull(C=C)>final Object t_Result =
+    <nullable(C=C)>final Integer t_Result =
         transactionTemplate.execute(
             new V24UpdateTransactionCallback\<<engine.name><table.name.voName>DAO>(
                 preparedStatementCreatorFactory
@@ -195,10 +196,10 @@ public int <cs.name.uncapitalized>(
 
     if  (t_Result != null)
     {
-        result = ((Integer) t_Result).intValue();
+        result = t_Result.intValue();
     }
 
-    /*
+<!  /*
     result =
         update(
             t_PreparedStatementCreatorFactory
@@ -206,7 +207,7 @@ public int <cs.name.uncapitalized>(
             t_PreparedStatementCreatorFactory
                .newPreparedStatementSetter(params));
      */
-
+!>
     return result;
 }
 <endif>

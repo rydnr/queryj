@@ -118,6 +118,7 @@ public class TemplateDefPerCustomResultTemplateContext
      * Retrieves the template def.
      * @return such information.
      */
+    @Override
     @NotNull
     public TemplateDef<String> getTemplateDef()
     {

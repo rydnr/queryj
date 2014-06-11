@@ -531,14 +531,14 @@ custom_selects_for_update_sql(table, repository, C) ::= <<
  * The <sql.id> SQL.
  */
 public static final String <sql.id.normalized.uppercased>_SQL =
-    <sql.splitAndSurroundByDoubleQuotes; separator=" +\n"><endif>;}; separator="\n">
+    <sql.value.splitAndSurroundByDoubleQuotes; separator=" +\n"><endif>;}; separator="\n">
 >>
 
 custom_updates_or_inserts_sql(table, repository, C) ::= <<
 // custom updates or inserts
 <table.customUpdatesOrInserts:{sql|
 <if(!sql.dynamic)>
-<if(sql.splitAndSurroundByDoubleQuotes)>
+<if(sql.value.splitAndSurroundByDoubleQuotes)>
 
 /**
  * The <sql.id> SQL.
@@ -1670,7 +1670,7 @@ find_by_pk_sql_join_fk(parentForeignKey, parentPrimaryKey) ::= <<
  @param parentPrimaryKey the parent's primary key.
 !>
 <parentForeignKey.attributes,parentPrimaryKey:{ pk, parentPk |
-+   " AND <pk.tableNameUppercased>.<pk.name.uppercased> = <parentPk.tableNameUppercased>.<parentPk.name.uppercased> "}; separator="\n">
++   " AND <pk.table.name.uppercased>.<pk.name.uppercased> = <parentPk.table.name.uppercased>.<parentPk.name.uppercased> "}; separator="\n">
 >>
 
 attribute_resultset_extractor_class(table, repository, attr, C) ::= <<
