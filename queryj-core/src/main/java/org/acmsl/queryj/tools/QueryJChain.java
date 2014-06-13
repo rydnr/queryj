@@ -51,7 +51,6 @@ import org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
-import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
@@ -126,8 +125,6 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
         chain.add((CH) new MySQL4xMetaDataRetrievalHandler());
         chain.add((CH) new OracleMetaDataRetrievalHandler());
         chain.add((CH) new JdbcMetaDataRetrievalHandler());
-
-        chain.add((CH) new ExternallyManagedFieldsRetrievalHandler());
 
         chain.add((CH) new CustomSqlValidationHandler());
         chain.add((CH) new CustomSqlCacheWritingHandler());

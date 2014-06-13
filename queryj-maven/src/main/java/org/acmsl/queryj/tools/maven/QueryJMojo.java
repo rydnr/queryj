@@ -199,12 +199,6 @@ public class QueryJMojo
     private File m__HeaderFile;
 
     /**
-     * The list of external managed fields
-     * @parameter
-     */
-    private ExternallyManagedField[] externallyManagedFields = new ExternallyManagedField[0];
-
-    /**
      * The grammar folder.
      * @parameter property="grammarFolder"
      */
@@ -830,46 +824,6 @@ public class QueryJMojo
     }
 
     /**
-     * Specifies the externally managed fields.
-     * @param fields such fields.
-     */
-    protected final void immutableSetExternallyManagedFields(
-        @NotNull final ExternallyManagedField[] fields)
-    {
-        externallyManagedFields = fields;
-    }
-
-    /**
-     * Specifies the externally managed fields.
-     * @param fields such fields.
-     */
-    public void setExternallyManagedFields(@NotNull final ExternallyManagedField[] fields)
-    {
-        immutableSetExternallyManagedFields(fields);
-    }
-
-    /**
-     * Returns the externally managed fields.
-     * @return such fields.
-     */
-    @NotNull
-    protected final ExternallyManagedField[] immutableGetExternallyManagedFields()
-    {
-//        return m__aExternallyManagedFields;
-        return externallyManagedFields;
-    }
-
-    /**
-     * Returns the externally managed fields.
-     * @return such fields.
-     */
-    @NotNull
-    protected ExternallyManagedField[] getExternallyManagedFields()
-    {
-        return immutableGetExternallyManagedFields();
-    }
-
-    /**
      * Specifies the grammar folder.
      * @param folder such folder.
      */
@@ -1446,7 +1400,6 @@ public class QueryJMojo
         result.setGrammarName(getGrammarName());
         result.setGrammarSuffix(getGrammarSuffix());
 
-        buildExternallyManagedFields(result);
         buildTables(result);
 
         @Nullable final String encoding = getEncoding();
@@ -1481,61 +1434,6 @@ public class QueryJMojo
         result.setDisableCheckthreadAnnotations(disableCheckthreadAnnotations);
 
         return result;
-    }
-
-    /**
-     * Builds the external managed fields list.
-     * @param task the task.
-     */
-    @SuppressWarnings("unchecked")
-    protected void buildExternallyManagedFields(
-        @NotNull final QueryJTask task)
-    {
-        @NotNull final ExternallyManagedField[] array = getExternallyManagedFields();
-
-        final int count = array.length;
-        @Nullable final AntExternallyManagedFieldsElement element;
-        ExternallyManagedField field;
-        @Nullable AntFieldElement fieldElement;
-
-        if  (count > 0)
-        {
-            element =
-                (AntExternallyManagedFieldsElement) task.createDynamicElement(
-                    QueryJTask.EXTERNALLY_MANAGED_FIELDS);
-
-            if (element != null)
-            {
-                for (@Nullable final ExternallyManagedField anArray : array)
-                {
-                    field = anArray;
-
-                    if (field != null)
-                    {
-                        fieldElement =
-                            (AntFieldElement)
-                                element.createDynamicElement(
-                                    AntExternallyManagedFieldsElement.FIELD_LITERAL);
-
-                        if (fieldElement != null)
-                        {
-                            fieldElement.setDynamicAttribute("name", field.getName());
-
-                            fieldElement.setDynamicAttribute(
-                                AntFieldElement.TABLE_NAME_LITERAL, field.getTableName());
-
-                            fieldElement.setDynamicAttribute(
-                                AntFieldElement.KEYWORD_LITERAL, field.getKeyword());
-
-                            fieldElement.setDynamicAttribute(
-                                AntFieldElement.RETRIEVAL_QUERY_LITERAL, field.getRetrievalQuery());
-                        }
-                    }
-                }
-
-                task.setExternallyManagedFields(element);
-            }
-        }
     }
 
     /**
@@ -1601,8 +1499,9 @@ public class QueryJMojo
                                             "name", field.getName());
                                         fieldElement.setDynamicAttribute(
                                             "type", field.getType());
+                                        @Nullable final String t_strPk = field.getPk();
                                         fieldElement.setDynamicAttribute(
-                                            "pk", field.getPk());
+                                            "pk", String.valueOf(Boolean.valueOf(t_strPk == null)));
                                     }
                                 }
                             }
@@ -1737,7 +1636,6 @@ public class QueryJMojo
                ", \"jndiDataSource\": \"" + m__strJndiDataSource + '"' +
                ", \"sqlXmlFile\": \"" + m__SqlXmlFile + '"' +
                ", \"headerFile\": \"" + m__HeaderFile + '"' +
-               ", \"externallyManagedFields\": \"" + Arrays.toString(externallyManagedFields) + '"' +
                ", \"grammarFolder\": \"" + m__GrammarFolder + '"' +
                ", \"grammarName\": \"" + m__strGrammarName + '"' +
                ", \"grammarSuffix\": \"" + m__strGrammarSuffix + '"' +
