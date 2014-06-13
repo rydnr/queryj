@@ -51,7 +51,7 @@ public final class AttributeValueObject
     private static final long serialVersionUID = 8975433666493838327L;
 
     /**
-     * Creates an <code>AttributeValueObject</code> with the following
+     * Creates an {@code AttributeValueObject} with the following
      * information.
      * @param name the name.
      * @param typeId the type id.

@@ -599,6 +599,53 @@ public class MetaLanguageUtils
         return result;
     }
 
+    /**
+     * Retrieves whether the column is bound to a sequence.
+     * @param columnComment the column comment.
+     * @return the sequence name, or {@code null} otherwise.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    public String retrieveColumnOraseq(@NotNull final String columnComment)
+    {
+        @Nullable String result = null;
+
+        if  (!isEmpty(columnComment))
+        {
+            try
+            {
+                @NotNull final PerCommentParser t_Parser = setUpParser(columnComment);
+
+                @NotNull final ParseTree tree = t_Parser.columnComment();
+
+                @NotNull final PerCommentVisitor<String> visitor = new PerCommentColOraseqVisitor();
+
+                @Nullable final String resultValue = visitor.visit(tree);
+
+                if (resultValue != null)
+                {
+                    result = resultValue;
+                }
+            }
+            catch  (@NotNull final RecognitionException recognitionException)
+            {
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        Literals.INVALID_COLUMN_COMMENT + columnComment,
+                        recognitionException);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @NotNull
     public String toString()

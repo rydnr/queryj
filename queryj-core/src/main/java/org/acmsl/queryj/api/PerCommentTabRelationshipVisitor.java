@@ -57,7 +57,8 @@ import java.util.List;
 /**
  * Visits tabRelationship rules in PerComment.g4 grammar.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/07/06
+ * @since 3.0
+ * Created: 2013/07/06
  */
 public class PerCommentTabRelationshipVisitor
     extends PerCommentBaseVisitor<List<List<String>>>

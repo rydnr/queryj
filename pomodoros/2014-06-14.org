@@ -1,0 +1,3 @@
+* 2014/06/14
+** TODO Remove externally-managed-fields from Maven's pom #527: 1 ->
+** Support Oracle sequences #526: 1 ->
