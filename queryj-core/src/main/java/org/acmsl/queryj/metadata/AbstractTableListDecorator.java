@@ -38,9 +38,10 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.metadata.TableAttributesPartialListDecorator.Operation;
+import org.acmsl.queryj.metadata.AbstractPartialListDecorator.Operation;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
@@ -61,40 +62,55 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing JDK classes.
  */
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Provides some common logic for table list decorators.
+ * @param <V> the type of the items.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/12/30 11:00
  */
 @ThreadSafe
-public abstract class AbstractTableAttributesListDecorator
-    extends AbstractListDecorator<Attribute<DecoratedString>>
-    implements TableDecorator
+public abstract class AbstractTableListDecorator<V>
+    extends AbstractListDecorator<V>
+    implements ListDecorator<V>,
+               TableDecorator,
+               TableListDecorator
 {
-    /**
-     * The serial version id.
-     */
-    public static final String INVALID_OPERATION = "Invalid operation";
-
     /**
      * The table decorator.
      */
     private TableDecorator m__Table;
 
     /**
+     * The custom SQL provider.
+     */
+    private CustomSqlProvider m__CustomSqlProvider;
+
+    /**
+     * The decorator factory.
+     */
+    private DecoratorFactory m__DecoratorFactory;
+
+    /**
      * Creates a new instance.
      * @param list the {@link List}.
      * @param table the {@link TableDecorator}.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
-    public AbstractTableAttributesListDecorator(
-        @NotNull final List<Attribute<DecoratedString>> list,
-        @NotNull final TableDecorator table)
+    public AbstractTableListDecorator(
+        @NotNull final List<V> list,
+        @NotNull final TableDecorator table,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         super(list);
         immutableSetTable(table);
+        immutableSetCustomSqlProvider(customSqlProvider);
+        immutableSetDecoratorFactory(decoratorFactory);
     }
 
     /**
@@ -127,6 +143,64 @@ public abstract class AbstractTableAttributesListDecorator
     }
 
     /**
+     * Specifies the custom sql provider.
+     * @param provider such {@link CustomSqlProvider instance}.
+     */
+    protected final void immutableSetCustomSqlProvider(@NotNull final CustomSqlProvider provider)
+    {
+        this.m__CustomSqlProvider = provider;
+    }
+
+    /**
+     * Specifies the custom sql provider.
+     * @param provider such {@link CustomSqlProvider instance}.
+     */
+    @SuppressWarnings("unused")
+    protected void setCustomSqlProvider(@NotNull final CustomSqlProvider provider)
+    {
+        immutableSetCustomSqlProvider(provider);
+    }
+
+    /**
+     * Retrieves the custom sql provider.
+     * @return such {@link CustomSqlProvider instance}.
+     */
+    @NotNull
+    public CustomSqlProvider getCustomSqlProvider()
+    {
+        return this.m__CustomSqlProvider;
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param factory the {@link DecoratorFactory} instance.
+     */
+    protected final void immutableSetDecoratorFactory(@NotNull final DecoratorFactory factory)
+    {
+        this.m__DecoratorFactory = factory;
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param factory the {@link DecoratorFactory} instance.
+     */
+    @SuppressWarnings("unused")
+    protected void setDecoratorFactory(@NotNull final DecoratorFactory factory)
+    {
+        immutableSetDecoratorFactory(factory);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return the {@link DecoratorFactory} instance.
+     */
+    @NotNull
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return this.m__DecoratorFactory;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @NotNull
@@ -134,8 +208,8 @@ public abstract class AbstractTableAttributesListDecorator
     public PartialListDecorator getPlus()
     {
         return
-            new TableAttributesPartialListDecorator(
-                this, getTable(), Operation.PLUS);
+            new TablePartialListDecorator<>(
+                this, getTable(), Operation.PLUS, getCustomSqlProvider(), getDecoratorFactory());
     }
 
     /**
@@ -146,8 +220,8 @@ public abstract class AbstractTableAttributesListDecorator
     public PartialListDecorator getMinus()
     {
         return
-            new TableAttributesPartialListDecorator(
-                this, getTable(), Operation.MINUS);
+            new TablePartialListDecorator<>(
+                this, getTable(), Operation.MINUS, getCustomSqlProvider(), getDecoratorFactory());
     }
 
     /**
@@ -158,8 +232,8 @@ public abstract class AbstractTableAttributesListDecorator
     public PartialListDecorator getOnly()
     {
         return
-            new TableAttributesPartialListDecorator(
-                this, getTable(), Operation.ONLY);
+            new TablePartialListDecorator<>(
+                this, getTable(), Operation.ONLY, getCustomSqlProvider(), getDecoratorFactory());
     }
 
     // TableDecorator implementation
@@ -242,7 +316,7 @@ public abstract class AbstractTableAttributesListDecorator
      */
     @NotNull
     @Override
-    public List<Result<DecoratedString>> getDifferentCustomResults()
+    public ListDecorator<Result<DecoratedString>> getCustomResults()
     {
         throw new RuntimeException(INVALID_OPERATION);
     }
@@ -256,7 +330,7 @@ public abstract class AbstractTableAttributesListDecorator
     {
         return
             getAttributeTypes(
-                getItems(),
+                retrieveAttributes(getItems()),
                 getMetadataManager().getMetadataTypeManager(),
                 TableDecoratorHelper.getInstance());
     }
@@ -268,6 +342,7 @@ public abstract class AbstractTableAttributesListDecorator
      * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return their types.
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     protected List<DecoratedString> getAttributeTypes(
         @NotNull final List<Attribute<DecoratedString>> items,
@@ -298,23 +373,23 @@ public abstract class AbstractTableAttributesListDecorator
     @Override
     public List<Attribute<DecoratedString>> getNullableAttributes()
     {
-        return getNullableAttributes(getAttributes(), TableDecoratorHelper.getInstance());
+        return getNullableAttributes(retrieveAttributes(getItems()), TableDecoratorHelper.getInstance());
     }
 
     /**
      * Retrieves the nullable attributes.
-     * @param attributes the attributes.
+     * @param items the attributes.
      * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return the nullable attributes.
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     public List<Attribute<DecoratedString>> getNullableAttributes(
-        @NotNull final List<Attribute<DecoratedString>> attributes,
+        @NotNull final List<Attribute<DecoratedString>> items,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        return tableDecoratorHelper.filterNullableAttributes(attributes);
+        return tableDecoratorHelper.filterNullableAttributes(items);
     }
-
 
     // Table implementation
     /**
@@ -413,7 +488,7 @@ public abstract class AbstractTableAttributesListDecorator
      */
     public boolean getContainsClobs()
     {
-        return contains(getItems(), Types.CLOB);
+        return contains(retrieveAttributes(getItems()), Types.CLOB);
     }
 
     /**
@@ -606,6 +681,64 @@ public abstract class AbstractTableAttributesListDecorator
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public ListDecorator<V> getDifferent()
+    {
+        return getDifferent(getItems(), getTable(), getCustomSqlProvider(), getDecoratorFactory());
+    }
+
+    /**
+     * Removes any duplicates in given collection.
+     * @param items the items.
+     * @param table the {@link TableDecorator table}.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return the original items, discarding duplicates.
+     */
+    @NotNull
+    protected ListDecorator<V> getDifferent(
+        @NotNull final List<V> items,
+        @NotNull final TableDecorator table,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        @NotNull final ListDecorator<V> result;
+
+        @NotNull final List<V> list = new ArrayList<>(items.size());
+
+        for (@Nullable final V item: items)
+        {
+            if (   (item != null)
+                   && (!list.contains(item)))
+            {
+                list.add(item);
+            }
+        }
+
+        result = createListDecorator(list, table, customSqlProvider, decoratorFactory);
+
+        return result;
+    }
+
+    /**
+     * Creates a new list decorator instance.
+     * @param items the items.
+     * @param table the {@link TableDecorator table}.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return the new list decorator.
+     */
+    @NotNull
+    protected abstract ListDecorator<V> createListDecorator(
+        @NotNull final List<V> items,
+        @NotNull final TableDecorator table,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory);
+
+    /**
      * Compares given instance with the one wrapped by this instance.
      * @param table the table to compare with.
      * @return the result of comparing given instance with the wrapped one.
@@ -624,9 +757,12 @@ public abstract class AbstractTableAttributesListDecorator
     public String toString()
     {
         return
-              "{ \"class\": " + AbstractTableAttributesListDecorator.class.getSimpleName() + '"'
-            + ", \"package\": \"org.acmsl.queryj.metadata\""
+              "{ \"super\": " + super.toString()
             + ", \"table\": \"" + m__Table.getName()
+            + ", \"customSqlProvider\": " + this.m__CustomSqlProvider.hashCode()
+            + ", \"decoratorFactory\": " + this.m__DecoratorFactory.hashCode()
+            + ", \"class\": " + AbstractTableListDecorator.class.getSimpleName() + '"'
+            + ", \"package\": \"org.acmsl.queryj.metadata\""
             + "\" }";
     }
 }

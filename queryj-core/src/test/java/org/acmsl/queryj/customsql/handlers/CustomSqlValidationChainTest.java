@@ -46,28 +46,15 @@ import org.acmsl.commons.patterns.Chain;
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.BindQueryParametersHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.CacheValidationOutcomeHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.CheckResultSetGettersWorkForDefinedPropertiesHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.CustomQueryChain;
 import org.acmsl.queryj.customsql.handlers.customsqlvalidation.CustomQueryChainTest;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.ExecuteQueryHandler;
 import org.acmsl.queryj.customsql.handlers.customsqlvalidation.GlobalValidationEnabledHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.QueryValidationEnabledHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.ReportMissingPropertiesHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.ReportUnusedPropertiesHandler;
 import org.acmsl.queryj.customsql.handlers.customsqlvalidation.RetrieveQueryHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.RetrieveResultPropertiesHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.RetrieveResultSetColumnsHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.SetupPreparedStatementHandler;
-import org.acmsl.queryj.customsql.handlers.customsqlvalidation.SkipValidationIfCacheExistsHandler;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JUnit classes.
@@ -86,6 +73,10 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class CustomSqlValidationChainTest
 {
+    /**
+     * Checks whether it includes the required handlers.
+     * throws QueryJBuildException
+     */
     @SuppressWarnings("unchecked")
     @Test
     public void includes_required_handlers()
@@ -102,6 +93,11 @@ public class CustomSqlValidationChainTest
         Assert.assertTrue(contains(GlobalValidationEnabledHandler.class, t_Chain));
     }
 
+    /**
+     * Checks whether given chain contains the handler class.
+     * @param handlerClass the handler class.
+     * @param chain the chain.
+     */
     protected boolean contains(
         @NotNull final Class<?> handlerClass,
         @NotNull final Chain<QueryJCommand, QueryJBuildException, QueryJCommandHandler<QueryJCommand>> chain)

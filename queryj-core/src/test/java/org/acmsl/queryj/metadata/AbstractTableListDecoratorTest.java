@@ -68,13 +68,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Tests for {@link AbstractTableAttributesListDecorator}.
+ * Tests for {@link AbstractTableListDecorator}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/04/12 06:38
  */
 @RunWith(JUnit4.class)
-public class AbstractTableAttributesListDecoratorTest
+public class AbstractTableListDecoratorTest
 {
     /**
      * Checks whether getContainsClobs() detects any Clob
@@ -88,7 +88,7 @@ public class AbstractTableAttributesListDecoratorTest
             new ArrayList<>();
 
         @NotNull final String name = "name";
-        @NotNull final String comment = "comment";
+        @NotNull final String comment = "comment1";
         @NotNull final List<Attribute<String>> primaryKey = new ArrayList<>(0);
         @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>(0);
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable = null;
@@ -120,8 +120,8 @@ public class AbstractTableAttributesListDecoratorTest
         @NotNull final TableDecorator tableDecorator =
             new CachingTableDecorator(table, metadataManager, decoratorFactory, customSqlProvider);
 
-        @NotNull final AbstractTableAttributesListDecorator instance =
-            createInstance(attributes, tableDecorator, metadataManager);
+        @NotNull final AbstractTableListDecorator<Attribute<DecoratedString>> instance =
+            createInstance(attributes, tableDecorator, metadataManager, customSqlProvider, decoratorFactory);
 
         Assert.assertTrue(instance.getContainsClobs());
         EasyMock.verify(attribute);
@@ -139,7 +139,7 @@ public class AbstractTableAttributesListDecoratorTest
             new ArrayList<>();
 
         @NotNull final String name = "name";
-        @NotNull final String comment = "comment";
+        @NotNull final String comment = "comment2";
         @NotNull final List<Attribute<String>> primaryKey = new ArrayList<>(0);
         @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>(0);
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable = null;
@@ -171,8 +171,8 @@ public class AbstractTableAttributesListDecoratorTest
         @NotNull final TableDecorator tableDecorator =
             new CachingTableDecorator(table, metadataManager, decoratorFactory, customSqlProvider);
 
-        @NotNull final AbstractTableAttributesListDecorator instance =
-            createInstance(attributes, tableDecorator, metadataManager);
+        @NotNull final AbstractTableListDecorator<Attribute<DecoratedString>> instance =
+            createInstance(attributes, tableDecorator, metadataManager, customSqlProvider, decoratorFactory);
 
         Assert.assertTrue(instance.getContainsClobs());
         EasyMock.verify(attribute);
@@ -191,7 +191,7 @@ public class AbstractTableAttributesListDecoratorTest
             new ArrayList<>();
 
         @NotNull final String name = "name";
-        @NotNull final String comment = "comment";
+        @NotNull final String comment = "comment3";
         @NotNull final List<Attribute<String>> primaryKey = new ArrayList<>(0);
         @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>(0);
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable = null;
@@ -226,8 +226,8 @@ public class AbstractTableAttributesListDecoratorTest
         @NotNull final TableDecorator tableDecorator =
             new CachingTableDecorator(table, metadataManager, decoratorFactory, customSqlProvider);
 
-        @NotNull final AbstractTableAttributesListDecorator instance =
-            createInstance(attributes, tableDecorator, metadataManager);
+        @NotNull final AbstractTableListDecorator instance =
+            createInstance(attributes, tableDecorator, metadataManager, customSqlProvider, decoratorFactory);
 
         @NotNull final List<DecoratedString> types = instance.getAttributeTypes();
         Assert.assertFalse(types.isEmpty());
@@ -244,44 +244,112 @@ public class AbstractTableAttributesListDecoratorTest
      * @param attributes the attributes.
      * @param tableDecorator the {@link TableDecorator}.
      * @param metadataManager the {@link MetadataManager}.
+     * @param customSqlProvider the {@link CustomSqlProvider}.
+     * @param decoratorFactory the {@link DecoratorFactory}.
      * @return the new instance.
      */
     @NotNull
-    protected AbstractTableAttributesListDecorator createInstance(
+    protected AbstractTableListDecorator<Attribute<DecoratedString>> createInstance(
         @NotNull final List<Attribute<DecoratedString>> attributes,
         @NotNull final TableDecorator tableDecorator,
-        @NotNull final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
-            new AbstractTableAttributesListDecorator(attributes, tableDecorator)
-            {
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public Attribute<DecoratedString> getStaticAttribute()
-                {
-                    return null;
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                public boolean isRelationship()
-                {
-                    return false;
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @NotNull
-                @Override
-                public MetadataManager getMetadataManager()
-                {
-                    return metadataManager;
-                }
-            };
+            new MyTableListDecorator(
+                attributes, tableDecorator, customSqlProvider, decoratorFactory, metadataManager);
     }
+
+    /**
+     * A dummy implementation of {@link AbstractTableListDecorator}.
+     */
+    public static class MyTableListDecorator
+        extends AbstractTableListDecorator<Attribute<DecoratedString>>
+    {
+        /**
+         * The metadata manager.
+         */
+        private MetadataManager m__MetadataManager;
+
+        /**
+         * Creates a new instance.
+         * @param attributes the attributes.
+         * @param tableDecorator the table decorator.
+         * @param customSqlProvider the {@link CustomSqlProvider} instance.
+         * @param decoratorFactory the {@link DecoratorFactory} instance.
+         * @param metadataManager the {@link MetadataManager} instance.
+         */
+        public MyTableListDecorator(
+            @NotNull final List<Attribute<DecoratedString>> attributes,
+            @NotNull final TableDecorator tableDecorator,
+            @NotNull final CustomSqlProvider customSqlProvider,
+            @NotNull final DecoratorFactory decoratorFactory,
+            @NotNull final MetadataManager metadataManager)
+        {
+            super(attributes, tableDecorator, customSqlProvider, decoratorFactory);
+            immutableSetMetadataManager(metadataManager);
+        }
+
+        /**
+         * Specifies the metadata manager.
+         * @param metadataManager the {@link MetadataManager} instance.
+         */
+        protected final void immutableSetMetadataManager(@NotNull final MetadataManager metadataManager)
+        {
+            this.m__MetadataManager = metadataManager;
+        }
+
+        /**
+         * Specifies the metadata manager.
+         * @param metadataManager the {@link MetadataManager} instance.
+         */
+        protected void setMetadataManager(@NotNull final MetadataManager metadataManager)
+        {
+            immutableSetMetadataManager((metadataManager));
+        }
+
+        /**
+         * Retrieves the metadata manager.
+         * @return the {@link MetadataManager} instance.
+         */
+        @Override
+        @NotNull
+        public MetadataManager getMetadataManager()
+        {
+            return this.m__MetadataManager;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Attribute<DecoratedString> getStaticAttribute()
+        {
+            return null;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isRelationship()
+        {
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @NotNull
+        @Override
+        protected ListDecorator<Attribute<DecoratedString>> createListDecorator(
+            @NotNull final List<Attribute<DecoratedString>> items,
+            @NotNull final TableDecorator table,
+            @NotNull final CustomSqlProvider customSqlProvider,
+            @NotNull final DecoratorFactory decoratorFactory)
+        {
+            return new MyTableListDecorator(items, table, customSqlProvider, decoratorFactory, getMetadataManager());
+        }
+    };
 }

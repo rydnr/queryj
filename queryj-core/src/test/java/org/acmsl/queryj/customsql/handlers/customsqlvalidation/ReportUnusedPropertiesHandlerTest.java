@@ -50,11 +50,6 @@ import org.acmsl.queryj.customsql.Sql.Cardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 
 /*
- * Importing Apache Commons Configuration classes.
- */
-import org.apache.commons.configuration.PropertiesConfiguration;
-
-/*
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;

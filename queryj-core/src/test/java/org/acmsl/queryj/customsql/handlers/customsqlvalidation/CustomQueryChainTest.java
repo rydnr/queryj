@@ -71,6 +71,10 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class CustomQueryChainTest
 {
+    /**
+     * Checks whether it includes the required handlers.
+     * throws QueryJBuildException
+     */
     @SuppressWarnings("unchecked")
     @Test
     public void includes_required_handlers()
@@ -96,6 +100,12 @@ public class CustomQueryChainTest
         Assert.assertTrue(contains(SkipValidationIfCacheExistsHandler.class, t_Chain));
     }
 
+    /**
+     * Checks whether given chain contains a handler class.
+     * @param handlerClass the handler class.
+     * @param chain the chain.
+     * @return {@code true} in such case.
+     */
     public boolean contains(
         @NotNull final Class<?> handlerClass,
         @NotNull final Chain<QueryJCommand, QueryJBuildException, QueryJCommandHandler<QueryJCommand>> chain)

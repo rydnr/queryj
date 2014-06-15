@@ -100,7 +100,8 @@ public class AbstractResultDecoratorTest
         properties.add(property3);
         properties.add(property4);
 
-        @NotNull final AbstractResultDecorator result = AbstractResultDecoratorTest.setupResultDecorator(properties);
+        @NotNull final AbstractResultDecorator<String> result =
+            AbstractResultDecoratorTest.setupResultDecorator(properties);
 
         Assert.assertEquals(1, result.getPropertyTypes().size());
     }
@@ -130,7 +131,8 @@ public class AbstractResultDecoratorTest
         properties.add(property3);
         properties.add(property4);
 
-        @NotNull final AbstractResultDecorator result = AbstractResultDecoratorTest.setupResultDecorator(properties);
+        @NotNull final AbstractResultDecorator<String> result =
+            AbstractResultDecoratorTest.setupResultDecorator(properties);
 
         Assert.assertEquals(2, result.getNullableProperties().size());
     }
@@ -141,7 +143,7 @@ public class AbstractResultDecoratorTest
     @Test
     public void getSimpleClassValue_removes_the_package_name()
     {
-        @NotNull final AbstractResultDecorator result =
+        @NotNull final AbstractResultDecorator<String> result =
             AbstractResultDecoratorTest.setupResultDecorator("my.id", "com.foo.bar.MyResult", new ArrayList<>(0));
 
         Assert.assertEquals("MyResult", result.getSimpleClassValue().getValue());
@@ -154,7 +156,7 @@ public class AbstractResultDecoratorTest
     @Test
     public void getPackage_retrieves_the_package_name()
     {
-        @NotNull final AbstractResultDecorator result =
+        @NotNull final AbstractResultDecorator<String> result =
             AbstractResultDecoratorTest.setupResultDecorator("my.id", "com.foo.bar.MyResult", new ArrayList<>(0));
 
         Assert.assertEquals("com.foo.bar", result.getPackage().getValue());
@@ -167,7 +169,7 @@ public class AbstractResultDecoratorTest
      * @return the decorator.
      */
     @NotNull
-    protected static AbstractResultDecorator setupResultDecorator(@NotNull final List<Property<String>> properties)
+    protected static AbstractResultDecorator<String> setupResultDecorator(@NotNull final List<Property<String>> properties)
     {
         return setupResultDecorator("my.result", "MyResult", properties);
     }
@@ -180,12 +182,12 @@ public class AbstractResultDecoratorTest
      * @return the decorator.
      */
     @NotNull
-    protected static AbstractResultDecorator setupResultDecorator(
+    protected static AbstractResultDecorator<String> setupResultDecorator(
         @NotNull final String id,
         @NotNull final String classValue,
         @NotNull final List<Property<String>> properties)
     {
-        @NotNull final AbstractResultDecorator result;
+        @NotNull final AbstractResultDecorator<String> result;
 
         @NotNull final Result<String> wrappedResult = new ResultElement<>(id, classValue);
 
@@ -208,7 +210,7 @@ public class AbstractResultDecoratorTest
         EasyMock.replay(metadataManager);
 
         result =
-            new AbstractResultDecorator(wrappedResult, customSqlProvider, metadataManager, decoratorFactory) {};
+            new AbstractResultDecorator<String>(wrappedResult, customSqlProvider, metadataManager, decoratorFactory) {};
 
         return result;
     }

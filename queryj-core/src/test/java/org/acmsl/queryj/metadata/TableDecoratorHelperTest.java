@@ -44,6 +44,7 @@ import org.acmsl.queryj.metadata.vo.AttributeIncompleteValueObject;
 /*
  * Importing JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.vo.AttributeValueObject;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -238,5 +239,41 @@ public class TableDecoratorHelperTest
         Assert.assertFalse(
             instance.containNotNullAttributes(
                 table2.getAttributes(), table2.getMetadataManager().getMetadataTypeManager()));
+    }
+
+    /**
+     * Checks whether isListOfAttributes detects types correctly.
+     */
+    @Test
+    public void isListOfAttributes_detects_types_correctly()
+    {
+        @NotNull final List<Attribute<String>> list = new ArrayList<>(1);
+
+        @NotNull final Attribute<String> attribute =
+            new AttributeValueObject(
+                "name",
+                Types.BIGINT,
+                "long",
+                "table",
+                "comment",
+                1,
+                10,
+                1,
+                null,
+                null,
+                null,
+                false,
+                null,
+                false,
+                false,
+                null,
+                null,
+                null);
+
+        list.add(attribute);
+
+        @NotNull final TableDecoratorHelper instance = TableDecoratorHelper.getInstance();
+
+        Assert.assertTrue(instance.isListOfAttributes(list));
     }
 }

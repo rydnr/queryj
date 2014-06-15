@@ -86,6 +86,11 @@ import java.sql.SQLException;
 @RunWith(JUnit4.class)
 public class ExecuteQueryHandlerTest
 {
+    /**
+     * Tests whether a valid query executes correctly.
+     * throws QueryJBuildException if the test fails.
+     * throws SQLException if the test fails.
+     */
     @SuppressWarnings("unchecked")
     @Test
     public void a_valid_query_executes_correctly()

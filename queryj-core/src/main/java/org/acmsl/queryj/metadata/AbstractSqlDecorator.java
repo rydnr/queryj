@@ -543,9 +543,10 @@ public abstract class AbstractSqlDecorator
      * @return the decorated instance.
      */
     @NotNull
-    protected ResultDecorator decorate(@NotNull final Result<String> result)
+    protected ResultDecorator<DecoratedString> decorate(@NotNull final Result<String> result)
     {
-        return decorate(result, getCustomSqlProvider(), getMetadataManager(), CachingDecoratorFactory.getInstance());
+        return
+            decorate(result, getCustomSqlProvider(), getMetadataManager(), CachingDecoratorFactory.getInstance());
     }
 
     /**
@@ -557,7 +558,7 @@ public abstract class AbstractSqlDecorator
      * @return the decorated instance.
      */
     @NotNull
-    protected ResultDecorator decorate(
+    protected ResultDecorator<DecoratedString> decorate(
         @NotNull final Result<String> result,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,

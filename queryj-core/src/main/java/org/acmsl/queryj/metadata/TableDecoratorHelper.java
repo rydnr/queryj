@@ -39,6 +39,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.vo.Attribute;
 
 /*
@@ -470,6 +471,68 @@ public class TableDecoratorHelper
         }
 
         Collections.sort(result);
+
+        return result;
+    }
+
+    /**
+     * Checks whether given list is composed of {@link org.acmsl.queryj.metadata.vo.Attribute attributes} or not.
+     * @param <T> the type of the items.
+     * @param list such list.
+     * @return {@code true} in such case.
+     */
+    protected <T> boolean isListOfAttributes(@NotNull final List<T> list)
+    {
+        final boolean result;
+
+        if (list.size() > 0)
+        {
+            @Nullable final T item = list.get(0);
+
+            if (item instanceof Attribute)
+            {
+                result = true;
+            }
+            else
+            {
+                result = false;
+            }
+        }
+        else
+        {
+            result = true;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given list is composed of {@link Attribute attributes} or not.
+     * @param <T> the type of the items.
+     * @param list such list.
+     * @return {@code true} in such case.
+     */
+    protected <T> boolean isListOfCustomResults(@NotNull final List<T> list)
+    {
+        final boolean result;
+
+        if (list.size() > 0)
+        {
+            @Nullable final T item = list.get(0);
+
+            if (item instanceof Result)
+            {
+                result = true;
+            }
+            else
+            {
+                result = false;
+            }
+        }
+        else
+        {
+            result = true;
+        }
 
         return result;
     }

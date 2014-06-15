@@ -356,6 +356,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @return the retrieved rows.
+     * throws SQLException if the contents cannot be retrieved.
      */
     @NotNull
     protected List<Row<String>> queryContents(
@@ -375,9 +376,10 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * Queries the contents of given table.
      * @param tableName the table name.
      * @param metadataManager the metadata manager.
-     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
-     * @param metadataUtils the <code>MetadataUtils</code> instance.
+     * @param metaLanguageUtils the {@link MetaLanguageUtils}  instance.
+     * @param metadataUtils the {@link MetadataUtils} instance.
      * @return the retrieved rows.
+     * throws SQLException if the contents cannot be retrieved.
      */
     @NotNull
     protected List<Row<String>> queryContents(
@@ -433,6 +435,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param attributes the attributes.
      * @param metadataManager the metadata manager.
      * @return the retrieved rows.
+     * throws SQLException if the contents cannot be retrieved.
      */
     @NotNull
     public List<Row<String>> queryContents(
@@ -457,6 +460,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param attributes the attributes.
      * @param metaData the metadata.
      * @return the retrieved rows.
+     * throws SQLException if the contents cannot be retrieved.
      */
     @NotNull
     protected List<Row<String>> queryContents(
@@ -481,6 +485,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param attributes the attributes.
      * @param connection the connection.
      * @return the retrieved rows.
+     * throws SQLException if the contents cannot be retrieved.
      */
     @NotNull
     protected List<Row<String>> queryContents(

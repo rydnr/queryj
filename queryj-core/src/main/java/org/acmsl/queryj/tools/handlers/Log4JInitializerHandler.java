@@ -167,6 +167,9 @@ public class Log4JInitializerHandler
          * <code>writer</code>.
          * <p>The <code>writer</code> must have been previously opened by
          * the user.
+         * @param layout the layout.
+         * @param writer the writer.
+         * @param priority the priority.
          */
         public WriterAppenderImpl(final Layout layout, final Writer writer, final Priority priority)
         {
@@ -219,6 +222,7 @@ public class Log4JInitializerHandler
         /**
          * Creates a new instance for given log.
          * @param log the {@link Log}.
+         * @param level the level.
          */
         public WriterAdapter(@NotNull final Log log, @NotNull final Level level)
         {
@@ -301,6 +305,7 @@ public class Log4JInitializerHandler
          * @param len the buffer length.
          * @param log the actual {@link Log}.
          * @param level the log {@link Level level}.
+         * throws IOException if the content cannot be written.
          */
         protected void write(
             final char[] cbuf, final int off, final int len, @NotNull final Log log, @NotNull final Level level)

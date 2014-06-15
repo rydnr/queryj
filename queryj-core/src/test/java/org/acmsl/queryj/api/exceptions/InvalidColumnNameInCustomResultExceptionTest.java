@@ -74,6 +74,10 @@ import java.util.MissingResourceException;
 @RunWith(JUnit4.class)
 public class InvalidColumnNameInCustomResultExceptionTest
 {
+    /**
+     * Tests whether the message is internationalized for implicit results.
+     * throws MissingResourceException
+     */
     @Test
     public void the_message_is_internationalized_for_implicit_results()
         throws MissingResourceException
@@ -103,6 +107,10 @@ public class InvalidColumnNameInCustomResultExceptionTest
         }
     }
 
+    /**
+     * Tests whether the message is internationalized for explicit results.
+     * throws MissingResourceException
+     */
     @Test
     public void the_message_is_internationalized_for_explicit_results()
         throws MissingResourceException

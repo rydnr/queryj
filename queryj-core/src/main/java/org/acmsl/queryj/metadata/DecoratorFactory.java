@@ -96,6 +96,7 @@ public interface DecoratorFactory
     /**
      * Creates a {@link PropertyDecorator} for given
      * property instance.
+     * @param <V> the result type.
      * @param property the {@link Property property}.
      * @param result the {@link Result result}.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
@@ -103,9 +104,9 @@ public interface DecoratorFactory
      * @return the decorated property for the concrete template.
      */
     @NotNull
-    public PropertyDecorator createDecorator(
+    public <V> PropertyDecorator createDecorator(
         @NotNull final Property<String> property,
-        @NotNull final Result<String> result,
+        @NotNull final Result<V> result,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager);
 
@@ -119,7 +120,7 @@ public interface DecoratorFactory
      */
     @SuppressWarnings("unused")
     @NotNull
-    public ResultDecorator createDecorator(
+    public ResultDecorator<DecoratedString> createDecorator(
         @NotNull final Result<String> result,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager);

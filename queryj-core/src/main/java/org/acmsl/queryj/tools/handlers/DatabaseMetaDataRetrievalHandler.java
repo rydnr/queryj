@@ -176,7 +176,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param alreadyDone the flag indicating whether the metadata
      * extraction has already been done.
      * @param metaData the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
+     * @return {@code true} if the chain should be stopped.
+     * throws QueryJBuildException if the process fails.
      */
     protected boolean handle(
         @NotNull final QueryJCommand parameters,
@@ -502,7 +503,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Handles given parameters.
      * @param parameters the parameters to handle.
      * @param metadataManager the {@link MetadataManager} instance.
-     * @return <code>true</code> if the chain should be stopped.
+     * @return {@code true} if the chain should be stopped.
+     * throws QueryJBuildException if the process fails.
      */
     @SuppressWarnings("unchecked")
     protected boolean handle(
@@ -604,7 +606,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Handles given parameters.
      * @param parameters the parameters to handle.
      * @param metaData the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
+     * @return {@code true} if the chain should be stopped.
+     * throws QueryJBuildException if the process fails.
      */
     protected boolean handle(
         @NotNull final QueryJCommand parameters,

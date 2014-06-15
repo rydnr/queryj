@@ -64,7 +64,9 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Manages a sequential chain of actions within QueryJ.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <C> the command type.
+ * @param <CH> che command handler type.
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
 public abstract class AbstractQueryJChain
@@ -80,7 +82,7 @@ public abstract class AbstractQueryJChain
      */
     public AbstractQueryJChain()
     {
-        immutableSetChain(new ArrayListChainAdapter<>());
+        immutableSetChain(new ArrayListChainAdapter<C, QueryJBuildException, CH>());
     }
 
     /**

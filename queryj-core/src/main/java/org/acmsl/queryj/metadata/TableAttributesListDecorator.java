@@ -36,14 +36,13 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.metadata.vo.Row;
-import org.acmsl.queryj.metadata.vo.Table;
 
 /*
  * Importing JetBrains annotations.
@@ -70,7 +69,7 @@ import java.util.List;
  */
 @ThreadSafe
 public class TableAttributesListDecorator
-    extends AbstractTableAttributesListDecorator
+    extends AbstractTableListDecorator<Attribute<DecoratedString>>
 {
     /**
      * The serial version id.
@@ -81,79 +80,22 @@ public class TableAttributesListDecorator
      * Creates a new instance.
      * @param list the attributes.
      * @param table the wrapped table.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     public TableAttributesListDecorator(
         @NotNull final List<Attribute<DecoratedString>> list,
-        @NotNull final TableDecorator table)
+        @NotNull final TableDecorator table,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        super(list, table);
+        super(list, table, customSqlProvider, decoratorFactory);
     }
+
     // TableDecorator implementation
 
     /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes()
-    {
-        throw new RuntimeException(INVALID_OPERATION);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public List<Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>>
-    getAllParentTables()
-    {
-        throw new RuntimeException(INVALID_OPERATION);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes()
-    {
-        throw new RuntimeException(INVALID_OPERATION);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public List<Sql<DecoratedString>> getDynamicQueries()
-    {
-        throw new RuntimeException(INVALID_OPERATION);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public List<Row<DecoratedString>> getStaticContent()
-    {
-        throw new RuntimeException(INVALID_OPERATION);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public List<Result<DecoratedString>> getDifferentCustomResults()
-    {
-        throw new RuntimeException(INVALID_OPERATION);
-    }
-
-    /**
      * Retrieves all attributes, including parent's.
-     *
      * @return such attributes.
      */
     @NotNull
@@ -165,7 +107,6 @@ public class TableAttributesListDecorator
 
     /**
      * Retrieves all attributes, including parent's.
-     *
      * @return such attributes.
      */
     @NotNull
@@ -177,7 +118,6 @@ public class TableAttributesListDecorator
 
     /**
      * Checks whether some of the attributes are nullable or not.
-     *
      * @return {@code true} in such case.
      */
     @Override
@@ -188,7 +128,6 @@ public class TableAttributesListDecorator
 
     /**
      * Checks whether some of the attributes cannot be null.
-     *
      * @return {@code true} in such case.
      */
     @Override
@@ -199,7 +138,6 @@ public class TableAttributesListDecorator
 
     /**
      * Retrieves the custom result.
-     *
      * @return such {@link org.acmsl.queryj.metadata.ResultDecorator} element.
      */
     @Nullable
@@ -211,7 +149,6 @@ public class TableAttributesListDecorator
 
     /**
      * Retrieves the custom selects.
-     *
      * @return such list of {@link org.acmsl.queryj.customsql.Sql} elements.
      */
     @NotNull
@@ -223,7 +160,6 @@ public class TableAttributesListDecorator
 
     /**
      * Retrieves the custom updates or inserts.
-     *
      * @return such information.
      */
     @NotNull
@@ -235,7 +171,6 @@ public class TableAttributesListDecorator
 
     /**
      * Retrieves the custom select-for-update queries.
-     *
      * @return such list of {@link org.acmsl.queryj.customsql.Sql} elements.
      */
     @NotNull
@@ -247,7 +182,6 @@ public class TableAttributesListDecorator
 
     /**
      * Retrieves the name of the parent table, or {@code null} if no parent exists.
-     *
      * @return such information.
      */
     @Nullable
@@ -259,7 +193,6 @@ public class TableAttributesListDecorator
 
     /**
      * Retrieves the parent foreign-key.
-     *
      * @return such foreign key.
      */
     @Nullable
@@ -271,7 +204,6 @@ public class TableAttributesListDecorator
 
     /**
      * Alias to make templates more readable.
-     *
      * @return the child attributes.
      */
     @Nullable
@@ -283,7 +215,6 @@ public class TableAttributesListDecorator
 
     /**
      * Retrieves the nullable attributes.
-     *
      * @return such list.
      */
     @NotNull
@@ -296,117 +227,14 @@ public class TableAttributesListDecorator
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
-    @Override
-    public List<DecoratedString> getAttributeTypes()
+    protected ListDecorator<Attribute<DecoratedString>> createListDecorator(
+        @NotNull final List<Attribute<DecoratedString>> items,
+        @NotNull final TableDecorator table,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        return super.getAttributeTypes();
-    }
-
-    // Table implementation
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public DecoratedString getName()
-    {
-        return getTable().getName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Nullable
-    @Override
-    public DecoratedString getComment()
-    {
-        return getTable().getComment();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public ListDecorator<Attribute<DecoratedString>> getPrimaryKey()
-    {
-        return getTable().getPrimaryKey();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public List<ForeignKey<DecoratedString>> getForeignKeys()
-    {
-        return getTable().getForeignKeys();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Nullable
-    @Override
-    public Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>>
-    getParentTable()
-    {
-        return getTable().getParentTable();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isStatic()
-    {
-        return getTable().isStatic();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Attribute<DecoratedString> getStaticAttribute()
-    {
-        return getTable().getStaticAttribute();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isVoDecorated()
-    {
-        return getTable().isVoDecorated();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isRelationship()
-    {
-        return getTable().isRelationship();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public MetadataManager getMetadataManager()
-    {
-        return getTable().getMetadataManager();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int compareTo(final Table<DecoratedString, Attribute<DecoratedString>, ListDecorator<Attribute<DecoratedString>>> table)
-    {
-        return getTable().compareTo(table);
+        return new TableAttributesListDecorator(items, table, customSqlProvider, decoratorFactory);
     }
 }

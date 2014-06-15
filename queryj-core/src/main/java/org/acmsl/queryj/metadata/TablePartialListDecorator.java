@@ -36,8 +36,9 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.Attribute;
@@ -64,186 +65,107 @@ import java.util.List;
 
 /**
  * Partial list decorator for table attributes.
+ * @param <V> the type of the items.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/12/30 10:25
  */
 @ThreadSafe
-public class TableAttributesPartialListDecorator
-    implements PartialListDecorator,
-               TableDecorator
+public class TablePartialListDecorator<V>
+    extends AbstractTablePartialListDecorator<V>
+    implements TableDecorator
 {
     /**
      * The serial version id.
      */
-    private static final long serialVersionUID = 3942968754043772227L;
+    private static final long serialVersionUID = -7540355104418964835L;
 
     /**
-     * The table decorator.
+     * The custom SQL provider.
      */
-    private TableDecorator m__Table;
+    private CustomSqlProvider m__CustomSqlProvider;
 
     /**
-     * The list decorator.
+     * The decorator factory.
      */
-    private ListDecorator<Attribute<DecoratedString>> m__ListDecorator;
-
-    /**
-     * The operation types.
-     */
-    public static enum Operation
-    {
-        /**
-         * The plus operation.
-         */
-        PLUS,
-        /**
-         * The minus operation.
-         */
-        MINUS,
-        /**
-         * The "only" operation.
-         */
-        ONLY
-    }
-
-    /**
-     * The operation.
-     */
-    private Operation m__Operation;
+    private DecoratorFactory m__DecoratorFactory;
 
     /**
      * Creates a new instance.
      * @param listDecorator the {@link ListDecorator}.
      * @param table the {@link TableDecorator}.
      * @param operation the {@link Operation}.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
-    public TableAttributesPartialListDecorator(
-        @NotNull final ListDecorator<Attribute<DecoratedString>> listDecorator,
+    public TablePartialListDecorator(
+        @NotNull final ListDecorator<V> listDecorator,
         @NotNull final TableDecorator table,
-        @NotNull final Operation operation)
+        @NotNull final Operation operation,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        immutableSetListDecorator(listDecorator);
-        immutableSetTable(table);
-        immutableSetOperation(operation);
+        super(listDecorator, operation, table);
+        immutableSetCustomSqlProvider(customSqlProvider);
+        immutableSetDecoratorFactory(decoratorFactory);
     }
 
     /**
-     * Specifies the list decorator.
-     * @param listDecorator such instance.
+     * Specifies the custom sql provider.
+     * @param provider such {@link CustomSqlProvider instance}.
      */
-    protected final void immutableSetListDecorator(@NotNull final ListDecorator<Attribute<DecoratedString>> listDecorator)
+    protected final void immutableSetCustomSqlProvider(@NotNull final CustomSqlProvider provider)
     {
-        this.m__ListDecorator = listDecorator;
+        this.m__CustomSqlProvider = provider;
     }
 
     /**
-     * Specifies the list decorator.
-     * @param listDecorator such instance.
-     */
-    @SuppressWarnings("unused")
-    protected void setListDecorator(@NotNull final ListDecorator<Attribute<DecoratedString>> listDecorator)
-    {
-        immutableSetListDecorator(listDecorator);
-    }
-
-    /**
-     * Retrieves the list decorator.
-     * @return such instance.
+     * Specifies the custom sql provider.
+     * @param provider such {@link CustomSqlProvider instance}.
      */
     @SuppressWarnings("unused")
-    public ListDecorator<Attribute<DecoratedString>> getListDecorator()
+    protected void setCustomSqlProvider(@NotNull final CustomSqlProvider provider)
     {
-        return this.m__ListDecorator;
+        immutableSetCustomSqlProvider(provider);
     }
 
     /**
-     * Specifies the table.
-     * @param table the table.
-     */
-    protected final void immutableSetTable(@NotNull final TableDecorator table)
-    {
-        this.m__Table = table;
-    }
-
-    /**
-     * Specifies the table.
-     * @param table the table.
-     */
-    @SuppressWarnings("unused")
-    protected void setTable(@NotNull final TableDecorator table)
-    {
-        immutableSetTable(table);
-    }
-
-    /**
-     * Retrieves the table.
-     * @return such instance.
+     * Retrieves the custom sql provider.
+     * @return such {@link CustomSqlProvider instance}.
      */
     @NotNull
-    public TableDecorator getTable()
+    public CustomSqlProvider getCustomSqlProvider()
     {
-        return this.m__Table;
+        return this.m__CustomSqlProvider;
     }
 
     /**
-     * Specifies the operation.
-     * @param operation such operation.
+     * Specifies the decorator factory.
+     * @param factory the {@link DecoratorFactory} instance.
      */
-    protected final void immutableSetOperation(@NotNull final Operation operation)
+    protected final void immutableSetDecoratorFactory(@NotNull final DecoratorFactory factory)
     {
-        this.m__Operation = operation;
+        this.m__DecoratorFactory = factory;
     }
 
     /**
-     * Specifies the operation.
-     * @param operation such operation.
-     */
-    @SuppressWarnings("unused")
-    protected void setOperation(@NotNull final Operation operation)
-    {
-        immutableSetOperation(operation);
-    }
-
-    /**
-     * Retrieves the operation.
-     * @return such operation.
-     */
-    public Operation getOperation()
-    {
-        return this.m__Operation;
-    }
-
-    // ListDecorator implementation
-    /**
-     * Retrieves the items.
-     * @return such information.
+     * Specifies the decorator factory.
+     * @param factory the {@link DecoratorFactory} instance.
      */
     @SuppressWarnings("unused")
-    @NotNull
-    public List<Attribute<DecoratedString>> getItems()
+    protected void setDecoratorFactory(@NotNull final DecoratorFactory factory)
     {
-        throw new RuntimeException(AbstractTableAttributesListDecorator.INVALID_OPERATION);
+        immutableSetDecoratorFactory(factory);
     }
 
     /**
-     * Applies the "plus" operation to the items.
-     * @return the partial result.
+     * Retrieves the decorator factory.
+     * @return the {@link DecoratorFactory} instance.
      */
     @NotNull
-    public PartialListDecorator plus()
+    public DecoratorFactory getDecoratorFactory()
     {
-        throw new RuntimeException(AbstractTableAttributesListDecorator.INVALID_OPERATION);
-    }
-
-    /**
-     * Applies the "minus" operation to the items.
-     * @return the partial result.
-     */
-    @NotNull
-    public PartialListDecorator minus()
-    {
-        throw new RuntimeException(AbstractTableAttributesListDecorator.INVALID_OPERATION);
+        return this.m__DecoratorFactory;
     }
 
     // TableDecorator implementation
@@ -266,9 +188,7 @@ public class TableAttributesPartialListDecorator
     @NotNull
     public ListDecorator<Attribute<DecoratedString>> getReadOnly()
     {
-        @NotNull final ListDecorator<Attribute<DecoratedString>> result = getReadOnlyAttributes();
-
-        return result;
+        return getReadOnlyAttributes();
     }
 
     /**
@@ -280,28 +200,37 @@ public class TableAttributesPartialListDecorator
      */
     @NotNull
     protected ListDecorator<Attribute<DecoratedString>> getReadOnlyAttributes(
-        @NotNull final ListDecorator<Attribute<DecoratedString>> list,
+        @NotNull final ListDecorator<V> list,
         @NotNull final TableDecorator table,
         @NotNull final Operation operation)
     {
         @NotNull final ListDecorator<Attribute<DecoratedString>> result;
 
-        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<>(list);
+        if (isListOfAttributes(list))
+        {
+            @SuppressWarnings("unchecked")
+            @NotNull final List<Attribute<DecoratedString>> aux =
+                new ArrayList<>((ListDecorator<Attribute<DecoratedString>>) list);
 
-        if (operation.equals(Operation.MINUS))
-        {
-            aux.removeAll(table.getReadOnlyAttributes());
-        }
-        else if (operation.equals(Operation.PLUS))
-        {
-            aux.addAll(table.getReadOnlyAttributes());
+            if (operation.equals(Operation.MINUS))
+            {
+                aux.removeAll(table.getReadOnlyAttributes());
+            }
+            else if (operation.equals(Operation.PLUS))
+            {
+                aux.addAll(table.getReadOnlyAttributes());
+            }
+            else
+            {
+                aux.retainAll(table.getReadOnlyAttributes());
+            }
+
+            result = new TableAttributesListDecorator(aux, table, getCustomSqlProvider(), getDecoratorFactory());
         }
         else
         {
-            aux.retainAll(table.getReadOnlyAttributes());
+            throw new RuntimeException(ListDecorator.INVALID_OPERATION);
         }
-
-        result = new TableAttributesListDecorator(aux, table);
 
         return result;
     }
@@ -325,9 +254,7 @@ public class TableAttributesPartialListDecorator
     @NotNull
     public ListDecorator<Attribute<DecoratedString>> getExternallyManaged()
     {
-        @NotNull final ListDecorator<Attribute<DecoratedString>> result = getExternallyManagedAttributes();
-
-        return result;
+        return getExternallyManagedAttributes();
     }
 
     /**
@@ -349,28 +276,37 @@ public class TableAttributesPartialListDecorator
      */
     @NotNull
     protected ListDecorator<Attribute<DecoratedString>> getExternallyManagedAttributes(
-        @NotNull final ListDecorator<Attribute<DecoratedString>> list,
+        @NotNull final ListDecorator<V> list,
         @NotNull final TableDecorator table,
         @NotNull final Operation operation)
     {
         @NotNull final ListDecorator<Attribute<DecoratedString>> result;
 
-        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<>(list);
+        if (isListOfAttributes(list))
+        {
+            @SuppressWarnings("unchecked")
+            @NotNull final List<Attribute<DecoratedString>> aux =
+                (List<Attribute<DecoratedString>>) new ArrayList<>(list);
 
-        if (operation.equals(Operation.MINUS))
-        {
-            aux.removeAll(table.getExternallyManagedAttributes());
-        }
-        else if (operation.equals(Operation.PLUS))
-        {
-            aux.addAll(table.getExternallyManagedAttributes());
+            if (operation.equals(Operation.MINUS))
+            {
+                aux.removeAll(table.getExternallyManagedAttributes());
+            }
+            else if (operation.equals(Operation.PLUS))
+            {
+                aux.addAll(table.getExternallyManagedAttributes());
+            }
+            else
+            {
+                aux.retainAll(table.getExternallyManagedAttributes());
+            }
+
+            result = new TableAttributesListDecorator(aux, table, getCustomSqlProvider(), getDecoratorFactory());
         }
         else
         {
-            aux.retainAll(table.getExternallyManagedAttributes());
+            throw new UnsupportedOperationException();
         }
-
-        result = new TableAttributesListDecorator(aux, table);
 
         return result;
     }
@@ -442,9 +378,9 @@ public class TableAttributesPartialListDecorator
      */
     @NotNull
     @Override
-    public List<Result<DecoratedString>> getDifferentCustomResults()
+    public ListDecorator<Result<DecoratedString>> getCustomResults()
     {
-        return getTable().getDifferentCustomResults();
+        return getTable().getCustomResults();
     }
 
     /**
@@ -507,28 +443,37 @@ public class TableAttributesPartialListDecorator
      */
     @NotNull
     protected ListDecorator<Attribute<DecoratedString>> getPrimaryKey(
-        @NotNull final ListDecorator<Attribute<DecoratedString>> list,
+        @NotNull final ListDecorator<V> list,
         @NotNull final TableDecorator table,
         @NotNull final Operation operation)
     {
         @NotNull final ListDecorator<Attribute<DecoratedString>> result;
 
-        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<>(list);
+        if (isListOfAttributes(list))
+        {
+            @SuppressWarnings("unchecked")
+            @NotNull final List<Attribute<DecoratedString>> aux =
+                (List<Attribute<DecoratedString>>) new ArrayList<>(list);
 
-        if (operation.equals(Operation.MINUS))
-        {
-            aux.removeAll(table.getPrimaryKey());
-        }
-        else if (operation.equals(Operation.PLUS))
-        {
-            addAll(table.getPrimaryKey(), aux);
+            if (operation.equals(Operation.MINUS))
+            {
+                aux.removeAll(table.getPrimaryKey());
+            }
+            else if (operation.equals(Operation.PLUS))
+            {
+                addAll(table.getPrimaryKey(), aux);
+            }
+            else
+            {
+                aux.retainAll(table.getPrimaryKey());
+            }
+
+            result = new TableAttributesListDecorator(aux, table, getCustomSqlProvider(), getDecoratorFactory());
         }
         else
         {
-            aux.retainAll(table.getPrimaryKey());
+            throw new UnsupportedOperationException();
         }
-
-        result = new TableAttributesListDecorator(aux, table);
 
         return result;
     }
@@ -552,28 +497,37 @@ public class TableAttributesPartialListDecorator
      */
     @NotNull
     protected ListDecorator<Attribute<DecoratedString>> getAttributes(
-        @NotNull final ListDecorator<Attribute<DecoratedString>> list,
+        @NotNull final ListDecorator<V> list,
         @NotNull final TableDecorator table,
         @NotNull final Operation operation)
     {
         @NotNull final ListDecorator<Attribute<DecoratedString>> result;
 
-        @NotNull final List<Attribute<DecoratedString>> aux = new ArrayList<>(list);
+        if (isListOfAttributes(list))
+        {
+            @SuppressWarnings("unchecked")
+            @NotNull final List<Attribute<DecoratedString>> aux =
+                (List<Attribute<DecoratedString>>) new ArrayList<>(list);
 
-        if (operation.equals(Operation.MINUS))
-        {
-            aux.removeAll(table.getAttributes());
-        }
-        else if (operation.equals(Operation.PLUS))
-        {
-            addAll(table.getAttributes(), aux);
+            if (operation.equals(Operation.MINUS))
+            {
+                aux.removeAll(table.getAttributes());
+            }
+            else if (operation.equals(Operation.PLUS))
+            {
+                addAll(table.getAttributes(), aux);
+            }
+            else
+            {
+                aux.retainAll(table.getAttributes());
+            }
+
+            result = new TableAttributesListDecorator(aux, table, getCustomSqlProvider(), getDecoratorFactory());
         }
         else
         {
-            aux.retainAll(table.getAttributes());
+            throw new UnsupportedOperationException();
         }
-
-        result = new TableAttributesListDecorator(aux, table);
 
         return result;
     }
@@ -612,7 +566,7 @@ public class TableAttributesPartialListDecorator
      * {@inheritDoc}
      */
     @Override
-    @NotNull
+    @Nullable
     public Attribute<DecoratedString> getStaticAttribute()
     {
         return getTable().getStaticAttribute();
@@ -811,6 +765,7 @@ public class TableAttributesPartialListDecorator
         return getTable().getNullableAttributes();
     }
 
+
     /**
      * Compares the wrapped table to given one.
      * @param table the table to compare with.
@@ -831,11 +786,85 @@ public class TableAttributesPartialListDecorator
     public String toString()
     {
         return
-              "{ \"class\": \"" + TableAttributesPartialListDecorator.class.getSimpleName() + '"'
+              "{ \"super\": " + super.toString()
+            + ", \"customSqlProvider\": " + this.m__CustomSqlProvider
+            + ", \"decoratorFactory\": " + this.m__DecoratorFactory
+            + ", \"class\": \"" + TablePartialListDecorator.class.getSimpleName() + '"'
             + ", \"package\": \"org.acmsl.queryj.metadata\""
-            + ", \"listDecorator\": " + m__ListDecorator
-            + ", \"table\": " + m__Table
-            + ", \"operation\": " + m__Operation
             + " }";
+    }
+
+    /**
+     * Retrieves the items, after removing duplicates.
+     * @return such list.
+     */
+    @NotNull
+    public ListDecorator<V> getDifferent()
+    {
+        return
+            getDifferent(
+                getListDecorator(),
+                getTable(),
+                getCustomSqlProvider(),
+                getDecoratorFactory(),
+                TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the items, after removing duplicates.
+     * @param items the items.
+     * @param table the {@link TableDecorator table}.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
+     * @return such list.
+     */
+    @SuppressWarnings("unchecked")
+    @NotNull
+    protected ListDecorator<V> getDifferent(
+        @NotNull final ListDecorator<V> items,
+        @NotNull final TableDecorator table,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
+    {
+        @NotNull final ListDecorator<V> result;
+
+        @NotNull final List<V> aux = new ArrayList<>(items.size());
+
+        for (@Nullable final V item : items)
+        {
+            if (!aux.contains(item))
+            {
+                aux.add(item);
+            }
+        }
+
+        if (tableDecoratorHelper.isListOfAttributes(items))
+        {
+            result =
+                (ListDecorator<V>)
+                    new TableAttributesListDecorator(
+                        (List<Attribute<DecoratedString>>) aux,
+                        table,
+                        customSqlProvider,
+                        decoratorFactory);
+        }
+        else if (tableDecoratorHelper.isListOfCustomResults(items))
+        {
+            result =
+                (ListDecorator<V>)
+                    new TableCustomResultsListDecorator(
+                        (List<Result<DecoratedString>>) aux,
+                        table,
+                        customSqlProvider,
+                        decoratorFactory);
+        }
+        else
+        {
+            throw new RuntimeException(AbstractTableListDecorator.INVALID_OPERATION);
+        }
+
+        return result;
     }
 }

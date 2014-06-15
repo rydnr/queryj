@@ -206,6 +206,8 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param fileUtils the {@link FileUtils} instance.
      * @param log the {@link Log} instance.
      * @return whether it gets written to disk.
+     * throws IOException if the template cannot be written to disk.
+     * throws QueryJBuildException if the template cannot be generated.
      */
     protected boolean generate(
         @NotNull final N template,
@@ -468,6 +470,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param relevantContent the content.
      * @param charset the charset.
      * @return the hash.
+     * throws QueryJBuildException if the hash cannot be computed.
      */
     @NotNull
     protected String computeHash(

@@ -23,17 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: PartialListDecorator.java
+ * Filename: TableListDecorator.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: ListDecorators or PartialListDecorators associated to a table.
  *
- * Date: 2013/12/30
- * Time: 10:21
+ * Date: 2014/06/15
+ * Time: 10:05
  *
  */
 package org.acmsl.queryj.metadata;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -41,15 +46,18 @@ package org.acmsl.queryj.metadata;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Identifies partial list decorators, i.e. {@link ListDecorator}s
- * linked with a certain operation in {@link ListDecorator} and expecting
- * a call to another method of the collection-container class to
- * fully define the final list.
+ * {@link ListDecorator}s or {@link PartialListDecorator}s associated to a {@link TableDecorator table}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/12/30 10:21
+ * Created: 2014/06/15 10:05
  */
 @ThreadSafe
-public interface PartialListDecorator
+public interface TableListDecorator
 {
+    /**
+     * Retrieves the table decorator.
+     * @return such {@link TableDecorator instance}.
+     */
+    @NotNull
+    TableDecorator getTable();
 }

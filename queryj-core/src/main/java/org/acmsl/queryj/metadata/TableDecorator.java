@@ -104,11 +104,11 @@ public interface TableDecorator
     List<Row<DecoratedString>> getStaticContent();
 
     /**
-     * Retrieves the list of different results defined for this table (using the referring custom-selects).
+     * Retrieves the list of results defined for this table (using the referring custom-selects).
      * @return such list.
      */
     @NotNull
-    List<Result<DecoratedString>> getDifferentCustomResults();
+    ListDecorator<Result<DecoratedString>> getCustomResults();
 
     /**
      * Retrieves the ordered list of the fully-qualified attribute types.

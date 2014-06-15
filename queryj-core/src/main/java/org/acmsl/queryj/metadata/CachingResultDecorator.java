@@ -63,7 +63,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class CachingResultDecorator
-    extends  AbstractResultDecorator
+    extends  AbstractResultDecorator<String>
 {
     /**
      * The serial version id.

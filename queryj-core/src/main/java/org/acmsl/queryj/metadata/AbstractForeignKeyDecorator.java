@@ -104,7 +104,7 @@ public abstract class AbstractForeignKeyDecorator
     {
         super(
             new DecoratedString(foreignKey.getSourceTableName()),
-            new ArrayList<>(0),
+            new ArrayList<Attribute<DecoratedString>>(0),
             new DecoratedString(foreignKey.getTargetTableName()),
             foreignKey.isNullable());
         immutableSetAttributes(
@@ -277,6 +277,8 @@ public abstract class AbstractForeignKeyDecorator
 
     /**
      * Decorates given attributes.
+     * @param <V> the type of the attributes.
+     * @param <K> the type of the decorated attributes.
      * @param attributes the attributes to decorate.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} implementation.
@@ -512,6 +514,7 @@ public abstract class AbstractForeignKeyDecorator
      * @return such list.
      */
     @NotNull
+    @SuppressWarnings("unused")
     public List<DecoratedString> getAttributeTypes()
     {
         return
@@ -541,6 +544,7 @@ public abstract class AbstractForeignKeyDecorator
      * Checks whether any attribute is a clob.
      * @return {@code true} in such case.
      */
+    @SuppressWarnings("unused")
     public boolean getContainsClobs()
     {
         return containClobs(getAttributes(), getMetadataManager().getMetadataTypeManager(), TableDecoratorHelper.getInstance());
@@ -550,6 +554,7 @@ public abstract class AbstractForeignKeyDecorator
      * Checks whether any attribute is a clob.
      * @param attributes the {@link Attribute}s.
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return {@code true} in such case.
      */
     protected boolean containClobs(
@@ -645,6 +650,7 @@ public abstract class AbstractForeignKeyDecorator
      * @param foreignKey the decorated foreign key.
      * @param object the object to compare to.
      * @return the result of such comparison.
+     * throws ClassCastException if the objects are not compatible.
      */
     protected int compareTo(
         @NotNull final ForeignKey<String> foreignKey, @Nullable final ForeignKey<DecoratedString> object)
@@ -670,7 +676,7 @@ public abstract class AbstractForeignKeyDecorator
      * @return a positive number if the first is considered 'greater' than the second;
      * 0 if they are equal; a negative number otherwise.
      */
-//    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     protected int compareFks(@NotNull final ForeignKey<String> first, @NotNull final ForeignKey<DecoratedString> second)
     {
         final int result;

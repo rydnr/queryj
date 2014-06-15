@@ -156,6 +156,7 @@ public class AbstractSqlDecoratorTest
         @NotNull final Sql<String> sql =
             new SqlElement<>("id1", "name1", "select", Cardinality.SINGLE, "all", false, false, "none", "desc1");
 
+        @SuppressWarnings("unchecked")
         @NotNull final Parameter parameter =
             new ParameterElement<String, String>("pid", 1, "paramName", "Date", null);
 

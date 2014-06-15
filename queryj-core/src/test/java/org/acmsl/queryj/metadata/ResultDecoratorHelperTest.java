@@ -97,7 +97,7 @@ public class ResultDecoratorHelperTest
         properties.add(property3);
         properties.add(property4);
 
-        @NotNull final AbstractResultDecorator result = AbstractResultDecoratorTest.setupResultDecorator(properties);
+        @NotNull final AbstractResultDecorator<String> result = AbstractResultDecoratorTest.setupResultDecorator(properties);
 
         Assert.assertTrue(instance.containNullableProperties(result.getProperties()));
     }
@@ -130,7 +130,8 @@ public class ResultDecoratorHelperTest
         properties.add(property3);
         properties.add(property4);
 
-        @NotNull final AbstractResultDecorator result = AbstractResultDecoratorTest.setupResultDecorator(properties);
+        @NotNull final AbstractResultDecorator<String> result =
+            AbstractResultDecoratorTest.setupResultDecorator(properties);
 
         Assert.assertTrue(instance.containNotNullProperties(result.getProperties(), result.getMetadataTypeManager()));
     }

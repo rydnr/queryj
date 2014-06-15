@@ -88,6 +88,12 @@ import java.util.Arrays;
 @RunWith(JUnit4.class)
 public class BindQueryParametersHandlerTest
 {
+    /**
+     * Tests whether the handler binds the parameters to the query correctly.
+     * throws QueryJBuildException if the test fails.
+     * throws SQLException if the test fails.
+     */
+    @SuppressWarnings("unchecked")
     @Test
     public void binds_the_parameters_to_the_query()
         throws QueryJBuildException, SQLException
@@ -103,7 +109,7 @@ public class BindQueryParametersHandlerTest
 
         sql.setValue("select sysdate from dual where ? = 'A'");
 
-        @NotNull final Parameter parameter = new ParameterElement("id", 1, "id", "String", "1");
+        @NotNull final Parameter parameter = new ParameterElement<>("id", 1, "id", "String", "1");
         sql.add(new ParameterRefElement("id"));
 
         new QueryJCommandWrapper<Sql<String>>(parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, sql);
@@ -139,6 +145,10 @@ public class BindQueryParametersHandlerTest
         EasyMock.verify(t_Statement);
     }
 
+    /**
+     * The common part of all tests.
+     * throws Exception if the test fails.
+     */
     @SuppressWarnings("unchecked")
     public void testPrimitiveBody(@NotNull final Class<?> type)
         throws Exception
@@ -168,6 +178,10 @@ public class BindQueryParametersHandlerTest
                 t_Parameter, 0, type, t_Sql, Arrays.asList(int.class, t_ParameterType)));
     }
 
+    /**
+     * Tests whether retrieveStatementSetterMethod() works for int parameters.
+     * throws Exception if the test fails.
+     */
     @Test
     public void retrieve_statement_setter_method_works_for_int_parameter()
         throws Exception
@@ -175,6 +189,10 @@ public class BindQueryParametersHandlerTest
         testPrimitiveBody(int.class);
     }
 
+    /**
+     * Tests whether retrieveStatementSetterMethod() works for Integer parameters.
+     * throws Exception if the test fails.
+     */
     @Test
     public void retrieve_statement_setter_method_works_for_Int_parameter()
         throws Exception
@@ -182,6 +200,10 @@ public class BindQueryParametersHandlerTest
         testPrimitiveBody(Integer.class);
     }
 
+    /**
+     * Tests whether retrieveStatementSetterMethod() works for long parameters.
+     * throws Exception if the test fails.
+     */
     @Test
     public void retrieve_statement_setter_method_works_for_long_parameter()
         throws Exception
@@ -189,6 +211,10 @@ public class BindQueryParametersHandlerTest
         testPrimitiveBody(long.class);
     }
 
+    /**
+     * Tests whether retrieveStatementSetterMethod() works for Long parameters.
+     * throws Exception if the test fails.
+     */
     @Test
     public void retrieve_statement_setter_method_works_for_Long_parameter()
         throws Exception
@@ -196,6 +222,10 @@ public class BindQueryParametersHandlerTest
         testPrimitiveBody(Long.class);
     }
 
+    /**
+     * Tests whether retrieveStatementSetterMethod() works for double parameters.
+     * throws Exception if the test fails.
+     */
     @Test
     public void retrieve_statement_setter_method_works_for_double_parameter()
         throws Exception
@@ -203,6 +233,10 @@ public class BindQueryParametersHandlerTest
         testPrimitiveBody(double.class);
     }
 
+    /**
+     * Tests whether retrieveStatementSetterMethod() works for Double parameters.
+     * throws Exception if the test fails.
+     */
     @Test
     public void retrieve_statement_setter_method_works_for_Double_parameter()
         throws Exception
@@ -210,6 +244,10 @@ public class BindQueryParametersHandlerTest
         testPrimitiveBody(Double.class);
     }
 
+    /**
+     * Tests whether retrieveStatementSetterMethod() works for float parameters.
+     * throws Exception if the test fails.
+     */
     @Test
     public void retrieve_statement_setter_method_works_for_float_parameter()
         throws Exception
@@ -217,6 +255,10 @@ public class BindQueryParametersHandlerTest
         testPrimitiveBody(float.class);
     }
 
+    /**
+     * Tests whether retrieveStatementSetterMethod() works for Float parameters.
+     * throws Exception if the test fails.
+     */
     @Test
     public void retrieve_statement_setter_method_works_for_Float_parameter()
         throws Exception
@@ -224,6 +266,10 @@ public class BindQueryParametersHandlerTest
         testPrimitiveBody(Float.class);
     }
 
+    /**
+     * Tests whether retrieveStatementSetterMethod() works for boolean parameters.
+     * throws Exception if the test fails.
+     */
     @Test
     public void retrieve_statement_setter_method_works_for_boolean_parameter()
         throws Exception
@@ -231,6 +277,10 @@ public class BindQueryParametersHandlerTest
         testPrimitiveBody(boolean.class);
     }
 
+    /**
+     * Tests whether retrieveStatementSetterMethod() works for Boolean parameters.
+     * throws Exception if the test fails.
+     */
     @Test
     public void retrieve_statement_setter_method_works_for_Boolean_parameter()
         throws Exception

@@ -128,6 +128,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param parameters the parameters.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom RESULT provider.
+     * throws QueryJBuildException if the templates cannot be built.
      */
     @ThreadSafe
     protected void buildTemplates(
@@ -171,6 +172,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param resultElements the {@link Result} list.
      * @param customResultUtils the {@link CustomResultUtils} instance.
+     * throws QueryJBuildException if the templates cannot be built.
      */
     @ThreadSafe
     @SuppressWarnings("unchecked")
@@ -235,6 +237,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param properties the properties.
      * @param parameters the parameters.
      * @return the template.
+     * throws QueryJBuildException if the template cannot be created.
      */
     @Nullable
     protected abstract T createTemplate(
@@ -286,6 +289,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param engine the engine.
      * @param parameters the parameter map.
      * @return the package name.
+     * throws QueryJBuildException if the package is unavailable.
      */
     @ThreadSafe
     protected abstract String retrievePackage(
@@ -310,7 +314,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customSqlProvider the custom RESULT provider.
      * @param allowDuplicates whether to remove duplicates.
      * @return such templates.
-     * reason.
+     * throws QueryJBuildException if the custom results are unavailable.
      */
     @NotNull
     protected List<Result<String>> retrieveCustomResults(
