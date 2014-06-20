@@ -1,0 +1,2 @@
+* 2014/06/19
+** DONE ListDecorator refactoring: 3 -> X X X

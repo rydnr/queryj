@@ -44,7 +44,7 @@ import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 
@@ -96,7 +96,7 @@ public class SetupPreparedStatementHandlerTest
 
         @NotNull final SqlElement<String> sql =
             new SqlElement<>(
-                "id", "dao", "name", "select", Cardinality.SINGLE, "all", true /* validation */, false, "description");
+                "id", "dao", "name", "select", SqlCardinality.SINGLE, "all", true /* validation */, false, "description");
 
         sql.setValue("select sysdate from dual where ? = 'A'");
 

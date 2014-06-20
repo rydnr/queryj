@@ -45,7 +45,7 @@ import org.acmsl.queryj.customsql.ParameterRefElement;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 
 /*
@@ -81,7 +81,7 @@ public class AbstractSqlDecoratorTest
     public void isResultNullable_is_correct_for_implicit_results_and_single_queries()
     {
         @NotNull final Sql<String> sql =
-            new SqlElement<>("id1", "name1", "select", Cardinality.SINGLE, "all", false, false, "none", "desc1");
+            new SqlElement<>("id1", "name1", "select", SqlCardinality.SINGLE, "all", false, false, "none", "desc1");
 
         @NotNull final CustomSqlProvider customSqlProvider = EasyMock.createNiceMock(CustomSqlProvider.class);
         @NotNull final SqlResultDAO resultDAO = EasyMock.createNiceMock(SqlResultDAO.class);
@@ -105,7 +105,7 @@ public class AbstractSqlDecoratorTest
     public void isResultNullable_is_correct_for_multiple_queries()
     {
         @NotNull final Sql<String> sql =
-            new SqlElement<>("id1", "name1", "select", Cardinality.MULTIPLE, "all", false, false, "none", "desc1");
+            new SqlElement<>("id1", "name1", "select", SqlCardinality.MULTIPLE, "all", false, false, "none", "desc1");
 
         @NotNull final CustomSqlProvider customSqlProvider = EasyMock.createNiceMock(CustomSqlProvider.class);
         @NotNull final MetadataManager metadataManager = EasyMock.createNiceMock(MetadataManager.class);
@@ -123,7 +123,7 @@ public class AbstractSqlDecoratorTest
     public void isResultNullable_is_correct_for_explicit_results_and_single_queries()
     {
         @NotNull final Sql<String> sql =
-            new SqlElement<>("id1", "name1", "select", Cardinality.SINGLE, "all", false, false, "none", "desc1");
+            new SqlElement<>("id1", "name1", "select", SqlCardinality.SINGLE, "all", false, false, "none", "desc1");
 
         @NotNull final Result<String> result =
             new ResultElement<>("r1", String.class.getSimpleName());
@@ -154,7 +154,7 @@ public class AbstractSqlDecoratorTest
     public void getParameterTypes_returns_no_duplicates()
     {
         @NotNull final Sql<String> sql =
-            new SqlElement<>("id1", "name1", "select", Cardinality.SINGLE, "all", false, false, "none", "desc1");
+            new SqlElement<>("id1", "name1", "select", SqlCardinality.SINGLE, "all", false, false, "none", "desc1");
 
         @SuppressWarnings("unchecked")
         @NotNull final Parameter parameter =

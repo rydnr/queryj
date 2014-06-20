@@ -49,7 +49,7 @@ import org.acmsl.queryj.customsql.PropertyRefElement;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 
 /*
@@ -102,7 +102,7 @@ public class RetrieveResultSetColumnsHandlerTest
 
         @NotNull final SqlElement<String> sql =
             new SqlElement<>(
-                "id", "dao", "name", Sql.SELECT, Cardinality.SINGLE, "all", true /* validation */, false, "description");
+                "id", "dao", "name", Sql.SELECT, SqlCardinality.SINGLE, "all", true /* validation */, false, "description");
 
         sql.setValue("select sysdate from dual where ? = 'A'");
 
@@ -163,7 +163,7 @@ public class RetrieveResultSetColumnsHandlerTest
 
         @NotNull final SqlElement<String> sql =
             new SqlElement<>(
-                "id", "dao", "name", Sql.UPDATE, Cardinality.SINGLE, "all", true /* validation */, false, "description");
+                "id", "dao", "name", Sql.UPDATE, SqlCardinality.SINGLE, "all", true /* validation */, false, "description");
 
         new QueryJCommandWrapper<Sql<String>>(t_Parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, sql);
         new QueryJCommandWrapper<ResultSet>(t_Parameters).setSetting(

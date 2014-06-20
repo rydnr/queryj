@@ -1,5 +1,5 @@
 /*
-                        QueryJ-Core
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -41,9 +41,9 @@ import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.stringtemplate.v4.ST;
 
 /**
  * Represents any kind of templates.
@@ -73,7 +73,7 @@ public interface Template<T extends TemplateContext>
      * @return such output.
      */
     @Nullable
-    String generate(final boolean relevantOnly)
+    ST generate(final boolean relevantOnly)
         throws InvalidTemplateException,
                DevelopmentModeException;
 

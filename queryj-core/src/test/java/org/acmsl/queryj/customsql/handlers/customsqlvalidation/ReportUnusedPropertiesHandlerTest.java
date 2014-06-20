@@ -46,7 +46,7 @@ import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 
 /*
@@ -126,7 +126,7 @@ public class ReportUnusedPropertiesHandlerTest
                 "dao",
                 "name",
                 String.class.getSimpleName(),
-                Cardinality.SINGLE,
+                SqlCardinality.SINGLE,
                 "all",
                 true,
                 false,

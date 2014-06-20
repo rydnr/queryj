@@ -95,7 +95,7 @@ public class SqlElement<T>
     /**
      * The cardinality.
      */
-    private Cardinality cardinality;
+    private SqlCardinality cardinality;
 
     /**
      * The <i>implementation</i> attribute.
@@ -165,7 +165,7 @@ public class SqlElement<T>
         @Nullable final T dao,
         @NotNull final T name,
         @NotNull final T type,
-        @NotNull final Cardinality cardinality,
+        @NotNull final SqlCardinality cardinality,
         @Nullable final T implementation,
         final boolean validate,
         final boolean dynamic,
@@ -191,7 +191,7 @@ public class SqlElement<T>
         @NotNull final T id,
         @NotNull final T name,
         @NotNull final T type,
-        @NotNull final Cardinality cardinality,
+        @NotNull final SqlCardinality cardinality,
         @Nullable final T implementation,
         final boolean validate,
         final boolean dynamic,
@@ -220,7 +220,7 @@ public class SqlElement<T>
         @Nullable final T repositoryScope,
         @NotNull final T name,
         @NotNull final T type,
-        @NotNull final Cardinality cardinality,
+        @NotNull final SqlCardinality cardinality,
         @Nullable final T implementation,
         final boolean validate,
         final boolean dynamic,
@@ -370,7 +370,7 @@ public class SqlElement<T>
      * Specifies the cardinality.
      * @param value such information.
      */
-    protected final void immutableSetCardinality(@NotNull final Cardinality value)
+    protected final void immutableSetCardinality(@NotNull final SqlCardinality value)
     {
         this.cardinality = value;
     }
@@ -380,7 +380,7 @@ public class SqlElement<T>
      * @param cardinality such information.
      */
     @SuppressWarnings("unused")
-    protected void setCardinality(@NotNull final Cardinality cardinality)
+    protected void setCardinality(@NotNull final SqlCardinality cardinality)
     {
         immutableSetCardinality(cardinality);
     }
@@ -391,7 +391,7 @@ public class SqlElement<T>
      */
     @Override
     @NotNull
-    public Cardinality getCardinality()
+    public SqlCardinality getCardinality()
     {
         return this.cardinality;
     }
@@ -402,7 +402,7 @@ public class SqlElement<T>
     @Override
     public boolean isMultiple()
     {
-        return getCardinality().equals(Cardinality.MULTIPLE);
+        return getCardinality().equals(SqlCardinality.MULTIPLE);
     }
 
     /**
@@ -799,7 +799,7 @@ public class SqlElement<T>
         final T repositoryScope,
         final T name,
         final T type,
-        @NotNull final Cardinality cardinality,
+        @NotNull final SqlCardinality cardinality,
         final T implementation,
         final T value,
         final boolean validate,

@@ -110,7 +110,7 @@ public class ForeignKeyTestHelper
         @NotNull final List<ForeignKey<String>> foreignKeys,
         @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
-        @NotNull final List<Map<String, String>> fkEntries = fkInfo.asMaps();
+        @NotNull final List<Map<String, String>> fkEntries = fkInfo.asMaps(String.class, String.class);
 
         @Nullable ForeignKey<String> foreignKey;
 

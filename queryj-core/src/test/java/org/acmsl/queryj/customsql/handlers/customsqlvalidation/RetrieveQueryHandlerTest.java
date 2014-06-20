@@ -49,7 +49,7 @@ import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
@@ -110,7 +110,7 @@ public class RetrieveQueryHandlerTest
 
         @NotNull final List<SqlElement<String>> list = new ArrayList<>(1);
         list.add(
-            new SqlElement<>("id", "dao", "name", "String", Cardinality.SINGLE, "all", true, false, "description"));
+            new SqlElement<>("id", "dao", "name", "String", SqlCardinality.SINGLE, "all", true, false, "description"));
         new QueryJCommandWrapper<List<SqlElement<String>>>(parameters).setSetting(RetrieveQueryHandler.SQL_LIST, list);
 
 
@@ -133,7 +133,7 @@ public class RetrieveQueryHandlerTest
 
         @NotNull final List<Sql<String>> list = new ArrayList<>(1);
         list.add(
-            new SqlElement<>("id", "dao", "name", "String", Cardinality.SINGLE, "all", true, false, "description"));
+            new SqlElement<>("id", "dao", "name", "String", SqlCardinality.SINGLE, "all", true, false, "description"));
         new QueryJCommandWrapper<List<Sql<String>>>(parameters).setSetting(RetrieveQueryHandler.SQL_LIST, list);
 
         Assert.assertEquals(list, instance.retrieveSqlList(parameters));

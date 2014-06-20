@@ -61,4 +61,18 @@ public interface TableResultDecorator<V>
      */
     @NotNull
     TableDecorator getTable();
+
+    /**
+     * Checks whether there's any custom query returning a single
+     * instance of the wrapped result.
+     * @return {@code true} in such case.
+     */
+    boolean isSingleBeingUsed();
+
+    /**
+     * Checks whether there's any custom query returning multiple
+     * instances of the wrapped result.
+     * @return {@code true} in such case.
+     */
+    boolean isMultipleBeingUsed();
 }

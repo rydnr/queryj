@@ -40,7 +40,6 @@ import org.acmsl.queryj.metadata.CachingResultDecorator;
 import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.MetadataUtils;
 import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.TableDAO;
@@ -393,7 +392,7 @@ public class CustomResultUtils
      * @return {@code true} if it should be included.
      * @param <T> the Result type.
      */
-    protected <T> boolean matches(@NotNull final Result<T> resultElement, @NotNull final String tableName)
+    public <T> boolean matches(@NotNull final Result<T> resultElement, @NotNull final String tableName)
     {
         final boolean result;
 

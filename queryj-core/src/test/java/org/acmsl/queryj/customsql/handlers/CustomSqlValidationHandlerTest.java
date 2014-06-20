@@ -48,7 +48,7 @@ import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.ParameterElement;
 import org.acmsl.queryj.customsql.ParameterRefElement;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.customsql.handlers.customsqlvalidation.RetrieveQueryHandler;
 import org.acmsl.queryj.metadata.ColumnDAO;
@@ -219,7 +219,7 @@ public class CustomSqlValidationHandlerTest
         @NotNull final String t_strSql = "select sysdate from dual where sysdate = ?";
 
         @NotNull final SqlElement<String> t_Sql =
-            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+            new SqlElement<>("id", "DAO", "name", "select", SqlCardinality.SINGLE, "oracle", true, false, "description");
 
         t_Sql.setValue(t_strSql);
 
@@ -238,7 +238,7 @@ public class CustomSqlValidationHandlerTest
         @NotNull final String t_strSql = "select 1 from dual where ? = 'blah'";
 
         @NotNull final SqlElement<String> t_Sql =
-            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+            new SqlElement<>("id", "DAO", "name", "select", SqlCardinality.SINGLE, "oracle", true, false, "description");
 
         t_Sql.setValue(t_strSql);
 
@@ -257,7 +257,7 @@ public class CustomSqlValidationHandlerTest
         @NotNull final String t_strSql = "select 1 from dual where ? = 1";
 
         @NotNull final SqlElement<String> t_Sql =
-            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+            new SqlElement<>("id", "DAO", "name", "select", SqlCardinality.SINGLE, "oracle", true, false, "description");
 
         t_Sql.setValue(t_strSql);
 
@@ -276,7 +276,7 @@ public class CustomSqlValidationHandlerTest
         @NotNull final String t_strSql = "select 1 from dual where ? = 1";
 
         @NotNull final SqlElement<String> t_Sql =
-            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+            new SqlElement<>("id", "DAO", "name", "select", SqlCardinality.SINGLE, "oracle", true, false, "description");
 
         t_Sql.setValue(t_strSql);
 
@@ -295,7 +295,7 @@ public class CustomSqlValidationHandlerTest
         @NotNull final String t_strSql = "select 1 from dual where ? = 1";
 
         @NotNull final SqlElement<String> t_Sql =
-            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+            new SqlElement<>("id", "DAO", "name", "select", SqlCardinality.SINGLE, "oracle", true, false, "description");
 
         t_Sql.setValue(t_strSql);
 

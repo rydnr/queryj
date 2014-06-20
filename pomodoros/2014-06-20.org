@@ -1,0 +1,5 @@
+* 2014/06/20
+** ListDecorator refactoring:
+*** DONE Implement TableResultDecorator.isSingleBeingUsed : 1 -> X
+*** DONE Implement TableResultDecorator.isMultipleBeingUsed : 1 -> X
+*** TODO Fix ArrayList.different: 1 -> X

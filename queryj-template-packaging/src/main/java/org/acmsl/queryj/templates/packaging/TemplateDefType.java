@@ -91,7 +91,7 @@ public enum TemplateDefType
      * Creates a new type.
      * @param type the name of the type.
      */
-    TemplateDefType(@NotNull final String type)
+    TemplateDefType(/* @NotNull */ final String type)
     {
         this.m__strType = type;
     }

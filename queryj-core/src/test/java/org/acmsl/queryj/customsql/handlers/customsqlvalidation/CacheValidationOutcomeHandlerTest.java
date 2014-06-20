@@ -48,7 +48,7 @@ import org.acmsl.queryj.customsql.CustomSqlProviderTest.SemiMockedAbstractCustom
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.customsql.SqlConnectionFlagsDAO;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.customsql.SqlResultSetFlagsDAO;
@@ -107,7 +107,7 @@ public class CacheValidationOutcomeHandlerTest
         @NotNull final CacheValidationOutcomeHandler instance = new CacheValidationOutcomeHandler();
 
         @NotNull final Sql<String> t_Sql =
-            new SqlElement<>("sql-id", "dao", "sql-name", "select", Cardinality.SINGLE, "all", true, false, "fake sql");
+            new SqlElement<>("sql-id", "dao", "sql-name", "select", SqlCardinality.SINGLE, "all", true, false, "fake sql");
 
         @NotNull final Result<String> t_Result = new ResultElement<>("r1", "Whatever");
 
@@ -193,7 +193,7 @@ public class CacheValidationOutcomeHandlerTest
             };
 
         @NotNull final Sql<String> t_Sql =
-            new SqlElement<>("sql-id", "dao", "sql-name", "select", Cardinality.SINGLE, "all", true, false, "fake sql");
+            new SqlElement<>("sql-id", "dao", "sql-name", "select", SqlCardinality.SINGLE, "all", true, false, "fake sql");
 
         @NotNull final Result<String> t_Result = new ResultElement<>("r1", "Whatever");
 

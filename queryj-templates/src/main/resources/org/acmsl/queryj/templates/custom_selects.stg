@@ -108,13 +108,13 @@ protected <custom_select_return(cs=cs, table=table, result=cs.result, C=C)> <cs.
 {
     <custom_select_result_declaration(sql=cs, result=cs.result, table=table, C=C)>
 
-    /*
+<!    /*
     preparedStatementCreatorFactory.setResultSetType(..);
     preparedStatementCreatorFactory.setUpdatableResults(..);
     preparedStatementCreatorFactory.setReturnGeneratedKeys(..);
     preparedStatementCreatorFactory.setGeneratedKeysColumnNames(..);
     */
-
+!>
     result =
         <custom_select_template_call(sql=cs, result=cs.result, table=table, C=C)>
 
@@ -463,8 +463,12 @@ if(result.wrappingASingleProperty)><
 else><
   if(result.classValue)
    >import <result.classValue>;
-import <C.project_package>.<baseDAOSubpackageName>.<result.simpleClassValue.lowercased>.<result.simpleClassValue>ResultSetSingleExtractor;
-import <C.project_package>.<baseDAOSubpackageName>.<result.simpleClassValue.lowercased>.<result.simpleClassValue>ResultSetMultipleExtractor;<
+<  if(result.singleBeingUsed)
+    >import <C.project_package>.<baseDAOSubpackageName>.<result.simpleClassValue.lowercased>.<result.simpleClassValue>ResultSetSingleExtractor;
+<  endif>
+<  if(result.multipleBeingUsed)
+    >import <C.project_package>.<baseDAOSubpackageName>.<result.simpleClassValue.lowercased>.<result.simpleClassValue>ResultSetMultipleExtractor;
+<  endif><
   endif><
 endif>
 >>

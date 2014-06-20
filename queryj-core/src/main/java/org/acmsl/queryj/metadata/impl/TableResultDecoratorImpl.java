@@ -38,11 +38,16 @@ package org.acmsl.queryj.metadata.impl;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.ResultRef;
+import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.metadata.AbstractResultDecorator;
 import org.acmsl.queryj.metadata.DecoratedString;
 import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.TableDecorator;
 import org.acmsl.queryj.metadata.TableResultDecorator;
 
@@ -56,6 +61,8 @@ import org.jetbrains.annotations.Nullable;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+import java.util.List;
 
 /**
  * Obvious implementation of {@link TableResultDecorator}.
@@ -118,6 +125,90 @@ public class TableResultDecoratorImpl<V>
     public TableDecorator getTable()
     {
         return this.m__Table;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isSingleBeingUsed()
+    {
+        return isBeingUsed(SqlCardinality.SINGLE, getTable(), getResult(), getCustomSqlProvider());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isMultipleBeingUsed()
+    {
+        return isBeingUsed(SqlCardinality.MULTIPLE, getTable(), getResult(), getCustomSqlProvider());
+    }
+
+    /**
+     * Checks whether there's any query associated to given table,
+     * returning a single/multiple instance of the custom result.
+     * @param SqlCardinality the {@link SqlCardinality single/multiple} check.
+     * @param table the {@link TableDecorator table}.
+     * @param customResult the {@link Result custom result}.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @return {@code true} in such case.
+     */
+    protected boolean isBeingUsed(
+        @NotNull final SqlCardinality SqlCardinality,
+        @NotNull final TableDecorator table,
+        @NotNull final Result<DecoratedString> customResult,
+        @NotNull final CustomSqlProvider customSqlProvider)
+    {
+        return
+            isBeingUsed(
+                SqlCardinality, table, customResult, customSqlProvider.getSqlDAO(), CustomResultUtils.getInstance());
+    }
+
+    /**
+     * Checks whether there's any query associated to given table,
+     * returning a single/multiple instance of the custom result.
+     * @param SqlCardinality the {@link SqlCardinality single/multiple} check.
+     * @param table the {@link TableDecorator table}.
+     * @param customResult the {@link Result custom result}.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @param customResultUtils the {@link CustomResultUtils} instance.
+     * @return {@code true} in such case.
+     */
+    protected boolean isBeingUsed(
+        @NotNull final SqlCardinality SqlCardinality,
+        @NotNull final TableDecorator table,
+        @NotNull final Result<DecoratedString> customResult,
+        @NotNull final SqlDAO sqlDAO,
+        @NotNull final CustomResultUtils customResultUtils)
+    {
+        boolean result = customResultUtils.matches(customResult, table.getName().getValue());
+
+        if (!result)
+        {
+            @NotNull final List<Sql<String>> queries = sqlDAO.findByDAO(table.getName().getValue());
+
+            for (@Nullable final Sql<String> query : queries)
+            {
+                if (query != null)
+                {
+                    @Nullable final ResultRef resultRef = query.getResultRef();
+
+                    if (   (resultRef != null)
+                        && (resultRef.getId().equals(customResult.getId().getValue())))
+                    {
+                        result = query.getCardinality().equals(SqlCardinality);
+
+                        if (result)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     /**

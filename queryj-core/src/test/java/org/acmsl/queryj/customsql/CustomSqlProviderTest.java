@@ -38,7 +38,7 @@ package org.acmsl.queryj.customsql;
 /*
  * Importing QueryJ Core classes.
  */
-import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
@@ -291,9 +291,9 @@ public class CustomSqlProviderTest
     public void different_sql_give_different_hashes()
     {
         @NotNull final Sql<String> t_Sql1 =
-            new SqlElement<>("id1", "dao", null, "name1", "select", Cardinality.SINGLE, "all", true, false, "desc1");
+            new SqlElement<>("id1", "dao", null, "name1", "select", SqlCardinality.SINGLE, "all", true, false, "desc1");
         @NotNull final Sql<String> t_Sql2 =
-            new SqlElement<>("id2", "dao2", null, "name1", "select", Cardinality.SINGLE, "all", true, false, "desc1");
+            new SqlElement<>("id2", "dao2", null, "name1", "select", SqlCardinality.SINGLE, "all", true, false, "desc1");
 
         @NotNull final Result<String> t_Result1 = new ResultElement<>("p1", "class1");
         @NotNull final Result<String> t_Result2 = new ResultElement<>("p2", "class1");
@@ -338,9 +338,9 @@ public class CustomSqlProviderTest
     public void equal_sql_give_equal_hashes()
     {
         @NotNull final Sql<String> t_Sql1 =
-            new SqlElement<>("id1", "dao", null, "name1", "select", Cardinality.SINGLE, "all", true, false, "desc1");
+            new SqlElement<>("id1", "dao", null, "name1", "select", SqlCardinality.SINGLE, "all", true, false, "desc1");
         @NotNull final Sql<String> t_Sql2 =
-            new SqlElement<>("id2", "dao", null, "name1", "select", Cardinality.SINGLE, "all", true, false, "desc1");
+            new SqlElement<>("id2", "dao", null, "name1", "select", SqlCardinality.SINGLE, "all", true, false, "desc1");
 
         @NotNull final Result<String> t_Result1 = new ResultElement<>("p1", "class1");
         @NotNull final Result<String> t_Result2 = new ResultElement<>("p2", "class1");

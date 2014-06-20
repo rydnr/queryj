@@ -36,6 +36,7 @@
     <version.checkthread>1.0.9</version.checkthread>
     <version.powermock>1.5.5</version.powermock>
     <version.oracle-driver>1.4</version.oracle-driver>
+    <version.netty>5.0.0.Alpha1</version.netty>
   </properties>
 
   <modules>
@@ -44,6 +45,7 @@
     <module>queryj-test</module>
     <module>queryj-template-packaging</module>
     <module>queryj-maven</module>
+    <module>queryj-debugging</module>
     <module>queryj-template-packaging-maven-plugin</module>
     <module>queryj-templates</module>
   </modules>
@@ -396,6 +398,22 @@
         <optional>true</optional>
       </dependency>
 
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjrt</artifactId>
+        <version>1.8.0</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-transport</artifactId>
+        <version>${version.netty}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-buffer</artifactId>
+        <version>${version.netty}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -506,25 +524,31 @@
           </executions>
         </plugin>
 
-        <plugin>                                                                                                                                                                             
-          <groupId>org.codehaus.mojo</groupId>                                                                                                                                                 
-          <artifactId>aspectj-maven-plugin</artifactId>                                                                                                                                        
-          <version>1.4</version>                                                                                                                                   
-          <configuration>                                                                                                                                                                      
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>aspectj-maven-plugin</artifactId>
+          <version>1.6</version>
+          <configuration>
             <Xlint>warning</Xlint>
             <XaddSerialVersionUID>true</XaddSerialVersionUID>
             <encoding>UTF-8</encoding>
-            <source>1.7</source>
-            <target>1.7</target>
-            <warn>constructorName,packageDefaultMethod,deprecation,maskedCatchBlocks,unusedLocals,unusedArguments,unusedImports</warn>
-            <dependencies>
-              <dependency>
-                <groupId>aspectj</groupId>
-                <artifactId>aspectjrt</artifactId>
-                <version>1.6.11</version>
-              </dependency>
-            </dependencies>
+            <complianceLevel>1.8</complianceLevel>
+            <source>1.8</source>
+            <target>1.8</target>
+            <warn>constructorName,packageDefaultMethod,deprecation,maskedCatchBlocks,unusedLocals,unusedArguments,unusedImports,all</warn>
           </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.aspectj</groupId>
+              <artifactId>aspectjrt</artifactId>
+              <version>1.8.0</version>
+            </dependency>
+            <dependency>
+              <groupId>org.aspectj</groupId>
+              <artifactId>aspectjtools</artifactId>
+              <version>1.8.0</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -556,6 +580,26 @@
           <artifactId>maven-resources-plugin</artifactId>
           <version>2.6</version>
         </plugin>
+	<plugin>
+	  <groupId>org.codehaus.mojo</groupId>
+	  <artifactId>findbugs-maven-plugin</artifactId>
+	  <version>2.5.4</version>
+          <configuration>
+            <xmlOutput>true</xmlOutput>
+            <!-- Optional directory to put findbugs xdoc xml report -->
+            <xmlOutputDirectory>target/site</xmlOutputDirectory>
+          </configuration>
+	</plugin>
+	<plugin>
+	  <groupId>org.apache.maven.plugins</groupId>
+	  <artifactId>maven-pmd-plugin</artifactId>
+	  <version>3.1</version>
+	  <configuration>
+	    <linkXref>true</linkXref>
+	    <sourceEncoding>utf-8</sourceEncoding>
+	    <targetJdk>1.8</targetJdk>
+	  </configuration>
+	</plugin>
       </plugins>
     </pluginManagement>
 
@@ -571,38 +615,6 @@
           <useFile>false</useFile>
         </configuration>
       </plugin>
-      <!--plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>checkthread</id>
-            <phase>test</phase>
-            <configuration>
-              <tasks>
-                <taskdef name="checkthread" classname="org.checkthread.anttask.CheckThreadTask" />
-                <target name="analyze">
-                  <checkthread 
-                    targetpath="${classDir}/mypackage/" 
-                    classpath="${classDir}"
-                    verbose="false"/>
-                </target>
-              </tasks>
-              <sourceRoot>${project.build.directory}/classes</sourceRoot>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.checkthread</groupId>
-            <artifactId>checkthread-analyzer</artifactId>
-            <version>${version.checkthread}</version>
-          </dependency>
-        </dependencies>
-      </plugin-->
     </plugins>
   </build>
 

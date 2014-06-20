@@ -1,0 +1,5 @@
+* 2014/06/21
+** Fix template debugging memory leak #510:
+*** TODO Use toString auditing via aspectj: 2 ->
+** ListDecorator refactoring #528:
+*** Fix ArrayList.different: 3 ->

@@ -47,13 +47,17 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Represents an error processing a table template.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/15
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @since 2.0
+ * Created: 013/06/15
  */
 @ThreadSafe
 public class InvalidPerTableTemplateException
     extends InvalidTemplateException
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -6205112274174273041L;
 
     /**

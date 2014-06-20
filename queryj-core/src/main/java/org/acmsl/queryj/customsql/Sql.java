@@ -132,89 +132,6 @@ public interface Sql<T>
     static final String ALL = "all";
 
     /**
-     * Defines the cardinality of the query.
-     */
-    public enum Cardinality
-    {
-        /**
-         * None.
-         */
-        NONE("none"),
-
-        /**
-         * Just one record.
-         */
-        SINGLE("single"),
-
-        /**
-         * Multiple results.
-         */
-        MULTIPLE("multiple");
-
-        /**
-         * The m__strName.
-         */
-        @NotNull private final String m__strName;
-
-        /**
-         * Creates a new enum value.
-         * @param value the value.
-         */
-        Cardinality(@NotNull final String value)
-        {
-            this.m__strName = value;
-        }
-
-        /**
-         * Retrieves the m__strName.
-         * @return such information.
-         */
-        @NotNull
-        public String getName()
-        {
-            return this.m__strName;
-        }
-
-        /**
-         * Retrieves the cardinality associated to given text.
-         * @param text the text.
-         * @return the cardinality instance.
-         */
-        public static Cardinality fromString(@Nullable final String text)
-        {
-            @Nullable Cardinality result = null;
-
-            if (text != null)
-            {
-                for (@NotNull final Cardinality cardinality : Cardinality.values())
-                {
-                    if (text.equalsIgnoreCase(cardinality.getName()))
-                    {
-                        result = cardinality;
-                        break;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @NotNull
-        @Override
-        public String toString()
-        {
-            return
-                  "{ \"class\": \"" + Cardinality.class.getSimpleName() + "\""
-                + ", \"package\": \"org.acmsl.queryj.customsql\""
-                + ", \"name\": \"" + this.m__strName + "\""
-                + " }";
-        }
-    }
-
-    /**
      * Retrieves the <i>description</i> attribute.
      * @return such value.
      */
@@ -254,7 +171,7 @@ public interface Sql<T>
      * @return such information.
      */
     @NotNull
-    Cardinality getCardinality();
+    SqlCardinality getCardinality();
 
     /**
      * Retrieves the <i>implementation</i> attribute.

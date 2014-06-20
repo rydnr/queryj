@@ -73,7 +73,6 @@ sourceImpl(table, engine, C) ::= <<
   basePackageName=C.project_package,
   package=C.package,
   jdbcOperationsSubpackageName=typeInitMap.jdbcOperationsSubpackageName,
-  customResults=table.differentCustomResults,
   voSubpackageName=typeInitMap.voSubpackageName,
   voName=table.name.voName,
   voFactorySubpackageName=typeInitMap.voFactorySubpackageName,
@@ -155,7 +154,6 @@ project_imports(
   basePackageName,
   package,
   jdbcOperationsSubpackageName,
-  customResults,
   voSubpackageName,
   voName,
   voFactorySubpackageName,
@@ -173,7 +171,6 @@ project_imports(
   @param basePackageName the base package name.
   @param package the package.
   @param jdbcOperationsSubpackageName the subpackage for the JDBC operations.
-  @param customResults the results of the custom queries.
   @param voSubpackageName the subpackage for the value
   @param voName the class name of the value-object.
   @param voFactorySubpackageName the subpackage of the value object factories.
@@ -219,14 +216,15 @@ import <basePackageName>.<voFactorySubpackageName>.core.<table.name.voName>Facto
   basePackageName=basePackageName,
   baseDAOSubpackageName=baseDAOSubpackageName,
   referredVOName=fk.source.name.voName)>}; separator="\n">
-<table.differentCustomResults:{ cr  | <custom_select_import(result=cr, package=basePackageName, baseDAOSubpackageName=baseDAOSubpackageName, C=C)>}; separator="\n">
+//<table.customResults>
+<table.customResults:{ cr  | <custom_select_return_import(result=cr, package=basePackageName, baseDAOSubpackageName=baseDAOSubpackageName, C=C)>}; separator="\n">
 
 /*
  * Importing V24-Commons classes.
  */
 import com.ventura24.commons.dao.DAOListener;
-<if(table.differentCustomResults)
- ><table.differentCustomResults:{ cr  | <if(cr.wrappingASingleProperty)><cr.properties:{p | <if(p.typeSupportedOutOfTheBox)>import com.ventura24.commons.dao.<p.objectType>ResultSetMultipleExtractor;<endif>}; separator="\n"><endif>}; separator="\n">
+<if(table.customResults)
+ ><table.customResults:{ cr  | <if(cr.wrappingASingleProperty)><cr.properties:{p | <if(p.typeSupportedOutOfTheBox)>import com.ventura24.commons.dao.<p.objectType>ResultSetMultipleExtractor;<endif>}; separator="\n"><endif>}; separator="\n">
 <endif>
 import com.ventura24.commons.dao.V24JdbcTemplate;
 import com.ventura24.commons.dao.V24PreparedStatementCreator;
@@ -236,17 +234,6 @@ import com.ventura24.commons.dao.V24QueryTransactionCallback;
 import com.ventura24.commons.dao.V24UpdateTransactionCallback;
 import com.ventura24.commons.dao.V24ResultSetSingleExtractor;
 
->>
-
-custom_select_import(result, package, baseDAOSubpackageName, C) ::= <<
-<!
- Generates the imports for given result.
- @param result the custom result.
- @param package the base package.
- @param baseDAOSubpackageName the base DAO subpackage name.
- @param C the context.
-!>
-<custom_select_return_import(result=result, package=package, baseDAOSubpackageName=baseDAOSubpackageName, C=C)>
 >>
 
 foreignkey_statementsetter_import(

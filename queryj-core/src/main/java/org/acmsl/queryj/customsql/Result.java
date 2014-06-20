@@ -49,7 +49,7 @@ import java.util.List;
  */
 public interface Result<T>
     extends  IdentifiableElement<T>,
-             java.lang.Comparable<Result<T>>
+             Comparable<Result<T>>
 {
     /**
      * Retrieves the <i>class</i> attribute.

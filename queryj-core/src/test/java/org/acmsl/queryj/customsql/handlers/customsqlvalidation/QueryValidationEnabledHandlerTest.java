@@ -44,7 +44,7 @@ import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 
 /*
@@ -84,7 +84,7 @@ public class QueryValidationEnabledHandlerTest
 
         @NotNull final Sql<String> sql =
             new SqlElement<>(
-                "id", "dao", "name", "String", Cardinality.SINGLE, "all", false /* validation */, false, "description");
+                "id", "dao", "name", "String", SqlCardinality.SINGLE, "all", false /* validation */, false, "description");
 
         new QueryJCommandWrapper<Sql<String>>(parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, sql);
 
@@ -106,7 +106,7 @@ public class QueryValidationEnabledHandlerTest
 
         @NotNull final Sql<String> sql =
             new SqlElement<>(
-                "id", "dao", "name", "String", Cardinality.SINGLE, "all", true /* validation */, false, "description");
+                "id", "dao", "name", "String", SqlCardinality.SINGLE, "all", true /* validation */, false, "description");
 
         new QueryJCommandWrapper<Sql<String>>(parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, sql);
 

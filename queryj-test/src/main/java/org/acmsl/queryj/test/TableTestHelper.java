@@ -49,7 +49,7 @@ import org.acmsl.queryj.customsql.ParameterElement;
 import org.acmsl.queryj.customsql.ParameterRef;
 import org.acmsl.queryj.customsql.ParameterRefElement;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
@@ -223,7 +223,7 @@ public class TableTestHelper
         @NotNull final DataTable tableInfo,
         @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
-        @NotNull final List<Map<String, String>> tableEntries = tableInfo.asMaps();
+        @NotNull final List<Map<String, String>> tableEntries = tableInfo.asMaps(String.class, String.class);
 
         @Nullable Table<String, Attribute<String>, List<Attribute<String>>> table;
 
@@ -307,7 +307,7 @@ public class TableTestHelper
             int precision;
             String[] booleanInfo;
 
-            for (@NotNull final Map<String, String> columnEntry: columnInfo.asMaps())
+            for (@NotNull final Map<String, String> columnEntry: columnInfo.asMaps(String.class, String.class))
             {
                 if (table.getName().equals(columnEntry.get(AntTablesElement.TABLE)))
                 {
@@ -513,7 +513,7 @@ public class TableTestHelper
 
         for (@NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table : tables.values())
         {
-            for (@NotNull final Map<String, String> fkEntry: fkInfo.asMaps())
+            for (@NotNull final Map<String, String> fkEntry: fkInfo.asMaps(String.class, String.class))
             {
                 @Nullable final String sourceTable;
                 @Nullable final String sourceColumnsField;
@@ -581,7 +581,7 @@ public class TableTestHelper
     {
         @NotNull final List<Sql<String>> result = new ArrayList<>();
 
-        for (@NotNull final Map<String, String> sqlRow: sqlInfo.asMaps())
+        for (@NotNull final Map<String, String> sqlRow: sqlInfo.asMaps(String.class, String.class))
         {
             @NotNull final String id = sqlRow.get("id");
             @NotNull final String name = sqlRow.get("name");
@@ -589,7 +589,7 @@ public class TableTestHelper
             @NotNull final String type = sqlRow.get("type");
             @NotNull final String matches = sqlRow.get("matches");
             @NotNull final String validate = sqlRow.get("validate");
-            @NotNull final Cardinality cardinality = Cardinality.fromString(matches.toLowerCase(Locale.US));
+            @NotNull final SqlCardinality cardinality = SqlCardinality.fromString(matches.toLowerCase(Locale.US));
             @NotNull final String value = sqlRow.get(VALUE);
 
             @NotNull final SqlElement<String> sql =
@@ -624,7 +624,7 @@ public class TableTestHelper
     {
         @NotNull final Map<String, List<Parameter<String, ?>>> result = new HashMap<>();
 
-        for (@NotNull final Map<String, String> sqlRow: parameterInfo.asMaps())
+        for (@NotNull final Map<String, String> sqlRow: parameterInfo.asMaps(String.class, String.class))
         {
             @NotNull final String id = sqlRow.get("id");
             @NotNull final String sqlRef = sqlRow.get("sql");
@@ -737,7 +737,7 @@ public class TableTestHelper
     {
         @NotNull final Map<String, List<Row<String>>> result = new HashMap<>();
 
-        for (@NotNull final Map<String, String> tableRow: values.asMaps())
+        for (@NotNull final Map<String, String> tableRow: values.asMaps(String.class, String.class))
         {
             @NotNull final String tableName = tableRow.get("table");
             @Nullable List<Row<String>> rows = result.get(tableName);
@@ -964,7 +964,7 @@ public class TableTestHelper
     {
         @Nullable String result = null;
 
-        for (@NotNull final Map<String, String> tableRow: values.asMaps())
+        for (@NotNull final Map<String, String> tableRow: values.asMaps(String.class, String.class))
         {
             result = tableRow.get(key);
             break;

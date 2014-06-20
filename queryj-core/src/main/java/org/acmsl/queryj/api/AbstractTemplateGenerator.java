@@ -37,8 +37,10 @@ package org.acmsl.queryj.api;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.Sha256NotSupportedException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.tools.debugging.TemplateDebuggingService;
 
 /*
  * Importing some ACM-SL classes.
@@ -50,6 +52,11 @@ import org.acmsl.commons.utils.io.FileUtils;
  * Importing some Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
 
 /*
  * Importing some JetBrains annotations.
@@ -69,12 +76,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.lang.management.ManagementFactory;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ServiceLoader;
 
 /**
  * Common logic for template generators.
+ * @param <N> the template.
+ * @param <C> the template context.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 3.0
  * Created: 2013/08/17 10:26
@@ -87,6 +98,11 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * String literal: "Cannot serialize template ";
      */
     protected static final String CANNOT_SERIALIZE_TEMPLATE_LITERAL = "Cannot serialize template ";
+
+    /**
+     * String literal: "-Xrunjdwp:transport".
+     */
+    public static final String XRUNJDWP_TRANSPORT = "-Xrunjdwp:transport";
 
     /**
      * Whether to enable template caching.
@@ -191,6 +207,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
                 outputDir,
                 rootFolder,
                 charset,
+                resolveTemplateDebuggingService(),
                 FileUtils.getInstance(),
                 UniqueLogFactory.getLog(AbstractQueryJTemplateGenerator.class));
     }
@@ -203,6 +220,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param outputDir the output folder.
      * @param rootFolder the root folder.
      * @param charset the {@link Charset} to use.
+     * @param templateDebuggingService the {@link TemplateDebuggingService} instance.
      * @param fileUtils the {@link FileUtils} instance.
      * @param log the {@link Log} instance.
      * @return whether it gets written to disk.
@@ -216,13 +234,25 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         @NotNull final File outputDir,
         @NotNull final File rootFolder,
         @NotNull final Charset charset,
+        @Nullable final TemplateDebuggingService<C> templateDebuggingService,
         @NotNull final FileUtils fileUtils,
         @Nullable final Log log)
         throws IOException, QueryJBuildException
     {
         boolean result = false;
 
-         @Nullable final String relevantContent = template.generate(true);
+        @Nullable final ST relevantStTemplate = template.generate(true);
+
+        @Nullable final String relevantContent;
+
+        if (relevantStTemplate != null)
+        {
+            relevantContent = relevantStTemplate.render();
+        }
+        else
+        {
+            relevantContent = null;
+        }
 
         if (relevantContent != null)
         {
@@ -251,7 +281,44 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
                             .getAbsolutePath() + File.separator + "." + fileName + ".ser");
                 }
 
-                @Nullable final String t_strFileContents = template.generate(false);
+
+                @Nullable final ST stTemplate = template.generate(false);
+
+                @Nullable String t_strFileContents = "";
+
+                if (stTemplate != null)
+                {
+                    try
+                    {
+                        t_strFileContents = stTemplate.render();
+                    }
+                    catch (@NotNull final Throwable throwable)
+                    {
+                        @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractQueryJTemplate.class);
+
+                        if (t_Log != null)
+                        {
+                            t_Log.error(
+                                "Error in template " + template.getTemplateName(), throwable);
+                        }
+        /*                    @Nullable final STTreeView debugTool =
+                                new StringTemplateTreeView("Debugging " + getTemplateName(), t_Template);
+
+                            debugTool.setVisible(true);
+
+                            while (debugTool.isVisible())
+                            {
+                                try
+                                {
+                                    Thread.sleep(1000);
+                                }
+                                catch (InterruptedException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }*/
+                    }
+                }
 
                 if (!"".equals(t_strFileContents))
                 {
@@ -282,6 +349,8 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
                             t_strOutputFile,
                             t_strFileContents,
                             charset);
+
+                        debugging(t_strFileContents, stTemplate, template.getTemplateContext(), templateDebuggingService);
                     }
 
                     writeHash(newHash, fileName, outputDir, rootFolder, charset, fileUtils);
@@ -301,6 +370,89 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         return result;
     }
 
+    /**
+     * Checks whether we're in dev mode.
+     * @param templateFileName the template file name.
+     * @return {@code true} in such case.
+     */
+    protected boolean isInDevMode(@NotNull final String templateFileName)
+    {
+        final boolean result;
+
+        final boolean devModeDisabled = System.getProperty("queryj.devMode.disabled") != null;
+
+        if (devModeDisabled)
+        {
+            result = false;
+        }
+        else
+        {
+            final boolean debug =
+                ManagementFactory.getRuntimeMXBean(). getInputArguments().toString().contains(XRUNJDWP_TRANSPORT);
+
+            result =
+                (   (debug)
+                    && (!templateFileName.startsWith("org/acmsl/queryj/templates/packaging")));
+        }
+
+        return result;
+    }
+
+    /**
+     * Manages the debugging session.
+     * @param output the current output from the template.
+     * @param template the {@link ST template}.
+     * @param context the context.
+     * @param debuggingService the {@link TemplateDebuggingService} instance.
+     * @return {@code true} if the debug takes place.
+     */
+    protected boolean debugging(
+        @NotNull final String output,
+        @NotNull final ST template,
+        @NotNull final C context,
+        @Nullable final TemplateDebuggingService<C> debuggingService)
+        throws DevelopmentModeException
+    {
+        final boolean result;
+
+        if (   (debuggingService != null)
+            && (context.isDebugEnabled())
+            && (isInDevMode(context.getFileName())))
+        {
+            result = true;
+        }
+        else
+        {
+            result = false;
+        }
+
+        if (result)
+        {
+            synchronized (AbstractTemplateGenerator.class)
+            {
+                debuggingService.debugTemplate(template, context, output);
+                //t_Template.inspect().waitForClose();
+            }
+    /*                    @Nullable final STTreeView debugTool =
+                            new StringTemplateTreeView("Debugging " + getTemplateName(), t_Template);
+
+                        debugTool.setVisible(true);
+
+                        while (debugTool.isVisible())
+                        {
+                            try
+                            {
+                                Thread.sleep(1000);
+                            }
+                            catch (InterruptedException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }*/
+        }
+
+        return result;
+    }
     /**
      * Tries to read the hash from disk.
      * @param fileName  the file name.
@@ -515,6 +667,41 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         return result.toString();
     }
 
+
+    /**
+     * Resolves the {@link TemplateDebuggingService} at runtime.
+     * @return such instance, or {@code null} if none is found.
+     */
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public TemplateDebuggingService<C> resolveTemplateDebuggingService()
+    {
+        @Nullable TemplateDebuggingService<C> result = null;
+
+        @Nullable final Class<TemplateDebuggingService> serviceClass =
+            TemplateDebuggingService.class;
+
+        if (serviceClass != null)
+        {
+            @Nullable final ServiceLoader<TemplateDebuggingService> loader =
+                ServiceLoader.load(serviceClass);
+
+            if (loader != null)
+            {
+                for (@NotNull final TemplateDebuggingService<C> service : loader)
+                {
+                    result = service;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public String toString()

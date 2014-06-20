@@ -48,7 +48,7 @@ import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.ParameterElement;
 import org.acmsl.queryj.customsql.ParameterRefElement;
 import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.Sql.Cardinality;
+import org.acmsl.queryj.customsql.SqlCardinality;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
@@ -60,6 +60,7 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JUnit classes.
@@ -105,7 +106,7 @@ public class BindQueryParametersHandlerTest
 
         @NotNull final SqlElement<String> sql =
             new SqlElement<>(
-                "id", "dao", "name", "select", Cardinality.SINGLE, "all", true /* validation */, false, "description");
+                "id", "dao", "name", "select", SqlCardinality.SINGLE, "all", true /* validation */, false, "description");
 
         sql.setValue("select sysdate from dual where ? = 'A'");
 
@@ -158,11 +159,11 @@ public class BindQueryParametersHandlerTest
         @NotNull final Parameter t_Parameter = new ParameterElement<>("id", 1, "id", type, "1");
 
         @NotNull final Sql<String> t_Sql =
-            new SqlElement<>("id", "DAO", "name", "select", Cardinality.SINGLE, "oracle", true, false, "description");
+            new SqlElement<>("id", "DAO", "name", "select", SqlCardinality.SINGLE, "oracle", true, false, "description");
 
         @NotNull final Class<?> t_ParameterType;
 
-        @NotNull final TypeManager t_TypeManager = new JdbcTypeManager();
+        @Nullable final TypeManager t_TypeManager = new JdbcTypeManager();
 
         if (t_TypeManager.isPrimitiveWrapper(type))
         {

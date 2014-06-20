@@ -90,8 +90,6 @@ public class ResultElement<T>
         }
     }
 
-
-
     /**
      * Specifies the <i>class</i> attribute.
      * @param classValue such value.

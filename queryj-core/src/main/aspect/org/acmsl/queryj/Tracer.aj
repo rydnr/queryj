@@ -1,9 +1,8 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
-    Copyright (C) 2002  Jose San Leandro Armend�riz
-                        jsanleandro@yahoo.es
-                        chousz@yahoo.com
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                        queryj@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,75 +19,68 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jsanleandro@yahoo.es
+    Contact info: jose.sanleandro@acm-sl.com
     Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecaba�as
+                    Urb. Valdecabanas
                     Boadilla del monte
                     28660 Madrid
                     Spain
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: Tracer.aj
  *
- * Author: Jose San Leandro Armend�riz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Traces method calls.
- *
- * Last modified by: $Author$ at $Date$
- *
- * File version: $Revision$
- *
- * Project version: $Name$
- *
- * $Id$
  *
  */
 package aspects.org.acmsl.queryj;
 
 /*
- * Importing project classes.
+ * Importing Apache Commons Logging classes.
  */
-import org.acmsl.queryj.tools.OracleMetaDataManager;
+import org.apache.commons.logging.LogFactory;
 
 /*
  * Importing JDK classes.
  */
-
-/*
- * Importing Jakarta Commons classes.
- */
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Traces method calls.
- * @author <a href=
-  "http://www.samspublishing.com/catalog/product.asp?product_id={681277AC-6106-4C7D-B71A-59D04871EE89}"
+ * @author <a href="http://www.samspublishing.com/catalog/product.asp?product_id={681277AC-6106-4C7D-B71A-59D04871EE89}"
    >Ivan Kiselev (from Aspect-Oriented Programming with AspectJ)</a>
- * @version $Revision$
  */
 public aspect Tracer
 {
     /**
-     * The stack depth.
+     * The System property to enable it.
      */
-    private static Map m__mStackDepths = new HashMap();
+    public static final String SYSTEM_PROPERTY = "queryj.tracer";
 
     /**
-     * Specifies the stack depths.
-     * @param map the new map.
+     * The stack depth.
      */
-    protected void setStackDepths(Map map)
-    {
-        m__mStackDepths = map;
-    }
+    private final Map<Thread, Integer> m__mStackDepths = new HashMap<>();
 
     /**
      * Retrieves the stack depths map.
      * @return such map.
      */
-    public Map getStackDepths()
+    public Map<Thread, Integer> getStackDepths()
     {
         return m__mStackDepths;
+    }
+
+    /**
+     * Checks whether it's enabled.
+     * @return {@code true} in such case.
+     */
+    public boolean isEnabled()
+    {
+        return System.getProperty(SYSTEM_PROPERTY) != null;
     }
 
     /**
@@ -120,26 +112,23 @@ public aspect Tracer
      */
     before(Object obj) : tracePoint(obj)
     {
-        Map t_mStackDepths = getStackDepths();
-
-        if  (t_mStackDepths == null)
+        if (isEnabled())
         {
-            t_mStackDepths = new HashMap();
-            setStackDepths(t_mStackDepths);
+            Map<Thread, Integer> t_mStackDepths = getStackDepths();
+
+            Integer t_Depth = t_mStackDepths.get(Thread.currentThread());
+
+            if  (t_Depth == null)
+            {
+                t_Depth = 0;
+            }
+
+            //System.out.println(
+            LogFactory.getLog("tracer-in").debug(
+                indent(t_Depth.intValue()) + " >> "  + thisJoinPointStaticPart.getSignature());
+
+            t_mStackDepths.put(Thread.currentThread(), t_Depth + 1);
         }
-
-        Integer t_Depth = (Integer) t_mStackDepths.get(Thread.currentThread());
-
-        if  (t_Depth == null)
-        {
-            t_Depth = new Integer(0);
-        }
-
-        //LogFactory.getLog("tracer-in").info(
-        System.out.println(
-            indent(t_Depth.intValue()) + " >> "  + thisJoinPointStaticPart.getSignature());
-
-        t_mStackDepths.put(Thread.currentThread(), new Integer(t_Depth.intValue() + 1));
     }
 
     /**
@@ -147,35 +136,32 @@ public aspect Tracer
      */
     after(Object obj) : tracePoint(obj)
     {
-        Map t_mStackDepths = getStackDepths();
-
-        if  (t_mStackDepths == null)
+        if (isEnabled())
         {
-            t_mStackDepths = new HashMap();
-            setStackDepths(t_mStackDepths);
+            final Map<Thread, Integer> t_mStackDepths = getStackDepths();
+
+            Integer t_Depth = t_mStackDepths.get(Thread.currentThread());
+
+            if  (t_Depth == null)
+            {
+                t_Depth = 0;
+            }
+
+            t_Depth = t_Depth - 1;
+
+            if  (t_Depth == 0)
+            {
+                t_mStackDepths.remove(Thread.currentThread());
+            }
+            else
+            {
+                t_mStackDepths.put(Thread.currentThread(), t_Depth);
+            }
+
+            //System.out.println(
+            LogFactory.getLog("tracer-out").debug(
+                indent(t_Depth.intValue()) + " << " + thisJoinPointStaticPart.getSignature());
         }
-
-        Integer t_Depth = (Integer) t_mStackDepths.get(Thread.currentThread());
-
-        if  (t_Depth == null)
-        {
-            t_Depth = new Integer(0);
-        }
-
-        t_Depth = new Integer(t_Depth.intValue() - 1);
-
-        if  (t_Depth.intValue() == 0)
-        {
-            t_mStackDepths.remove(Thread.currentThread());
-        }
-        else
-        {
-            t_mStackDepths.put(Thread.currentThread(), t_Depth);
-        }
-
-        //LogFactory.getLog("tracer-out").info(
-        System.out.println(
-            indent(t_Depth.intValue()) + " << " + thisJoinPointStaticPart.getSignature());
     }
 
     /**
@@ -183,9 +169,9 @@ public aspect Tracer
      * @param num the amount to indent.
      * @return such indentation.
      */
-    protected static StringBuffer indent(int num)
+    protected static String indent(int num)
     {
-        StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
 
         for  (int t_iIndex = 0;
                   t_iIndex < num;
@@ -199,6 +185,6 @@ public aspect Tracer
         result.append(Thread.currentThread().hashCode());
         result.append("]");
 
-        return result;
+        return result.toString();
     }
 }
