@@ -32,9 +32,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <antlr4.visitor>true</antlr4.visitor>
     <antlr4.listener>true</antlr4.listener>
-    <version.antlr4>4.2</version.antlr4>
+    <version.antlr4>4.3</version.antlr4>
     <version.checkthread>1.0.9</version.checkthread>
-    <version.powermock>1.5.4</version.powermock>
+    <version.powermock>1.5.5</version.powermock>
     <version.oracle-driver>1.4</version.oracle-driver>
   </properties>
 
@@ -195,7 +195,7 @@
       <dependency>
         <groupId>org.apache.ant</groupId>
         <artifactId>ant</artifactId>
-        <version>1.9.3</version>
+        <version>1.9.4</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
@@ -208,14 +208,9 @@
         <version>3.2.1</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-logging</artifactId>
-        <version>1.1</version>
-      </dependency>
-      <dependency>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
-        <version>1.1</version>
+        <version>1.1.3</version>
       </dependency>
       <dependency>
         <groupId>com.oracle</groupId>
@@ -246,12 +241,12 @@
       <dependency>
         <groupId>org.antlr</groupId>
         <artifactId>ST4</artifactId>
-        <version>4.0.7</version>
+        <version>4.0.8</version>
       </dependency>
       <dependency>
         <groupId>org.antlr</groupId>
         <artifactId>antlr</artifactId>
-        <version>3.5.1</version>
+        <version>3.5.2</version>
       </dependency>
       <dependency>
         <groupId>commons-digester</groupId>
@@ -269,14 +264,9 @@
         <version>1.2</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-lang</artifactId>
-        <version>2.4</version>
-      </dependency>
-      <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
-        <version>2.4</version>
+        <version>2.6</version>
       </dependency>
       <dependency>
         <groupId>commons-collections</groupId>
@@ -286,7 +276,7 @@
       <dependency>
         <groupId>commons-beanutils</groupId>
         <artifactId>commons-beanutils</artifactId>
-        <version>1.9.1</version>
+        <version>1.9.2</version>
       </dependency>
       <dependency>
         <groupId>com.jetbrains</groupId>
@@ -306,7 +296,7 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
-        <version>4.0.2.RELEASE</version>
+        <version>4.0.5.RELEASE</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
@@ -322,7 +312,7 @@
       <dependency>
         <groupId>info.cukes</groupId>
         <artifactId>cucumber-core</artifactId>
-        <version>1.1.5</version>
+        <version>1.1.7</version>
       </dependency>
       <dependency>
         <groupId>info.cukes</groupId>
@@ -342,12 +332,12 @@
       <dependency>
         <groupId>info.cukes</groupId>
         <artifactId>cucumber-java</artifactId>
-        <version>1.1.5</version>
+        <version>1.1.7</version>
       </dependency>
       <dependency>
         <groupId>info.cukes</groupId>
         <artifactId>cucumber-junit</artifactId>
-        <version>1.1.5</version>
+        <version>1.1.7</version>
       </dependency>
       <dependency>
         <groupId>com.rubiconproject.oss</groupId>
@@ -368,7 +358,7 @@
       <dependency>
         <groupId>org.apache.maven.plugin-tools</groupId>
         <artifactId>maven-plugin-annotations</artifactId>
-        <version>3.2</version>
+        <version>3.3</version>
       </dependency>
 
       <dependency>

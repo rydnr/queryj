@@ -49,7 +49,7 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
+      <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>

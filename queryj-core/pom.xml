@@ -30,7 +30,7 @@
       <artifactId>acmsl-commons</artifactId>
       <exclusions>
         <exclusion>
-          <groupId>org.apache.commons</groupId>
+          <groupId>commons-beanutils</groupId>
           <artifactId>commons-beanutils</artifactId>
         </exclusion>
         <exclusion>
@@ -71,7 +71,7 @@
       <artifactId>ant</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
+      <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
@@ -111,7 +111,7 @@
       <artifactId>commons-cli</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
+      <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
     </dependency>
     <dependency>

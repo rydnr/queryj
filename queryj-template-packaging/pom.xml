@@ -51,7 +51,7 @@
       <artifactId>acmsl-commons</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
+      <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
@@ -67,7 +67,7 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
+      <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
