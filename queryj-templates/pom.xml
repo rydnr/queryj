@@ -5,26 +5,14 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>queryj-templates</artifactId>
   <packaging>jar</packaging>
-  <version>3.0-SNAPSHOT</version>
+  <version>latest-SNAPSHOT</version>
   <name>QueryJ Templates</name>
   <url>http://www.acm-sl.org/projects/queryj</url>
-  <inceptionYear>2002</inceptionYear>
-  <licenses>
-    <license>
-      <name>GPL</name>
-      <url>http://www.fsf.org/licensing/licenses/gpl.html</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <organization>
-    <name>ACM-SL</name>
-    <url>http://www.acm-sl.org</url>
-  </organization>
 
   <parent>
     <groupId>org.acmsl.queryj</groupId>
     <artifactId>queryj</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <version>latest-SNAPSHOT</version>
   </parent>
 
   <dependencies>

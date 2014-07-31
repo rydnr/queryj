@@ -6,7 +6,7 @@
   <groupId>org.acmsl.queryj</groupId>
   <artifactId>queryj</artifactId>
   <packaging>pom</packaging>
-  <version>3.0-SNAPSHOT</version>
+  <version>latest-SNAPSHOT</version>
   <name>QueryJ</name>
   <url>http://www.acm-sl.org/projects/queryj</url>
   <inceptionYear>2002</inceptionYear>
@@ -22,12 +22,16 @@
     <url>http://www.acm-sl.org</url>
   </organization>
 
-  <prerequisites>
-    <maven>2.2.1</maven>
-  </prerequisites>
+  <parent>
+    <groupId>org.acmsl</groupId>
+    <artifactId>acmsl-pom</artifactId>
+    <version>latest-SNAPSHOT</version>
+  </parent>
 
   <properties>
-    <version.queryj>3.0-SNAPSHOT</version.queryj>
+    <version.major>3</version.major>
+    <version.minor>0</version.minor>
+    <version.queryj>latest-SNAPSHOT</version.queryj>
     <!-- to ensure encoding is not platform-dependent -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <antlr4.visitor>true</antlr4.visitor>
@@ -416,6 +420,35 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <scm>                                                                                     
+    <connection>scm:git:http://github.com/rydnr/queryj.git</connection> 
+    <developerConnection>scm:git:http://github.com/rydnr/queryj.git</developerConnection> 
+    <url>scm:git:http://github.com/rydnr/queryj.git</url> 
+    <tag>HEAD</tag>                                                                         
+  </scm>                                                                                    
+                                                                                            
+  <issueManagement>                                                                         
+    <system>github</system>                                                                   
+    <url>http://github.com/rydnr/queryj.git/</url>                                                                 
+  </issueManagement>                                                                        
+                                                                                            
+  <ciManagement>                                                                            
+    <system>Hudson</system>                                                                 
+    <url>http://jenkins.acm-sl.org/job/queryj</url>                                   
+    <notifiers>                                                                             
+      <notifier>                                                                            
+        <type>mail</type>                                                                   
+        <sendOnError>true</sendOnError>                                                     
+        <sendOnFailure>true</sendOnFailure>                                                 
+        <sendOnSuccess>true</sendOnSuccess>                                                 
+        <sendOnWarning>true</sendOnWarning>                                                 
+        <configuration>                                                                     
+          <address>jenkins@acm-sl.org</address>                                       
+        </configuration>                                                                    
+      </notifier>                                                                           
+    </notifiers>                                                                            
+  </ciManagement>
 
   <build>
     <pluginManagement>
