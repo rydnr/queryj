@@ -73,8 +73,7 @@
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.antlr</groupId>
@@ -115,7 +114,7 @@
       <artifactId>commons-lang</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.jetbrains</groupId>
+      <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
     </dependency>
     <!--dependency>
@@ -166,6 +165,19 @@
     </dependency>
 
   </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>acmsl-libs-releases</id>
+      <name>acmsl-libs-releases</name>
+      <url>http://maven.acm-sl.org/artifactory/libs-release-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>acmsl-libs-snapshots</id>
+      <name>acmsl-libs-snapshots</name>
+      <url>http://maven.acm-sl.org/artifactory/libs-snapshot-local</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <build>
     <plugins>

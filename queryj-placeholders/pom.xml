@@ -58,7 +58,7 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>com.jetbrains</groupId>
+      <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
     </dependency>
     <dependency>
@@ -87,6 +87,19 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>acmsl-libs-releases</id>
+      <name>acmsl-libs-releases</name>
+      <url>http://maven.acm-sl.org/artifactory/libs-release-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>acmsl-libs-snapshots</id>
+      <name>acmsl-libs-snapshots</name>
+      <url>http://maven.acm-sl.org/artifactory/libs-snapshot-local</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <build>
     <plugins>

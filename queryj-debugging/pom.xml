@@ -41,7 +41,7 @@
       <artifactId>commons-cli</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.jetbrains</groupId>
+      <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
     </dependency>
 
@@ -87,6 +87,19 @@
 
   </dependencies>
 
+  <distributionManagement>
+    <repository>
+      <id>acmsl-libs-releases</id>
+      <name>acmsl-libs-releases</name>
+      <url>http://maven.acm-sl.org/artifactory/libs-release-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>acmsl-libs-snapshots</id>
+      <name>acmsl-libs-snapshots</name>
+      <url>http://maven.acm-sl.org/artifactory/libs-snapshot-local</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <build>
     <plugins>
       <plugin>
@@ -122,12 +135,12 @@
   <reporting>
     <plugins>
       <plugin>
-	<groupId>org.codehaus.mojo</groupId>
-	<artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
       </plugin>
       <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-pmd-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
       </plugin>
     </plugins>
   </reporting>
