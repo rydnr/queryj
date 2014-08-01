@@ -111,7 +111,7 @@
     </dependency>
     <dependency>
       <groupId>com.oracle</groupId>
-      <artifactId>oracle-driver</artifactId>
+      <artifactId>ojdbc14</artifactId>
       <!--optional>true</optional-->
       <scope>test</scope>
     </dependency>
