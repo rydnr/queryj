@@ -78,7 +78,7 @@ public enum TemplateDebuggingCommand
      * Creates a new command.
      * @param name the name.
      */
-    TemplateDebuggingCommand(@NotNull final String name)
+    TemplateDebuggingCommand(final String name)
     {
         this.m__strName = name;
     }
