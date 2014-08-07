@@ -38,59 +38,33 @@
     </dependency>
     <dependency>
       <groupId>org.acmsl</groupId>
-      <artifactId>acmsl-commons</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.commons</groupId>
-          <artifactId>commons-beanutils</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>gnu-regexp</groupId>
-          <artifactId>gnu-regexp</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>regexp</groupId>
-          <artifactId>regexp</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.servlet</groupId>
-          <artifactId>servlet-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>mx4j</groupId>
-          <artifactId>mx4j</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.junit</groupId>
-          <artifactId>junit</artifactId>
-        </exclusion>
-      </exclusions>
+      <artifactId>java-commons</artifactId>
     </dependency>
-      <dependency>
-        <groupId>info.cukes</groupId>
-        <artifactId>gherkin</artifactId>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>info.cukes</groupId>
-        <artifactId>cucumber-jvm-deps</artifactId>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>info.cukes</groupId>
-        <artifactId>cucumber-java</artifactId>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>info.cukes</groupId>
-        <artifactId>cucumber-junit</artifactId>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>com.rubiconproject.oss</groupId>
-        <artifactId>jchronic</artifactId>
-        <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>gherkin</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-jvm-deps</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-java</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.rubiconproject.oss</groupId>
+      <artifactId>jchronic</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>

@@ -36,7 +36,7 @@
     </dependency>
     <dependency>
       <groupId>org.acmsl</groupId>
-      <artifactId>acmsl-commons</artifactId>
+      <artifactId>java-commons</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>

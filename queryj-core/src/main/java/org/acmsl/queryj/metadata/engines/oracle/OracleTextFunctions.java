@@ -300,6 +300,7 @@ public class OracleTextFunctions
          * Builds a text representation of this object.
          * @return this object in text format.
          */
+        @NotNull
         public String toString()
         {
             @NotNull StringBuffer t_sbResult = new StringBuffer();
