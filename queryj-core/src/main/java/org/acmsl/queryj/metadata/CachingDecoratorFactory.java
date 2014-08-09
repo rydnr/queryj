@@ -115,18 +115,18 @@ public class CachingDecoratorFactory
     @Override
     @NotNull
     @SuppressWarnings("unchecked")
-    public <V> Attribute<DecoratedString> createDecorator(
+    public <V, K> Attribute<K> createDecorator(
         @NotNull final Attribute<V> attribute, @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final Attribute<DecoratedString> result;
+        @NotNull final Attribute<K> result;
 
         if (attribute.getName() instanceof String)
         {
-            result = new CachingAttributeDecorator((Attribute<String>) attribute, metadataManager);
+            result = (Attribute<K>) new CachingAttributeDecorator((Attribute<String>) attribute, metadataManager);
         }
         else
         {
-            result = (Attribute<DecoratedString>) attribute;
+            result = (Attribute<K>) attribute;
         }
 
         return result;
