@@ -176,6 +176,8 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandler
      * @param typeManager the {@link TypeManager} instance.
      * @param handler a {@link RetrieveResultPropertiesHandler} for dealing with reflection.
      * @param metadataManager the {@link MetadataManager} instance.
+     * @throws SQLException if the properties cannot be validated.
+     * @throws QueryJBuildException if the operation fails for some other reason.
      */
     protected void validateProperties(
         @NotNull final ResultSet resultSet,

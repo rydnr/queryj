@@ -206,6 +206,7 @@ public class CustomResultTestHelper
     /**
      * Converts given table information to a {@link Result}.
      * @param tableEntry the table information.
+     * @param index the index.
      * @return the {@link Result} instance.
      */
     @Nullable

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.customsql.xml;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
@@ -91,10 +91,10 @@ public class SqlXmlParserParameterDAO
     }
 
     /**
-     * Retrieves the {@link org.acmsl.queryj.customsql.Parameter} associated to given id.
-     *
+     * Retrieves the {@link Parameter} associated to given id.
      * @param id the parameter id.
-     * @return the {@link org.acmsl.queryj.customsql.Parameter}, or <code>null</code> if not found.
+     * @param parser the parser.
+     * @return the {@link Parameter}, or <code>null</code> if not found.
      */
     @Nullable
     protected Parameter<String, ?> findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
@@ -103,7 +103,7 @@ public class SqlXmlParserParameterDAO
     }
 
     /**
-     * Retrieves all {@link org.acmsl.queryj.customsql.Parameter parameters} used in given {@link org.acmsl.queryj.customsql.Sql}.
+     * Retrieves all {@link Parameter parameters} used in given {@link org.acmsl.queryj.customsql.Sql}.
      *
      * @param sqlId the {@link org.acmsl.queryj.customsql.Sql} identifier.
      * @return the list of parameters required by given {@link org.acmsl.queryj.customsql.Sql}.

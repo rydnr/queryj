@@ -147,6 +147,7 @@ public abstract class AbstractFillTemplateChain<C extends TemplateContext>
      * @param relevantOnly to include only the relevant ones: the ones that are necessary to
      * be able to find out if two template realizations are equivalent. Usually, generation timestamps,
      * documentation, etc. can be considered not relevant.
+     * @return the chain.
      */
     @NotNull
     @SuppressWarnings("unchecked")

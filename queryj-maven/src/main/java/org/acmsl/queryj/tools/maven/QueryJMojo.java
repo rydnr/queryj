@@ -43,7 +43,7 @@ import org.acmsl.queryj.tools.ant.QueryJTask;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing some ACM-SL Java Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 
@@ -52,9 +52,11 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  */
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /*
  * Importing some Ant classes.
@@ -63,7 +65,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Path;
 
 /*
- * Importing some Jetbrains annotations.
+ * Importing NotNull annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,15 +92,12 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Executes QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
- * @goal queryj
- * @execute phase="generate-sources"
- * @threadSafe
  */
 @SuppressWarnings("unused")
 @ThreadSafe
+@Mojo( name = "queryj", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true, executionStrategy = "once-per-session")
 public class QueryJMojo
     extends AbstractMojo
-    implements Mojo
 {
     /**
      * The location of pom.properties within the jar file.
@@ -128,131 +127,132 @@ public class QueryJMojo
 
     /**
      * The driver.
-     * @parameter property="driver" @required
      */
+    @Parameter (property = "driver", required = true)
     private String m__strDriver;
 
     /**
      * The url.
      * @parameter property="url" @required
      */
+    @Parameter (property = "url", required = true)
     private String m__strUrl;
 
     /**
      * The user name.
-     * @parameter property="username" @required
      */
+    @Parameter (property = "username", required = true)
     private String m__strUsername;
 
     /**
      * The password.
-     * @parameter property="password" @required
      */
+    @Parameter (property = "password", required = true)
     private String m__strPassword;
 
     /**
      * The catalog.
-     * @parameter property="catalog"
      */
+    @Parameter (property = "catalog", required = false)
     private String catalog;
 
     /**
      * The schema.
-     * @parameter property="schema" @required
      */
+    @Parameter (property = "schema", required = true)
     private String schema;
 
     /**
      * The repository.
-     * @parameter property="repository" @required
      */
+    @Parameter (property = "repository", required = true)
     private String m__strRepository;
 
     /**
      * The package name.
-     * @parameter property="packageName" @required
      */
+    @Parameter (property = "packageName", required = true)
     private String m__strPackageName;
 
     /**
      * The output directory.
-     * @parameter property="outputDir"
      */
+    @Parameter (property = "outputDir", required = false)
     private File m__OutputDir;
 
     /**
      * The data source.
-     * @parameter property="jndiDataSource"
      */
+    @Parameter (property = "jndiDataSource", required = false)
     private String m__strJndiDataSource;
 
     /**
      * The sql xml file.
-     * @parameter property="sqlXmlFile"
      */
+    @Parameter (property = "sqlXmlFile", required = false)
     private File m__SqlXmlFile;
 
     /**
      * The header file.
-     * @parameter property="headerFile"
      */
+    @Parameter (property = "headerFile", required = false)
     private File m__HeaderFile;
 
     /**
      * The grammar folder.
-     * @parameter property="grammarFolder"
      */
+    @Parameter (property = "grammarFolder", required = false)
     private File m__GrammarFolder;
 
     /**
      * The grammar bundle.
-     * @parameter property="grammarName"
      */
+    @Parameter (property = "grammarName", required = false)
     private String m__strGrammarName;
 
     /**
      * The grammar suffix.
-     * @parameter property="grammarSuffix"
      */
+    @Parameter (property = "grammarSuffix", required = false)
     private String m__strGrammarSuffix;
 
     /**
      * The list of tables.
      * @parameter
      */
+    @Parameter (required = false)
     private Table[] m__aTables = new Table[0];
     // @*** parameter property="tables"
 
     /**
      * The file encoding.
-     * @parameter property="encoding" default-value="${project.build.sourceEncoding}"
      */
+    @Parameter (property = "encoding", required = false, defaultValue = "${project.build.sourceEncoding}")
     private String m__strEncoding;
 
     /**
      * Whether to generate file timestamps.
-     * @parameter property="disableGenerationTimestamps"
      */
+    @Parameter (property = "disableGenerationTimestamps", required = false)
     private Boolean m__bDisableGenerationTimestamps;
 
     /**
      * Whether to disable NotNull annotations.
-     * @parameter property="disableNotNullAnnotations"
      */
+    @Parameter (property = "disableNotNullAnnotations", required = false)
     private Boolean m__bDisableNotNullAnnotations = false;
 
     /**
      * Whether to disable checkthread.org annotations.
-     * @parameter property="disableCheckthreadAnnotations"
      */
+    @Parameter (property = "disableCheckthreadAnnotations", required = false)
     private Boolean m__bDisableCheckthreadAnnotations = false;
 
     /**
      * The current build session instance. This is used for toolchain manager API calls.
-     * @parameter default-value="${session}"
-     * @required
      * @readonly
      */
+    @Parameter (defaultValue = "${session}", required = true, readonly = true)
     private MavenSession session;
 
     /**
@@ -1219,6 +1219,7 @@ public class QueryJMojo
     /**
      * Executes QueryJ via Maven2.
      * @param log the Maven log.
+     * @throws MojoExecutionException if the process fails.
      */
     protected void execute(@NotNull final Log log)
         throws MojoExecutionException
@@ -1248,6 +1249,7 @@ public class QueryJMojo
      * Executes QueryJ via Maven2.
      * @param log the Maven log.
      * @param version the QueryJ version.
+     * @throws MojoExecutionException if the process fails.
      */
     protected void execute(@NotNull final Log log, final String version)
         throws MojoExecutionException

@@ -182,6 +182,7 @@ public class BindQueryParametersHandler
      * @param customSqlProvider the {@link CustomSqlProvider}.
      * @param typeManager the {@link TypeManager}.
      * @param conversionUtils the {@link ConversionUtils}.
+     * @throws QueryJBuildException if the binding fails.
      */
     protected void bindParameters(
         @NotNull final Sql<String> sql,
@@ -233,6 +234,7 @@ public class BindQueryParametersHandler
      * @param typeManager the metadata type manager.
      * @param conversionUtils the <code>ConversionUtils</code> instance.
      * @param <T> the type.
+     * @throws QueryJBuildException if the binding fails.
      */
     @SuppressWarnings("unchecked")
     protected <T> void bindParameter(
@@ -349,6 +351,7 @@ public class BindQueryParametersHandler
      * @param sql the sql.
      * @param parameterClasses the parameter classes.
      * @return the method.
+     * @throws QueryJBuildException if the binding fails.
      */
     @NotNull
     protected Method retrievePreparedStatementMethod(
@@ -400,6 +403,7 @@ public class BindQueryParametersHandler
      * @param conversionUtils the {@link ConversionUtils} instance.
      * @param <T> the type.
      * @return the validation value.
+     * @throws QueryJBuildException if the binding fails.
      */
     @SuppressWarnings("unchecked")
     protected <T> T retrieveParameterValue(
@@ -452,6 +456,7 @@ public class BindQueryParametersHandler
      * @param stringUtils the {@link StringUtils} instance.
      * @param <T> the type.
      * @return the validation value.
+     * @throws QueryJBuildException if the binding fails.
      */
     @SuppressWarnings("unchecked")
     protected <T> T retrieveParameterValue(
@@ -505,6 +510,7 @@ public class BindQueryParametersHandler
      * @param parameter the {@link Parameter}.
      * @param sql the {@link Sql}.
      * @return the {@link Date} value if it's a Date.
+     * @throws QueryJBuildException if the binding fails.
      */
     protected Date assumeIsADate(
         @NotNull final Parameter<String, ?> parameter,
@@ -575,6 +581,7 @@ public class BindQueryParametersHandler
      * @param sql the {@link Sql}.
      * @param <T> the type.
      * @return the parameter value.
+     * @throws QueryJBuildException if the binding fails.
      */
     protected <T> T createViaConstructor(
         @NotNull final Parameter<String, T> parameter,
@@ -735,6 +742,7 @@ public class BindQueryParametersHandler
      * @param methodName the method name.
      * @param parameterClasses the parameter classes.
      * @return the <code>Method</code> instance.
+     * @throws NoSuchMethodException if the method is not found.
      */
     @NotNull
     protected Method retrieveMethod(

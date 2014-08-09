@@ -80,6 +80,7 @@ public class PropertyElement<T>
     /**
      * Creates a PropertyElement with given information.
      * @param id the <i>id</i> attribute.
+     * @param columnName the <i>columnName</i> attribute.
      * @param index the <i>index</i> attribute.
      * @param type the <i>type</i> attribute.
      * @param nullable the <i>nullable</i> attribute.

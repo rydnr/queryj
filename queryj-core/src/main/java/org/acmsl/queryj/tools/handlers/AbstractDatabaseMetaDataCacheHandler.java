@@ -33,7 +33,7 @@
 package org.acmsl.queryj.tools.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
 
@@ -89,6 +89,7 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
      * Caches given {@link MetadataManager database information} to disk.
      * @param manager the {@link MetadataManager} instance.
      * @param outputDir the output dir.
+     * @throws IOException if the manager cannot be cached.
      */
     protected void cache(@NotNull final MetadataManager manager, @NotNull final File outputDir)
         throws IOException
@@ -146,6 +147,8 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
      * Retrieves the cache.
      * @param outputDir the output dir.
      * @return {@link MetadataManager} instance from disk.
+     * @throws IOException if the cache is unavailable.
+     * @throws ClassNotFoundException if a misconfiguration occurs.
      */
     @Nullable
     @SuppressWarnings("unused")

@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -72,6 +72,7 @@ public class CannotAnalyzeResultSetForValidationException
 
     /**
      * Creates a new instance associated to given {@link Sql}.
+     * @param cause the cause.
      * @param sql the SQL.
      */
     public CannotAnalyzeResultSetForValidationException(

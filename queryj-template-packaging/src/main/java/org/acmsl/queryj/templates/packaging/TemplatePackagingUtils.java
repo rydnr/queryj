@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: Utility class for template packaging.
  *
  * Date: 2014/06/03
  * Time: 01:17
@@ -52,7 +52,7 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 /**
- *
+ * Utility class for template packaging.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/06/03 01:17
@@ -117,6 +117,7 @@ public class TemplatePackagingUtils
      * Builds the final file name.
      * @param templateDef the {@link TemplateDef} instance.
      * @param templateName the template name.
+     * @param extension the filename extension.
      * @return such file name.
      */
     @NotNull

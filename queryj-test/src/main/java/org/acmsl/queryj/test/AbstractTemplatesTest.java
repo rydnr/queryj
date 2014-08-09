@@ -763,6 +763,8 @@ public abstract class AbstractTemplatesTest<G, F>
      * Sets up the Java parser.
      * @param javaFile the Java contents to parse.
      * @return the {@link JavaParser} instance.
+     * @throws RecognitionException if the format is invalid.
+     * @throws IOException if the source cannot be read.
      */
     @SuppressWarnings("unchecked")
     @NotNull
@@ -894,6 +896,7 @@ public abstract class AbstractTemplatesTest<G, F>
      * Creates a temporary directory.
      * @param prefix the prefix to use (optional).
      * @return the temporary folder.
+     * @throws IOException if the folder cannot be created.
      */
     @SuppressWarnings("unused")
     @NotNull
@@ -1307,6 +1310,8 @@ public abstract class AbstractTemplatesTest<G, F>
      * Configures a parser for given stream.
      * @param stream the stream to parse.
      * @return the {@link TemplateDefParser}.
+     * @throws RecognitionException if the format is invalid.
+     * @throws IOException if the source cannot be read.
      */
     @NotNull
     protected TemplateDefParser setupParser(@NotNull final InputStream stream)

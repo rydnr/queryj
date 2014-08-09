@@ -61,7 +61,9 @@ import java.util.Map.Entry;
 /**
  * Abstract implementation to simplify fill handlers.
  * @author <a href="jose@acm-sl.org">Jose San Leandro</a>
- * @since 2010/05/13
+ * @since 3.0
+ * Created: 2010/05/13
+ * @param <P> the placeholder type.
  */
 @SuppressWarnings("unused")
 public abstract class AbstractFillHandler<P>
@@ -104,11 +106,12 @@ public abstract class AbstractFillHandler<P>
      * @param map the command map.
      * @param placeHolder the placeholder.
      * model.
+     * @return {@code false} if the handler processes the chain correctly.
+     * @throws QueryJBuildException if {@code getValue()} throws it.
      */
     @SuppressWarnings("unchecked")
     public boolean handle(@NotNull final Map<String, P> map, @NotNull final String placeHolder)
-        throws InvalidTemplateException,
-               QueryJBuildException
+        throws QueryJBuildException
     {
         final boolean result = true;
 

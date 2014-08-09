@@ -238,8 +238,8 @@ public class NettyServerDebuggingService<C extends TemplateContext>
     /**
      * Launches the server.
      * @return the {@link ChannelFuture}.
-     * throws InterruptedException if the server gets interrupted.
-     * throws IOException if the socket cannot be bound.
+     * @throws InterruptedException if the server gets interrupted.
+     * @throws IOException if the socket cannot be bound.
      */
     public ChannelFuture launchServer()
         throws InterruptedException,
@@ -265,8 +265,8 @@ public class NettyServerDebuggingService<C extends TemplateContext>
      * Launches the server.
      * @param port the port.
      * @return the {@link ChannelFuture}.
-     * throws InterruptedException if the server gets interrupted.
-     * throws IOException if the socket cannot be bound.
+     * @throws InterruptedException if the server gets interrupted.
+     * @throws IOException if the socket cannot be bound.
      */
     public ChannelFuture launchServer(final int port)
         throws InterruptedException,
@@ -281,8 +281,8 @@ public class NettyServerDebuggingService<C extends TemplateContext>
      * @param port the port.
      * @param handler the {@link ChannelHandlerAdapter handler} to handle incoming connections.
      * @return the {@link ChannelFuture}.
-     * throws InterruptedException if the server gets interrupted.
-     * throws IOException if the socket cannot be bound.
+     * @throws InterruptedException if the server gets interrupted.
+     * @throws IOException if the socket cannot be bound.
      */
     @NotNull
     protected ChannelFuture launchServer(final int port, @NotNull final ChannelHandlerAdapter handler)
@@ -347,7 +347,7 @@ public class NettyServerDebuggingService<C extends TemplateContext>
 
     /**
      * Stops the server.
-     * throws InterruptedException if the server cannot be stopped.
+     * @throws InterruptedException if the server cannot be stopped.
      */
     @SuppressWarnings("unused")
     public void stopServer()
@@ -359,7 +359,7 @@ public class NettyServerDebuggingService<C extends TemplateContext>
     /**
      * Stops the server.
      * @param group the {@link EventLoopGroup group}.
-     * throws InterruptedException if the server cannot be stopped.
+     * @throws InterruptedException if the server cannot be stopped.
      */
     protected void stopServer(@NotNull final EventLoopGroup group)
         throws InterruptedException

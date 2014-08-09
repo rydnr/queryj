@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing project classes classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 
@@ -64,6 +64,7 @@ public interface PerRepositoryTemplate<C extends PerRepositoryTemplateContext>
      * Builds a context-specific exception.
      * @param context  the context.
      * @param template the {@link ST} instance.
+     * @param actualException the actual exception.
      * @return the specific {@link InvalidTemplateException} for the template.
      */
     @NotNull

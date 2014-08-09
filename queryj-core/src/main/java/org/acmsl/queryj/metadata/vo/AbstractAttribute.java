@@ -57,6 +57,7 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Abstract logic-less implementation of {@link Attribute} interface.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @param <T> the type.
  */
 @ThreadSafe
 public abstract class AbstractAttribute<T>
@@ -522,6 +523,7 @@ public abstract class AbstractAttribute<T>
      * Checks whether given value is null or empty.
      * @param value the value.
      * @return {@code true} in such case.
+     * @param <V> the type.
      */
     protected static final <V> boolean isNullOrEmpty(@Nullable final V value)
     {

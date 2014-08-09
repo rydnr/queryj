@@ -33,7 +33,7 @@
 package org.acmsl.queryj.customsql.xml;
 
 /*
- * Importing project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.exceptions.CannotReadCustomSqlXmlFileException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -59,7 +59,7 @@ import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing some ACM-SL Java Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
@@ -707,6 +707,7 @@ public class SqlXmlParserImpl
 
     /**
      * Loads the information from the XML resource.
+     * @throws QueryJBuildException if the parsing operation fails.
      */
     protected void load()
       throws  QueryJBuildException
@@ -718,6 +719,7 @@ public class SqlXmlParserImpl
      * Loads the information from the XML resource.
      * @param digester the Digester instance.
      * @param input the input stream.
+     * @throws QueryJBuildException if the parsing operation fails.
      */
     protected synchronized void load(
         @Nullable final Digester digester, @Nullable final InputStream input)

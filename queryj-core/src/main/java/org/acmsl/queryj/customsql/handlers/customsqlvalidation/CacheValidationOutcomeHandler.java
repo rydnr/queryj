@@ -113,6 +113,7 @@ public class CacheValidationOutcomeHandler
      * Writes the validation outcome to disk.
      * @param sql the {@link Sql}.
      * @param command the command.
+     * @throws QueryJBuildException if the operation fails.
      */
     protected void cacheOutcomeToDisk(
         @NotNull final Sql<String> sql,

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.customsql.xml;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.IdentifiableElement;
 import org.acmsl.queryj.customsql.SqlStatementFlagsDAO;
@@ -98,7 +98,7 @@ public class SqlXmlParserStatementFlagsDAO
 
     /**
      * Finds the connection flags for given primary key operation.
-     *
+     * @param parser the parser.
      * @return such information.
      */
     @NotNull

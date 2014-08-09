@@ -33,7 +33,7 @@
 package org.acmsl.queryj.tools.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.QueryJCommand;
@@ -177,7 +177,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * extraction has already been done.
      * @param metaData the database metadata.
      * @return {@code true} if the chain should be stopped.
-     * throws QueryJBuildException if the process fails.
+     * @throws QueryJBuildException if the process fails.
      */
     protected boolean handle(
         @NotNull final QueryJCommand parameters,
@@ -504,7 +504,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameters to handle.
      * @param metadataManager the {@link MetadataManager} instance.
      * @return {@code true} if the chain should be stopped.
-     * throws QueryJBuildException if the process fails.
+     * @throws QueryJBuildException if the process fails.
      */
     @SuppressWarnings("unchecked")
     protected boolean handle(
@@ -607,7 +607,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameters to handle.
      * @param metaData the database metadata.
      * @return {@code true} if the chain should be stopped.
-     * throws QueryJBuildException if the process fails.
+     * @throws QueryJBuildException if the process fails.
      */
     protected boolean handle(
         @NotNull final QueryJCommand parameters,
@@ -909,6 +909,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param metaData the {@link DatabaseMetaData} instance.
      * @param parameters the parameter map.
      * @return the metadata manager instance.
+     * @throws QueryJBuildException if the metadata manager cannot be built.
      */
     @Nullable
     @SuppressWarnings("unchecked")
@@ -1035,6 +1036,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param caseSensitive whether the engine is case sensitive or not.
      * @param engine the engine.
      * @return the metadata manager instance.
+     * @throws QueryJBuildException if the metadata manager cannot be built.
      */
     @NotNull
     protected MetadataManager buildMetadataManager(
@@ -1252,6 +1254,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Retrieves the product name.
      * @param metaData the database metadata.
      * @return the product name.
+     * @throws QueryJBuildException if the product name information is not available.
      */
     @NotNull
     protected String retrieveProductName(@NotNull final DatabaseMetaData metaData)
@@ -1325,6 +1328,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Retrieves the product's identifier quote string.
      * @param metaData the database metadata.
      * @return the quote string.
+     * @throws QueryJBuildException if the product quote information is not available.
      */
     @SuppressWarnings("unused")
     protected String retrieveProductQuote(@NotNull final DatabaseMetaData metaData)
@@ -1428,6 +1432,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param metaData the database metadata.
      * @param parameters the command parameters.
      * @return <code>true</code> in case it matches.
+     * @throws QueryJBuildException if the vendor information is not available.
      */
     protected boolean checkVendor(
         @NotNull final DatabaseMetaData metaData, @NotNull final QueryJCommand parameters)

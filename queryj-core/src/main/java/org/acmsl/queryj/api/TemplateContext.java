@@ -64,6 +64,7 @@ public interface TemplateContext
 {
     /**
      * Retrieves the template name.
+     * @return such name.
      */
     @NotNull
     String getTemplateName();

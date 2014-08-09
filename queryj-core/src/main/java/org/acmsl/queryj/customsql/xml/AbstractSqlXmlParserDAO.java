@@ -146,7 +146,10 @@ public abstract class AbstractSqlXmlParserDAO
     /**
      * Retrieves the element matching given id.
      * @param id the id.
+     * @param type the type.
+     * @param collection the collection.
      * @return the element, if any.
+     * @param <T> the element type.
      */
     @SuppressWarnings("unchecked")
     @Nullable
@@ -177,8 +180,8 @@ public abstract class AbstractSqlXmlParserDAO
      * @param parser the parser.
      * @param type the type.
      * @return such list.
+     * @param <T> the element type.
      */
-    @SuppressWarnings("unchecked")
     @NotNull
     protected <T> List<T> findAll(@NotNull final SqlXmlParser parser, @NotNull final Class<?> type)
     {
@@ -190,6 +193,7 @@ public abstract class AbstractSqlXmlParserDAO
      * @param type the type.
      * @param collection the collection.
      * @return such list.
+     * @param <T> the element type.
      */
     @SuppressWarnings("unchecked")
     @NotNull
@@ -218,6 +222,8 @@ public abstract class AbstractSqlXmlParserDAO
      * @param contents such contents.
      * @param itemClass the class to filter.
      * @param idFilter the id filter (optional).
+     * @return the filtered items.
+     * @param <I> the element type.
      */
     @SuppressWarnings("unchecked")
     @NotNull

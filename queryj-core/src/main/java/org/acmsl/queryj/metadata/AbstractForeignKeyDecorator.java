@@ -34,7 +34,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.vo.AbstractForeignKey;
@@ -389,6 +389,7 @@ public abstract class AbstractForeignKeyDecorator
 
     /**
      * Checks whether this foreign key allows null or not.
+     * @param attributes the attributes.
      * @param <V> the attribute type.
      * @return such condition.
      */

@@ -305,7 +305,7 @@ public class Log4JInitializerHandler
          * @param len the buffer length.
          * @param log the actual {@link Log}.
          * @param level the log {@link Level level}.
-         * throws IOException if the content cannot be written.
+         * @throws IOException if the content cannot be written.
          */
         protected void write(
             final char[] cbuf, final int off, final int len, @NotNull final Log log, @NotNull final Level level)

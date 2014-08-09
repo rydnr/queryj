@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholdern
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
@@ -68,6 +68,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class NonPrimaryKeyAttributesHandler
     extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Attribute<String>>>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 2484558064912624673L;
 
     /**
@@ -111,6 +114,7 @@ public class NonPrimaryKeyAttributesHandler
      * @param tableName the table name.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param metadataUtils the {@link MetadataUtils} instance.
+     * @return the non-pk attributes.
      */
     @NotNull
     protected List<Attribute<String>> retrieveNonPkAttributes(

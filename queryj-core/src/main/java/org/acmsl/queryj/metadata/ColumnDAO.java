@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -60,7 +60,7 @@ import java.util.List;
  * Provides methods to access {@link Attribute column} information.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * @Created 2012/06/06
+ * Created: 2012/06/06
  */
 public interface ColumnDAO
     extends DAO
@@ -69,6 +69,7 @@ public interface ColumnDAO
      * Retrieves a concrete column in a given table.
      * @param table the table name.
      * @param columnName the column name.
+     * @return the column.
      */
     @Nullable
     Attribute<String> findColumn(@NotNull final String table, @NotNull final String columnName);
@@ -76,6 +77,7 @@ public interface ColumnDAO
     /**
      * Retrieves the columns for given table.
      * @param table the table name.
+     * @return the columns.
      */
     @NotNull
     List<Attribute<String>> findColumns(@NotNull final String table);
@@ -83,6 +85,7 @@ public interface ColumnDAO
     /**
      * Retrieves the columns for given table, including parent's, if any.
      * @param table the table name.
+     * @return the columns.
      */
     @NotNull
     List<Attribute<String>> findAllColumns(@NotNull final String table);

@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.api.handlers.fillhandlers;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.handlers.TemplateHandler;
@@ -59,6 +59,7 @@ import java.io.Serializable;
  * @author <a href="mailto:jose@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2012/05/13
+ * @param <P> the placeholder type.
  */
 public interface FillHandler<P>
     extends TemplateHandler<QueryJCommand>,
@@ -74,6 +75,7 @@ public interface FillHandler<P>
     /**
      * Retrieves the template value for that placeholder.
      * @return the dynamic value.
+     * @throws QueryJBuildException if the value cannot be evaluated.
      */
     @Nullable
     P getValue()

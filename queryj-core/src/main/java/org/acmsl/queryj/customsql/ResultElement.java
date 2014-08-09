@@ -33,7 +33,7 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.jetbrains.annotations.NotNull;
 
@@ -136,6 +136,7 @@ public class ResultElement<T>
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such value.
      */
+    @Override
     protected int hashCode(
         @NotNull final T id,
         @NotNull final Collection<PropertyRef> propertyRefs)
@@ -169,6 +170,7 @@ public class ResultElement<T>
 
     /**
      * Checks whether given instance is semantically equal to this one.
+     * @param candidate the candidate.
      * @param id the <i>id</i> attribute.
      * @param classValue the <i>class</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.

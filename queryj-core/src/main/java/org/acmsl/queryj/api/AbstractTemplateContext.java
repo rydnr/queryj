@@ -221,6 +221,7 @@ public abstract class AbstractTemplateContext
 
     /**
      * Builds a command key.
+     * @param pk the pk.
      * @param key the key.
      * @return the command key.
      */

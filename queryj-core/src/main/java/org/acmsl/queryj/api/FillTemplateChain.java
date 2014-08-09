@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -68,6 +68,8 @@ public interface FillTemplateChain<C extends TemplateContext>
      * @param relevantOnly to include only the relevant ones: the ones that are necessary to
      * be able to find out if two template realizations are equivalent. Usually, generation timestamps,
      * documentation, etc. can be considered not relevant.
+     * @return the placeholders.
+     * @throws QueryJBuildException if the placeholders cannot be provided.
      */
     @NotNull
     QueryJCommand providePlaceholders(final boolean relevantOnly)

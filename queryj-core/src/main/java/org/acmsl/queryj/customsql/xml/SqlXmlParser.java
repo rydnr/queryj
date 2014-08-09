@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -33,7 +33,7 @@
 package org.acmsl.queryj.customsql.xml;
 
 /*
- * Importing project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.ConnectionFlags;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
@@ -60,7 +60,8 @@ import java.util.List;
 /**
  * Is able to read the contents contained in QueryJ's sql.xml files.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
- * @since 2012/07/06 07:08
+ * Created 2012/07/06 07:08
+ * @since 2.0
  */
 public interface SqlXmlParser
     extends CustomSqlProvider
@@ -130,6 +131,7 @@ public interface SqlXmlParser
 
     /**
      * Parses the sql.xml associated to this instance.
+     * @throws QueryJBuildException if the parsing operation fails.
      */
     void parse()
         throws  QueryJBuildException;

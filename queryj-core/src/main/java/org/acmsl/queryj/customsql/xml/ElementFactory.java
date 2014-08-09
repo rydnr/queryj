@@ -89,7 +89,7 @@ public abstract class ElementFactory
     }
 
     /**
-     * Creates a Customer value object from given SAX attributes.
+     * Creates an object from given SAX attributes.
      * @param attributes the attributes.
      * @return the Customer information.
      */
@@ -102,11 +102,12 @@ public abstract class ElementFactory
     }
 
     /**
-     * Creates a Customer value object from given SAX attributes.
+     * Creates an object from given SAX attributes.
      * @param attributes the attributes.
      * @param digester the Digester instance.
      * @param conversionUtils the ConversionUtils instance.
      * @return the Customer information.
+     * @throws SAXException if the object cannot be created.
      */
     @Nullable
     protected abstract Object createObject(

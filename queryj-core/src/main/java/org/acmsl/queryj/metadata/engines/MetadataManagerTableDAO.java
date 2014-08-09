@@ -356,7 +356,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @return the retrieved rows.
-     * throws SQLException if the contents cannot be retrieved.
+     * @throws SQLException if the contents cannot be retrieved.
      */
     @NotNull
     protected List<Row<String>> queryContents(
@@ -379,7 +379,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param metaLanguageUtils the {@link MetaLanguageUtils}  instance.
      * @param metadataUtils the {@link MetadataUtils} instance.
      * @return the retrieved rows.
-     * throws SQLException if the contents cannot be retrieved.
+     * @throws SQLException if the contents cannot be retrieved.
      */
     @NotNull
     protected List<Row<String>> queryContents(
@@ -435,7 +435,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param attributes the attributes.
      * @param metadataManager the metadata manager.
      * @return the retrieved rows.
-     * throws SQLException if the contents cannot be retrieved.
+     * @throws SQLException if the contents cannot be retrieved.
      */
     @NotNull
     public List<Row<String>> queryContents(
@@ -460,7 +460,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param attributes the attributes.
      * @param metaData the metadata.
      * @return the retrieved rows.
-     * throws SQLException if the contents cannot be retrieved.
+     * @throws SQLException if the contents cannot be retrieved.
      */
     @NotNull
     protected List<Row<String>> queryContents(
@@ -485,7 +485,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @param attributes the attributes.
      * @param connection the connection.
      * @return the retrieved rows.
-     * throws SQLException if the contents cannot be retrieved.
+     * @throws SQLException if the contents cannot be retrieved.
      */
     @NotNull
     protected List<Row<String>> queryContents(
@@ -748,7 +748,8 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
     public String toString()
     {
         return
-              "{ \"class\": \"" + MetadataManagerTableDAO.class.getName() + "\""
-            + ", \"metadataManager\": \"" + m__MetadataManager + "\" }";
+              "{ \"metadataManager\": \"" + m__MetadataManager.hashCode() + '"'
+            + ", \"class\": \"MetadataManagerTableDAO\""
+            + ", \"package\": \"org.acmsl.queryj.metadata.engines\" }";
     }
 }

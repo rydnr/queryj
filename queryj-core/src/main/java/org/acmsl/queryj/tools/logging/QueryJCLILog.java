@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -30,14 +30,9 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: Minimal logging helper to integrate with UniqueLogFactory
- * API. It implements *Log* only to make the
- * developer confortable with the API, which just means
- * replacing *LogFactory.getLog(..)* with
- * using the *UniqueLogLogFactory.getLog(..)*.
- *
- * Version: $Revision$ ($Author$ at $Date$)
- *
- * $Id$
+ *              API. It implements *Log* only to make the developer comfortable
+ *              with the API, which just means replacing *LogFactory.getLog(..)*
+ *              with *UniqueLogLogFactory.getLog(..)*.
  *
  */
 package org.acmsl.queryj.tools.logging;
@@ -62,9 +57,9 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Minimal logging helper to integrate with UniqueLogFactory  API.
  * It implements <code>Log</code> only to make the
- * developer confortable with the API, which just means
+ * developer comfortable with the API, which just means
  * replacing <code>LogFactory.getLog(..)</code> with
- * using the <code>UniqueLogFactory.getLog(..)</code>.
+ * <code>UniqueLogFactory.getLog(..)</code>.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
@@ -87,7 +82,7 @@ public class QueryJCLILog
      * @param threshold the threshold.
      * @param printStream the print stream.
      */
-    public QueryJCLILog(final int threshold, final PrintStream printStream)
+    public QueryJCLILog(final int threshold, @NotNull final PrintStream printStream)
     {
         immutableSetThreshold(threshold);
         immutableSetPrintStream(printStream);
@@ -107,6 +102,7 @@ public class QueryJCLILog
      * Specifies the threshold.
      * @param threshold such value.
      */
+    @SuppressWarnings("unused")
     protected void setThreshold(final int threshold)
     {
         immutableSetThreshold(threshold);
@@ -126,7 +122,7 @@ public class QueryJCLILog
      * @param printStream the print stream.
      */
     protected final void immutableSetPrintStream(
-        final PrintStream printStream)
+        @NotNull final PrintStream printStream)
     {
         m__PrintStream = printStream;
     }
@@ -135,7 +131,8 @@ public class QueryJCLILog
      * Specifies the <code>PrintStream</code> instance.
      * @param printStream the print stream.
      */
-    protected void setPrintStream(final PrintStream printStream)
+    @SuppressWarnings("unused")
+    protected void setPrintStream(@NotNull final PrintStream printStream)
     {
         immutableSetPrintStream(printStream);
     }
@@ -144,6 +141,7 @@ public class QueryJCLILog
      * Retrieves the <code>PrintStream</code> instance.
      * @return the print stream.
      */
+    @NotNull
     public PrintStream getPrintStream()
     {
         return m__PrintStream;
@@ -158,13 +156,9 @@ public class QueryJCLILog
     }
 
     /**
-     * <p> Is trace logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than trace. </p>
-     * @return <code>true</code> in such case.
+     * {@inheritDoc}
      */
+    @Override
     public boolean isTraceEnabled()
     {
         return isTraceEnabled(getThreshold());
@@ -176,6 +170,7 @@ public class QueryJCLILog
      * <p> Call this method to prevent having to perform expensive operations
      * (for example, <code>String</code> concatenation)
      * when the log level is more than trace. </p>
+     * @param threshold the threshold.
      * @return <code>true</code> in such case.
      */
     protected boolean isTraceEnabled(final int threshold)
@@ -184,13 +179,9 @@ public class QueryJCLILog
     }
 
     /**
-     * <p> Is debug logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than debug. </p>
-     * @return <code>true</code> in such case.
+     * {@inheritDoc}
      */
+    @Override
     public boolean isDebugEnabled()
     {
         return isDebugEnabled(getThreshold());
@@ -211,13 +202,9 @@ public class QueryJCLILog
     }
 
     /**
-     * <p> Is info logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than info. </p>
-     * @return <code>true</code> in such case.
+     * {@inheritDoc}
      */
+    @Override
     public boolean isInfoEnabled()
     {
         return isInfoEnabled(getThreshold());
@@ -238,13 +225,9 @@ public class QueryJCLILog
     }
 
     /**
-     * <p> Is warn logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than warn. </p>
-     * @return <code>true</code> in such case.
+     * {@inheritDoc}
      */
+    @Override
     public boolean isWarnEnabled()
     {
         return isWarnEnabled(getThreshold());
@@ -265,13 +248,9 @@ public class QueryJCLILog
     }
 
     /**
-     * <p> Is error logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than error. </p>
-     * @return <code>true</code> in such case.
+     * {@inheritDoc}
      */
+    @Override
     public boolean isErrorEnabled()
     {
         return isErrorEnabled(getThreshold());
@@ -292,13 +271,9 @@ public class QueryJCLILog
     }
 
     /**
-     * <p> Is fatal logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than fatal. </p>
-     * @return <code>true</code> in such case.
+     * {@inheritDoc}
      */
+    @Override
     public boolean isFatalEnabled()
     {
         return isFatalEnabled(getThreshold());
@@ -319,10 +294,10 @@ public class QueryJCLILog
     }
 
     /**
-     * <p>Logs a message with trace log level.</p>
-     * @param message the message.
+     * {@inheritDoc}
      */
-    public void trace(final Object message)
+    @Override
+    public void trace(@NotNull final Object message)
     {
         if  (isTraceEnabled())
         {
@@ -331,11 +306,10 @@ public class QueryJCLILog
     }
     
     /**
-     * <p>Logs an error with trace log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {@inheritDoc}
      */
-    public void trace(final Object message, final Throwable throwable)
+    @Override
+    public void trace(@NotNull final Object message, @NotNull final Throwable throwable)
     {
         if  (isTraceEnabled())
         {
@@ -348,7 +322,7 @@ public class QueryJCLILog
      * @param message the message.
      * @param printStream the <code>PrintStream</code> instance.
      */
-    protected void log(final Object message, @NotNull final PrintStream printStream)
+    protected void log(@NotNull final Object message, @NotNull final PrintStream printStream)
     {
         printStream.println("" + message);
     }
@@ -360,7 +334,7 @@ public class QueryJCLILog
      * @param printStream the print stream.
      */
     protected void log(
-        final Object message,
+        @NotNull final Object message,
         @Nullable final Throwable throwable,
         @NotNull final PrintStream printStream)
     {
@@ -380,10 +354,10 @@ public class QueryJCLILog
     }
     
     /**
-     * <p>Logs a message with debug log level.</p>
-     * @param message the message.
+     * {@inheritDoc}
      */
-    public void debug(final Object message)
+    @Override
+    public void debug(@NotNull final Object message)
     {
         if  (isDebugEnabled())
         {
@@ -392,11 +366,10 @@ public class QueryJCLILog
     }
     
     /**
-     * <p>Logs an error with debug log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {@inheritDoc}
      */
-    public void debug(final Object message, final Throwable throwable)
+    @Override
+    public void debug(@NotNull final Object message, @NotNull final Throwable throwable)
     {
         if  (isDebugEnabled())
         {
@@ -405,10 +378,10 @@ public class QueryJCLILog
     }
     
     /**
-     * <p>Logs a message with info log level.</p>
-     * @param message the message.
+     * {@inheritDoc}
      */
-    public void info(final Object message)
+    @Override
+    public void info(@NotNull final Object message)
     {
         if  (isInfoEnabled())
         {
@@ -417,11 +390,10 @@ public class QueryJCLILog
     }
     
     /**
-     * <p>Logs an error with info log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {@inheritDoc}
      */
-    public void info(final Object message, final Throwable throwable)
+    @Override
+    public void info(@NotNull final Object message, @NotNull final Throwable throwable)
     {
         if  (isInfoEnabled())
         {
@@ -430,10 +402,10 @@ public class QueryJCLILog
     }
     
     /**
-     * <p>Logs a message with warn log level.</p>
-     * @param message the message.
+     * {@inheritDoc}
      */
-    public void warn(final Object message)
+    @Override
+    public void warn(@NotNull final Object message)
     {
         if  (isWarnEnabled())
         {
@@ -442,11 +414,10 @@ public class QueryJCLILog
     }
     
     /**
-     * <p>Logs an error with warn log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {@inheritDoc}
      */
-    public void warn(final Object message, final Throwable throwable)
+    @Override
+    public void warn(@NotNull final Object message, @NotNull final Throwable throwable)
     {
         if  (isWarnEnabled())
         {
@@ -455,10 +426,10 @@ public class QueryJCLILog
     }
     
     /**
-     * <p>Logs a message with error log level.</p>
-     * @param message the message.
+     * {@inheritDoc}
      */
-    public void error(final Object message)
+    @Override
+    public void error(@NotNull final Object message)
     {
         if  (isErrorEnabled())
         {
@@ -467,11 +438,10 @@ public class QueryJCLILog
     }
     
     /**
-     * <p>Logs an error with error log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {@inheritDoc}
      */
-    public void error(final Object message, final Throwable throwable)
+    @Override
+    public void error(@NotNull final Object message, @NotNull final Throwable throwable)
     {
         if  (isErrorEnabled())
         {
@@ -480,10 +450,10 @@ public class QueryJCLILog
     }
     
     /**
-     * <p>Logs a message with fatal log level.</p>
-     * @param message the message.
+     * {@inheritDoc}
      */
-    public void fatal(final Object message)
+    @Override
+    public void fatal(@NotNull final Object message)
     {
         if  (isFatalEnabled())
         {
@@ -492,15 +462,28 @@ public class QueryJCLILog
     }
     
     /**
-     * <p>Logs an error with fatal log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {@inheritDoc}
      */
-    public void fatal(final Object message, final Throwable throwable)
+    @Override
+    public void fatal(@NotNull final Object message, @NotNull final Throwable throwable)
     {
         if  (isFatalEnabled())
         {
             log(message, throwable, getPrintStream());
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    public String toString()
+    {
+        return
+              "{ \"threshold\": " + m__iThreshold
+            + ", \"printStream\": \"" + m__PrintStream.hashCode() + '"'
+            + ", \"class\": \"QueryJCLILog\""
+            + ", \"package\": \"org.acmsl.queryj.tools.logging\" }";
     }
 }

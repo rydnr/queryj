@@ -70,6 +70,7 @@ public interface MetadataExtractionListener
 
     /**
      * Notifies all table names have been extracted.
+     * @param count the count.
      */
     public void tableNamesExtracted(final int count);
 

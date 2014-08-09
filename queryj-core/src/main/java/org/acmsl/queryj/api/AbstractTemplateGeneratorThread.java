@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.api;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 
@@ -400,6 +400,7 @@ public abstract class AbstractTemplateGeneratorThread
     /**
      * Runs the template generation process.
      * @param templateGenerator the template generator.
+     * @param template the template.
      * @param outputDir the output folder.
      * @param rootFolder the root folder.
      * @param charset the {@link Charset} to use.

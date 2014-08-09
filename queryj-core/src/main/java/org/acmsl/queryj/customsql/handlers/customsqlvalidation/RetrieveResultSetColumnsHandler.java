@@ -163,7 +163,9 @@ public class RetrieveResultSetColumnsHandler
     /**
      * Retrieves the columns from given {@link ResultSet}.
      * @param resultSetMetadata the {@link ResultSetMetaData}.
+     * @param handler the handler.
      * @return the list of {@link Property} columns.
+     * @throws SQLException if the columns cannot be retrieved.
      */
     protected List<Property<String>> retrieveColumns(
         @NotNull final ResultSetMetaData resultSetMetadata, @NotNull final RetrieveResultPropertiesHandler handler)

@@ -33,7 +33,7 @@
 package org.acmsl.queryj.tools.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -98,6 +98,7 @@ public class DatabaseMetaDataLoggingHandler
      * Handles given information.
      * @param metaData the database metadata.
      * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the metadata cannot be logged.
      */
     protected boolean handle(@NotNull final DatabaseMetaData metaData)
         throws  QueryJBuildException

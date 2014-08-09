@@ -184,6 +184,7 @@ public abstract class AbstractResult<T>
 
     /**
      * Checks whether given instance is semantically equal to this one.
+     * @param candidate the candidate.
      * @param id the <i>id</i> attribute.
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return <code>true</code> in such case.

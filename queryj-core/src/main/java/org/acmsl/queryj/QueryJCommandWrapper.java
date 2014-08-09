@@ -122,10 +122,10 @@ public class QueryJCommandWrapper<T>
     /**
      * Retrieves a T setting from the command.
      * @param key the key.
+     * @param command the command.
      * @return the setting.
      */
     @Nullable
-    @SuppressWarnings("cast,unchecked")
     protected T getSetting(@NotNull final String key, @NotNull final QueryJCommand command)
     {
         return command.getObjectSetting(key);
@@ -145,6 +145,7 @@ public class QueryJCommandWrapper<T>
     /**
      * Retrieves a T setting from the command.
      * @param key the key.
+     * @param command the command.
      * @return the setting.
      */
     @Nullable

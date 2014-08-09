@@ -73,6 +73,7 @@ public abstract class AbstractPropertyDecorator
     /**
      * Creates an <code>AbstractPropertyDecorator</code> to decorate given property.
      * @param property the property to decorate.
+     * @param metadataManager the {@link MetadataTypeManager} instance.
      */
     public AbstractPropertyDecorator(
         @NotNull final Property<String> property, @NotNull final MetadataManager metadataManager)

@@ -118,6 +118,7 @@ public class FindTemplateDefsHandler
      * @param command the command to handle.
      * @param log the log.
      * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the template defs are unavailable.
      */
     protected boolean handle(@NotNull final QueryJCommand command, @Nullable final Log log)
         throws  QueryJBuildException

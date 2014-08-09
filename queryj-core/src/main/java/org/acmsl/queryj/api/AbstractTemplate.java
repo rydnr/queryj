@@ -720,6 +720,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param context the {@link QueryJTemplateContext} instance.
      * @param relevantOnly whether to include only relevant placeholders.
      * @return such output.
+     * @throws InvalidTemplateException if the template is invalid.
+     * @throws DevelopmentModeException if we're running in development mode.
      */
     @Nullable
     protected ST generate(@NotNull final C context, final boolean relevantOnly)
@@ -747,11 +749,13 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param context the context.
      * @param relevantOnly whether to include only relevant placeholders.
      * @return such code.
+     * @throws InvalidTemplateException if the template is invalid.
+     * @throws DevelopmentModeException if we're running in development mode.
      */
     @Nullable
     protected ST generateOutput(@NotNull final C context, final boolean relevantOnly)
-        throws InvalidTemplateException,
-        DevelopmentModeException
+      throws InvalidTemplateException,
+             DevelopmentModeException
     {
         @Nullable final ST result;
 
@@ -815,6 +819,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Builds the correct chain.
      * @param context the context.
      * @return the specific {@link FillTemplateChain}.
+     * @throws QueryJBuildException if the template chain cannot be built.
      */
     @SuppressWarnings("unchecked")
     @NotNull
@@ -860,6 +865,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param context the context.
      * @param placeholderPackage the placeholder package.
      * @return the {@link org.acmsl.queryj.tools.PlaceholderChainProvider} class.
+     * @throws QueryJBuildException if the factory class is invalid.
      */
     @Nullable
     @SuppressWarnings("unchecked")
@@ -929,6 +935,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Builds a context-specific exception.
      * @param context the context.
      * @param template the {@link ST} instance.
+     * @param actualException the actual exception.
      * @return the specific {@link InvalidTemplateException} for the template.
      */
     @NotNull

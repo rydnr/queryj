@@ -38,11 +38,6 @@
 package org.acmsl.queryj.metadata.vo;
 
 /*
- * Importing ACM SL Commons classes.
- */
-import org.acmsl.commons.utils.ToStringUtils;
-
-/*
  * Importing Apache Commons Lang classes.
  */
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -212,8 +207,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     }
 
     /**
-     * Retrieves the table name.
-     * @return such name.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -271,8 +265,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     }
 
     /**
-     * Retrieves the parent table.
-     * @return such table.
+     * {@inheritDoc}
      */
     @Nullable
     @Override
@@ -525,39 +518,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     }
 
     /**
-     * Compares this object with the specified object for order.  Returns a
-     * negative integer, zero, or a positive integer as this object is less
-     * than, equal to, or greater than the specified object.
-     * <p></p>
-     * <p>The implementor must ensure <tt>sgn(x.compareTo(y)) ==
-     * -sgn(y.compareTo(x))</tt> for all <tt>x</tt> and <tt>y</tt>.  (This
-     * implies that <tt>x.compareTo(y)</tt> must throw an exception iff
-     * <tt>y.compareTo(x)</tt> throws an exception.)
-     * <p></p>
-     * <p>The implementor must also ensure that the relation is transitive:
-     * <tt>(x.compareTo(y)&gt;0 &amp;&amp; y.compareTo(z)&gt;0)</tt> implies
-     * <tt>x.compareTo(z)&gt;0</tt>.
-     * <p></p>
-     * <p>Finally, the implementor must ensure that <tt>x.compareTo(y)==0</tt>
-     * implies that <tt>sgn(x.compareTo(z)) == sgn(y.compareTo(z))</tt>, for
-     * all <tt>z</tt>.
-     * <p></p>
-     * <p>It is strongly recommended, but <i>not</i> strictly required that
-     * <tt>(x.compareTo(y)==0) == (x.equals(y))</tt>.  Generally speaking, any
-     * class that implements the <tt>Comparable</tt> interface and violates
-     * this condition should clearly indicate this fact.  The recommended
-     * language is "Note: this class has a natural ordering that is
-     * inconsistent with equals."
-     * <p></p>
-     * <p>In the foregoing description, the notation
-     * <tt>sgn(</tt><i>expression</i><tt>)</tt> designates the mathematical
-     * <i>signum</i> function, which is defined to return one of <tt>-1</tt>,
-     * <tt>0</tt>, or <tt>1</tt> according to whether the value of
-     * <i>expression</i> is negative, zero or positive.
-     *
-     * @param o the object to be compared.
-     * @return a negative integer, zero, or a positive integer as this object
-     *         is less than, equal to, or greater than the specified object.
+     * {@inheritDoc}
      */
     @Override
     public int compareTo(@NotNull final Table<V, A, L> o)
@@ -587,9 +548,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     public String toString()
     {
         return
-              "{ \"class\": \"" + AbstractTable.class.getSimpleName()
-            + ", \"package\": \"org.acmsl.queryj.metadata.vo\""
-            + ", \"name\": \"" + m__Name + '"'
+              "{ \"name\": \"" + m__Name + '"'
             + ", \"comment\": \"" + m__Comment + '"'
             + ", \"parentTable\": " + m__ParentTable
 //            + ", \"primaryKey\": " + ToStringUtils.getInstance().toJson(m__lPrimaryKey)
@@ -598,6 +557,7 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
             + ", \"static\": " + m__Static
             + ", \"voDecorated\": " + m__bVoDecorated
             + ", \"relationship\": " + m__bRelationship
-            + '}';
+            + ", \"class\": \"" + AbstractTable.class.getSimpleName()
+            + ", \"package\": \"org.acmsl.queryj.metadata.vo\" }";
     }
 }

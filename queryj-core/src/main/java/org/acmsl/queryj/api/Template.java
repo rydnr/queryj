@@ -71,6 +71,8 @@ public interface Template<T extends TemplateContext>
      * Generates the output source code.
      * @param relevantOnly whether to include only relevant placeholders.
      * @return such output.
+     * @throws InvalidTemplateException if the template is invalid.
+     * @throws DevelopmentModeException if we're running in development mode.
      */
     @Nullable
     ST generate(final boolean relevantOnly)

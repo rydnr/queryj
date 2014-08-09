@@ -204,6 +204,7 @@ public class DecoratedTemplateDefWrapper
 
     /**
      * Retrieves the name of the template def itself.
+     * @param templateDef the {@link TemplateDef}.
      * @return such information.
      */
     @NotNull

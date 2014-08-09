@@ -36,7 +36,7 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Template-Packaging classes.
+ * Importing QueryJ Template Packaging classes.
  */
 import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
 import org.acmsl.queryj.templates.packaging.exceptions.MissingSourcesException;
@@ -104,6 +104,7 @@ public class TemplatePackagingParameterValidationHandler
     /**
      * Validates the parameters.
      * @param sources the source folders.
+     * @throws QueryJBuildException if the parameters fail validation.
      */
     protected void validateParameters(@Nullable final List<File> sources)
         throws  QueryJBuildException

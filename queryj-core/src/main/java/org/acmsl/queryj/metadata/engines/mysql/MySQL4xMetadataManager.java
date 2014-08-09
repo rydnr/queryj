@@ -33,7 +33,7 @@
 package org.acmsl.queryj.metadata.engines.mysql;
 
 /*
- * Importing project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.acmsl.queryj.api.exceptions.QueryJException;
@@ -59,6 +59,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Manages the information metadata stored in an Oracle database.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 @ThreadSafe
 public class MySQL4xMetadataManager
 //    extends JdbcMetadataManager
@@ -86,7 +87,13 @@ public class MySQL4xMetadataManager
      * @param catalog the database catalog.
      * @param schema the database schema.
      * @param caseSensitive whether the database engine is case sensitive or not.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
+     * @throws SQLException if the extraction fails.
+     * @throws QueryJException if any other error occurs.
      */
+    @SuppressWarnings("unused")
     public MySQL4xMetadataManager(
         @NotNull final String[] tableNames,
         @NotNull final String[] procedureNames,

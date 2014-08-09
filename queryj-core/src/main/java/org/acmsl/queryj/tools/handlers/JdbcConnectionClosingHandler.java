@@ -33,7 +33,7 @@
 package org.acmsl.queryj.tools.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
@@ -101,6 +101,7 @@ public class JdbcConnectionClosingHandler
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the connection cannot be closed.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -217,6 +218,7 @@ public class JdbcConnectionClosingHandler
     /**
      * Closes the JDBC connection stored in the attribute map.
      * @param parameters the parameter map.
+     * @throws QueryJBuildException if the connection cannot be closed.
      */
     protected void closeConnection(@NotNull final QueryJCommand parameters)
         throws  QueryJBuildException
@@ -229,6 +231,7 @@ public class JdbcConnectionClosingHandler
     /**
      * Closes the connection.
      * @param connection the JDBC connection.
+     * @throws QueryJBuildException if the connection cannot be closed.
      */
     protected void closeConnection(@Nullable final Connection connection)
         throws  QueryJBuildException
@@ -251,7 +254,6 @@ public class JdbcConnectionClosingHandler
      * @param parameters the parameter map.
      */
     protected void removeConnection(@NotNull final QueryJCommand parameters)
-        throws  QueryJBuildException
     {
         new QueryJCommandWrapper<Connection>(parameters)
             .setSetting(JdbcConnectionOpeningHandler.JDBC_CONNECTION, null);

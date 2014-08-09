@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -103,6 +103,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @param engine the engine.
      * @param parameters the parameter map.
      * @return such folder.
+     * @throws QueryJBuildException if the output dir is unavailable.
      */
     @NotNull
     protected File retrieveOutputDir(
@@ -134,6 +135,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
+     * @throws QueryJBuildException if the output dir is unavailable.
      */
     @NotNull
     protected abstract File retrieveOutputDir(

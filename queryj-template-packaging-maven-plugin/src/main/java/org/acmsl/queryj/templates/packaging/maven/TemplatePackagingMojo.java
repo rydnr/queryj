@@ -82,9 +82,6 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Generates required QueryJ boilerplate from user-provided templates, via Maven.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
- * @goal package-templates
- * @execute phase="generate-sources"
- * @threadSafe
  * @since 3.0
  * Created: 2013/06/16
  */
@@ -437,6 +434,7 @@ public class TemplatePackagingMojo
     /**
      * Executes Template Packaging via Maven2.
      * @param log the Maven log.
+     * @throws MojoExecutionException if the process fails.
      */
     protected void execute(@NotNull final Log log)
         throws MojoExecutionException
@@ -496,6 +494,7 @@ public class TemplatePackagingMojo
      * @param command the command.
      * @param log the log.
      * @param version the version.
+     * @throws MojoExecutionException if the process fails.
      */
     protected void execute(
         @NotNull final QueryJCommand command, @NotNull final Log log, final String version)

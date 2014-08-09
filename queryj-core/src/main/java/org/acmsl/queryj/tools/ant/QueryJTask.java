@@ -32,7 +32,7 @@
 package org.acmsl.queryj.tools.ant;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.QueryJCommand;
@@ -51,7 +51,6 @@ import java.io.File;
 /*
  * Importing some Ant classes.
  */
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
@@ -112,6 +111,7 @@ public class QueryJTask
 
     /**
      * Creates a {@link QueryJTask} instance.
+     * @param log the log.
      */
     public QueryJTask(@NotNull final Log log)
     {
@@ -1034,9 +1034,11 @@ public class QueryJTask
      * Specifies the "externally-managed-fields" nested element.
      * @param externallyManagedFields the externally-managed-fields xml
      * element.
+     * @param command the command.
      */
     protected void setExternallyManagedFields(
-        @NotNull final AntExternallyManagedFieldsElement externallyManagedFields, @NotNull final QueryJCommand command)
+        @NotNull final AntExternallyManagedFieldsElement externallyManagedFields,
+        @NotNull final QueryJCommand command)
     {
         new QueryJCommandWrapper<AntExternallyManagedFieldsElement>(command)
             .setSetting(EXTERNALLY_MANAGED_FIELDS, externallyManagedFields);
@@ -1055,6 +1057,7 @@ public class QueryJTask
 
     /**
      * Retrieves the "externally-managed-fields" nested element.
+     * @param command the command.
      * @return such information.
      */
     @Nullable
@@ -1077,6 +1080,7 @@ public class QueryJTask
     /**
      * Specifies the thread count.
      * @param threadCount such value.
+     * @param delegee the command.
      */
     protected void setThreadCount(final int threadCount, @NotNull final QueryJCommand delegee)
     {
@@ -1095,6 +1099,7 @@ public class QueryJTask
 
     /**
      * Retrieves the thread count.
+     * @param delegee the command.
      * @return such value.
      */
     @SuppressWarnings("unused")
@@ -1115,6 +1120,7 @@ public class QueryJTask
     /**
      * Specifies whether to include timestamps in the generated code.
      * @param disableGenerateTimestamps such choice.
+     * @param delegee the command.
      */
     protected void setDisableGenerationTimestamps(
         final boolean disableGenerateTimestamps, @NotNull final QueryJCommand delegee)
@@ -1134,6 +1140,7 @@ public class QueryJTask
 
     /**
      * Retrieves whether to include timestamps in the generated code.
+     * @param delegee the command.
      * @return such information.
      */
     protected final boolean getDisableGenerationTimestamps(@NotNull final QueryJCommand delegee)
@@ -1153,6 +1160,7 @@ public class QueryJTask
     /**
      * Specifies whether to include NotNull annotations in the generated code.
      * @param disableNotNullAnnotations such choice.
+     * @param delegee the command.
      */
     protected void setDisableNotNullAnnotations(
         final boolean disableNotNullAnnotations, @NotNull final QueryJCommand delegee)
@@ -1172,6 +1180,7 @@ public class QueryJTask
 
     /**
      * Retrieves whether to include NotNull annotations in the generated code.
+     * @param delegee the command.
      * @return such information.
      */
     protected final boolean getDisableNotNullAnnotations(@NotNull final QueryJCommand delegee)
@@ -1191,6 +1200,7 @@ public class QueryJTask
     /**
      * Specifies whether to include Checkthread.org annotations in the generated code.
      * @param disableCheckthreadAnnotations such choice.
+     * @param delegee the command.
      */
     @SuppressWarnings("unused")
     protected void setDisableCheckthreadAnnotations(
@@ -1212,6 +1222,7 @@ public class QueryJTask
 
     /**
      * Retrieves whether to include Checkthread.org annotations in the generated code.
+     * @param delegee the command.
      * @return such information.
      */
     @SuppressWarnings("unused")
@@ -1261,13 +1272,10 @@ public class QueryJTask
     }
 
     /**
-     * Specifies a dynamic attribute.
-     * @param name the attribute name.
-     * @param value the attribute value.
+     * {@inheritDoc}
      */
     @Override
-    public void setDynamicAttribute(
-        final String name, final String value)
+    public void setDynamicAttribute(@NotNull final String name, @NotNull final String value)
     {
         throw
             new BuildException(
@@ -1276,13 +1284,11 @@ public class QueryJTask
     }
 
     /**
-     * Creates a dynamic element.
-     * @param name the element's name.
-     * @return the object.
+     * {@inheritDoc}
      */
     @Override
     @Nullable
-    public Object createDynamicElement(final String name)
+    public Object createDynamicElement(@NotNull final String name)
     {
         @Nullable final Object result;
 
@@ -1315,15 +1321,16 @@ public class QueryJTask
 
     /**
      * {@inheritDoc}
-     * @return
      */
     @NotNull
     @Override
     public String toString()
     {
-        return "{ 'class': 'QueryJTask', 'classpath': '" + m__Classpath +
-               "', 'queryJCommand': '" + m__QueryJCommand +
-               "', 'tables': " + m__Tables +
-               '}';
+        return
+              "{ \"classpath\": \"" + m__Classpath + '"'
+            + ", \"command\": " + m__QueryJCommand
+            + ", \"tables\": " + m__Tables
+            + ", \"class\": \"QueryJTask\""
+            + ", \"package\": \"org.acmsl.queryj.tools.ant\" }";
     }
 }

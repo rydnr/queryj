@@ -136,7 +136,6 @@ public class TestableAbstractTemplate<C extends TemplateContext>
 
     /**
      * {@inheritDoc}
-     * @return
      */
     @NotNull
     @Override

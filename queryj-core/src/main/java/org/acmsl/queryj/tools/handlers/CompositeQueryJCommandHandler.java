@@ -36,7 +36,7 @@
 package org.acmsl.queryj.tools.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -71,6 +71,8 @@ import org.checkthread.annotations.ThreadSafe;
  * of handlers, to which the logic is delegated to, following GoF's
  * <b>Composite pattern</b>.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <C> the command type.
+ * @param <CH> the command handler type.
  */
 @ThreadSafe
 public class CompositeQueryJCommandHandler<C extends QueryJCommand, CH extends QueryJCommandHandler<C>>
@@ -179,6 +181,7 @@ public class CompositeQueryJCommandHandler<C extends QueryJCommand, CH extends Q
      * @param handlerCollection the handler collection.
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
+     * @throws QueryJBuildException if the wrapped handlers fail.
      */
     protected boolean handle(
         @NotNull final C command,
@@ -216,6 +219,7 @@ public class CompositeQueryJCommandHandler<C extends QueryJCommand, CH extends Q
      * @param handler the concrete handler.
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
+     * @throws QueryJBuildException if the handler fail.
      */
     protected boolean handle(
         @NotNull final C command, @NotNull final CH handler)

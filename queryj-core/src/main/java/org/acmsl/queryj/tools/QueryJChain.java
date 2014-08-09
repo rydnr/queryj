@@ -33,7 +33,7 @@
 package org.acmsl.queryj.tools;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
@@ -143,6 +143,7 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
     /**
      * Fills given chain with external template bundles.
      * @param chain the chain.
+     * @throws QueryJBuildException if the handlers cannot be retrieved.
      */
     @SuppressWarnings("unchecked")
     protected void fillTemplateHandlers(@NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain)

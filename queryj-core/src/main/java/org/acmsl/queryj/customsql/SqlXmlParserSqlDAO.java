@@ -139,6 +139,7 @@ public class SqlXmlParserSqlDAO
     /**
      * Checks whether given primary key was already retrieved or not.
      * @param id the id to check.
+     * @return {@code true} in such case.
      */
     protected synchronized boolean isPrimaryKeyAlreadyRetrieved(@NotNull final String id)
     {
@@ -183,7 +184,8 @@ public class SqlXmlParserSqlDAO
     }
 
     /**
-     * Retrieves all {@link SqlElement SQL elements}.
+     * Retrieves one specific {@link SqlElement SQL element}.
+     * @param id the id to filter.
      * @param parser the parser.
      * @return such list.
      */
@@ -195,7 +197,6 @@ public class SqlXmlParserSqlDAO
 
     /**
      * Retrieves all {@link Sql} associated to a given DAO (table).
-     *
      * @param table the table.
      * @return the associated {@link Sql} instances.
      */
@@ -390,6 +391,7 @@ public class SqlXmlParserSqlDAO
     /**
      * Filters given {@link Sql} list to get only the ones matching given type.
      * @param list the list of queries.
+     * @param type the type.
      * @return the matching ones.
      */
     @NotNull
@@ -596,6 +598,7 @@ public class SqlXmlParserSqlDAO
 
     /**
      * Retrieves all repository-scoped SQL.
+     * @param breakAtFirstOccurrence whether to return just the first match.
      * @return such list.
      */
     @NotNull

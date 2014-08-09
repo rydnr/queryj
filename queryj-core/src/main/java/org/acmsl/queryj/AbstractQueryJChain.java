@@ -117,6 +117,7 @@ public abstract class AbstractQueryJChain
     /**
      * Requests the chained logic to be performed.
      * @param settings the command.
+     * @throws QueryJBuildException if the process fails.
     */
     public void process(@NotNull final C settings)
         throws QueryJBuildException
@@ -128,6 +129,7 @@ public abstract class AbstractQueryJChain
      * Builds the chain.
      * @param chain the chain to be configured.
      * @return the updated chain.
+     * @throws QueryJBuildException if the process fails.
      */
     protected abstract Chain<C, QueryJBuildException, CH> buildChain(
         @NotNull final Chain<C, QueryJBuildException, CH> chain)
@@ -175,6 +177,7 @@ public abstract class AbstractQueryJChain
      * @param chain the concrete chain.
      * @param command the command that represents which actions should be done.
      * @return <code>true</code> if the command is processed by the chain.
+     * @throws QueryJBuildException if the process fails.
      */
     protected boolean process(
         @NotNull final Chain<C, QueryJBuildException, CH> chain, @NotNull final C command)

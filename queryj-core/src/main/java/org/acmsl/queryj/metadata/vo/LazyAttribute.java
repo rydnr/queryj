@@ -816,6 +816,7 @@ public class LazyAttribute
      * @param tableName the table name.
      * @param columnName the column name.
      * @param metadataManager the {@link MetadataManager} instance.
+     * @return the attribute.
      */
     @Nullable
     protected Attribute<String> retrieveAttribute(

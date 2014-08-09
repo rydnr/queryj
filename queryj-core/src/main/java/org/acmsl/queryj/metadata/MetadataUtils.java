@@ -457,6 +457,7 @@ public class MetadataUtils
      * @param sourceTableName the name of the source table.
      * @param targetTableName the name of the target table..
      * @param metadataManager the {@link MetadataManager} instance.
+     * @return the foreign keys.
      */
     @NotNull
     @SuppressWarnings("unused")
@@ -599,6 +600,7 @@ public class MetadataUtils
      * @param properties the properties.
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @return such collection.
+     * @param <T> the type.
      */
     @NotNull
     public <T> List<Property<T>> filterLobProperties(

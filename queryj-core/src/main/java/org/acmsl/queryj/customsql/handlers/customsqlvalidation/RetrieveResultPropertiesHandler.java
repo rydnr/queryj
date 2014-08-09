@@ -136,6 +136,7 @@ public class RetrieveResultPropertiesHandler
      * @param command the command to process (or not).
      * @return <code>true</code> if the handler actually process the command,
      *         or maybe because it's not desirable to continue the chain.
+     * @throws QueryJBuildException if the operation fails.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand command)
@@ -174,13 +175,14 @@ public class RetrieveResultPropertiesHandler
     }
 
     /**
-     * Validates the result set.
+     * Retrieves the properties.
      * @param sql the sql.
      * @param sqlResult the custom sql result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param typeManager the <code>MetadataTypeManager</code> instance.
      * @return the properties.
+     * @throws QueryJBuildException if the operation fails.
      */
     protected List<Property<String>> retrieveProperties(
         @NotNull final Sql<String> sql,
@@ -194,7 +196,7 @@ public class RetrieveResultPropertiesHandler
 
         if (sql.getId().equalsIgnoreCase("find-product-types-by-draw-type-id"))
         {
-            int debug = 1;
+            final int debug = 1;
         }
 
         @Nullable final String t_strTable =
@@ -237,6 +239,7 @@ public class RetrieveResultPropertiesHandler
      * @param metadata the result set metadata.
      * @param index the index.
      * @return the associated {@link Property}.
+     * @throws SQLException if the property information is unavailable.
      */
     @NotNull
     protected Property<String> createPropertyFrom(@NotNull final ResultSetMetaData metadata, final int index)
@@ -254,6 +257,7 @@ public class RetrieveResultPropertiesHandler
      * @param sqlResult the custom sql result.
      * @param propertyDAO the {@link org.acmsl.queryj.metadata.SqlPropertyDAO} instance.
      * @return such properties.
+     * @throws QueryJBuildException if the property information is unavailable.
      */
     @NotNull
     protected List<Property<String>> retrieveExplicitProperties(
@@ -286,6 +290,7 @@ public class RetrieveResultPropertiesHandler
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param typeManager the <code>MetadataTypeManager</code> instance.
      * @return such properties.
+     * @throws QueryJBuildException if the property information is unavailable.
      */
     @NotNull
     protected List<Property<String>> retrieveImplicitProperties(
@@ -336,6 +341,7 @@ public class RetrieveResultPropertiesHandler
      * @param sqlResult the {@link Result} instance.
      * @param sql the SQL element.
      * @param metadataManager the {@link MetadataManager} instance.
+     * @throws QueryJBuildException if the getter information is unavailable.
      */
     protected void invokeResultSetGetter(
         @NotNull final Method method,
@@ -393,6 +399,7 @@ public class RetrieveResultPropertiesHandler
      * @param methodName the method name.
      * @param parameterClasses the parameter classes.
      * @return the <code>Method</code> instance.
+     * @throws NoSuchMethodException if the method does not exist.
      */
     @NotNull
     protected Method retrieveMethod(

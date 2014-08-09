@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -85,6 +85,7 @@ public class CachingPropertyDecorator
      * Creates a <code>CachingPropertyDecorator</code> to decorate given
      * property.
      * @param property the property to decorate.
+     * @param metadataManager the {@link MetadataManager} instance.
      */
     public CachingPropertyDecorator(
         @NotNull final Property<String> property, @NotNull final MetadataManager metadataManager)

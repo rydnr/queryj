@@ -36,11 +36,15 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.handlers.fillhandlers.TemplateContextFillHandler;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+
+/*
+ * Importing Apache Commons Lang classes.
+ */
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -116,6 +120,7 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
     /**
      * Retrieves the template value for that placeholder.
      * @return the dynamic value.
+     * @throws QueryJBuildException if the value is unavailable.
      */
     @Nullable
     @Override
@@ -127,7 +132,9 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
 
     /**
      * Retrieves the template value for this placeholder.
+     * @param context the context.
      * @return such value.
+     * @throws QueryJBuildException if the value is unavailable.
      */
     @Nullable
     protected abstract P getValue(@NotNull final C context)
@@ -146,7 +153,7 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final Object obj)
+    public boolean equals(@Nullable final Object obj)
     {
         if (obj == null)
         {
@@ -168,8 +175,9 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
     @NotNull
     public String toString()
     {
-        return "AbstractTemplateContextFillHandler{" +
-               " templateContext=" + templateContext +
-               " }";
+        return
+              "{ \"templateContext\": \"" + templateContext.hashCode() + '"'
+            + ", \"class\": \"AbstractTemplateContextFillHandler\""
+            + ", \"package\": \"org.acmsl.queryj.placeholders\" }";
     }
 }

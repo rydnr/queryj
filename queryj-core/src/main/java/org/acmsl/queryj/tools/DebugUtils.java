@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Provides simple stuff to help with debugging.
  *
  * Date: 7/29/12
  * Time: 7:55 AM
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.tools;
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing some ACM-SL Java Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
@@ -47,7 +47,7 @@ import org.acmsl.commons.patterns.Utils;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing some checktrhead.org annotations.
+ * Importing some checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
 
@@ -101,6 +101,7 @@ public class DebugUtils
      * Checks whether to intercept the flow while debugging custom-result logic.
      * @param resultId the id of the result.
      * @return <code>true</code> in such case.
+     * @param <T> the id type.
      */
     public <T> boolean debugEnabledForResultId(@NotNull final T resultId)
     {

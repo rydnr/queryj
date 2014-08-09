@@ -116,6 +116,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param parameters the parameters.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param tableDAO the {@link TableDAO} instance.
+     * @throws QueryJBuildException if the template cannot be built.
      */
     protected void buildTemplate(
         @NotNull final QueryJCommand parameters,
@@ -142,6 +143,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param metadataManager the database metadata manager.
      * @param templateFactory the template factory.
      * @param tables the tables.
+     * @throws QueryJBuildException if the template cannot be built.
      */
     @SuppressWarnings("unchecked")
     protected void buildTemplate(
@@ -217,6 +219,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param engine the engine.
      * @param parameters the parameter map.
      * @return the package name.
+     * @throws QueryJBuildException if the package cannot be retrieved.
      */
     protected abstract String retrievePackage(
         @NotNull final String tableName,
@@ -240,6 +243,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param staticContents the table's static contents (optional).
      * @param parameters the parameter map.
      * @return the template.
+     * @throws QueryJBuildException if the template cannot be built.
      */
     @Nullable
     protected abstract T createTemplate(
@@ -335,6 +339,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param tableName the table name.
      * @param tableDAO the {@link TableDAO} instance.
      * @return such information.
+     * @throws SQLException if the content is unavailable.
      */
     @Nullable
     protected List<Row<String>> retrieveStaticContent(

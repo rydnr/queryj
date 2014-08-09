@@ -36,7 +36,7 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -73,6 +73,9 @@ import java.util.List;
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/09/15 07:18
+ * @param <T> the template type.
+ * @param <TF> the template factory type.
+ * @param <C> the context.
  */
 @ThreadSafe
 public abstract class PerTemplateDefBuildHandler
@@ -106,6 +109,8 @@ public abstract class PerTemplateDefBuildHandler
      * Builds the template.
      * @param parameters the parameters.
      * @param factory the TF instance.
+     * @return the templates.
+     * @throws QueryJBuildException if the templates cannot be built.
      */
     @NotNull
     protected List<T> buildTemplates(@NotNull final QueryJCommand parameters, @NotNull final TF factory)

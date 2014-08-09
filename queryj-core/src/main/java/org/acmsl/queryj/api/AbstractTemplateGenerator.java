@@ -224,8 +224,8 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param fileUtils the {@link FileUtils} instance.
      * @param log the {@link Log} instance.
      * @return whether it gets written to disk.
-     * throws IOException if the template cannot be written to disk.
-     * throws QueryJBuildException if the template cannot be generated.
+     * @throws IOException if the template cannot be written to disk.
+     * @throws QueryJBuildException if the template cannot be generated.
      */
     protected boolean generate(
         @NotNull final N template,
@@ -237,7 +237,8 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         @Nullable final TemplateDebuggingService<C> templateDebuggingService,
         @NotNull final FileUtils fileUtils,
         @Nullable final Log log)
-        throws IOException, QueryJBuildException
+      throws IOException,
+             QueryJBuildException
     {
         boolean result = false;
 
@@ -405,6 +406,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param context the context.
      * @param debuggingService the {@link TemplateDebuggingService} instance.
      * @return {@code true} if the debug takes place.
+     * @throws DevelopmentModeException in case of debugging.
      */
     protected boolean debugging(
         @NotNull final String output,
@@ -622,7 +624,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param relevantContent the content.
      * @param charset the charset.
      * @return the hash.
-     * throws QueryJBuildException if the hash cannot be computed.
+     * @throws QueryJBuildException if the hash cannot be computed.
      */
     @NotNull
     protected String computeHash(

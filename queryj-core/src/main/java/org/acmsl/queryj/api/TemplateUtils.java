@@ -324,7 +324,7 @@ public class TemplateUtils
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom results.
-     * model.
+     * @throws QueryJBuildException if the custom results cannot be retrieved.
      */
     @SuppressWarnings("unused")
     @NotNull
@@ -355,6 +355,7 @@ public class TemplateUtils
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom results.
+     * @throws QueryJBuildException if the custom results cannot be retrieved.
      */
     @NotNull
     public List<Result<String>> retrieveCustomResults(
@@ -387,6 +388,7 @@ public class TemplateUtils
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return the custom results.
+     * @throws QueryJBuildException if the custom results cannot be retrieved.
      */
     @NotNull
     public List<Result<String>> retrieveCustomResults(

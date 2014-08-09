@@ -76,9 +76,10 @@ public interface DecoratorFactory
      * @param attribute the {@link Attribute attribute}.
      * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated attribute for the concrete template.
+     * @param <V> the value type.
      */
     @NotNull
-    public <V, DecoratedString> Attribute<DecoratedString> createDecorator(
+    public <V> Attribute<DecoratedString> createDecorator(
         @NotNull final Attribute<V> attribute, @NotNull final MetadataManager metadataManager);
 
     /**
@@ -102,6 +103,7 @@ public interface DecoratorFactory
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated property for the concrete template.
+     * @param <V> the type.
      */
     @NotNull
     public <V> PropertyDecorator createDecorator(
@@ -166,6 +168,7 @@ public interface DecoratorFactory
      * @param attributes the {@link Attribute attributes}.
      * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated version of the attribute list.
+     * @param <V> the type.
      */
     @NotNull
     public <V> List<Attribute<DecoratedString>> decorateAttributes(

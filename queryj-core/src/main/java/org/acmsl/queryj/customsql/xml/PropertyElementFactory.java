@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -35,7 +35,7 @@
 package org.acmsl.queryj.customsql.xml;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.PropertyElement;
@@ -93,6 +93,7 @@ public class PropertyElementFactory
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;property&gt; information.
      */
+    @Override
     @Nullable
     public Object createObject(
         @NotNull final Attributes attributes,
@@ -145,6 +146,8 @@ public class PropertyElementFactory
 
     /**
      * Checks whether given value starts with upper case.
+     * @param type the type.
+     * @return {@code true} in such case.
      */
     protected boolean startsWithUpperCase(@NotNull final String type)
     {

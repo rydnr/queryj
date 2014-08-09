@@ -232,6 +232,7 @@ public class TableDecoratorHelper
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such collection.
+     * @param <V> the type.
      */
     @NotNull
     public <V> List<Attribute<DecoratedString>> sumUpParentAndChildAttributes(

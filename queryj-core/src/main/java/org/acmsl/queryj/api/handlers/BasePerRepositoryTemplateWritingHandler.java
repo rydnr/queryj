@@ -102,6 +102,7 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * Retrieves the template from the command.
      * @param parameters the parameters.
      * @return the template.
+     * @throws QueryJBuildException if the template is unavailable.
      */
     @Nullable
     protected abstract T retrieveTemplate(@NotNull final QueryJCommand parameters)

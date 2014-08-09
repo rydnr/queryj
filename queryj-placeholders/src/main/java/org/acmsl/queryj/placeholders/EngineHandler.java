@@ -36,7 +36,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing some project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.QueryJTemplateContext;
 import org.acmsl.queryj.metadata.engines.Engine;
@@ -100,8 +100,9 @@ public class EngineHandler
     }
 
     /**
-     * Retrieves the engine name.
+     * Retrieves the {@link Engine}.
      * @param metadataManager the {@link MetadataManager} instance.
+     * @return the engine.
      */
     @NotNull
     protected Engine<String> getEngine(@NotNull final MetadataManager metadataManager)

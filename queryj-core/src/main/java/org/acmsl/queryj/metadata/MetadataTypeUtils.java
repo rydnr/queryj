@@ -34,12 +34,17 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing ACM-SL Commons classes.
+ * Importing ACM-SL Java Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 import org.acmsl.queryj.Literals;
+
+/*
+ * Importing NotNull annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -86,9 +91,9 @@ public class MetadataTypeUtils
      * Retrieves the wrapper class associated to given Java type.
      * @param type the Java type.
      * @return such class name (not fully-qualified).
-     * @precondtion type != null
      */
-    public String getWrapperClass(final String type)
+    @NotNull
+    public String getWrapperClass(@NotNull final String type)
     {
         String result = type;
 
@@ -150,6 +155,8 @@ public class MetadataTypeUtils
      * contained in this instance.
      * @return such information.
      */
+    @Override
+    @NotNull
     public String toString()
     {
         return
@@ -162,6 +169,7 @@ public class MetadataTypeUtils
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -175,7 +183,8 @@ public class MetadataTypeUtils
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    @Override
+    public boolean equals(@Nullable final Object object)
     {
         return
             new org.apache.commons.lang.builder.EqualsBuilder()

@@ -37,7 +37,7 @@
 package org.acmsl.queryj.templates.packaging.handlers;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -72,6 +72,9 @@ import java.util.List;
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2013/09/15 07:34
+ * @param <T> the template type.
+ * @param <TF> the template factory type.
+ * @param <C> the context type.
  */
 @ThreadSafe
 public abstract class GlobalBuildHandler
@@ -89,6 +92,7 @@ public abstract class GlobalBuildHandler
      * Handles given information.
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the template cannot be built.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand parameters)
@@ -105,6 +109,8 @@ public abstract class GlobalBuildHandler
      * Builds the template.
      * @param parameters the parameters.
      * @param factory the TF instance.
+     * @return the template.
+     * @throws QueryJBuildException if the template cannot be built.
      */
     @NotNull
     protected T buildTemplate(@NotNull final QueryJCommand parameters, @NotNull final TF factory)

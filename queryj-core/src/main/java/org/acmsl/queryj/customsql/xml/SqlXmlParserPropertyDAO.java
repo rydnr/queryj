@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.customsql.xml;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyRef;
@@ -181,6 +181,7 @@ public class SqlXmlParserPropertyDAO
      * @param columnName the column name.
      * @param index the property index.
      * @param type the type.
+     * @param nullable whether the property is nullable.
      * @param parser the {@link SqlXmlParser} instance.
      */
     protected void insert(

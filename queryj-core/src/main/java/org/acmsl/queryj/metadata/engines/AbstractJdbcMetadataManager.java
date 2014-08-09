@@ -772,6 +772,8 @@ public abstract class AbstractJdbcMetadataManager
      * <code>MetadataExtractionListener</code> instance.
      * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
      * @return the list of tables.
+     * @throws SQLException if the extraction fails.
+     * @throws QueryJException if any other error occurs.
      */
     @NotNull
     protected List<Table<String, Attribute<String>, List<Attribute<String>>>> extractTableMetadata(
@@ -841,6 +843,7 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * Converts between given lists.
      * @param list the list to convert.
+     * @return the list.
      */
     @NotNull
     protected List<Attribute<String>> toAttributeList(@NotNull final List<AttributeIncompleteValueObject> list)
@@ -858,6 +861,7 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * Converts between given lists.
      * @param list the list to convert.
+     * @return the foreign keys.
      */
     @NotNull
     protected List<ForeignKey<String>> toForeignKeyList(@NotNull final List<ForeignKeyIncompleteValueObject> list)
@@ -1204,6 +1208,8 @@ public abstract class AbstractJdbcMetadataManager
      * @param metadataExtractionListener the metadata extraction listener.
      * @param caseSensitiveness whether the checks are case sensitive or not.
      * @return the list of all table names.
+     * @throws SQLException if the extraction fails.
+     * @throws QueryJException if any other error occurs.
      */
     protected abstract List<TableIncompleteValueObject> extractTableNamesAndComments(
         @NotNull final DatabaseMetaData metaData,
@@ -1220,8 +1226,11 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param tables the tables.
      * @param caseSensitiveness whether the table names are case sensitive or not.
      * @param metadataExtractionListener the metadata extraction listener.
+     * @throws SQLException if the extraction fails.
+     * @throws QueryJException if any other error occurs.
      */
     protected abstract void extractTableColumns(
         @NotNull final DatabaseMetaData metaData,
@@ -1238,8 +1247,11 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param tables the tables.
      * @param caseSensitiveness whether the table names are case sensitive or not.
      * @param metadataExtractionListener the metadata extraction listener.
+     * @throws SQLException if the extraction fails.
+     * @throws QueryJException if any other error occurs.
      */
     protected abstract void extractPrimaryKeys(
         @NotNull final DatabaseMetaData metaData,
@@ -1256,8 +1268,11 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param tables the tables.
      * @param caseSensitiveness whether the table names are case sensitive or not.
      * @param metadataExtractionListener the metadata extraction listener.
+     * @throws SQLException if the extraction fails.
+     * @throws QueryJException if any other error occurs.
      */
     protected abstract void extractForeignKeys(
         @NotNull final DatabaseMetaData metaData,

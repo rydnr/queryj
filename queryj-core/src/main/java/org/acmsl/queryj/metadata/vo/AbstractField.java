@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,7 +34,7 @@
 package org.acmsl.queryj.metadata.vo;
 
 /*
- * Importing some QueryJ classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntFieldFkElement;
@@ -74,6 +74,9 @@ public abstract class AbstractField
      * @param typeId the type id.
      * @param type the type.
      * @param tableName the name of the table.
+     * @param ordinalPosition the ordinal position.
+     * @param length the length.
+     * @param precision the precision.
      * @param comment the field comment.
      * @param keyword the keyword used to retrieve the value, if any.
      * @param retrievalQuery the query used to retrieve the value, if any.

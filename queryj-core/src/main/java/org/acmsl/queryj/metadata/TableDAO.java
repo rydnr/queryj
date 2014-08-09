@@ -112,6 +112,7 @@ public interface TableDAO
      * Retrieves the actual contents of given table.
      * @param tableName the table name.
      * @return the retrieved rows.
+     * @throws SQLException if the query fails.
      */
     @NotNull
     List<Row<String>> queryContents(@NotNull final String tableName)

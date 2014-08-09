@@ -29,7 +29,7 @@
 package org.acmsl.queryj.tools.handlers;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJCommandWrapper;
@@ -170,6 +170,7 @@ public class ParameterValidationHandler
      * @param command the command to handle.
      * @param log the log.
      * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if any parameter fails to validate.
      */
     protected boolean handle(@NotNull final QueryJCommand command, @Nullable final Log log)
         throws  QueryJBuildException
@@ -183,6 +184,7 @@ public class ParameterValidationHandler
      * Validates the parameters.
      * @param command the parameter map.
      * @param usingAnt whether QueryJ is executed within Ant.
+     * @throws QueryJBuildException if any parameter fails to validate.
      */
     public void validateParameters(
         @NotNull final QueryJCommand command, final boolean usingAnt)
@@ -235,6 +237,7 @@ public class ParameterValidationHandler
      * @param threadCount the number of threads.
      * @param command the command, to store processed information.
      * such as the header contents.
+     * @throws QueryJBuildException if any parameter fails to validate.
      */
     protected void validateParameters(
         @Nullable final String driver,
@@ -465,6 +468,7 @@ public class ParameterValidationHandler
      * information.
      * @param classpath the classpath.
      * such as the header contents.
+     * @throws QueryJBuildException if any parameter fails to validate.
      */
     protected void validateAntParameters(
         @Nullable final AntTablesElement tables,
@@ -494,7 +498,10 @@ public class ParameterValidationHandler
     /**
      * Reads the contents of given file.
      * @param file the file.
+     * @param charset the charset.
      * @return the file contents.
+     * @throws SecurityException if reading the file is not permitted.
+     * @throws IOException if the file cannot be read.
      */
     @NotNull
     protected String readFile(@NotNull final File file, @NotNull final Charset charset)
@@ -507,8 +514,11 @@ public class ParameterValidationHandler
     /**
      * Reads the contents of given file.
      * @param file the file.
+     * @param charset the charset.
      * @param fileUtils the {@link FileUtils} instance.
      * @return the file contents.
+     * @throws SecurityException if reading the file is not permitted.
+     * @throws IOException if the file cannot be read.
      */
     @NotNull
     protected String readFile(

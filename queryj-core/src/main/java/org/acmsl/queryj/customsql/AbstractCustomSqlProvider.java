@@ -36,7 +36,7 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing ACMSL Java Commons classes.
+ * Importing ACM-SL Java Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 
@@ -92,6 +92,7 @@ public abstract class AbstractCustomSqlProvider
     /**
      * Computes the hash of given String.
      * @param value the value.
+     * @param charset the charset.
      * @return the hash.
      */
     @NotNull
@@ -168,6 +169,8 @@ public abstract class AbstractCustomSqlProvider
      * @param validate whether to validate or not.
      * @param dynamic whether it's dynamic or not.
      * @param value the value.
+     * @param repositoryScoped whether it's repository-scoped or not.
+     * @param implementation the implementation value.
      * @param parameterRefs the parameter refs.
      * @param charset the charset.
      * @param parameterDAO the {@link org.acmsl.queryj.metadata.SqlParameterDAO} instance.
@@ -279,8 +282,9 @@ public abstract class AbstractCustomSqlProvider
     /**
      * Computes the hash for given {@link Parameter parameter}.
      * @param parameter the parameter.
-     * @param separator the hash separator.
      * @param charset the charset.
+     * @param separator the hash separator.
+     * @return the hash.
      * @param <T> the type.
      * @param <V> the type of the value.
      */
@@ -297,6 +301,7 @@ public abstract class AbstractCustomSqlProvider
      * @param type the parameter type.
      * @param charset the charset.
      * @param separator the hash separator.
+     * @return the hash.
      * @param <T> the type.
      */
     @NotNull

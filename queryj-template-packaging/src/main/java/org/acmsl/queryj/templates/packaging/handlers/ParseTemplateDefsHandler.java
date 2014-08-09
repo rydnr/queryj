@@ -141,6 +141,7 @@ public class ParseTemplateDefsHandler
      * @param stringUtils the {@link StringUtils} instance.
      * @return {@code true} if the handler actually process the command,
      *         or maybe because it's not desirable to continue the chain.
+     * @throws QueryJBuildException if the template defs cannot be parsed.
      */
     protected boolean handle(@NotNull final QueryJCommand command, @NotNull final StringUtils stringUtils)
         throws QueryJBuildException
@@ -258,6 +259,8 @@ public class ParseTemplateDefsHandler
     /**
      * Parses a template def file.
      * @param file the file to parse.
+     * @return the template def.
+     * @throws TemplatePackagingCheckedException if the template def file cannot be parsed.
      */
     @NotNull
     public TemplateDef<String> parseDefFile(@NotNull final File file)
@@ -280,6 +283,8 @@ public class ParseTemplateDefsHandler
     /**
      * Parses a template def stream.
      * @param inputStream the stream to parse.
+     * @return the template def.
+     * @throws TemplatePackagingCheckedException if the template def stream cannot be parsed.
      */
     @NotNull
     public TemplateDef<String> parseDefStream(@NotNull final InputStream inputStream)
@@ -303,6 +308,7 @@ public class ParseTemplateDefsHandler
      * Parses a template def file.
      * @param parser the parser.
      * @return the {@link TemplateDef}.
+     * @throws TemplatePackagingCheckedException if the template def cannot be parsed.
      */
     @NotNull
     public TemplateDef<String> parseDef(@NotNull final TemplateDefParser parser)
@@ -316,6 +322,7 @@ public class ParseTemplateDefsHandler
      * @param parser the parser.
      * @param file the file.
      * @return the {@link TemplateDef}.
+     * @throws TemplatePackagingCheckedException if the template def cannot be parsed.
      */
     @NotNull
     public TemplateDef<String> parseDef(
@@ -537,6 +544,8 @@ public class ParseTemplateDefsHandler
      * Sets up the template definition parser.
      * @param file the template def contents to parse.
      * @return the {@link TemplateDefParser} instance.
+     * @throws RecognitionException if the format is invalid.
+     * @throws IOException if the source cannot be read.
      */
     @NotNull
     protected TemplateDefParser setUpParser(@NotNull final File file)
@@ -550,11 +559,13 @@ public class ParseTemplateDefsHandler
      * Sets up the template definition parser.
      * @param inputStream the template def contents to parse.
      * @return the {@link TemplateDefParser} instance.
+     * @throws RecognitionException if the format is invalid.
+     * @throws IOException if the source cannot be read.
      */
     @NotNull
     protected TemplateDefParser setUpParser(@NotNull final InputStream inputStream)
         throws RecognitionException,
-        IOException
+               IOException
     {
         return setUpParser(new ANTLRInputStream(inputStream));
     }
@@ -563,12 +574,14 @@ public class ParseTemplateDefsHandler
      * Sets up the template definition parser.
      * @param stream the {@link ANTLRInputStream}.
      * @return the {@link TemplateDefParser} instance.
+     * @throws RecognitionException if the format is invalid.
+     * @throws IOException if the source cannot be read.
      */
     @SuppressWarnings("unchecked")
     @NotNull
     protected TemplateDefParser setUpParser(@NotNull final ANTLRInputStream stream)
         throws RecognitionException,
-        IOException
+               IOException
     {
         @NotNull final TemplateDefParser result;
 

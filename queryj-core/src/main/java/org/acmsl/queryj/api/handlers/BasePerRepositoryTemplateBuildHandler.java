@@ -100,6 +100,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the template cannot be built.
      */
     @Override
     public boolean handle(@NotNull final QueryJCommand command)
@@ -122,11 +123,12 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param templateFactory the template factory.
      * @param repository the repository.
      * @param metadataManager the {@link MetadataManager} instance.
+     * @throws QueryJBuildException if the template cannot be built.
      */
     @SuppressWarnings("unchecked")
     protected void buildTemplate(
         @NotNull final QueryJCommand parameters,
-        @NotNull final CustomSqlProvider customSqlProvider,
+        @SuppressWarnings("unused") @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
         @NotNull final String repository,
         @NotNull final MetadataManager metadataManager)
@@ -154,7 +156,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param parameters the command.
      * @return <code>true</code> in such case.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked, unused")
     protected boolean isGenerationEnabled(
         @NotNull final CustomSqlProvider customSqlProvider, @NotNull final QueryJCommand parameters)
     {
@@ -170,6 +172,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param tableNames the table names.
      * @param parameters the command.
      * @return the template.
+     * @throws QueryJBuildException if the template cannot be built.
      */
     @Nullable
     protected abstract T createTemplate(

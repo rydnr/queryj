@@ -29,8 +29,8 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: *LogFactory* implementation that uses a
- * cached Ant-based *Log* instance if pre-cached.
+ * Description: *LogFactory* implementation that uses a cached Ant-based *Log*
+ *              instance if pre-cached.
  *
  * Important Note: This class implements Apache Commons-Logging's Log
  * interface. License details are copied verbatim below.
@@ -39,7 +39,7 @@
 package org.acmsl.queryj.tools.logging;
 
 /*
- * Importing Commons-Logging classes.
+ * Importing Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogConfigurationException;
@@ -135,9 +135,7 @@ public class QueryJLogFactory
     }
 
     /**
-     * Convenience method to derive a name from the specified class and
-     * call <code>getInstance(String)</code> with it.
-     * @param clazz Class for which a suitable Log name will be derived
+     * {@inheritDoc}
      */
     @Nullable
     @Override
@@ -152,9 +150,10 @@ public class QueryJLogFactory
      * call <code>getInstance(String)</code> with it.
      * @param clazz Class for which a suitable Log name will be derived
      * @param log the cached log instance.
+     * @return the {@link Log} instance.
      */
     @Nullable
-    protected Log getInstance(@NotNull final Class clazz, @Nullable final Log log)
+    protected Log getInstance(@NotNull final Class<?> clazz, @Nullable final Log log)
         throws LogConfigurationException
     {
         @Nullable Log result = log;
@@ -201,6 +200,8 @@ public class QueryJLogFactory
      * returned (the meaning of this name is only known to the underlying
      * logging implementation that is being wrapped)
      * @param log the possibly cached log instance.
+     * @return the {@link Log} instance.
+     * @throws LogConfigurationException in case of misconfiguration.
      */
     @Nullable
     public Log getInstance(@NotNull final String name, @Nullable final Log log)

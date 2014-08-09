@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -29,14 +29,9 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: Minimal logging helper to avoid using Ant-specific
- * API. It implements *Log* only to make the
- * developer confortable with the API, which just means
- * replacing *LogFactory.getLog(..)* with
- * using the *UniqueLogFactory.getLog(..)*.
- *
- * Version: $Revision$ ($Author$ at $Date$)
- *
- * $Id$
+ *              API. It implements *Log* only to make the developer comfortable
+ *              with the API, which just means replacing *LogFactory.getLog(..)*
+ *              with *UniqueLogFactory.getLog(..)*.
  *
  */
 package org.acmsl.queryj.tools.logging;
@@ -55,19 +50,19 @@ import org.apache.tools.ant.Project;
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Minimal logging helper to avoid using Ant-specific
  * API. It implements <code>Log</code> only to make the
- * developer confortable with the API, which just means
+ * developer comfortable with the API, which just means
  * replacing <code>LogFactory.getLog(..)</code> with
- * using the <code>UniqueLogFactory.getLog(..)</code>.
+ * <code>UniqueLogFactory.getLog(..)</code>.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
@@ -127,82 +122,63 @@ public class QueryJAntLog
     }
 
     /**
-     * <p> Is debug logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than debug. </p>
+     * {inheritDoc}
      */
+    @Override
     public boolean isDebugEnabled()
     {
         return true;
     }
 
     /**
-     * <p> Is error logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than error. </p>
+     * {inheritDoc}
      */
+    @Override
     public boolean isErrorEnabled()
     {
         return true;
     }
 
     /**
-     * <p> Is fatal logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than fatal. </p>
+     * {inheritDoc}
      */
+    @Override
     public boolean isFatalEnabled()
     {
         return true;
     }
 
     /**
-     * <p> Is info logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than info. </p>
+     * {inheritDoc}
      */
+    @Override
     public boolean isInfoEnabled()
     {
         return true;
     }
 
     /**
-     * <p> Is trace logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than trace. </p>
+     * {inheritDoc}
      */
+    @Override
     public boolean isTraceEnabled()
     {
         return true;
     }
 
-
     /**
-     * <p> Is warn logging currently enabled? </p>
-     *
-     * <p> Call this method to prevent having to perform expensive operations
-     * (for example, <code>String</code> concatenation)
-     * when the log level is more than warn. </p>
+     * {inheritDoc}
      */
+    @Override
     public boolean isWarnEnabled()
     {
         return true;
     }
 
     /**
-     * <p>Logs a message with trace log level.</p>
-     * @param message the message.
+     * {inheritDoc}
      */
+    @Override
     public void trace(@Nullable final Object message)
     {
         trace(message, getProject());
@@ -219,10 +195,9 @@ public class QueryJAntLog
     }
 
     /**
-     * <p>Logs an error with trace log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {inheritDoc}
      */
+    @Override
     public void trace(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         trace(message, throwable, getProject());
@@ -232,6 +207,7 @@ public class QueryJAntLog
      * <p>Logs an error with trace log level.</p>
      * @param message the message.
      * @param throwable the cause.
+     * @param project the project.
      */
     protected void trace(
         @Nullable final Object message,
@@ -242,11 +218,11 @@ public class QueryJAntLog
             message + "(" + throwable.getMessage() + ")",
             Project.MSG_VERBOSE);
     }
-    
+
     /**
-     * <p>Logs a message with debug log level.</p>
-     * @param message the message.
+     * {inheritDoc}
      */
+    @Override
     public void debug(@Nullable final Object message)
     {
         debug(message, getProject());
@@ -263,10 +239,9 @@ public class QueryJAntLog
     }
 
     /**
-     * <p>Logs an error with debug log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {inheritDoc}
      */
+    @Override
     public void debug(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         debug(message, throwable, getProject());
@@ -276,6 +251,7 @@ public class QueryJAntLog
      * <p>Logs an error with debug log level.</p>
      * @param message the message.
      * @param throwable the cause.
+     * @param project the project.
      */
     protected void debug(
         @Nullable final Object message,
@@ -286,11 +262,11 @@ public class QueryJAntLog
             message + "(" + throwable.getMessage() + ")",
             Project.MSG_DEBUG);
     }
-    
+
     /**
-     * <p>Logs a message with info log level.</p>
-     * @param message the message.
+     * {inheritDoc}
      */
+    @Override
     public void info(@Nullable final Object message)
     {
         info(message, getProject());
@@ -307,10 +283,9 @@ public class QueryJAntLog
     }
 
     /**
-     * <p>Logs an error with info log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {inheritDoc}
      */
+    @Override
     public void info(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         info(message, throwable, getProject());
@@ -320,6 +295,7 @@ public class QueryJAntLog
      * <p>Logs an error with info log level.</p>
      * @param message the message.
      * @param throwable the cause.
+     * @param project the project.
      */
     protected void info(
         @Nullable final Object message,
@@ -330,11 +306,11 @@ public class QueryJAntLog
             message + "(" + throwable.getMessage() + ")",
             Project.MSG_INFO);
     }
-    
+
     /**
-     * <p>Logs a message with warn log level.</p>
-     * @param message the message.
+     * {inheritDoc}
      */
+    @Override
     public void warn(@Nullable final Object message)
     {
         warn(message, getProject());
@@ -351,10 +327,9 @@ public class QueryJAntLog
     }
 
     /**
-     * <p>Logs an error with warn log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {inheritDoc}
      */
+    @Override
     public void warn(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         warn(message, throwable, getProject());
@@ -364,6 +339,7 @@ public class QueryJAntLog
      * <p>Logs an error with warn log level.</p>
      * @param message the message.
      * @param throwable the cause.
+     * @param project the <code>Project</code> instance.
      */
     protected void warn(
         @Nullable final Object message,
@@ -376,9 +352,9 @@ public class QueryJAntLog
     }
 
     /**
-     * <p>Logs a message with error log level.</p>
-     * @param message the message.
+     * {inheritDoc}
      */
+    @Override
     public void error(@Nullable final Object message)
     {
         error(message, getProject());
@@ -395,10 +371,9 @@ public class QueryJAntLog
     }
 
     /**
-     * <p>Logs an error with error log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {inheritDoc}
      */
+    @Override
     public void error(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         error(message, throwable, getProject());
@@ -408,6 +383,7 @@ public class QueryJAntLog
      * <p>Logs an error with error log level.</p>
      * @param message the message.
      * @param throwable the cause.
+     * @param project the <code>Project</code> instance.
      */
     protected void error(
         @Nullable final Object message,
@@ -420,9 +396,9 @@ public class QueryJAntLog
     }
 
     /**
-     * <p>Logs a message with fatal log level.</p>
-     * @param message the message.
+     * {inheritDoc}
      */
+    @Override
     public void fatal(@Nullable final Object message)
     {
         fatal(message, getProject());
@@ -439,10 +415,9 @@ public class QueryJAntLog
     }
 
     /**
-     * <p>Logs an error with fatal log level.</p>
-     * @param message the message.
-     * @param throwable the cause.
+     * {inheritDoc}
      */
+    @Override
     public void fatal(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         fatal(message, throwable, getProject());
@@ -452,6 +427,7 @@ public class QueryJAntLog
      * <p>Logs an error with fatal log level.</p>
      * @param message the message.
      * @param throwable the cause.
+     * @param project the <code>Project</code> instance.
      */
     protected void fatal(
         @Nullable final Object message,

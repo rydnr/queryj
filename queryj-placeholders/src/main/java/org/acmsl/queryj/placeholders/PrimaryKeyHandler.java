@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -36,7 +36,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
@@ -68,7 +68,9 @@ import org.checkthread.annotations.ThreadSafe;
 public class PrimaryKeyHandler
     extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Attribute<String>>>
 {
-
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -8692058693572483344L;
 
     /**
@@ -83,7 +85,7 @@ public class PrimaryKeyHandler
 
     /**
      * Retrieves the template value for this placeholder.
-     *
+     * @param context the context.
      * @return such value.
      */
     @NotNull
@@ -110,6 +112,9 @@ public class PrimaryKeyHandler
 
     /**
      * Retrieves the primary key attributes.
+     * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param metadataUtils the {@link MetadataUtils} instance.
      * @return such attributes.
      */
     @NotNull

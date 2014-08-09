@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -77,7 +77,10 @@ public abstract class AbstractEngine<T>
 
     /**
      * Creates a new instance.
-     *
+     * @param name the name.
+     * @param version the version.
+     * @param lobHandling whether it requires special lob handling.
+     * @param supportsSequences whether it supports sequences.
      */
     protected AbstractEngine(
         @NotNull final T name, @NotNull final T version, final boolean lobHandling, final boolean supportsSequences)

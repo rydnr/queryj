@@ -94,6 +94,7 @@ public class AntProjectAdapter
      * Creates a {@link AntProjectAdapter} with given Ant {@link Project}
      * instance.
      * @param project the project.
+     * @param log the log.
      */
     public AntProjectAdapter(@NotNull final Project project, @NotNull final Log log)
     {
@@ -211,6 +212,7 @@ public class AntProjectAdapter
     /**
      * Retrieves the input handler.
      * @param project the {@link Project} instance.
+     * @return the input handler.
      */
     @NotNull
     protected InputHandler getInputHandler(@NotNull final Project project)
@@ -251,6 +253,7 @@ public class AntProjectAdapter
     /**
      * Retrieves the default input stream.
      * @param project the {@link Project} instance.
+     * @return the input stream.
      */
     @NotNull
     protected InputStream getDefaultInputStream(@NotNull final Project project)
@@ -269,8 +272,9 @@ public class AntProjectAdapter
     }
 
     /**
-     * Creates a subproject.
+     * Creates a sub-project.
      * @param project the {@link Project} instance.
+     * @return the sub-project.
      */
     @NotNull
     protected Project createSubProject(@NotNull final Project project)
@@ -351,6 +355,7 @@ public class AntProjectAdapter
      * Creates a class loader.
      * @param path the path.
      * @param project the {@link Project} instance.
+     * @return the ANT-specific class loader.
      */
     @NotNull
     protected AntClassLoader createClassLoader(@NotNull final Path path, @NotNull final Project project)
@@ -373,6 +378,7 @@ public class AntProjectAdapter
      * @param classLoader the parent class loader.
      * @param path the path.
      * @param project the {@link Project} instance.
+     * @return the ANT-specific class loader.
      */
     @NotNull
     protected AntClassLoader createClassLoader(
@@ -851,6 +857,7 @@ public class AntProjectAdapter
 
     /**
      * Specifies the description.
+     * @param description the description.
      * @param project the {@link Project} instance.
      */
     protected void setDescription(@NotNull final String description, @NotNull final Project project)
@@ -1073,7 +1080,7 @@ public class AntProjectAdapter
      */
     @Override
     @NotNull
-    public Hashtable getTaskDefinitions()
+    public Hashtable<String, Class<?>> getTaskDefinitions()
     {
         return getTaskDefinitions(getProject());
     }
@@ -1081,9 +1088,10 @@ public class AntProjectAdapter
     /**
      * Retrieves the task definitions.
      * @param project the {@link Project} instance.
+     * @return the hash table.
      */
     @NotNull
-    protected Hashtable getTaskDefinitions(@NotNull final Project project)
+    protected Hashtable<String, Class<?>> getTaskDefinitions(@NotNull final Project project)
     {
         return project.getTaskDefinitions();
     }
@@ -1093,7 +1101,7 @@ public class AntProjectAdapter
      */
     @Override
     @NotNull
-    public Map getCopyOfTaskDefinitions()
+    public Map<String, Class<?>> getCopyOfTaskDefinitions()
     {
         return getCopyOfTaskDefinitions(getProject());
     }
@@ -1104,7 +1112,7 @@ public class AntProjectAdapter
      * @return such information.
      */
     @NotNull
-    protected Map getCopyOfTaskDefinitions(@NotNull final Project project)
+    protected Map<String, Class<?>> getCopyOfTaskDefinitions(@NotNull final Project project)
     {
         return project.getCopyOfTaskDefinitions();
     }
@@ -1447,6 +1455,7 @@ public class AntProjectAdapter
      * @param length the buffer length.
      * @param project the {@link Project} instance.
      * @return the number of bytes read.
+     * @throws IOException if the underlying call to Project#defaultInput(byte[], int, int} throws it.
      */
     protected int defaultInput(
         @NotNull final byte[] buffer, final int offset, final int length, @NotNull final Project project)
@@ -1472,6 +1481,7 @@ public class AntProjectAdapter
      * @param length the buffer length.
      * @param project the {@link Project} instance.
      * @return the number of bytes processed.
+     * @throws IOException if the underlying call to Project#demuxInput(byte[], int, int} throws it.
      */
     protected int demuxInput(
         @NotNull final byte[] buffer, final int offset, final int length, @NotNull final Project project)
@@ -1516,6 +1526,7 @@ public class AntProjectAdapter
      * See {@link Project#executeTarget(String)}.
      * @param targetName the target name.
      * @param project the {@link Project} instance.
+     * @throws BuildException if the target fails.
      */
     protected void executeTarget(@NotNull final String targetName, @NotNull final Project project)
         throws BuildException
@@ -1537,6 +1548,7 @@ public class AntProjectAdapter
      * See {@link Project#executeSortedTargets(Vector)}.
      * @param sortedTargets the target list.
      * @param project the {@link Project} instance.
+     * @throws BuildException if the targets fail.
      */
     protected void executeSortedTargets(@NotNull final Vector sortedTargets, @NotNull final Project project)
         throws BuildException
@@ -1632,7 +1644,7 @@ public class AntProjectAdapter
      */
     @Override
     @NotNull
-    public Hashtable getReferences()
+    public Hashtable<String, Object> getReferences()
     {
         return getReferences(getProject());
     }
@@ -1643,7 +1655,7 @@ public class AntProjectAdapter
      * @return such references.
      */
     @NotNull
-    protected Hashtable getReferences(@NotNull final Project project)
+    protected Hashtable<String, Object> getReferences(@NotNull final Project project)
     {
         return project.getReferences();
     }
@@ -1673,7 +1685,7 @@ public class AntProjectAdapter
      */
     @Override
     @NotNull
-    public Map getCopyOfReferences()
+    public Map<String, Object> getCopyOfReferences()
     {
         return getCopyOfReferences(getProject());
     }
@@ -1684,7 +1696,7 @@ public class AntProjectAdapter
      * @return such references.
      */
     @NotNull
-    protected Map getCopyOfReferences(@NotNull final Project project)
+    protected Map<String, Object> getCopyOfReferences(@NotNull final Project project)
     {
         return project.getCopyOfReferences();
     }
@@ -1694,7 +1706,7 @@ public class AntProjectAdapter
      */
     @Override
     @Nullable
-    public Object getReference(@NotNull final String key)
+    public <T> T getReference(@NotNull final String key)
     {
         return getReference(key, getProject());
     }
@@ -1704,9 +1716,10 @@ public class AntProjectAdapter
      * @param key the reference key.
      * @param project the {@link Project} instance.
      * @return the reference value.
+     * @param <T> the reference type.
      */
     @Nullable
-    protected Object getReference(@NotNull final String key, @NotNull final Project project)
+    protected <T> T getReference(@NotNull final String key, @NotNull final Project project)
     {
         return project.getReference(key);
     }

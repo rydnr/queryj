@@ -283,7 +283,7 @@ public abstract class AbstractParameterDecorator<V>
 
     /**
      * Retrieves whether the attribute is a clob or not.
-     * return such information.
+     * @return such information.
      */
     public boolean isClob()
     {
@@ -295,7 +295,7 @@ public abstract class AbstractParameterDecorator<V>
      * @param type the type.
      * @param metadataTypeManager the <code>MetadataTypeManager</code>
      * instance.
-     * return such information.
+     * @return such information.
      */
     protected boolean isClob(
         @NotNull final DecoratedString type, @NotNull final MetadataTypeManager metadataTypeManager)
@@ -415,6 +415,7 @@ public abstract class AbstractParameterDecorator<V>
      * Provides a text representation of the information
      * contained in given instance.
      * @param parameter the decorated parameter.
+     * @param typeManager the {@link MetadataTypeManager} instance.
      * @return such information.
      */
     @NotNull

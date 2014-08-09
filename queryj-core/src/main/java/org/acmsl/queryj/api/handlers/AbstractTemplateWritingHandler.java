@@ -132,6 +132,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param parameters the parameters.
      * @param threadCount the thread count.
      * @param rootDir the root dir.
+     * @throws QueryJBuildException if the templates cannot be written.
      */
     protected void writeTemplates(
         @NotNull final QueryJCommand parameters,
@@ -180,6 +181,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param charset the file encoding.
      * @param templateGenerator the template generator.
      * @param rootDir the root dir.
+     * @throws QueryJBuildException if the templates cannot be written.
      */
     @SuppressWarnings("unused")
     protected void writeTemplatesSequentially(
@@ -227,6 +229,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param threadCount the number of threads to use.
      * @param rootDir the root dir.
      * @return the list if {@link Future} to keep track of the progress.
+     * @throws QueryJBuildException if the templates cannot be written.
      */
     @NotNull
     protected List<Future<T>> writeTemplatesMultithread(
@@ -317,6 +320,8 @@ public abstract class AbstractTemplateWritingHandler
      * @param templateGenerator the template generator.
      * @param threadCount the number of threads to use.
      * @param rootDir the root dir.
+     * @return the futures for the concurrent threads.
+     * @throws QueryJBuildException if the templates cannot be written.
      */
     @NotNull
     @SuppressWarnings("unused")
@@ -328,7 +333,7 @@ public abstract class AbstractTemplateWritingHandler
         @NotNull final TG templateGenerator,
         final int threadCount,
         @NotNull final File rootDir)
-        throws  QueryJBuildException
+      throws  QueryJBuildException
     {
         @NotNull final List<Future<?>> result;
 
@@ -437,6 +442,7 @@ public abstract class AbstractTemplateWritingHandler
      * Retrieves the templates from the command.
      * @param parameters the parameters.
      * @return the template.
+     * @throws QueryJBuildException if the templates cannot be retrieved.
      */
     @NotNull
     public abstract List<T> retrieveTemplates(@NotNull final QueryJCommand parameters)
@@ -474,6 +480,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param rootDir the root dir.
      * @param parameters the parameter map.
      * @return such folder.
+     * @throws QueryJBuildException if the output dir is unavailable.
      */
     @NotNull
     protected abstract File retrieveOutputDir(

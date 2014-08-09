@@ -1,6 +1,6 @@
 //;-*- mode: java -*-
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -34,7 +34,7 @@
 package org.acmsl.queryj.tools.cli;
 
 /*
- * Importing some project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.SerializablePropertiesConfiguration;
@@ -67,8 +67,9 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Allows executing QueryJ from the command-line.
- * @since Thu Jul 13 18:21:23 2006
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @since 1.0
+ * Created: Thu Jul 13 18:21:23 2006
  */
 public final class QueryJCLI
     implements  QueryJCLIOptions
@@ -245,6 +246,8 @@ public final class QueryJCLI
      * Executes QueryJ using given options.
      * @param configurationSettings the configuration settings.
      * @param logThreshold the log threshold.
+     * @param customSqlFile the file.
+     * @throws QueryJBuildException if QueryJ cannot be run.
      */
     @SuppressWarnings("unused")
     protected static void executeQueryJ(

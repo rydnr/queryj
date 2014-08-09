@@ -188,6 +188,8 @@ public class OracleMetadataManager
      * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @return the list of all table names.
+     * @throws SQLException if the extraction fails.
+     * @throws QueryJException if any other error occurs.
      */
     @NotNull
     @SuppressWarnings("unused")
@@ -198,7 +200,8 @@ public class OracleMetadataManager
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         @NotNull final MetaLanguageUtils metaLanguageUtils,
         @NotNull final MetadataTypeManager metadataTypeManager)
-        throws SQLException, QueryJException
+      throws SQLException,
+             QueryJException
     {
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> result;
 
@@ -537,6 +540,7 @@ public class OracleMetadataManager
      * @param caseSensitiveness whether the engine is case sensitive or not.
      * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @throws SQLException if the process fails.
      */
     @SuppressWarnings("unused,unchecked")
     protected void processRow(

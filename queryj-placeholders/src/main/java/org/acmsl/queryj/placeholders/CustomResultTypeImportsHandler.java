@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Placeholders
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,7 +37,7 @@
 package org.acmsl.queryj.placeholders;
 
 /*
- * Importing some project classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
@@ -69,12 +69,16 @@ import org.checkthread.annotations.ThreadSafe;
  * Resolves "property_type_imports" placeholders, to avoid declaring
  * unused imports.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2012/06/20
+ * @since 3.0
+ * Created: 2012/06/20
  */
 @ThreadSafe
 public class CustomResultTypeImportsHandler
     extends AbstractTemplateContextFillHandler<PerCustomResultTemplateContext, List<String>>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -3410211570531493763L;
 
     /**
@@ -111,6 +115,7 @@ public class CustomResultTypeImportsHandler
     /**
      * Retrieves the list of JDK imports associated to the result properties.
      * @param customResult the custom result.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param metadataManager the {@link MetadataManager} instance.
      * @return such list.
      */

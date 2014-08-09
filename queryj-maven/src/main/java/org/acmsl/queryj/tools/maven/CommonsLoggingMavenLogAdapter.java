@@ -120,6 +120,7 @@ public class CommonsLoggingMavenLogAdapter
     /**
      * Checks whether the debug level is enabled.
      * @param mavenLog the underlying {@link Log}.
+     * @return {@code true} in such case.
      */
     protected boolean isTraceEnabled(@NotNull final Log mavenLog)
     {
@@ -211,6 +212,7 @@ public class CommonsLoggingMavenLogAdapter
     /**
      * Checks whether the debug level is enabled.
      * @param mavenLog the underlying {@link Log}.
+     * @return {@code true} in such case.
      */
     protected boolean isDebugEnabled(@NotNull final Log mavenLog)
     {
@@ -302,6 +304,7 @@ public class CommonsLoggingMavenLogAdapter
     /**
      * Checks whether the debug level is enabled.
      * @param mavenLog the underlying {@link Log}.
+     * @return {@code true} in such case.
      */
     protected boolean isInfoEnabled(@NotNull final Log mavenLog)
     {
@@ -395,6 +398,7 @@ public class CommonsLoggingMavenLogAdapter
     /**
      * Checks whether the debug level is enabled.
      * @param mavenLog the underlying {@link Log}.
+     * @return {@code true} in such case.
      */
     protected boolean isWarnEnabled(@NotNull final Log mavenLog)
     {
@@ -486,6 +490,7 @@ public class CommonsLoggingMavenLogAdapter
     /**
      * Checks whether the error level is enabled.
      * @param mavenLog the underlying {@link Log}.
+     * @return {@code true} in such case.
      */
     protected boolean isErrorEnabled(@NotNull final Log mavenLog)
     {
@@ -578,6 +583,7 @@ public class CommonsLoggingMavenLogAdapter
     /**
      * Checks whether the debug level is enabled.
      * @param mavenLog the underlying {@link Log}.
+     * @return {@code true} in such case.
      */
     protected boolean isFatalEnabled(@NotNull final Log mavenLog)
     {

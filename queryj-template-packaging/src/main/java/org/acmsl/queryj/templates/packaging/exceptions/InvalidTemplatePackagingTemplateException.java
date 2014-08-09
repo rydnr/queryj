@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Template Packaging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -37,7 +37,7 @@
 package org.acmsl.queryj.templates.packaging.exceptions;
 
 /*
- * Importing QueryJ-Core classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 
@@ -69,6 +69,8 @@ public class InvalidTemplatePackagingTemplateException
 
     /**
      * Creates an instance.
+     * @param group the group.
+     * @param cause the cause.
      */
     public InvalidTemplatePackagingTemplateException(@NotNull final String group, @NotNull final Throwable cause)
     {

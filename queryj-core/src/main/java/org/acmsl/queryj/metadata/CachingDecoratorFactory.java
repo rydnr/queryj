@@ -33,7 +33,7 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing project-specific classes.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.customsql.Parameter;
@@ -110,24 +110,19 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Creates an <code>AttributeDecorator</code> for given
-     * attribute instance.
-     * @param attribute the attribute.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return the decorated attribute for the concrete template.
-     * @param <V> the value type.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
     @SuppressWarnings("unchecked")
-    public <V, DecoratedString> Attribute<DecoratedString> createDecorator(
+    public <V> Attribute<DecoratedString> createDecorator(
         @NotNull final Attribute<V> attribute, @NotNull final MetadataManager metadataManager)
     {
         @NotNull final Attribute<DecoratedString> result;
 
         if (attribute.getName() instanceof String)
         {
-            result = (Attribute<DecoratedString>) new CachingAttributeDecorator((Attribute<String>) attribute, metadataManager);
+            result = new CachingAttributeDecorator((Attribute<String>) attribute, metadataManager);
         }
         else
         {
@@ -153,12 +148,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Creates a <code>ResultDecorator</code> for given
-     * result instance.
-     * @param result the result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return the decorated result for the concrete template.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -173,11 +163,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Creates a <code>SqlDecorator</code>.
-     * @param sql the custom sql.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return the decorated sql for the concrete template.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -192,12 +178,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Creates an <code>ParameterDecorator</code> for given
-     * parameter instance.
-     *
-     * @param parameter       the parameter.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return the decorated attribute for the concrete template.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -208,14 +189,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Creates a <code>PropertyDecorator</code> for given
-     * property instance.
-     *
-     * @param property          the property.
-     * @param result            the result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager   the <code>MetadataManager</code> instance.
-     * @return the decorated property for the concrete template.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -229,11 +203,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Creates a {@link TableDecorator}.
-     * @param table the table name.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @return the decorated table for the concrete template.
+     * {@inheritDoc}
      */
     @Override
     @Nullable
@@ -274,11 +244,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Retrieves the decorated list of attributes.
-     * @param attributes the attributes to decorate.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @return the decorated version of the attribute list.
-     * @param <V> the original attribute type.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -308,10 +274,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Retrieves the decorated list of attributes of given table.
-     * @param table the table.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return the attribute list
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -337,10 +300,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Retrieves the decorated list of attributes composing the primary key of given table.
-     * @param table the table.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @return the primary key.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -376,14 +336,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Creates a <code>ForeignKeyDecorator</code>.
-     * @param sourceTableName the name of the source table.
-     * @param attributes the foreign key attributes.
-     * @param targetTableName the name of the target table.
-     * @param allowsNull whether the fk can be null as a whole.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @return the decorator instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -407,9 +360,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Provides a text representation of the information
-     * contained in this instance.
-     * @return such information.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
@@ -422,8 +373,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Retrieves the hash code associated to this instance.
-     * @return such information.
+     * {@inheritDoc}
      */
     @Override
     public int hashCode()
@@ -435,9 +385,7 @@ public class CachingDecoratorFactory
     }
 
     /**
-     * Checks whether given object is semantically equal to this instance.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
+     * {@inheritDoc}
      */
     @Override
     public boolean equals(@Nullable final Object object)
@@ -460,7 +408,7 @@ public class CachingDecoratorFactory
      * @param object the object to compare to.
      * @return the result of such comparison.
      * object prevents it from being compared to this Object.
-     * thows ClassCastException if both objects are incompatible.
+     * @throws ClassCastException if both objects are incompatible.
      */
     public int compareTo(@Nullable final Object object)
         throws  ClassCastException
