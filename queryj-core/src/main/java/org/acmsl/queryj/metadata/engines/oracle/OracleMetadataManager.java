@@ -551,7 +551,7 @@ public class OracleMetadataManager
         @NotNull final Map<String,List<ForeignKeyIncompleteValueObject>> foreignKeyMap,
         @NotNull final Map<String,List<AttributeIncompleteValueObject>> foreignKeyAttributeMap,
         final boolean caseSensitiveness,
-        @NotNull final MetaLanguageUtils metaLanguageUtils,
+        @SuppressWarnings("unused") @NotNull final MetaLanguageUtils metaLanguageUtils,
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws SQLException
     {

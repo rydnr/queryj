@@ -166,10 +166,6 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
 
             result = (MetadataManager) t_isCache.readObject();
         }
-        catch (@NotNull final IOException cannotFindCacheFile)
-        {
-            throw cannotFindCacheFile;
-        }
         finally
         {
             if (t_isCache != null)

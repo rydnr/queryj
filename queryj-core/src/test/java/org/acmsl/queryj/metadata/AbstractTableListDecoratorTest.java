@@ -268,6 +268,11 @@ public class AbstractTableListDecoratorTest
         extends AbstractTableListDecorator<Attribute<DecoratedString>>
     {
         /**
+         * The serial version id.
+         */
+        private static final long serialVersionUID = 2104780880849298140L;
+
+        /**
          * The metadata manager.
          */
         private MetadataManager m__MetadataManager;

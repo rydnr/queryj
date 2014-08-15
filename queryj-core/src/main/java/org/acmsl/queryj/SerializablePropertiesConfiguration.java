@@ -71,6 +71,11 @@ public class SerializablePropertiesConfiguration
     implements Serializable
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 79790522189184391L;
+
+    /**
      * {@inheritDoc}
      */
     public SerializablePropertiesConfiguration()

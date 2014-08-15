@@ -36,18 +36,24 @@
 package org.acmsl.queryj.metadata;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.customsql.Parameter;
-import org.acmsl.queryj.metadata.vo.Attribute;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

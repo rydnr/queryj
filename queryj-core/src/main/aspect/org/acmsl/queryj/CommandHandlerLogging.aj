@@ -36,19 +36,7 @@
  *              flow.
  *
  */
-package aspects.org.acmsl.queryj;
-
-/*
- * Importing project classes.
- */
-import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
-
-/*
- * Importing Jakarta Commons classes.
- */
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+package org.acmsl.queryj;
 
 /**
  * Prints out when a handler starts and finishes in the process

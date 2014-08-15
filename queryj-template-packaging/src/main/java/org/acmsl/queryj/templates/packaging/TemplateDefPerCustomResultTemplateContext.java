@@ -72,6 +72,11 @@ public class TemplateDefPerCustomResultTemplateContext
     implements TemplateDefTemplateContext
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -6499667603360482807L;
+
+    /**
      * The template def.
      */
     private TemplateDef<String> m__TemplateDef;

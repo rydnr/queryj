@@ -40,7 +40,6 @@ package org.acmsl.queryj.customsql.exceptions;
  */
 import org.acmsl.queryj.api.exceptions.QueryJNonCheckedException;
 import org.acmsl.queryj.customsql.Sql;
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -57,6 +56,11 @@ import org.checkthread.annotations.ThreadSafe;
 public class CannotValidateEmptyQueryException
     extends QueryJNonCheckedException
 {
+    /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 635708850144790366L;
+
     /**
      * Creates a new instance using given {@link Sql} as context.
      * @param sql the failing SQL.

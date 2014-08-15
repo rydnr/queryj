@@ -63,6 +63,11 @@ public class NoTableMatchingSqlException
     extends QueryJNonCheckedException
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -5206584966074520159L;
+
+    /**
      * Creates a new instance blaming the wrong custom SQL.
      * @param sql the {@link Sql}.
      */

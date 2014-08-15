@@ -194,6 +194,11 @@ public class AbstractTemplateTest
         extends TestableAbstractTemplate<C>
     {
         /**
+         * The serial version id.
+         */
+        private static final long serialVersionUID = 8071044949637581121L;
+
+        /**
          * An empty array list.
          */
         @NotNull

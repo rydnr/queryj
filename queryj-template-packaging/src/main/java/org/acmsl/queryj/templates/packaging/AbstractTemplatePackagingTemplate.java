@@ -84,6 +84,11 @@ public abstract class AbstractTemplatePackagingTemplate<C extends TemplatePackag
                TemplatePackagingTemplate<C>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 1307562443874023658L;
+
+    /**
      * Creates a new instance.
      * @param context the {@link TemplatePackagingContext context}.
      */

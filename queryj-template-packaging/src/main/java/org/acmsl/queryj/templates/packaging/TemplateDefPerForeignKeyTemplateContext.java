@@ -61,6 +61,11 @@ public class TemplateDefPerForeignKeyTemplateContext
     extends PerForeignKeyTemplateContext
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -8375197881601002390L;
+
+    /**
      * The template def.
      */
     private TemplateDef<String> m__TemplateDef;

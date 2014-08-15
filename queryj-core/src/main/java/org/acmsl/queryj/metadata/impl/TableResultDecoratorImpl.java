@@ -77,6 +77,11 @@ public class TableResultDecoratorImpl<V>
     implements TableResultDecorator<DecoratedString>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 3669176031601055279L;
+
+    /**
      * The table.
      */
     @NotNull
@@ -227,7 +232,7 @@ public class TableResultDecoratorImpl<V>
         }
         else if (o instanceof TableResultDecoratorImpl)
         {
-            @NotNull final TableResultDecoratorImpl that = (TableResultDecoratorImpl) o;
+            @NotNull final TableResultDecoratorImpl<?> that = (TableResultDecoratorImpl) o;
 
             if (getId().equals(that.getId()))
             {

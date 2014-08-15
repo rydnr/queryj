@@ -63,6 +63,11 @@ public class CustomSqlWithNoPropertiesException
     extends QueryJNonCheckedException
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -6182400513070979781L;
+
+    /**
      * Creates an instance blaming the wrong {@link Sql}.
      * @param sql the custom SQL.
      */

@@ -33,11 +33,6 @@
 package org.acmsl.queryj.metadata.vo;
 
 /*
- * Importing QueryJ Core classes.
- */
-import org.acmsl.queryj.Literals;
-
-/*
  * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -62,6 +57,11 @@ import java.util.List;
 public abstract class AbstractRow<V>
     implements Row<V>
 {
+    /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 2448751869446686328L;
+
     /**
      * The name.
      */
@@ -183,23 +183,6 @@ public abstract class AbstractRow<V>
     }
 
     /**
-     * Provides a text representation of the information
-     * contained in this instance.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String toString()
-    {
-        return
-            new org.apache.commons.lang.builder.ToStringBuilder(this)
-                .append("name", getName())
-                .append(Literals.TABLE_NAME, getTableName())
-                .append("attributes", getAttributes())
-                .toString();
-    }
-
-    /**
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
@@ -282,6 +265,21 @@ public abstract class AbstractRow<V>
                     first.getTableName(),
                     second.getTableName())
                 .toComparison();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"name\": \"" + this.m__strName + '"'
+            + ", \"table\": \"" + this.m__strTableName + '"'
+            + ", \"attributes\": \"" + this.m__lAttributes + '"'
+            + ", \"class\": \"AbstractRow\""
+            + ", \"package\": \"org.acmsl.queryj.metadata.vo\" }";
     }
 }
 

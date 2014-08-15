@@ -36,15 +36,18 @@
 package org.acmsl.queryj.metadata.engines;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.metadata.DecoratedString;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JUnit classes.
  */
-import org.checkthread.annotations.ThreadSafe;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,6 +62,9 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class DecoratedStringTest
 {
+    /**
+     * Checks whether capitalize() works for upper-case texts.
+     */
     @Test
     public void capitalize_works_for_upper_cased_strings()
     {
@@ -66,6 +72,9 @@ public class DecoratedStringTest
         Assert.assertEquals("Name", new DecoratedString("NAME").getCapitalized().getValue());
     }
 
+    /**
+     * Checks whether capitalize() works for mixed-case texts.
+     */
     @Test
     public void capitalize_works_for_mixed_cased_strings()
     {
@@ -74,18 +83,27 @@ public class DecoratedStringTest
         Assert.assertEquals("GCycleTypes", instance.getCapitalized().getValue());
     }
 
+    /**
+     * Checks whether getNoExtension() does nothing for texts with dots.
+     */
     @Test
-    public void remove_extension_does_nothing_for_texts_with_dots()
+    public void getNoExtension_does_nothing_for_texts_with_dots()
     {
         Assert.assertEquals("bla", new DecoratedString("bla.txt").getNoExtension().getValue());
     }
 
+    /**
+     * Checks whether getNoExtension() does nothing for texts with no dots.
+     */
     @Test
-    public void remove_extension_does_nothing_for_texts_with_no_dots()
+    public void getNoExtension_does_nothing_for_texts_with_no_dots()
     {
         Assert.assertEquals("bla", new DecoratedString("bla").getNoExtension().getValue());
     }
 
+    /**
+     * Checks whether shrink() removes all non-alphanumeric characters.
+     */
     @Test
     public void shrink_removes_all_non_alphanumeric_characters()
     {

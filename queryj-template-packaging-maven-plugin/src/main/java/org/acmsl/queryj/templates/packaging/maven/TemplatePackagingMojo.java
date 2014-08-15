@@ -87,7 +87,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @SuppressWarnings("unused")
 @ThreadSafe
-@Mojo( name = "package-templates", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
+@Mojo( name = "queryj-package-templates", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
 public class TemplatePackagingMojo
     extends AbstractMojo
     implements TemplatePackagingSettings
@@ -99,52 +99,50 @@ public class TemplatePackagingMojo
         "META-INF/maven/org.acmsl.queryj/queryj-template-packaging-maven-plugin/pom.properties";
 
     /**
-     * Additional source directories.
-     * @parameter property="sources" @required
+     * The prefix for environment variables.
      */
-    @Parameter(required = true, property = SOURCES)
+    public static final String ENV_PREFIX = "queryj-templates.";
+
+    /**
+     * Additional source directories.
+     */
+    @Parameter(name = SOURCES, property = ENV_PREFIX + SOURCES, required = true)
     private File[] m__aSources;
 
     /**
      * The output folder.
-     * @parameter property="outputDir" expression="${project.build.directory}/generated-sources" default-value="${project.build.directory}/generated-sources"
      */
-    @Parameter(property = OUTPUT_DIR, defaultValue = "${project.build.directory}/generated-sources")
+    @Parameter(name = OUTPUT_DIR, property = ENV_PREFIX + OUTPUT_DIR, defaultValue = "${project.build.directory}/generated-sources")
     private File m__OutputDir;
 
     /**
      * The output folder for tests.
-     * @parameter property="outputDirForTests" expression="${project.build.directory}/generated-test-sources" default-value="${project.build.directory}/generated-test-sources"
      */
-    @Parameter(property = OUTPUT_DIR_FOR_TESTS, defaultValue = "${project.build.directory}/generated-test-sources")
+    @Parameter(name = OUTPUT_DIR_FOR_TESTS, property = ENV_PREFIX + OUTPUT_DIR_FOR_TESTS, defaultValue = "${project.build.directory}/generated-test-sources")
     private File m__OutputDirForTests;
 
     /**
      * The JDBC driver.
-     * @parameter property="jdbcDriver" @required
      */
-    @Parameter(property = JDBC_DRIVER)
+    @Parameter(name = JDBC_DRIVER, property = ENV_PREFIX + JDBC_DRIVER)
     private String m__strJdbcDriver;
 
     /**
      * The JDBC url.
-     * @parameter property="jdbcUrl" @required
      */
-    @Parameter(property = JDBC_URL)
+    @Parameter(name = JDBC_URL, property = ENV_PREFIX + JDBC_URL)
     private String m__strJdbcUrl;
 
     /**
      * The JDBC username.
-     * @parameter property="jdbcUserName" @required
      */
-    @Parameter(property = JDBC_USERNAME)
+    @Parameter(name = JDBC_USERNAME, property = ENV_PREFIX + JDBC_USERNAME)
     private String m__strJdbcUserName;
 
     /**
      * The JDBC password.
-     * @parameter property="jdbcPassword" @required
      */
-    @Parameter(property = JDBC_PASSWORD)
+    @Parameter(name = JDBC_PASSWORD, property = ENV_PREFIX + JDBC_PASSWORD)
     private String m__strJdbcPassword;
 
     /**
@@ -153,7 +151,7 @@ public class TemplatePackagingMojo
     private QueryJCommand m__QueryJCommand;
 
     /**
-     * Creates a {@link TemplatePackagingMojo} instance.
+     * Creates a {@code TemplatePackagingMojo} instance.
      */
     public TemplatePackagingMojo()
     {
@@ -588,16 +586,15 @@ public class TemplatePackagingMojo
     public String toString()
     {
         return
-              "{ \"class\": \"" + TemplatePackagingMojo.class.getSimpleName() + "\""
-            + ", \"package\": \"org.acmsl.queryj.templates.packaging\""
-            + ", \"queryJCommand\": \"" + this.m__QueryJCommand + "\""
-            + ", \"sources\": \"" + Arrays.toString(this.m__aSources) + "\""
-            + ", \"outputDir\": \"" + this.m__OutputDir.getAbsolutePath() + "\""
-            + ", \"outputDirForTests\": \"" + this.m__OutputDirForTests.getAbsolutePath() + "\""
-            + ", \"jdbcDriver\": \"" + this.m__strJdbcDriver + "\""
-            + ", \"jdbcUrl\": \"" + this.m__strJdbcUrl + "\""
-            + ", \"jdbcUserName\": \"" + this.m__strJdbcUserName + "\""
-            + ", \"jdbcPassword\": \"" + this.m__strJdbcPassword + "\""
-            + " }";
+              "{ \"queryJCommand\": \"" + this.m__QueryJCommand.hashCode() + '"'
+            + ", \"sources\": \"" + Arrays.toString(this.m__aSources) + '"'
+            + ", \"outputDir\": \"" + this.m__OutputDir.getAbsolutePath() + '"'
+            + ", \"outputDirForTests\": \"" + this.m__OutputDirForTests.getAbsolutePath() + '"'
+            + ", \"jdbcDriver\": \"" + this.m__strJdbcDriver + '"'
+            + ", \"jdbcUrl\": \"" + this.m__strJdbcUrl + '"'
+            + ", \"jdbcUserName\": \"" + this.m__strJdbcUserName + '"'
+            + ", \"jdbcPassword\": \"XXXX-" + this.m__strJdbcPassword.length() + '"'
+            + ", \"class\": \"TemplatePackagingMojo\""
+            + ", \"package\": \"org.acmsl.queryj.templates.packaging\" }";
     }
 }

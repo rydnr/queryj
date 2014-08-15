@@ -64,6 +64,11 @@ public class PerForeignKeyTemplatesFeatureTemplate
     extends AbstractTemplatePackagingTemplate<GlobalTemplateContext>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 106295972351691642L;
+
+    /**
      * Builds a PerForeignKeyTemplatesFeature using given context.
      * @param context the {@link org.acmsl.queryj.templates.packaging.GlobalTemplateContext}.
      */

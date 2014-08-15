@@ -96,6 +96,11 @@ public abstract class AbstractJdbcMetadataManager
     implements MetadataManager
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 8480726945588937401L;
+
+    /**
      * The manager name.
      */
     private String m__strName;

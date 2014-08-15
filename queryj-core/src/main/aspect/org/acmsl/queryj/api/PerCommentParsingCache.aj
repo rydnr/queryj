@@ -308,7 +308,7 @@ public aspect PerCommentParsingCache
             COLUMN_READONLY_CACHE.put(key, result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 
     /**
@@ -361,7 +361,7 @@ public aspect PerCommentParsingCache
             TABLE_DECORATOR_CACHE.put(key, result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 
     /**

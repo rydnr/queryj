@@ -42,7 +42,6 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.AttributeIncompleteValueObject;
-import org.acmsl.queryj.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableValueObject;

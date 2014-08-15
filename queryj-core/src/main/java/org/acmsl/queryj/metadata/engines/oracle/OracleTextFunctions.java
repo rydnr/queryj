@@ -36,8 +36,9 @@
 package org.acmsl.queryj.metadata.engines.oracle;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing QueryJ Core classes.
  */
+import javafx.beans.binding.When.StringConditionBuilder;
 import org.acmsl.queryj.sql.Field;
 import org.acmsl.queryj.sql.QueryUtils;
 import org.acmsl.queryj.sql.StringField;
@@ -63,6 +64,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Release 8.1.7.0.1 - Production JServer Release 8.1.7.0.1 - Production.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 @ThreadSafe
 public class OracleTextFunctions
     implements  Singleton
@@ -134,13 +136,13 @@ public class OracleTextFunctions
          */
         private _StringFieldWrapper(@Nullable final Field field, final String function)
         {
-            // Example of when ? operator cannot be subsituted by if-else.
+            // Example of when ? operator cannot be substituted by if-else.
             super(
                 ((field == null) ? "" : field.getName()),
                 ((field == null) ? null : field.getTable()));
-            inmutableSetWrappedField(field);
-            inmutableSetFunction(function);
-            inmutableSetNoFunction(false);
+            immutableSetWrappedField(field);
+            immutableSetFunction(function);
+            immutableSetNoFunction(false);
         }
 
         /**
@@ -149,11 +151,12 @@ public class OracleTextFunctions
          * @param function the function.
          * @param parameters the additional parameters.
          */
+        @SuppressWarnings("unused")
         private _StringFieldWrapper(
             final Field field, final String function, final Object[] parameters)
         {
             this(field, function);
-            inmutableSetParameters(parameters);
+            immutableSetParameters(parameters);
         }
 
         /**
@@ -161,17 +164,19 @@ public class OracleTextFunctions
          * @param function the variable or function.
          * @param variable <code>true</code> if it is a variable.
          */
+        @SuppressWarnings("unused")
         private _StringFieldWrapper(
-            final String function, final boolean variable)
+            final String function, @SuppressWarnings("unused") final boolean variable)
         {
             this((Field) null, function);
-            inmutableSetNoFunction(true);
+            immutableSetNoFunction(true);
         }
 
         /**
          * Builds a FieldWrapper for given field and parameters.
          * @param function the function.
          */
+        @SuppressWarnings("unused")
         private _StringFieldWrapper(final String function)
         {
             this((Field) null, function);
@@ -182,17 +187,18 @@ public class OracleTextFunctions
          * @param value the value to wrap.
          * @param function the function.
          */
+        @SuppressWarnings("unused")
         private _StringFieldWrapper(final String value, final String function)
         {
             this((Field) null, function);
-            inmutableSetParameters(new Object[]{value});
+            immutableSetParameters(new Object[]{value});
         }
 
         /**
          * Specifies the wrapped field.
          * @param field the field to wrap.
          */
-        private void inmutableSetWrappedField(final Field field)
+        private void immutableSetWrappedField(final Field field)
         {
             m__WrappedField = field;
         }
@@ -201,9 +207,10 @@ public class OracleTextFunctions
          * Specifies the wrapped field.
          * @param field the field to wrap.
          */
+        @SuppressWarnings("unused")
         public void setWrappedField(final Field field)
         {
-            inmutableSetWrappedField(field);
+            immutableSetWrappedField(field);
         }
 
         /**
@@ -219,7 +226,7 @@ public class OracleTextFunctions
          * Specifies the function.
          * @param function such function.
          */
-        private void inmutableSetFunction(final String function)
+        private void immutableSetFunction(final String function)
         {
             m__strFunction = function;
         }
@@ -228,9 +235,10 @@ public class OracleTextFunctions
          * Specifies the function.
          * @param function such function.
          */
+        @SuppressWarnings("unused")
         public void setFunction(final String function)
         {
-            inmutableSetFunction(function);
+            immutableSetFunction(function);
         }
 
         /**
@@ -246,7 +254,7 @@ public class OracleTextFunctions
          * Specifies the parameter list.
          * @param parameters the parameters.
          */
-        private void inmutableSetParameters(final Object[] parameters)
+        private void immutableSetParameters(final Object[] parameters)
         {
             m__aParameters = parameters;
         }
@@ -257,7 +265,7 @@ public class OracleTextFunctions
          */
         public void setParameters(final Object[] parameters)
         {
-            inmutableSetParameters(parameters);
+            immutableSetParameters(parameters);
         }
 
         /**
@@ -273,7 +281,7 @@ public class OracleTextFunctions
          * Specifies whether the operator is a function or a variable.
          * @param function such flag.
          */
-        private void inmutableSetNoFunction(final boolean function)
+        private void immutableSetNoFunction(final boolean function)
         {
             m__bNoFunction = function;
         }
@@ -282,9 +290,10 @@ public class OracleTextFunctions
          * Specifies whether the operator is a function or a variable.
          * @param variable such flag.
          */
+        @SuppressWarnings("unused")
         public void setNoFunction(final boolean variable)
         {
-            inmutableSetNoFunction(variable);
+            immutableSetNoFunction(variable);
         }
 
         /**
@@ -303,11 +312,11 @@ public class OracleTextFunctions
         @NotNull
         public String toString()
         {
-            @NotNull StringBuffer t_sbResult = new StringBuffer();
+            @NotNull final StringBuilder t_sbResult = new StringBuilder();
 
-            @NotNull QueryUtils t_QueryUtils = QueryUtils.getInstance();
-            boolean t_bVariable = isNotAFunction();
-            String t_strFunction = getFunction();
+            @NotNull final QueryUtils t_QueryUtils = QueryUtils.getInstance();
+            final boolean t_bVariable = isNotAFunction();
+            @Nullable final String t_strFunction = getFunction();
             if  (t_strFunction != null)
             {
                 t_sbResult.append(t_strFunction);
@@ -316,14 +325,14 @@ public class OracleTextFunctions
             if  (!t_bVariable)
             {
                 t_sbResult.append("(");
-                Field t_strWrappedField = getWrappedField();
+                @Nullable final Field t_strWrappedField = getWrappedField();
                 if  (t_strWrappedField != null)
                 {
                     t_sbResult.append(t_strWrappedField.toString());
 
                 }
 
-                Object[] t_aArgs = getParameters();
+                @Nullable final Object[] t_aArgs = getParameters();
 
                 if  (   (t_aArgs != null)
                      && (t_aArgs.length > 0))
@@ -333,24 +342,21 @@ public class OracleTextFunctions
                         t_sbResult.append(",");
 
                     }
-                    if  (   (t_QueryUtils != null)
-                         && (t_QueryUtils.shouldBeEscaped(t_aArgs[0])))
+                    if  (t_QueryUtils.shouldBeEscaped(t_aArgs[0]))
                     {
                         t_sbResult.append("\"");
                     }
                     t_sbResult.append(t_aArgs[0]);
 
-                    if  (   (t_QueryUtils != null)
-                         && (t_QueryUtils.shouldBeEscaped(t_aArgs[0])))
+                    if  (t_QueryUtils.shouldBeEscaped(t_aArgs[0]))
                     {
                         t_sbResult.append("\"");
                     }
-                    boolean t_bQuoted = false;
+                    boolean t_bQuoted;
                     for  (int t_iIndex = 1; t_iIndex < t_aArgs.length; t_iIndex++)
                     {
                         t_sbResult.append(",");
-                        t_bQuoted = (   (t_QueryUtils != null)
-                                     && (t_QueryUtils.shouldBeEscaped(t_aArgs[t_iIndex])));
+                        t_bQuoted = (t_QueryUtils.shouldBeEscaped(t_aArgs[t_iIndex]));
                         if  (t_bQuoted)
                         {
                             t_sbResult.append("\"");
@@ -367,9 +373,7 @@ public class OracleTextFunctions
                 if  (   (t_strFunction != null)
                      && (t_aArgs != null)
                      && (t_aArgs.length > 1)
-                     && (t_QueryUtils != null)
-                     && (t_QueryUtils.shouldBeEscaped(
-                            t_aArgs[t_aArgs.length - 1])))
+                     && (t_QueryUtils.shouldBeEscaped(t_aArgs[t_aArgs.length - 1])))
                 {
                     t_sbResult.append("\"");
 
@@ -386,17 +390,20 @@ public class OracleTextFunctions
          * @return <code>true</code> if both instances represent
          * the same entity.
          */
+        @Override
         public boolean equals(@Nullable final Object other)
         {
             boolean result = false;
 
             if  (other != null)
             {
-                String t_strThisToString = toString();
+                final String t_strThisToString = toString();
 
-                String t_strOtherToString = other.toString();
+                final String t_strOtherToString = other.toString();
 
-                result = t_strThisToString.equals(t_strOtherToString);
+                result =
+                    (   (other instanceof OracleTextFunctions)
+                     && (t_strThisToString.equals(t_strOtherToString)));
             }
 
             return result;
@@ -425,7 +432,7 @@ public class OracleTextFunctions
         {
             int result = (field + function).hashCode();
             
-            int t_iCount = (parameters != null) ? parameters.length : 0;
+            final int t_iCount = (parameters != null) ? parameters.length : 0;
 
             @Nullable Object t_CurrentParameter;
 

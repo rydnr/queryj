@@ -38,6 +38,7 @@ package cucumber.templates;
 /*
  * Importing Cucumber classes.
  */
+import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 /*
@@ -51,7 +52,7 @@ import org.junit.runner.RunWith;
  * Created: 2013/04/12
  */
 @RunWith(Cucumber.class)
-@Cucumber.Options(format = {"pretty", "html:target/cucumber-html-report"})
+@CucumberOptions(format = {"pretty", "html:target/cucumber-html-report"})
 public class RunCukesTest
 {
 }

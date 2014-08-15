@@ -61,6 +61,11 @@ public class QueryJTestNonCheckedException
     extends QueryJNonCheckedException
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -5937485334969576730L;
+
+    /**
      * Creates a {@code TemplatePackagingNonCheckedException} with given message.
      * @param messageKey the key to build the exception message.
      */

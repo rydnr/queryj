@@ -372,7 +372,7 @@ public class BindQueryParametersHandler
                 retrieveMethod(
                     PreparedStatement.class,
                     getSetterMethod(type),
-                    parameterClasses.toArray(new Class<?>[parameterClasses.size()]));
+                    parameterClasses.toArray(new Class[parameterClasses.size()]));
         }
         catch  (@NotNull final NoSuchMethodException noSuchMethodException)
         {
@@ -748,7 +748,7 @@ public class BindQueryParametersHandler
     protected Method retrieveMethod(
         @NotNull final Class<?> instanceClass,
         @NotNull final String methodName,
-        @NotNull final Class[] parameterClasses)
+        @NotNull final Class<?>[] parameterClasses)
         throws  NoSuchMethodException
     {
         return instanceClass.getDeclaredMethod(methodName, parameterClasses);
@@ -762,10 +762,10 @@ public class BindQueryParametersHandler
     public String toString()
     {
         return
-              "{ \"class\": \"" + BindQueryParametersHandler.class.getSimpleName() + '"'
+              "{ \"DATE_FORMAT\": \"" + DATE_FORMAT + '"'
+            + ", \"DATE_FORMAT_EN\": \"" + DATE_FORMAT_EN + '"'
+            + ", \"class\": \"BindQueryParametersHandler\""
             + ", \"package\": \"org.acmsl.queryj.customsql.handlers.customsqlvalidation\""
-            + "DATE_FORMAT=\"" + DATE_FORMAT + '"'
-            + ", DATE_FORMAT_EN=\"" + DATE_FORMAT_EN + '"'
             + " }";
     }
 }

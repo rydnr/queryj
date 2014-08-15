@@ -70,6 +70,11 @@ public abstract class AbstractFillHandler<P>
     implements FillHandler<P>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 4490284647192932106L;
+
+    /**
      * {@inheritDoc}
      */
     @Override

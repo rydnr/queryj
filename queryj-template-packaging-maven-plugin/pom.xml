@@ -3,7 +3,6 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.acmsl.queryj</groupId>
   <artifactId>queryj-template-packaging-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <version>latest-SNAPSHOT</version>
@@ -79,6 +78,27 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
+        <configuration>
+           <!-- see http://jira.codehaus.org/browse/MNG-5346 -->
+           <!--skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound-->
+           <goalPrefix>queryj-templates</goalPrefix>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default-descriptor</id>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+          <execution>
+            <id>help-goal</id>
+            <goals>
+              <goal>helpmojo</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

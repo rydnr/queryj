@@ -55,6 +55,11 @@ public abstract class AbstractParameterElement<T>
     extends  AbstractIdElement<T>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -1378141777332493923L;
+
+    /**
      * The <i>index</i> attribute.
      */
     private int m__iIndex;

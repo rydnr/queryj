@@ -247,9 +247,14 @@ public class SqlXmlParserResultDAO
     protected synchronized void cacheResult(@NotNull final String table, @NotNull final Result<String> result)
     {
         @Nullable final Result<String> t_CurrentMatch = CACHED_RESULT_BY_TABLE.get(table.toLowerCase(Locale.US));
-        if (t_CurrentMatch == null)
+
+        if (t_CurrentMatch != null)
         {
             CACHED_RESULT_BY_TABLE.put(table.toLowerCase(Locale.US), t_CurrentMatch);
+        }
+        else
+        {
+            CACHED_RESULT_BY_TABLE.put(table.toLowerCase(Locale.US), result);
         }
     }
 

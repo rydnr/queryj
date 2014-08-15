@@ -43,10 +43,16 @@ import org.jetbrains.annotations.Nullable;
  * Common parent to all <i>custom-sql</i> elements with <i>id</i>
  * attributes.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @param <T> the type.
  */
 public abstract class AbstractIdElement<T>
     implements IdentifiableElement<T>
 {
+    /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -3906756800505246803L;
+
     /**
      * The <i>id</i> attribute.
      */

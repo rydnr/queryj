@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Test
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: The specified Java output is invalid.
  *
  * Date: 2014/05/03
  * Time: 07:26
@@ -49,7 +49,7 @@ import org.checkthread.annotations.ThreadSafe;
 import java.io.File;
 
 /**
- *
+ * The specified Java output is invalid.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/05/03 07:26
@@ -58,6 +58,11 @@ import java.io.File;
 public class InvalidJavaOutputException
     extends QueryJTestNonCheckedException
 {
+    /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 1417850235404217668L;
+
     /**
      * Creates a new exception.
      * @param file the generated Java source file.

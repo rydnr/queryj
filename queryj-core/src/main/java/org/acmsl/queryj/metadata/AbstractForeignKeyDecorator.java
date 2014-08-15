@@ -69,6 +69,11 @@ public abstract class AbstractForeignKeyDecorator
     implements ForeignKeyDecorator
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -8952259625768354841L;
+
+    /**
      * The decorated instance.
      */
     private ForeignKey<String> m__ForeignKey;

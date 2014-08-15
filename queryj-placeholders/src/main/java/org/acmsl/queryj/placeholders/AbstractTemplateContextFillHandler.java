@@ -73,6 +73,11 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
     implements TemplateContextFillHandler<C,P>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -4763780584817647713L;
+
+    /**
      * The template context.
      */
     private C templateContext;

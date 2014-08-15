@@ -86,7 +86,7 @@ public class SqlDecoratorHelperTest
             new SqlElement<>("id1", "name1", "select", SqlCardinality.SINGLE, "all", false, false, "none", "desc1");
 
         @NotNull final Parameter parameter =
-            new ParameterElement<String, String>("pid", 1, "paramName", "Date", null);
+            new ParameterElement<>("pid", 1, "paramName", "Date", null);
 
         sql.add(new ParameterRefElement("pid"));
 

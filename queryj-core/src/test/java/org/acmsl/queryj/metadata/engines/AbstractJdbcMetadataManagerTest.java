@@ -36,31 +36,35 @@
 package org.acmsl.queryj.metadata.engines;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.MetaLanguageUtils;
 import org.acmsl.queryj.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.metadata.engines.oracle.OracleEngine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.AttributeIncompleteValueObject;
-import org.acmsl.queryj.metadata.vo.Table;
-import org.easymock.EasyMock;
-import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JetBrains annotations.
  */
-import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing JUnit/EasyMock classes.
+ */
+import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+/*
+ * Importing JDK classes.
+ */
 import java.sql.DatabaseMetaData;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Tests for {@link AbstractJdbcMetadataManager}.

@@ -43,7 +43,6 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing checkthread.org annotations.
  */
-import org.checkthread.annotations.ThreadSafe;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -68,10 +67,7 @@ public class FileNameNotAvailableExceptionTest
     {
         @NotNull final FileNameNotAvailableException instance = new FileNameNotAvailableException();
 
-        for (@NotNull final Locale t_Locale : Arrays.asList(new Locale("en"), new Locale("es")))
-        {
-            // throws a MissingResourceException if the key is not declared.
-            instance.getMessage(t_Locale);
-        }
+        // throws a MissingResourceException if the key is not declared.
+        Arrays.asList(new Locale("en"), new Locale("es")).forEach(instance::getMessage);
     }
 }

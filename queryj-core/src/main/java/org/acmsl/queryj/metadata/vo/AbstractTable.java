@@ -72,6 +72,11 @@ public abstract class AbstractTable<V, A extends Attribute<V>, L extends List<A>
     implements Table<V, A, L>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 2693158501095404586L;
+
+    /**
      * The name.
      */
     private V m__Name;

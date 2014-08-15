@@ -59,6 +59,11 @@ public abstract class AbstractField
     implements  Field
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 7474193219072803177L;
+
+    /**
      * The field pk nature.
      */
     private boolean m__bPk = false;

@@ -71,6 +71,11 @@ public class TemplateDefPerTableTemplateContext
     implements TemplateDefTemplateContext
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -7294527581588704405L;
+
+    /**
      * The template def.
      */
     private TemplateDef<String> m__TemplateDef;

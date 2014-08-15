@@ -61,6 +61,11 @@ public class TemplateDefPerCustomSqlTemplateContext
     extends PerCustomSqlTemplateContext
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 7139844470884684765L;
+
+    /**
      * The template def.
      */
     private TemplateDef<String> m__TemplateDef;

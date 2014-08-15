@@ -84,7 +84,6 @@ import org.powermock.api.easymock.PowerMock;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -167,7 +166,7 @@ public class CheckResultSetGettersWorkForDefinedPropertiesHandlerTest
             .setSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, t_MetadataManager);
         new QueryJCommandWrapper<CustomSqlProvider>(t_Parameters).setSetting(
             CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, t_CustomSqlProvider);
-        new QueryJCommandWrapper<Sql>(t_Parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, t_Sql);
+        new QueryJCommandWrapper<Sql<String>>(t_Parameters).setSetting(RetrieveQueryHandler.CURRENT_SQL, t_Sql);
 
         EasyMock.replay(t_CustomSqlProvider);
         EasyMock.replay(t_MetadataManager);

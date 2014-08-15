@@ -71,7 +71,6 @@ import org.checkthread.annotations.ThreadSafe;
 /*
  * Importing JDK classes.
  */
-import java.util.Collection;
 import java.util.List;
 
 /**

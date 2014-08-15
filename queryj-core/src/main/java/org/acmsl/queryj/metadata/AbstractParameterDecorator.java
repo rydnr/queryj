@@ -60,6 +60,11 @@ public abstract class AbstractParameterDecorator<V>
     implements  ParameterDecorator<V>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -5249556677408053026L;
+
+    /**
      * The decorated parameter.
      */
     private Parameter<String, V> m__Parameter;

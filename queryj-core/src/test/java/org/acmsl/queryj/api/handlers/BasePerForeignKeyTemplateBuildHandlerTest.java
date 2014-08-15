@@ -36,28 +36,33 @@
 package org.acmsl.queryj.api.handlers;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.PerForeignKeyTemplate;
 import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.api.PerForeignKeyTemplateFactory;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
-import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing checkthread.org annotations.
+ * Importing JetBrains annotations.
  */
-import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing JUnit classes.
+ */
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+/*
+ * Importing JDK classes.
+ */
 import java.util.ArrayList;
 import java.util.List;
 

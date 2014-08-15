@@ -87,6 +87,11 @@ public abstract class AbstractResultDecorator<V>
                 ResultDecorator<DecoratedString>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 5436116921553920618L;
+
+    /**
      * The result element.
      */
     private Result<V> m__Result;
@@ -844,24 +849,6 @@ public abstract class AbstractResultDecorator<V>
     }
 
     /**
-     * Provides a text representation of the information
-     * contained in given instance.
-     * @return such information.
-     */
-    @Override
-    @NotNull
-    public String toString()
-    {
-        return
-              "{ \"class\": \"AbstractResultDecorator\""
-            + ", \"result\": " + m__Result
-            + ", \"customSqlProvider\": " + m__CustomSqlProvider.hashCode()
-            + ", \"metadataManager\": " + m__MetadataManager.hashCode()
-            + ", \"decoratorFactory\": " + m__DecoratorFactory.hashCode()
-            + " }";
-    }
-
-    /**
      * Retrieves the hashCode.
      * @return such value.
      */
@@ -909,4 +896,24 @@ public abstract class AbstractResultDecorator<V>
     {
         return result.equals(object);
     }
+
+    /**
+     * Provides a text representation of the information
+     * contained in given instance.
+     * @return such information.
+     */
+    @Override
+    @NotNull
+    public String toString()
+    {
+        return
+              "{ \"result\": " + m__Result
+            + ", \"customSqlProvider\": " + m__CustomSqlProvider.hashCode()
+            + ", \"metadataManager\": " + m__MetadataManager.hashCode()
+            + ", \"decoratorFactory\": " + m__DecoratorFactory.hashCode()
+            + ", \"class\": \"AbstractResultDecorator\""
+            + ", \"package\": \"org.acmsl.queryj.metadata\""
+            + " }";
+    }
+
 }

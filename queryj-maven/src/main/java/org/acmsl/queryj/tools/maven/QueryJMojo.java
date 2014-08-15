@@ -133,7 +133,6 @@ public class QueryJMojo
 
     /**
      * The url.
-     * @parameter property="url" @required
      */
     @Parameter (property = "url", required = true)
     private String m__strUrl;
@@ -218,7 +217,6 @@ public class QueryJMojo
 
     /**
      * The list of tables.
-     * @parameter
      */
     @Parameter (required = false)
     private Table[] m__aTables = new Table[0];

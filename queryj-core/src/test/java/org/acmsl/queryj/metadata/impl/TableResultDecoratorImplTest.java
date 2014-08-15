@@ -99,6 +99,11 @@ public class TableResultDecoratorImplTest
         extends AbstractTableDecorator
     {
         /**
+         * The serial version id.
+         */
+        private static final long serialVersionUID = 6624129343682091078L;
+
+        /**
          * Creates a new instance.
          * @param table the table.
          * @param metadataManager the {@link MetadataManager} instance.

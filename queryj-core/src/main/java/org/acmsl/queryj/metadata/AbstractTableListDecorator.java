@@ -80,6 +80,11 @@ public abstract class AbstractTableListDecorator<V>
                TableListDecorator
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 3046601047491232620L;
+
+    /**
      * The table decorator.
      */
     private TableDecorator m__Table;

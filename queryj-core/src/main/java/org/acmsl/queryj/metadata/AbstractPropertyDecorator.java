@@ -56,6 +56,11 @@ public abstract class AbstractPropertyDecorator
                 Comparable<Property<DecoratedString>>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -7923608984348177416L;
+
+    /**
      * The property element.
      */
     private Property<String> m__Property;

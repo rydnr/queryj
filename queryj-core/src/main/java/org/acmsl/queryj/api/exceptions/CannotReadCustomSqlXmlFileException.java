@@ -37,9 +37,8 @@
 package org.acmsl.queryj.api.exceptions;
 
 /*
- * Importing JetBrains annotations.
+ * Importing NotNull annotations.
  */
-import org.acmsl.commons.utils.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,8 +46,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing JDK classes.
  */
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 
 /*
  * Importing checkthread.org annotations.
@@ -64,7 +61,11 @@ import org.checkthread.annotations.ThreadSafe;
 public class CannotReadCustomSqlXmlFileException
     extends QueryJBuildException
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -8064000429461780536L;
+
     protected static final String CANNOT_READ_CUSTOM_SQL_XML_FILE = "cannot.read.custom-sql.xml.file";
 
     /**

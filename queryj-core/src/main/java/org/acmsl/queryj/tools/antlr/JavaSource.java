@@ -37,15 +37,15 @@
 package org.acmsl.queryj.tools.antlr;
 
 /**
- * Importing JDK classes.
+ * Importing NotNull annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Constructor;
+/**
+ * Importing JDK classes.
+ */
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.List;
 
 /**
  * Represents parsed Java sources. Defines a subset of {@link Class}, but it cannot be used
@@ -80,9 +80,9 @@ public interface JavaSource
      * Returns the Java language modifiers for this class or interface, encoded in an integer.
      * The modifiers consist of the Java Virtual Machine's constants for
      * public, protected, private, final, static, abstract and interface; they should be decoded using the methods of
-     * class {@link Modifier} .
+     * class {@link java.lang.reflect.Modifier} .
      * Retrieves the modifiers.
-     * @return a value to be interpreted using {@link Modifier}'s static methods.
+     * @return a value to be interpreted using {@link java.lang.reflect.Modifier}'s static methods.
      */
     @SuppressWarnings("unused")
     public int getModifiers();

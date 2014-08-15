@@ -35,7 +35,7 @@
  * Description: Traces method calls.
  *
  */
-package aspects.org.acmsl.queryj;
+package org.acmsl.queryj;
 
 /*
  * Importing Apache Commons Logging classes.
@@ -90,7 +90,7 @@ public aspect Tracer
            execution(* *.*(..))
         && this(obj)
         && !within(Tracer)
-        && !within(Log)
+        && !within(org.apache.commons.logging.Log)
         && !within(java.io.PrintStream)
         && !execution(String *.toString())
         && !execution(String *.getPrefix())
@@ -110,7 +110,7 @@ public aspect Tracer
     /**
      * Before reaching tracing pointcut.
      */
-    before(Object obj) : tracePoint(obj)
+    before(Object object) : tracePoint(object)
     {
         if (isEnabled())
         {
@@ -125,7 +125,7 @@ public aspect Tracer
 
             //System.out.println(
             LogFactory.getLog("tracer-in").debug(
-                indent(t_Depth.intValue()) + " >> "  + thisJoinPointStaticPart.getSignature());
+                indent(t_Depth) + " >> "  + thisJoinPointStaticPart.getSignature());
 
             t_mStackDepths.put(Thread.currentThread(), t_Depth + 1);
         }
@@ -134,7 +134,7 @@ public aspect Tracer
     /**
      * After reaching tracing pointcut.
      */
-    after(Object obj) : tracePoint(obj)
+    after(Object object) : tracePoint(object)
     {
         if (isEnabled())
         {
@@ -169,7 +169,7 @@ public aspect Tracer
      * @param num the amount to indent.
      * @return such indentation.
      */
-    protected static String indent(int num)
+    protected static String indent(final int num)
     {
         final StringBuilder result = new StringBuilder();
 

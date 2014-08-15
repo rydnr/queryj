@@ -80,8 +80,6 @@
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.oracle</groupId>
@@ -132,7 +130,7 @@
           <execution>
             <phase>generate-sources</phase>
             <goals>
-              <goal>package-templates</goal>
+              <goal>queryj-package-templates</goal>
             </goals>
           </execution>
         </executions>

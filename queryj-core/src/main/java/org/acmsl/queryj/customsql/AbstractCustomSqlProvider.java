@@ -85,6 +85,11 @@ public abstract class AbstractCustomSqlProvider
     implements CustomSqlProvider
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -4395843851323478336L;
+
+    /**
      * The default separator when computing hashes.
      */
     protected static final String DEFAULT_SEPARATOR = "|";
@@ -247,7 +252,7 @@ public abstract class AbstractCustomSqlProvider
         {
             if (t_ParameterRef != null)
             {
-                @Nullable final Parameter t_Parameter = parameterDAO.findByPrimaryKey(t_ParameterRef.getId());
+                @Nullable final Parameter<String, ?> t_Parameter = parameterDAO.findByPrimaryKey(t_ParameterRef.getId());
 
                 if (t_Parameter != null)
                 {
@@ -257,7 +262,7 @@ public abstract class AbstractCustomSqlProvider
             }
         }
 
-        @Nullable final Result t_Result = resultDAO.findBySqlId(id.toString());
+        @Nullable final Result<String> t_Result = resultDAO.findBySqlId(id.toString());
 
         if (t_Result != null)
         {

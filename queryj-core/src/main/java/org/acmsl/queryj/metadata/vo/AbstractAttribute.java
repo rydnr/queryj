@@ -64,6 +64,11 @@ public abstract class AbstractAttribute<T>
     implements Attribute<T>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -1945452522868946003L;
+
+    /**
      * The name.
      */
     private T m__strName;

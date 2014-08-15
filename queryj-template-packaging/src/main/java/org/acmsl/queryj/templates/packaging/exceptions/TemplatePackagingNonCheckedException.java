@@ -58,6 +58,11 @@ public abstract class TemplatePackagingNonCheckedException
     extends QueryJNonCheckedException
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -3197807444017761355L;
+
+    /**
      * Creates a {@code TemplatePackagingNonCheckedException} with given message.
      * @param messageKey the key to build the exception message.
      */

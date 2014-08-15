@@ -76,6 +76,11 @@ public class ConfigurationQueryJCommandImpl
                Serializable
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -3568357454519731023L;
+
+    /**
      * The attribute collection.
      */
     private Configuration m__Configuration;
@@ -407,13 +412,14 @@ public class ConfigurationQueryJCommandImpl
     public String toString()
     {
         return
-            "{ \"class\": \"" + ConfigurationQueryJCommandImpl.class.getSimpleName()
-            + ", \"package\": \"org.acmsl.queryj\""
-            + ", \"log\": \"" + m__Log + '"'
-            + ", \"configuration\": "
-            + "{ \"class\": \"" + m__Configuration.getClass().getSimpleName()
+              "{ \"configuration\": "
+            +   "{ \"class\": \"" + m__Configuration.getClass().getSimpleName()
             +    ", \"package\": \"" + m__Configuration.getClass().getPackage().getName() + '"'
 //            +    confToString(m__Configuration)
-            + "} }";
+            + '}'
+            + ", \"log\": \"" + m__Log + '"'
+            + ", \"class\": \"ConfigurationQueryJCommandImpl\""
+            + ", \"package\": \"org.acmsl.queryj\""
+            + "}";
     }
 }

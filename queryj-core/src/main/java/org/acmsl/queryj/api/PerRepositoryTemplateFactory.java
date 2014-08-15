@@ -42,7 +42,6 @@ import org.acmsl.commons.patterns.Factory;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.metadata.DecoratorFactory;
 
 /*
  * Importing some JetBrains annotations.

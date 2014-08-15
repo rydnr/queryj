@@ -35,43 +35,21 @@ package org.acmsl.queryj.api.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.api.MetaLanguageUtils;
-import org.acmsl.queryj.customsql.*;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.MetadataTypeManager;
+import org.acmsl.queryj.customsql.CustomResultUtils;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.MetadataUtils;
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.metadata.vo.AttributeValueObject;
-import org.acmsl.queryj.metadata.vo.Row;
-import org.acmsl.queryj.metadata.vo.RowValueObject;
-import org.acmsl.queryj.metadata.vo.Table;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-
-/*
- * Importing some Apache Commons Logging classes.
- */
-import org.apache.commons.logging.Log;
 
 /*
  * Importing some JetBrains annotations.

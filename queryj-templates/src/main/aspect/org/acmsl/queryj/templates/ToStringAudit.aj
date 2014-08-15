@@ -60,7 +60,7 @@ public aspect ToStringAudit
      * @param instance the instance.
      */
     pointcut toStringCall(final Object instance):
-           execution(public String *.toString())
+           call(public String *.toString())
         && target(instance);
 
     /**

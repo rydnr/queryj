@@ -70,6 +70,11 @@ public class StaticValuesHandler
     extends AbstractTemplateContextFillHandler<PerTableTemplateContext, List<Row<String>>>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -5652211427340902004L;
+
+    /**
      * Creates a new instance wrapping given context.
      * @param context the context.
      */

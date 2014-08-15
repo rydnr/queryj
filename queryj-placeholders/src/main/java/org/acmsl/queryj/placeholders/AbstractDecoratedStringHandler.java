@@ -64,6 +64,11 @@ public abstract class AbstractDecoratedStringHandler<C extends TemplateContext>
     extends AbstractTemplateContextFillHandler<C, DecoratedString>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -2303275887774081493L;
+
+    /**
      * Creates {@link AbstractDecoratedStringHandler} to enhance String
      * placeholders with 'decorated' versions.
      * @param context the {@link org.acmsl.queryj.api.QueryJTemplateContext context}.

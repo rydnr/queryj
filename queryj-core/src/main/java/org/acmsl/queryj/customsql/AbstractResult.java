@@ -56,6 +56,11 @@ public abstract class AbstractResult<T>
     implements  Result<T>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = -9151430656489323601L;
+
+    /**
      * The <i>property-ref</i> elements.
      */
     private List<PropertyRef> m__lPropertyRefs;
@@ -201,33 +206,6 @@ public abstract class AbstractResult<T>
     }
 
     /**
-     * Provides a text information about this instance.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String toString()
-    {
-        return toString(getId(), getPropertyRefs());
-    }
-
-    /**
-     * Provides a text information about this instance.
-     * @param id the <i>id</i> attribute.
-     * @param propertyRefs the <i>property-ref</i> elements.
-     * @return such information.
-     */
-    @NotNull
-    protected String toString(
-        @NotNull final T id, @NotNull final Collection<PropertyRef> propertyRefs)
-    {
-        return
-              getClass().getName()
-            + "[" + "id=" + id + "]"
-            + "[" + "property-refs=" + propertyRefs + "]";
-    }
-
-    /**
      * Compares given object with this instance.
      * @param object the object to compare to.
      * @return the result of such comparison.
@@ -249,5 +227,19 @@ public abstract class AbstractResult<T>
         }
 
         return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+            "{ \"property-refs\": \"" + this.m__lPropertyRefs + '"'
+            + ", \"super\": " + super.toString()
+            + ", \"class\": \"AbstractResult\""
+            + ", \"package\": \"org.acmsl.queryj.customsql\" }";
     }
 }

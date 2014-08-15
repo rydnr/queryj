@@ -56,6 +56,11 @@ public abstract class AbstractBasePerTableTemplate<C extends PerTableTemplateCon
     implements PerTableTemplate<C>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 1975130893936162955L;
+
+    /**
      * Builds an {@code AbstractBasePerTableTemplate} using given
      * information.
      * @param context the {@link PerTableTemplateContext} instance.

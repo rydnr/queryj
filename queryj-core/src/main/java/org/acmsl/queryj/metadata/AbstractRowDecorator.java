@@ -62,6 +62,11 @@ public abstract class AbstractRowDecorator
     extends AbstractRow<DecoratedString>
 {
     /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 2567236507603193966L;
+
+    /**
      * The decorated row.
      */
     private Row<String> m__Row;
@@ -289,10 +294,11 @@ public abstract class AbstractRowDecorator
     public String toString()
     {
         return
-              "{ \"class\": \"" + AbstractRowDecorator.class.getName() + '"'
+              "{ \"row\": \"" + m__Row + '"'
             + ", \"decoratorFactory\": " + m__DecoratorFactory.hashCode()
-            + ", \"row\": " + m__Row
             + ", \"metadataManager\": " + m__MetadataManager.hashCode()
-            + ", \"metadataTypeManager\": " + m__MetadataTypeManager.hashCode() + " }";
+            + ", \"metadataTypeManager\": " + m__MetadataTypeManager.hashCode()
+            + ", \"class\": \"AbstractRowDecorator\""
+            + ", \"package\": \"org.acmsl.queryj.metadata\" }";
     }
 }

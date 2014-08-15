@@ -225,7 +225,7 @@ public class CustomSqlValidationHandlerTest
 
         t_Sql.add(new ParameterRefElement("today"));
 
-        @NotNull final Parameter t_Parameter =
+        @NotNull final Parameter<String, Date> t_Parameter =
             new ParameterElement<>("today", 0, "today", "Date", new Date());
 
         testBody(t_Sql, t_Parameter);
@@ -244,7 +244,7 @@ public class CustomSqlValidationHandlerTest
 
         t_Sql.add(new ParameterRefElement("text"));
 
-        @NotNull final Parameter t_Parameter =
+        @NotNull final Parameter<String, String> t_Parameter =
             new ParameterElement<>("text", 0, "text", "String", "blah");
 
         testBody(t_Sql, t_Parameter);
@@ -263,7 +263,7 @@ public class CustomSqlValidationHandlerTest
 
         t_Sql.add(new ParameterRefElement("userId"));
 
-        @NotNull final Parameter t_Parameter =
+        @NotNull final Parameter<String, String> t_Parameter =
             new ParameterElement<>("userId", 0, "userId", "int", "1");
 
         testBody(t_Sql, t_Parameter);
@@ -282,7 +282,7 @@ public class CustomSqlValidationHandlerTest
 
         t_Sql.add(new ParameterRefElement("userId"));
 
-        @NotNull final Parameter t_Parameter =
+        @NotNull final Parameter<String, String> t_Parameter =
             new ParameterElement<>("userId", 0, "userId", "Long", "1");
 
         testBody(t_Sql, t_Parameter);
@@ -301,7 +301,7 @@ public class CustomSqlValidationHandlerTest
 
         t_Sql.add(new ParameterRefElement("userId"));
 
-        @NotNull final Parameter t_Parameter =
+        @NotNull final Parameter<String, String> t_Parameter =
             new ParameterElement<>("userId", 0, "userId", "double", "1");
 
         testBody(t_Sql, t_Parameter);

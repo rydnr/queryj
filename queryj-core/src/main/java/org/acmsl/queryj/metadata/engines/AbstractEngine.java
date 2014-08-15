@@ -50,11 +50,17 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/01/24 07:12
+ * @param <T> the type.
  */
 @ThreadSafe
 public abstract class AbstractEngine<T>
     implements Engine<T>
 {
+    /**
+     * The serial version id.
+     */
+    private static final long serialVersionUID = 3064466422979555849L;
+
     /**
      * The name.
      */
@@ -207,5 +213,21 @@ public abstract class AbstractEngine<T>
     public boolean supportsSequences()
     {
         return this.m__bSupportsSequences;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"name\": \"" + m__strName + '"'
+            + ", \"version\": \"" + m__strVersion + '"'
+            + ", \"customLobHandling\": \"" + m__bCustomLobHandling + '"'
+            + ", \"supportsSequences\": \"" + m__bSupportsSequences + '"'
+            + ", \"class\": \"AbstractEngine\""
+            + ", \"package\": \"org.acmsl.queryj.metadata.engines\" }";
     }
 }
