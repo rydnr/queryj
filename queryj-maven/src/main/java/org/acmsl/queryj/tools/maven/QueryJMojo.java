@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools.maven;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJSettings;
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
@@ -95,9 +96,10 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @SuppressWarnings("unused")
 @ThreadSafe
-@Mojo( name = "queryj", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true, executionStrategy = "once-per-session")
+@Mojo( name = Literals.QUERYJ_L, defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true, executionStrategy = "once-per-session")
 public class QueryJMojo
     extends AbstractMojo
+    implements QueryJSettings
 {
     /**
      * The location of pom.properties within the jar file.
@@ -106,14 +108,9 @@ public class QueryJMojo
         "META-INF/maven/org.acmsl.queryj/queryj-maven/pom.properties";
 
     /**
-     * The key for the QueryJ package.
-     */
-    protected static final String QUERYJ_PACKAGE = "queryj.package";
-
-    /**
      * String literal: "(unknown)"
      */
-    public static final String UNKNOWN_LITERAL = "(unknown)";
+    public static final String UNKNOWN_LITERAL = Literals.UNKNOWN_REMARK;
 
     /**
      * String literal: "version"
@@ -128,91 +125,91 @@ public class QueryJMojo
     /**
      * The driver.
      */
-    @Parameter (property = "driver", required = true)
+    @Parameter (name = Literals.DRIVER, property = JDBC_DRIVER, required = true)
     private String m__strDriver;
 
     /**
      * The url.
      */
-    @Parameter (property = "url", required = true)
+    @Parameter (name = Literals.URL, property = JDBC_URL, required = true)
     private String m__strUrl;
 
     /**
      * The user name.
      */
-    @Parameter (property = "username", required = true)
+    @Parameter (name = Literals.USERNAME, property = JDBC_USERNAME, required = true)
     private String m__strUsername;
 
     /**
      * The password.
      */
-    @Parameter (property = "password", required = true)
+    @Parameter (name = Literals.PASSWORD, property = JDBC_PASSWORD, required = true)
     private String m__strPassword;
 
     /**
      * The catalog.
      */
-    @Parameter (property = "catalog", required = false)
+    @Parameter (name = Literals.CATALOG, property = JDBC_CATALOG, required = false, defaultValue = "")
     private String catalog;
 
     /**
      * The schema.
      */
-    @Parameter (property = "schema", required = true)
+    @Parameter (name = Literals.SCHEMA, property = JDBC_SCHEMA, required = false, defaultValue = "")
     private String schema;
 
     /**
      * The repository.
      */
-    @Parameter (property = "repository", required = true)
+    @Parameter (name = Literals.REPOSITORY, property = REPOSITORY, required = true)
     private String m__strRepository;
 
     /**
      * The package name.
      */
-    @Parameter (property = "packageName", required = true)
+    @Parameter (name = Literals.PACKAGE_NAME, property = PACKAGE_NAME, required = true)
     private String m__strPackageName;
 
     /**
      * The output directory.
      */
-    @Parameter (property = "outputDir", required = false)
+    @Parameter (name = Literals.OUTPUT_DIR, property = OUTPUT_DIR, required = false, defaultValue = "${project.build.dir}")
     private File m__OutputDir;
 
     /**
      * The data source.
      */
-    @Parameter (property = "jndiDataSource", required = false)
+    @Parameter (name = Literals.JNDI_DATASOURCE, property = JNDI_DATASOURCE, required = false, defaultValue = "java:comp/env/jdbc/default")
     private String m__strJndiDataSource;
 
     /**
      * The sql xml file.
      */
-    @Parameter (property = "sqlXmlFile", required = false)
+    @Parameter (name = Literals.SQL_XML_FILE, property = SQL_XML_FILE, required = false, defaultValue = "sql.xml")
     private File m__SqlXmlFile;
 
     /**
      * The header file.
      */
-    @Parameter (property = "headerFile", required = false)
+    @Parameter (name = Literals.HEADER_FILE, property = HEADER_FILE, required = false, defaultValue = "header.txt")
     private File m__HeaderFile;
 
     /**
      * The grammar folder.
      */
-    @Parameter (property = "grammarFolder", required = false)
+    @Parameter (name = Literals.GRAMMAR_FOLDER, property = GRAMMAR_FOLDER, required = false, defaultValue = "")
     private File m__GrammarFolder;
 
     /**
      * The grammar bundle.
      */
-    @Parameter (property = "grammarName", required = false)
+    @Parameter (name = Literals.GRAMMAR_NAME, property = GRAMMAR_NAME, required = false, defaultValue = "")
     private String m__strGrammarName;
 
     /**
      * The grammar suffix.
      */
-    @Parameter (property = "grammarSuffix", required = false)
+    @Parameter (name = Literals.GRAMMAR_SUFFIX, property = GRAMMAR_SUFFIX, required = false, defaultValue = "")
     private String m__strGrammarSuffix;
 
     /**
@@ -225,25 +222,25 @@ public class QueryJMojo
     /**
      * The file encoding.
      */
-    @Parameter (property = "encoding", required = false, defaultValue = "${project.build.sourceEncoding}")
+    @Parameter (name = Literals.ENCODING, property = ENCODING, required = false, defaultValue = "${project.build.sourceEncoding}")
     private String m__strEncoding;
 
     /**
      * Whether to generate file timestamps.
      */
-    @Parameter (property = "disableGenerationTimestamps", required = false)
+    @Parameter (name = Literals.DISABLE_TIMESTAMPS, property = DISABLE_TIMESTAMPS, required = false, defaultValue = "false")
     private Boolean m__bDisableGenerationTimestamps;
 
     /**
      * Whether to disable NotNull annotations.
      */
-    @Parameter (property = "disableNotNullAnnotations", required = false)
+    @Parameter (name = Literals.DISABLE_NOTNULL_ANNOTATIONS, property = DISABLE_NOTNULL_ANNOTATIONS, required = false, defaultValue = "false")
     private Boolean m__bDisableNotNullAnnotations = false;
 
     /**
      * Whether to disable checkthread.org annotations.
      */
-    @Parameter (property = "disableCheckthreadAnnotations", required = false)
+    @Parameter (name = Literals.DISABLE_CHECKTHREAD_ANNOTATIONS, property = DISABLE_CHECKTHREAD_ANNOTATIONS, required = false, defaultValue = "false")
     private Boolean m__bDisableCheckthreadAnnotations = false;
 
     /**
@@ -288,7 +285,7 @@ public class QueryJMojo
     @Nullable
     protected String getDriver()
     {
-        String result = System.getProperty("queryj.driver");
+        String result = System.getProperty(JDBC_DRIVER);
 
         if (result == null)
         {
@@ -333,7 +330,7 @@ public class QueryJMojo
     @Nullable
     protected String getUrl()
     {
-        String result = System.getProperty("queryj.url");
+        String result = System.getProperty(JDBC_URL);
 
         if (result == null)
         {
@@ -378,7 +375,7 @@ public class QueryJMojo
     @Nullable
     protected String getUsername()
     {
-        String result = System.getProperty("queryj.username");
+        String result = System.getProperty(JDBC_USERNAME);
 
         if (result == null)
         {
@@ -423,7 +420,7 @@ public class QueryJMojo
     @Nullable
     protected String getPassword()
     {
-        String result = System.getProperty("queryj.password");
+        String result = System.getProperty(JDBC_PASSWORD);
 
         if (result == null)
         {
@@ -468,7 +465,7 @@ public class QueryJMojo
     @Nullable
     protected String getCatalog()
     {
-        String result = System.getProperty("queryj.catalog");
+        String result = System.getProperty(JDBC_CATALOG);
 
         if (result == null)
         {
@@ -513,7 +510,7 @@ public class QueryJMojo
     @NotNull
     protected String getSchema()
     {
-        String result = System.getProperty("queryj.schema");
+        String result = System.getProperty(JDBC_SCHEMA);
 
         if (result == null)
         {
@@ -563,7 +560,7 @@ public class QueryJMojo
     @NotNull
     protected String getRepository()
     {
-        String result = System.getProperty("queryj.repository");
+        String result = System.getProperty(REPOSITORY);
 
         if (result == null)
         {
@@ -613,7 +610,7 @@ public class QueryJMojo
     @Nullable
     protected String getPackageName()
     {
-        String result = System.getProperty(QUERYJ_PACKAGE);
+        String result = System.getProperty(PACKAGE_NAME);
 
         if (result == null)
         {
@@ -660,7 +657,7 @@ public class QueryJMojo
     {
         final File result;
 
-        final String aux = System.getProperty(QUERYJ_PACKAGE);
+        final String aux = System.getProperty(PACKAGE_NAME);
 
         if (aux == null)
         {
@@ -709,7 +706,7 @@ public class QueryJMojo
     @Nullable
     protected String getJndiDataSource()
     {
-        String result = System.getProperty("queryj.jndi");
+        String result = System.getProperty(JNDI_DATASOURCE);
 
         if (result == null)
         {
@@ -756,7 +753,7 @@ public class QueryJMojo
     {
         final File result;
 
-        @Nullable final String aux = System.getProperty("queryj.sqlXmlFile");
+        @Nullable final String aux = System.getProperty(SQL_XML_FILE);
 
         if (aux == null)
         {
@@ -807,7 +804,7 @@ public class QueryJMojo
     {
         final File result;
 
-        final String aux = System.getProperty("queryj.headerFile");
+        final String aux = System.getProperty(HEADER_FILE);
 
         if (aux == null)
         {
@@ -859,7 +856,7 @@ public class QueryJMojo
     {
         final File result;
 
-        @Nullable final String aux = System.getProperty("queryj.grammarFolder");
+        @Nullable final String aux = System.getProperty(GRAMMAR_FOLDER);
 
         if (aux == null)
         {
@@ -909,7 +906,7 @@ public class QueryJMojo
     @Nullable
     protected String getGrammarName()
     {
-        String result = System.getProperty("queryj.grammarName");
+        String result = System.getProperty(GRAMMAR_NAME);
 
         if (result == null)
         {
@@ -955,7 +952,7 @@ public class QueryJMojo
     @Nullable
     protected String getGrammarSuffix()
     {
-        String result = System.getProperty("queryj.grammarSuffix");
+        String result = System.getProperty(GRAMMAR_SUFFIX);
 
         if (result == null)
         {
@@ -1038,7 +1035,7 @@ public class QueryJMojo
     @Nullable
     public String getEncoding()
     {
-        String result = System.getProperty("queryj.enconding");
+        String result = System.getProperty(ENCODING);
 
         if (result == null)
         {
@@ -1052,7 +1049,7 @@ public class QueryJMojo
      * Specifies whether to use generation timestamps.
      * @param flag the choice.
      */
-    protected final void immutableSetDisableGenerationTimestamps(@NotNull final Boolean flag)
+    protected final void immutableSetDisableTimestamps(@NotNull final Boolean flag)
     {
         m__bDisableGenerationTimestamps = flag;
     }
@@ -1061,9 +1058,9 @@ public class QueryJMojo
      * Specifies whether to use generation timestamps.
      * @param flag the choice.
      */
-    public void setDisableGenerationTimestamps(@NotNull final Boolean flag)
+    public void setDisableTimestamps(@NotNull final Boolean flag)
     {
-        immutableSetDisableGenerationTimestamps(flag);
+        immutableSetDisableTimestamps(flag);
     }
 
     /**
@@ -1071,7 +1068,7 @@ public class QueryJMojo
      * @return such setting.
      */
     @Nullable
-    protected final Boolean immutableGetDisableGenerationTimestamps()
+    protected final Boolean immutableGetDisableTimestamps()
     {
         return m__bDisableGenerationTimestamps;
     }
@@ -1081,15 +1078,15 @@ public class QueryJMojo
      * @return such setting.
      */
     @NotNull
-    public Boolean getDisableGenerationTimestamps()
+    public Boolean getDisableTimestamps()
     {
         Boolean result = null;
 
-        @Nullable final String aux = System.getProperty("queryj.disableTimestamps");
+        @Nullable final String aux = System.getProperty(DISABLE_TIMESTAMPS);
 
         if (aux == null)
         {
-            result = immutableGetDisableGenerationTimestamps();
+            result = immutableGetDisableTimestamps();
         }
 
         if (result == null)
@@ -1137,7 +1134,7 @@ public class QueryJMojo
     {
         Boolean result = null;
 
-        @Nullable final String aux = System.getProperty("queryj.disableNotNullAnnotations");
+        @Nullable final String aux = System.getProperty(DISABLE_NOTNULL_ANNOTATIONS);
 
         if (aux == null)
         {
@@ -1189,7 +1186,7 @@ public class QueryJMojo
     {
         Boolean result = null;
 
-        @Nullable final String aux = System.getProperty("queryj.disableCheckthreadAnnotations");
+        @Nullable final String aux = System.getProperty(DISABLE_CHECKTHREAD_ANNOTATIONS);
 
         if (aux == null)
         {
@@ -1421,7 +1418,7 @@ public class QueryJMojo
         t_Log.info("Using " + threadCount + " threads");
         result.setThreadCount(threadCount);
 
-        final boolean disableGenerationTimestamps = getDisableGenerationTimestamps();
+        final boolean disableGenerationTimestamps = getDisableTimestamps();
 
         result.setDisableGenerationTimestamps(disableGenerationTimestamps);
 
@@ -1623,27 +1620,29 @@ public class QueryJMojo
     @Override
     public String toString()
     {
-        return "{ \"class\": \"" + QueryJMojo.class.getName() + '"' +
-               ", \"catalog\": \"" + catalog + '"' +
-               ", \"driver\": \"" + m__strDriver + '"' +
-               ", \"url\": \"" + m__strUrl + '"' +
-               ", \"username\": \"" + m__strUsername + '"' +
-               ", \"password\": \"" + m__strPassword + '"' +
-               ", \"schema\": \"" + schema + '"' +
-               ", \"repository\": \"" + m__strRepository + '"' +
-               Literals.PACKAGE_NAME + m__strPackageName + '"' +
-               Literals.OUTPUT_DIR + m__OutputDir + '"' +
-               ", \"jndiDataSource\": \"" + m__strJndiDataSource + '"' +
-               ", \"sqlXmlFile\": \"" + m__SqlXmlFile + '"' +
-               ", \"headerFile\": \"" + m__HeaderFile + '"' +
-               ", \"grammarFolder\": \"" + m__GrammarFolder + '"' +
-               ", \"grammarName\": \"" + m__strGrammarName + '"' +
-               ", \"grammarSuffix\": \"" + m__strGrammarSuffix + '"' +
-               ", \"tables\": " + Arrays.toString(m__aTables) + '"' +
-               ", \"encoding\": \"" + m__strEncoding + '"' +
-               ", \"disableGenerationTimestamps\": \"" + m__bDisableGenerationTimestamps + '"' +
-               ", \"disableNotNullAnnotations\": \"" + m__bDisableNotNullAnnotations + '"' +
-               ", \"disableCheckthreadAnnotations\": \"" + m__bDisableCheckthreadAnnotations + '"' +
-               ", \"session\": \"" + session + "\" }";
+        return
+              "{ \"catalog\": \"" + catalog + '"'
+            + ", \"driver\": \"" + m__strDriver + '"'
+            + ", \"url\": \"" + m__strUrl + '"'
+            + ", \"username\": \"" + m__strUsername + '"'
+            + ", \"password\": \"" + m__strPassword + '"'
+            + ", \"schema\": \"" + schema + '"'
+            + ", \"repository\": \"" + m__strRepository + '"'
+            + ", \"packageName\": \"" + m__strPackageName + '"'
+            + ", \"outputDir\": \"" + m__OutputDir + '"'
+            + ", \"jndiDataSource\": \"" + m__strJndiDataSource + '"'
+            + ", \"sqlXmlFile\": \"" + m__SqlXmlFile + '"'
+            + ", \"headerFile\": \"" + m__HeaderFile + '"'
+            + ", \"grammarFolder\": \"" + m__GrammarFolder + '"'
+            + ", \"grammarName\": \"" + m__strGrammarName + '"'
+            + ", \"grammarSuffix\": \"" + m__strGrammarSuffix + '"'
+            + ", \"tables\": " + Arrays.toString(m__aTables) + '"'
+            + ", \"encoding\": \"" + m__strEncoding + '"'
+            + ", \"disableGenerationTimestamps\": \"" + m__bDisableGenerationTimestamps + '"'
+            + ", \"disableNotNullAnnotations\": \"" + m__bDisableNotNullAnnotations + '"'
+            + ", \"disableCheckthreadAnnotations\": \"" + m__bDisableCheckthreadAnnotations + '"'
+            + ", \"session\": \"" + session.hashCode() + '"'
+            + ", \"class\": \"QueryJMojo\""
+            + ", \"package\": \"org.acmsl.queryj.tools.maven\" }";
     }
 }

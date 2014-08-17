@@ -49,6 +49,33 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public interface Literals
 {
+    String QUERYJ_L = "queryj";
+    String DRIVER = "driver";
+    String URL = "url";
+    String USERNAME = "username";
+    String PASSWORD = "password";
+    String OUTPUT_DIR = "outputDir";
+    String JNDI_DATASOURCE = "jndiDataSource";
+    String GENERATE_MOCK_IMPLEMENTATION = "generateMockImplementation";
+    String GENERATE_XML_IMPLEMENTATION = "generateXmlImplementation";
+    String GENERATE_TESTS = "generateTests";
+    String ALLOW_EMPTY_REPOSITORY_DAO = "allowEmptyRepositoryDAO";
+    String IMPLEMENT_MARKER_INTERFACES = "implementMarkerInterfaces";
+    String SQL_XML_FILE = "sqlXmlFile";
+    String GRAMMAR_FOLDER = "grammarFolder";
+    String GRAMMAR_NAME = "grammarName";
+    String GRAMMAR_SUFFIX = "grammarSuffix";
+    String HEADER_FILE = "headerFile";
+    String DISABLE_CUSTOM_SQL_VALIDATION = "disableCustomSqlValidation";
+    String ENCODING = "encoding";
+    String DISABLE_CACHING = "disableCaching";
+    String THREAD_COUNT = "threadCount";
+    String DISABLE_TIMESTAMPS = "disableTimestamps";
+    String DISABLE_NOTNULL_ANNOTATIONS = "disableNotNullAnnotations";
+    String DISABLE_CHECKTHREAD_ANNOTATIONS = "disableCheckthreadAnnotations";
+    String JMX = "jmx";
+    String CACHING = "caching";
+    String VERSION = "version";
     String JSON_PARENT_ATTR = " 'parent': ";
     String TEMPLATE = "Template";
     String GENERATING = "Generating ";
@@ -126,4 +153,5 @@ public interface Literals
     String RESULT = "result";
     String FOREIGN_KEY = "foreignKey";
     String NOTHING = "nothing";
+    String UNKNOWN_REMARK = "(unknown)";
 }

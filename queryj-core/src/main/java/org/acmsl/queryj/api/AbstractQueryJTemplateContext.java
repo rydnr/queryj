@@ -241,7 +241,7 @@ public abstract class AbstractQueryJTemplateContext
     @NotNull
     protected String buildBasePackageNameKey()
     {
-        return QueryJSettings.PACKAGE;
+        return QueryJSettings.PACKAGE_NAME;
     }
 
     /**

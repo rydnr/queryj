@@ -71,8 +71,9 @@ import org.checkthread.annotations.ThreadSafe;
 
 /**
  * Generates QueryJ classes using Ant.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  */
+@SuppressWarnings("unused")
 @ThreadSafe
 public class QueryJTask
     extends     Task
@@ -480,13 +481,13 @@ public class QueryJTask
     {
         if (packageName != null)
         {
-            delegee.setSetting(PACKAGE, packageName);
+            delegee.setSetting(PACKAGE_NAME, packageName);
         }
     }
 
     /**
      * Retrieves the package.
-     * @return such information.
+     * @return such information.                                    Q
      */
     @SuppressWarnings("unused")
     @Nullable
@@ -503,7 +504,7 @@ public class QueryJTask
     @Nullable
     protected String getPackage(@NotNull final QueryJCommand delegee)
     {
-        return delegee.getSetting(PACKAGE);
+        return delegee.getSetting(PACKAGE_NAME);
     }
 
     /**
@@ -525,7 +526,7 @@ public class QueryJTask
     {
         if (outputdir != null)
         {
-            new QueryJCommandWrapper<File>(delegee).setSetting(OUTPUT_FOLDER, outputdir);
+            new QueryJCommandWrapper<File>(delegee).setSetting(OUTPUT_DIR, outputdir);
         }
     }
 
@@ -548,7 +549,7 @@ public class QueryJTask
     @Nullable
     protected File getOutputdir(@NotNull final QueryJCommand delegee)
     {
-        return delegee.getFileSetting(OUTPUT_FOLDER);
+        return delegee.getFileSetting(OUTPUT_DIR);
     }
 
     /**
@@ -1292,28 +1293,29 @@ public class QueryJTask
     {
         @Nullable final Object result;
 
-        if  (ParameterValidationHandler.TABLES.equals(name))
+        switch (name)
         {
-            @Nullable final AntTablesElement t_ateResult;
+            case ParameterValidationHandler.TABLES:
+                @Nullable final AntTablesElement t_ateResult;
 
-            t_ateResult = new AntTablesElement();
+                t_ateResult = new AntTablesElement();
 
-            setTables(t_ateResult);
+                setTables(t_ateResult);
 
-            result = t_ateResult;
-        }
-        else if  (EXTERNALLY_MANAGED_FIELDS.equals(name))
-        {
-            @NotNull final AntExternallyManagedFieldsElement t_aemfeResult =
-                new AntExternallyManagedFieldsElement();
+                result = t_ateResult;
+                break;
 
-            setExternallyManagedFields(t_aemfeResult);
+            case EXTERNALLY_MANAGED_FIELDS:
+                @NotNull final AntExternallyManagedFieldsElement t_aemfeResult =
+                    new AntExternallyManagedFieldsElement();
 
-            result = t_aemfeResult;
-        }
-        else
-        {
-            throw new BuildException(name + ELEMENTS_ARE_NOT_SUPPORTED);
+                setExternallyManagedFields(t_aemfeResult);
+
+                result = t_aemfeResult;
+                break;
+
+            default:
+                throw new BuildException(name + ELEMENTS_ARE_NOT_SUPPORTED);
         }
 
         return result;

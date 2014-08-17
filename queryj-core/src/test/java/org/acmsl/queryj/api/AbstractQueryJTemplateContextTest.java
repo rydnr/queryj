@@ -266,7 +266,7 @@ public class AbstractQueryJTemplateContextTest
         new QueryJCommandWrapper<String>(t_Command).setSetting(result.buildPackageNameKey(), packageName);
 
         @NotNull final String basePackageName = "base.package.name";
-        new QueryJCommandWrapper<String>(t_Command).setSetting(QueryJSettings.PACKAGE, basePackageName);
+        new QueryJCommandWrapper<String>(t_Command).setSetting(QueryJSettings.PACKAGE_NAME, basePackageName);
 
         @NotNull final String repositoryName = "repository.name";
         new QueryJCommandWrapper<String>(t_Command).setSetting(QueryJSettings.REPOSITORY, repositoryName);

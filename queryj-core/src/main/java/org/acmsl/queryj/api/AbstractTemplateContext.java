@@ -524,7 +524,7 @@ public abstract class AbstractTemplateContext
     @NotNull
     protected String buildRootDirKey()
     {
-        return QueryJSettings.OUTPUT_FOLDER;
+        return QueryJSettings.OUTPUT_DIR;
     }
 
     /**
@@ -544,7 +544,7 @@ public abstract class AbstractTemplateContext
     @NotNull
     protected String buildOutputDirKey()
     {
-        return buildKey("outputDir");
+        return buildKey(Literals.OUTPUT_DIR);
     }
 
     /**

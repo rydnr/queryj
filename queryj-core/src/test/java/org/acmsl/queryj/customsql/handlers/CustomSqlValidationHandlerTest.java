@@ -183,7 +183,7 @@ public class CustomSqlValidationHandlerTest
         new QueryJCommandWrapper<MetadataManager>(t_Parameters)
             .setSetting(DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, t_MetadataManager);
         new QueryJCommandWrapper<List<Sql<String>>>(t_Parameters).setSetting(RetrieveQueryHandler.SQL_LIST, t_lSql);
-        new QueryJCommandWrapper<File>(t_Parameters).setSetting(QueryJCommand.OUTPUT_FOLDER, tempFolder.getRoot());
+        new QueryJCommandWrapper<File>(t_Parameters).setSetting(QueryJCommand.OUTPUT_DIR, tempFolder.getRoot());
 
         try
         {

@@ -104,7 +104,7 @@ public abstract class TemplatePackagingWritingHandler
     {
         @NotNull final File result;
 
-        @Nullable final File aux = new QueryJCommandWrapper<File>(parameters).getSetting(OUTPUT_DIR);
+        @Nullable final File aux = new QueryJCommandWrapper<File>(parameters).getSetting(TemplatePackagingSettings.OUTPUT_DIR);
 
         if (aux == null)
         {
