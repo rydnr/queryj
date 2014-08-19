@@ -1,0 +1,4 @@
+* 2014/08/19
+** DONE Create queryj-debugging-maven: 1 -> 1
+** TODO Implement QueryJDebuggingMojo boilerplate: 1 ->
+** Implement CommandHandler wrappers to drive the chain flow based on debugging commands: 3 ->

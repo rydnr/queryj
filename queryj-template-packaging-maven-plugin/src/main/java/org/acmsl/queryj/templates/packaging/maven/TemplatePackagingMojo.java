@@ -35,6 +35,7 @@ package org.acmsl.queryj.templates.packaging.maven;
 /*
  * Importing QueryJ Template Packaging classes.
  */
+import org.acmsl.queryj.Literals;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingChain;
 import org.acmsl.queryj.templates.packaging.TemplatePackagingSettings;
 
@@ -47,7 +48,6 @@ import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.SerializablePropertiesConfiguration;
-import org.acmsl.queryj.tools.maven.QueryJMojo;
 
 /*
  * Importing some Maven classes.
@@ -462,7 +462,7 @@ public class TemplatePackagingMojo
         catch (@NotNull final Throwable throwable)
         {  
             log.warn(
-                QueryJMojo.CANNOT_READ_MY_OWN_POM + POM_PROPERTIES_LOCATION,
+                Literals.CANNOT_READ_MY_OWN_POM + POM_PROPERTIES_LOCATION,
                 throwable);
         }
 
@@ -476,12 +476,12 @@ public class TemplatePackagingMojo
      */
     protected String retrieveVersion(@Nullable final Properties properties)
     {
-        String result = QueryJMojo.UNKNOWN_LITERAL;
+        String result = Literals.UNKNOWN_REMARK;
 
         if (   (properties != null)
-            && (properties.containsKey(QueryJMojo.VERSION_LITERAL)))
+            && (properties.containsKey(QueryJSettings.VERSION)))
         {
-            result = properties.getProperty(QueryJMojo.VERSION_LITERAL);
+            result = properties.getProperty(QueryJSettings.VERSION);
         }
 
         return result;

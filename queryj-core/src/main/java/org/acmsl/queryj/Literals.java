@@ -154,4 +154,9 @@ public interface Literals
     String FOREIGN_KEY = "foreignKey";
     String NOTHING = "nothing";
     String UNKNOWN_REMARK = "(unknown)";
+    /**
+     * String literal: "Strange... Cannot read my own "
+     */
+    String CANNOT_READ_MY_OWN_POM = "Strange... Cannot read my own ";
+
 }

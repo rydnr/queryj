@@ -11,11 +11,12 @@ queryj-templates/*.properties
 original-templates
 pomodoros/#*
 queryj-core/target
-queryj-maven/target
+queryj-maven-plugin/target
 queryj-placeholders/target
 queryj-template-packaging-maven-plugin/target
 queryj-template-packaging/target
 queryj-templates/src/test/resources/**/*.feature_
 queryj-templates/target
-queryj-test/target
 queryj-debugging/target
+queryj-debugging-maven-plugin/target
+queryj-test/target

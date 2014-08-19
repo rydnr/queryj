@@ -220,7 +220,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
 
     /**
-     * Builds a {@link AbstractTemplate} with given context.
+     * Builds a {@code AbstractTemplate} with given context.
      * @param context the context.
      */
     protected AbstractTemplate(@NotNull final C context)
@@ -229,7 +229,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
 
     /**
-     * Builds a {@link AbstractTemplate} with given context.
+     * Builds a {@code AbstractTemplate} with given context.
      * @param context the context.
      * @param placeholderPackage the package of the placeholder classes.
      */
@@ -239,7 +239,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
 
     /**
-     * Builds a {@link AbstractTemplate} with given context.
+     * Builds a {@code AbstractTemplate} with given context.
      * @param context the context.
      * @param placeholderPackage the package of the placeholder classes.
      * @param debugEnabled whether to enable debugging or not.
@@ -798,9 +798,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     t_ExceptionToWrap = invalidTemplate;
                 }
 
-                if (t_ExceptionToWrap == null)
-                {
-                }
                 if (t_ExceptionToWrap != null)
                 {
                     throw buildInvalidTemplateException(context, result, t_ExceptionToWrap);

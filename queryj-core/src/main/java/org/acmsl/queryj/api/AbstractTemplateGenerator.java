@@ -415,18 +415,10 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         @Nullable final TemplateDebuggingService<C> debuggingService)
         throws DevelopmentModeException
     {
-        final boolean result;
-
-        if (   (debuggingService != null)
-            && (context.isDebugEnabled())
-            && (isInDevMode(context.getFileName())))
-        {
-            result = true;
-        }
-        else
-        {
-            result = false;
-        }
+        final boolean result =
+            (   (debuggingService != null)
+             && (context.isDebugEnabled())
+             && (isInDevMode(context.getFileName())));
 
         if (result)
         {

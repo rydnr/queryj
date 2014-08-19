@@ -118,11 +118,6 @@ public class QueryJMojo
     public static final String VERSION_LITERAL = QueryJSettings.VERSION;
 
     /**
-     * String literal: "Strange... Cannot read my own "
-     */
-    public static final String CANNOT_READ_MY_OWN_POM = "Strange... Cannot read my own ";
-
-    /**
      * The driver.
      */
     @Parameter (name = Literals.DRIVER, property = JDBC_DRIVER, required = true)
@@ -1312,7 +1307,7 @@ public class QueryJMojo
         catch (@NotNull final IOException ioException)
         {
             log.warn(
-                CANNOT_READ_MY_OWN_POM + POM_PROPERTIES_LOCATION,
+                Literals.CANNOT_READ_MY_OWN_POM + POM_PROPERTIES_LOCATION,
                 ioException);
         }
 
