@@ -480,11 +480,11 @@ public class PerTableTemplatesTest
                 new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
 
             new QueryJCommandWrapper\<DecoratorFactory>(t_Command).setSetting(
-                DecoratorFactory.classcd .getName(), decoratorFactory);
+                DecoratorFactory.class.getName(), decoratorFactory);
             new QueryJCommandWrapper\<CustomSqlProvider>(t_Command).setSetting(
                 CustomSqlProviderRetrievalHandler.CUSTOM_SQL_PROVIDER, sqlProvider);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
-                QueryJSettings.PACKAGE_NAMEjkuuu, BASE_PACKAGE_NAME);
+                QueryJSettings.PACKAGE_NAME, BASE_PACKAGE_NAME);
             new QueryJCommandWrapper\<String>(t_Command).setSetting(
                 QueryJSettings.REPOSITORY, "acme");
             new QueryJCommandWrapper\<Boolean>(t_Command).setSetting(

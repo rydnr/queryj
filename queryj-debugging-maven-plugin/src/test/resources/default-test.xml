@@ -1,0 +1,27 @@
+<project>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.acmsl.queryj</groupId>
+        <artifactId>queryj-debugging-maven-plugin</artifactId>
+        <configuration>
+          <driver>com.foo.bar.JdbcDriver</driver>
+          <url>queryj:jdbc:url</url>
+          <username>QUERYJUSER</username>
+          <password>QUERYJPASSWORD</password>
+          <catalog />
+          <schema />
+          <repository>repos</repository>
+          <packageName>com.foo.bar</packageName>
+          <jndiDataSource>java:comp/env/jdbc/default</jndiDataSource>
+          <outputDir>${project.basedir}/target/generated-sources</outputDir>
+          <grammarFolder>${project.basedir}/src/main/assembly/</grammarFolder>
+          <grammarName>queryj</grammarName>
+          <grammarSuffix>.bundle</grammarSuffix>
+          <sqlXmlFile>${project.basedir}/target/sql.xml</sqlXmlFile>
+          <headerFile>${project.basedir}/src/main/assembly/header.txt</headerFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
