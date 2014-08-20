@@ -23,22 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDebuggingCommand.java
+ * Filename: TemplateDebuggingListener.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: The defined commands when debugging templates.
+ * Description: Receives notifications for asynchronous debugging services.
  *
  * Date: 2014/07/06
- * Time: 19:02
+ * Time: 19:12
  *
  */
-package org.acmsl.queryj.tools.debugging;
-
-/*
- * Importing JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
+package org.acmsl.queryj.debugging;
 
 /*
  * Importing checkthread.org annotations.
@@ -46,62 +41,17 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * The defined commands when debugging templates.
+ * Receives notifications for asynchronous debugging services.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2014/07/06 19:02
+ * Created: 2014/07/06 19:12
  */
 @ThreadSafe
-public enum TemplateDebuggingCommand
+public interface TemplateDebuggingListener
 {
     /**
-     * The reload command.
+     * Gets notified whenever a "reload" operation has been
+     * requested.
      */
-    RELOAD("reload"),
-
-    /**
-     * The "next" command.
-     */
-    NEXT("next"),
-
-    /**
-     * The "previous" command.
-     */
-    PREVIOUS("previous");
-
-    /**
-     * The name.
-     */
-    private final String m__strName;
-
-    /**
-     * Creates a new command.
-     * @param name the name.
-     */
-    TemplateDebuggingCommand(final String name)
-    {
-        this.m__strName = name;
-    }
-
-    /**
-     * Retrieves the name.
-     * @return such information.
-     */
-    @NotNull final String getName()
-    {
-        return this.m__strName;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public String toString()
-    {
-        return
-              "{ \"name\": \"" + this.m__strName + '"'
-            + ", \"class\": \"TemplateDebuggingCommand\""
-            + ", \"package\": \"org.acmsl.queryj.tools.debugging\" }";
-    }
+    public void reloadRequested();
 }

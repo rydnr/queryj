@@ -37,6 +37,15 @@
 package org.acmsl.queryj.debugging.netty;
 
 /*
+ * Importing QueryJ Core classes.
+ */
+import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
+import org.acmsl.queryj.debugging.TemplateDebuggingCommand;
+import org.acmsl.queryj.debugging.TemplateDebuggingListener;
+import org.acmsl.queryj.debugging.TemplateDebuggingService;
+
+/*
  * Importing Netty classes.
  */
 import io.netty.bootstrap.ServerBootstrap;
@@ -48,15 +57,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-
-/*
- * Importing QueryJ Core classes.
- */
-import org.acmsl.queryj.api.TemplateContext;
-import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
-import org.acmsl.queryj.tools.debugging.TemplateDebuggingCommand;
-import org.acmsl.queryj.tools.debugging.TemplateDebuggingListener;
-import org.acmsl.queryj.tools.debugging.TemplateDebuggingService;
 
 /*
  * Importing Apache Commons Logging classes.
@@ -223,11 +223,7 @@ public class NettyServerDebuggingService<C extends TemplateContext>
 
             future.sync();
         }
-        catch (@NotNull final InterruptedException interruption)
-        {
-            throw new DevelopmentModeException(template.groupThatCreatedThisInstance);
-        }
-        catch (@NotNull final IOException ioException)
+        catch (@NotNull final InterruptedException | IOException interruption)
         {
             throw new DevelopmentModeException(template.groupThatCreatedThisInstance);
         }

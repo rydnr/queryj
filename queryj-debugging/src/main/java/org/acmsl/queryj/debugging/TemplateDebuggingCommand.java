@@ -23,28 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDebuggingService.java
+ * Filename: TemplateDebuggingCommand.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Services able to debug templates.
+ * Description: The defined commands when debugging templates.
  *
- * Date: 2014/06/25
- * Time: 12:31
+ * Date: 2014/07/06
+ * Time: 19:02
  *
  */
-package org.acmsl.queryj.tools.debugging;
-
-/*
- * Importing QueryJ Core classes.
- */
-import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
-import org.acmsl.queryj.api.TemplateContext;
-
-/*
- * Importing StringTemplate classes.
- */
-import org.stringtemplate.v4.ST;
+package org.acmsl.queryj.debugging;
 
 /*
  * Importing JetBrains annotations.
@@ -57,25 +46,63 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Services able to debug templates.
+ * The defined commands when debugging templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
- * @param <C> the template context.
  * @since 3.0
- * Created: 2014/06/25 12:31
+ * Created: 2014/07/06 19:02
  */
 @ThreadSafe
-public interface TemplateDebuggingService<C extends TemplateContext>
+public enum TemplateDebuggingCommand
 {
     /**
-     * Debugs given template.
-     * @param template the template to debug.
-     * @param context the context.
-     * @param output the current template output.
-     * @return the {@link TemplateDebuggingCommand}.
-     * @throws DevelopmentModeException if the debug session must stop.
+     * The reload command.
+     */
+    RELOAD("reload"),
+
+    /**
+     * The "next" command.
+     */
+    NEXT("next"),
+
+    /**
+     * The "previous" command.
+     */
+    PREVIOUS("previous");
+
+    /**
+     * The name.
+     */
+    private final String m__strName;
+
+    /**
+     * Creates a new command.
+     * @param name the name.
+     */
+    TemplateDebuggingCommand(final String name)
+    {
+        this.m__strName = name;
+    }
+
+    /**
+     * Retrieves the name.
+     * @return such information.
      */
     @NotNull
-    TemplateDebuggingCommand debugTemplate(
-        @NotNull final ST template, @NotNull final C context, @NotNull final String output)
-        throws DevelopmentModeException;
+    public final String getName()
+    {
+        return this.m__strName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"name\": \"" + this.m__strName + '"'
+            + ", \"class\": \"TemplateDebuggingCommand\""
+            + ", \"package\": \"org.acmsl.queryj.tools.debugging\" }";
+    }
 }

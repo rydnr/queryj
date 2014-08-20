@@ -41,8 +41,6 @@ package org.acmsl.queryj.debugging;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
 import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.debugging.TemplateDebuggingCommand;
-import org.acmsl.queryj.tools.debugging.TemplateDebuggingService;
 
 /*
  * Importing StringTemplate classes.
@@ -96,7 +94,7 @@ public class AbstractTemplateGeneratorTest
                 }
             };
 
-        @Nullable final TemplateDebuggingService<?> service = instance.resolveTemplateDebuggingService();
+        @Nullable final TemplateDebuggingService<?> service = DebuggingUtils.getInstance().resolveTemplateDebuggingService();
 
         Assert.assertNotNull(service);
     }

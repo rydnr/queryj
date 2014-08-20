@@ -40,7 +40,6 @@ package org.acmsl.queryj.debugging;
  */
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
 import org.acmsl.queryj.api.TemplateContext;
-import org.acmsl.queryj.tools.debugging.TemplateDebuggingService;
 
 /*
  * Importing QueryJ Test classes.
@@ -111,25 +110,6 @@ public class STInspectorDebuggingServiceTest
                 public DecoratorFactory getDecoratorFactory()
                 {
                     return decoratorFactory;
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                protected boolean isInDevMode(@NotNull final String templateFileName)
-                {
-                    return true;
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Nullable
-                @Override
-                public TemplateDebuggingService resolveTemplateDebuggingService()
-                {
-                    return service;
                 }
 
                 /**

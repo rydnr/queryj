@@ -101,16 +101,14 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
     }
 
     /**
-     * Builds the chain.
-     * @param chain the chain to be configured.
-     * @return the updated chain.
+     * Adds the pre-processing handlers.
+     * @param chain the chain to build.
+     * @throws QueryJBuildException if building the chain fails.
      */
     @SuppressWarnings("unchecked")
-    @NotNull
-    @Override
-    protected Chain<QueryJCommand, QueryJBuildException, CH> buildChain(
+    protected void addPreProcessHandlers(
         @NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain)
-       throws QueryJBuildException
+        throws QueryJBuildException
     {
         chain.add((CH) new Log4JInitializerHandler());
 
@@ -132,10 +130,38 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
         chain.add((CH) new DatabaseMetaDataCacheWritingHandler());
 
         chain.add((CH) new DatabaseMetaDataLoggingHandler());
+    }
+
+    /**
+     * Adds the post-processing handlers.
+     * @param chain the chain to build.
+     * @throws QueryJBuildException if building the chain fails.
+     */
+    @SuppressWarnings("unchecked")
+    protected void addPostProcessHandlers(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain)
+        throws QueryJBuildException
+    {
+        chain.add((CH) new JdbcConnectionClosingHandler());
+    }
+
+    /**
+     * Builds the chain.
+     * @param chain the chain to be configured.
+     * @return the updated chain.
+     */
+    @SuppressWarnings("unchecked")
+    @NotNull
+    @Override
+    protected Chain<QueryJCommand, QueryJBuildException, CH> buildChain(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain)
+       throws QueryJBuildException
+    {
+        addPreProcessHandlers(chain);
 
         fillTemplateHandlers(chain);
 
-        chain.add((CH) new JdbcConnectionClosingHandler());
+        addPostProcessHandlers(chain);
 
         return chain;
     }

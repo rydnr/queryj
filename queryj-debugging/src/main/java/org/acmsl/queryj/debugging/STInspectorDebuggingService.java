@@ -39,8 +39,6 @@ package org.acmsl.queryj.debugging;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.api.TemplateContext;
-import org.acmsl.queryj.tools.debugging.TemplateDebuggingCommand;
-import org.acmsl.queryj.tools.debugging.TemplateDebuggingService;
 
 /*
  * Importing StringTemplate classes.

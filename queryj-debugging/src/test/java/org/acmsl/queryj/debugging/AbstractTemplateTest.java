@@ -46,7 +46,6 @@ import org.acmsl.queryj.api.exceptions.InvalidPerTableTemplateException;
 import org.acmsl.queryj.api.exceptions.InvalidTemplateException;
 import org.acmsl.queryj.api.handlers.fillhandlers.FillHandler;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.debugging.TemplateDebuggingService;
 
 /*
  * Importing QueryJ Debugging classes.
@@ -134,25 +133,6 @@ public class AbstractTemplateTest
                 public DecoratorFactory getDecoratorFactory()
                 {
                     return EasyMock.createNiceMock(DecoratorFactory.class);
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Override
-                protected boolean isInDevMode(@NotNull final String templateFileName)
-                {
-                    return true;
-                }
-
-                /**
-                 * {@inheritDoc}
-                 */
-                @Nullable
-                @Override
-                public TemplateDebuggingService resolveTemplateDebuggingService()
-                {
-                    return templateDebuggingService;
                 }
 
                 /**

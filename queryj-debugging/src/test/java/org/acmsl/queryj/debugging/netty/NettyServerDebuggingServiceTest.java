@@ -63,13 +63,13 @@ import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.queryj.api.AbstractTemplateGenerator;
 import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.debugging.TemplateDebuggingService;
 
 /*
  * Importing QueryJ Template Debugging classes.
  */
 import org.acmsl.queryj.debugging.AbstractTemplateTest;
 import org.acmsl.queryj.debugging.AbstractTemplateTest.MyTestableAbstractTemplate;
+import org.acmsl.queryj.debugging.TemplateDebuggingService;
 
 /*
  * Importing Apache Commons Logging annotations.
@@ -142,7 +142,6 @@ public class NettyServerDebuggingServiceTest
                 /**
                  * {@inheritDoc}
                  */
-                @Override
                 protected boolean isInDevMode(@NotNull final String templateFileName)
                 {
                     return true;
@@ -152,7 +151,6 @@ public class NettyServerDebuggingServiceTest
                  * {@inheritDoc}
                  */
                 @Nullable
-                @Override
                 public TemplateDebuggingService resolveTemplateDebuggingService()
                 {
                     return instance;

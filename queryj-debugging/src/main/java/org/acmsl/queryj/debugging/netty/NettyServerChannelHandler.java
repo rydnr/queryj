@@ -1,5 +1,5 @@
 /*
-                        queryj
+                        QueryJ Debugging
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: 
+ * Description: ChannelHandlerAdapter implementation to accept debug commands.
  *
  * Date: 2014/06/28
  * Time: 20:47
@@ -36,7 +36,13 @@
 package org.acmsl.queryj.debugging.netty;
 
 /*
- * Importing JetBrains annotations.
+ * Importing QueryJ Debugging classes.
+ */
+import org.acmsl.queryj.debugging.TemplateDebuggingCommand;
+import org.acmsl.queryj.debugging.TemplateDebuggingListener;
+
+/*
+ * Importing Netty classes.
  */
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -47,7 +53,10 @@ import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
-import org.acmsl.queryj.tools.debugging.TemplateDebuggingListener;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -56,7 +65,7 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- *
+ * {@link io.netty.channel.ChannelHandlerAdapter} implementation to accept debug commands.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/06/28 20:47
@@ -152,9 +161,22 @@ public class NettyServerChannelHandler
      */
     public void processCommand(@NotNull final String command, @NotNull final TemplateDebuggingListener listener)
     {
-        if (command.equals("reload"))
+        if (command.equals(TemplateDebuggingCommand.RELOAD.getName()))
         {
             listener.reloadRequested();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"listener\": \"" + m__Listener.hashCode() + '"'
+            + ", \"class\": \"NettyServerChannelHandler\""
+            + ", \"package\": \"org.acmsl.queryj.debugging.netty\" }";
     }
 }

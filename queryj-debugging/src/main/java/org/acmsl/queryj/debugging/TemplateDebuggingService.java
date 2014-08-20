@@ -23,17 +23,33 @@
 
  ******************************************************************************
  *
- * Filename: TemplateDebuggingListener.java
+ * Filename: TemplateDebuggingService.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Receives notifications for asynchronous debugging services.
+ * Description: Services able to debug templates.
  *
- * Date: 2014/07/06
- * Time: 19:12
+ * Date: 2014/06/25
+ * Time: 12:31
  *
  */
-package org.acmsl.queryj.tools.debugging;
+package org.acmsl.queryj.debugging;
+
+/*
+ * Importing QueryJ Core classes.
+ */
+import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
+import org.acmsl.queryj.api.TemplateContext;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.stringtemplate.v4.ST;
+
+/*
+ * Importing JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
@@ -41,17 +57,25 @@ package org.acmsl.queryj.tools.debugging;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Receives notifications for asynchronous debugging services.
+ * Services able to debug templates.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
+ * @param <C> the template context.
  * @since 3.0
- * Created: 2014/07/06 19:12
+ * Created: 2014/06/25 12:31
  */
 @ThreadSafe
-public interface TemplateDebuggingListener
+public interface TemplateDebuggingService<C extends TemplateContext>
 {
     /**
-     * Gets notified whenever a "reload" operation has been
-     * requested.
+     * Debugs given template.
+     * @param template the template to debug.
+     * @param context the context.
+     * @param output the current template output.
+     * @return the {@link TemplateDebuggingCommand}.
+     * @throws DevelopmentModeException if the debug session must stop.
      */
-    public void reloadRequested();
+    @NotNull
+    TemplateDebuggingCommand debugTemplate(
+        @NotNull final ST template, @NotNull final C context, @NotNull final String output)
+        throws DevelopmentModeException;
 }
