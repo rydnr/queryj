@@ -39,6 +39,7 @@ package org.acmsl.queryj.debugging.netty;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.debugging.TemplateDebuggingCommand;
@@ -61,6 +62,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 /*
  * Importing Apache Commons Logging classes.
  */
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.apache.commons.logging.LogFactory;
 
 /*
@@ -229,6 +231,16 @@ public class NettyServerDebuggingService<C extends TemplateContext>
         }
 
         return this.m__Command;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public TemplateDebuggingCommand debug(@NotNull final QueryJCommandHandler<QueryJCommand> handler)
+    {
+        return TemplateDebuggingCommand.NEXT;
     }
 
     /**

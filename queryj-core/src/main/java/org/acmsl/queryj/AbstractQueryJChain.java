@@ -173,6 +173,43 @@ public abstract class AbstractQueryJChain
     }
 
     /**
+     * Retrieves the link of the chain just before the one given command
+     * handler takes.
+     * @param chain the concrete chain.
+     * @param commandHandler the handler just after the desired link.
+     * @return the previous handler in the chain.
+     */
+    @Nullable
+    public CH getPreviousChainLink(
+        @Nullable final Chain<C, QueryJBuildException, CH> chain,
+        @Nullable final CH commandHandler)
+    {
+        @Nullable CH result = null;
+
+        if  (   (chain != null)
+              && (!chain.isEmpty()))
+        {
+            if  (   (commandHandler == null)
+                 || (!chain.contains(commandHandler)))
+            {
+                result = chain.get(0);
+            }
+            else
+            {
+                final int t_iCurrentIndex = chain.indexOf(commandHandler);
+
+                if  (   (t_iCurrentIndex > 0)
+                     && (t_iCurrentIndex <= chain.size() - 1))
+                {
+                    result = chain.get(t_iCurrentIndex - 1);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Sends given command to a concrete chain.
      * @param chain the concrete chain.
      * @param command the command that represents which actions should be done.

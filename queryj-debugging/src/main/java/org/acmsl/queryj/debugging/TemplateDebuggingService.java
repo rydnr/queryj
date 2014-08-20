@@ -38,8 +38,11 @@ package org.acmsl.queryj.debugging;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.TemplateContext;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
  * Importing StringTemplate classes.
@@ -78,4 +81,14 @@ public interface TemplateDebuggingService<C extends TemplateContext>
     TemplateDebuggingCommand debugTemplate(
         @NotNull final ST template, @NotNull final C context, @NotNull final String output)
         throws DevelopmentModeException;
+
+    /**
+     * Process given handler while debugging.
+     * @param handler the current handler in the chain.
+     * @return the {@link TemplateDebuggingCommand}.
+     * @throws QueryJBuildException if the debug process fails.
+     */
+    @NotNull
+    TemplateDebuggingCommand debug(@NotNull final QueryJCommandHandler<QueryJCommand> handler)
+        throws QueryJBuildException;
 }

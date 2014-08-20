@@ -40,6 +40,7 @@ package org.acmsl.queryj.debugging;
  */
 import org.acmsl.commons.patterns.Chain;
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.api.TemplateContext;
 import org.acmsl.queryj.api.exceptions.CannotFindTemplatesException;
 import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
@@ -76,16 +77,53 @@ import java.util.ServiceLoader;
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
  * Created: 2014/08/20 10:48
+ * @param <CH> the QueryJCommandHandler.
+ * @param <C> the template context.
  */
 @ThreadSafe
-public class QueryJDebuggingChain<CH extends QueryJCommandHandler<QueryJCommand>>
+public class QueryJDebuggingChain<CH extends QueryJCommandHandler<QueryJCommand>, C extends TemplateContext>
     extends QueryJChain<CH>
 {
     /**
+     * The template debugging service.
+     */
+    private TemplateDebuggingService<C> m__Service;
+
+    /**
      * Creates a {@code QueryJDebuggingChain} with given information.
      */
-    public QueryJDebuggingChain()
+    public QueryJDebuggingChain(@NotNull final TemplateDebuggingService<C> service)
     {
+        immutableSetService(service);
+    }
+
+    /**
+     * Specifies the template debugging service.
+     * @param service such {@link TemplateDebuggingService service}.
+     */
+    protected final void immutableSetService(@NotNull final TemplateDebuggingService<C> service)
+    {
+        this.m__Service = service;
+    }
+
+    /**
+     * Specifies the template debugging service.
+     * @param service such {@link TemplateDebuggingService service}.
+     */
+    @SuppressWarnings("unused")
+    protected void setService(@NotNull final TemplateDebuggingService<C> service)
+    {
+        immutableSetService(service);
+    }
+
+    /**
+     * Retrieves the template debugging service.
+     * @return the {@link TemplateDebuggingService service}.
+     */
+    @NotNull
+    public TemplateDebuggingService<C> getService()
+    {
+        return this.m__Service;
     }
 
     /**
@@ -100,72 +138,94 @@ public class QueryJDebuggingChain<CH extends QueryJCommandHandler<QueryJCommand>
         @NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain, @NotNull final QueryJCommand command)
         throws QueryJBuildException
     {
+        return process(chain, command, getService());
+    }
+
+    /**
+     * Sends given command to a concrete chain.
+     * @param chain the concrete chain.
+     * @param command the command that represents which actions should be done.
+     * @param service the {@link org.acmsl.queryj.debugging.TemplateDebuggingService service}.
+     * @return <code>true</code> if the command is processed by the chain.
+     * @throws QueryJBuildException if the process fails.
+     */
+    protected boolean process(
+        @NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain,
+        @NotNull final QueryJCommand command,
+        @NotNull final TemplateDebuggingService<C> service)
+        throws QueryJBuildException
+    {
         boolean result = false;
 
         @Nullable final Log t_Log = command.getLog();
 
         final boolean t_bLoggingEnabled = (t_Log != null);
 
-        boolean restart = false;
+        @NotNull TemplateDebuggingCommand t_DebugCommand = TemplateDebuggingCommand.NEXT;
 
-        do
+        try
         {
-            try
-            {
-                @Nullable CH t_CurrentCommandHandler = null;
+            @Nullable CH t_CurrentCommandHandler = null;
 
-                do
+            do
+            {
+                if (t_DebugCommand.equals(TemplateDebuggingCommand.NEXT))
                 {
                     t_CurrentCommandHandler =
                         getNextChainLink(chain, t_CurrentCommandHandler);
-
-                    if (t_bLoggingEnabled)
-                    {
-                        t_Log.debug("Next handler: " + t_CurrentCommandHandler);
-                    }
-
-                    if  (t_CurrentCommandHandler != null)
-                    {
-                        if (t_CurrentCommandHandler instanceof TemplateHandler)
-                        {
-
-                        }
-                        else
-                        {
-                            result = t_CurrentCommandHandler.handle(command);
-                        }
-
-                        if (t_bLoggingEnabled)
-                        {
-                            t_Log.debug(
-                                t_CurrentCommandHandler + "#handle(QueryJCommand) returned "
-                                + result);
-                        }
-                    }
                 }
-                while  (   (!result)
-                        && (t_CurrentCommandHandler != null));
-            }
-            catch  (@NotNull final DevelopmentModeException devMode)
-            {
-                restart = true;
-            }
-            catch  (@NotNull final QueryJBuildException buildException)
-            {
-                cleanUpOnError(buildException, command);
+                else if (t_DebugCommand.equals(TemplateDebuggingCommand.PREVIOUS))
+                {
+                    t_CurrentCommandHandler =
+                        getPreviousChainLink(chain, t_CurrentCommandHandler);
+                }
 
                 if (t_bLoggingEnabled)
                 {
-                    t_Log.error(
-                        "QueryJ could not generate sources correctly.",
-                        buildException);
+                    t_Log.debug("Next handler: " + t_CurrentCommandHandler);
                 }
 
-                throw buildException;
+                if  (t_CurrentCommandHandler != null)
+                {
+                     service.debug(t_CurrentCommandHandler);
+                }
+
+                if (t_bLoggingEnabled)
+                {
+                    t_Log.debug(
+                        t_CurrentCommandHandler + "#handle(QueryJCommand) returned "
+                        + result);
+                }
             }
+            while  (t_CurrentCommandHandler != null);
         }
-        while (restart);
+        catch  (@NotNull final QueryJBuildException buildException)
+        {
+            cleanUpOnError(buildException, command);
+
+            if (t_bLoggingEnabled)
+            {
+                t_Log.error(
+                    "QueryJ could not generate sources correctly.",
+                    buildException);
+            }
+
+            throw buildException;
+        }
 
         return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return
+              "{ \"service\": " + this.m__Service
+            + ", \"class\": \"QueryJDebuggingChain\""
+            + ", \"package\": \"org.acmsl.queryj.debugging\" }";
     }
 }

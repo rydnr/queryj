@@ -38,11 +38,13 @@ package org.acmsl.queryj.debugging;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.api.TemplateContext;
 
 /*
  * Importing StringTemplate classes.
  */
+import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.stringtemplate.v4.ST;
 
 /*
@@ -75,5 +77,15 @@ public class STInspectorDebuggingService<C extends TemplateContext>
     {
         template.inspect();
         return TemplateDebuggingCommand.RELOAD;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public TemplateDebuggingCommand debug(@NotNull final QueryJCommandHandler<QueryJCommand> handler)
+    {
+        return TemplateDebuggingCommand.NEXT;
     }
 }
