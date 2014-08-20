@@ -278,7 +278,7 @@ public class QueryJMojo
      * @return such value.
      */
     @Nullable
-    protected String getDriver()
+    public String getDriver()
     {
         String result = System.getProperty(JDBC_DRIVER);
 
@@ -323,7 +323,7 @@ public class QueryJMojo
      * @return such value.
      */
     @Nullable
-    protected String getUrl()
+    public String getUrl()
     {
         String result = System.getProperty(JDBC_URL);
 
@@ -368,7 +368,7 @@ public class QueryJMojo
      * @return such value.
      */
     @Nullable
-    protected String getUsername()
+    public String getUsername()
     {
         String result = System.getProperty(JDBC_USERNAME);
 
@@ -413,7 +413,7 @@ public class QueryJMojo
      * @return such value.
      */
     @Nullable
-    protected String getPassword()
+    public String getPassword()
     {
         String result = System.getProperty(JDBC_PASSWORD);
 
@@ -458,7 +458,7 @@ public class QueryJMojo
      * @return such value.
      */
     @Nullable
-    protected String getCatalog()
+    public String getCatalog()
     {
         String result = System.getProperty(JDBC_CATALOG);
 
@@ -503,7 +503,7 @@ public class QueryJMojo
      * @return such value, or an empty string if not initialized.
      */
     @NotNull
-    protected String getSchema()
+    public String getSchema()
     {
         String result = System.getProperty(JDBC_SCHEMA);
 
@@ -553,7 +553,7 @@ public class QueryJMojo
      * @return such value, or an empty string if not initialized.
      */
     @NotNull
-    protected String getRepository()
+    public String getRepository()
     {
         String result = System.getProperty(REPOSITORY);
 
@@ -603,7 +603,7 @@ public class QueryJMojo
      * @return such value.
      */
     @Nullable
-    protected String getPackageName()
+    public String getPackageName()
     {
         String result = System.getProperty(PACKAGE_NAME);
 
@@ -648,7 +648,7 @@ public class QueryJMojo
      * @return such directory.
      */
     @Nullable
-    protected File getOutputDir()
+    public File getOutputDir()
     {
         final File result;
 
@@ -699,7 +699,7 @@ public class QueryJMojo
      * @return such value.
      */
     @Nullable
-    protected String getJndiDataSource()
+    public String getJndiDataSource()
     {
         String result = System.getProperty(JNDI_DATASOURCE);
 
@@ -744,7 +744,7 @@ public class QueryJMojo
      * @return such file.
      */
     @Nullable
-    protected File getSqlXmlFile()
+    public File getSqlXmlFile()
     {
         final File result;
 
@@ -795,7 +795,7 @@ public class QueryJMojo
      * @return such file.
      */
     @Nullable
-    protected File getHeaderFile()
+    public File getHeaderFile()
     {
         final File result;
 
@@ -847,7 +847,7 @@ public class QueryJMojo
      * @return such resource.
      */
     @Nullable
-    protected File getGrammarFolder()
+    public File getGrammarFolder()
     {
         final File result;
 
@@ -899,7 +899,7 @@ public class QueryJMojo
      * @return such resource.
      */
     @Nullable
-    protected String getGrammarName()
+    public String getGrammarName()
     {
         String result = System.getProperty(GRAMMAR_NAME);
 
@@ -945,7 +945,7 @@ public class QueryJMojo
      * @return such resource.
      */
     @Nullable
-    protected String getGrammarSuffix()
+    public String getGrammarSuffix()
     {
         String result = System.getProperty(GRAMMAR_SUFFIX);
 
@@ -990,7 +990,7 @@ public class QueryJMojo
      * @return such information.
      */
     @NotNull
-    protected Table[] getTables()
+    public Table[] getTables()
     {
         return immutableGetTables();
     }
@@ -1198,6 +1198,7 @@ public class QueryJMojo
 
     /**
      * Executes QueryJ via Maven2.
+     * @throws org.apache.maven.plugin.MojoExecutionException if the process fails.
      */
     @Override
     public void execute()
@@ -1324,6 +1325,19 @@ public class QueryJMojo
     }
 
     /**
+     * Instantiates a new task.
+     * @param version the version.
+     * @param log the log.
+     * @return a new {@link org.acmsl.queryj.tools.ant.QueryJTask}.
+     */
+    @NotNull
+    protected QueryJTask instantiateTask(
+        @NotNull final String version, @NotNull final org.apache.commons.logging.Log log)
+    {
+        return new QueryJTask(log);
+    }
+
+    /**
      * Builds the QueryJ task.
      * @param version the version.
      * @param log the Maven log.
@@ -1334,7 +1348,7 @@ public class QueryJMojo
     {
         @NotNull final CommonsLoggingMavenLogAdapter t_Log = new CommonsLoggingMavenLogAdapter(log);
 
-        @NotNull final QueryJTask result = new QueryJTask(t_Log);
+        @NotNull final QueryJTask result = instantiateTask(version, t_Log);
 
         initLogging(t_Log);
 

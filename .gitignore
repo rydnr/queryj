@@ -20,3 +20,5 @@ queryj-templates/target
 queryj-debugging/target
 queryj-debugging-maven-plugin/target
 queryj-test/target
+queryj-ant-task/target
+queryj-debugging-ant-task/target

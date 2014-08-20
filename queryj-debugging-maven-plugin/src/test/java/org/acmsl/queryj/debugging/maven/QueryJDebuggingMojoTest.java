@@ -36,9 +36,13 @@
 package org.acmsl.queryj.debugging.maven;
 
 /*
- * Importing JetBrains annotations.
+ * Importing Apache Maven Plugin Harness classes.
  */
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -46,6 +50,14 @@ import org.jetbrains.annotations.NotNull;
  */
 import org.checkthread.annotations.ThreadSafe;
 
+/*
+ * Importing JetBrains annotations.
+ */
+import org.junit.Assert;
+
+/*
+ * Importing JDK classes.
+ */
 import java.io.File;
 
 /**
@@ -70,15 +82,47 @@ public class QueryJDebuggingMojoTest
     }
 
     /**
+     * Tests the configuration is read from "default-test.xml".
      * @throws Exception
      */
     public void testMojoGoal()
         throws Exception
     {
-        @NotNull final File testPom = new File(getBasedir(), "src/test/resources/default-test.xml" );
+        @NotNull final File testPom =
+            new File(
+                getBasedir() + File.separator + "src" + File.separator + "test" + File.separator + "resources",
+                "default-test.xml" );
 
         @NotNull final QueryJDebuggingMojo mojo = (QueryJDebuggingMojo) lookupMojo("queryj-debugging", testPom);
 
         assertNotNull(mojo);
+
+        Assert.assertEquals("Invalid driver", "com.foo.bar.JdbcDriver", mojo.getDriver());
+        Assert.assertEquals("Invalid url", "queryj:jdbc:url", mojo.getUrl());
+        Assert.assertEquals("Invalid username", "QUERYJUSER", mojo.getUsername());
+        Assert.assertEquals("Invalid password", "QUERYJPASSWORD", mojo.getPassword());
+        Assert.assertNull("Invalid catalog", mojo.getCatalog());
+        Assert.assertEquals("Invalid schema", "", mojo.getSchema());
+        Assert.assertEquals("Invalid repository", "repos", mojo.getRepository());
+        Assert.assertEquals("Invalid packageName", "com.foo.bar", mojo.getPackageName());
+        Assert.assertEquals("Invalid jndiDataSource", "java:comp/env/jdbc/default", mojo.getJndiDataSource());
+        Assert.assertEquals(
+            "Invalid outputDir",
+            new File("${project.basedir}" + File.separator + "target" + File.separator + "generated-sources"),
+            mojo.getOutputDir());
+        Assert.assertEquals(
+            "Invalid grammarFolder",
+            new File("${project.basedir}" + File.separator + "src" + File.separator + "main" + File.separator + "assembly"),
+            mojo.getGrammarFolder());
+        Assert.assertEquals("Invalid grammarName", "queryj", mojo.getGrammarName());
+        Assert.assertEquals("Invalid grammarSuffix", ".bundle", mojo.getGrammarSuffix());
+        Assert.assertEquals(
+            "Invalid sqlXmlFile", new File("${project.basedir}" + File.separator + "target", "sql.xml"), mojo.getSqlXmlFile());
+        Assert.assertEquals(
+            "Invalid headerFile",
+            new File(
+                "${project.basedir}" + File.separator + "src" + File.separator + "main" + File.separator + "assembly",
+                "header.txt"),
+            mojo.getHeaderFile());
     }
 }

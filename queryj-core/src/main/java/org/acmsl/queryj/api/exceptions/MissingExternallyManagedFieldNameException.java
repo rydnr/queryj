@@ -1,5 +1,5 @@
 /*
-                        QueryJ
+                        QueryJ Core
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -39,7 +39,7 @@ package org.acmsl.queryj.api.exceptions;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.ant.AntFieldElement;
+import org.acmsl.queryj.metadata.vo.Field;
 
 /*
  *Importing JetBrains annotations.
@@ -55,19 +55,24 @@ import org.checkthread.annotations.ThreadSafe;
  * Represents the error when a externally-managed field in a pom.xml or
  * Ant build lacks the "name" attribute.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @since 2013/06/14
+ * @since 3.0
+ * Created: 2013/06/14
  */
+@SuppressWarnings("unused")
 @ThreadSafe
 public class MissingExternallyManagedFieldNameException
     extends QueryJBuildException
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = 7436823944816029299L;
 
     /**
-     * Creates an instance with given {@link AntFieldElement}.
+     * Creates an instance with given {@link Field}.
      * @param field the field.
      */
-    public MissingExternallyManagedFieldNameException(@NotNull final AntFieldElement field)
+    public MissingExternallyManagedFieldNameException(@NotNull final Field field)
     {
         super("missing.externally-managed.field.name", new Object[] { field.toString() });
     }

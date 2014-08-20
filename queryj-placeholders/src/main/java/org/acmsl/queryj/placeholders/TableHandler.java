@@ -45,9 +45,8 @@ import org.acmsl.queryj.metadata.TableDecorator;
 import org.acmsl.queryj.api.PerTableTemplateContext;
 
 /**
- * Importing some JetBrains annotations.
+ * Importing NotNull annotations.
  */
-import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,13 +58,17 @@ import org.checkthread.annotations.ThreadSafe;
 /**
  * Resolves "table" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/03
+ * @since 3.0
+ * Created: 2012/06/03
  */
 @SuppressWarnings("unused")
 @ThreadSafe
 public class TableHandler
     extends AbstractTemplateContextFillHandler<PerTableTemplateContext, TableDecorator>
 {
+    /**
+     * The serial version id.
+     */
     private static final long serialVersionUID = -3398602147547759354L;
 
     /**
@@ -85,11 +88,11 @@ public class TableHandler
     @Override
     public String getPlaceHolder()
     {
-        return AntTablesElement.TABLE;
+        return "table";
     }
 
     /**
-     * Retrieves a {@link TableDecorator} using given {@link org.acmsl.queryj.api.PerTableTemplateContext context} information.
+     * Retrieves a {@link TableDecorator} using given {@link PerTableTemplateContext context} information.
      * @param context such context.
      * @return such value.
      */
@@ -108,8 +111,8 @@ public class TableHandler
     /**
      * Decorates given table.
      * @param table the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return the decorated table.
      */

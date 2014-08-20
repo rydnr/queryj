@@ -34,12 +34,6 @@
 package org.acmsl.queryj.metadata.vo;
 
 /*
- * Importing QueryJ Core classes.
- */
-import org.acmsl.queryj.tools.ant.AntFieldElement;
-import org.acmsl.queryj.tools.ant.AntFieldFkElement;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -71,7 +65,7 @@ public abstract class AbstractField
     /**
      * The field fk collection.
      */
-    private List<AntFieldFkElement> m__lFieldFks;
+    private List<Field> m__lFieldFks;
 
     /**
      * Creates an {@link AbstractField} with given information.
@@ -171,7 +165,7 @@ public abstract class AbstractField
      * Specifies the field fk collection.
      * @param fieldFks the collection
      */
-    private void immutableSetFieldFks(@NotNull final List<AntFieldFkElement> fieldFks)
+    private void immutableSetFieldFks(@NotNull final List<Field> fieldFks)
     {
         m__lFieldFks = fieldFks;
     }
@@ -180,7 +174,7 @@ public abstract class AbstractField
      * Specifies the field fk collection.
      * @param fieldFks the collection
      */
-    protected void setFieldFks(@NotNull final List<AntFieldFkElement> fieldFks)
+    protected void setFieldFks(@NotNull final List<Field> fieldFks)
     {
         immutableSetFieldFks(fieldFks);
     }
@@ -191,7 +185,7 @@ public abstract class AbstractField
      */
     @Nullable
     @Override
-    public List<AntFieldFkElement> getFieldFks()
+    public List<Field> getFieldFks()
     {
         return m__lFieldFks;
     }
@@ -210,7 +204,7 @@ public abstract class AbstractField
                 .appendSuper(super.toString())
                 .append("type", getType())
                 .append("pk", isPk())
-                .append(AntFieldElement.KEYWORD_LITERAL, getKeyword())
+                .append("keyword", getKeyword())
                 .append("retrievalQuery", getRetrievalQuery())
                 .append("fieldFks", getFieldFks())
                 .toString();

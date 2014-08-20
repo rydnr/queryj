@@ -1,0 +1,4 @@
+* 2014/08/20
+** DONE Create queryj-ant-tasks: 1 -> 1
+** TODO Create queryj-debugging-ant-tasks: 1 ->
+** Implement CommandHandler wrappers to drive the chain flow based on debugging commands: 3 ->

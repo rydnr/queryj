@@ -34,11 +34,6 @@
 package org.acmsl.queryj.metadata.vo;
 
 /*
- * Importing some project classes.
- */
-import org.acmsl.queryj.tools.ant.AntFieldFkElement;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.Collection;
@@ -60,5 +55,5 @@ public interface Field
      * Retrieves the field fk collection.
      * @return such collection.
      */
-    public Collection<AntFieldFkElement> getFieldFks();
+    public Collection<Field> getFieldFks();
 }

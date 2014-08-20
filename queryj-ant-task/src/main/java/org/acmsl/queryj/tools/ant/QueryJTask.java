@@ -150,6 +150,16 @@ public class QueryJTask
     }
 
     /**
+     * Retrieves the {@link Log} instance.
+     * @return such instance.
+     */
+    @NotNull
+    public Log getLog()
+    {
+        return getQueryJCommand().getLog();
+    }
+
+    /**
      * Specifies the driver.
      * @param driver the new driver.
      */
@@ -994,6 +1004,7 @@ public class QueryJTask
 
     /**
      * Requests the chained logic to be performed.
+     * @throws org.apache.tools.ant.BuildException if the process fails.
      */
     @Override
     public void execute()
@@ -1005,6 +1016,7 @@ public class QueryJTask
     /**
      * Requests the chained logic to be performed.
      * @param command the command.
+     * @throws org.apache.tools.ant.BuildException if the process fails.
      */
     protected void execute(@NotNull final QueryJCommand command)
         throws  BuildException
@@ -1015,8 +1027,7 @@ public class QueryJTask
         }
         catch  (@NotNull final QueryJBuildException buildException)
         {
-            throw
-                new BuildException(buildException.getMessage(), buildException);
+            throw new BuildException(buildException.getMessage(), buildException);
         }
     }
 

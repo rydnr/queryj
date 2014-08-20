@@ -42,6 +42,7 @@ import org.acmsl.queryj.metadata.vo.AbstractField;
 /*
  * Importing some Ant classes.
  */
+import org.acmsl.queryj.metadata.vo.Field;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
 
@@ -104,7 +105,7 @@ public class AntFieldElement
     private String m__strPk;
 
     /**
-     * Creates an empty {@link AntFieldElement}.
+     * Creates an empty {@code AntFieldElement}.
      */
     public AntFieldElement()
     {
@@ -185,13 +186,13 @@ public class AntFieldElement
     @Nullable
     public Object createDynamicElement(final String name)
     {
-        final @Nullable AntFieldFkElement result;
+        final @Nullable Field result;
 
         if  ("fk".equals(name)) 
         {
-            result = new AntFieldFkElement();
+            result = null; //new AntFieldFkElement();
 
-            List<AntFieldFkElement> t_cFieldFks = getFieldFks();
+            @Nullable List<Field> t_cFieldFks = getFieldFks();
 
             if  (t_cFieldFks == null)
             {

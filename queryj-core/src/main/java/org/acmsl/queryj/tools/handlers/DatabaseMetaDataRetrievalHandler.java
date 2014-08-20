@@ -44,18 +44,12 @@ import org.acmsl.queryj.api.exceptions.CannotRetrieveDatabaseInformationExceptio
 import org.acmsl.queryj.metadata.engines.Engine;
 import org.acmsl.queryj.metadata.engines.UndefinedJdbcEngine;
 import org.acmsl.queryj.metadata.engines.oracle.OracleEngine;
-import org.acmsl.queryj.tools.ant.AntFieldElement;
-import org.acmsl.queryj.tools.ant.AntFieldFkElement;
-import org.acmsl.queryj.tools.ant.AntTableElement;
-import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.metadata.MetadataExtractionLogger;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -68,7 +62,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 import org.apache.commons.logging.Log;
 
 /*
- * Importing jetbrains annotations.
+ * Importing NotNull annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -79,8 +73,6 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -243,263 +235,6 @@ public abstract class DatabaseMetaDataRetrievalHandler
     }
 
     /**
-     * Retrieves the explicitly-defined table names.
-     * @param parameters the parameters.
-     * @return the array of table names.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    protected List<Table<String, Attribute<String>, List<Attribute<String>>>> retrieveExplicitTableNames(
-        @NotNull final QueryJCommand parameters)
-    {
-        List<Table<String, Attribute<String>, List<Attribute<String>>>> result = null;
-
-        @Nullable final AntTablesElement t_TablesElement =
-            retrieveTablesElement(parameters);
-
-        @Nullable final Iterator<AntTableElement> t_itTableElements;
-
-        @Nullable final Collection<AntTableElement> t_cTableElements;
-
-        if  (t_TablesElement != null)
-        {
-            t_cTableElements = t_TablesElement.getTables();
-
-            if  (   (t_cTableElements != null)
-                 && (t_cTableElements.size() > 0))
-            {
-                result =
-                    new ArrayList<>(
-                        t_cTableElements.size());
-
-                t_itTableElements = t_cTableElements.iterator();
-
-                while  (t_itTableElements.hasNext())
-                {
-                    @NotNull final AntTableElement t_Table = t_itTableElements.next();
-
-                    result.add(convertToTable(t_Table));
-                }
-
-                storeTables(result, parameters);
-            }
-        }
-
-        if (result == null)
-        {
-            result = new ArrayList<>(0);
-        }
-
-        return result;
-    }
-
-    /**
-     * Converts to a {@link Table}.
-     * @param table the {@link AntTableElement} instance to convert.
-     * @return the converted table.
-     */
-    @NotNull
-    protected Table<String, Attribute<String>, List<Attribute<String>>> convertToTable(
-        @NotNull final AntTableElement table)
-    {
-        @NotNull final TableIncompleteValueObject result =
-            new TableIncompleteValueObject(table.getName(), null);
-
-        @Nullable final List<AntFieldElement> t_lFields = table.getFields();
-
-        if (t_lFields != null)
-        {
-            @NotNull final List<Attribute<String>> t_lAttributes =
-                new ArrayList<>(t_lFields.size());
-
-            for (@Nullable final AntFieldElement t_Field : t_lFields)
-            {
-                if (t_Field != null)
-                {
-                    t_lAttributes.add(t_Field);
-                }
-            }
-
-            result.setAttributes(t_lAttributes);
-        }
-
-        // TODO: add foreign keys
-
-        return result;
-    }
-
-    /**
-     * Checks whether there are at least one field in any explicitly-defined table.
-     * @param explicitTables the explicitly-defined table information.
-     * @return <code>true</code> in such case.
-     */
-    @SuppressWarnings("unused")
-    protected boolean areExplicitTableFieldsEmpty(@Nullable final AntTablesElement explicitTables)
-    {
-        boolean result = true;
-
-        if (explicitTables != null)
-        {
-            @Nullable final Iterator<AntTableElement> t_itTableElements;
-
-            @Nullable final Collection<AntTableElement> t_cTableElements = explicitTables.getTables();
-
-            @Nullable Collection<AntFieldElement> t_cFieldElements;
-
-            t_itTableElements = t_cTableElements.iterator();
-
-            while  (t_itTableElements.hasNext())
-            {
-                @NotNull final AntTableElement t_Table =
-                    t_itTableElements.next();
-
-                t_cFieldElements = t_Table.getFields();
-
-                if  (   (t_cFieldElements != null)
-                     && (t_cFieldElements.size() > 0))
-                {
-                    result = false;
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Process explicit schema.
-     * @param parameters the parameter map.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
-     * @param explicitTables the {@link AntTablesElement} instance.
-     * @param tableMap the table map.
-     * @param tableNameMap the table name map.
-     * @param fieldMap a map to store field information.
-     * @param fieldFkMap the field fk map.
-     * @param fieldNameMap the field name map.
-     * @param attributeMap the attribute map.
-     */
-    protected void processExplicitSchema(
-        @SuppressWarnings("unused") @NotNull final QueryJCommand parameters,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
-        @Nullable final AntTablesElement explicitTables,
-        @SuppressWarnings("unused") @NotNull final Map<String, List<AntTableElement>> tableMap,
-        @NotNull final Map<String, List<String>> tableNameMap,
-        @SuppressWarnings("unused") @NotNull final Map<String, List<AntFieldElement>> fieldMap,
-        @NotNull final Map<String, List<AntFieldFkElement>> fieldFkMap,
-        @NotNull final Map<String, String> fieldNameMap,
-        @NotNull final Map<String, List<Attribute<String>>> attributeMap)
-    {
-        @Nullable List<AntTableElement> t_cTableElements = null;
-
-        if (explicitTables != null)
-        {
-            t_cTableElements = explicitTables.getTables();
-        }
-
-        @Nullable Iterator<AntTableElement> t_itTableElements = null;
-
-        @Nullable List<AntFieldElement> t_cFieldElements;
-
-        List<String> t_lTables;
-
-        if  (t_cTableElements != null)
-        {
-            t_itTableElements = t_cTableElements.iterator();
-        }
-
-        if  (t_itTableElements != null)
-        {
-            while  (t_itTableElements.hasNext())
-            {
-                @NotNull final AntTableElement t_Table =
-                    t_itTableElements.next();
-
-                t_lTables = tableNameMap.get(buildTableKey());
-
-                if  (t_lTables == null)
-                {
-                    t_lTables = new ArrayList<>();
-                    tableNameMap.put(buildTableKey(), t_lTables);
-                }
-
-                t_lTables.add(t_Table.getName());
-
-                t_cFieldElements = t_Table.getFields();
-
-                if  (   (t_cFieldElements  != null)
-                     && (t_cFieldElements.size() > 0))
-                {
-                    @SuppressWarnings("unchecked")
-                    @Nullable List<Attribute<String>> t_lFields =
-                        attributeMap.get(buildTableFieldsKey(t_Table.getName()));
-
-                    if (t_lFields == null)
-                    {
-                        t_lFields = new ArrayList<>(4);
-
-                        attributeMap.put(buildTableFieldsKey(t_Table.getName()), t_lFields);
-                    }
-
-                    @Nullable List<Attribute<String>> t_lPks =
-                        attributeMap.get(buildPkKey(t_Table.getName()));
-
-                    if (t_lPks == null)
-                    {
-                        t_lPks = new ArrayList<>(1);
-                        attributeMap.put(buildPkKey(t_Table.getName()), t_lPks);
-                    }
-
-                    for (@Nullable final AntFieldElement t_Field : t_cFieldElements)
-                    {
-                        if (t_Field != null)
-                        {
-                            t_lFields.add(t_Field);
-
-                            if (t_Field.isPk())
-                            {
-                                t_lPks.add(t_Field);
-
-                                fieldNameMap.put(
-                                    buildPkKey(t_Table.getName(), t_Field.getName()),
-                                    t_Field.getName());
-                            }
-
-                            @Nullable List<AntFieldFkElement> t_lFieldFks =
-                                t_Field.getFieldFks();
-
-                            if (t_lFieldFks == null)
-                            {
-                                t_lFieldFks = new ArrayList<>(0);
-                            }
-                            fieldFkMap.put(
-                                buildFkKey(t_Table.getName(), t_Field.getName()),
-                                t_lFieldFks);
-
-                            metadataManager.getColumnDAO().insert(
-                                t_Table.getName(),
-                                t_Field.getName(),
-                                metadataTypeManager.getJavaType(
-                                    t_Field.getType()));
-                        }
-                    }
-                }
-
-                @Nullable final List<Attribute<String>> t_lFields =
-                    attributeMap.get(buildTableFieldsKey(t_Table.getName()));
-
-                if (t_lFields != null)
-                {
-                    metadataManager.getPrimaryKeyDAO().insert(
-                        t_Table.getName(), t_lFields);
-                }
-            }
-        }
-    }
-
-    /**
      * Handles given parameters.
      * @param parameters the parameters to handle.
      * @param metadataManager the {@link MetadataManager} instance.
@@ -517,13 +252,14 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         storeMetadata(t_Metadata, parameters);
 
-        @Nullable final MetadataTypeManager t_MetadataTypeManager;
-
         if  (metadataManager != null)
         {
+            storeMetadataManager(metadataManager, parameters);
+
+            /*
             @NotNull final Map<String, ?> t_mKeys = new HashMap<String, Object>();
 
-            storeMetadataManager(metadataManager, parameters);
+            @Nullable final MetadataTypeManager t_MetadataTypeManager;
 
             t_MetadataTypeManager =
                 metadataManager.getMetadataTypeManager();
@@ -595,6 +331,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     }
                 }
             }
+            */
         }
 
         storeAlreadyDoneFlag(parameters);
@@ -618,6 +355,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         storeMetadata(metaData, parameters);
 
+        /*
         @Nullable final AntTablesElement t_TablesElement;
 
         t_TablesElement = retrieveTablesElement(parameters);
@@ -626,7 +364,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             extractTables(parameters, t_TablesElement);
 
         storeTables(t_lTables, parameters);
-
+        */
         @Nullable final MetadataManager t_MetadataManager =
             buildMetadataManager(parameters, metaData);
 
@@ -636,187 +374,6 @@ public abstract class DatabaseMetaDataRetrievalHandler
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the names of the user-defined tables.
-     * @param parameters the command parameters.
-     * @param tablesElement the &lt;tables&gt; element.
-     * @return such table names.
-     */
-    @NotNull
-    @SuppressWarnings("unused")
-    protected List<Table<String, Attribute<String>, List<Attribute<String>>>> extractTables(
-        @NotNull final QueryJCommand parameters, @Nullable final AntTablesElement tablesElement)
-    {
-        List<Table<String, Attribute<String>, List<Attribute<String>>>> result = null;
-
-        if (tablesElement != null)
-        {
-            result = extractTables(tablesElement.getTables());
-        }
-
-        if (result == null)
-        {
-            result = new ArrayList<>(0);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the fields of the user-defined tables.
-     * @param tables the table definitions.
-     * @return such fields.
-     */
-    @NotNull
-    protected List<Table<String, Attribute<String>, List<Attribute<String>>>> extractTables(
-        @Nullable final List<AntTableElement> tables)
-    {
-        @Nullable final List<Table<String, Attribute<String>, List<Attribute<String>>>> result;
-
-        final int t_iLength = (tables != null) ? tables.size() : 0;
-
-        result = new ArrayList<>(t_iLength);
-
-        if (tables != null)
-        {
-            for (@Nullable final AntTableElement t_Table : tables)
-            {
-                if  (t_Table != null)
-                {
-                    result.add(convertToTable(t_Table));
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves whether the tables should be extracted on demand.
-     * @param tablesElement the tables element.
-     * @return the result of such analysis..
-     */
-    @SuppressWarnings("unused")
-    protected boolean lazyTableExtraction(@Nullable final AntTablesElement tablesElement)
-    {
-        boolean result = false;
-
-        if  (tablesElement != null)
-        {
-            result = lazyTableExtraction(tablesElement.getTables());
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves whether the tables should be extracted on demand.
-     * @param tables the table definitions.
-     * @return the result of such analysis.
-     */
-    protected boolean lazyTableExtraction(@Nullable final Collection<AntTableElement> tables)
-    {
-        boolean result = false;
-
-        if (tables != null)
-        {
-            for (@Nullable final AntTableElement t_Table : tables)
-            {
-                if  (t_Table != null)
-                {
-                    @Nullable final Collection<AntFieldElement> t_cFields = t_Table.getFields();
-
-                    if  (   (t_cFields != null)
-                         && (t_cFields.size()> 0))
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Extracts the procedures.
-     * @param tables the tables.
-     * @param extractedMap the already-extracted information.
-     * @param metadataManager the database metadata manager.
-     * @param tableKey the key to store the tables.
-     */
-    @SuppressWarnings("unused")
-    protected void extractForeignKeys(
-        @NotNull final Collection<String> tables,
-        @NotNull final Map<String, Collection<String>> extractedMap,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final Object tableKey)
-    {
-        for (@Nullable final String t_strTableName : tables)
-        {
-            if (t_strTableName != null)
-            {
-                @NotNull final Collection<String> t_cFields =
-                    extractedMap.get(buildTableFieldsKey(t_strTableName));
-
-                for (@Nullable final String t_strFieldName : t_cFields)
-                {
-                    if (t_strFieldName != null)
-                    {
-                        @NotNull final Collection<String> t_cFieldFks =
-                            extractedMap.get(buildFkKey(t_strTableName, t_strFieldName));
-
-                        @Nullable final Iterator<String> t_itFieldFks = null;
-
-//                        if  (t_cFieldFks != null)
-//                        {
-//                            t_itFieldFks =
-//                                t_cFieldFks.iterator();
-//                        }
-//
-//                        if  (t_itFieldFks != null)
-//                        {
-//                            while  (t_itFieldFks.hasNext())
-//                            {
-//                                  @NotNull AntFieldFkElement t_FieldFk =
-//                                      (AntFieldFkElement)
-//                                          t_itFieldFks.next();
-//
-//                                  if  (t_FieldFk != null)
-//                                  {
-                    // TODO
-//                                        metadataManager.addForeignKey(
-//                                            t_strTableName,
-//                                            new String[] {t_strFieldName},
-//                                            t_FieldFk.getTable(),
-//                                            new String[]
-//                                            {
-//                                                t_FieldFk.getField()
-//                                            });
-//                                    }
-//                                }
-//                            }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Retrieves the tables XML element stored in the
-     * attribute map.
-     * @param parameters the parameter map.
-     * @return the table information.
-     */
-    @Nullable
-    protected AntTablesElement retrieveTablesElement(@NotNull final QueryJCommand parameters)
-    {
-        return
-            new QueryJCommandWrapper<AntTablesElement>(parameters)
-                .getSetting(ParameterValidationHandler.EXPLICIT_TABLES);
     }
 
     /**
@@ -955,15 +512,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 storeTables(result.getTableDAO().findAllTables(), parameters);
             }
         }
-        catch  (@NotNull final SQLException sqlException)
+        catch  (@NotNull final SQLException | QueryJException sqlException)
         {
             throw
                 new CannotRetrieveDatabaseMetadataException(sqlException);
-        }
-        catch  (@NotNull final QueryJException queryjException)
-        {
-            throw
-                new CannotRetrieveDatabaseMetadataException(queryjException);
         }
 
         return result;
@@ -1179,75 +731,6 @@ public abstract class DatabaseMetaDataRetrievalHandler
     protected String retrieveSchema(@NotNull final QueryJCommand parameters)
     {
         return parameters.getSetting(ParameterValidationHandler.JDBC_SCHEMA);
-    }
-
-    /**
-     * Builds the table key.
-     * @return the map key.
-     */
-    @NotNull
-    protected String buildTableKey()
-    {
-        return "'@'@'table";
-    }
-
-    /**
-     * Builds the table fields key.
-     * @param key the key.
-     * @return the map key.
-     */
-    @NotNull
-    protected String buildTableFieldsKey(@NotNull final Object key)
-    {
-        return ".98.table'@'@'fields`p" + key;
-    }
-
-    /**
-     * Builds a pk key using given object.
-     * @param firstKey the first object key.
-     * @return the map key.
-     */
-    @NotNull
-    protected String buildPkKey(@NotNull final Object firstKey)
-    {
-        return ".|\\|.pk" + firstKey;
-    }
-
-    /**
-     * Builds a pk key using given object.
-     * @param firstKey the first object key.
-     * @param secondKey the second object key.
-     * @return the map key.
-     */
-    @NotNull
-    protected String buildPkKey(
-        @NotNull final String firstKey, @NotNull final String secondKey)
-    {
-        return buildPkKey(firstKey) + "-.,.,-" + secondKey;
-    }
-
-    /**
-     * Builds a fk key using given object.
-     * @param firstKey the first object key.
-     * @return the map key.
-     */
-    @NotNull
-    protected String buildFkKey(@NotNull final String firstKey)
-    {
-        return "==fk''" + firstKey;
-    }
-
-    /**
-     * Builds a fk key using given object.
-     * @param firstKey the first object key.
-     * @param secondKey the second object key.
-     * @return the map key.
-     */
-    @NotNull
-    protected String buildFkKey(
-        @NotNull final String firstKey, @NotNull final String secondKey)
-    {
-        return buildFkKey(firstKey) + ".,.," + secondKey;
     }
 
     /**

@@ -7,7 +7,7 @@
   <artifactId>queryj-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <version>latest-SNAPSHOT</version>
-  <name>QueryJ Maven</name>
+  <name>QueryJ Maven Plugin</name>
   <inceptionYear>2002</inceptionYear>
 
   <parent>
@@ -29,6 +29,10 @@
     <dependency>
       <groupId>org.acmsl.queryj</groupId>
       <artifactId>queryj-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.acmsl.queryj</groupId>
+      <artifactId>queryj-ant-task</artifactId>
     </dependency>
     <dependency>
       <groupId>org.acmsl</groupId>

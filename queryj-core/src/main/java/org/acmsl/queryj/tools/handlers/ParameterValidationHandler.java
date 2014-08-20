@@ -32,7 +32,6 @@ package org.acmsl.queryj.tools.handlers;
  * Importing QueryJ Core classes.
  */
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.QueryJCommandWrapper;
 import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.api.exceptions.CannotReadCustomSqlXmlFileException;
 import org.acmsl.queryj.api.exceptions.NullCharsetException;
@@ -43,9 +42,7 @@ import org.acmsl.queryj.api.exceptions.GrammarBundleDoesNotExistException;
 import org.acmsl.queryj.api.exceptions.GrammarFolderDoesNotExistException;
 import org.acmsl.queryj.api.exceptions.IllegalThreadCountException;
 import org.acmsl.queryj.api.exceptions.InvalidJndiLocationException;
-import org.acmsl.queryj.api.exceptions.MissingClasspathException;
 import org.acmsl.queryj.api.exceptions.MissingCustomSqlXmlFileException;
-import org.acmsl.queryj.api.exceptions.MissingExternallyManagedFieldsException;
 import org.acmsl.queryj.api.exceptions.MissingJdbcDriverException;
 import org.acmsl.queryj.api.exceptions.MissingJdbcSchemaException;
 import org.acmsl.queryj.api.exceptions.MissingJdbcUrlException;
@@ -54,10 +51,7 @@ import org.acmsl.queryj.api.exceptions.MissingJndiLocationException;
 import org.acmsl.queryj.api.exceptions.MissingOutputFolderException;
 import org.acmsl.queryj.api.exceptions.MissingPackageException;
 import org.acmsl.queryj.api.exceptions.MissingRepositoryException;
-import org.acmsl.queryj.api.exceptions.MissingTablesException;
 import org.acmsl.queryj.api.exceptions.OutputDirIsNotAFolderException;
-import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
-import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.logging.QueryJAntLog;
 
 /*
@@ -65,11 +59,6 @@ import org.acmsl.queryj.tools.logging.QueryJAntLog;
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.types.Path;
 
 /*
  * Importing Commons-Logging classes.
@@ -187,7 +176,7 @@ public class ParameterValidationHandler
      * @throws QueryJBuildException if any parameter fails to validate.
      */
     public void validateParameters(
-        @NotNull final QueryJCommand command, final boolean usingAnt)
+        @NotNull final QueryJCommand command, @SuppressWarnings("unused") final boolean usingAnt)
       throws  QueryJBuildException
     {
         validateParameters(
@@ -208,6 +197,7 @@ public class ParameterValidationHandler
             command.getIntSetting(THREAD_COUNT, Runtime.getRuntime().availableProcessors()),
             command);
 
+        /*
         if  (usingAnt)
         {
             validateAntParameters(
@@ -216,6 +206,7 @@ public class ParameterValidationHandler
                     EXTERNALLY_MANAGED_FIELDS),
                 new QueryJCommandWrapper<Path>(command).getSetting(CLASSPATH));
         }
+        */
     }
 
     /**
@@ -458,40 +449,6 @@ public class ParameterValidationHandler
         if (threadCount <= 0)
         {
             throw new IllegalThreadCountException(threadCount);
-        }
-    }
-
-    /**
-     * Validates the parameters explicitly coming from Ant.
-     * @param tables the table information.
-     * @param externallyManagedFields the externally-managed fields
-     * information.
-     * @param classpath the classpath.
-     * such as the header contents.
-     * @throws QueryJBuildException if any parameter fails to validate.
-     */
-    protected void validateAntParameters(
-        @Nullable final AntTablesElement tables,
-        @Nullable final AntExternallyManagedFieldsElement externallyManagedFields,
-        @Nullable final Path classpath)
-      throws  QueryJBuildException
-    {
-        if  (classpath == null) 
-        {
-            throw new MissingClasspathException();
-        }
-
-        if  (   (tables != null)
-             && (   (tables.getTables() == null)
-                 || (tables.getTables().size() == 0)))
-        {
-            throw new MissingTablesException();
-        }
-
-        if  (   (externallyManagedFields != null)
-             && (externallyManagedFields.getFields().size() == 0))
-        {
-            throw new MissingExternallyManagedFieldsException();
         }
     }
 
