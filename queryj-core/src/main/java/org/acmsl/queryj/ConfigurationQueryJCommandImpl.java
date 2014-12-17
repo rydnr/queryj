@@ -167,7 +167,7 @@ public class ConfigurationQueryJCommandImpl
      * Retrieves the log instance.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public Log getLog()
     {

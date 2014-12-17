@@ -73,7 +73,7 @@ public interface QueryJCommand
      * Retrieves the log instance.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     public Log getLog();
 
     /**
