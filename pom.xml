@@ -6,7 +6,7 @@
   <groupId>org.acmsl.queryj</groupId>
   <artifactId>queryj</artifactId>
   <packaging>pom</packaging>
-  <version>latest-SNAPSHOT</version>
+  <version>3.1.0036</version>
   <name>QueryJ</name>
   <url>http://www.acm-sl.org/projects/queryj</url>
   <inceptionYear>2002</inceptionYear>
@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.acmsl</groupId>
     <artifactId>acmsl-pom</artifactId>
-    <version>latest-SNAPSHOT</version>
+    <version>3.1.0036</version>
   </parent>
 
   <properties>
