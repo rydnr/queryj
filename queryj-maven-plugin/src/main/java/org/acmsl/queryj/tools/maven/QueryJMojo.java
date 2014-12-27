@@ -652,7 +652,7 @@ public class QueryJMojo
     {
         final File result;
 
-        final String aux = System.getProperty(PACKAGE_NAME);
+        final String aux = System.getProperty(OUTPUT_DIR);
 
         if (aux == null)
         {

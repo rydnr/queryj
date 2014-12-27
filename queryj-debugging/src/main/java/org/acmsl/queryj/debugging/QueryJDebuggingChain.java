@@ -155,7 +155,7 @@ public class QueryJDebuggingChain<CH extends QueryJCommandHandler<QueryJCommand>
         @NotNull final TemplateDebuggingService<C> service)
         throws QueryJBuildException
     {
-        boolean result = false;
+        final boolean result = false;
 
         @Nullable final Log t_Log = command.getLog();
 
@@ -187,7 +187,7 @@ public class QueryJDebuggingChain<CH extends QueryJCommandHandler<QueryJCommand>
 
                 if  (t_CurrentCommandHandler != null)
                 {
-                     service.debug(t_CurrentCommandHandler);
+                     t_DebugCommand = service.debug(t_CurrentCommandHandler, command);
                 }
 
                 if (t_bLoggingEnabled)

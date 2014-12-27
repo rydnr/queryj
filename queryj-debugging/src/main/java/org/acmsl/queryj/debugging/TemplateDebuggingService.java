@@ -85,10 +85,12 @@ public interface TemplateDebuggingService<C extends TemplateContext>
     /**
      * Process given handler while debugging.
      * @param handler the current handler in the chain.
+     * @param command the {@link QueryJCommand command}.
      * @return the {@link TemplateDebuggingCommand}.
      * @throws QueryJBuildException if the debug process fails.
      */
     @NotNull
-    TemplateDebuggingCommand debug(@NotNull final QueryJCommandHandler<QueryJCommand> handler)
+    TemplateDebuggingCommand debug(
+        @NotNull final QueryJCommandHandler<QueryJCommand> handler, @NotNull final QueryJCommand command)
         throws QueryJBuildException;
 }

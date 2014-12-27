@@ -59,7 +59,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing JUnit classes.
  */
 import org.easymock.EasyMock;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -127,14 +126,13 @@ public class AbstractTemplateGeneratorTest
         }
 
         /**
-         * Process given handler while debugging.
-         *
-         * @param handler the current handler in the chain.
-         * @return the {@link TemplateDebuggingCommand}.
+         * {@inheritDoc}
          */
         @NotNull
         @Override
-        public TemplateDebuggingCommand debug(@NotNull final QueryJCommandHandler<QueryJCommand> handler)
+        public TemplateDebuggingCommand debug(
+            @NotNull final QueryJCommandHandler<QueryJCommand> handler,
+            @NotNull final QueryJCommand command)
         {
             return TemplateDebuggingCommand.NEXT;
         }
