@@ -5,13 +5,13 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>queryj-ant-task</artifactId>
   <packaging>jar</packaging>
-  <version>latest-SNAPSHOT</version>
+  <version>3.1.0075</version>
   <name>QueryJ Ant Task</name>
 
   <parent>
     <groupId>org.acmsl.queryj</groupId>
     <artifactId>queryj</artifactId>
-    <version>latest-SNAPSHOT</version>
+    <version>3.1.0075</version>
   </parent>
 
   <dependencies>
