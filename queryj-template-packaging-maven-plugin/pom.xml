@@ -18,6 +18,25 @@
     <maven>2.2.1</maven>
   </prerequisites>
  
+  <distributionManagement>
+    <repository>
+      <id>acmsl-plugins-releases</id>
+      <name>acmsl-plugins-releases</name>
+      <url>http://maven.acm-sl.org/plugins-releases-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>acmsl-plugins-snapshots</id>
+      <name>acmsl-plugins-snapshots</name>
+      <url>http://maven.acm-sl.org/plugins-snapshots-local</url>
+    </snapshotRepository>
+    <!-- site:deploy pending -->
+    <!--site>
+        <id>github</id>
+        <name>Github project</name>
+        <url>http://github.com/rydnr/queryj/queryj-template-packaging-maven-plugin</url>
+        </site-->
+  </distributionManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.acmsl.queryj</groupId>
