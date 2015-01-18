@@ -38,7 +38,6 @@ package org.acmsl.queryj.metadata.engines.oracle;
 /*
  * Importing QueryJ Core classes.
  */
-import javafx.beans.binding.When.StringConditionBuilder;
 import org.acmsl.queryj.sql.Field;
 import org.acmsl.queryj.sql.QueryUtils;
 import org.acmsl.queryj.sql.StringField;
