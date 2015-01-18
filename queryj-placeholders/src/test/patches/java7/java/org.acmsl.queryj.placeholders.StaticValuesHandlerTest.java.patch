@@ -1,0 +1,20 @@
+diff -rupN org/acmsl/queryj/placeholders/StaticValuesHandlerTest.java org/acmsl/queryj/placeholders/StaticValuesHandlerTest.java
+--- org/acmsl/queryj/placeholders/StaticValuesHandlerTest.java
++++ org/acmsl/queryj/placeholders/StaticValuesHandlerTest.java
+@@ -40,6 +40,7 @@ package org.acmsl.queryj.placeholders;
+  */
+ import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+ import org.acmsl.queryj.api.PerTableTemplateContext;
++import org.acmsl.queryj.metadata.vo.Attribute;
+ import org.acmsl.queryj.metadata.vo.Row;
+ import org.acmsl.queryj.metadata.vo.RowValueObject;
+ 
+@@ -89,7 +90,7 @@ public class StaticValuesHandlerTest
+         throws QueryJBuildException
+     {
+         @NotNull final List<Row<String>> t_lStaticValues =
+-            Arrays.<Row<String>>asList(new RowValueObject("row1", "table1", new ArrayList<>(0)));
++            Arrays.<Row<String>>asList(new RowValueObject("row1", "table1", new ArrayList<Attribute<String>>(0)));
+ 
+         @NotNull final PerTableTemplateContext t_Context = EasyMock.createNiceMock(PerTableTemplateContext.class);
+ 
