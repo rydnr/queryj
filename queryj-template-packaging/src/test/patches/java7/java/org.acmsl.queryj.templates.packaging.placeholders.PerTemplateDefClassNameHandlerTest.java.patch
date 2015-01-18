@@ -1,0 +1,21 @@
+diff -rupN org/acmsl/queryj/templates/packaging/placeholders/PerTemplateDefClassNameHandlerTest.java org/acmsl/queryj/templates/packaging/placeholders/PerTemplateDefClassNameHandlerTest.java
+--- org/acmsl/queryj/templates/packaging/placeholders/PerTemplateDefClassNameHandlerTest.java
++++ org/acmsl/queryj/templates/packaging/placeholders/PerTemplateDefClassNameHandlerTest.java
+@@ -99,7 +99,7 @@ public class PerTemplateDefClassNameHandlerTest
+                 "FinalFile.java",
+                 "com.foo.bar",
+                 file,
+-                new HashMap<>(0),
++                new HashMap<String, String>(0),
+                 false,
+                 false);
+ 
+@@ -137,7 +137,7 @@ public class PerTemplateDefClassNameHandlerTest
+                 "FinalFile.java",
+                 "com.foo.bar",
+                 null,
+-                new HashMap<>(0),
++                new HashMap<String, String>(0),
+                 false,
+                 false);
+ 

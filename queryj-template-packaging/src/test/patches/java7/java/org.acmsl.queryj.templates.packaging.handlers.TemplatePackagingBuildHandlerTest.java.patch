@@ -1,0 +1,21 @@
+diff -rupN org/acmsl/queryj/templates/packaging/handlers/TemplatePackagingBuildHandlerTest.java org/acmsl/queryj/templates/packaging/handlers/TemplatePackagingBuildHandlerTest.java
+--- org/acmsl/queryj/templates/packaging/handlers/TemplatePackagingBuildHandlerTest.java
++++ org/acmsl/queryj/templates/packaging/handlers/TemplatePackagingBuildHandlerTest.java
+@@ -98,7 +98,7 @@ public class TemplatePackagingBuildHandlerTest
+                 "finalOFile.java",
+                 "com.foo.bar",
+                 file,
+-                new HashMap<>(0),
++                new HashMap<String, String>(0),
+                 false,
+                 false);
+ 
+@@ -124,7 +124,7 @@ public class TemplatePackagingBuildHandlerTest
+                 "finalOFile.java",
+                 "com.foo.bar",
+                 null,
+-                new HashMap<>(0),
++                new HashMap<String, String>(0),
+                 false,
+                 false);
+ 
