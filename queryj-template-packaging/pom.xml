@@ -164,6 +164,20 @@
                   <goal>apply</goal>
                 </goals>
               </execution>
+              <execution>
+                <id>java7-resources-patches</id>
+                 <configuration>
+                  <targetDirectory>${project.basedir}/src/main/resources</targetDirectory>
+                  <patchDirectory>${project.basedir}/src/main/patches/java7/resources</patchDirectory>
+                  <patchTrackingFile>${project.build.directory}/optimization-files/patches-applied-resources.txt</patchTrackingFile>
+                  <naturalOrderProcessing>true</naturalOrderProcessing>
+                  <optimizations>false</optimizations>
+                </configuration>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>apply</goal>
+                </goals>
+              </execution>
             </executions>
           </plugin>
         </plugins>

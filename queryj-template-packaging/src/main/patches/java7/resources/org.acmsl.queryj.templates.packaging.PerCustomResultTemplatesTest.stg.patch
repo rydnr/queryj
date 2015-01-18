@@ -1,0 +1,21 @@
+diff -rupN org/acmsl/queryj/templates/packaging/PerCustomResultTemplatesTest.stg org/acmsl/queryj/templates/packaging/PerCustomResultTemplatesTest.stg
+--- org/acmsl/queryj/templates/packaging/PerCustomResultTemplatesTest.stg
++++ org/acmsl/queryj/templates/packaging/PerCustomResultTemplatesTest.stg
+@@ -340,7 +340,7 @@ public class PerCustomResultTemplatesTest
+             new QueryJCommandWrapper\<String>(t_Command).setSetting(
+                 QueryJSettings.VERSION, "<C.version>");
+ 
+-            @NotNull final List\<Result\<String\>> results = new ArrayList\<>(resultMap.values());
++            @NotNull final List\<Result\<String\>> results = new ArrayList\<Result\<String\>>(resultMap.values());
+ 
+             for (@Nullable final Result\<String> result : results)
+             {
+@@ -354,7 +354,7 @@ public class PerCustomResultTemplatesTest
+ 
+                     if (properties == null)
+                     {
+-                        properties = new ArrayList\<>(0);
++                        properties = new ArrayList\<Property\<String\>>(0);
+                     }
+ 
+                     @NotNull final MetadataManager metadataManager =

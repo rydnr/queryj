@@ -1,0 +1,47 @@
+diff -rupN org/acmsl/queryj/templates/packaging/PerTableTemplatesTest.stg org/acmsl/queryj/templates/packaging/PerTableTemplatesTest.stg
+--- org/acmsl/queryj/templates/packaging/PerTableTemplatesTest.stg
++++ org/acmsl/queryj/templates/packaging/PerTableTemplatesTest.stg
+@@ -501,7 +501,7 @@ public class PerTableTemplatesTest
+                 QueryJSettings.VERSION, "<C.version>");
+ 
+             @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> tables =
+-                new ArrayList\<>(tableMap.values());
++                new ArrayList\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>>(tableMap.values());
+ 
+             for (@NotNull final Table\<String, Attribute\<String>, List\<Attribute\<String>\>> table : tables)
+             {
+@@ -509,7 +509,7 @@ public class PerTableTemplatesTest
+ 
+                 if (tableRows == null)
+                 {
+-                    tableRows = new ArrayList\<>(0);
++                    tableRows = new ArrayList\<Row\<String\>>(0);
+                 }
+ 
+                 @NotNull final MetadataManager metadataManager =
+@@ -704,9 +704,9 @@ public class PerTableTemplatesTest
+ 
+         @NotNull final Map\<String, Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> t_mTables = getTables();
+         @NotNull final Set\<String> t_TableNameSet = t_mTables.keySet();
+-        @NotNull final List\<String> t_lTableNames = new ArrayList\<>(t_TableNameSet.size());
++        @NotNull final List\<String> t_lTableNames = new ArrayList\<String>(t_TableNameSet.size());
+         @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> t_lTables =
+-            new ArrayList\<>(t_TableNameSet.size());
++            new ArrayList\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>>(t_TableNameSet.size());
+         t_lTableNames.addAll(t_TableNameSet);
+         t_lTables.addAll(t_mTables.values());
+ 
+@@ -717,7 +717,12 @@ public class PerTableTemplatesTest
+             t_strJdbcUserName,
+             t_strJdbcPassword,
+             retrieveCustomSqlProvider(getSqlList(), getParameters()),
+-            retrieveMetadataManager(engineName, t_lTableNames, t_lTables, new ArrayList\<>(0), null));
++            retrieveMetadataManager(
++                engineName,
++                t_lTableNames,
++                t_lTables,
++                new ArrayList\<Row\<String\>>(0),
++                null));
+     }
+ 
+     /**

@@ -1,0 +1,20 @@
+diff -rupN org/acmsl/queryj/templates/packaging/PerRepositoryTemplatesTest.stg org/acmsl/queryj/templates/packaging/PerRepositoryTemplatesTest.stg
+--- org/acmsl/queryj/templates/packaging/PerRepositoryTemplatesTest.stg
++++ org/acmsl/queryj/templates/packaging/PerRepositoryTemplatesTest.stg
+@@ -326,10 +326,14 @@ public class PerRepositoryTemplatesTest
+                 QueryJSettings.VERSION, "<C.version>");
+ 
+             @NotNull final List\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>> t_lTables =
+-                new ArrayList\<>(tableMap.values());
++                new ArrayList\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>>(tableMap.values());
+ 
+             @NotNull final MetadataManager t_MetadataManager =
+-                retrieveMetadataManager(engine, t_lTables, new ArrayList\<>(0), t_DecoratorFactory);
++                retrieveMetadataManager(
++                    engine,
++                    t_lTables,
++                    new ArrayList\<Row\<String\>>(0),
++                    t_DecoratorFactory);
+ 
+             new QueryJCommandWrapper\<MetadataManager>(t_Command).setSetting(
+                 DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, t_MetadataManager);

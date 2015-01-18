@@ -1,0 +1,15 @@
+diff -rupN org/acmsl/queryj/templates/packaging/PerForeignKeyTemplatesTest.stg org/acmsl/queryj/templates/packaging/PerForeignKeyTemplatesTest.stg
+--- org/acmsl/queryj/templates/packaging/PerForeignKeyTemplatesTest.stg
++++ org/acmsl/queryj/templates/packaging/PerForeignKeyTemplatesTest.stg
+@@ -370,7 +370,10 @@ public class PerForeignKeyTemplatesTest
+ 
+             @NotNull final MetadataManager t_MetadataManager =
+                 retrieveMetadataManager(
+-                    engine, new ArrayList\<>(tables.values()), new ArrayList\<>(0), decoratorFactory);
++                    engine,
++                    new ArrayList\<Table\<String, Attribute\<String>, List\<Attribute\<String\>>\>>(tables.values()),
++                    new ArrayList\<Row\<String\>>(0),
++                    decoratorFactory);
+ 
+             new QueryJCommandWrapper<MetadataManager>(t_Command).setSetting(
+                 DatabaseMetaDataRetrievalHandler.METADATA_MANAGER, t_MetadataManager);
