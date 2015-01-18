@@ -6,14 +6,14 @@
   <groupId>org.acmsl.queryj</groupId>
   <artifactId>queryj-debugging-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>latest-SNAPSHOT</version>
+  <version>3.1.93</version>
   <name>QueryJ Debugging Maven Plugin</name>
   <inceptionYear>2014</inceptionYear>
 
   <parent>
     <groupId>org.acmsl.queryj</groupId>
     <artifactId>queryj</artifactId>
-    <version>latest-SNAPSHOT</version>
+    <version>3.1.93</version>
   </parent>
 
   <prerequisites>
