@@ -1,0 +1,90 @@
+diff -rupN org/acmsl/queryj/api/PerCommentParsingCache.aj org/acmsl/queryj/api/PerCommentParsingCache.aj
+--- org/acmsl/queryj/api/PerCommentParsingCache.aj
++++ org/acmsl/queryj/api/PerCommentParsingCache.aj
+@@ -61,42 +61,42 @@ public aspect PerCommentParsingCache
+     /**
+      * The static-attribute cache.
+      */
+-    private static final Map<String, String> STATIC_ATTRIBUTE_CACHE = new HashMap<>();
++    private static final Map<String, String> STATIC_ATTRIBUTE_CACHE = new HashMap<String, String>();
+ 
+     /**
+      * The declared parent cache.
+      */
+-    private static final Map<String, String> DECLARED_PARENT_CACHE = new HashMap<>();
++    private static final Map<String, String> DECLARED_PARENT_CACHE = new HashMap<String, String>();
+ 
+     /**
+      * The discriminating parent cache.
+      */
+-    private static final Map<String, String> DISCRIMINATING_PARENT_CACHE = new HashMap<>();
++    private static final Map<String, String> DISCRIMINATING_PARENT_CACHE = new HashMap<String, String>();
+ 
+     /**
+      * The column bool cache.
+      */
+-    private static final Map<String, String[]> COLUMN_BOOL_CACHE = new HashMap<>();
++    private static final Map<String, String[]> COLUMN_BOOL_CACHE = new HashMap<String, String[]>();
+ 
+     /**
+      * The column readonly cache.
+      */
+-    private static final Map<String, Boolean> COLUMN_READONLY_CACHE= new HashMap<>();
++    private static final Map<String, Boolean> COLUMN_READONLY_CACHE= new HashMap<String, Boolean>();
+ 
+     /**
+      * The column discriminated tables cache.
+      */
+-    private static final Map<String, List<List<String>>> COLUMN_DISCRIMINATED_TABLES_CACHE= new HashMap<>();
++    private static final Map<String, List<List<String>>> COLUMN_DISCRIMINATED_TABLES_CACHE= new HashMap<String, List<List<String>>>();
+ 
+     /**
+      * The table decorator cache.
+      */
+-    private static final Map<String, Boolean> TABLE_DECORATOR_CACHE = new HashMap<>();
++    private static final Map<String, Boolean> TABLE_DECORATOR_CACHE = new HashMap<String, Boolean>();
+ 
+     /**
+      * The table relationship cache.
+      */
+-    private static final Map<String, List<List<String>>> TABLE_RELATIONSHIP_CACHE = new HashMap<>();
++    private static final Map<String, List<List<String>>> TABLE_RELATIONSHIP_CACHE = new HashMap<String, List<List<String>>>();
+ 
+     /**
+      * The pointcut for "retrieveStaticAttribute(String)"
+@@ -328,7 +328,7 @@ public aspect PerCommentParsingCache
+ 
+             if (result == null)
+             {
+-                COLUMN_DISCRIMINATED_TABLES_CACHE.put(key, new ArrayList<>(0));
++                COLUMN_DISCRIMINATED_TABLES_CACHE.put(key, new ArrayList<List<String>>(0));
+             }
+             else
+             {
+@@ -337,7 +337,7 @@ public aspect PerCommentParsingCache
+         }
+         else if (result.equals(key))
+         {
+-            result = new ArrayList<>(0);
++            result = new ArrayList<List<String>>(0);
+         }
+ 
+         return result;
+@@ -381,7 +381,7 @@ public aspect PerCommentParsingCache
+ 
+             if (result == null)
+             {
+-                TABLE_RELATIONSHIP_CACHE.put(key, new ArrayList<>(0));
++                TABLE_RELATIONSHIP_CACHE.put(key, new ArrayList<List<String>>(0));
+             }
+             else
+             {
+@@ -390,7 +390,7 @@ public aspect PerCommentParsingCache
+         }
+         else if (result.equals(key))
+         {
+-            result = new ArrayList<>(0);
++            result = new ArrayList<List<String>>(0);
+         }
+ 
+         return result;

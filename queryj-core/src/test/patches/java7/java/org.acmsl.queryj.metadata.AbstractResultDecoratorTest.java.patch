@@ -1,0 +1,30 @@
+diff -rupN org/acmsl/queryj/metadata/AbstractResultDecoratorTest.java org/acmsl/queryj/metadata/AbstractResultDecoratorTest.java
+--- org/acmsl/queryj/metadata/AbstractResultDecoratorTest.java
++++ org/acmsl/queryj/metadata/AbstractResultDecoratorTest.java
+@@ -144,7 +144,7 @@ public class AbstractResultDecoratorTest
+     public void getSimpleClassValue_removes_the_package_name()
+     {
+         @NotNull final AbstractResultDecorator<String> result =
+-            AbstractResultDecoratorTest.setupResultDecorator("my.id", "com.foo.bar.MyResult", new ArrayList<>(0));
++            AbstractResultDecoratorTest.setupResultDecorator("my.id", "com.foo.bar.MyResult", new ArrayList<Property<String>>(0));
+ 
+         Assert.assertEquals("MyResult", result.getSimpleClassValue().getValue());
+ 
+@@ -157,7 +157,7 @@ public class AbstractResultDecoratorTest
+     public void getPackage_retrieves_the_package_name()
+     {
+         @NotNull final AbstractResultDecorator<String> result =
+-            AbstractResultDecoratorTest.setupResultDecorator("my.id", "com.foo.bar.MyResult", new ArrayList<>(0));
++            AbstractResultDecoratorTest.setupResultDecorator("my.id", "com.foo.bar.MyResult", new ArrayList<Property<String>>(0));
+ 
+         Assert.assertEquals("com.foo.bar", result.getPackage().getValue());
+ 
+@@ -189,7 +189,7 @@ public class AbstractResultDecoratorTest
+     {
+         @NotNull final AbstractResultDecorator<String> result;
+ 
+-        @NotNull final Result<String> wrappedResult = new ResultElement<>(id, classValue);
++        @NotNull final Result<String> wrappedResult = new ResultElement<String>(id, classValue);
+ 
+         @NotNull final CustomSqlProvider customSqlProvider = EasyMock.createNiceMock(CustomSqlProvider.class);
+         @NotNull final SqlPropertyDAO propertyDAO = EasyMock.createNiceMock(SqlPropertyDAO.class);

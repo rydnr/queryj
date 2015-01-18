@@ -1,0 +1,16 @@
+diff -rupN org/acmsl/queryj/api/PerTableTemplateContext.java org/acmsl/queryj/api/PerTableTemplateContext.java
+--- org/acmsl/queryj/api/PerTableTemplateContext.java
++++ org/acmsl/queryj/api/PerTableTemplateContext.java
+@@ -142,8 +142,10 @@ public class PerTableTemplateContext
+     public List<Row<String>> getStaticValues()
+     {
+         return
+-            new ArrayList<>(
+-                getListValue(buildStaticValuesKey(), getCommand(), new StaticValuesNotAvailableException()));
++            new ArrayList<Row<String>>(
++                (List<Row<String>>)
++                    super.<Row<String>>getListValue(
++                        buildStaticValuesKey(), getCommand(), new StaticValuesNotAvailableException()));
+     }
+ 
+     /**

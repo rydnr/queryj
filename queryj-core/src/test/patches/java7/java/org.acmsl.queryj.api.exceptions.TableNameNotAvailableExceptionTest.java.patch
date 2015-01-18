@@ -1,0 +1,14 @@
+diff -rupN org/acmsl/queryj/api/exceptions/TableNameNotAvailableExceptionTest.java org/acmsl/queryj/api/exceptions/TableNameNotAvailableExceptionTest.java
+--- org/acmsl/queryj/api/exceptions/TableNameNotAvailableExceptionTest.java
++++ org/acmsl/queryj/api/exceptions/TableNameNotAvailableExceptionTest.java
+@@ -71,6 +71,9 @@ public class TableNameNotAvailableExceptionTest
+         @NotNull final TableNameNotAvailableException instance = new TableNameNotAvailableException();
+ 
+         // throws a MissingResourceException if the key is not declared.
+-        Arrays.asList(new Locale("en"), new Locale("es")).forEach(instance::getMessage);
++        for (@NotNull final Locale locale : Arrays.asList(new Locale("en"), new Locale("es")))
++        {
++            instance.getMessage(locale);
++        }
+     }
+ }
