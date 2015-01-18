@@ -6,14 +6,14 @@
   <groupId>org.acmsl.queryj</groupId>
   <artifactId>queryj-placeholders</artifactId>
   <packaging>jar</packaging>
-  <version>latest-SNAPSHOT</version>
+  <version>3.1.91</version>
   <name>QueryJ Placeholders</name>
   <url>http://www.acm-sl.org/projects/queryj</url>
 
   <parent>
     <groupId>org.acmsl.queryj</groupId>
     <artifactId>queryj</artifactId>
-    <version>latest-SNAPSHOT</version>
+    <version>3.1.91</version>
   </parent>
 
   <dependencies>
