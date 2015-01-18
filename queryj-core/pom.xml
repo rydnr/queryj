@@ -206,7 +206,6 @@
               <execution>
                 <id>java7-main-patches</id>
                 <configuration>
-                  <!--targetDirectory>${project.basedir}/main/generated-sources</targetDirectory-->
                   <patchDirectory>${project.basedir}/src/main/patches/java7</patchDirectory>
                   <patchTrackingFile>${project.build.directory}/optimization-files/patches-applied.txt</patchTrackingFile>
                   <naturalOrderProcessing>true</naturalOrderProcessing>
@@ -220,7 +219,7 @@
               <execution>
                 <id>java7-test-patches</id>
                 <configuration>
-                  <targetDirectory>${project.basedir}/target/generated-test-sources</targetDirectory>
+                  <targetDirectory>${project.basedir}/src/test/java</targetDirectory>
                   <patchDirectory>${project.basedir}/src/test/patches/java7</patchDirectory>
                   <patchTrackingFile>${project.build.directory}/optimization-files/patches-applied-test.txt</patchTrackingFile>
                   <naturalOrderProcessing>true</naturalOrderProcessing>
@@ -232,6 +231,20 @@
                 </goals>
               </execution>
             </executions>
+              <execution>
+                <id>java7-aspectj-patches</id>
+                <configuration>
+                  <targetDirectory>${project.basedir}/src/main/aspectj</targetDirectory>
+                  <patchDirectory>${project.basedir}/src/main/patches/java7-aspectj</patchDirectory>
+                  <patchTrackingFile>${project.build.directory}/optimization-files/patches-applied-aspectj.txt</patchTrackingFile>
+                  <naturalOrderProcessing>true</naturalOrderProcessing>
+                  <optimizations>false</optimizations>
+                </configuration>
+                <phase>process-sources</phase>
+                <goals>
+                  <goal>apply</goal>
+                </goals>
+              </execution>
           </plugin>
         </plugins>
       </build>
