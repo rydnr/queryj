@@ -1,0 +1,24 @@
+diff -rupN org/acmsl/queryj/debugging/netty/NettyServerChannelHandler.java org/acmsl/queryj/debugging/netty/NettyServerChannelHandler.java
+--- org/acmsl/queryj/debugging/netty/NettyServerChannelHandler.java
++++ org/acmsl/queryj/debugging/netty/NettyServerChannelHandler.java
+@@ -118,9 +118,17 @@ public class NettyServerChannelHandler
+ 
+         final ChannelFuture future = ctx.writeAndFlush("ACK");
+         future.addListener(
+-            channelFuture -> {
+-                System.out.println("Closing context");
+-                ctx.close();
++            new ChannelFutureListener()
++            {
++                /**
++                 * {@inheritDoc}
++                 */
++                @Override
++                public void operationComplete(@NotNull final ChannelFuture future)
++                {
++                    System.out.println("Closing context");
++                    ctx.close();
++                }
+             });
+ 
+         /*

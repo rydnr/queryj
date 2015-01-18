@@ -138,4 +138,41 @@
       </plugin>
     </plugins>
   </reporting>
+
+  <profiles>
+    <profile>
+      <id>forJava7</id>
+      <activation>
+        <jdk>1.7</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-patch-plugin</artifactId>
+            <configuration>
+              <targetDirectory>${moduleDirectory}</targetDirectory>
+              <skipApplication>false</skipApplication>
+            </configuration>
+            <executions>
+              <execution>
+                <id>java7-patches</id>
+                 <configuration>
+                  <targetDirectory>${project.basedir}/src/main/java</targetDirectory>
+                  <patchDirectory>${project.basedir}/src/main/patches/java7/java</patchDirectory>
+                  <patchTrackingFile>${project.build.directory}/optimization-files/patches-applied.txt</patchTrackingFile>
+                  <naturalOrderProcessing>true</naturalOrderProcessing>
+                  <optimizations>false</optimizations>
+                </configuration>
+                <phase>process-sources</phase>
+                <goals>
+                  <goal>apply</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
