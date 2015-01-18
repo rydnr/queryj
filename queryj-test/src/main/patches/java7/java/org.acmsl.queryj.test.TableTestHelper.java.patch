@@ -1,0 +1,106 @@
+diff -rupN org/acmsl/queryj/test/TableTestHelper.java org/acmsl/queryj/test/TableTestHelper.java
+--- org/acmsl/queryj/test/TableTestHelper.java
++++ org/acmsl/queryj/test/TableTestHelper.java
+@@ -289,7 +289,7 @@ public class TableTestHelper
+         @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
+     {
+         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> result =
+-            new ArrayList<>(tables.size());
++            new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(tables.size());
+ 
+         for (@NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table : tables.values())
+         {
+@@ -372,9 +372,9 @@ public class TableTestHelper
+             new TableValueObject(
+                 tableName,
+                 comment,
+-                new ArrayList<>(),
+-                new ArrayList<>(),
+-                new ArrayList<>(),
++                new ArrayList<Attribute<String>>(),
++                new ArrayList<Attribute<String>>(),
++                new ArrayList<ForeignKey<String>>(),
+                 // TODO: Decorate TableValueObject to retrieve the parent table via its name
+                 // and the table collection.
+                 null, //parentTable,
+@@ -469,7 +469,7 @@ public class TableTestHelper
+     public List<Attribute<String>> filterAttributes(
+         final Table<String, Attribute<String>, List<Attribute<String>>> table, final String[] columns)
+     {
+-        @NotNull final List<Attribute<String>> result = new ArrayList<>();
++        @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>();
+ 
+         for (@NotNull final Attribute<String> attribute : table.getAttributes())
+         {
+@@ -579,7 +579,7 @@ public class TableTestHelper
+     @NotNull
+     public List<Sql<String>> defineSql(@NotNull final DataTable sqlInfo)
+     {
+-        @NotNull final List<Sql<String>> result = new ArrayList<>();
++        @NotNull final List<Sql<String>> result = new ArrayList<Sql<String>>();
+ 
+         for (@NotNull final Map<String, String> sqlRow: sqlInfo.asMaps(String.class, String.class))
+         {
+@@ -593,7 +593,7 @@ public class TableTestHelper
+             @NotNull final String value = sqlRow.get(VALUE);
+ 
+             @NotNull final SqlElement<String> sql =
+-                new SqlElement<>(
++                new SqlElement<String>(
+                     id,
+                     dao,
+                     name,
+@@ -622,7 +622,7 @@ public class TableTestHelper
+     public Map<String, List<Parameter<String, ?>>> defineParameters(
+         @NotNull final DataTable parameterInfo, @NotNull final List<Sql<String>> sqlList)
+     {
+-        @NotNull final Map<String, List<Parameter<String, ?>>> result = new HashMap<>();
++        @NotNull final Map<String, List<Parameter<String, ?>>> result = new HashMap<String, List<Parameter<String, ?>>>();
+ 
+         for (@NotNull final Map<String, String> sqlRow: parameterInfo.asMaps(String.class, String.class))
+         {
+@@ -636,7 +636,7 @@ public class TableTestHelper
+             @Nullable final Object parseValidationValue = (validationValue != null) ? toDate(validationValue) : null;
+ 
+             @NotNull final ParameterElement<String, ?> parameter =
+-                new ParameterElement<>(
++                new ParameterElement<String, Object>(
+                     id,
+                     Integer.parseInt(index),
+                     name,
+@@ -647,7 +647,7 @@ public class TableTestHelper
+ 
+             if (parameters == null)
+             {
+-                parameters = new ArrayList<>();
++                parameters = new ArrayList<Parameter<String, ?>>();
+                 result.put(sqlRef, parameters);
+             }
+             parameters.add(parameter);
+@@ -735,7 +735,7 @@ public class TableTestHelper
+         @NotNull final DataTable values,
+         @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
+     {
+-        @NotNull final Map<String, List<Row<String>>> result = new HashMap<>();
++        @NotNull final Map<String, List<Row<String>>> result = new HashMap<String, List<Row<String>>>();
+ 
+         for (@NotNull final Map<String, String> tableRow: values.asMaps(String.class, String.class))
+         {
+@@ -743,7 +743,7 @@ public class TableTestHelper
+             @Nullable List<Row<String>> rows = result.get(tableName);
+             if (rows == null)
+             {
+-                rows = new ArrayList<>();
++                rows = new ArrayList<Row<String>>();
+                 result.put(tableName, rows);
+             }
+             @NotNull final String contents = tableRow.get("row");
+@@ -782,7 +782,7 @@ public class TableTestHelper
+     protected List<Attribute<String>> fillValues(
+         @NotNull final String contents, @NotNull final List<Attribute<String>> attributes)
+     {
+-        @NotNull final List<Attribute<String>> result = new ArrayList<>(attributes.size());
++        @NotNull final List<Attribute<String>> result = new ArrayList<Attribute<String>>(attributes.size());
+ 
+         @NotNull final String[] parts = contents.split(",");
+ 
