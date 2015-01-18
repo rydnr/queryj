@@ -173,7 +173,7 @@
                   <naturalOrderProcessing>true</naturalOrderProcessing>
                   <optimizations>false</optimizations>
                 </configuration>
-                <phase>process-resources</phase>
+                <phase>process-sources</phase>
                 <goals>
                   <goal>apply</goal>
                 </goals>
