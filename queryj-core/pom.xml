@@ -206,7 +206,7 @@
               <execution>
                 <id>java7-main-patches</id>
                 <configuration>
-                  <patchDirectory>${project.basedir}/src/main/patches/java7</patchDirectory>
+                  <patchDirectory>${project.basedir}/src/main/patches/java7/java</patchDirectory>
                   <patchTrackingFile>${project.build.directory}/optimization-files/patches-applied.txt</patchTrackingFile>
                   <naturalOrderProcessing>true</naturalOrderProcessing>
                   <optimizations>false</optimizations>
@@ -220,7 +220,7 @@
                 <id>java7-test-patches</id>
                 <configuration>
                   <targetDirectory>${project.basedir}/src/test/java</targetDirectory>
-                  <patchDirectory>${project.basedir}/src/test/patches/java7</patchDirectory>
+                  <patchDirectory>${project.basedir}/src/test/patches/java7/java</patchDirectory>
                   <patchTrackingFile>${project.build.directory}/optimization-files/patches-applied-test.txt</patchTrackingFile>
                   <naturalOrderProcessing>true</naturalOrderProcessing>
                   <optimizations>false</optimizations>
@@ -233,8 +233,8 @@
               <execution>
                 <id>java7-aspectj-patches</id>
                 <configuration>
-                  <targetDirectory>${project.basedir}/src/main/aspectj</targetDirectory>
-                  <patchDirectory>${project.basedir}/src/main/patches/java7-aspectj</patchDirectory>
+                  <targetDirectory>${project.basedir}/src/main/aspect</targetDirectory>
+                  <patchDirectory>${project.basedir}/src/main/patches/java7/aspect</patchDirectory>
                   <patchTrackingFile>${project.build.directory}/optimization-files/patches-applied-aspectj.txt</patchTrackingFile>
                   <naturalOrderProcessing>true</naturalOrderProcessing>
                   <optimizations>false</optimizations>
