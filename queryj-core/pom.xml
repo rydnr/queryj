@@ -189,6 +189,54 @@
 
   <profiles>
     <profile>
+      <id>forJava7</id>
+      <activation>
+        <jdk>1.7</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-patch-plugin</artifactId>
+            <configuration>
+              <targetDirectory>${moduleDirectory}</targetDirectory>
+              <skipApplication>false</skipApplication>
+            </configuration>
+            <executions>
+              <execution>
+                <id>java7-main-patches</id>
+                <configuration>
+                  <targetDirectory>${project.basedir}/target/generated-sources</targetDirectory>
+                  <patchDirectory>${project.basedir}/src/main/patches/java7</patchDirectory>
+                  <patchTrackingFile>${project.build.directory}/optimization-files/patches-applied.txt</patchTrackingFile>
+                  <naturalOrderProcessing>true</naturalOrderProcessing>
+                  <optimizations>false</optimizations>
+                </configuration>
+                <phase>process-sources</phase>
+                <goals>
+                  <goal>apply</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>java7-test-patches</id>
+                <configuration>
+                  <targetDirectory>${project.basedir}/target/generated-test-sources</targetDirectory>
+                  <patchDirectory>${project.basedir}/src/test/patches/java7</patchDirectory>
+                  <patchTrackingFile>${project.build.directory}/optimization-files/patches-applied-test.txt</patchTrackingFile>
+                  <naturalOrderProcessing>true</naturalOrderProcessing>
+                  <optimizations>false</optimizations>
+                </configuration>
+                <phase>process-sources</phase>
+                <goals>
+                  <goal>apply</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>release</id>
       <build>
         <plugins>

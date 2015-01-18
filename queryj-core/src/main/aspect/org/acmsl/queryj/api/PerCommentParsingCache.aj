@@ -328,7 +328,7 @@ public aspect PerCommentParsingCache
 
             if (result == null)
             {
-                COLUMN_DISCRIMINATED_TABLES_CACHE.put(key, new ArrayList<>(0));
+                COLUMN_DISCRIMINATED_TABLES_CACHE.put(key, new ArrayList<List<String>>(0));
             }
             else
             {
@@ -337,7 +337,7 @@ public aspect PerCommentParsingCache
         }
         else if (result.equals(key))
         {
-            result = new ArrayList<>(0);
+            result = new ArrayList<List<String>>(0);
         }
 
         return result;
@@ -381,7 +381,7 @@ public aspect PerCommentParsingCache
 
             if (result == null)
             {
-                TABLE_RELATIONSHIP_CACHE.put(key, new ArrayList<>(0));
+                TABLE_RELATIONSHIP_CACHE.put(key, new ArrayList<List<String>>(0));
             }
             else
             {
@@ -390,7 +390,7 @@ public aspect PerCommentParsingCache
         }
         else if (result.equals(key))
         {
-            result = new ArrayList<>(0);
+            result = new ArrayList<List<String>>(0);
         }
 
         return result;
