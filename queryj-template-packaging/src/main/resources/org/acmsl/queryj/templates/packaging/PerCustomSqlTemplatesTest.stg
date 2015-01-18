@@ -52,7 +52,7 @@ source(C) ::= <<
   [
     description()
   ],
-  template="org/acmsl/queryj/templates/PerCustomSqlTemplatesTest.stg",
+  template="org/acmsl/queryj/templates/packaging/PerCustomSqlTemplatesTest.stg",
   C=C)><endif>
 
 <package_declaration(packageName="cucumber.templates")>
