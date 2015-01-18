@@ -206,7 +206,7 @@
               <execution>
                 <id>java7-main-patches</id>
                 <configuration>
-                  <targetDirectory>${project.basedir}/target/generated-sources</targetDirectory>
+                  <!--targetDirectory>${project.basedir}/main/generated-sources</targetDirectory-->
                   <patchDirectory>${project.basedir}/src/main/patches/java7</patchDirectory>
                   <patchTrackingFile>${project.build.directory}/optimization-files/patches-applied.txt</patchTrackingFile>
                   <naturalOrderProcessing>true</naturalOrderProcessing>
@@ -226,7 +226,7 @@
                   <naturalOrderProcessing>true</naturalOrderProcessing>
                   <optimizations>false</optimizations>
                 </configuration>
-                <phase>process-sources</phase>
+                <phase>process-test-sources</phase>
                 <goals>
                   <goal>apply</goal>
                 </goals>
