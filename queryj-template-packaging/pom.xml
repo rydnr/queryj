@@ -6,13 +6,13 @@
   <groupId>org.acmsl.queryj</groupId>
   <artifactId>queryj-template-packaging</artifactId>
   <packaging>jar</packaging>
-  <version>latest-SNAPSHOT</version>
+  <version>3.1.110</version>
   <name>QueryJ Template Packaging</name>
 
   <parent>
     <groupId>org.acmsl.queryj</groupId>
     <artifactId>queryj</artifactId>
-    <version>latest-SNAPSHOT</version>
+    <version>3.1.110</version>
   </parent>
 
   <dependencies>
