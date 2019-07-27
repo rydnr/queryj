@@ -83,7 +83,7 @@ public class AbstractTableDecoratorTest
      */
     protected AbstractTableDecorator setupTableDecorator()
     {
-        return setupTableDecorator(new ArrayList<>(0), null);
+        return setupTableDecorator(new ArrayList<Attribute<String>>(0), null);
     }
 
     /**
@@ -110,8 +110,8 @@ public class AbstractTableDecoratorTest
 
         @NotNull final String name = "name";
         @NotNull final String comment = "comment";
-        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<>(0);
-        @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>(0);
+        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<Attribute<String>>(0);
+        @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<ForeignKey<String>>(0);
         @Nullable final Attribute<String> staticAttribute = null;
         final boolean voDecorated = false;
         final boolean isRelationship = false;
@@ -178,7 +178,7 @@ public class AbstractTableDecoratorTest
     public void getContainsClobs_is_correct_if_table_contains_clobs()
     {
         @NotNull final String name = "name";
-        @NotNull final List<Attribute<String>> attributes = new ArrayList<>();
+        @NotNull final List<Attribute<String>> attributes = new ArrayList<Attribute<String>>();
         attributes.add(
             new AttributeIncompleteValueObject(
                 "name",
@@ -205,10 +205,10 @@ public class AbstractTableDecoratorTest
     {
         @NotNull final String name = "parentTable";
         @NotNull final String comment = "comment";
-        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<>(0);
-        @NotNull final List<Attribute<String>> attributes = new ArrayList<>(0);
-        @NotNull final List<Attribute<String>> parentAttributes = new ArrayList<>(0);
-        @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>(0);
+        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<Attribute<String>>(0);
+        @NotNull final List<Attribute<String>> attributes = new ArrayList<Attribute<String>>(0);
+        @NotNull final List<Attribute<String>> parentAttributes = new ArrayList<Attribute<String>>(0);
+        @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<ForeignKey<String>>(0);
         @Nullable final Attribute<String> staticAttribute = null;
         final boolean voDecorated = false;
         final boolean isRelationship = false;
@@ -277,7 +277,7 @@ public class AbstractTableDecoratorTest
     @Test
     public void getAttributeTypes_does_not_contain_duplicates()
     {
-        @NotNull final List<Attribute<String>> attributes = new ArrayList<>(0);
+        @NotNull final List<Attribute<String>> attributes = new ArrayList<Attribute<String>>(0);
 
         @NotNull final Attribute<String> childAttribute1 =
             new AttributeIncompleteValueObject(

@@ -59,6 +59,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 /*
  * Importing some JDK classes.
  */
+import java.nio.charset.Charset;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

@@ -431,17 +431,6 @@ public class JdbcMetadataTypeManagerTest
     }
 
     /**
-     * Checks whether getConstantName() works for REF_CURSORs.
-     */
-    @Test
-    public void getConstantName_retrieves_the_correct_constant_for_REF_CURSORs()
-    {
-        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
-
-        Assert.assertEquals("REF_CURSOR", instance.getConstantName(Types.REF_CURSOR));
-    }
-
-    /**
      * Checks whether getConstantName() works for ROWIDs.
      */
     @Test
@@ -497,17 +486,6 @@ public class JdbcMetadataTypeManagerTest
     }
 
     /**
-     * Checks whether getConstantName() works for TIME_WITH_TIMEZONEs.
-     */
-    @Test
-    public void getConstantName_retrieves_the_correct_constant_for_TIME_WITH_TIMEZONEs()
-    {
-        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
-
-        Assert.assertEquals("TIME_WITH_TIMEZONE", instance.getConstantName(Types.TIME_WITH_TIMEZONE));
-    }
-
-    /**
      * Checks whether getConstantName() works for TIMESTAMPs.
      */
     @Test
@@ -516,17 +494,6 @@ public class JdbcMetadataTypeManagerTest
         @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
 
         Assert.assertEquals("TIMESTAMP", instance.getConstantName(Types.TIMESTAMP));
-    }
-
-    /**
-     * Checks whether getConstantName() works for TIMESTAMP_WITH_TIMEZONEs.
-     */
-    @Test
-    public void getConstantName_retrieves_the_correct_constant_for_TIMESTAMP_WITH_TIMEZONEs()
-    {
-        @NotNull final JdbcMetadataTypeManager instance = new JdbcMetadataTypeManager();
-
-        Assert.assertEquals("TIMESTAMP_WITH_TIMEZONE", instance.getConstantName(Types.TIMESTAMP_WITH_TIMEZONE));
     }
 
     /**

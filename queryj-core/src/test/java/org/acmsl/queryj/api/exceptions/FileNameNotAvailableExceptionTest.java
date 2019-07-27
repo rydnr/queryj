@@ -68,6 +68,9 @@ public class FileNameNotAvailableExceptionTest
         @NotNull final FileNameNotAvailableException instance = new FileNameNotAvailableException();
 
         // throws a MissingResourceException if the key is not declared.
-        Arrays.asList(new Locale("en"), new Locale("es")).forEach(instance::getMessage);
+        for (@NotNull final Locale locale : Arrays.asList(new Locale("en"), new Locale("es")))
+        {
+            instance.getMessage(locale);
+        }
     }
 }

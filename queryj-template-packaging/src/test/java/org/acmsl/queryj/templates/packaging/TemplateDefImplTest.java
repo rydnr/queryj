@@ -85,7 +85,7 @@ public class TemplateDefImplTest
                 "<result.id.normalized>Sample.java",
                 "com.foo.bar",
                 file,
-                new HashMap<>(0),
+                new HashMap<String, String>(0),
                 false,
                 false);
 

@@ -1190,10 +1190,6 @@ public class JdbcMetadataTypeManager
                 result = "REF";
                 break;
 
-            case Types.REF_CURSOR:
-                result = "REF_CURSOR";
-                break;
-
             case Types.ROWID:
                 result = "ROWID";
                 break;
@@ -1214,16 +1210,8 @@ public class JdbcMetadataTypeManager
                 result = "TIME";
                 break;
 
-            case Types.TIME_WITH_TIMEZONE:
-                result = "TIME_WITH_TIMEZONE";
-                break;
-
             case Types.TIMESTAMP:
                 result = Literals.TIMESTAMP_U;
-                break;
-
-            case Types.TIMESTAMP_WITH_TIMEZONE:
-                result = "TIMESTAMP_WITH_TIMEZONE";
                 break;
 
             case Types.TINYINT:

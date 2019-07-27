@@ -44,6 +44,7 @@ import org.acmsl.queryj.api.PerForeignKeyTemplateContext;
 import org.acmsl.queryj.api.PerForeignKeyTemplateFactory;
 import org.acmsl.queryj.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.metadata.engines.Engine;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
 
@@ -89,7 +90,7 @@ public class BasePerForeignKeyTemplateBuildHandlerTest
         @NotNull final ForeignKey<String> foreignKey =
             new ForeignKeyValueObject(
                 "source",
-                new ArrayList<>(0),
+                new ArrayList<Attribute<String>>(0),
                 "target",
                 false);
 

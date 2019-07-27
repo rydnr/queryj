@@ -80,11 +80,11 @@ public class PerCustomResultTemplateContextTest
     @Test
     public void properties_are_stored_correctly_in_the_command()
     {
-        @NotNull final List<Property<String>> properties = new ArrayList<>(0);
+        @NotNull final List<Property<String>> properties = new ArrayList<Property<String>>(0);
 
-        properties.add(new PropertyElement<>("id", "columnName", 1, "type", false));
+        properties.add(new PropertyElement<String>("id", "columnName", 1, "type", false));
 
-        @NotNull final Result<String> result = new ResultElement<>("id", "class");
+        @NotNull final Result<String> result = new ResultElement<String>("id", "class");
 
         @NotNull final QueryJCommand command =
             new ConfigurationQueryJCommandImpl(new SerializablePropertiesConfiguration());
@@ -94,10 +94,10 @@ public class PerCustomResultTemplateContextTest
 
         Assert.assertEquals(properties, instance.getProperties());
 
-        @NotNull final Result<String> result2 = new ResultElement<>("id2", "class");
+        @NotNull final Result<String> result2 = new ResultElement<String>("id2", "class");
 
         @NotNull final PerCustomResultTemplateContext instance2 =
-            new PerCustomResultTemplateContext(result2, new ArrayList<>(0), false, command);
+            new PerCustomResultTemplateContext(result2, new ArrayList<Property<String>>(0), false, command);
 
         Assert.assertEquals(properties, instance.getProperties());
         Assert.assertNotEquals(properties, instance2.getProperties());

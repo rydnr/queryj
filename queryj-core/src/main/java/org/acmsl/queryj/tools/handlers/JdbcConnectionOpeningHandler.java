@@ -112,9 +112,9 @@ public class JdbcConnectionOpeningHandler
         return
             openConnection(
                 (String) parameters.getSetting(JDBC_DRIVER),
-                parameters.getSetting(JDBC_URL),
-                parameters.getSetting(JDBC_USERNAME),
-                parameters.getSetting(JDBC_PASSWORD));
+                (String) parameters.getSetting(JDBC_URL),
+                (String) parameters.getSetting(JDBC_USERNAME),
+                (String) parameters.getSetting(JDBC_PASSWORD));
     }
 
     /**

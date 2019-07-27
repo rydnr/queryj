@@ -85,12 +85,12 @@ public class AbstractTableListDecoratorTest
     public void getContainsClobs_works_when_there_are_clobs()
     {
         @NotNull final List<Attribute<DecoratedString>> attributes =
-            new ArrayList<>();
+            new ArrayList<Attribute<DecoratedString>>();
 
         @NotNull final String name = "name";
         @NotNull final String comment = "comment1";
-        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<>(0);
-        @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>(0);
+        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<Attribute<String>>(0);
+        @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<ForeignKey<String>>(0);
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable = null;
         @Nullable final Attribute<String> staticAttribute = null;
         final boolean voDecorated = false;
@@ -101,7 +101,7 @@ public class AbstractTableListDecoratorTest
                 name,
                 comment,
                 primaryKey,
-                new ArrayList<>(0), // not used in this test
+                new ArrayList<Attribute<String>>(0), // not used in this test
                 foreignKeys,
                 parentTable,
                 staticAttribute,
@@ -136,12 +136,12 @@ public class AbstractTableListDecoratorTest
     public void getContainsClobs_works_when_there_are_no_clobs()
     {
         @NotNull final List<Attribute<DecoratedString>> attributes =
-            new ArrayList<>();
+            new ArrayList<Attribute<DecoratedString>>();
 
         @NotNull final String name = "name";
         @NotNull final String comment = "comment2";
-        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<>(0);
-        @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>(0);
+        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<Attribute<String>>(0);
+        @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<ForeignKey<String>>(0);
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable = null;
         @Nullable final Attribute<String> staticAttribute = null;
         final boolean voDecorated = false;
@@ -152,7 +152,7 @@ public class AbstractTableListDecoratorTest
                 name,
                 comment,
                 primaryKey,
-                new ArrayList<>(0), // not used in this test
+                new ArrayList<Attribute<String>>(0), // not used in this test
                 foreignKeys,
                 parentTable,
                 staticAttribute,
@@ -188,12 +188,12 @@ public class AbstractTableListDecoratorTest
     public void getAttributeTypes_retrieves_the_attribute_types()
     {
         @NotNull final List<Attribute<DecoratedString>> attributes =
-            new ArrayList<>();
+            new ArrayList<Attribute<DecoratedString>>();
 
         @NotNull final String name = "name";
         @NotNull final String comment = "comment3";
-        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<>(0);
-        @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>(0);
+        @NotNull final List<Attribute<String>> primaryKey = new ArrayList<Attribute<String>>(0);
+        @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<ForeignKey<String>>(0);
         @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> parentTable = null;
         @Nullable final Attribute<String> staticAttribute = null;
         final boolean voDecorated = false;
@@ -204,7 +204,7 @@ public class AbstractTableListDecoratorTest
                 name,
                 comment,
                 primaryKey,
-                new ArrayList<>(0), // not used in this test
+                new ArrayList<Attribute<String>>(0), // not used in this test
                 foreignKeys,
                 parentTable,
                 staticAttribute,

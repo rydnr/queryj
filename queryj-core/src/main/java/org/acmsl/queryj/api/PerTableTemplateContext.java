@@ -142,8 +142,10 @@ public class PerTableTemplateContext
     public List<Row<String>> getStaticValues()
     {
         return
-            new ArrayList<>(
-                getListValue(buildStaticValuesKey(), getCommand(), new StaticValuesNotAvailableException()));
+            new ArrayList<Row<String>>(
+                (List<Row<String>>)
+                    super.<Row<String>>getListValue(
+                        buildStaticValuesKey(), getCommand(), new StaticValuesNotAvailableException()));
     }
 
     /**

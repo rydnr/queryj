@@ -43,6 +43,7 @@ import org.acmsl.queryj.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.metadata.engines.oracle.OracleEngine;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.AttributeIncompleteValueObject;
+import org.acmsl.queryj.metadata.vo.Table;
 
 /*
  * Importing JetBrains annotations.
@@ -65,6 +66,7 @@ import org.junit.runners.JUnit4;
 import java.sql.DatabaseMetaData;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Tests for {@link AbstractJdbcMetadataManager}.
@@ -94,7 +96,7 @@ public class AbstractJdbcMetadataManagerTest
                 null, //catalog,
                 null, //schema,
                 new ArrayList<String>(0),
-                new ArrayList<>(0),
+                new ArrayList<Table<String, Attribute<String>, List<Attribute<String>>>>(0),
                 true, // disableTableExtraction,
                 true, // final boolean lazyTableExtraction,
                 true, // final boolean caseSensitive,

@@ -99,7 +99,7 @@ public class PerTemplateDefClassNameHandlerTest
                 "FinalFile.java",
                 "com.foo.bar",
                 file,
-                new HashMap<>(0),
+                new HashMap<String, String>(0),
                 false,
                 false);
 
@@ -137,7 +137,7 @@ public class PerTemplateDefClassNameHandlerTest
                 "FinalFile.java",
                 "com.foo.bar",
                 null,
-                new HashMap<>(0),
+                new HashMap<String, String>(0),
                 false,
                 false);
 

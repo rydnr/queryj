@@ -66,7 +66,7 @@ import java.util.List;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Adds a simple caching mechanism while decorating <code>Table</code>
+ * Adds a simple caching mechanism while decorating {@link Table}
  * instances.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  */
@@ -684,19 +684,33 @@ public class CachingTableDecorator
     @NotNull
     public ListDecorator<Attribute<DecoratedString>> getChildAttributes()
     {
-        ListDecorator<Attribute<DecoratedString>> result = getCachedChildAttributes();
+        @NotNull final ListDecorator<Attribute<DecoratedString>> result;
 
-        if (result == null)
+        @Nullable final ListDecorator<Attribute<DecoratedString>> cached = getCachedChildAttributes();
+
+        if (cached == null)
         {
-            result = super.getChildAttributes();
-            if (result == null)
+            @Nullable final ListDecorator<Attribute<DecoratedString>> parent = super.getChildAttributes();
+
+            if (parent == null)
             {
                 result =
                     new TableAttributesListDecorator(
-                        new ArrayList<>(0), this, getCustomSqlProvider(), getDecoratorFactory());
+                        new ArrayList<Attribute<DecoratedString>>(0),
+                        this,
+                        getCustomSqlProvider(),
+                        getDecoratorFactory());
+            }
+            else
+            {
+                result = parent;
             }
 
             setCachedChildAttributes(result);
+        }
+        else
+        {
+            result = cached;
         }
 
         return result;

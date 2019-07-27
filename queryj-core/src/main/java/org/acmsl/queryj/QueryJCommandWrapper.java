@@ -210,4 +210,18 @@ public class QueryJCommandWrapper<T>
               "{ \"command\": " + m__Command
             + ", \"class\": \"QueryJCommandWrapper\", \"package\": \"org.acmsl.queryj\" }";
     }
+
+
+    private void myStuff() {
+        int a = 1;
+    }
+
+    public static class A {
+        public A() {
+        }
+
+        public void doStuff() {
+            new QueryJCommandWrapper(null).myStuff();
+        }
+    }
 }

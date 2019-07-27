@@ -38,6 +38,7 @@ package org.acmsl.queryj.debugging.netty;
 /*
  * Importing QueryJ Debugging classes.
  */
+import io.netty.util.concurrent.Future;
 import org.acmsl.queryj.debugging.TemplateDebuggingCommand;
 import org.acmsl.queryj.debugging.TemplateDebuggingListener;
 
@@ -118,7 +119,7 @@ public class NettyServerChannelHandler
 
         final ChannelFuture future = ctx.writeAndFlush("ACK");
         future.addListener(
-            channelFuture -> {
+            (Future<? super Void> channelFuture) -> {
                 System.out.println("Closing context");
                 ctx.close();
             });
