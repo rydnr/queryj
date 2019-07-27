@@ -272,14 +272,14 @@ public abstract class AbstractTemplatesTest<G, F>
      */
     protected AbstractTemplatesTest()
     {
-        immutableSetOutputFiles(new HashMap<>());
-        immutableSetTables(new HashMap<>());
-        immutableSetForeignKeys(new ArrayList<>());
-        immutableSetSqlList(new ArrayList<>());
-        immutableSetParameters(new HashMap<>());
-        immutableSetRows(new HashMap<>());
-        immutableSetResults(new HashMap<>());
-        immutableSetProperties(new HashMap<>());
+        immutableSetOutputFiles(new HashMap<String, File>());
+        immutableSetTables(new HashMap<String, Table<String, Attribute<String>, List<Attribute<String>>>>());
+        immutableSetForeignKeys(new ArrayList<ForeignKey<String>>());
+        immutableSetSqlList(new ArrayList<Sql<String>>());
+        immutableSetParameters(new HashMap<String, List<Parameter<String, ?>>>());
+        immutableSetRows(new HashMap<String, List<Row<String>>>());
+        immutableSetResults(new HashMap<String, Result<String>>());
+        immutableSetProperties(new HashMap<String, List<Property<String>>>());
     }
 
     /**
@@ -1107,7 +1107,7 @@ public abstract class AbstractTemplatesTest<G, F>
         @NotNull final List<String> tableNames =
             resultClass != null
             ? Arrays.asList(StringUtils.getInstance().unCapitalize(resultClass, "_"))
-            : new ArrayList<>(0);
+            : new ArrayList<String>(0);
         @NotNull final Table<String, Attribute<String>, List<Attribute<String>>> table =
             EasyMock.createNiceMock(Table.class);
         @NotNull final List<Table<String, Attribute<String>, List<Attribute<String>>>> tables =

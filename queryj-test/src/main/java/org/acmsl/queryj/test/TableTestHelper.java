@@ -372,9 +372,9 @@ public class TableTestHelper
             new TableValueObject(
                 tableName,
                 comment,
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
+                new ArrayList<Attribute<String>>(),
+                new ArrayList<Attribute<String>>(),
+                new ArrayList<ForeignKey<String>>(),
                 // TODO: Decorate TableValueObject to retrieve the parent table via its name
                 // and the table collection.
                 null, //parentTable,
