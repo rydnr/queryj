@@ -73,6 +73,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.stringtemplate.v4.ST;
 
+import javax.management.Query;
+
 /**
  * Tests for {@link org.acmsl.queryj.debugging.QueryJDebuggingChain}.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
@@ -134,6 +136,14 @@ public class QueryJDebuggingChainTest
                     @NotNull final QueryJCommandHandler<QueryJCommand> handler,
                     @NotNull final QueryJCommand command)
                 {
+                    try
+		    {
+                        handler.handle(command);
+                    }
+                    catch (@NotNull final QueryJBuildException buildException)
+                    {
+                        // Do nothing.
+                    }
                     return TemplateDebuggingCommand.NEXT;
                 }
             };
@@ -230,6 +240,14 @@ public class QueryJDebuggingChainTest
                     @NotNull final QueryJCommandHandler<QueryJCommand> handler,
                     @NotNull final QueryJCommand command)
                 {
+                    try
+                    {
+                        handler.handle(command);
+                    }
+                    catch (@NotNull final QueryJBuildException buildException)
+                    {
+                        // Do nothing.
+                    }
                     return TemplateDebuggingCommand.NEXT;
                 }
             };
