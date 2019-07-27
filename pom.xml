@@ -37,14 +37,14 @@
     <module>queryj-core</module>
     <module>queryj-placeholders</module>
     <module>queryj-template-packaging</module>
-    <module>queryj-debugging</module>
     <module>queryj-ant-task</module>
     <module>queryj-test</module>
     <module>queryj-maven-plugin</module>
     <module>queryj-template-packaging-maven-plugin</module>
+    <module>queryj-debugging</module>
     <module>queryj-debugging-ant-task</module>
     <module>queryj-debugging-maven-plugin</module>
-    <module>queryj-templates</module>
+    <!--module>queryj-templates</module-->
   </modules>
 
   <scm>                                                                                     
