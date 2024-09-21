@@ -1,0 +1,4 @@
+- In "digests_the_chain_sequentially" test, the #debug method in the anonymous class implementing TemplateDebuggingService<TemplateContext> needs to call handler.handle(command).
+- In "digests_the_chain_sequentially" test, the #debug method in the anonymous class implementing TemplateDebuggingService<TemplateContext> calls handler.handle(command) and could raise an exception, so it needs to be wrapped in a try/catch. Leave the catch block empty for now.
+- In "a_next_only_service_moves_forward_sequentially" test, the #debug method in the anonymous class implementing TemplateDebuggingService<TemplateContext> needs to call handler.handle(command).
+- In "a_next_only_service_moves_forward_sequentially" test, the #debug method in the anonymous class implementing TemplateDebuggingService<TemplateContext> calls handler.handle(command) and could raise an exception, so it needs to be wrapped in a try/catch. Leave the catch block empty for now.

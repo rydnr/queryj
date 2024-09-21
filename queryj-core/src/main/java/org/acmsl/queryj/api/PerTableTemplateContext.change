@@ -1,0 +1,1 @@
+- In #getStaticValues(), don't try to create a new ArrayList, but use the return value from #getListValue().

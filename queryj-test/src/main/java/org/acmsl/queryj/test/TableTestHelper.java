@@ -38,7 +38,7 @@ package org.acmsl.queryj.test;
 /*
  * Importing Cucumber classes.
  */
-import cucumber.api.DataTable;
+import io.cucumber.datatable.DataTable;
 
 /*
  * Importing QueryJ-Core classes.

@@ -38,7 +38,7 @@ package org.acmsl.queryj.test;
 /*
  * Importing Cucumber classes.
  */
-import cucumber.api.DataTable;
+import io.cucumber.datatable.DataTable;
 
 /*
  * Importing QueryJ Core classes.
@@ -92,13 +92,9 @@ public class ForeignKeyTestHelperTest
         @NotNull final ForeignKeyTestHelper instance = ForeignKeyTestHelper.getInstance();
 
         @NotNull final String[] columnNames = { "source", "column(s)", "target", "allows null" };
-        @NotNull final Map<String, String> row = new HashMap<>(4);
-        row.put("source", "G_CYCLE_TYPES");
-        row.put("column(s)", "G_FIRST_DRAW_TYPE_ID");
-        row.put("target", "G_DRAWS");
-        row.put("allows null", "false");
-        @NotNull final List<?> data = Arrays.asList(row);
-        @NotNull final DataTable dataTable = DataTable.create(data, Locale.getDefault(), columnNames);
+        @NotNull final String[] columnValues = { "G_CYCLE_TYPES", "G_FIRST_DRAW_TYPE_ID", "G_DRAWS", "false" };
+        @NotNull final List<List<String>> data = Arrays.asList(Arrays.asList(columnNames), Arrays.asList(columnValues));
+        @NotNull final DataTable dataTable = DataTable.create(data);
 
         @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>();
 
@@ -155,13 +151,9 @@ public class ForeignKeyTestHelperTest
         @NotNull final ForeignKeyTestHelper instance = ForeignKeyTestHelper.getInstance();
 
         @NotNull final String[] columnNames = { "source", "column(s)", "target", "allows null" };
-        @NotNull final Map<String, String> row = new HashMap<>(4);
-        row.put("source", "G_CYCLE_TYPES");
-        row.put("column(s)", "G_FIRST_DRAW_TYPE_ID");
-        row.put("target", "G_DRAWS");
-        row.put("allows null", "false");
-        @NotNull final List<?> data = Arrays.asList(row);
-        @NotNull final DataTable dataTable = DataTable.create(data, Locale.getDefault(), columnNames);
+        @NotNull final String[] columnValues = { "G_CYCLE_TYPES", "G_FIRST_DRAW_TYPE_ID", "G_DRAWS", "false" };
+        @NotNull final List<List<String>> data = Arrays.asList(Arrays.asList(columnNames), Arrays.asList(columnValues));
+        @NotNull final DataTable dataTable = DataTable.create(data);
 
         @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>();
 
@@ -241,13 +233,9 @@ public class ForeignKeyTestHelperTest
         @NotNull final ForeignKeyTestHelper instance = ForeignKeyTestHelper.getInstance();
 
         @NotNull final String[] columnNames = { "source", "column(s)", "target", "allows null" };
-        @NotNull final Map<String, String> row = new HashMap<>(4);
-        row.put("source", "G_CYCLE_TYPES");
-        row.put("column(s)", "G_FIRST_DRAW_TYPE_ID");
-        row.put("target", "G_DRAWS");
-        row.put("allows null", "false");
-        @NotNull final List<?> data = Arrays.asList(row);
-        @NotNull final DataTable dataTable = DataTable.create(data, Locale.getDefault(), columnNames);
+        @NotNull final String[] columnValues = { "G_CYCLE_TYPES", "G_FIRST_DRAW_TYPE_ID", "G_DRAWS", "false" };
+        @NotNull final List<List<String>> data = Arrays.asList(Arrays.asList(columnNames), Arrays.asList(columnValues));
+        @NotNull final DataTable dataTable = DataTable.create(data);
 
         @NotNull final List<ForeignKey<String>> foreignKeys = new ArrayList<>();
 

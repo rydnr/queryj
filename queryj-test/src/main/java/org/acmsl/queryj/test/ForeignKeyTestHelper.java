@@ -38,7 +38,7 @@ package org.acmsl.queryj.test;
 /*
  * Importing Cucumber classes.
  */
-import cucumber.api.DataTable;
+import io.cucumber.datatable.DataTable;
 
 /*
  * Importing QueryJ Core classes.
@@ -110,7 +110,7 @@ public class ForeignKeyTestHelper
         @NotNull final List<ForeignKey<String>> foreignKeys,
         @NotNull final Map<String, Table<String, Attribute<String>, List<Attribute<String>>>> tables)
     {
-        @NotNull final List<Map<String, String>> fkEntries = fkInfo.asMaps(String.class, String.class);
+        @NotNull final List<Map<String, String>> fkEntries = fkInfo.entries();
 
         @Nullable ForeignKey<String> foreignKey;
 

@@ -3,6 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <groupId>org.acmsl.queryj</groupId>
   <artifactId>queryj-core</artifactId>
   <packaging>jar</packaging>
   <version>latest-SNAPSHOT</version>
@@ -12,13 +13,22 @@
     <groupId>org.acmsl.queryj</groupId>
     <artifactId>queryj</artifactId>
     <version>latest-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <dependencies>
     <dependency>
       <groupId>org.checkthread</groupId>
       <artifactId>checkthread-annotations</artifactId>
-      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.acmsl.queryj</groupId>

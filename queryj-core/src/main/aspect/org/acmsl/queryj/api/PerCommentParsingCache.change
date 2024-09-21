@@ -1,0 +1,2 @@
+- In the around advice for "retrieveColumnDiscriminatedTables(String)" pointcut, if no result is intercepted, cache an empty list using new ArrayList<List<String>>(0) instead of new ArrayList<>(0).
+- In the around advice for "retrieveTableRelationship(String)" pointcut, if no result is intercepted, cache an empty list using new ArrayList<List<String>>(0) instead of new ArrayList<>(0).

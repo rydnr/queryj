@@ -1,0 +1,1 @@
+- In the constructor, call super using a new ArrayList<Attribute<DecoratedString>>() instead of an ArrayList<> as third argument.

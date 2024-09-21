@@ -1,0 +1,1 @@
+- When instantiating a TableAttributesListDecorator, pass a new ArrayList<Attribute<DecoratedString>>() instead of an ArrayList<>.

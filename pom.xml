@@ -8,18 +8,18 @@
   <packaging>pom</packaging>
   <version>latest-SNAPSHOT</version>
   <name>QueryJ</name>
-  <url>http://www.acm-sl.org/projects/queryj</url>
+  <url>https://www.acm-sl.org/projects/queryj</url>
   <inceptionYear>2002</inceptionYear>
   <licenses>
     <license>
       <name>GPL</name>
-      <url>http://www.fsf.org/licensing/licenses/gpl.html</url>
+      <url>https://www.fsf.org/licensing/licenses/gpl.html</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
   <organization>
     <name>ACM-SL</name>
-    <url>http://www.acm-sl.org</url>
+    <url>https://www.acm-sl.org</url>
   </organization>
 
   <parent>
@@ -48,20 +48,20 @@
   </modules>
 
   <scm>                                                                                     
-    <connection>scm:git:http://github.com/rydnr/queryj.git</connection> 
-    <developerConnection>scm:git:http://github.com/rydnr/queryj.git</developerConnection> 
-    <url>scm:git:http://github.com/rydnr/queryj.git</url> 
+    <connection>scm:git:https://github.com/rydnr/queryj.git</connection>
+    <developerConnection>scm:git:https://github.com/rydnr/queryj.git</developerConnection>
+    <url>scm:git:https://github.com/rydnr/queryj.git</url>
     <tag>HEAD</tag>                                                                         
   </scm>                                                                                    
                                                                                             
   <issueManagement>                                                                         
     <system>github</system>                                                                   
-    <url>http://github.com/rydnr/queryj.git/</url>                                                                 
+    <url>https://github.com/rydnr/queryj.git/</url>
   </issueManagement>                                                                        
                                                                                             
   <ciManagement>                                                                            
     <system>Hudson</system>                                                                 
-    <url>http://jenkins.acm-sl.org/job/queryj</url>                                   
+    <url>https://jenkins.acm-sl.org/job/queryj</url>
     <notifiers>                                                                             
       <notifier>                                                                            
         <type>mail</type>                                                                   

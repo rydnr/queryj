@@ -1,0 +1,1 @@
+- Replace calls to QueryJCommand.getSetting(String) expecting a String back, with QueryJCommand.getStringSetting(String)

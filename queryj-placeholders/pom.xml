@@ -8,18 +8,20 @@
   <packaging>jar</packaging>
   <version>latest-SNAPSHOT</version>
   <name>QueryJ Placeholders</name>
-  <url>http://www.acm-sl.org/projects/queryj</url>
+  <url>https://www.acm-sl.org/projects/queryj</url>
 
   <parent>
     <groupId>org.acmsl.queryj</groupId>
     <artifactId>queryj</artifactId>
     <version>latest-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <dependencies>
     <dependency>
       <groupId>org.acmsl.queryj</groupId>
       <artifactId>queryj-core</artifactId>
+      <version>latest-SNAPSHOT</version>
     </dependency>
 
     <dependency>

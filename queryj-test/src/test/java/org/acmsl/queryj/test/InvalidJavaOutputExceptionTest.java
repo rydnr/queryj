@@ -46,9 +46,9 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing JUnit/EasyMock classes.
+ * Importing JUnit/Mockito classes.
  */
-import org.easymock.EasyMock;
+import org.mockito.Mockito;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -91,7 +91,7 @@ public class InvalidJavaOutputExceptionTest
     @Test
     public void error_message_is_defined_in_Spanish_and_English()
     {
-        @NotNull final RecognitionException exception = EasyMock.createNiceMock(RecognitionException.class);
+        @NotNull final RecognitionException exception = Mockito.mock(RecognitionException.class);
 
         @NotNull final InvalidJavaOutputException instance =
             new InvalidJavaOutputException(new File("test"), -1, -1, "msg", exception);

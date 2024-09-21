@@ -40,6 +40,7 @@ package org.acmsl.queryj.placeholders;
  */
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
 import org.acmsl.queryj.api.PerTableTemplateContext;
+import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.RowValueObject;
@@ -63,7 +64,13 @@ import org.powermock.modules.junit4.PowerMockRunner;
  */
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+/*
+ * Importing Apache-Commons Configuration classes.
+ */
+import org.apache.commons.configuration.MapConfiguration;
 
 /**
  * Tests for {@link StaticValuesHandler}.
@@ -74,10 +81,26 @@ import java.util.List;
 @RunWith(PowerMockRunner.class)
 public class StaticValuesHandlerTest
 {
+    protected class TestablePerTableTemplateContext
+        extends PerTableTemplateContext {
+
+        /**
+         * Creates an empty context.
+         * @return such instance.
+         */
+        public TestablePerTableTemplateContext() {
+            super(
+                  "test_table",
+                  Arrays.<Row<String>>asList(new RowValueObject("row1", "table1", new ArrayList<Attribute<String>>(0))),
+                  false,
+                  new ConfigurationQueryJCommandImpl(new MapConfiguration(new HashMap())));
+        }
+    }
+
     @Test
     public void returns_the_expected_placeholder()
     {
-        @NotNull final PerTableTemplateContext t_Context = EasyMock.createNiceMock(PerTableTemplateContext.class);
+        @NotNull final PerTableTemplateContext t_Context = EasyMock.createNiceMock(TestablePerTableTemplateContext.class);
 
         @NotNull final StaticValuesHandler instance =
             new StaticValuesHandler(t_Context);
@@ -85,14 +108,23 @@ public class StaticValuesHandlerTest
         Assert.assertEquals("static_values", instance.getPlaceHolder());
     }
 
+    /**
+     * Retrieves static values.
+     * @param tableName the table name.
+     * @return such values.
+     */
+    protected List<Row<String>> build_static_values(@NotNull final String tableName)
+    {
+        return Arrays.<Row<String>>asList(new RowValueObject("row1", tableName, new ArrayList<Attribute<String>>(0)));
+    }
+
     @Test
     public void returns_the_expected_values()
         throws QueryJBuildException
     {
-        @NotNull final List<Row<String>> t_lStaticValues =
-            Arrays.<Row<String>>asList(new RowValueObject("row1", "table1", new ArrayList<Attribute<String>>(0)));
+        @NotNull final List<Row<String>> t_lStaticValues = new TestablePerTableTemplateContext().getStaticValues();
 
-        @NotNull final PerTableTemplateContext t_Context = EasyMock.createNiceMock(PerTableTemplateContext.class);
+        @NotNull final PerTableTemplateContext t_Context = EasyMock.createNiceMock(TestablePerTableTemplateContext.class);
 
         EasyMock.expect(t_Context.getStaticValues()).andReturn(t_lStaticValues);
         EasyMock.replay(t_Context);
