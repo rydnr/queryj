@@ -19,16 +19,6 @@
   </prerequisites>
  
   <distributionManagement>
-    <repository>
-      <id>acmsl-plugins-releases</id>
-      <name>acmsl-plugins-releases</name>
-      <url>http://maven.acm-sl.org/repository/plugins-releases-local</url>
-    </repository>
-    <snapshotRepository>
-      <id>acmsl-plugins-snapshots</id>
-      <name>acmsl-plugins-snapshots</name>
-      <url>http://maven.acm-sl.org/repository/plugins-snapshots-local</url>
-    </snapshotRepository>
     <!-- site:deploy pending -->
     <!--site>
         <id>github</id>
@@ -128,12 +118,10 @@
       <plugin>
        <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
-        <version>${findbugs-maven-plugin.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>${maven-pmd-plugin.version}</version>
       </plugin>
     </plugins>
   </reporting>
