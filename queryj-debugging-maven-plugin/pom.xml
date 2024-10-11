@@ -21,16 +21,6 @@
   </prerequisites>
  
   <distributionManagement>
-    <repository>
-      <id>acmsl-plugins-releases</id>
-      <name>acmsl-plugins-releases</name>
-      <url>http://maven.acm-sl.org/repository/plugins-releases-local</url>
-    </repository>
-    <snapshotRepository>
-      <id>acmsl-plugins-snapshots</id>
-      <name>acmsl-plugins-snapshots</name>
-      <url>http://maven.acm-sl.org/repository/plugins-snapshots-local</url>
-    </snapshotRepository>
     <!-- site:deploy pending -->
     <!--site>
         <id>github</id>
