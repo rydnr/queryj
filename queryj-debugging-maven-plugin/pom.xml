@@ -21,13 +21,23 @@
   </prerequisites>
  
   <distributionManagement>
+    <repository>
+      <id>acmsl-plugins-releases</id>
+      <name>acmsl-plugins-releases</name>
+      <url>http://maven.acm-sl.org:8081/repository/maven-plugins-releases-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>acmsl-plugins-snapshots</id>
+      <name>acmsl-plugins-snapshots</name>
+      <url>http://maven.acm-sl.org:8081/repository/maven-plugins-snapshots-local</url>
+    </snapshotRepository>
+  </distributionManagement>
     <!-- site:deploy pending -->
     <!--site>
         <id>github</id>
         <name>Github project</name>
         <url>http://github.com/rydnr/queryj/queryj-debugging-maven-plugin</url>
         </site-->
-  </distributionManagement>
 
   <dependencies>
     <dependency>

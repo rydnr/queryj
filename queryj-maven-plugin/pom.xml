@@ -20,6 +20,19 @@
     <maven>2.2.1</maven>
   </prerequisites>
  
+  <distributionManagement>
+    <repository>
+      <id>acmsl-plugins-releases</id>
+      <name>acmsl-plugins-releases</name>
+      <url>http://maven.acm-sl.org:8081/repository/maven-plugins-releases-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>acmsl-plugins-snapshots</id>
+      <name>acmsl-plugins-snapshots</name>
+      <url>http://maven.acm-sl.org:8081/repository/maven-plugins-snapshots-local</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.checkthread</groupId>
