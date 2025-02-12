@@ -60,6 +60,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.io.Serial;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -86,22 +87,8 @@ public class JdbcMetadataManager
     /**
      * The serial version id.
      */
+    @Serial
     private static final long serialVersionUID = -3287133509095459164L;
-
-    /**
-     * String literal: "REMARKS".
-     */
-    public static final String REMARKS = "REMARKS";
-
-    /**
-     * String literal: "Discarding ".
-     */
-    public static final String DISCARDING = "Discarding ";
-
-    /**
-     * String literal: "KEY_SEQ".
-     */
-    public static final String KEY_SEQ = "KEY_SEQ";
 
     /**
      * Creates a {@code JdbcMetadataManager} with given name.
@@ -124,7 +111,7 @@ public class JdbcMetadataManager
      * @param tables the list of tables.
      * @param disableTableExtraction whether to disable table extraction or not.
      * @param lazyTableExtraction whether to retrieve table information on demand.
-     * @param caseSensitive whether it's case sensitive.
+     * @param caseSensitive whether it's case-sensitive.
      * @param engine the engine.
      */
     public JdbcMetadataManager(
@@ -181,7 +168,7 @@ public class JdbcMetadataManager
                         catalog,
                         schema,
                         null,
-                        new String[]{ "TABLE" });
+                        new String[]{ Literals.TABLE_U });
             }
             catch  (@NotNull final SQLException sqlException)
             {
@@ -192,13 +179,16 @@ public class JdbcMetadataManager
             TableIncompleteValueObject t_Table;
             String t_strTableName;
             String t_strTableComment;
+            String t_strTableCatalog;
 
             while (t_rsTables.next())
             {
+                t_strTableCatalog = t_rsTables.getString(Literals.TABLE_CAT_U);
                 t_strTableName = t_rsTables.getString(Literals.TABLE_NAME_U);
-                t_strTableComment = t_rsTables.getString(REMARKS);
+                t_strTableComment = t_rsTables.getString(Literals.REMARKS);
 
-                if (passesFilter(t_strTableName, caseSensitiveness, tableNames))
+                if (   ((catalog == null) || (catalog.equals(t_strTableCatalog)))
+                    && passesFilter(t_strTableName, caseSensitiveness, tableNames))
                 {
                     t_Table =
                         new TableIncompleteValueObject(
@@ -212,7 +202,7 @@ public class JdbcMetadataManager
         catch  (final SQLException sqlException)
         {
             logWarn(
-                "Cannot retrieve the table names.",
+                Literals.CANNOT_RETRIEVE_THE_TABLE_NAMES,
                 sqlException);
 
             throw sqlException;
@@ -246,6 +236,7 @@ public class JdbcMetadataManager
             new HashMap<>(tables.size());
 
         final ResultSet t_rsColumns;
+        String t_strTableCatalog;
         String t_strTableName;
         String t_strColumnName;
         int t_iColumnType;
@@ -272,9 +263,11 @@ public class JdbcMetadataManager
 
             while (t_rsColumns.next())
             {
+                t_strTableCatalog = t_rsColumns.getString(Literals.TABLE_CAT_U);
                 t_strTableName = t_rsColumns.getString(Literals.TABLE_NAME_U);
 
-                if (passesFilter(t_strTableName, tables, caseSensitiveness))
+                if (   ((catalog == null) || (catalog.equals(t_strTableCatalog)))
+                    && (passesFilter(t_strTableName, tables, caseSensitiveness)))
                 {
                     t_lColumns = t_mAux.get(t_strTableName);
 
@@ -285,15 +278,16 @@ public class JdbcMetadataManager
                     }
 
                     t_strColumnName = t_rsColumns.getString(Literals.COLUMN_NAME_U);
-                    t_iColumnType = t_rsColumns.getInt("COLUMN_TYPE");
-                    t_strTypeName = t_rsColumns.getString("TYPE_NAME");
-                    t_iColumnSize = t_rsColumns.getInt("COLUMN_SIZE");
-                    t_iDecimalDigits = t_rsColumns.getInt("DECIMAL_DIGITS");
+                    t_iColumnType = t_rsColumns.getInt(Literals.DATA_TYPE_U);
+                    t_strTypeName = t_rsColumns.getString(Literals.TYPE_NAME_U);
+                    t_iColumnSize =
+                            t_rsColumns.getInt(Literals.COLUMN_SIZE_U);
+                    t_iDecimalDigits = t_rsColumns.getInt(Literals.DECIMAL_DIGITS_U);
                     t_iNullable = t_rsColumns.getInt(Literals.NULLABLE);
-                    t_strColumnComment = t_rsColumns.getString(REMARKS);
-                    t_strDefaultValue = t_rsColumns.getString("COLUMN_DEF");
+                    t_strColumnComment = t_rsColumns.getString(Literals.REMARKS);
+                    t_strDefaultValue = t_rsColumns.getString(Literals.COLUMN_DEF_U);
                     //t_iMaxStringBytes = t_rsColumns.getInt("CHAR_OCTET_LENGTH");
-                    t_iOrdinalPosition = t_rsColumns.getInt("ORDINAL_POSITION");
+                    t_iOrdinalPosition = t_rsColumns.getInt(Literals.ORDINAL_POSITION_U);
 
                     t_Attribute =
                         new AttributeIncompleteValueObject(
@@ -309,10 +303,11 @@ public class JdbcMetadataManager
                             t_strDefaultValue);
 
                     t_lColumns.add(t_Attribute);
+
                 }
                 else
                 {
-                    logVerbose(DISCARDING + t_strTableName);
+                    logVerbose(Literals.DISCARDING + t_strTableName);
                 }
             }
 
@@ -321,7 +316,7 @@ public class JdbcMetadataManager
         catch  (final SQLException sqlException)
         {
             logWarn(
-                "Cannot retrieve the column names.",
+                Literals.CANNOT_RETRIEVE_THE_COLUMN_NAMES,
                 sqlException);
 
             throw sqlException;
@@ -347,83 +342,71 @@ public class JdbcMetadataManager
         @NotNull final Map<String, List<Attribute<String>>> t_mAux =
             new HashMap<>(tables.size());
 
-        final ResultSet t_rsPrimaryKeys;
-        String t_strTableName;
-        String t_strColumnName;
-        int t_iOrdinalPosition;
+        for (@Nullable final TableIncompleteValueObject table : tables) {
 
-        try
-        {
-            // TODO: check if the last parameter (table) can be null
-            t_rsPrimaryKeys =
-                metaData.getPrimaryKeys(
-                    catalog,
-                    schema,
-                    null);
+            if (table != null) {
+                try {
+                    final ResultSet t_rsPrimaryKeys;
+                    String t_strTableName;
+                    String t_strColumnName;
+                    int t_iOrdinalPosition;
 
-            List<Attribute<String>> t_lPrimaryKeys;
-            Attribute<String> t_Attribute;
+                    t_rsPrimaryKeys =
+                        metaData.getPrimaryKeys(catalog, schema, table.getName());
 
-            while (t_rsPrimaryKeys.next())
-            {
-                t_strTableName = t_rsPrimaryKeys.getString(Literals.TABLE_NAME_U);
+                    List<Attribute<String>> t_lPrimaryKeys;
+                    Attribute<String> t_Attribute;
 
-                @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
-                    findTable(t_strTableName, tables, caseSensitiveness);
+                    while (t_rsPrimaryKeys.next()) {
+                        t_strTableName = t_rsPrimaryKeys.getString(Literals.TABLE_NAME_U);
 
-                if (   (t_Table != null)
-                    && (passesFilter(t_Table, tables, caseSensitiveness)))
-                {
-                    t_lPrimaryKeys = t_mAux.get(t_strTableName);
+                        @Nullable final Table<String, Attribute<String>, List<Attribute<String>>> t_Table =
+                            findTable(t_strTableName, tables, caseSensitiveness);
 
-                    if (t_lPrimaryKeys == null)
-                    {
-                        t_lPrimaryKeys = new ArrayList<>(9);
-                        t_mAux.put(t_strTableName, t_lPrimaryKeys);
+                        if (   (t_Table != null)
+                               && (passesFilter(t_Table, tables, caseSensitiveness))) {
+                            t_lPrimaryKeys = t_mAux.get(t_strTableName);
+
+                            if (t_lPrimaryKeys == null) {
+                                t_lPrimaryKeys = new ArrayList<>(9);
+                                t_mAux.put(t_strTableName, t_lPrimaryKeys);
+                            }
+
+                            t_strColumnName = t_rsPrimaryKeys.getString(Literals.COLUMN_NAME_U);
+                            t_iOrdinalPosition = t_rsPrimaryKeys.getInt(Literals.KEY_SEQ);
+
+                            t_Attribute = findAttribute(t_strColumnName, t_Table.getAttributes(), caseSensitiveness);
+
+                            if (t_Attribute != null) {
+                                t_lPrimaryKeys.add(fixOrdinalPosition(t_iOrdinalPosition, t_Attribute));
+                            }
+
+                        } else {
+                            logVerbose(Literals.DISCARDING + t_strTableName);
+                        }
                     }
 
-                    t_strColumnName = t_rsPrimaryKeys.getString(Literals.COLUMN_NAME_U);
-                    t_iOrdinalPosition = t_rsPrimaryKeys.getInt(KEY_SEQ);
+                    t_rsPrimaryKeys.close();
+                } catch (final SQLException sqlException) {
+                    logWarn(
+                            Literals.CANNOT_RETRIEVE_THE_PRIMARY_KEYS,
+                            sqlException);
 
-                    t_Attribute = findAttribute(t_strColumnName, t_Table.getAttributes(), caseSensitiveness);
-
-                    if (t_Attribute != null)
-                    {
-                        t_lPrimaryKeys.add(fixOrdinalPosition(t_iOrdinalPosition, t_Attribute));
-                    }
-
-                    t_lPrimaryKeys.add(t_Attribute);
-                }
-                else
-                {
-                    logVerbose(DISCARDING + t_strTableName);
+                    throw sqlException;
                 }
             }
-
-            t_rsPrimaryKeys.close();
         }
-        catch  (final SQLException sqlException)
-        {
-            logWarn(
-                "Cannot retrieve the primary keys.",
-                sqlException);
-
-            throw sqlException;
-        }
-
         Table<String, Attribute<String>, List<Attribute<String>>> t_ParentTable;
         List<Attribute<String>> t_lParentTablePrimaryKey;
         List<Attribute<String>> t_lChildTablePrimaryKey;
         List<Attribute<String>> t_lCompletePrimaryKey;
 
-        for (@NotNull final TableIncompleteValueObject t_Table : tables)
-        {
+        for (@NotNull final TableIncompleteValueObject t_Table : tables) {
             t_lChildTablePrimaryKey = t_mAux.get(t_Table.getName());
-
+           
             t_ParentTable = t_Table.getParentTable();
 
-            if (t_ParentTable != null)
-            {
+            if (t_ParentTable != null) {
                 t_lParentTablePrimaryKey = t_ParentTable.getAttributes();
 
                 t_lCompletePrimaryKey =
@@ -432,11 +415,9 @@ public class JdbcMetadataManager
                 t_lCompletePrimaryKey.addAll(t_lParentTablePrimaryKey);
                 t_lCompletePrimaryKey.addAll(t_lChildTablePrimaryKey);
                 fixOrdinalPositions(t_lCompletePrimaryKey);
-                t_Table.setAttributes(t_lCompletePrimaryKey);
-            }
-            else
-            {
-                t_Table.setAttributes(t_lChildTablePrimaryKey);
+                t_Table.setPrimaryKey(t_lCompletePrimaryKey);
+            } else {
+                t_Table.setPrimaryKey(t_lChildTablePrimaryKey);
             }
         }
     }
@@ -446,7 +427,7 @@ public class JdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
-     * @param caseSensitiveness whether the table names are case sensitive or not.
+     * @param caseSensitiveness whether the table names are case-sensitive or not.
      * @param metadataExtractionListener the metadata extraction listener.
      */
     @Override
@@ -463,102 +444,90 @@ public class JdbcMetadataManager
         @NotNull final Map<String,List<ForeignKey<String>>> t_mAux =
             new HashMap<>(tables.size());
 
-        final ResultSet t_rsForeignKeys;
-        String t_strSourceTableName;
-        Table<String, Attribute<String>, List<Attribute<String>>> t_SourceTable;
-        String t_strTargetTableName;
-        Table<String, Attribute<String>, List<Attribute<String>>> t_TargetTable;
-        String t_strSourceColumnName;
-        int t_iOrdinalPosition;
 
-        try
-        {
-            // TODO: check if the last parameter (table) can be null
-            t_rsForeignKeys =
-                metaData.getImportedKeys(
-                    catalog,
-                    schema,
-                    null);
+        for (@Nullable final TableIncompleteValueObject table : tables) {
 
-            List<ForeignKey<String>> t_lForeignKeys;
-            ForeignKey<String> t_ForeignKey;
-            List<Attribute<String>> t_lFkAttributes = null;
-            Attribute<String> t_Attribute;
+            if (table != null) {
+                try {
+                    final ResultSet t_rsForeignKeys;
+                    String t_strSourceTableName;
+                    Table<String, Attribute<String>, List<Attribute<String>>> t_SourceTable;
+                    String t_strTargetTableName;
+                    Table<String, Attribute<String>, List<Attribute<String>>> t_TargetTable;
+                    String t_strSourceColumnName;
+                    int t_iOrdinalPosition;
 
-            while (t_rsForeignKeys.next())
-            {
-                t_strSourceTableName = t_rsForeignKeys.getString("FKTABLE_NAME");
-                t_strTargetTableName = t_rsForeignKeys.getString("PKTABLE_NAME");
+                    t_rsForeignKeys =
+                        metaData.getImportedKeys(catalog, schema, table.getName());
 
-                t_SourceTable = findTable(t_strSourceTableName, tables, caseSensitiveness);
-                t_TargetTable = findTable(t_strTargetTableName, tables, caseSensitiveness);
+                    List<ForeignKey<String>> t_lForeignKeys;
+                    ForeignKey<String> t_ForeignKey;
+                    List<Attribute<String>> t_lFkAttributes = null;
+                    Attribute<String> t_Attribute;
 
-                if (   (t_SourceTable != null)
-                    && (t_TargetTable != null)
-                    && (passesFilter(t_SourceTable, tables, caseSensitiveness))
-                    && (passesFilter(t_TargetTable, tables, caseSensitiveness)))
-                {
-                    t_lForeignKeys = t_mAux.get(t_strSourceTableName);
+                    while (t_rsForeignKeys.next()) {
+                        t_strSourceTableName = t_rsForeignKeys.getString(Literals.FKTABLE_NAME_U);
+                        t_strTargetTableName = t_rsForeignKeys.getString(Literals.PKTABLE_NAME_U);
 
-                    if (t_lForeignKeys == null)
-                    {
-                        t_lForeignKeys = new ArrayList<>(1);
-                        t_mAux.put(t_strSourceTableName, t_lForeignKeys);
-                    }
+                        t_SourceTable = findTable(t_strSourceTableName, tables, caseSensitiveness);
+                        t_TargetTable = findTable(t_strTargetTableName, tables, caseSensitiveness);
 
-                    t_strSourceColumnName = t_rsForeignKeys.getString("FKCOLUMN_NAME");
-                    t_iOrdinalPosition = t_rsForeignKeys.getInt(KEY_SEQ);
+                        if (   (t_SourceTable != null)
+                            && (t_TargetTable != null)
+                            && (passesFilter(t_SourceTable, tables, caseSensitiveness))
+                            && (passesFilter(t_TargetTable, tables, caseSensitiveness))) {
 
-                    t_Attribute =
-                        findAttribute(t_strSourceColumnName, t_SourceTable.getAttributes(), caseSensitiveness);
+                            t_lForeignKeys = t_mAux.get(t_strSourceTableName);
 
-                    if (t_Attribute != null)
-                    {
-                        if (t_lFkAttributes == null)
-                        {
-                            t_lFkAttributes = new ArrayList<>(1);
-                            t_ForeignKey =
-                                new ForeignKeyValueObject(
-                                    t_strSourceTableName,
-                                    t_lFkAttributes,
-                                    t_strTargetTableName,
-                                    t_Attribute.isNullable());
+                            if (t_lForeignKeys == null) {
+                                t_lForeignKeys = new ArrayList<>(1);
+                                t_mAux.put(t_strSourceTableName, t_lForeignKeys);
+                            }
 
-                            t_lForeignKeys.add(t_ForeignKey);
+                            t_strSourceColumnName = t_rsForeignKeys.getString(Literals.FKCOLUMN_NAME_U);
+                            t_iOrdinalPosition = t_rsForeignKeys.getInt(Literals.KEY_SEQ);
+
+                            t_Attribute =
+                                findAttribute(t_strSourceColumnName, t_SourceTable.getAttributes(), caseSensitiveness);
+
+                            if (t_Attribute != null) {
+                                if (t_lFkAttributes == null) {
+                                    t_lFkAttributes = new ArrayList<>(1);
+                                }
+                                t_lFkAttributes.add(fixOrdinalPosition(t_iOrdinalPosition, t_Attribute));
+                                t_ForeignKey =
+                                    new ForeignKeyValueObject(
+                                        t_strSourceTableName,
+                                        t_lFkAttributes,
+                                        t_strTargetTableName,
+                                        t_Attribute.isNullable());
+
+                                t_lForeignKeys.add(t_ForeignKey);
+                            }
+                        } else {
+                            logVerbose(Literals.DISCARDING + t_strSourceTableName);
                         }
-                        t_lFkAttributes.add(fixOrdinalPosition(t_iOrdinalPosition, t_Attribute));
                     }
-                }
-                else
-                {
-                    logVerbose(DISCARDING + t_strSourceTableName);
+
+                    t_rsForeignKeys.close();
+                } catch  (final SQLException sqlException) {
+                    logWarn("Cannot retrieve the foreign keys.", sqlException);
+
+                    throw sqlException;
                 }
             }
-
-            t_rsForeignKeys.close();
         }
-        catch  (final SQLException sqlException)
-        {
-            logWarn(
-                "Cannot retrieve the foreign keys.",
-                sqlException);
-
-            throw sqlException;
-        }
-
         Table<String, Attribute<String>, List<Attribute<String>>> t_ParentTable;
         List<ForeignKey<String>> t_lParentForeignKeys;
         List<ForeignKey<String>> t_lChildForeignKeys;
         List<ForeignKey<String>> t_lCompleteForeignKey;
 
-        for (@NotNull final TableIncompleteValueObject t_Table : tables)
-        {
+        for (@NotNull final TableIncompleteValueObject t_Table : tables) {
             t_lChildForeignKeys = t_mAux.get(t_Table.getName());
 
             t_ParentTable = t_Table.getParentTable();
 
-            if (t_ParentTable != null)
-            {
+            if (t_ParentTable != null) {
                 t_lParentForeignKeys = t_ParentTable.getForeignKeys();
 
                 t_lCompleteForeignKey =
@@ -567,9 +536,8 @@ public class JdbcMetadataManager
                 t_lCompleteForeignKey.addAll(t_lParentForeignKeys);
                 t_lCompleteForeignKey.addAll(t_lChildForeignKeys);
                 t_Table.setForeignKeys(t_lCompleteForeignKey);
-            }
-            else
-            {
+
+            } else {
                 t_Table.setForeignKeys(t_lChildForeignKeys);
             }
         }
@@ -626,7 +594,7 @@ public class JdbcMetadataManager
     @Override
     protected boolean isInvalidColumnNameException(@NotNull final SQLException exception)
     {
-        return matchesMessage(exception, "Invalid column name");
+        return matchesMessage(exception, Literals.INVALID_COLUMN_NAME);
     }
 
     /**
@@ -635,6 +603,6 @@ public class JdbcMetadataManager
     @Override
     protected boolean isInvalidColumnTypeException(@NotNull final SQLException exception)
     {
-        return matchesMessage(exception, "Invalid column type");
+        return matchesMessage(exception, Literals.INVALID_COLUMN_TYPE);
     }
 }

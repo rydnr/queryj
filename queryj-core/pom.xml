@@ -172,11 +172,11 @@
           <warn />
         </configuration>
         <executions>
-	  <execution>
-	    <goals>
-	      <goal>compile</goal>
-	    </goals>
-	  </execution>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
     </plugins>

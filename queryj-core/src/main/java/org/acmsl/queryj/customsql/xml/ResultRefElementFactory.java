@@ -86,11 +86,14 @@ public class ResultRefElementFactory
         final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable ResultRefElement result = null;
+        @Nullable final ResultRefElement result;
+        @Nullable final String t_strId = attributes.getValue("id");
 
-        String t_strId = attributes.getValue("id");
-
-        result = new ResultRefElement(t_strId);
+        if (t_strId == null) {
+            result = null;
+        } else {
+            result = new ResultRefElement(t_strId);
+        }
 
         return result;
     }

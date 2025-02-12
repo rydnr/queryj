@@ -87,7 +87,7 @@ import org.checkthread.annotations.ThreadSafe;
  */
 @SuppressWarnings("unused")
 @ThreadSafe
-@Mojo( name = "queryj-package-templates", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true )
+@Mojo( name = "queryj-package-templates", defaultPhase = LifecyclePhase.GENERATE_SOURCES, threadSafe = true, executionStrategy = "once-per-session" )
 public class TemplatePackagingMojo
     extends AbstractMojo
     implements TemplatePackagingSettings
@@ -169,12 +169,12 @@ public class TemplatePackagingMojo
 
     /**
      * Specifies the {@link QueryJCommand} to delegate.
-     * @param delegee such instance.
+     * @param delegate such instance.
      */
     @SuppressWarnings("unused")
-    protected void setQueryJCommand(@NotNull final QueryJCommand delegee)
+    protected void setQueryJCommand(@NotNull final QueryJCommand delegate)
     {
-        immutableSetQueryJCommand(delegee);
+        immutableSetQueryJCommand(delegate);
     }
 
     /**
@@ -595,6 +595,6 @@ public class TemplatePackagingMojo
             + ", \"jdbcUserName\": \"" + this.m__strJdbcUserName + '"'
             + ", \"jdbcPassword\": \"XXXX-" + this.m__strJdbcPassword.length() + '"'
             + ", \"class\": \"TemplatePackagingMojo\""
-            + ", \"package\": \"org.acmsl.queryj.templates.packaging\" }";
+            + ", \"package\": \"org.acmsl.queryj.templates.packaging.maven\" }";
     }
 }

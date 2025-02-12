@@ -116,6 +116,7 @@ public interface Literals
     String TABLE_NAME = "tableName";
     String TABLE_NAME_U = "TABLE_NAME";
     String COLUMN_NAME_U = "COLUMN_NAME";
+    String DATA_TYPE_U = "DATA_TYPE";
     String POSITION_U = "POSITION";
     String USER_CONSTRAINTS_U = "USER_CONSTRAINTS";
     String CONSTRAINT_NAME_U = "CONSTRAINT_NAME";
@@ -159,4 +160,34 @@ public interface Literals
      */
     String CANNOT_READ_MY_OWN_POM = "Strange... Cannot read my own ";
 
+    String TYPE_NAME_U = "TYPE_NAME";
+    String COLUMN_SIZE_U = "COLUMN_SIZE";
+    String DECIMAL_DIGITS_U = "DECIMAL_DIGITS";
+    String COLUMN_DEF_U = "COLUMN_DEF";
+    String ORDINAL_POSITION_U = "ORDINAL_POSITION";
+    String TABLE_U = "TABLE";
+    String TABLE_CAT_U = "TABLE_CAT";
+    String FKTABLE_NAME_U = "FKTABLE_NAME";
+    String PKTABLE_NAME_U = "PKTABLE_NAME";
+    String FKCOLUMN_NAME_U = "FKCOLUMN_NAME";
+    String INVALID_COLUMN_NAME = "Invalid column name";
+    String INVALID_COLUMN_TYPE = "Invalid column type";
+    String CANNOT_RETRIEVE_THE_PRIMARY_KEYS = "Cannot retrieve the primary keys";
+    String CANNOT_RETRIEVE_THE_COLUMN_NAMES = "Cannot retrieve the column names";
+    String CANNOT_RETRIEVE_THE_TABLE_NAMES = "Cannot retrieve the table names";
+
+    /**
+     * String literal: "REMARKS".
+     */
+    public static final String REMARKS = "REMARKS";
+
+    /**
+     * String literal: "Discarding ".
+     */
+    public static final String DISCARDING = "Discarding ";
+
+    /**
+     * String literal: "KEY_SEQ".
+     */
+    public static final String KEY_SEQ = "KEY_SEQ";
 }

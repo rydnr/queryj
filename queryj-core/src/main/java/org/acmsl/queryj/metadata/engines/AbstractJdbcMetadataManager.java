@@ -77,6 +77,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.io.Serial;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -98,6 +99,7 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * The serial version id.
      */
+    @Serial
     private static final long serialVersionUID = 8480726945588937401L;
 
     /**
@@ -155,7 +157,7 @@ public abstract class AbstractJdbcMetadataManager
     private boolean m__bLazyTableExtraction;
 
     /**
-     * Whether the engine is case sensitive.
+     * Whether the engine is case-sensitive.
      */
     private boolean m__bCaseSensitive = false;
 
@@ -282,7 +284,7 @@ public abstract class AbstractJdbcMetadataManager
         List<String> result = immutableGetTableNames();
 
         if (   (result == null)
-            || (result.size() == 0))
+            || (result.isEmpty()))
         {
             result = extractTableNames(getTables());
             setTableNames(result);
@@ -516,7 +518,7 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Specifies the whether the table extraction should be disabled.
+     * Specifies whether the table extraction should be disabled.
      * @param flag such flag.
      */
     protected final void immutableSetDisableTableExtraction(
@@ -526,7 +528,7 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Specifies the whether the table extraction should be disabled.
+     * Specifies whether the table extraction should be disabled.
      * @param flag such flag.
      */
     @SuppressWarnings("unused")
@@ -803,7 +805,7 @@ public abstract class AbstractJdbcMetadataManager
             extractTableNamesAndComments(
                 metaData, catalog, schema, t_lTableNames, metadataExtractionListener, caseSensitiveness);
 
-        if  (t_lTableNames.size() == 0)
+        if  (t_lTableNames.isEmpty())
         {
             t_lTableNames = retrieveTableNames(t_lTables);
 
@@ -824,6 +826,9 @@ public abstract class AbstractJdbcMetadataManager
             caseSensitiveness,
             metadataExtractionListener);
 
+        System.out.println("Tables: " + t_lTables);
+        
+        System.out.println("Attributes: " + t_lTables.stream().map(t -> t.getAttributes()).map(String::valueOf));
         extractPrimaryKeys(
             metaData,
             catalog,
@@ -1067,6 +1072,8 @@ public abstract class AbstractJdbcMetadataManager
         {
             t_lChildTableAttributes = attributes.get(t_Table.getName());
 
+            System.out.println("Attributes of " + t_Table.getName() + " -> " + t_lChildTableAttributes);
+            
             t_ParentTable = t_Table.getParentTable();
 
             if (t_ParentTable != null)

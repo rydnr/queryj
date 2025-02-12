@@ -135,9 +135,6 @@
   value 	CDATA  #REQUIRED
 >
 
-<!ENTITY % local_entities SYSTEM "file:///home/chous/.m2/local_entities">
-%local_entities;
-
 <!ENTITY pattern "&#x00025;d{yyyy/MMM/dd HH:mm:ss,SSS} &#x00025;-5p [&#x00025;t][&#x00025;c] &#x00025;m&#x00025;n">
 ]>
 
@@ -159,7 +156,7 @@
  
   <appender class="org.apache.log4j.RollingFileAppender" name="FILE">
     <param name="Threshold" value="INFO"/>
-    <param name="File" value="&log4j_file;"/>
+    <param name="File" value="~/logs/java-process.log"/>
     <param name="Append" value="true" />
     <param name="maxFileSize" value="1MB" />
     <param name="maxBackupIndex" value="9" />
@@ -170,7 +167,7 @@
  
   <appender class="org.apache.log4j.DailyRollingFileAppender" name="FILEERROR">
     <param name="Threshold" value="ERROR"/>
-    <param name="File" value="&log4j_fileerror;"/>
+    <param name="File" value="~/logs/java-process-error.log"/>
     <param name="Append" value="true" />
     <param name="DatePattern" value="'.'yyyyMMdd" />
     <layout class="org.apache.log4j.PatternLayout">
@@ -180,7 +177,7 @@
 
   <appender name="SQL-LOG-FILE" class="org.apache.log4j.DailyRollingFileAppender">
     <param name="Threshold" value="DEBUG"/>
-    <param name="File" value="&log4j_sqllog;"/>
+    <param name="File" value="~/logs/java-process-sql.log"/>
     <param name="Append" value="true"/>
 
     <layout class="org.apache.log4j.PatternLayout">

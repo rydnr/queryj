@@ -647,4 +647,13 @@ public class DecoratedString
     {
         return !isTrue();
     }
+
+    /**
+     * Converts dots to slashes.
+     * @return Such transformation.
+     */
+    @SuppressWarnings("unused")
+    public DecoratedString getDotsToSlashes() {
+        return new DecoratedString(this.getValue().replace(".", "/"));
+    }
 }

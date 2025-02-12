@@ -169,7 +169,7 @@ public class <C.class_name>
     {
         @NotNull final TemplateDef\<String> t_TemplateDef =
             new ParseTemplateDefsHandler().parseDefStream(
-                getClass().getResourceAsStream("/org/acmsl/queryj/templates/<def.defName>.stg.def"));
+                getClass().getResourceAsStream("/<def.packageName.dotsWithSlashes>/<def.defName>.stg.def"));
 
         @NotNull final <def.type.capitalized>TemplateContext t_Context =
             new TemplateDef<def.type.capitalized>TemplateContext(t_TemplateDef, repository, tableNames, <def.debug>, parameters);

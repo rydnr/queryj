@@ -47,6 +47,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing JDK classes.
  */
+import java.io.Serial;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
@@ -67,6 +68,7 @@ public class MySQL4xMetadataManager
     /**
      * The serial version id.
      */
+    @Serial
     private static final long serialVersionUID = -9087872657546547720L;
 
     /**

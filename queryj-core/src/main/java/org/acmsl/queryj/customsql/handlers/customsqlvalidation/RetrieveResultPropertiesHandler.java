@@ -213,13 +213,13 @@ public class RetrieveResultPropertiesHandler
             result.addAll(retrieveExplicitProperties(sqlResult, customSqlProvider.getSqlPropertyDAO()));
         }
 
-        if  (   (result.size() == 0)
+        if  (   (result.isEmpty())
              && (t_strTable != null))
         {
             result = retrieveImplicitProperties(t_strTable, metadataManager, typeManager);
         }
 
-        if  (result.size() == 0)
+        if  (result.isEmpty())
         {
             if (sqlResult != null)
             {

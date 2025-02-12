@@ -502,7 +502,7 @@ public class QueryJMojo
      * Returns the schema.
      * @return such value, or an empty string if not initialized.
      */
-    @NotNull
+    @Nullable
     public String getSchema()
     {
         String result = System.getProperty(JDBC_SCHEMA);
@@ -510,11 +510,6 @@ public class QueryJMojo
         if (result == null)
         {
             result = immutableGetSchema();
-        }
-
-        if  (result == null)
-        {
-            result = "";
         }
 
         return result;

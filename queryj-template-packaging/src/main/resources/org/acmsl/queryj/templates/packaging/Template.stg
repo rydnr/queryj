@@ -127,7 +127,7 @@ public class <C.class_name>
     {
         return
             retrieveGroup(
-                "org/acmsl/queryj/templates/<def.rawName>",
+                "<def.packageName.dotsToSlashes>/<def.rawName>",
                 Arrays.asList(org.acmsl.queryj.Literals.ORG_ACMSL_QUERYJ_TEMPLATES));
     }
 

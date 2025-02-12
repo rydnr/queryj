@@ -110,7 +110,7 @@ public class TemplatePackagingParameterValidationHandler
         throws  QueryJBuildException
     {
         if  (   (sources == null)
-             || (sources.size() == 0))
+             || (sources.isEmpty()))
         {
             throw new MissingSourcesException();
         }

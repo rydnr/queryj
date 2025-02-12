@@ -281,10 +281,12 @@ public class ParameterValidationHandler
         }
         */
 
-        if  (schema == null) 
+        /* Not mandatory.
+        if  (schema == null)
         {
             throw new MissingJdbcSchemaException();
         }
+        */
 
         if  (repository == null) 
         {
