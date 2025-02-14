@@ -24,11 +24,11 @@
 
  ******************************************************************************
  *
- * Filename: QueryJCLI.java
+ * Filename: PythonCLI.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Allows executing QueryJ from the command-line.
+ * Description: Allows executing QueryJ for Python from the command-line.
  *
  */
 package org.acmsl.queryj.tools.cli;
@@ -41,7 +41,7 @@ import org.acmsl.queryj.SerializablePropertiesConfiguration;
 import org.acmsl.queryj.tools.logging.QueryJCLILog;
 import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJChain;
+import org.acmsl.queryj.tools.PythonChain;
 
 /*
  * Importing some Apache Commons CLI classes.
@@ -66,12 +66,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Allows executing QueryJ from the command-line.
+ * Allows executing QueryJ for Python from the command-line.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 1.0
- * Created: Thu Jul 13 18:21:23 2006
+ * Created: Thu Jul 13 18:21:23 2025
  */
-public final class QueryJCLI
+public final class PythonCLI
     implements  QueryJCLIOptions
 {
     /**
@@ -80,23 +80,21 @@ public final class QueryJCLI
      */
     public static void main(@NotNull final String[] args)
     {
-        executeQueryJ(args, QueryJCLIHelper.getInstance());
+        executeQueryJ(args, PythonCLIHelper.getInstance());
     }
 
     /**
      * Executes <b>QueryJ</b> from the command line.
      * @param args the command-line arguments.
-     * @param helper the <code>QueryJCLIHelper</code> instance.
+     * @param helper the <code>PythonCLIHelper</code> instance.
      */
     protected static void executeQueryJ(
-        final String[] args, @NotNull final QueryJCLIHelper helper)
+        final String[] args, @NotNull final PythonCLIHelper helper)
     {
         executeQueryJ(
             args,
             helper.createConfigurationOption(),
             helper.createConfigurationLongOption(),
-            helper.createCustomSqlOption(),
-            helper.createCustomSqlLongOption(),
             helper.createVerbosityOptions(),
             helper.createHelpOption(),
             helper.createHelpLongOption(),
@@ -110,24 +108,19 @@ public final class QueryJCLI
      * properties file.
      * @param configurationLongOption the long option specifying the
      * configuration properties file.
-     * @param customSqlOption the option specifying the custom SQL file.
-     * @param customSqlLongOption the long option specifying the custom SQL
-     * file.
      * @param verbosityOptions the options specifying the verbosity.
      * @param helpOption the option specifying the help.
      * @param helpLongOption the long option specifying the help.
-     * @param helper the <code>QueryJCLIHelper</code> instance.
+     * @param helper the <code>PythonCLIHelper</code> instance.
      */
     protected static void executeQueryJ(
         @NotNull final String[] args,
         @NotNull final Option configurationOption,
         @NotNull final Option configurationLongOption,
-        @NotNull final Option customSqlOption,
-        @NotNull final Option customSqlLongOption,
         @NotNull final Option[] verbosityOptions,
         @NotNull final Option helpOption,
         @NotNull final Option helpLongOption,
-        @NotNull final QueryJCLIHelper helper)
+        @NotNull final PythonCLIHelper helper)
     {
         @Nullable Options t_Options;
 
@@ -138,7 +131,6 @@ public final class QueryJCLI
             t_Options =
                 helper.createOptions(
                     configurationLongOption, 
-                    customSqlLongOption,
                     verbosityOptions,
                     helpLongOption);
 
@@ -151,7 +143,6 @@ public final class QueryJCLI
                  t_Options =
                      helper.createOptions(
                          configurationOption, 
-                         customSqlOption,
                          verbosityOptions,
                          helpOption);
 
@@ -167,8 +158,6 @@ public final class QueryJCLI
                 helper.printUsage(
                     configurationOption,
                     configurationLongOption,
-                    customSqlOption,
-                    customSqlLongOption,
                     verbosityOptions,
                     helpOption,
                     helpLongOption,
@@ -183,8 +172,6 @@ public final class QueryJCLI
                 helper.printUsage(
                     configurationOption,
                     configurationLongOption,
-                    customSqlOption,
-                    customSqlLongOption,
                     verbosityOptions,
                     helpOption,
                     helpLongOption,
@@ -203,15 +190,6 @@ public final class QueryJCLI
                             CONFIGURATION_PROPERTIES_LONG_OPTION);
                 }
 
-                String t_strCustomSqlFileName =
-                    t_CommandLine.getOptionValue(CUSTOM_SQL_OPTION);
-
-                if  (t_strCustomSqlFileName == null)
-                {
-                    t_strCustomSqlFileName =
-                        t_CommandLine.getOptionValue(CUSTOM_SQL_LONG_OPTION);
-                }
-
                 try
                 {
                     @NotNull final Configuration t_ConfigurationSettings =
@@ -222,8 +200,7 @@ public final class QueryJCLI
                     {
                         executeQueryJ(
                             t_ConfigurationSettings,
-                            retrieveLogThreshold(t_CommandLine),
-                            t_strCustomSqlFileName);
+                            retrieveLogThreshold(t_CommandLine));
                     }
                     catch  (@NotNull final QueryJBuildException buildException)
                     {
@@ -246,17 +223,15 @@ public final class QueryJCLI
      * Executes QueryJ using given options.
      * @param configurationSettings the configuration settings.
      * @param logThreshold the log threshold.
-     * @param customSqlFile the file.
      * @throws QueryJBuildException if QueryJ cannot be run.
      */
     @SuppressWarnings("unused")
     protected static void executeQueryJ(
         @NotNull final Configuration configurationSettings,
-        final int logThreshold,
-        @NotNull final String customSqlFile)
+        final int logThreshold)
       throws  QueryJBuildException
     {
-        new QueryJChain<>()
+        new PythonChain<>()
             .process(
                 new ConfigurationQueryJCommandImpl(configurationSettings, new QueryJCLILog(logThreshold, System.err)));
     }

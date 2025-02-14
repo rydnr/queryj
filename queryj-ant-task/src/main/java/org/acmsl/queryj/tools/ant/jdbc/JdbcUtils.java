@@ -23,7 +23,7 @@
 
  ******************************************************************************
  *
- * Filename: AntUtils.java
+ * Filename: JdbcUtils.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -33,7 +33,7 @@
  * Time: 08:35
  *
  */
-package org.acmsl.queryj.tools.ant;
+package org.acmsl.queryj.tools.ant.jdbc;
 
 /*
  * Importing QueryJ Core classes.
@@ -84,7 +84,7 @@ import java.util.Map;
  * Created: 2014/08/20 08:35
  */
 @ThreadSafe
-public class AntUtils
+public class JdbcUtils
 {
     /**
      * Retrieves the explicitly-defined table names.

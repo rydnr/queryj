@@ -23,7 +23,7 @@
 
  ******************************************************************************
  *
- * Filename: QueryJChain.java
+ * Filename: JdbcChain.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -38,12 +38,11 @@ package org.acmsl.queryj.tools;
 import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.QueryJSettings;
-import org.acmsl.queryj.api.exceptions.CannotFindTemplatesException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.handlers.TemplateHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlCacheWritingHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
-import org.acmsl.queryj.api.handlers.TemplateHandler;
 import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataCacheWritingHandler;
@@ -60,12 +59,6 @@ import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
  */
 import org.acmsl.commons.patterns.Chain;
 import org.acmsl.commons.logging.UniqueLogFactory;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
-import java.util.ServiceLoader;
 
 /*
  * Importing some Apache Commons Logging classes.
@@ -89,14 +82,14 @@ import org.checkthread.annotations.ThreadSafe;
  * @param <CH> the command handler class.
  */
 @ThreadSafe
-public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
+public class JdbcChain<CH extends QueryJCommandHandler<QueryJCommand>>
     extends AbstractQueryJChain<QueryJCommand, CH>
     implements QueryJSettings
 {
     /**
-     * Creates a {@link QueryJChain} with given information.
+     * Creates a {@link JdbcChain} with given information.
      */
-    public QueryJChain()
+    public JdbcChain()
     {
     }
 
@@ -167,39 +160,6 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
     }
 
     /**
-     * Fills given chain with external template bundles.
-     * @param chain the chain.
-     * @throws QueryJBuildException if the handlers cannot be retrieved.
-     */
-    @SuppressWarnings("unchecked")
-    protected void fillTemplateHandlers(@NotNull final Chain<QueryJCommand, QueryJBuildException, CH> chain)
-        throws QueryJBuildException
-    {
-        // Don't know how to fix the generics warnings
-        @NotNull final ServiceLoader<TemplateChainProvider> loader =
-             ServiceLoader.load(TemplateChainProvider.class);
-
-        if (loader.iterator().hasNext())
-        {
-            // Don't know how to fix the generics warnings
-            @NotNull final TemplateChainProvider provider = loader.iterator().next();
-
-            // Don't know how to fix the generics warnings
-            for (@Nullable final TemplateHandler<?> handler : (List<TemplateHandler<?>>) provider.getHandlers())
-            {
-                if (handler != null)
-                {
-                    chain.add((CH) handler);
-                }
-            }
-        }
-        else
-        {
-            throw new CannotFindTemplatesException(TemplateChainProvider.class);
-        }
-    }
-
-    /**
      * Performs any clean up whenever an error occurs.
      * @param buildException the error that triggers this clean-up.
      * @param command the command.
@@ -208,7 +168,7 @@ public class QueryJChain<CH extends QueryJCommandHandler<QueryJCommand>>
     protected void cleanUpOnError(
         @NotNull final QueryJBuildException buildException, @NotNull final QueryJCommand command)
     {
-        @Nullable final Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(JdbcChain.class);
 
         if  (t_Log != null)
         {

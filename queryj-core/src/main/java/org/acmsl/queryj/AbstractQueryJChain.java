@@ -36,8 +36,12 @@ package org.acmsl.queryj;
 /*
  * Importing QueryJ Core classes.
  */
+import org.acmsl.queryj.api.exceptions.CannotFindTemplatesException;
 import org.acmsl.queryj.api.exceptions.DevelopmentModeException;
 import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.api.handlers.TemplateHandler;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.tools.TemplateChainProvider;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 
 /*
@@ -45,6 +49,12 @@ import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
  */
 import org.acmsl.commons.patterns.ArrayListChainAdapter;
 import org.acmsl.commons.patterns.Chain;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.List;
+import java.util.ServiceLoader;
 
 /*
  * Importing some Apache Commons Logging classes.
@@ -71,6 +81,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public abstract class AbstractQueryJChain
     <C extends QueryJCommand, CH extends QueryJCommandHandler<C>>
+    implements QueryJChain<C, CH>
 {
     /**
      * The chain.
@@ -281,6 +292,39 @@ public abstract class AbstractQueryJChain
         while (restart);
 
         return result;
+    }
+
+    /**
+     * Fills given chain with external template bundles.
+     * @param chain the chain.
+     * @throws QueryJBuildException if the handlers cannot be retrieved.
+     */
+    @SuppressWarnings("unchecked")
+    protected void fillTemplateHandlers(@NotNull final Chain<C, QueryJBuildException, CH> chain)
+        throws QueryJBuildException
+    {
+        // Don't know how to fix the generics warnings
+        @NotNull final ServiceLoader<TemplateChainProvider> loader =
+             ServiceLoader.load(TemplateChainProvider.class);
+
+        if (loader.iterator().hasNext())
+        {
+            // Don't know how to fix the generics warnings
+            @NotNull final TemplateChainProvider provider = loader.iterator().next();
+
+            // Don't know how to fix the generics warnings
+            for (@Nullable final TemplateHandler<?> handler : (List<TemplateHandler<?>>) provider.getHandlers())
+            {
+                if (handler != null)
+                {
+                    chain.add((CH) handler);
+                }
+            }
+        }
+        else
+        {
+            throw new CannotFindTemplatesException(TemplateChainProvider.class);
+        }
     }
 
     /**

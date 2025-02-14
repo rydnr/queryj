@@ -32,7 +32,7 @@
  *              QueryJ task.
  *
  */
-package org.acmsl.queryj.tools.ant;
+package org.acmsl.queryj.tools.ant.jdbc;
 
 /*
  * Importing some JDK classes.
@@ -66,8 +66,6 @@ import org.checkthread.annotations.ThreadSafe;
 public class AntTablesElement
     implements  DynamicConfigurator
 {
-    public static final String TABLE = "table";
-
     /**
      * The table collection.
      */
@@ -117,7 +115,7 @@ public class AntTablesElement
     {
         throw
             new BuildException(
-                QueryJTask.NO_DYNAMIC_ATTRIBUTES_ARE_SUPPORTED + name + "=" + value + ")");
+                Literals.DYNAMIC_ATTRIBUTES_ARE_NOT_SUPPORTED.format(name, value));
     }
 
     /**
@@ -130,23 +128,24 @@ public class AntTablesElement
     {
         @Nullable final AntTableElement result;
 
-        if  (TABLE.equals(name))
+        switch (Literals.valueOf(name.toUpperCase()))
         {
-            result = new AntTableElement();
+            case TABLE:
+                result = new AntTableElement();
 
-            List<AntTableElement> t_lTables = getTables();
+                List<AntTableElement> t_lTables = getTables();
 
-            if  (t_lTables == null)
-            {
-                t_lTables = new ArrayList<AntTableElement>();
-                setTables(t_lTables);
-            }
+                if  (t_lTables == null)
+                {
+                    t_lTables = new ArrayList<AntTableElement>();
+                    setTables(t_lTables);
+                }
 
-            t_lTables.add(result);
-        }
-        else 
-        {
-            throw new BuildException(name + QueryJTask.ELEMENTS_ARE_NOT_SUPPORTED);
+                t_lTables.add(result);
+                break;
+
+            default:
+                throw new BuildException(Literals.ELEMENTS_ARE_NOT_SUPPORTED.format(name));
         }
 
         return result;

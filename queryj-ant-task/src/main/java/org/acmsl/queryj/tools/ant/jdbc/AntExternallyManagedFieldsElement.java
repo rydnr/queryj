@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ Core
 
@@ -23,15 +24,26 @@
 
  ******************************************************************************
  *
- * Filename: AntTableElement.java
+ * Filename: AntExternallyManagedFieldsElement.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Contains all information inside a "table" XML element in Ant scripts,
- *              under QueryJ task.
+ * Description: Contains all information regarding the declaration of
+ *              externally managed fields in QueryJ task.
  *
  */
-package org.acmsl.queryj.tools.ant;
+package org.acmsl.queryj.tools.ant.jdbc;
+
+/*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.tools.ant.jdbc.Literals;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.ArrayList;
+import java.util.Collection;
 
 /*
  * Importing some Ant classes.
@@ -40,16 +52,10 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.ArrayList;
-import java.util.List;
 
 /*
  * Importing checkthread.org annotations.
@@ -57,68 +63,33 @@ import java.util.List;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Contains all information inside a "table" XML element in Ant scripts,
- * under QueryJ task.
+ * Contains all information regarding the declaration of
+ * externally managed fields in QueryJ task.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class AntTableElement
+public class AntExternallyManagedFieldsElement
     implements  DynamicConfigurator
 {
     /**
-     * The table name.
-     * @parameter property="name"
-     */
-    private String m__strTableName;
-
-    /**
      * The field collection.
-     * @parameter property="fields"
      */
-    private List<AntFieldElement> m__lFields;
+    private Collection<AntFieldElement> m__cFields;
 
     /**
-     * Specifies the table name.
-     * @param name the table name.
+     * Specifies the field collection.
+     * @param fields the collection
      */
-    protected final void immutableSetName(@NotNull final String name)
+    private void immutableSetFields(@NotNull final Collection<AntFieldElement> fields)
     {
-        m__strTableName = name;
-    }
-
-    /**
-     * Specifies the table name.
-     * @param name the table name.
-     */
-    public void setName(@NotNull final String name)
-    {
-        immutableSetName(name);
-    }
-
-    /**
-     * Retrieves the table name.
-     * @return such name.
-     */
-    @Nullable
-    public String getName()
-    {
-        return m__strTableName;
+        m__cFields = fields;
     }
 
     /**
      * Specifies the field collection.
      * @param fields the collection
      */
-    protected final void immutableSetFields(@NotNull final List<AntFieldElement> fields)
-    {
-        m__lFields = fields;
-    }
-
-    /**
-     * Specifies the field collection.
-     * @param fields the collection
-     */
-    public void setFields(@NotNull final List<AntFieldElement> fields)
+    private void setFields(@NotNull final Collection<AntFieldElement> fields)
     {
         immutableSetFields(fields);
     }
@@ -128,9 +99,33 @@ public class AntTableElement
      * @return such collection.
      */
     @Nullable
-    public List<AntFieldElement> getFields()
+    protected final Collection<AntFieldElement> immutableGetFields()
     {
-        return m__lFields;
+        return m__cFields;
+    }
+
+    /**
+     * Retrieves the field collection.
+     * @return such collection.
+     */
+    @NotNull
+    public Collection<AntFieldElement> getFields()
+    {
+        @Nullable final Collection<AntFieldElement> result;
+
+        @Nullable final Collection<AntFieldElement> t_cFields = immutableGetFields();
+
+        if (t_cFields == null)
+        {
+            result = new ArrayList<>();
+            setFields(result);
+        }
+        else
+        {
+            result = t_cFields;
+        }
+
+        return result;
     }
 
     /**
@@ -141,14 +136,7 @@ public class AntTableElement
     @Override
     public void setDynamicAttribute(@NotNull final String name, @NotNull final String value)
     {
-        if  ("name".equals(name))
-        {
-            setName(value);
-        }
-        else 
-        {
-            throw new BuildException("Attribute are supported");
-        }
+        throw new BuildException(Literals.ATTRIBUTES_ARE_NOT_SUPPORTED.format());
     }
 
     /**
@@ -156,29 +144,23 @@ public class AntTableElement
      * @param name the element's name.
      * @return the object.
      */
-    @Override
     @Nullable
+    @Override
     public Object createDynamicElement(@NotNull final String name)
     {
         @Nullable final AntFieldElement result;
 
-        if  (AntExternallyManagedFieldsElement.FIELD_LITERAL.equals(name))
+        if  (Literals.FIELD.equals(name))
         {
             result = new AntFieldElement();
 
-            List<AntFieldElement> t_lFields = getFields();
+            @NotNull final Collection<AntFieldElement> t_cFields = getFields();
 
-            if  (t_lFields == null)
-            {
-                t_lFields = new ArrayList<>();
-                setFields(t_lFields);
-            }
-
-            t_lFields.add(result);
+            t_cFields.add(result);
         }
         else 
         {
-            throw new BuildException(name + QueryJTask.ELEMENTS_ARE_NOT_SUPPORTED);
+            throw new BuildException(name + Literals.ELEMENTS_ARE_NOT_SUPPORTED);
         }
 
         return result;
@@ -191,7 +173,6 @@ public class AntTableElement
     @Override
     public String toString()
     {
-        return "{ 'class': 'AntTableElement', 'fields': '" + m__lFields +
-               "', 'tableName': '" + m__strTableName + "' }";
+        return "AntExternallyManagedFieldsElement{ fields=" + m__cFields + " }";
     }
 }

@@ -32,7 +32,12 @@
  *              under QueryJ task.
  *
  */
-package org.acmsl.queryj.tools.ant;
+package org.acmsl.queryj.tools.ant.jdbc;
+
+/*
+ * Importing some project classes.
+ */
+import org.acmsl.queryj.tools.ant.jdbc.Literals;
 
 /*
  * Importing some Ant classes.
@@ -42,10 +47,14 @@ import org.apache.tools.ant.DynamicConfigurator;
 import org.jetbrains.annotations.NotNull;
 
 /*
+ * Import nullable annotations.
+ */
+import org.jetbrains.annotations.Nullable;
+
+/*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains all information inside a "fk" XML element in Ant scripts,
@@ -112,17 +121,16 @@ public class AntFieldFkElement
     @Override
     public void setDynamicAttribute(@NotNull final String name, @NotNull final String value)
     {
-        if  (AntTablesElement.TABLE.equals(name))
+        switch (Literals.valueOf(name.toUpperCase()))
         {
-            setTable(value);
-        }
-        else if  (AntExternallyManagedFieldsElement.FIELD_LITERAL.equals(name))
-        {
-            setField(value);
-        }
-        else 
-        {
-            throw new BuildException(AntFieldElement.ATTRIBUTE_LITERAL + name + "is not supported");
+            case TABLE:
+                setTable(value);
+                break;
+            case FIELD:
+                setField(value);
+                break;
+            default:
+                throw new BuildException(Literals.ATTRIBUTE_IS_NOT_SUPPORTED.format(name));
         }
     }
 
@@ -136,8 +144,7 @@ public class AntFieldFkElement
     public Object createDynamicElement(@NotNull final String name)
     {
         throw
-            new BuildException(
-                "Nested elements inside <fk> are not supported");
+            new BuildException(Literals.NESTED_ELEMENTS_INSIDE_FK_ARE_NOT_SUPPORTED.format(name));
     }
 
     /**

@@ -24,7 +24,7 @@
 
  ******************************************************************************
  *
- * Filename: QueryJCLIHelper.java
+ * Filename: JdbcCLIHelper.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -83,7 +83,7 @@ import org.checkthread.annotations.ThreadSafe;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class QueryJCLIHelper
+public class JdbcCLIHelper
     implements  QueryJCLIOptions,
                 Singleton,
                 Utils
@@ -96,27 +96,27 @@ public class QueryJCLIHelper
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
-    private static class QueryJCLIHelperSingletonContainer
+    private static class JdbcCLIHelperSingletonContainer
     {
         /**
          * The actual singleton.
          */
-        public static final QueryJCLIHelper SINGLETON = new QueryJCLIHelper();
+        public static final JdbcCLIHelper SINGLETON = new JdbcCLIHelper();
     }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected QueryJCLIHelper() {};
+    protected JdbcCLIHelper() {};
 
     /**
-     * Retrieves a <code>QueryJCLIHelper</code> instance.
+     * Retrieves a <code>JdbcCLIHelper</code> instance.
      * @return such instance.
      */
     @NotNull
-    public static QueryJCLIHelper getInstance()
+    public static JdbcCLIHelper getInstance()
     {
-        return QueryJCLIHelperSingletonContainer.SINGLETON;
+        return JdbcCLIHelperSingletonContainer.SINGLETON;
     }
 
     /**
@@ -386,13 +386,13 @@ public class QueryJCLIHelper
 
                 if  (result == null)
                 {
-                    stream = QueryJCLIHelper.class.getResourceAsStream(configurationFile);
+                    stream = JdbcCLIHelper.class.getResourceAsStream(configurationFile);
                     result = readConfigurationSettings(stream, true);
 
                     if  (result != null)
                     {
                         @Nullable final Log t_Log =
-                            UniqueLogFactory.getLog(QueryJCLIHelper.class);
+                            UniqueLogFactory.getLog(JdbcCLIHelper.class);
 
                         if  (t_Log != null)
                         {
@@ -406,7 +406,7 @@ public class QueryJCLIHelper
             catch  (@NotNull final IOException ioException)
             {
                 @Nullable final Log t_Log =
-                    UniqueLogFactory.getLog(QueryJCLIHelper.class);
+                    UniqueLogFactory.getLog(JdbcCLIHelper.class);
 
                 if  (t_Log != null)
                 {
@@ -426,7 +426,7 @@ public class QueryJCLIHelper
                     catch  (@NotNull final IOException ioException)
                     {
                         @Nullable final Log t_Log =
-                            UniqueLogFactory.getLog(QueryJCLIHelper.class);
+                            UniqueLogFactory.getLog(JdbcCLIHelper.class);
 
                         if  (t_Log != null)
                         {
@@ -468,7 +468,7 @@ public class QueryJCLIHelper
             if  (log)
             {
                 @Nullable final Log t_Log =
-                    UniqueLogFactory.getLog(QueryJCLIHelper.class);
+                    UniqueLogFactory.getLog(JdbcCLIHelper.class);
 
                 if  (t_Log != null)
                 {

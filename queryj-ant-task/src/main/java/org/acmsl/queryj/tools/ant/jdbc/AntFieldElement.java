@@ -32,7 +32,7 @@
  *              scripts, under QueryJ task.
  *
  */
-package org.acmsl.queryj.tools.ant;
+package org.acmsl.queryj.tools.ant.jdbc;
 
 /*
  * Importing some project classes.
@@ -77,26 +77,6 @@ public class AntFieldElement
      * The serial version id.
      */
     private static final long serialVersionUID = 5709131443641728342L;
-
-    /**
-     * String literal: "table-name".
-     */
-    public static final String TABLE_NAME_LITERAL = "table-name";
-
-    /**
-     * String literal: "keyword".
-     */
-    public static final String KEYWORD_LITERAL = "keyword";
-
-    /**
-     * String literal: "retrieval-query".
-     */
-    public static final String RETRIEVAL_QUERY_LITERAL = "retrieval-query";
-
-    /**
-     * String literal: "Attribute ".
-     */
-    static final String ATTRIBUTE_LITERAL = "Attribute ";
 
     /**
      * The field pk nature.
@@ -145,35 +125,30 @@ public class AntFieldElement
     @Override
     public void setDynamicAttribute(@NotNull final String name, @NotNull final String value)
     {
-        if  ("name".equals(name))
+        switch (Literals.valueOf(name.toUpperCase()))
         {
-            setName(value);
-        }
-        else if  ("type".equals(name))
-        {
-            setType(value);
-        }
-        else if  ("pk".equals(name))
-        {
-            setPk(value);
-        }
-        else if  (TABLE_NAME_LITERAL.equals(name))
-        {
-            setTableName(value);
-        }
-        else if  (KEYWORD_LITERAL.equals(name))
-        {
-            setKeyword(value);
-        }
-        else if  (RETRIEVAL_QUERY_LITERAL.equals(name))
-        {
-            setRetrievalQuery(value);
-        }
-        else 
-        {
-            // TODO: Use a custom exception
-            throw
-                new BuildException(ATTRIBUTE_LITERAL + name + " is not supported");
+            case NAME:
+                setName(value);
+                break;
+            case TYPE:
+                setType(value);
+                break;
+            case PK:
+                setPk(value);
+                break;
+            case TABLE_NAME:
+                setTableName(value);
+                break;
+            case KEYWORD:
+                setKeyword(value);
+                break;
+            case RETRIEVAL_QUERY:
+                setRetrievalQuery(value);
+                break;
+            default:
+                // TODO: Use a custom exception
+                throw
+                    new BuildException(Literals.ATTRIBUTE_IS_NOT_SUPPORTED.format(name));
         }
     }
 
@@ -188,23 +163,23 @@ public class AntFieldElement
     {
         final @Nullable Field result;
 
-        if  ("fk".equals(name)) 
+        switch (Literals.valueOf(name.toUpperCase()))
         {
-            result = null; //new AntFieldFkElement();
+            case FK:
+                result = null; // TODO: new Field();
 
-            @Nullable List<Field> t_cFieldFks = getFieldFks();
+                @Nullable List<Field> t_cFieldFks = getFieldFks();
 
-            if  (t_cFieldFks == null)
-            {
-                t_cFieldFks = new ArrayList<>();
-                setFieldFks(t_cFieldFks);
-            }
+                if  (t_cFieldFks == null)
+                {
+                    t_cFieldFks = new ArrayList<>();
+                    setFieldFks(t_cFieldFks);
+                }
 
-            t_cFieldFks.add(result);
-        }
-        else 
-        {
-            throw new BuildException(name + QueryJTask.ELEMENTS_ARE_NOT_SUPPORTED);
+                t_cFieldFks.add(result);
+                break;
+            default:
+                throw new BuildException(Literals.NO_ELEMENTS_BUT_FK_ARE_SUPPORTED.format(name));
         }
 
         return result;
