@@ -25,7 +25,7 @@ pipeline {
             steps {
                 sshagent(credentials:['github']) {
                     checkout([
-                        $class: 'GitSCM'
+                        $class: 'GitSCM',
                         branches: [[name: '*/main']], // Replace with your branch
                         doGenerateSubmoduleConfigurations: false,
                         extensions: [
