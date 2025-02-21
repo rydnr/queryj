@@ -17,13 +17,14 @@ pipeline {
         MAVEN_REPO = 'http://maven.acm-sl.org/repository/maven-snapshots-local'
         LOCAL_VERSION_FILE = "${WORKSPACE}/.last_snapshot_versions"
         MAVEN_OPTS = "-Dmaven.repo.local=${WORKSPACE}/.m2/repository" // Optional: Isolate repo per build
+        GIT_SSH_COMMAND = "ssh -i ~/.ssh/id_rsa-github-jenkins -o IdentitiesOnly=yes"
     }
 
     stages {
         stage('Checkout') {
             steps {
                 checkout([
-                    $class: 'GitSCM',
+                    scmGit
                     branches: [[name: '*/main']], // Replace with your branch
                     doGenerateSubmoduleConfigurations: false,
                     extensions: [
