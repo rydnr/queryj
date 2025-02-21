@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven' // Ensure Jenkins uses the right Maven installation
+    }
+
     options {
         skipDefaultCheckout() // Avoids Jenkins auto-checkout
     }
@@ -12,6 +16,7 @@ pipeline {
         ARTIFACT_ID = 'queryj-core'
         MAVEN_REPO = 'http://maven.acm-sl.org/repository/maven-snapshots-local'
         LOCAL_VERSION_FILE = "${WORKSPACE}/.last_snapshot_versions"
+        MAVEN_OPTS = "-Dmaven.repo.local=${WORKSPACE}/.m2/repository" // Optional: Isolate repo per build
     }
 
     stages {
@@ -34,59 +39,14 @@ pipeline {
             }
         }
 
-        stage('Check for New SNAPSHOT') {
-            steps {
-                script {
-                    // Generate the effective POM
-                    sh '/home/jenkins/.sdkman/candidates/maven/current/bin/mvn help:effective-pom -Doutput=effective-pom.xml'
-
-                    // Extract all SNAPSHOT dependencies
-                    def snapshotDeps = sh(script: """
-                        xmlstarlet sel -T -N "x=http://maven.apache.org/POM/4.0.0" \\
-                        -t -m "/x:project/x:dependencies/x:dependency[x:version[contains(text(),'SNAPSHOT')]]" \\
-                        -v "concat(x:groupId,':',x:artifactId,':',x:version)" -n effective-pom.xml
-                    """, returnStdout: true).trim().split("\n")
-
-                    def shouldTriggerBuild = false
-                    def newVersions = [:]
-
-                    snapshotDeps.each { dep ->
-                        def parts = dep.split(":")
-                        def groupId = parts[0].replace('.', '/')
-                        def artifactId = parts[1]
-                        def version = parts[2]
-
-                        def metadataUrl = "${MAVEN_REPO}${groupId}/${artifactId}/maven-metadata.xml"
-                        def latestSnapshot = sh(script: """
-                            curl -s "${metadataUrl}" | xmlstarlet sel -T -t -v "/metadata/versioning/latest" || echo "none"
-                        """, returnStdout: true).trim()
-
-                        def lastSnapshot = sh(script: "grep ${artifactId} ${LOCAL_VERSION_FILE} || echo none", returnStdout: true).trim()
-
-                        if (latestSnapshot != "none" && latestSnapshot != lastSnapshot) {
-                            shouldTriggerBuild = true
-                            newVersions[artifactId] = latestSnapshot
-                        }
-                    }
-
-                    if (shouldTriggerBuild) {
-                        echo "New SNAPSHOT detected!"
-                        writeFile file: LOCAL_VERSION_FILE, text: newVersions.collect { k, v -> "${k}=${v}" }.join("\n")
-                        currentBuild.result = 'SUCCESS'
-                    } else {
-                        echo "No new SNAPSHOT detected."
-                        currentBuild.result = 'ABORTED'
-                    }
-                }
-            }
-        }
-
         stage('Build and Deploy') {
             when {
                 expression { currentBuild.result == 'SUCCESS' }
             }
             steps {
-                sh '/home/jenkins/.sdkman/candidates/maven/current/bin/mvn clean deploy'
+                withMaven(maven: 'Maven') {  // Enables Jenkins to track SNAPSHOT dependencies
+                    sh '/home/jenkins/.sdkman/candidates/maven/current/bin/mvn clean deploy'
+                }
             }
         }
     }
