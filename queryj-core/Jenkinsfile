@@ -28,7 +28,7 @@ pipeline {
                         sh 'git config --global core.sshCommand "ssh -o IdentitiesOnly=yes -i ~/.ssh/id_rsa-github-jenkins"'
                         checkout([
                             $class: 'GitSCM',
-                            branches: [[name: '*/main']], // Replace with your branch
+                            branches: [[name: '*/master']],
                             doGenerateSubmoduleConfigurations: false,
                             extensions: [
                                 [$class: 'WipeWorkspace'], // Wipes workspace before cloning
