@@ -10,7 +10,7 @@ pipeline {
     }
 
     environment {
-        GIT_REPO = 'git@github.com:rydnr/java-commons.git' // Your repository URL
+        GIT_REPO = 'git@github.com:rydnr/queryj.git'
         CREDENTIALS_ID = 'github' // Jenkins credentials ID for SSH key
         GROUP_ID = 'org.acmsl.queryj'
         ARTIFACT_ID = 'queryj-core'
@@ -20,25 +20,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/main']], // Replace with your branch
-                    doGenerateSubmoduleConfigurations: false,
-                    extensions: [
-                        [$class: 'WipeWorkspace'], // Wipes workspace before cloning
-                        [$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false]
-                    ],
-                    submoduleCfg: [],
-                    userRemoteConfigs: [[
-                        url: env.GIT_REPO,
-                        credentialsId: env.CREDENTIALS_ID
-                    ]]
-                ])
-            }
-        }
-
         stage('Build and Deploy') {
             when {
                 expression { currentBuild.result == 'SUCCESS' }
