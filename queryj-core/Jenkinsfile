@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven' // Ensure Jenkins uses the right Maven installation
+        maven 'maven' // Ensure Jenkins uses the right Maven installation
     }
 
     options {
