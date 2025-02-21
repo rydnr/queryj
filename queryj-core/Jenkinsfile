@@ -23,20 +23,22 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout([
-                    scmGit
-                    branches: [[name: '*/main']], // Replace with your branch
-                    doGenerateSubmoduleConfigurations: false,
-                    extensions: [
-                        [$class: 'WipeWorkspace'], // Wipes workspace before cloning
-                        [$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false]
-                    ],
-                    submoduleCfg: [],
-                    userRemoteConfigs: [[
-                        url: env.GIT_REPO,
-                        credentialsId: env.CREDENTIALS_ID
-                    ]]
-                ])
+                sshagent(credentials:['github']) {
+                    checkout([
+                        $class: 'GitSCM'
+                        branches: [[name: '*/main']], // Replace with your branch
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [
+                            [$class: 'WipeWorkspace'], // Wipes workspace before cloning
+                            [$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false]
+                        ],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[
+                            url: env.GIT_REPO,
+                            credentialsId: env.CREDENTIALS_ID
+                        ]]
+                    ])
+                }
             }
         }
 
