@@ -21,9 +21,6 @@ pipeline {
 
     stages {
         stage('Build and Deploy') {
-            when {
-                expression { currentBuild.result == 'SUCCESS' }
-            }
             steps {
                 withMaven(maven: 'Maven') {  // Enables Jenkins to track SNAPSHOT dependencies
                     sh '/home/jenkins/.sdkman/candidates/maven/current/bin/mvn clean deploy'
