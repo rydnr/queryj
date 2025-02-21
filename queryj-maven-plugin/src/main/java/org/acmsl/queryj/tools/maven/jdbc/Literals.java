@@ -27,13 +27,13 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Literals for QueryJ Maven.
+ * Description: Literals for JdbcMojo.
  *
- * Date: 2013/11/28
+ * Date: 2025/02/13
  * Time: 21:52
  *
  */
-package org.acmsl.queryj.tools.maven;
+package org.acmsl.queryj.tools.maven.jdbc;
 
 /*
  * Importing checkthread.org annotations.
@@ -41,14 +41,14 @@ package org.acmsl.queryj.tools.maven;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Literals for QueryJ Maven.
+ * Literals for JdbcMojo.
  * @author <a href="mailto:queryj@acm-sl.org">Jose San Leandro</a>
  * @since 3.0
- * Created: 2013/11/28 21:52
+ * Created: 2025/02/13 21:52
  */
 @ThreadSafe
 public interface Literals
-    extends org.acmsl.queryj.Literals
+    extends org.acmsl.queryj.tools.maven.Literals
 {
-    String OUTPUT_DIR = ", 'outputDir': '";
+    String PACKAGE_NAME = ", 'packageName': '";
 }

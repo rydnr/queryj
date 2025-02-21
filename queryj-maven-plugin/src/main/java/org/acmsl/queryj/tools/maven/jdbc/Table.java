@@ -29,15 +29,18 @@
  *
  * Description: Models a table.
  */
-package org.acmsl.queryj.tools.maven;
+package org.acmsl.queryj.tools.maven.jdbc;
 
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
+
+/*
+ * Importing Jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /*
  * Importing checkthread.org annotations.

@@ -29,7 +29,7 @@
  *
  * Description: Models a field.
  */
-package org.acmsl.queryj.tools.maven;
+package org.acmsl.queryj.tools.maven.jdbc;
 
 /*
  * Importing JetBrains annotations.
