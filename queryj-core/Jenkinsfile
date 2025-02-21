@@ -22,7 +22,7 @@ pipeline {
     stages {
         stage('Build and Deploy') {
             steps {
-                withMaven(maven: 'Maven') {  // Enables Jenkins to track SNAPSHOT dependencies
+                withMaven(maven: 'maven') {  // Enables Jenkins to track SNAPSHOT dependencies
                     sh '/home/jenkins/.sdkman/candidates/maven/current/bin/mvn clean deploy'
                 }
             }
