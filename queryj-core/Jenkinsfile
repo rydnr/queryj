@@ -68,7 +68,7 @@ pipeline {
                 withMaven(maven: 'maven') {  // Enables Jenkins to track SNAPSHOT dependencies
                     sh '''
                         cd "${WORKSPACE}"/${ARTIFACT_ID};
-                        mvn -X clean deploy
+                        mvn clean deploy
                     '''
                 }
             }
@@ -114,7 +114,7 @@ pipeline {
                 withMaven(maven: 'maven') {
                     sh '''
                         cd "${WORKSPACE}"/${ARTIFACT_ID};
-                        mvn -Prelease release:perform'
+                        mvn -Prelease release:perform
                     '''
                 }
             }
