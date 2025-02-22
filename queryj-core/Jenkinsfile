@@ -108,9 +108,6 @@ pipeline {
         }
 
         stage('Maven Release') {
-            when {
-                expression { currentBuild.result == 'SUCCESS' }
-            }
             steps {
                 withMaven(maven: 'maven') {
                     sh '''
