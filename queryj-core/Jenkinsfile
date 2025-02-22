@@ -17,6 +17,7 @@ pipeline {
         MAVEN_REPO = 'http://maven.acm-sl.org/repository/maven-snapshots-local'
         LOCAL_VERSION_FILE = "${WORKSPACE}/.last_snapshot_versions"
         GIT_SSH_COMMAND = "ssh -i ~/.ssh/id_rsa-github-jenkins -o IdentitiesOnly=yes"
+        ORIGIN_BRANCH = "master"
     }
 
     stages {
@@ -89,7 +90,7 @@ pipeline {
                         cd "${WORKSPACE}"/${ARTIFACT_ID};
                         cp "${WORKSPACE}"/../../_get-new-version/workspace/target/.version "${WORKSPACE}"/${ARTIFACT_ID}/target/.version;
 
-                        export NEW_VERSION="$(cat "${WORKSPACE}"/target/.version)";
+                        export NEW_VERSION="$(cat "${WORKSPACE}"/${ARTIFACT_ID}/target/.version)";
                         export NEW_GIT_TAG="${ARTIFACT_ID}-${NEW_VERSION}";
 
                         mvn versions:set -DnewVersion="${NEW_VERSION}"
@@ -125,14 +126,13 @@ pipeline {
                 script {
                     sh '''
                         cd "${WORKSPACE}"/${ARTIFACT_ID};
-                        export TAG_NAME="$(cat "${WORKSPACE}"/${ARTIFACT_ID}/target/.version)";
 
                         mvn versions:set -DnewVersion="latest-SNAPSHOT"
                         xmlstarlet ed --inplace -N x="http://maven.apache.org/POM/4.0.0" -u "/x:project/x:parent/x:version" -v "latest-SNAPSHOT" pom.xml
 
                         git add pom.xml
-                        git commit -m "Pointing ${ARTIFACT_ID}-${TAG_NAME} to latest-SNAPSHOT again"
-                        git push origin main
+                        git commit -m "Pointing ${GROUP_ID}/${ARTIFACT_ID} to latest-SNAPSHOT again"
+                        git push origin ${ORIGIN_BRANCH}
                     '''
                 }
             }
