@@ -48,7 +48,7 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 withMaven(maven: 'maven') {  // Enables Jenkins to track SNAPSHOT dependencies
-                    sh '/home/jenkins/.sdkman/candidates/maven/current/bin/mvn clean deploy'
+                    sh '/home/jenkins/.sdkman/candidates/maven/current/bin/mvn -U clean deploy'
                 }
             }
         }
