@@ -29,10 +29,10 @@ pipeline {
                         sh '''
                             if ! /home/jenkins/.sdkman/candidates/maven/current/bin/mvn dependency:get -DgroupId=org.acmsl -DartifactId=acmsl-pom -Dversion=latest-SNAPSHOT -Dpackaging=pom; then
                                 echo "Parent POM not found in remote repository, installing locally..."
-                                git clone git@github.com:rydnr/acmsl-pom.git /tmp/acmsl-pom
-                                cd /tmp/acmsl-pom
+                                git clone git@github.com:rydnr/acmsl-pom.git /tmp/$$
+                                cd /tmp/$$
                                 mvn clean install
-                                rm -rf /tmp/acmsl-pom
+                                rm -rf /tmp/$$
                             fi
                         '''
                     }
