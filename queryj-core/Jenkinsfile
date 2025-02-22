@@ -21,6 +21,24 @@ pipeline {
     }
 
     stages {
+        stage('Ensure Parent POM is Available') {
+            steps {
+                script {
+                    sshagent(credentials: [env.CREDENTIALS_ID]) {
+                        sh 'git config --global core.sshCommand "ssh -o IdentitiesOnly=yes -i ~/.ssh/id_rsa-github-jenkins"'
+                        sh '''
+                            if ! /home/jenkins/.sdkman/candidates/maven/current/bin/mvn dependency:get -DgroupId=org.acmsl -DartifactId=acmsl-pom -Dversion=latest-SNAPSHOT -Dpackaging=pom; then
+                                echo "Parent POM not found in remote repository, installing locally..."
+                                git clone git@github.com:rydnr/acmsl-pom.git /tmp/acmsl-pom
+                                cd /tmp/acmsl-pom
+                                mvn clean install
+                            fi
+                        '''
+                    }
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 script {
