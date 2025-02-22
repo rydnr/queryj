@@ -66,7 +66,10 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 withMaven(maven: 'maven') {  // Enables Jenkins to track SNAPSHOT dependencies
-                    sh '/home/jenkins/.sdkman/candidates/maven/current/bin/mvn -X clean deploy'
+                    sh '''
+                        cd "${WORKSPACE}"/${ARTIFACT_ID};
+                        mvn -X clean deploy'
+                    '''
                 }
             }
         }
