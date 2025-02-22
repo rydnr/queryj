@@ -32,6 +32,7 @@ pipeline {
                                 git clone git@github.com:rydnr/acmsl-pom.git /tmp/acmsl-pom
                                 cd /tmp/acmsl-pom
                                 mvn clean install
+                                rm -rf /tmp/acmsl-pom
                             fi
                         '''
                     }
