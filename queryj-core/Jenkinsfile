@@ -83,22 +83,20 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        cd "${WORKSPACE}";
-                        cp "${WORKSPACE}"/../../_get-new-version/workspace/target/.version "${WORKSPACE}"/target/.version;
+                        cd "${WORKSPACE}"/${ARTIFACT_ID};
+                        cp "${WORKSPACE}"/../../_get-new-version/workspace/target/.version "${WORKSPACE}"/${ARTIFACT_ID}/target/.version;
 
-                        export GROUP="$(xmlstarlet sel -T -N x=http://maven.apache.org/POM/4.0.0 -t -v "/x:project/x:groupId" pom.xml)";
-                        export ARTIFACT="$(xmlstarlet sel -T -N x=http://maven.apache.org/POM/4.0.0 -t -v "/x:project/x:artifactId" pom.xml)";
                         export NEW_VERSION="$(cat "${WORKSPACE}"/target/.version)";
-                        export NEW_GIT_TAG="${ARTIFACT}-${NEW_VERSION}";
+                        export NEW_GIT_TAG="${ARTIFACT_ID}-${NEW_VERSION}";
 
                         mvn versions:set -DnewVersion="${NEW_VERSION}"
                         xmlstarlet ed --inplace -N x="http://maven.apache.org/POM/4.0.0" -u "/x:project/x:parent/x:version" -v "${NEW_VERSION}" pom.xml
 
-                        /usr/local/bin/prepare-release.sh "${GROUP}" "${ARTIFACT}" "${NEW_VERSION}" "${REPO}"
+                        /usr/local/bin/prepare-release.sh "${GROUP_ID}" "${ARTIFACT_ID}" "${NEW_VERSION}" "${GIT_REPO}"
 
                         git add pom.xml
-                        git commit -m "Releasing ${ARTIFACT}: ${NEW_VERSION}"
-                        git tag -a "${NEW_GIT_TAG}" -m "Releasing ${ARTIFACT}: ${NEW_VERSION}"
+                        git commit -m "Releasing ${ARTIFACT_ID}: ${NEW_VERSION}"
+                        git tag -a "${NEW_GIT_TAG}" -m "Releasing ${ARTIFACT_ID}: ${NEW_VERSION}"
                         git push origin --tags
                     '''
                 }
@@ -111,7 +109,10 @@ pipeline {
             }
             steps {
                 withMaven(maven: 'maven') {
-                    sh 'mvn -Prelease release:perform'
+                    sh '''
+                        cd "${WORKSPACE}"/${ARTIFACT_ID};
+                        mvn -Prelease release:perform'
+                    '''
                 }
             }
         }
@@ -120,15 +121,14 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        cd "${WORKSPACE}";
-                        export TAG_NAME="$(cat "${WORKSPACE}"/target/.version)";
-                        export ARTIFACT="$(xmlstarlet sel -T -N x=http://maven.apache.org/POM/4.0.0 -t -v "/x:project/x:artifactId" pom.xml)";
+                        cd "${WORKSPACE}"/${ARTIFACT_ID};
+                        export TAG_NAME="$(cat "${WORKSPACE}"/${ARTIFACT_ID}/target/.version)";
 
                         mvn versions:set -DnewVersion="latest-SNAPSHOT"
                         xmlstarlet ed --inplace -N x="http://maven.apache.org/POM/4.0.0" -u "/x:project/x:parent/x:version" -v "latest-SNAPSHOT" pom.xml
 
                         git add pom.xml
-                        git commit -m "Pointing ${ARTIFACT}-${TAG_NAME} to latest-SNAPSHOT again"
+                        git commit -m "Pointing ${ARTIFACT_ID}-${TAG_NAME} to latest-SNAPSHOT again"
                         git push origin main
                     '''
                 }
