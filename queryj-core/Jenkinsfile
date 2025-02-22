@@ -13,6 +13,7 @@ pipeline {
         GIT_REPO = 'git@github.com:rydnr/queryj.git'
         CREDENTIALS_ID = 'github' // Jenkins credentials ID for SSH key
         GROUP_ID = 'org.acmsl.queryj'
+        PARENT_ARTIFACT_ID = 'queryj'
         ARTIFACT_ID = 'queryj-core'
         MAVEN_REPO = 'http://maven.acm-sl.org/repository/maven-snapshots-local'
         LOCAL_VERSION_FILE = "${WORKSPACE}/.last_snapshot_versions"
@@ -83,6 +84,41 @@ pipeline {
             }
         }
 
+        stage('Update Version & Tag Release of parent') {
+            steps {
+                script {
+                    sh '''
+                        cd "${WORKSPACE}";
+                        cp "${WORKSPACE}"/../../_get-new-version/workspace/target/.version "${WORKSPACE}"/${ARTIFACT_ID}/target/.version;
+
+                        export NEW_VERSION="$(cat "${WORKSPACE}"/${ARTIFACT_ID}/target/.version)";
+                        export NEW_GIT_TAG="${ARTIFACT_ID}-${NEW_VERSION}";
+
+                        mvn versions:set -DnewVersion="${NEW_VERSION}"
+                        xmlstarlet ed --inplace -N x="http://maven.apache.org/POM/4.0.0" -u "/x:project/x:parent/x:version" -v "${NEW_VERSION}" pom.xml
+
+                        /usr/local/bin/prepare-release.sh "${GROUP_ID}" "${PARENT_ARTIFACT_ID}" "${NEW_VERSION}" "${GIT_REPO}"
+
+                        git add pom.xml
+                        git commit -m "Releasing ${PARENT_ARTIFACT_ID}: ${NEW_VERSION}"
+                        git tag -a "${NEW_GIT_TAG}" -m "Releasing ${PARENT_ARTIFACT_ID}: ${NEW_VERSION}"
+                        git push origin --tags
+                    '''
+                }
+            }
+        }
+
+        stage('Maven Release of parent') {
+            steps {
+                withMaven(maven: 'maven') {
+                    sh '''
+                        cd "${WORKSPACE}";
+                        mvn -Prelease release:perform
+                    '''
+                }
+            }
+        }
+
         stage('Update Version & Tag Release') {
             steps {
                 script {
@@ -129,6 +165,14 @@ pipeline {
 
                         git add pom.xml
                         git commit -m "Pointing ${GROUP_ID}/${ARTIFACT_ID} to latest-SNAPSHOT again"
+
+                        cd "${WORKSPACE}";
+
+                        mvn versions:set -DnewVersion="latest-SNAPSHOT"
+                        xmlstarlet ed --inplace -N x="http://maven.apache.org/POM/4.0.0" -u "/x:project/x:parent/x:version" -v "latest-SNAPSHOT" pom.xml
+
+                        git add pom.xml
+                        git commit -m "Pointing ${GROUP_ID}/${PARENT_ARTIFACT_ID} to latest-SNAPSHOT again"
                         git push origin ${ORIGIN_BRANCH}
                     '''
                 }
