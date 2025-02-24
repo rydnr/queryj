@@ -24,11 +24,11 @@
 
  ******************************************************************************
  *
- * Filename: PythonCLI.java
+ * Filename: DomainCLI.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Allows executing QueryJ for Python from the command-line.
+ * Description: Allows executing QueryJ for Domain sources from the command-line.
  *
  */
 package org.acmsl.queryj.tools.cli;
@@ -38,10 +38,10 @@ package org.acmsl.queryj.tools.cli;
  */
 import org.acmsl.queryj.ConfigurationQueryJCommandImpl;
 import org.acmsl.queryj.SerializablePropertiesConfiguration;
+import org.acmsl.queryj.api.exceptions.QueryJBuildException;
+import org.acmsl.queryj.tools.DomainChain;
 import org.acmsl.queryj.tools.logging.QueryJCLILog;
 import org.acmsl.queryj.tools.logging.QueryJLog;
-import org.acmsl.queryj.api.exceptions.QueryJBuildException;
-import org.acmsl.queryj.tools.PythonChain;
 
 /*
  * Importing some Apache Commons CLI classes.
@@ -66,12 +66,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Allows executing QueryJ for Python from the command-line.
+ * Allows executing QueryJ for Domain sources from the command-line.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 1.0
  * Created: Thu Jul 13 18:21:23 2025
  */
-public final class PythonCLI
+public final class DomainCLI
     implements  QueryJCLIOptions
 {
     /**
@@ -80,16 +80,16 @@ public final class PythonCLI
      */
     public static void main(@NotNull final String[] args)
     {
-        executeQueryJ(args, PythonCLIHelper.getInstance());
+        executeQueryJ(args, DomainCLIHelper.getInstance());
     }
 
     /**
      * Executes <b>QueryJ</b> from the command line.
      * @param args the command-line arguments.
-     * @param helper the <code>PythonCLIHelper</code> instance.
+     * @param helper the <code>DomainCLIHelper</code> instance.
      */
     protected static void executeQueryJ(
-        final String[] args, @NotNull final PythonCLIHelper helper)
+        final String[] args, @NotNull final DomainCLIHelper helper)
     {
         executeQueryJ(
             args,
@@ -111,7 +111,7 @@ public final class PythonCLI
      * @param verbosityOptions the options specifying the verbosity.
      * @param helpOption the option specifying the help.
      * @param helpLongOption the long option specifying the help.
-     * @param helper the <code>PythonCLIHelper</code> instance.
+     * @param helper the <code>DomainCLIHelper</code> instance.
      */
     protected static void executeQueryJ(
         @NotNull final String[] args,
@@ -120,7 +120,7 @@ public final class PythonCLI
         @NotNull final Option[] verbosityOptions,
         @NotNull final Option helpOption,
         @NotNull final Option helpLongOption,
-        @NotNull final PythonCLIHelper helper)
+        @NotNull final DomainCLIHelper helper)
     {
         @Nullable Options t_Options;
 
@@ -231,7 +231,7 @@ public final class PythonCLI
         final int logThreshold)
       throws  QueryJBuildException
     {
-        new PythonChain<>()
+        new DomainChain<>()
             .process(
                 new ConfigurationQueryJCommandImpl(configurationSettings, new QueryJCLILog(logThreshold, System.err)));
     }

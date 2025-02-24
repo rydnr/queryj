@@ -24,12 +24,12 @@
 
  ******************************************************************************
  *
- * Filename: PythonCLIHelper.java
+ * Filename: DomainCLIHelper.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Provides some useful methods for executing QueryJ for Python from the
- *              command-line
+ * Description: Provides some useful methods for executing QueryJ for Domain
+ *              sources from the command-line.
  *
  */
 package org.acmsl.queryj.tools.cli;
@@ -79,11 +79,11 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Provides some useful methods for executing QueryJ for Python from the command-line.
+ * Provides some useful methods for executing QueryJ for Domain sources from the command-line.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @ThreadSafe
-public class PythonCLIHelper
+public class DomainCLIHelper
     implements  QueryJCLIOptions,
                 Singleton,
                 Utils
@@ -96,27 +96,27 @@ public class PythonCLIHelper
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
-    private static class PythonCLIHelperSingletonContainer
+    private static class DomainCLIHelperSingletonContainer
     {
         /**
          * The actual singleton.
          */
-        public static final PythonCLIHelper SINGLETON = new PythonCLIHelper();
+        public static final DomainCLIHelper SINGLETON = new DomainCLIHelper();
     }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected PythonCLIHelper() {};
+    protected DomainCLIHelper() {};
 
     /**
-     * Retrieves a <code>PythonCLIHelper</code> instance.
+     * Retrieves a <code>DomainCLIHelper</code> instance.
      * @return such instance.
      */
     @NotNull
-    public static PythonCLIHelper getInstance()
+    public static DomainCLIHelper getInstance()
     {
-        return PythonCLIHelperSingletonContainer.SINGLETON;
+        return DomainCLIHelperSingletonContainer.SINGLETON;
     }
 
     /**
@@ -351,13 +351,13 @@ public class PythonCLIHelper
 
                 if  (result == null)
                 {
-                    stream = PythonCLIHelper.class.getResourceAsStream(configurationFile);
+                    stream = DomainCLIHelper.class.getResourceAsStream(configurationFile);
                     result = readConfigurationSettings(stream, true);
 
                     if  (result != null)
                     {
                         @Nullable final Log t_Log =
-                            UniqueLogFactory.getLog(PythonCLIHelper.class);
+                            UniqueLogFactory.getLog(DomainCLIHelper.class);
 
                         if  (t_Log != null)
                         {
@@ -371,7 +371,7 @@ public class PythonCLIHelper
             catch  (@NotNull final IOException ioException)
             {
                 @Nullable final Log t_Log =
-                    UniqueLogFactory.getLog(PythonCLIHelper.class);
+                    UniqueLogFactory.getLog(DomainCLIHelper.class);
 
                 if  (t_Log != null)
                 {
@@ -391,7 +391,7 @@ public class PythonCLIHelper
                     catch  (@NotNull final IOException ioException)
                     {
                         @Nullable final Log t_Log =
-                            UniqueLogFactory.getLog(PythonCLIHelper.class);
+                            UniqueLogFactory.getLog(DomainCLIHelper.class);
 
                         if  (t_Log != null)
                         {
@@ -433,7 +433,7 @@ public class PythonCLIHelper
             if  (log)
             {
                 @Nullable final Log t_Log =
-                    UniqueLogFactory.getLog(PythonCLIHelper.class);
+                    UniqueLogFactory.getLog(DomainCLIHelper.class);
 
                 if  (t_Log != null)
                 {

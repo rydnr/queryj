@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: PythonChain.java
+ * Filename: DomainChain.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Defines the chain when QueryJ extracts information from Python sources.
+ * Description: Defines the chain when QueryJ extracts information from Domain sources.
  *
  */
 package org.acmsl.queryj.tools;
@@ -74,19 +74,19 @@ import org.jetbrains.annotations.Nullable;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
- * Defines the chain when QueryJ extracts information from Python sources.
+ * Defines the chain when QueryJ extracts information from Domain sources.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @param <CH> the command handler class.
  */
 @ThreadSafe
-public class PythonChain<CH extends QueryJCommandHandler<QueryJCommand>>
+public class DomainChain<CH extends QueryJCommandHandler<QueryJCommand>>
     extends AbstractQueryJChain<QueryJCommand, CH>
     implements QueryJSettings
 {
     /**
-     * Creates a {@link PythonChain} with given information.
+     * Creates a {@link DomainChain} with given information.
      */
-    public PythonChain()
+    public DomainChain()
     {
     }
 
@@ -148,7 +148,7 @@ public class PythonChain<CH extends QueryJCommandHandler<QueryJCommand>>
     protected void cleanUpOnError(
         @NotNull final QueryJBuildException buildException, @NotNull final QueryJCommand command)
     {
-        @Nullable final Log t_Log = UniqueLogFactory.getLog(PythonChain.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(DomainChain.class);
 
         if  (t_Log != null)
         {
